@@ -20,10 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Stop Ngrok
-        run: npx ngrok kill
-        
+    
       - name: Add Ngrok Authtoken
         run: npx ngrok authtoken 2r13IymzhSkH29ThtKzB4R9xMrU_4GV336h3Zr83LhDzBmgvT
 
