@@ -20,11 +20,16 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-    
+
       - name: Add Ngrok Authtoken
         run: npx ngrok authtoken 2r13IymzhSkH29ThtKzB4R9xMrU_4GV336h3Zr83LhDzBmgvT
 
-      - name: Start Angular App with Ngrok
+      - name: Start Angular App and Ngrok
         run: |
-          HOST=0.0.0.0 npm start -- --disable-host-check &
-          npx ngrok http 4202 &
+          nohup npm start -- --disable-host-check --host 0.0.0.0 & 
+          sleep 10  # Wait for the Angular app to start
+          nohup npx ngrok http 4202 &  # Run ngrok in the background
+          
+      - name: Wait for services to be fully initialized
+        run: |
+          sleep 60  # This will allow time for both the Angular app and ngrok to initialize.
