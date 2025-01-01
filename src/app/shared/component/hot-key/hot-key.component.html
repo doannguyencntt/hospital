@@ -1,0 +1,15 @@
+
+    <div class="hot-key-zone" kendoTooltip position="bottom" tooltipClass="hot-key-zone-tooltip" [tooltipTemplate]="hotKeyTemplate"  filter="*">        
+        <ul class="inline">
+            <!-- <li><i>Phím tắt: </i></li> -->
+            <li *ngFor="let key of keys"><strong class="red">{{key.Key}}</strong>: {{key.Description}}{{key.End==true?'':','}} </li>
+        </ul>
+    </div>            
+    <ng-template #hotKeyTemplate>
+        <table class="table table-border">
+            <tr *ngFor="let key of keys">
+                <td><strong class="red">{{key.Key}}</strong></td>
+                <td>{{key.Description}}</td>
+            </tr>
+        </table>
+    </ng-template>

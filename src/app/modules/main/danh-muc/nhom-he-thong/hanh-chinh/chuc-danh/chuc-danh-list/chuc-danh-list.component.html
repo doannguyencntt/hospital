@@ -1,0 +1,65 @@
+<vex-page-layout>
+  <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+    <div [class.px-gutter]="true" class="w-full flex justify-between">
+      <div>
+        <vex-breadcrumbs
+          [crumbs]="[
+          {Title:'Danh Mục',Path:''},
+          {Title:'Nhóm hệ thống',Path:''}
+          ,{Title:'Hành Chính',Path:''},
+          {Title:'Chức Danh',Path:'/danh-muc/nhom-he-thong/hanh-chinh/chuc-danh',
+          Active:true}
+          ]">
+        </vex-breadcrumbs>
+      </div>
+    </div>
+  </vex-page-layout-header>
+  <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+    <div class="card overflow-auto -mt-15">
+      <app-grid baseRoute="danh-muc/nhom-he-thong/hanh-chinh/chuc-danh" [gridColumns]="gridColumns"
+        [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="true"
+        [showExportExcel]="true" (extExportExcel)="exportExcel()"></app-grid>
+    </div>
+    <ng-template #trangThaiTemplate let-dataItem>
+      <div *ngIf="dataItem.IsDefault == 1">
+          <button *ngIf="dataItem.IsDisabled == 1 " (click)="updateChucDanh(dataItem.Id,dataItem.IsDisabled)" disabled mat-menu-item>
+              <mat-icon [icIcon]="icClose" color="warn"></mat-icon><span>Ngừng sử dụng</span>
+            </button>
+            <button *ngIf="dataItem.IsDisabled != 1 " (click)="updateChucDanh(dataItem.Id,dataItem.IsDisabled)" disabled mat-menu-item>
+              <mat-icon [icIcon]="icicdone" color="primary"></mat-icon><span>Đang sử dụng</span>
+            </button>
+      </div>
+      <div *ngIf="dataItem.IsDefault != 1">
+          <button *ngIf="dataItem.IsDisabled == 1 " (click)="updateChucDanh(dataItem.Id,dataItem.IsDisabled)"  mat-menu-item>
+              <mat-icon [icIcon]="icClose" color="warn"></mat-icon><span>Ngừng sử dụng</span>
+            </button>
+            <button *ngIf="dataItem.IsDisabled !=1 " (click)="updateChucDanh(dataItem.Id,dataItem.IsDisabled)"  mat-menu-item>
+              <mat-icon [icIcon]="icicdone" color="primary"></mat-icon><span>Đang sử dụng</span>
+            </button>
+      </div>
+    </ng-template>
+    <ng-template #groupTemplate let-dataItem>
+      <button *ngIf="dataItem.IsDefault == 1" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu"
+        mat-icon-button type="button" disabled >
+        <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+      </button>
+      <button *ngIf="dataItem.IsDefault != 1"  kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu"
+        mat-icon-button type="button" >
+        <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+      </button>
+      <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+        <ng-template let-customer="customer" matMenuContent>
+          <button (click)="gridChild.edit(dataItem.Id)" mat-menu-item>
+            <mat-icon [icIcon]="icEdit"></mat-icon>
+            <span>Sửa</span>
+          </button>
+          <button (click)="gridChild.delete(dataItem.Id)" mat-menu-item>
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+            <span>Xóa</span>
+          </button>
+        </ng-template>
+      </mat-menu>
+    </ng-template>
+  </vex-page-layout-content>
+  
+</vex-page-layout>

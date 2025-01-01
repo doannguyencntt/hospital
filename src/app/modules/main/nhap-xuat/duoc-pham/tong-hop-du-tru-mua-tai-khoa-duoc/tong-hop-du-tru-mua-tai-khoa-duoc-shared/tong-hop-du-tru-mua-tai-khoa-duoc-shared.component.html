@@ -1,0 +1,58 @@
+<!-- <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="soPhieu" fxFlex="20%" [required]="true" [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.SoPhieu"
+        maxlength="50" label="Số phiếu" [validationerror]="'SoPhieu' | validationerror:validationErrors" [disabled]="isDisableTrangThai">
+    </app-textbox>
+    <app-textbox id="Khoa" fxFlex="20%" [required]="true" [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.Khoa"
+        bind="true" label="Khoa" class="item-no-padding" [validationerror]="'Khoa' | validationerror:validationErrors"
+        [disabled]="isDisableTrangThai">
+    </app-textbox>
+    <app-textbox id="nguoiYeuCau" fxFlex="20%" [required]="true"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.NguoitYeuCau" bind="true" label="Khoa" class="item-no-padding"
+        [validationerror]="'Khoa' | validationerror:validationErrors" [disabled]="isDisableTrangThai">
+    </app-textbox>
+    <app-datepicker id="NgayYeuCau" fxFlex="20%" [required]="true" [(model)]="nhapKhoChiTietMarketing.NgayYeuCau"
+         label="Ngày yêu cầu" [validationerror]="'NgayYeuCau' | validationerror:validationErrors"
+        [disabled]="isDisableTrangThai">
+    </app-datepicker>
+    <app-textbox id="NguoiDuyet" fxFlex="20%" [required]="true"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.NguoiDuyet" bind="true" label="NguoiDuyet"
+        class="item-no-padding" [validationerror]="'NguoiDuyet' | validationerror:validationErrors" [disabled]="isDisableTrangThai">
+    </app-textbox>
+    <app-datepicker id="NgayDuyet" fxFlex="20%" [required]="true" [(model)]="nhapKhoChiTietMarketing.NgayDuyet"
+        label="Ngày yêu cầu" [validationerror]="'NgayYeuCau' | validationerror:validationErrors"
+        [disabled]="isDisableTrangThai">
+    </app-datepicker>
+    <app-textbox id="GiamDocDuyet" fxFlex="20%" [required]="true"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.GiamDocDuyet" bind="true" label="Giám đốc duyệt"
+        class="item-no-padding" [validationerror]="'GiamDocDuyet' | validationerror:validationErrors" [disabled]="isDisableTrangThai">
+    </app-textbox>
+    <app-textbox id="NgayGiamDocDuyet" fxFlex="20%" [required]="true"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.NgayGiamDocDuyet" bind="true" label="Ngày giám đốc duyệt"
+        class="item-no-padding" [validationerror]="'NgayGiamDocDuyet' | validationerror:validationErrors" [disabled]="isDisableTrangThai">
+    </app-textbox>
+    <app-textbox id="GhiChu" fxFlex="40%" [required]="true" [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.GhiChu"
+        bind="true" label="Ghi Chu" class="item-no-padding"
+        [validationerror]="'GhiChu' | validationerror:validationErrors" [disabled]="isDisableTrangThai">
+    </app-textbox>
+    <span fxFlex="100%"><b>THÔNG TIN ChiTiet</b></span>
+    <app-grid baseRoute="" [gridColumns]="gridChildColumns" 
+    [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+    [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+    urlGetData="YeuCauMuaDuocPham/GetDataDSYeuCauMuaDuocPhamChildForGridAsync"
+    urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageYeuCauMuaDuocPhamChildForGridAsync"
+    additionalSearchString=""
+    [detailTemplate]="detailChildTemplate"
+    [autoHeight]="true" >
+    </app-grid>
+    <ng-template #detailChildTemplate let-dataItem>
+        <app-grid baseRoute="" [gridColumns]="gridChildColumns" 
+            [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+            [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            urlGetData="YeuCauMuaDuocPham/GetDataDSYeuCauMuaDuocPhamChildChildForGridAsync"
+            urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageYeuCauMuaDuocPhamChildChildForGridAsync"
+            additionalSearchString=""
+            [detailTemplate]="detailChildTemplate"
+            [autoHeight]="true" >
+        </app-grid>
+    </ng-template>
+</div> -->

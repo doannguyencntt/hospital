@@ -1,0 +1,33 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>THÔNG BÁO</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <!-- <h3 class="sub-title">Thông Tin Thẻ</h3> -->
+    <table width="100%">
+        <tr>
+            <td>Số thẻ BHYT: <strong>{{data.BHYTMaSoThe}}</strong></td>
+        </tr>
+        <tr>
+            <td>Họ và tên: <strong>{{data.HoTen}}</strong></td>
+            <td>Năm sinh: <strong>{{data.NgayThangNamSinhDisplay}}</strong></td>
+            <td>Giới tính: <strong>{{data.GioiTinhDisplay}}</strong></td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 30px">
+        <h3 class="sub-title, sub-title-bottom">Không thể kiểm tra thẻ này trên cổng BHYT, bạn hãy thử lại lần nữa</h3>
+    </div>
+
+    <div class="div-title-bottom">
+        <button class="div-margin-bottom" type="button" mat-button class="mr-1" (click)="khamKhongBHYT()">Hủy</button>
+        <button class="div-margin-bottom" type="button" (click)="khamKhongBHYT()" color="primary" mat-raised-button>Khám không có thẻ BHYT</button>
+        <!-- <button class="div-margin-bottom" type="button" (click)="chapNhanCoBHYT()" color="primary" mat-raised-button>Chấp nhận có BHYT</button> -->
+        <button type="button" (click)="chapNhanBHYTNhapTay()" class="div-margin-bottom" color="primary" mat-raised-button>Chấp nhận BHYT nhập tay</button>
+        <button type="button" (click)="thuLai()" color="primary" mat-raised-button>Thử lại</button>
+    </div>
+    
+</mat-dialog-content>

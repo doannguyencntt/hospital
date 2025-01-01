@@ -1,0 +1,23 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Ngày nghỉ dưỡng thai</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+
+</div>
+<mat-dialog-content style="overflow:hidden">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-datepicker id="TuNgay" fxFlex="50%" fxFlex.sm="50%" [(model)]="capNhatPhieuDuongThai.TuNgay"
+             label="Từ ngày"  required="true"
+             [validationerror]="'TuNgay' | validationerror:validationErrors">
+        </app-datepicker>
+        <app-datepicker id="DenNgay" fxFlex="50%" fxFlex.sm="50%" [(model)]="capNhatPhieuDuongThai.DenNgay"
+            required="true" label="Đến ngày"
+            [validationerror]="'DenNgay' | validationerror:validationErrors">
+        </app-datepicker>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-raised-button mat-button (click)="close()">Hủy</button>
+    <button type="button" color="primary" mat-raised-button mat-button (click)="xacNhan()">Xác nhận</button>
+</mat-dialog-actions>

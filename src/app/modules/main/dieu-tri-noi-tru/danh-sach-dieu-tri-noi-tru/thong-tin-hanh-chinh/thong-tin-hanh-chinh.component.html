@@ -1,0 +1,152 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+        <h3 class="blue-text" style="display: inline; float: left;">I. HÀNH CHÍNH</h3>
+    </div>
+</div>
+
+<div id="hanh-chinh" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0"
+    [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <p fxFlex="25%" fxFlex.sm="100%">Họ tên: <b>{{thongTinHanhChinh.HoTen}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">Ngày sinh: <b>{{thongTinHanhChinh.NgaySinhDisplay}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">Tuổi: <b>{{thongTinHanhChinh.Tuoi}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">Giới tính: <b>{{thongTinHanhChinh.GioiTinhDisplay}}</b></p>
+
+    <p fxFlex="50%" fxFlex.sm="100%">Địa chỉ: <b>{{thongTinHanhChinh.DiaChi}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">Quốc tịch: <b>{{thongTinHanhChinh.QuocTichDisplay}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">Dân tộc: <b>{{thongTinHanhChinh.DanTocDisplay}}</b></p>
+
+    <p fxFlex="25%" fxFlex.sm="100%">Nghề nghiệp: <b>{{thongTinHanhChinh.NgheNghiepDisplay}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">Nơi làm việc: <b>{{thongTinHanhChinh.NoiLamViec}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">Người liên hệ: <b
+            *ngIf="thongTinHanhChinh.NguoiLienHeHoTen">{{thongTinHanhChinh.NguoiLienHeQuanHeNhanThanDisplay}}:
+            {{thongTinHanhChinh.NguoiLienHeHoTen}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">SĐT: <b>{{thongTinHanhChinh.SoDienThoaiDisplay}}</b></p>
+
+    <p fxFlex="25%" fxFlex.sm="100%">Đối tượng: <b>{{thongTinHanhChinh.CoBHYTDisplay}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">Mã thẻ BHYT: <b>{{thongTinHanhChinh.BHYTMaSoThe}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">Hiệu lực: <b
+            *ngIf="thongTinHanhChinh.CoBHYT">{{thongTinHanhChinh.BHYTNgayHieuLucDisplay}} -
+            {{thongTinHanhChinh.BHYTNgayHetHanDisplay}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">Mức hưởng: <b>{{thongTinHanhChinh.BHYTMucHuongDisplay}}</b></p>
+
+    <p fxFlex="25%" fxFlex.sm="100%">Tuyến khám: <b>{{thongTinHanhChinh.TuyenKham}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">
+        <span fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0">
+            <span class="mt-3 mt-sm-0" fxFlex="25%" fxFlex.sm="50%">Nhóm máu: </span>
+            <app-dropdownlist id="nhom-mau" fxFlex="25%" fxFlex.sm="50%" [popupSettings]="null"
+                [url]="urlGetDanhSachNhomMau" [(model)]="thongTinHanhChinh.NhomMau"
+                [modelText]="thongTinHanhChinh.NhomMauDisplay"
+                [validationerror]="'NhomMau' | validationerror: validationErrors">
+            </app-dropdownlist>
+        </span>
+    </p>
+    <p fxFlex="25%" fxFlex.sm="100%">
+        <span fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0">
+            <span class="mt-3 mt-sm-0" fxFlex="25%" fxFlex.sm="50%">Yếu tố Rh: </span>
+            <app-dropdownlist id="yeu-to-rh" fxFlex="25%" fxFlex.sm="50%" [popupSettings]="null"
+                [url]="urlGetDanhSachYeuToRh" [(model)]="thongTinHanhChinh.YeuToRh"
+                [modelText]="thongTinHanhChinh.YeuToRhDisplay"
+                [validationerror]="'YeuToRh' | validationerror: validationErrors">
+            </app-dropdownlist>
+        </span>
+    </p>
+    <p fxFlex="25%" fxFlex.sm="100%" class="mt-3 mt-sm-0"><a class="link-highlight" (click)="capNhatDoiTuong()">Cập nhật
+            đối tượng</a></p>
+</div>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+        <h3 class="blue-text" style="display: inline; float: left;">II. QUẢN LÝ NGƯỜI BỆNH</h3>
+    </div>
+</div>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0"
+    [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <p fxFlex="25%" fxFlex.sm="100%">Thời gian tiếp nhận: <b>{{thongTinHanhChinh.ThoiDiemTiepNhanDisplay}}</b></p>
+    <p fxFlex="25%" fxFlex.sm="100%">Nơi tiếp nhận: <b>{{thongTinHanhChinh.NoiTiepNhanDisplay}}</b></p>
+    <p fxFlex="50%" fxFlex.sm="100%">Nơi giới thiệu: <b>{{thongTinHanhChinh.NoiGioiThieuDisplay}}</b></p>
+
+    <app-datetimepicker id="thoi-gian-vao-khoa" class="item-no-padding" fxFlex="20%" fxFlex.sm="100%"
+        label="Thời gian vào khoa" [formatDate]="'dd/MM/yyyy HH:mm'" [disabled]="true"
+        [(model)]="thongTinHanhChinh.ThoiDiemNhapVien"
+        [validationerror]="'ThoiDiemNhapVien' | validationerror: validationErrors">
+    </app-datetimepicker>
+
+    <app-textboxnumeric id="so-lan-vao-vien" fxFlex="20%" fxFlex.sm="100%" min="1" max="366"
+        label="Vào viện do bệnh này lần thứ" [(model)]="thongTinHanhChinh.SoLanVaoVienDoBenhNay"
+        [validationerror]="'SoLanVaoVienDoBenhNay' | validationerror:validationErrors">
+    </app-textboxnumeric>
+
+    <app-combobox id="chuyen-tuyen" class="item-no-padding" fxFlex="20%" fxFlex.sm="100%" label="Chuyển tuyến" url=""
+        [popupSettings]="null" [disabled]="true" [(model)]="thongTinHanhChinh.LoaiChuyenTuyen"
+        [modelText]="thongTinHanhChinh.LoaiChuyenTuyenDisplay"
+        [validationerror]="'LoaiChuyenTuyen' | validationerror: validationErrors">
+    </app-combobox>
+
+    <app-combobox id="chuyen-den-bv" class="item-no-padding" fxFlex="40%" fxFlex.sm="100%" label="Chuyển đến BV" url=""
+        [popupSettings]="null" [disabled]="true" [(model)]="thongTinHanhChinh.ChuyenDenBenhVienId"
+        [modelText]="thongTinHanhChinh.ChuyenDenBenhVienDisplay"
+        [validationerror]="'ChuyenDenBenhVienId' | validationerror: validationErrors">
+    </app-combobox>
+
+    <app-datetimepicker id="ngay-ra-vien" class="item-no-padding mt-6" fxFlex="20%" fxFlex.sm="100%"
+        label="Ngày ra viện" [formatDate]="'dd/MM/yyyy HH:mm'" [disabled]="true"
+        [(model)]="thongTinHanhChinh.ThoiDiemRaVien"
+        [validationerror]="'ThoiDiemRaVien' | validationerror: validationErrors">
+    </app-datetimepicker>
+
+    <app-combobox id="ly-do" class="item-no-padding mt-6" fxFlex="20%" fxFlex.sm="100%" label="Lý do" url=""
+        [popupSettings]="null" [disabled]="true" [(model)]="thongTinHanhChinh.HinhThucRaVien"
+        [modelText]="thongTinHanhChinh.HinhThucRaVienDisplay"
+        [validationerror]="'HinhThucRaVien' | validationerror: validationErrors">
+    </app-combobox>
+
+    <div fxFlex="20%" fxFlex.sm="100%" style="flex-direction: column; flex-wrap: wrap;">
+        <app-checkbox name="phau-thuat" fxFlex="100%" fxFlex.sm="100%" label="Ngày hẹn tái khám" [disabled]="true"
+            [(model)]="thongTinHanhChinh.IsTaiKham" [validationerror]="'IsTaiKham' | validationerror: validationErrors">
+        </app-checkbox>
+        <app-datepicker id="ngay-hen-tai-kham" class="item-no-padding" fxFlex="100%" fxFlex.sm="100%"
+            label="Ngày hẹn tái khám" [disabled]="true" [(model)]="thongTinHanhChinh.NgayTaiKham"
+            [validationerror]="'NgayTaiKham' | validationerror: validationErrors">
+        </app-datepicker>
+    </div>
+
+    <app-textboxnumeric id="tong-so-ngay-dieu-tri" class="mt-6" fxFlex="20%" fxFlex.sm="100%" min="1" max="366"
+        label="Tổng số ngày điều trị" [disabled]="true" [(model)]="thongTinHanhChinh.TongSoNgayDieuTri"
+        [validationerror]="'TongSoNgayDieuTri' | validationerror:validationErrors">
+    </app-textboxnumeric>
+
+    <app-checkbox name="thu-thuat" class="mt-8" fxFlex="10%" fxFlex.sm="50%" label="Thủ thuật" [disabled]="true"
+        [(model)]="thongTinHanhChinh.CoThuThuat" [validationerror]="'CoThuThuat' | validationerror: validationErrors">
+    </app-checkbox>
+
+    <app-checkbox name="phau-thuat" class="mt-8" fxFlex="10%" fxFlex.sm="50%" label="Phẫu thuật" [disabled]="true"
+        [(model)]="thongTinHanhChinh.CoPhauThuat" [validationerror]="'CoPhauThuat' | validationerror: validationErrors">
+    </app-checkbox>
+
+    <p fxFlex="100%" fxFlex.sm="100%">Chuyển khoa</p>
+    <div fxFlex="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-grid #gridChuyenKhoa fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" masterName="gridChuyenKhoa"
+                maxHeight="500" reorderRowsMoveItemData="true" [gridColumns]="gridColumns" [documentType]="documentType"
+                [urlGetData]="urlGetDanhSachChuyenKhoaForGrid"
+                [urlGetTotalPage]="urlGetTotalPagesDanhSachChuyenKhoaForGrid"
+                [additionalSearchString]="yeuCauTiepNhanId" [sort]="sortDanhSachChuyenKhoa" [allowSortDefault]="true"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true"
+                [pageable]="false" [checkboxAble]="false" [showStt]="true">
+            </app-grid>
+
+            <ng-template #denKhoaTemplate let-dataItem>
+                {{dataItem.KhoaPhongChuyenDenDisplay}}
+            </ng-template>
+
+            <ng-template #thoiGianBatDauTemplate let-dataItem>
+                {{dataItem.ThoiDiemVaoKhoaDisplay}}
+            </ng-template>
+
+            <ng-template #thoiGianKetThucTemplate let-dataItem>
+                {{dataItem.ThoiDiemRaKhoaDisplay}}
+            </ng-template>
+        </div>
+    </div>
+</div>

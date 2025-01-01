@@ -1,0 +1,136 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[                   
+                {Title:'Thống Kê', Path:''},
+                {Title:'Báo Cáo', Path:''},
+                {Title:'Dược', Path:''},
+                {Title:'Chi Tiết Xuất Nội Bộ', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <kendo-grid [data]="gridDataSource" [height]="height" class="k-grid1" [pageable]="true" [resizable]="true"
+                [pageSize]="pageSize" [skip]="skip" (pageChange)="pageChange($event)" id="baoCaoGrid" #baoCaoGrid>
+
+                <ng-template kendoGridToolbarTemplate>
+                    <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row"
+                        fxLayoutAlign="start center">
+                        <app-combobox id="KhoId" fxFlex="15%" fxFlex.sm="15%" popupSettings="" style="margin-left: 5px;"
+                            class="mt-1 on-header pb-0 mr-1" label="Kho" bind="true" url="TonKho/GetKhoTatCa"
+                            [(model)]="baoCaoSearch.KhoId" [autoSelectFirstItem]="true">
+                        </app-combobox>
+
+                        <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu
+                            id="TuNgayFormat" [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày"
+                            class="mt-1 on-header mr-1">
+                        </app-datetimepicker>
+
+                        <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden
+                            id="DenNgayFormat" [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header mr-1"
+                            label="Đến ngày">
+                        </app-datetimepicker>
+
+                        <div fxFlex="55%" fxFlex.sm="55%" class="pb-0">
+                            <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                                (click)="XemBaoCao()">Xem Báo Cáo</button>
+                            <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                                (click)="exportExcel()">Xuất Excel</button>
+                            <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                                class="mr-1 mt-2" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                        </div>
+
+                        <span fxFlex></span>
+
+                        <button [matMenuTriggerFor]="columnFilterMenu" fxFlex="none" class="mr-4" mat-icon-button
+                            kendoTooltip title="Lọc cột" type="button">
+                            <mat-icon [icIcon]="icFilterList"></mat-icon>
+                        </button>
+
+                        <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                            <div *ngFor="let column of gridColumns">
+                                <button *ngIf="column.Title != ''"
+                                    class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                                    <mat-checkbox [disabled]="true" color="primary">
+                                        {{ column.Title }}
+                                    </mat-checkbox>
+                                </button>
+                            </div>
+                        </mat-menu>
+                    </div>
+                </ng-template>
+
+                <kendo-grid-column field="{{getFieldColumn(0)}}" title="{{getTitleColumn(0)}}"
+                    width="{{getWidthColumn(0)}}" [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{rowIndex + 1}}
+                    </ng-template>
+                </kendo-grid-column>
+
+                <kendo-grid-column field="{{getFieldColumn(1)}}" title="{{getTitleColumn(1)}}"
+                    width="{{getWidthColumn(1)}}" [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                    <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                        <span>Tổng cộng:</span>
+                    </ng-template>
+                </kendo-grid-column>
+
+                <kendo-grid-column field="{{getFieldColumn(2)}}" title="{{getTitleColumn(2)}}"
+                    width="{{getWidthColumn(2)}}" [style]="{'text-align': 'left'}"
+                    [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+
+                </kendo-grid-column>
+
+                <ng-container *ngIf="listKho && listKho.length > 0">
+
+                    <kendo-grid-column *ngFor="let item of listKho" [title]="item" width="200"
+                        [style]="{'text-align': 'left'}"
+                        [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+
+
+                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                            {{getSoLuong(item, dataItem.ThongTinThuoc)}}
+                            <br>
+                            <span>{{getThanhTien(item,dataItem.ThongTinThuoc) | number:'0.2-2':'vi-VN'}}</span>
+                        </ng-template>
+                        <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                            <span>{{totalThanhTien(item) | number:'0.2-2':'vi-VN'}}</span>
+                        </ng-template>
+                    </kendo-grid-column>
+                </ng-container>
+
+                <ng-template kendoGridNoRecordsTemplate>
+                    <span *ngIf="_isLoading">Đang tải dữ liệu...</span>
+                    <span *ngIf="!_isLoading">Không có dữ liệu</span>
+                </ng-template>
+                <kendo-grid-messages noRecords="Không có dữ liệu" pagerOf="trong số" pagerItems="dòng"
+                    detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết" loading="Đang tải dữ liệu...">
+                </kendo-grid-messages>
+                <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+                    <div style="justify-content: center;" fxLayout="row wrap" fxLayout.lt-sm="column"
+                        fxLayoutAlign="space-between" fxFlex="100%" *ngIf="_showDefaultPagerTemplate">
+                        <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                        <kendo-pager-numeric-buttons [buttonCount]="5" class="d-none d-sm-none d-md-block">
+                        </kendo-pager-numeric-buttons>
+                        <button *ngIf="_isLoadingTotalPage" kendoButton
+                            class="btn btn-raised btn-default btn-min-width mb-0">
+                            <img src="/assets/img/loader_circle.gif" alt="Đang tính..." style="height: 20px;" />
+                        </button>
+                        <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                        <kendo-pager-info></kendo-pager-info>
+                        <div kendoTooltip class="k-icon k-i-refresh"
+                            style="order: 10;cursor: pointer; align-self: center;" title="Làm mới"
+                            (click)="reFresh()"></div>
+                        <div *ngIf="_isLoading" class="grid-loading k-i-loading"></div>
+                    </div>
+                </ng-template>
+                
+            </kendo-grid>
+
+        </div>
+
+    </vex-page-layout-content>
+</vex-page-layout>

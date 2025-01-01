@@ -1,0 +1,96 @@
+<kendo-textbox-container floatingLabel="{{label}}" [ngClass]="{'required':required}"  *ngIf="isFormatCurrenly">
+    <div id="plus-texbox">
+        <input style="float: left;" kendoTextBox type="text" ngControl="model" [readonly]="readonly" [disabled]="disabled" id="{{id}}"
+        name="{{id}}" (ngModelChange)="emit($event)" [(ngModel)]="model" (blur)="onBlur()"
+        (keydown)="onKeyDown( $event, $event.target.value)" appFormatNumber digitOnly />
+        <a class="ns-plus" (click) =  plus($event,$event.target.value)  *ngIf="isShowInDecrease" >
+            <!-- <span class="k-icon k-i-arrow-n"></span> -->
+
+            <span class="k-link k-link-increase" 
+             aria-label="Tăng" title="Tăng"><span class="k-icon k-i-arrow-n"></span></span>
+
+            </a>
+        <a class="ns-minus" (click) =  minus($event,$event.target.value)  *ngIf="isShowInDecrease" >
+            <span class="k-link k-link-decrease" 
+             aria-label="Giảm" title="Giảm"><span class="k-icon k-i-arrow-s"></span></span>
+            
+        </a>
+    </div>
+ 
+       
+    <label class="red" [innerHTML]="validationerror"></label>
+
+    <div *ngIf="checkSuggestMoney">
+        <ul class="k-reset" id="ab048a7b-5204-4984-8913-61df05ede096">
+            <li aria-selected="true" class="k-button ng-star-inserted selectMoneyNumber" role="option" 
+               *ngFor="let item of arrMoneyNumber" (click)="selectedValue(item)">
+                <span> {{item | number:'0.2-2':'vi-VN'}} </span>
+            </li>
+        </ul>
+    </div>
+</kendo-textbox-container>
+
+
+
+<kendo-textbox-container floatingLabel="{{label}}" [ngClass]="{'required':required}" *ngIf="!isFormatCurrenly">
+    <kendo-numerictextbox [min]="min" [max]="max" [autoCorrect]="autoCorrect" [spinners]="spinners" class="form-control"
+        [ngClass]="validationerror!=''?'has-error':''" id="{{id}}" [readonly]="readonly" [disabled]="disabled" (blur)="onBlur()"
+        placeholder="{{placeHolder}}" (ngModelChange)="emit($event)" ngControl="model" name="{{id}}" [(ngModel)]="model"
+        (valueChange)="onValueChange($event)" title="{{title}}" [format]="format" [step]="step"
+        [decimals]="decimals">
+        <kendo-numerictextbox-messages increment="Tăng" decrement="Giảm"></kendo-numerictextbox-messages>
+    </kendo-numerictextbox>
+    <label class="red" [innerHTML]="validationerror"></label>
+    <div *ngIf="checkSuggestMoney">
+        <ul class="k-reset" id="ab048a7b-5204-4984-8913-61df05ede096">
+            <li aria-selected="true" class="k-button ng-star-inserted selectMoneyNumber" role="option"
+                ng-reflect-klass="k-button" *ngFor="let item of arrMoneyNumber" (click)="selectedValue(item)">
+                <span> {{item | number:'0.2-2':'vi-VN'}} </span>
+            </li>
+        </ul>
+    </div>
+</kendo-textbox-container>
+
+
+
+<!--  
+<div class="form-row" kendoTooltip>
+  <div class="form-group {{moreClass}} col-sm-12" *ngIf="!horizontalForm">
+      <label for="{{id}}" *ngIf="label!=null && label!=''">{{label}}<span class="text-danger" *ngIf="required">*</span></label>      
+      <kendo-numerictextbox [min]="min" [max]="max" [autoCorrect]="autoCorrect"
+      class="form-control" [ngClass]="validationerror!=''?'has-error':''" id="{{id}}"
+      [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+      ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}" [format]="format"
+      [step]="step">
+      <kendo-numerictextbox-messages
+                increment="Tăng"
+                decrement="Giảm"
+            ></kendo-numerictextbox-messages>
+  </kendo-numerictextbox>
+  </div>
+
+  <div class="{{moreClass}}" *ngIf="horizontalForm">
+      <label for="{{id}}" class="{{classLabel}} col-form-label" *ngIf="label!=null && label!=''">{{label}}<span
+              class="text-danger" *ngIf="required">*</span></label>
+      <div class="{{classField}}">    
+        <kendo-numerictextbox [min]="min" [max]="max" [autoCorrect]="autoCorrect"
+        class="form-control" [ngClass]="validationerror!=''?'has-error':''" id="{{id}}"
+        [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+        ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}" [format]="format"
+        [step]="step">
+        <kendo-numerictextbox-messages
+                  increment="Tăng"
+                  decrement="Giảm"
+              ></kendo-numerictextbox-messages>
+    </kendo-numerictextbox>
+      </div>
+  </div>
+  <div class="col-sm-12">
+      <div class="alert alert-danger alert-dismissible fade show mt-n-15" role="alert" *ngIf="validationerror!=''">
+          <div [innerHTML]="validationerror"></div>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="validationerror=''">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+  </div>
+</div> -->

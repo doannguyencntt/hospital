@@ -1,0 +1,97 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    style="padding-top: 13px;padding-bottom: 10px;" [ngClass]="{'disableDiv':IsKetThucBenhAn}">
+
+    <app-combobox id="DichVuPTTT" fxFlex="30%" [(model)]="giayChungNhanPhauThuat.DichVuPTTTId"
+        [modelText]="giayChungNhanPhauThuat.DichVuPTTTText"
+        url="DieuTriNoiTru/GetListDichVuKyThuatThuocPhauThuatThuThuatCuaBenhNhan?yctnId={{yeuCauTiepNhanId}}"
+        label="Dịch vụ PTTT" required="true" (selectionChange)="selectionPTTT($event)"
+        [validationerror]="'DichVuPTTTId' | validationerror:validationErrors" > 
+    </app-combobox>
+    <app-textarea fxFlex="30%" id="SoLuuTru" label="Số lưu trữ" [(model)]="giayChungNhanPhauThuat.SoLuuTru"
+        minHeight="25">
+    </app-textarea>
+
+    <app-textarea fxFlex="40%" id="ChanDoan" label="Chẩn đoán" [(model)]="giayChungNhanPhauThuat.ChanDoan"
+        minHeight="25">
+    </app-textarea>
+
+    <app-datepicker id="PhauThuatNgay" fxFlex="30%" fxFlex.sm="30%" [(model)]="giayChungNhanPhauThuat.PhauThuatNgay"
+        label="Phẩu thuật ngày">
+    </app-datepicker>
+
+
+    <app-combobox id="PhuongThucVoCam" fxFlex="30%" [(model)]="giayChungNhanPhauThuat.PhuongThucVoCamId"
+        [modelText]="giayChungNhanPhauThuat.PhuongThucVoCamText"
+        (selectionChange)="selectionPhuongThucVoCam($event)"
+        url="KhamBenh/GetListPhuongPhapVoCam"
+        label="Phương thức vô cảm" >
+    </app-combobox>
+
+    <app-textbox id="pttt_vien_chinh" class="item-no-padding" fxFlex="20%" fxFlex.sm="20%" label="PTTT viên chính" [(model)]="giayChungNhanPhauThuat.PhauThuatVienText" [disabled]="true">
+    </app-textbox>
+
+    <app-multiselect popupSettings="null" id="phuong-phap-pttt"  fxFlex="100%" 
+        fxFlex.sm="100%" label="Phương Pháp PTTT" class="item-no-padding" url="KhamBenh/GetListPhuongPhapPTTT" 
+        [template]="phuongPhapTemplate" [templateHeader]="phuongPhapTemplateHeader" [(model)]="giayChungNhanPhauThuat.PhuongThucPhauThuats"
+         #phuongPhapPttt>
+        <ng-template #phuongPhapTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên PTTT</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #phuongPhapTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-multiselect>
+
+
+    <app-combobox id="TinhTrangRaVien" fxFlex="20%" [(model)]="giayChungNhanPhauThuat.TinhTrangRaVienId"
+        [modelText]="giayChungNhanPhauThuat.TinhTrangRaVienText" url="DieuTriNoiTru/GetListTinhTrangRaVienHoSoKhacs"
+        label="Tình trạng ra viện">
+    </app-combobox>
+    <div class="text-center" kendoTooltip fxFlex="10%">
+        <button (click)="addTinhTrangRaVien()" color="primary" mat-mini-fab kendoTooltip title="Thêm" type="button">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+    <app-datepicker id="NgayThangNam" fxFlex="30%" fxFlex.sm="30%" [(model)]="giayChungNhanPhauThuat.NgayThangNam"
+        label="Ngày, tháng, năm">
+    </app-datepicker>
+
+
+    <app-combobox id="TruongKhoaId" fxFlex="20%" fxFlex.sm="20%" [(model)]="giayChungNhanPhauThuat.TruongKhoaId"
+        [modelText]="giayChungNhanPhauThuat.TruongKhoa" url="ToaThuocMau/BacSiKeToa" label="Trưởng khoa">
+    </app-combobox>
+
+    <app-combobox id="NhanVienThucHienId" fxFlex="20%" fxFlex.sm="20%"
+        [(model)]="giayChungNhanPhauThuat.GiamDocChuyenMonId" [modelText]="giayChungNhanPhauThuat.GiamDocChuyenMon"
+        url="ToaThuocMau/BacSiKeToa" label="Giám đốc chuyên môn">
+    </app-combobox>
+
+    <div fxFlex="80%">
+    </div>
+    <div fxFlex="20%">
+        <div style="padding-top: 11px !important;float: right">
+            <button type="button" style="margin-right: 10px; pointer-events: all;" mat-raised-button mat-button
+                (click)="print()">
+                In
+            </button>
+            <button  type="button" style="margin-right: 10px;"
+                mat-raised-button mat-button (click)="cancel()">
+                Hủy
+            </button>
+            <button type="button" color="primary" mat-raised-button mat-button (click)="save()">
+                Lưu
+            </button>
+        </div>
+    </div>
+
+</div>

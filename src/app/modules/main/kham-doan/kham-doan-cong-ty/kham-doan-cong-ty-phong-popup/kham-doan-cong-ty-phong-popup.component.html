@@ -1,0 +1,43 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">{{title}}</div>
+    <button type="button" mat-icon-button mat-dialog-close [mat-dialog-close]="null" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 240px;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-textbox id="maPhong" fxFlex="50%" fxFlex.sm="50%" label="Mã phòng" [maxlength]="50" [required]="true"> 
+        </app-textbox>
+        <app-textbox id="tenPhong" fxFlex="50%" fxFlex.sm="50%" label="Tên phòng" [maxlength]="50" [required]="true">
+        </app-textbox>
+        <app-textbox id="ghiChu" fxFlex="100%" fxFlex.sm="100%" label="Ghi chú" [maxlength]="50">
+        </app-textbox>
+        <app-multiselect id="ChuanDoanLienKetICD" fxFlex="100%" fxFlex.sm="100%" label="DS nhân viên" class="item-no-padding"
+            [required]="true" [popupSettings]="null"
+            [template]="nhanVienTemplate" [templateHeader]="nhanVienTemplateHeader" url="ChuanDoan/GetChuanDoanLienKetICD">
+            <ng-template #nhanVienTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th>Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #nhanVienTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.TenTiengViet}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-multiselect>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="mt-4 pb-5">
+    <button style="margin-left: auto;" type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Hủy</button>
+    <button *ngIf="data.Id == null" mat-raised-button mat-button color="primary" (click)="xuLyThem()">Thêm</button>
+    <button *ngIf="data.Id != null" mat-raised-button mat-button color="primary" (click)="xuLyLuu()">Lưu</button>
+</mat-dialog-actions>

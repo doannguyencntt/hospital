@@ -1,0 +1,53 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[                   
+                {Title:'Thống Kê', Path:''},
+                {Title:'Báo Cáo', Path:''},
+                {Title:'Khám Đoàn', Path:''},
+                {Title:'Tổng Hợp Kết Quả KSK', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15" >
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0"> 
+                <app-combobox id="CongTyId" fxFlex="20%" fxFlex.sm="20%" label="Tên công ty" [required]="true"
+                    url="BaoCao/GetCongTys" [(model)]="baoCaoSearch.CongTyId" class="mt-1 on-header"
+                    (modelChange)="changeCongTy($event)"
+                    style="padding-left: 10px;">
+                </app-combobox>
+
+                <app-combobox id="HopDongId" fxFlex="20%" fxFlex.sm="20%" label="Số hợp đồng" [required]="true"
+                    url="BaoCao/GetHopDongKhamSucKhoes" [(model)]="baoCaoSearch.HopDongId" class="mt-1 on-header"
+                    [reloadForGrid]="true" [bind]="true" (dataForLookupChange)="changeLookupHopDong($event)"
+                    [queryInfo]="{ParameterDependencies:'{CongTyKhamSucKhoeId:' + baoCaoSearch.CongTyId + '}', Take: 50}">
+                </app-combobox>
+               
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.ToDate" #tiepnhantu id="TuNgay" 
+                [maxDate]="baoCaoSearch.FromDate" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.FromDate" #tiepnhanden id="DenNgay" 
+                    [minDate]="baoCaoSearch.ToDate" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+                <div fxFlex="30%" fxFlex.sm="30%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                    (click)="xem()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button 
+                        (click)="exportExcel()">Xuất Excel</button>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0" style="overflow:auto;">
+                    <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+                        <div [innerHTML]="html" style="overflow:auto;" id="content"></div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

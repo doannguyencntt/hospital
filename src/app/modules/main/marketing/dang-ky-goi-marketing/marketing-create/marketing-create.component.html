@@ -1,0 +1,38 @@
+<app-header-form [crumbs]="[
+        {Title:'Marketing',Path:''}
+        ,{Title:'Đăng Ký Gói Marketing',Path:'/marketing/dang-ky-goi-marketing', queryParams: {holdQuery : true}, Active: true}
+        
+            ]" [isicMoreVert]="false">
+        </app-header-form>
+
+    <!-- <vex-page-layout-content [class.px-gutter]="true" class="-mt-6"> -->
+        <div class="p-gutter" vexContainer>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="auto">
+                    <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                        <h2 style="margin-right: 15px !important;" class="title m-0">Đăng Ký Gói Marketing</h2>
+                    
+                        <!-- (modelChange)="lyDoVaoVienChange($event)" -->
+                        <!-- <app-radio id="IsXuatKhac" class="no-label" [(model)]="IsXuatKhac"
+                             [items]="[{Value:false,Text:'Xuất qua kho khác'},{Value:true,Text:'Xuất khác'}]">
+                        </app-radio> -->
+                    
+                    </div>
+
+                    <div class="px-6 py-4" fxLayout="column">
+
+                        <app-marketing-shared [isUpdate]="false">
+                        </app-marketing-shared>
+
+                        <div class="form-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                            <!-- <app-formfooter [bodyComponent]="shared" type="create" (created)="onCreated()">
+                                                                            </app-formfooter> -->
+                            <button type="button" (click)="cancel()" mat-button class="mr-1"><i class="ft-arrow-left"></i> Hủy</button>
+                            <button *ngIf="!loading" type="button" (click)="xuLyKiemTraDangKyGoiMarketing()" color="primary" mat-raised-button><i class="ft-save"></i> Lưu</button>
+                            <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                                    alt="Loading" /></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

@@ -1,0 +1,34 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Nhóm Hệ Thống',Path:''}
+                    ,{Title:'Bảo Hiểm Y Tế',Path:''}
+                    ,{Title:'Chi Số Xét Nghiệm',Path:'/danh-muc/nhom-he-thong/bao-hiem-y-te/chi-so-xet-nghiem',Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/nhom-he-thong/bao-hiem-y-te/chi-so-xet-nghiem"
+                [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="true"
+                [showExportExcel]="true" (extExportExcel)="exportExcel()"
+                [lazyLoadPage]="true">
+            </app-grid>
+            <ng-template #trangThaiTemplate let-dataItem>
+                <button *ngIf="dataItem.HieuLuc != 1"
+                    (click)="updateDanhMucChiSoXetNghiem(dataItem.Id,dataItem.HieuLuc)" mat-menu-item>
+                    <mat-icon [icIcon]="icClose" color="warn"></mat-icon><span>Ngừng sử dụng</span>
+                </button>
+                <button *ngIf="dataItem.HieuLuc == 1"
+                    (click)="updateDanhMucChiSoXetNghiem(dataItem.Id,dataItem.HieuLuc)" mat-menu-item>
+                    <mat-icon [icIcon]="icicdone" color="primary"></mat-icon><span>Đang sử dụng</span>
+                </button>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

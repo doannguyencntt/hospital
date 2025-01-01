@@ -1,0 +1,170 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                    {Title:'Khám Bệnh',Path:''},
+                    {Title:'Lịch Sử Khám Bệnh',Path:'/lich-su-kham-benh', queryParams: {holdQuery : true}},
+                    {Title:'Lịch Sử Khám Bệnh Chi Tiết',Path:'', Active:true} 
+
+                    ]">
+            </vex-breadcrumbs>
+
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <div class="row mb-3">
+                            <fieldset fxFlex="100%" class="{{(thongTinBenhNhan != undefined && thongTinBenhNhan != null && thongTinBenhNhan.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+                                <legend class="sub-title">Thông tin hành chính</legend>
+                                <div fxFlex="100%">
+                                    <ul class="inline">
+                                        <li>Mã TN:
+                                            <strong>{{thongTinBenhNhan.MaYeuCauTiepNhan}}</strong>
+                                        </li>
+                                        <li>Mã NB:
+                                            <strong>{{thongTinBenhNhan.MaBN}}</strong>
+                                        </li>
+                                        <li>Họ tên:
+                                            <strong>{{thongTinBenhNhan.HoTen}}</strong>
+                                        </li>
+                                        <li>Giới tính:
+                                            <strong>{{thongTinBenhNhan.TenGioiTinh}}</strong>
+                                        </li>
+                                        <ng-container *ngIf="thongTinBenhNhan.LoaiYeuCauTiepNhan != 6">
+                                            <li>Tuổi:
+                                                <strong>{{thongTinBenhNhan.TuoiThoiDiemHienTai}}</strong>
+                                            </li>
+                                        </ng-container>
+                                        <ng-container *ngIf="thongTinBenhNhan.LoaiYeuCauTiepNhan == 6">
+                                            <li>Năm sinh:
+                                                <strong>{{thongTinBenhNhan.NamSinh}}</strong>
+                                            </li>
+                                        </ng-container>
+                                        <li>SĐT:
+                                            <strong>{{thongTinBenhNhan.SoDienThoai}}</strong>
+                                        </li>
+                                        <li>Dân tộc:
+                                            <strong>{{thongTinBenhNhan.DanToc}}</strong>
+                                        </li>
+                                        <li>Địa chỉ:
+                                            <strong>{{thongTinBenhNhan.DiaChi}}</strong>
+                                        </li>
+                                    </ul><br>
+                                    <ul class="inline">
+                                        <li>Nghề nghiệp:
+                                            <strong>{{thongTinBenhNhan.NgheNghiep}}</strong>
+                                        </li>
+                                        <ng-container *ngIf="thongTinBenhNhan.LoaiYeuCauTiepNhan != 6">
+                                            <li>Tuyến khám:
+                                                <strong style="color: green;">{{thongTinBenhNhan.TuyenKham}}</strong>
+                                            </li>
+                                            <li>Số BHYT:
+                                                <strong>{{thongTinBenhNhan.SoBHYT}}</strong>
+                                            </li>
+                                            <li>Mức hưởng:
+                                                <strong *ngIf="thongTinBenhNhan.BHYTMucHuong != null"
+                                                    style="color: blue;">{{thongTinBenhNhan.BHYTMucHuong}}%</strong>
+                                            </li>
+                                            <li>Ngày hiệu lực:
+                                                <strong [style.color]="thongTinBenhNhan.IsBHYTHetHan ? 'red' : ''">
+                                                    {{thongTinBenhNhan.BHYTThoiGianHieuLucDisplay}}</strong>
+                                            </li>
+                                            <li>Lý do TN:
+                                                <strong>{{thongTinBenhNhan.TenLyDoTiepNhan}}</strong>
+                                            </li>
+                                            <li>Lý do khám bệnh:
+                                                <strong>{{thongTinBenhNhan.TenLyDoKhamBenh}}</strong>
+                                            </li>
+                                            <li>Ngày TN:
+                                                <strong>{{thongTinBenhNhan.ThoiDiemTiepNhanDisplay}}</strong>
+                                            </li>
+                                        </ng-container>
+                                        <ng-container *ngIf="thongTinBenhNhan.LoaiYeuCauTiepNhan == 6">
+                                            <li>Công ty:
+                                                <strong style="color: red;">{{thongTinBenhNhan.TenCongTy}}</strong>
+                                            </li>
+                                        </ng-container>
+                                    </ul>
+                                </div>
+                                <!-- <div>
+                                    <ul class="inline">
+                                        <li>Nghề nghiệp:
+                                            <strong>{{thongTinBenhNhan.NgheNghiep}}</strong>
+                                        </li>
+                                        <li>Tuyến khám:
+                                            <strong style="color: green;">{{thongTinBenhNhan.TuyenKham}}</strong>
+                                        </li>
+                                        <li>Mức hưởng:
+                                            <strong style="color: blue;">{{thongTinBenhNhan.BHYTMucHuong}}%</strong>
+                                        </li>
+                                    </ul>
+                                </div> -->
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                            <div fxFlex="100%">
+                                <kendo-tabstrip fxFlex="100%"
+                                    class="content-has-border tabstrip-pad sticky-kendotab-item tabstrip-on-popup">
+                                    <kendo-tabstrip-tab [title]="'KHÁM BỆNH'" [selected]="true">
+                                        <ng-template kendoTabContent>
+                                            <app-lich-su-kham-benh [BenhNhan]="BenhNhan" *ngIf="isShowKhamBenh"
+                                                [yeuCauKhamBenhId]="yeuCauKhamBenhId"
+                                                [YeuCauTiepNhanId]="yeuCauTiepNhanId">
+                                            </app-lich-su-kham-benh>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+
+                                    <kendo-tabstrip-tab [title]="'CHỈ ĐỊNH'">
+                                        <ng-template kendoTabContent>
+                                            <app-lich-su-kham-benh-chi-dinh [yeuCauKhamBenhId]="yeuCauKhamBenhId"
+                                                [yeuCauTiepNhanId]="yeuCauTiepNhanId">
+                                            </app-lich-su-kham-benh-chi-dinh>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+
+                                    <kendo-tabstrip-tab [title]="'KQ CLS'">
+                                        <ng-template kendoTabContent>
+                                            <app-lich-su-kham-benh-ket-qua-cls [YeuCauTiepNhanId]="yeuCauTiepNhanId"> 
+                                                <!-- to do  -->
+                                           </app-lich-su-kham-benh-ket-qua-cls>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+
+                                    <kendo-tabstrip-tab [title]="'CHẨN ĐOÁN'">
+                                        <ng-template kendoTabContent>
+                                            <app-lich-su-kham-benh-ket-luan [BenhNhan]="BenhNhan"
+                                                [yeuCauKhamBenhId]="yeuCauKhamBenhId">
+                                            </app-lich-su-kham-benh-ket-luan>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+
+                                    <!-- <kendo-tabstrip-tab [title]="'TƯỜNG TRÌNH PT/TT'"
+                                        *ngIf="coPhauThuatThuThuat == true">
+                                        <ng-template kendoTabContent>
+                                            <app-lich-su-kham-benh-phau-thuat-thu-thuat
+                                                [yeuCauKhamBenhId]="yeuCauKhamBenhId">
+                                            </app-lich-su-kham-benh-phau-thuat-thu-thuat>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab> -->
+
+                                </kendo-tabstrip>
+                            </div>
+                        </div>
+
+                        <div class="row pt-4">
+                            <button type="button" color="default" title="Phím tắt: Esc" (click)="quayLai()"
+                                mat-raised-button mat-button class="float-right">
+                                Quay lại</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+
+</vex-page-layout>

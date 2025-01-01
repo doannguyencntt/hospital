@@ -1,0 +1,81 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>CẬP NHẬT LƯU TRỮ BỆNH ÁN</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="min-height: 245px;">
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3" class="{{(thongLuuTruHoSo != null && thongLuuTruHoSo.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+            <legend>
+                Thông tin bệnh án
+            </legend>
+
+            <div fxLayout="column">
+                <ul class="inline">
+                    <li>Mã TN: &nbsp;<strong>{{thongLuuTruHoSo.MaTN}}</strong></li>
+                    <li>Mã NB: &nbsp;<strong>{{thongLuuTruHoSo.MaBN}}</strong></li>
+                    <li>Họ tên: &nbsp;<strong>{{thongLuuTruHoSo.HoTen}}</strong></li>
+                    <li>Tuổi: &nbsp;<strong>{{thongLuuTruHoSo.Tuoi}}</strong></li>
+                    <li>Giới tính: &nbsp;<strong>{{thongLuuTruHoSo.GioiTinhDisplay}}</strong></li>
+                    <li>Địa chỉ: &nbsp;<strong>{{thongLuuTruHoSo.DiaChi}}</strong></li>
+                    <li>Nghề nghiệp: &nbsp;<strong>{{thongLuuTruHoSo.NgheNghiep}}</strong></li>
+                    <li>Số BA: &nbsp;<strong>{{thongLuuTruHoSo.SoBenhAn}}</strong></li>
+                    <li>Loại BA: &nbsp;<strong>{{thongLuuTruHoSo.LoaiBenhAn}}</strong></li>
+                    <li>Khoa: &nbsp;<strong>{{thongLuuTruHoSo.Khoa}}</strong></li>
+                    <li>Đối tượng: &nbsp;<strong>{{thongLuuTruHoSo.DoiTuong}}</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3 mt-3">
+            <legend>
+                Thông tin điều trị
+            </legend>
+
+            <div fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                    style="padding-top: 16px;">
+                    <div fxFlex="25%">
+                        <label>
+                            Số lưu trữ: &nbsp;<strong>{{thongLuuTruHoSo.SoLuuTru}}</strong>
+                        </label>
+                    </div>
+                    <!-- required="true" -->
+                    <app-textbox id="ThuTuSapXepLuuTru" fxFlex="30%" fxFlex.sm="30%" label="Thứ tự sắp xếp"
+                        maxlength="50" (modelChange)="thuTuSapXepLuuTruChange($event)" onlynumber="true"
+                        [(model)]="thongLuuTruHoSo.ThuTuSapXepLuuTru" 
+                        [validationerror]="'ThuTuSapXepLuuTru' | validationerror:validationErrors">
+                    </app-textbox>
+                    <div fxFlex="30%">
+                        <label>
+                            Trạng thái bệnh án: &nbsp;<strong>{{thongLuuTruHoSo.TrangThaiSapXep}}</strong>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div fxLayout="column">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                style="padding-top: 16px;">
+                <label>
+                    Người thực hiện: &nbsp;<strong>{{thongLuuTruHoSo.NhanVienThucHien}}</strong>
+                </label>
+
+                <label>
+                    Ngày thực hiện: &nbsp;<strong>{{thongLuuTruHoSo.NgayThucHien}}</strong>
+                </label>
+            </div>
+        </div>
+
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" mat-stroked-button color="primary" mat-dialog-close>Hủy</button>
+    <button tabindex="-1" type="button" (click)="luu()" mat-stroked-button color="primary"
+        class="md-primary">Lưu</button>
+</mat-dialog-actions>

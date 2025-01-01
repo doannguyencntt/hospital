@@ -1,0 +1,35 @@
+<app-grid #gridLichSuTiem
+    [urlGetData]="'TiemChung/GetDataForGridLichSuTiemChung'" [urlGetTotalPage]="'TiemChung/GetTotalPageForGridLichSuTiemChung'"
+    [gridColumns]="lichSuTiemChungGridColumns" 
+    [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true" 
+    [useHeaderDefault]="false" [checkboxAble]="false" [sort]="sort">
+    
+    <ng-template #thoiDiemKhamTemplate let-dataItem>
+        {{dataItem.ThoiDiemKhamDisplay}}
+    </ng-template>
+
+    <ng-template #bacSiKhamTemplate let-dataItem>
+        {{dataItem.BacSiKhamDisplay}}
+    </ng-template>
+
+    <ng-template #trangThaiSauTiemTemplate let-dataItem>
+        <!-- <label class="green">
+            <strong><span>{{dataItem.TrangThaiSauTiemDisplay}}</span></strong>
+        </label> -->
+        {{dataItem.LoaiPhanUngSauTiemDisplay}}
+    </ng-template>
+
+    <ng-template #thoiGianHenTiemTemplate let-dataItem>
+        {{dataItem.ThoiGianHenTiemDisplay}}
+    </ng-template>
+
+    <ng-template #chiTietTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <a (click)="chiTiet(dataItem.Id)">
+                <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.MaYeuCauTiepNhan}}">
+                    {{dataItem.MaYeuCauTiepNhan}}
+                </p>
+            </a>
+        </div>
+    </ng-template>
+</app-grid>

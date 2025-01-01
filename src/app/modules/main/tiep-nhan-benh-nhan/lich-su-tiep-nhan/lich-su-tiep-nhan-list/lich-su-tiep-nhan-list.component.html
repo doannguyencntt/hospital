@@ -1,0 +1,192 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="
+                    [
+                        {Title:'Tiếp Nhận Người Bệnh',Path:''},
+                        {Title:'Lịch Sử Tiếp Nhận',Path:'', Active:true}           
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/lich-su-tiep-nhan" [gridColumns]="gridColumns" [documentType]="documentType"
+                [useActionDefault]="false" [lazyLoadPage]="true" [searchString]="lichSuTiepNhan.SearchString"
+                [additionalSearchString]="addtionStringDefault" [showStt]="true"
+                urlGetData="LichSuTiepNhan/GetDataForGridAsyncLichSuTiepNhan"
+                urlGetTotalPage="LichSuTiepNhan/GetTotalPageForGridAsyncLichSuTiepNhan" [useHeaderDefault]="false"
+                [headerTemplate]="headerTemplate" [checkboxAble]="false" [sort]="sort">
+                <ng-template #thoiDiemTiepNhanTemplate let-dataItem>
+                    {{dataItem.ThoiDiemTiepNhanDisplay}}
+                </ng-template>
+                <ng-template #chiTietTemplate let-dataItem>
+                    <div class="text-center" kendoTooltip>
+                        <a (click)="view(dataItem.Id)">
+                            <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.MaYeuCauTiepNhan}}">
+                                {{dataItem.MaYeuCauTiepNhan}}</p>
+                        </a>
+                    </div>
+                </ng-template>
+                <ng-template #hienThiNgayThangNamTemplate let-dataItem>
+                    {{dataItem.NgayThangNam}}
+                </ng-template>
+                <ng-template #trangThaiTemplate let-dataItem>
+                    <label *ngIf="dataItem.TrangThaiYeuCauTiepNhan == 2" class="green">
+                        <strong><span>Đã hoàn tất</span></strong>
+                    </label>
+                    <label *ngIf="dataItem.TrangThaiYeuCauTiepNhan == 3" class="red">
+                        <strong><span>Đã hủy</span></strong>
+                    </label>
+                </ng-template>
+            </app-grid>
+        </div>
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                    fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        type="search" name="searchString" [(ngModel)]="lichSuTiepNhan.SearchString"
+                        (keyup)="onKey($event)" (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa..." />
+                </div>
+                <app-datetimepicker fxFlex="250px" [(model)]="lichSuTiepNhan.ThoiDiemTiepNhanTuFormat" #tiepnhantu
+                    id="ThoiDiemTiepNhanTuFormat" (modelChange)="thoiDiemTNChange()" label="Tiếp nhận từ"
+                    class="ml-2 on-header" (keyup)="onKey($event)">
+                </app-datetimepicker>
+                <app-datetimepicker fxFlex="250px" [(model)]="lichSuTiepNhan.ThoiDiemTiepNhanDenFormat" #tiepnhanden
+                    id="ThoiDiemTiepNhanDenFormat" (modelChange)="thoiDiemTNChange()" label="Tiếp nhận đến"
+                    class="ml-2 on-header" (keyup)="onKey($event)">
+                </app-datetimepicker>
+                <button type="button" color="primary" (click)="TimkiemNangCao()" class="ml-2"
+                    mat-raised-button>Tìm</button>
+                <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                </button>
+                <span fxFlex></span>
+                <button [matMenuTriggerFor]="columnFilterMenu" fxFlex="none" class="mr-4" mat-icon-button kendoTooltip
+                    title="Lọc cột" type="button">
+                    <mat-icon [icIcon]="icFilterList"></mat-icon>
+                </button>
+
+                <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                    <div *ngFor="let column of gridColumns">
+                        <button *ngIf="column.Title != ''"
+                            class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                            <mat-checkbox [disabled]="true" color="primary">
+                                {{ column.Title }}
+                            </mat-checkbox>
+                        </button>
+                    </div>
+                </mat-menu>
+                <button class="ml-4 right" style="right: 20px;" type="button" mat-icon-button (click)="XuatExcel()"
+                    kendoTooltip title="Xuất Excel" fxFlex="none">
+                    <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                </button>
+                <!-- <mat-menu #appMenu="matMenu" class="menu-form-wrapper" [hasBackdrop]="false">
+                    <div (click)="$event.stopPropagation()" class="pl-1 pr-1" fxFlex="280px">
+                        <div fxLayout="column" fxLayout.lt-sm="column" fxLayoutGap="2px grid"
+                            style="max-height: 400px;overflow-y: auto;" fxLayoutGap.lt-sm="0">
+                            <app-textbox fxFlex="100%" [(model)]="lichSuTiepNhan.HoTen" #benhnhan id="BenhNhanId"
+                                (modelChange)="getInputSearchValue($event, benhnhan.id, benhnhan.label)" maxlength="100"
+                                label="Tên người bệnh">
+                            </app-textbox>
+                            <app-textboxnumeric fxFlex="100%" [(model)]="lichSuTiepNhan.NamSinh" format="#" #namsinh
+                                max=9999 id="NamSinh"
+                                (modelChange)="getInputSearchValue($event, namsinh.id, namsinh.label)" label="Năm sinh">
+                            </app-textboxnumeric>
+                            <app-textbox fxFlex="100%" [(model)]="lichSuTiepNhan.DiaChi" #diachi id="DiaChi"
+                                maxlength="200" (modelChange)="getInputSearchValue($event, diachi.id, diachi.label)"
+                                label="Địa chỉ">
+                            </app-textbox>
+                            <app-datetimepicker fxFlex="100%" [(model)]="lichSuTiepNhan.ThoiDiemTiepNhanTuFormat"
+                                #tiepnhantu id="ThoiDiemTiepNhanTuFormat"
+                                (modelChange)="getInputSearchValue($event, tiepnhantu.id, tiepnhantu.label)"
+                                label="Tiếp nhận từ">
+                            </app-datetimepicker>
+                            <app-datetimepicker fxFlex="100%" [(model)]="lichSuTiepNhan.ThoiDiemTiepNhanDenFormat"
+                                #tiepnhanden id="ThoiDiemTiepNhanDenFormat"
+                                (modelChange)="getInputSearchValue($event, tiepnhanden.id, tiepnhanden.label)"
+                                label="Tiếp nhận đến">
+                            </app-datetimepicker>
+                            <app-textbox fxFlex="100%" [(model)]="lichSuTiepNhan.TrieuChungTiepNhan" #lydo
+                                maxlength="50" id="LyDoKham"
+                                (modelChange)="getInputSearchValue($event, lydo.id, lydo.label)" label="Lý do khám bệnh">
+                            </app-textbox>
+                            <app-textbox fxFlex="100%" [(model)]="lichSuTiepNhan.DoiTuong" #doituong id="DoiTuong"
+                                (modelChange)="getInputSearchValue($event, doituong.id, doituong.label)" maxlength="50"
+                                label="Đối tượng">
+                            </app-textbox>
+                        </div>
+
+                        <div fxLayout="column wrap" fxLayout.lt-sm="column" fxLayoutGap="2px grid"
+                            fxLayoutGap.lt-sm="0">
+                            <div fxFlex="100%" style="margin-top: 10px;">
+                                <button type="button" color="primary" (click)="TimkiemNangCao()"
+                                    class="mr-1 float-right" mat-raised-button>
+                                    Tìm</button>
+                                <button type="button" (click)="cancelSearch()" mat-button class="mr-1 float-right"><i
+                                        class="ft-arrow-left"></i>
+                                    Xóa tìm</button>
+                                <button type="button" (click)="closeMenu()" mat-button class="mr-1 float-left"><i
+                                        class="ft-arrow-left"></i>
+                                    Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-menu>
+                <button [matMenuTriggerFor]="appMenu" mat-flat-button color="primary"
+                    style="width: 245px; margin-left: 10px;" #trigger="matMenuTrigger">
+                    Tìm kiếm nâng cao
+                </button>
+                <div class="tag-item-group" kendoTooltip style="overflow-x: scroll;
+                            overflow-y: hidden;
+                            height: 55px;
+                            width: 100%;
+                            white-space: nowrap;
+                            margin-left: 8px;
+                            margin-top: 4px;">
+                    <button *ngFor="let item of listTagShowOnHeader" [hidden]="!showCancelSearch" id="{{item.Key}}"
+                        value="{{item.Key}}" style="margin-left: 2px;margin-top: 7px;" #tagItem
+                        title="{{item.Title}}: {{item.Value}}" (click)="cancelTagSearch(tagItem.id)"
+                        class="mat-stroked-button">
+                        <div *ngIf="showCancelSearch === true">
+                            {{item.Title}}: <b>{{item.Value}}</b>
+                            <mat-icon style="margin: 5px 0 0 10px; float: right;
+                                        clear: both;" [icIcon]="icicclose" color="warn">
+                            </mat-icon>
+                        </div>
+                    </button>
+                </div>
+                <button *ngIf="showCancelSearch === true" (click)="cancelSearch()"
+                    style="margin-left: 15px; border: 1px;" mat-stroked-button color="warn"
+                    [hidden]="!showCancelSearch">Hủy
+                </button> -->
+            </div>
+        </ng-template>
+        <ng-template #actionTemplate let-dataItem>
+            <button kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+            </button>
+            <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                <ng-template let-customer="customer" matMenuContent>
+                    <button (click)="InBangKeChiPhiKhamBenh(dataItem.Id)" mat-menu-item>
+                        <mat-icon [icIcon]="icPrint"></mat-icon>
+                        <span>Bảng Kê Chi Phí Khám Bệnh</span>
+                    </button>
+                    <button (click)="InHoSoLichSuKhamBenh(dataItem.Id, true)" mat-menu-item>
+                        <mat-icon [icIcon]="icPrint"></mat-icon>
+                        <span>Hồ Sơ Khám Bệnh</span>
+                    </button>
+                    <button *ngIf="dataItem.CoYeuCauKhamBenhNhapVien == true"
+                        (click)="InHoSoLichSuKhamBenh(dataItem.Id, false)" mat-menu-item>
+                        <mat-icon [icIcon]="icPrint"></mat-icon>
+                        <span>Phiếu Khám Bệnh Vào Viện</span>
+                    </button>
+                </ng-template>
+            </mat-menu>
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>

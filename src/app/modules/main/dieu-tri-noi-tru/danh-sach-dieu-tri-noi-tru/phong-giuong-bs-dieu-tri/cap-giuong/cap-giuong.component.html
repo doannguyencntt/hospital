@@ -1,0 +1,172 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <ng-container *ngIf="!dieuTriNoiTruModel.KetThucBenhAn">
+        <p fxFlex="100%" fxFlex.sm="100%">Khoa chỉ định: <b>{{currentKhoaChuyenDen.DisplayName}}</b>
+        
+            <a class="ml-4" style="color:green; text-decoration: underline; font-weight: bold; bottom: 20px;"
+                (click)="xemGoiDichVu()">
+                Dịch vụ giường trong gói
+            </a>
+        </p>
+
+        <app-combobox id="dich-vu-giuong" class="item-no-padding" fxFlex="40%" fxFlex.sm="100%" label="Dịch vụ giường"
+            [url]="'KhamBenh/GetDichVuGiuongBenhVien'" [popupSettings]="null" [required]="true"
+            [queryInfo]="getDichVuGiuongQueryInfo()"
+            [(model)]="yeuCauDichVuGiuongBenhVienPhongGiuongBs.DichVuGiuongBenhVienId" [modelText]="yeuCauDichVuGiuongBenhVienPhongGiuongBs.DichVuGiuongBenhVienDisplay"
+            (selectionChange)="evtDichVuGiuongChanged($event)" (openCombobox)="evtComboboxDichVuGiuongOpened($event)"
+            [validationerror]="'DichVuGiuongBenhVienId' | validationerror: validationErrors">
+        </app-combobox>
+        
+        <app-checkbox name="bao-phong" class="mt-4" fxFlex="10%" fxFlex.sm="100%" label="Bao phòng"
+            [disabled]="isBaoPhongDisabled || (isEditing && yeuCauDichVuGiuongBenhVienPhongGiuongBs.LoaiGiaDichVuCoHieuLuc <= 1 && !isDichVuGiuongChangedWhileEditing)"
+            [(model)]="yeuCauDichVuGiuongBenhVienPhongGiuongBs.BaoPhong"
+            [validationerror]="'BaoPhong' | validationerror: validationErrors">
+        </app-checkbox>
+
+        <app-combobox id="doi-tuong" class="item-no-padding" fxFlex="10%" fxFlex.sm="100%" label="Đối tượng"
+            [url]="'DieuTriNoiTru/GetListDoiTuongSuDung'"
+            [popupSettings]="null" [required]="true" [disabled]="!isDaChiDinhGiuong"
+            [(model)]="yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDung" [modelText]="yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDungDisplay"
+            (modelChange)="evtDoiTuongSuDungChanged($event)" (openCombobox)="evtComboboxDoiTuongOpened($event)"
+            [validationerror]="'DoiTuongSuDung' | validationerror: validationErrors">
+        </app-combobox> 
+
+        <app-textbox id="ly-do-chuyen" class="item-no-padding" fxFlex="40%" fxFlex.sm="100%" label="Lý do chuyển" maxlength="1000"
+            [(model)]="yeuCauDichVuGiuongBenhVienPhongGiuongBs.GhiChu"
+            [validationerror]="'GhiChu' | validationerror: validationErrors">
+        </app-textbox>
+
+        <div fxFlex="25%" fxFlex.sm="100%">
+            <div class="container-custom">
+                <label style="display: flex;">Giường chuyển đến <p *ngIf="!yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDung || yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDung != enumDoiTuongSuDung.NguoiNha" style="color: red; margin-left: 5px;">*</p></label>
+                <div fxLayout="row" fxLayoutGap="16px" style="padding-bottom: 8px; justify-content: space-between;">
+                    <div>
+                        {{yeuCauDichVuGiuongBenhVienPhongGiuongBs.GiuongBenhDisplay}}
+                    </div>
+                    <div>
+                        <a *ngIf="!yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDung || yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDung != enumDoiTuongSuDung.NguoiNha" style="text-decoration: underline; color: blue;" (click)="chonGiuong()">
+                            <i>
+                                Chọn
+                            </i>
+                        </a>
+                        <a *ngIf="yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDung && yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDung == enumDoiTuongSuDung.NguoiNha" style="text-decoration: underline; color: grey;">
+                            <i>
+                                Chọn
+                            </i>
+                        </a>
+                    </div>
+                </div>
+                <app-validationerrorother
+                    [validationerror]="'GiuongBenhId' | validationerror:validationErrors">
+                </app-validationerrorother>
+            </div>
+        </div>
+
+        <app-combobox id="loai-giuong" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Loại giường"
+            [url]="'DichVuGiuongBenhVien/GetListLoaiGiuong'"
+            [required]="!yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDung || yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDung != enumDoiTuongSuDung.NguoiNha" [disabled]="true" [bind]="true"
+            [(model)]="yeuCauDichVuGiuongBenhVienPhongGiuongBs.LoaiGiuong" [modelText]="yeuCauDichVuGiuongBenhVienPhongGiuongBs.LoaiGiuongDisplay"
+            [validationerror]="'LoaiGiuong' | validationerror: validationErrors">
+        </app-combobox>
+
+        <app-datetimepicker id="thoi-gian-nhan" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Thời gian nhận"
+            [formatDate]="'dd/MM/yyyy HH:mm'" [required]="true" [disabled]="(!isDaChiDinhGiuong || isEditingFirstData) && !IsBenhAnSoSinh"
+            [(model)]="yeuCauDichVuGiuongBenhVienPhongGiuongBs.ThoiDiemBatDauSuDung"
+            (modelChange)="evtThoiDiemBatDauSuDungChanged($event)"
+            [validationerror]="'ThoiDiemBatDauSuDung' | validationerror: validationErrors">
+        </app-datetimepicker>
+
+        <app-datetimepicker id="thoi-gian-tra" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Thời gian trả"
+            [formatDate]="'dd/MM/yyyy HH:mm'" 
+            [disabled]="yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDung && yeuCauDichVuGiuongBenhVienPhongGiuongBs.DoiTuongSuDung == enumDoiTuongSuDung.BenhNhan && !IsBenhAnSoSinh"
+            [(model)]="yeuCauDichVuGiuongBenhVienPhongGiuongBs.ThoiDiemKetThucSuDung"
+            (modelChange)="evtThoiDiemKetThucSuDungChanged($event)"
+            [validationerror]="'ThoiDiemKetThucSuDung' | validationerror: validationErrors">
+        </app-datetimepicker>
+
+        <div fxFlex="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+            <button type="button" class="mr-2" mat-button color="primary" (click)="huy()">Huỷ</button>
+            <button *ngIf="!isEditing" type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Enter" mat-raised-button (click)="themDichVuGiuong()">Thêm</button>
+            <button *ngIf="isEditing" type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Ctrl + S" (click)="luu()">Lưu</button>
+        </div>
+    </ng-container>
+
+    <p fxFlex="100%" fxFlex.sm="100%">
+        <a (click)="chiTietSuDungGiuongTheoNgay()" style="text-decoration: underline; color: blue; pointer-events: all;">Chi tiết sử dụng giường theo ngày</a>
+    </p>
+
+    <div fxFlex="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-grid #gridCapGiuong fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" masterName="gridCapGiuong" maxHeight="500" reorderRowsMoveItemData="true"
+                [gridColumns]="gridColumns" [documentType]="documentType" [sort]="sortDanhSachEkipDieuTri" [additionalSearchString]="yeuCauTiepNhanId"
+                [urlGetData]="urlGetDanhSachEkipDieuTriForGrid" [urlGetTotalPage]="urlGetTotalPagesDanhSachEkipDieuTriForGrid"
+                [allowSortDefault]="true" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+                [lazyLoadPage]="true" [pageable]="false" [checkboxAble]="false"
+                [showStt]="true">
+            </app-grid>
+
+            <ng-template #khoaChiDinhTemplate let-dataItem>
+                {{dataItem.KhoaChiDinhDisplay}}
+            </ng-template>
+
+            <ng-template #giuongBenhTemplate let-dataItem>
+                {{dataItem.TenGiuong}}
+            </ng-template>
+
+            <ng-template #loaiGiuongTemplate let-dataItem>
+                {{dataItem.LoaiGiuongDisplay}}
+            </ng-template>
+
+            <ng-template #dichVuGiuongBenhVienTemplate let-dataItem>
+                {{dataItem.DichVuGiuongBenhVienDisplay}}
+            </ng-template>
+
+            <ng-template #doiTuongSuDungTemplate let-dataItem>
+                {{dataItem.DoiTuongSuDungDisplay}}
+            </ng-template>
+
+            <ng-template #thoiGianNhanTemplate let-dataItem>
+                {{dataItem.ThoiGianNhanDisplay}}
+            </ng-template>
+
+            <ng-template #thoiGianTraTemplate let-dataItem>
+                {{dataItem.ThoiGianTraDisplay}}
+            </ng-template>
+
+            <ng-template #baoPhongTemplate let-dataItem let-rowIndex="rowIndex">
+                <!-- {{dataItem.BaoPhongDisplay}} -->
+                <app-checkbox id="bao-phong-{{rowIndex + 1}}"
+                    [disabled]="true"
+                    [(model)]="dataItem.BaoPhong"
+                    [validationerror]="'dataItem[' + dataItem.Id + '].BaoPhong' | validationerror: validationErrors">
+                </app-checkbox>
+            </ng-template>
+
+            <ng-template #donGiaTemplate let-dataItem>
+                {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #donGiaBHYTTemplate let-dataItem>
+                {{dataItem.DonGiaBHYT | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #thanhTienTamTinhTemplate let-dataItem>
+                {{dataItem.ThanhTienTamTinh | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #lyDoChuyenTemplate let-dataItem>
+                {{dataItem.GhiChu}}
+            </ng-template>
+
+            <ng-template #actionTemplate let-dataItem>
+                <div class="text-center" kendoTooltip *ngIf="!dieuTriNoiTruModel.KetThucBenhAn">
+                    <button [disabled]="dataItem.IsReadOnly" *ngIf="dataItem.DaQuyetToan != true" mat-icon-button kendoTooltip title="Chỉnh sửa" type="button" (click)="chinhsua(dataItem)">
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                    </button>
+                    <button [disabled]="dataItem.IsFirstData || dataItem.IsReadOnly" [ngClass]="!dataItem.IsFirstData ? 'red-color' : 'grey-color'" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoa(dataItem)">
+                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

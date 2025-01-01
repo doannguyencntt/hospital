@@ -1,0 +1,96 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <div fxFlex="100%">
+            <br>
+        </div>
+        <div fxFlex="100%">
+            <table width="100%">
+                <tr>
+                    <th style="width: 5%;background-color: #EEE9E9;height: 50px">#</th>
+                    <th style="width: 20%;background-color: #EEE9E9">NỘI DUNG</th>
+                    <th style="width: 15%;background-color: #EEE9E9">TÊN THUỐC</th>
+                    <th style="width: 15%;background-color: #EEE9E9">DỊ NGUYÊN GÂY DỊ ỨNG</th>
+                    <th style="width: 15%;background-color: #EEE9E9">CÓ-KHÔNG/SỐ LẦN</th>
+                    <th style="width: 15%;background-color: #EEE9E9">BIỂU HIỆN LÂM SÀNG</th>
+                    <th style="width: 15%;background-color: #EEE9E9;">XỬ TRÍ</th>
+                </tr>
+                <tr *ngFor="let item of phieuKhaiThacTienSuDiUngList">
+                    <td >{{item.Stt}}</td>
+                    <td style="width: 20%;;">{{item.NoiDung}}</td>
+                    <td style="width: 15%;">
+                        <app-autocomplete id="TenThuoc" [(model)]="item.TenThuoc" [dataList]="dataDuocPham" popupSettings="null"
+                             >
+                        </app-autocomplete>
+                    </td>
+                    <td style="width: 15%;">
+                        <app-textarea id="DiNguyenGayDiUng" [(model)]="item.DiNguyenGayDiUng" >
+                        </app-textarea>
+                    </td>
+                    <td style="width: 19%;">
+                        <div>
+                            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap.lt-sm="0">
+                                <app-radio fxFlex="74%" id="CoKhongSoLan" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"  class="no-label"
+                                    [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                                    [(model)]="item.CoKhong" (modelChange)="ChonCoKhong($event,item)">
+                                </app-radio>
+                                <app-textboxnumeric fxFlex="20%" style="padding-bottom: 0px;"  class="no-label" [(model)]="item.SoLan"
+                                     *ngIf="item.CoKhong ==true"
+                                     >
+                                </app-textboxnumeric>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width: 13%;">
+                        <app-textarea id="BieuHienLamSang" [(model)]="item.BieuHienLamSang"  >
+                        </app-textarea>
+                    </td>
+                    <td style="width: 13%;">
+                        <app-textarea id="XuTri" [(model)]="item.XuTri" >
+                        </app-textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <app-autocomplete id="BSKhaiThac" fxFlex="20%" fxFlex.sm="20%" label="BS khai thác" [dataList]="data" popupSettings="null"
+            [(model)]="phieuKhaiThacTienSuDiUng.BSKhaiThac" required="true" bind="true"
+            [validationerror]="'BacSiKhaiThac' | validationerror:validationErrors">
+        </app-autocomplete> 
+         <app-upload id="Upload" #uploadKhaiThacTienSuBenh [allowedExtensions]="allowedExtensions" fxFlex="40%"
+            [(model)]="phieuKhaiThacTienSuDiUng.FileChuKy" [multiple]="true" label="File chữ ký"
+            [template]="templateFileChuanDoanHAInfo">
+        </app-upload>
+        <ng-template #templateFileChuanDoanHAInfo let-files>
+            <table width="100%" >
+                <tr>
+                    <td>
+                        <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                            (click)="uploadKhaiThacTienSuBenh.viewFile(files[0])"
+                            class="custom-name red">{{files[0].name}}</a>
+                        <a *ngIf="!files[0].error" title="{{files[0].name}}"
+                            (click)="uploadKhaiThacTienSuBenh.viewFile(files[0])" class="green"
+                            class="custom-name green">{{files[0].name}}</a>
+                    </td>
+                    <td style="width:25px">
+                        <a type="button" (click)="uploadKhaiThacTienSuBenh.remove(files[0].uid)" mat-icon-button>
+                            <mat-icon [icIcon]="icClear"></mat-icon>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </ng-template>  
+        <div fxFlex="100%" style="padding-bottom: 50px;">
+            <label fxFlex="25%" style="padding-top: 30px;">Người thực hiện :
+                <b>{{phieuKhaiThacTienSuDiUng.TaiKhoanDangNhap}}</b></label>
+            <label fxFlex="25%" style="padding-top: 30px;">Ngày thực hiện : <b>{{phieuKhaiThacTienSuDiUng.NgayThucHien}}</b></label>
+            <span fxFlex="50%" style="text-align: right;">
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" style="pointer-events: all;"
+                    (click)="In()">In</button>
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                    (click)="Huy()">Hủy</button>
+                <button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+                    Lưu
+                </button>
+            </span>
+        </div>
+    </div>
+</div>

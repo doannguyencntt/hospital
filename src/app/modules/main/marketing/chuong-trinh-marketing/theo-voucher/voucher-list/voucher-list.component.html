@@ -1,0 +1,156 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    { Title: 'Marketing', Path: '' },
+                    { Title: 'Chương Trình Marketing', Path: '' },
+                    { Title: 'Theo Voucher', Path: '/marketing/ct-marketing/voucher' , Active: true }]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/marketing/ct-marketing/voucher"
+                [gridColumns]="gridColumns" [documentType]="documentType"
+                [showExportExcel]="true" (extExportExcel)="exportExcel()" [showStt]="true"
+                [useActionDefault]="false" [lazyLoadPage]="true"
+                [useHeaderDefault]="false" [headerTemplate]="headerTemplate" [additionalSearchString]="firstSearchString">
+            </app-grid>
+        </div>
+    </vex-page-layout-content> 
+</vex-page-layout>
+
+<!-- <ng-template #headerTemplate>
+    <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+        <div class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+            fxLayout="row" fxLayoutAlign="start center">
+            <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+            <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                type="search" name="searchString" [(ngModel)]="voucherSearch.SearchString"
+                (keyup)="onKey($event)" (ngModelChange)="clearSearch()" placeholder="Nhập từ khóa..." />
+
+            <app-daterangepicker id="ThoiGianApDung" fxFlex="300px" fxFlex.sm="auto" class="mt-1 ml-2 on-header"
+                [(model)]="voucherSearch.RangeNgayApDung" 
+                label="Từ ngày - đến ngày" (modelChange)="timKiem()">
+            </app-daterangepicker>
+        </div>
+
+        <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+            <mat-icon [icIcon]="icSearch"></mat-icon>
+        </button>
+
+        <span fxFlex></span>
+        
+        <button [matMenuTriggerFor]="columnFilterMenu" class="mr-4" fxFlex="none" mat-icon-button
+            kendoTooltip title="Lọc cột" type="button">
+            <mat-icon [icIcon]="icFilterList"></mat-icon>
+        </button>
+
+        <button (click)="exportExcel()" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip title="Xuất Excel"
+            type="button">
+            <mat-icon [icIcon]="icFileExcel"></mat-icon>
+        </button>
+
+        <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+            <div *ngFor="let column of filterColumns">
+                <button
+                    class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                    <mat-checkbox [disabled]="true" color="primary">
+                        {{ column.Title }}
+                    </mat-checkbox>
+                </button>
+            </div>
+        </mat-menu>
+
+        <button (click)="add()" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm" type="button">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+</ng-template> -->
+<ng-template #headerTemplate>
+    <div class="bg-app-bar pl-0 h-15 border-b sticky left-0 px-6" fxLayout="row" fxLayoutAlign="start center">
+        <div class="bg-card rounded-full border px-4 ml-2" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                fxLayoutAlign="start center" style="margin-top: 2px;">
+                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search"
+                    name="searchString" [(ngModel)]="voucherSearch.SearchString" (keyup)="onKey($event)"
+                    (ngModelChange)="clearSearch()" placeholder="Nhập từ khóa..." />
+            </div>
+            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                <mat-icon [icIcon]="icSearch"></mat-icon>
+            </button>
+
+        <app-daterangepicker id="tuNgayDenNgay" fxFlex="300px" fxFlex.sm="auto" class="mt-1 ml-2 on-header"
+            [(model)]="voucherSearch.RangeNgayApDung" 
+            label="Từ ngày - đến ngày" (modelChange)="timKiem()">
+        </app-daterangepicker>
+
+        <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+            <mat-icon [icIcon]="icSearch"></mat-icon>
+        </button>
+
+        <span fxFlex></span>
+
+        <button [matMenuTriggerFor]="columnFilterMenu" class="ml-3" fxFlex="none" mat-icon-button
+            kendoTooltip title="Lọc cột" type="button">
+            <mat-icon [icIcon]="icFilterList"></mat-icon>
+        </button>
+
+        <button (click)="exportExcel()" class="ml-3" fxFlex="none" mat-icon-button kendoTooltip title="Xuất Excel"
+            type="button">
+            <mat-icon [icIcon]="icFileExcel"></mat-icon>
+        </button>
+
+        <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+            <div *ngFor="let column of filterColumns">
+                <button
+                    class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                    <mat-checkbox [disabled]="true" color="primary">
+                        {{ column.Title }}
+                    </mat-checkbox>
+                </button>
+            </div>
+        </mat-menu>
+
+        <button (click)="add()" class="ml-3" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm" type="button">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #soLuongPhatHanhTemplate let-dataItem>
+    {{dataItem.SoLuongPhatHanhDisplay}}
+</ng-template>
+
+<ng-template #tuNgayTemplate let-dataItem>
+    {{dataItem.TuNgayDisplay}}
+</ng-template>
+
+<ng-template #denNgayTemplate let-dataItem>
+    {{dataItem.DenNgayDisplay}}
+</ng-template>
+
+<ng-template #groupTemplate let-dataItem >
+    <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu"
+        mat-icon-button type="button">
+        <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+    </button>
+    <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+        <ng-template matMenuContent>
+            <button (click)="edit(dataItem)" mat-menu-item>
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+                <span>Sửa</span>
+            </button>
+            <button (click)="delete(dataItem)" mat-menu-item>
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+                <span>Xoá</span>
+            </button>
+            <button (click)="chiTiet(dataItem)" mat-menu-item>
+                <mat-icon [icIcon]="icDetail"></mat-icon>
+                <span>Chi tiết sử dụng</span>
+            </button>
+        </ng-template>
+    </mat-menu>
+</ng-template>

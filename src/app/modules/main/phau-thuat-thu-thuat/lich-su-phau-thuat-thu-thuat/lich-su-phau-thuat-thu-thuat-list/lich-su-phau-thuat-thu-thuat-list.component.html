@@ -1,0 +1,109 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="
+                    [
+                        { Title: 'Phẫu Thuật Thủ Thuật', Path: '' },
+                        { Title: 'Lịch Sử Phẫu Thuật Thủ Thuật', Path: '/lich-su-phau-thuat-thu-thuat', Active: true }           
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+                [lazyLoadPage]="true" [urlGetData]="'PhauThuatThuThuat/GetDataForGridAsyncLichSuPhauThuatThuThuat'"
+                [urlGetTotalPage]="'PhauThuatThuThuat/GetTotalPageForGridAsyncLichSuPhauThuatThuThuat'"
+                [searchString]="lichSuPTTT.SearchString" [additionalSearchString]="addtionStringDefault"
+                [showStt]="true" [useHeaderDefault]="false" [headerTemplate]="headerTemplate" [checkboxAble]="false" [sort]="sort">
+                <ng-template #thoiDiemTiepNhanTemplate let-dataItem>
+                    {{dataItem.ThoiDiemTiepNhanDisplay}}
+                </ng-template>
+                <ng-template #thoiDiemThucHienTemplate let-dataItem>
+                    {{dataItem.ThoiDiemThucHienDisplay}}
+                </ng-template>
+                <ng-template #thoiDiemHoanThanhTemplate let-dataItem>
+                    {{dataItem.ThoiDiemHoanThanhDisplay}}
+                </ng-template>
+                <ng-template #chiTietTemplate let-dataItem>
+                    <div class="text-center" kendoTooltip>
+                        <a (click)="view(dataItem.Id, dataItem.LaKhongThucHien)">
+                            <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.MaYeuCauTiepNhan}}">
+                                {{dataItem.MaYeuCauTiepNhan}}
+                            </p>
+                        </a>
+                    </div>
+                </ng-template>
+                <ng-template #trangThaiTemplate let-dataItem>
+                    <label *ngIf="dataItem.TrangThaiPTTTSearch === 'Đã chuyển giao'" class="green">
+                        <strong><span>Đã chuyển giao</span></strong>
+                    </label>
+                    <label *ngIf="dataItem.TrangThaiPTTTSearch === 'Đã tử vong'" class="red">
+                        <strong><span>Đã tử vong</span></strong>
+                    </label>
+                </ng-template>
+            </app-grid>
+        </div>
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                    fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search"
+                        name="searchString" [(ngModel)]="lichSuPTTT.SearchString" (keyup)="onKey($event)"
+                        (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa..." />
+                </div>
+                <app-datetimepicker fxFlex="245px" #tiepnhantu id="ThoiDiemTiepNhanTuFormat"
+                    [(model)]="lichSuPTTT.ThoiDiemTiepNhanTuFormat"
+                    label="Hoàn thành từ" class="ml-2 on-header" (keyup)="onKey($event)">
+                </app-datetimepicker>
+                <app-datetimepicker fxFlex="245px" #tiepnhanden id="ThoiDiemTiepNhanDenFormat"
+                    [(model)]="lichSuPTTT.ThoiDiemTiepNhanDenFormat"
+                    label="Hoàn thành đến" class="ml-2 on-header" (keyup)="onKey($event)">
+                </app-datetimepicker>
+
+                <app-checkbox [(model)]="lichSuPTTT.ThongTinThucHien.ThucHien" id="thucHien" label="Thực hiện"
+                    class="ml-2 mt-2 mr-1"></app-checkbox>
+                <app-checkbox [(model)]="lichSuPTTT.ThongTinThucHien.KhongThucHien" id="khongThucHien" label="Không thực hiện"
+                    class="mt-2 mr-1"></app-checkbox>
+
+                <button type="button" color="primary" (click)="TimKiemNangCao()" class="ml-2"
+                    mat-raised-button>Tìm</button>
+                <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                </button>
+                <span fxFlex></span>
+                <button [matMenuTriggerFor]="columnFilterMenu" fxFlex="none" class="mr-4" mat-icon-button kendoTooltip
+                    title="Lọc cột" type="button">
+                    <mat-icon [icIcon]="icFilterList"></mat-icon>
+                </button>
+
+                <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                    <div *ngFor="let column of gridColumns">
+                        <button *ngIf="column.Title != ''"
+                            class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                            <mat-checkbox [disabled]="true" color="primary">
+                                {{ column.Title }}
+                            </mat-checkbox>
+                        </button>
+                    </div>
+                </mat-menu>
+
+                <button class="ml-4 right" style="right: 20px;" type="button" mat-icon-button (click)="exportExcel()"
+                    kendoTooltip title="Xuất Excel" fxFlex="none">
+                    <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #khoaGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+        <ng-template #TuongTrinhLaiTemplate let-dataItem>
+            <button *ngIf="dataItem.DuocTuongTrinhLai===true && dataItem.TuVongTrongPTTT != true" color="primary" mat-raised-button
+                (click)="tuongtinhLai(dataItem)">Tường trình
+                lại</button>
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>

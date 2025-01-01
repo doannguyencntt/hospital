@@ -1,0 +1,68 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Ngày Nghỉ Hưởng Bảo Hiểm Xã Hội</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 290px;">
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div fxLayout="row wrap" fxFlex="100%" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            style="padding-top: 16px;">
+
+            <div fxFlex="10%">
+                <mat-icon [icIcon]="icInfo" kendoTooltip title="Thời điểm tiếp nhận">
+                </mat-icon>
+            </div>
+            <app-datepicker fxFlex="45%" label="Từ ngày" [minDate]="dateTiepNhanMin"
+                [(model)]="thongTinNgayNghiHuongBHYT.ThoiDiemTiepNhan" required="true"
+                [validationerror]="'ThoiDiemTiepNhan' | validationerror:validationErrors">
+            </app-datepicker>
+
+
+            <app-datepicker fxFlex="45%" label="Đến ngày" [minDate]="dateTiepNhanMin"
+                [(model)]="thongTinNgayNghiHuongBHYT.DenNgay" required="true"
+                [validationerror]="'DenNgay' | validationerror:validationErrors">
+            </app-datepicker>
+
+            <strong class="font_size">Chuẩn đoán và phương pháp điều trị</strong>
+            <app-combobox label="Chẩn đoán" url="KhamBenh/ICD"
+                [(model)]="thongTinNgayNghiHuongBHYT.ICDChinhNghiHuongBHYT" fxFlex="100%"
+                [(modelText)]="thongTinNgayNghiHuongBHYT.TenICDChinhNghiHuongBHYT" popupSettings="null"
+                (selectionChange)="iCDSelectionChange($event)" [template]="iCDChinhTemplate"
+                [templateHeader]="iCDChinhTemplateHeader" class="item-no-padding" [required]="true"
+                [validationerror]="'ICDChinhNghiHuongBHYT' | validationerror:validationErrors"
+                [queryInfo]="{ParameterDependencies:'{ChanDoanICDId:' + thongTinNgayNghiHuongBHYT.ICDChinhNghiHuongBHYT +'}', Take: 50}">
+                <ng-template #iCDChinhTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="25%">Mã</th>
+                            <th>Tên Tiếng Việt</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #iCDChinhTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="25%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+            <app-textarea [minHeight]="60" id="huong-dan-dieu-tri" class="item-no-padding" fxFlex="100%"
+                label="Phương pháp điều trị" [(model)]="thongTinNgayNghiHuongBHYT.PhuongPhapDieuTriNghiHuongBHYT"
+                [required]="true" maxlength="4000"
+                [validationerror]="'PhuongPhapDieuTriNghiHuongBHYT' | validationerror:validationErrors">
+            </app-textarea>
+
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" (click)="close()" mat-stroked-button color="primary"
+        mat-dialog-close>Hủy</button>
+    <button tabindex="-1" type="button" (click)="xemGiayHuongBHXH()" mat-stroked-button color="primary"
+        class="md-primary">Xác Nhận</button>
+</mat-dialog-actions>

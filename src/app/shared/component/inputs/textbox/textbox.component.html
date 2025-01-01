@@ -1,0 +1,94 @@
+<kendo-textbox-container *ngIf="isAutoFocus == false" floatingLabel="{{label}}" [ngClass]="{'k-state-initial':(model!=null || (placeHolder != '' && placeHolder != null) ),'required':required, 'background-white': isWhiteBackground}">   
+    <div fxLayout="row wrap" fxFlex="100%">
+        <input placeholder="{{placeHolder}}" fxFlex="90%" kendoTextBox (blur)="blur($event)" type="{{type}}" ngControl="model" [readonly]="readonly"
+            [disabled]="disabled" id="{{id}}" name="{{id}}" [(ngModel)]="model" (ngModelChange)="emit($event)"
+            maxlength="{{maxlength}}" *ngIf="!onlynumber && !onlyNumberAndCharacter && eyesDisplay == true" />
+        <input placeholder="{{placeHolder}}" fxFlex="90%" kendoTextBox (blur)="blur($event)" type="{{type}}" ngControl="model" [readonly]="readonly"
+            [disabled]="disabled" id="{{id}}" name="{{id}}" (ngModelChange)="emit($event)" [(ngModel)]="model"
+            maxlength="{{maxlength}}" digitOnly *ngIf="onlynumber && !onlyNumberAndCharacter && eyesDisplay == true" />
+
+            <input placeholder="{{placeHolder}}" fxFlex="100%" kendoTextBox (blur)="blur($event)" type="{{type}}" ngControl="model" [readonly]="readonly"
+            [disabled]="disabled" id="{{id}}" name="{{id}}" [(ngModel)]="model" (ngModelChange)="emit($event)"
+            maxlength="{{maxlength}}" *ngIf="!onlynumber && !onlyNumberAndCharacter && eyesDisplay != true" />
+        <input fxFlex="100%" kendoTextBox (blur)="blur($event)" type="{{type}}" ngControl="model" [readonly]="readonly"
+            [disabled]="disabled" id="{{id}}" name="{{id}}" (ngModelChange)="emit($event)" [(ngModel)]="model"
+            maxlength="{{maxlength}}" digitOnly *ngIf="onlynumber && !onlyNumberAndCharacter && eyesDisplay != true" />
+
+            <mat-icon [icIcon]="icKeyboardVoice" class="voice" *ngIf="useVoice" (click)="showVoice()"></mat-icon>
+        <button fxFlex="10%" *ngIf="eyesDisplay == true" 
+        (click)="toggleVisibility()"
+        kendoTooltip title="Nhấp vào mắt để chuyển đổi cách hiển thị" mat-icon-button matSuffix
+            type="button">
+            <mat-icon *ngIf="visible" [icIcon]="icVisibility"></mat-icon>
+            <mat-icon *ngIf="!visible" [icIcon]="icVisibilityOff"></mat-icon>
+        </button>
+        
+        <label  class="red" [innerHTML]="validationerror"></label>
+    </div>
+    
+</kendo-textbox-container>
+
+<kendo-textbox-container *ngIf="isAutoFocus == true" floatingLabel="{{label}}" [ngClass]="{'k-state-initial':(model!=null || (placeHolder != '' && placeHolder != null) ),'required':required, 'background-white': isWhiteBackground}">
+    <input placeholder="{{placeHolder}}" kendoTextBox  (blur)="blur($event)"  type="{{type}}" ngControl="model" [readonly]="readonly" [disabled]="disabled" id="{{id}}isAutoFocus" name="{{id}}" 
+    [(ngModel)]="model" (ngModelChange)="emit($event)" maxlength="{{maxlength}}" [tabindex]="tabindex"
+            *ngIf="!onlynumber && !onlyNumberAndCharacter"/>             
+     <input placeholder="{{placeHolder}}" kendoTextBox  (blur)="blur($event)" type="{{type}}" ngControl="model" [readonly]="readonly" [disabled]="disabled" id="{{id}}isAutoFocus" name="{{id}}" 
+     (ngModelChange)="emit($event)"  [(ngModel)]="model"  maxlength="{{maxlength}}" [tabindex]="tabindex"
+                digitOnly *ngIf="onlynumber && !onlyNumberAndCharacter"/>
+                <mat-icon [icIcon]="icKeyboardVoice" class="voice" *ngIf="useVoice" (click)="showVoice()"></mat-icon>
+     <label class="red" [innerHTML]="validationerror"></label>
+
+</kendo-textbox-container>
+
+<!-- 
+<div class="form-row" kendoTooltip>
+    <div class="form-group {{moreClass}} col-sm-12" *ngIf="!horizontalForm">
+        <label for="{{id}}" *ngIf="label!=null && label!=''">{{label}}<span class="text-danger" *ngIf="required">*</span></label>
+        <div [ngClass]="{'position-relative has-icon-right':showIconEyeRight}">
+                <input type="{{type}}" class="form-control {{moreClassForInput}}" [ngClass]="validationerror!=''?'has-error':''" kendoTextBox id="{{id}}"
+                [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+                ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}"  autocomplete="{{type=='password'?'new-password':'off'}}" maxlength="{{maxlength}}"
+                digitOnly *ngIf="onlynumber && !onlyNumberAndCharacter"/>
+                <input type="{{type}}" class="form-control {{moreClassForInput}}" [ngClass]="validationerror!=''?'has-error':''" kendoTextBox id="{{id}}"
+                [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+                ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}"  autocomplete="{{type=='password'?'new-password':'off'}}" maxlength="{{maxlength}}"
+                *ngIf="!onlynumber && !onlyNumberAndCharacter"/>
+                <input type="{{type}}" class="form-control {{moreClassForInput}}" [ngClass]="validationerror!=''?'has-error':''" kendoTextBox id="{{id}}"
+                [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+                ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}"  autocomplete="{{type=='password'?'new-password':'off'}}" maxlength="{{maxlength}}"
+                numberAndLetter *ngIf="onlyNumberAndCharacter"/> 
+                <div *ngIf="showIconEyeRight" class="form-control-position" (click)="toggleEye()" style="top:5px;cursor: pointer;">
+                    <i class="{{eyeMode}}"></i>
+                </div>          
+        </div>
+    </div>
+
+    <div class="col-sm-12 {{moreClass}}" *ngIf="horizontalForm">
+      <div class="form-row">
+        <label for="{{id}}" class="{{classLabel}} col-form-label" *ngIf="label!=null && label!=''">{{label}} <span
+                class="text-danger" *ngIf="required">*</span></label>
+        <div class="{{classField}}">
+            <input type="{{type}}" class="form-control {{moreClassForInput}}" [ngClass]="validationerror!=''?'has-error':''" kendoTextBox id="{{id}}"
+                [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+                ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}"  autocomplete="{{type=='password'?'new-password':'off'}}" maxlength="{{maxlength}}"
+                digitOnly *ngIf="onlynumber && !onlyNumberAndCharacter" inputmode="numeric" pattern="[0-9]*"/>
+            <input type="{{type}}" class="form-control {{moreClassForInput}}" [ngClass]="validationerror!=''?'has-error':''" kendoTextBox id="{{id}}"
+                [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+                ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}"  autocomplete="{{type=='password'?'new-password':'off'}}" maxlength="{{maxlength}}"
+                *ngIf="!onlynumber && !onlyNumberAndCharacter"/>
+            <input type="{{type}}" class="form-control {{moreClassForInput}}" [ngClass]="validationerror!=''?'has-error':''" kendoTextBox id="{{id}}"
+                [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+                ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}"  autocomplete="{{type=='password'?'new-password':'off'}}" maxlength="{{maxlength}}"
+                numberAndLetter *ngIf="onlyNumberAndCharacter && !onlynumber"/>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="alert alert-danger alert-dismissible fade show mt-n-15" role="alert" *ngIf="validationerror!=''">
+            <div [innerHTML]="validationerror"></div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="validationerror=''">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+</div> -->

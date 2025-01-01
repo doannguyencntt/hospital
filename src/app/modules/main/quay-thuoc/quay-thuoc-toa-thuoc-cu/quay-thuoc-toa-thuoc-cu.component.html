@@ -1,0 +1,91 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="
+                    [
+                    {Title:'Nhà Thuốc',Path:'/nha-thuoc'},
+                    {Title:'Mua Toa Cũ ',Path:'',Active:true}
+                    ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="auto">
+                    <div class="card" fxFlex="auto">
+                        <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                            <app-quay-thuoc-thong-tin-hanh-chinh [MaBN]="id"></app-quay-thuoc-thong-tin-hanh-chinh>
+                            <h4 class="sub-title" fxFlex="100%" style="font-weight: bold;">Toa Thuốc Cũ</h4>
+                            <app-grid [headerTemplate]="headerTemplate" [useHeaderDefault]="false"
+                                [urlGetData]="urlGetDataGridChild" [urlGetTotalPage]="urlGetTotalPageGridChild"
+                                [gridColumns]="gridColumns" [useAddDeault]="false" [useActionDefault]="false"
+                                [checkboxAble]="true" [detailTemplate]="detailTemplate" [lazyLoadPage]="true"
+                                (extCheckboxSelection)="extCheckboxSelection($event)" heightToolbar="325">
+                            </app-grid>
+
+                            <ng-template #detailTemplate let-dataItem>
+                                <app-grid [gridColumns]="gridChildColumns" [useAddDeault]="false"
+                                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                                    [lazyLoadPage]="true" [urlGetData]="urlGetDataGridChild1"
+                                    [urlGetTotalPage]="urlGetTotalPageGridChild1" searchString="{{dataItem.Id}}"
+                                    [autoHeight]="true" [pageable]="false">
+                                </app-grid>
+                            </ng-template>
+                            <ng-template #detailTemplateCT let-dataItem>
+                                <span style="color:red" *ngIf="dataItem.LaDuocPhamBenhVien ==  false">Dược phẩm ngoài
+                                    bệnh viện</span>
+                                <span style="color:blue" *ngIf="dataItem.LaDuocPhamBenhVien ==  true">Dược phẩm trong
+                                    bệnh viện</span>
+                            </ng-template>
+                            <ng-template #headerTemplate>
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0" class="px-2 py-3">
+                                    <app-textbox id="DVKhamHienThi" fxFlex="20%" fxFlex.sm="40%" maxlength="4000"
+                                        [(model)]="timKiemToaThuocCu.DVKhamHienThi" style="padding-left: 10px;"
+                                        label="DV Khám" (keyup)="onKey($event)">
+                                    </app-textbox>
+                                    <app-textbox id="ChuanDoan" fxFlex="20%" fxFlex.sm="40%" maxlength="4000"
+                                        [(model)]="timKiemToaThuocCu.ChuanDoan" style="padding-left: 10px;"
+                                        label="Chẩn đoán" (keyup)="onKey($event)">
+                                    </app-textbox>
+                                    <app-textbox id="BSKham" fxFlex="20%" fxFlex.sm="40%" maxlength="4000"
+                                        [(model)]="timKiemToaThuocCu.BSKham" style="padding-left: 10px;"
+                                        label="BS Khám" (keyup)="onKey($event)">
+                                    </app-textbox>
+                                   
+                                    <!-- <app-datepicker id="NgayKham" fxFlex="20%" fxFlex.sm="40%"
+                                        [(model)]="timKiemToaThuocCu.NgayKham"  label="Ngày khám" (keyup)="onKey($event)">
+                                    </app-datepicker> -->
+                                    <app-daterangepicker id="Daterange" fxFlex="20%" fxFlex.sm="20%" [(model)]="timKiemToaThuocCu.RangeDate"
+                                        label="Từ ngày - Đến ngày" (keyup)="onKey3($event)" (modelChange)="changRange($event)">
+                                    </app-daterangepicker>
+                                    <div fxFlex="15%" class="mt-5">
+                                        <button type="button" color="primary" mat-raised-button mat-button class="mr-1"
+                                            (click)="TimKiem()">Tìm kiếm</button>
+                                    </div>
+
+                                </div>
+                            </ng-template>
+
+
+
+
+
+                            <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2">
+                                <button type="button" mat-raised-button mat-button (click)="Huy()">
+                                    Hủy
+                                </button>
+                                <button type="button" color="primary" mat-raised-button mat-button
+                                    (click)="ChonThuoc()">
+                                    Chọn
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

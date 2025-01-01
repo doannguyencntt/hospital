@@ -1,0 +1,80 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+        [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <app-radio id="SelectBenhNhanHoacNguoiNha" fxFlex="20%" style="margin-top: 5px;background-color:white;"
+            label="Tôi là" [items]="[{Value:true,Text:'Người bệnh'},{Value:false,Text:'Người nhà'}]"
+            [(model)]="giayCamKetTuNguyenSuDungThuocDichVuNgoaiBHYT.SelectBenhNhanHoacNguoiNha" (modelChange)="changeSelect($event)">
+        </app-radio>
+        <label fxFlex="100%"></label>
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            *ngIf="giayCamKetTuNguyenSuDungThuocDichVuNgoaiBHYT.SelectBenhNhanHoacNguoiNha == false">
+            <app-textbox id="HoTen" fxFlex="100%" label="Họ tên" [required]="true"
+                [(model)]="giayCamKetTuNguyenSuDungThuocDichVuNgoaiBHYT.HoTen"
+                [validationerror]="'HoTen' | validationerror:validationErrors">
+            </app-textbox>
+        </div>
+
+        <app-grid [style.display]="dataSourceDanhSach!=null ?'block':'none'" #grid fxFlex="100%" fxFlex.sm="100%"
+            [gridColumns]="gridColumns" [allowSortDefault]="true" [gridDataSource]="dataSourceDanhSach"
+            [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500" [pageable]="false" masterName="GridSoKet"
+            [removeGroupFooterIfIsOnlyOne]="true"  [groups]="groups">
+        </app-grid>
+        <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+        <ng-template #nhomDichVuTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+        <!-- <ng-template #tenDichVuTemplate let-dataItem>
+            <strong>{{tenDichVu(dataItem.TenDichVu)}}</strong>
+        </ng-template> -->
+        <ng-template #tongTienGroupFooterTemplate let-aggregates>
+            {{aggregates.TongTien.sum | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #donGiaTemplate let-dataItem>
+            {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #soLuongTemplate let-dataItem>
+            {{dataItem.SoLuong | number}}
+        </ng-template>
+        <app-upload id="Upload" #uploadGiayCamKetSuDungThuoc [allowedExtensions]="allowedExtensions" fxFlex="60%"
+            [(model)]="giayCamKetTuNguyenSuDungThuocDichVuNgoaiBHYT.FileChuKy" [multiple]="true" label="File chữ ký"
+            [template]="templateFileChuanDoanHAInfo">
+        </app-upload>
+        <ng-template #templateFileChuanDoanHAInfo let-files>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td>
+                        <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                            (click)="uploadGiayCamKetSuDungThuoc.viewFile(files[0])"
+                            class="custom-name red">{{files[0].name}}</a>
+                        <a *ngIf="!files[0].error" title="{{files[0].name}}"
+                            (click)="uploadGiayCamKetSuDungThuoc.viewFile(files[0])" class="green"
+                            class="custom-name green">{{files[0].name}}</a>
+                    </td>
+                    <td style="width:25px">
+                        <a type="button" (click)="uploadGiayCamKetSuDungThuoc.remove(files[0].uid)" mat-icon-button>
+                            <mat-icon [icIcon]="icClear"></mat-icon>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </ng-template>
+        <div fxFlex="100%" style="padding-bottom: 50px;">
+            <label fxFlex="25%" style="padding-top: 30px;">Người thực hiện :
+                <b>{{giayCamKetTuNguyenSuDungThuocDichVuNgoaiBHYT.TaiKhoanDangNhap}}</b></label>
+            <label fxFlex="25%" style="padding-top: 30px;">Ngày thực hiện :
+                <b>{{giayCamKetTuNguyenSuDungThuocDichVuNgoaiBHYT.NgayThucHien}}</b></label>
+            <span fxFlex="50%" style="text-align: right;">
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="InPhieu()"
+                    style="pointer-events: all;">In </button>
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                    (click)="Huy()">Hủy</button>
+                <button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+                    Lưu
+                </button>
+            </span>
+        </div>
+    </div>
+</div>

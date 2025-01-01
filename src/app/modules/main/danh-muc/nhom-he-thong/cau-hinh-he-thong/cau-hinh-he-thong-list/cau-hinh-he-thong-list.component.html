@@ -1,0 +1,62 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                        {Title:'Danh Mục',Path:''}
+                        ,{Title:'Nhóm Hệ Thống',Path:''},
+                        {Title:'Cấu Hình Hệ Thống',Path:''}
+                        ,{Title:'Thông Số Mặc Định',Path:'/danh-muc/nhom-he-thong/cau-hinh-he-thong/thong-so-mac-dinh',
+                        Active:true}
+                        ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="danh-muc/nhom-he-thong/cau-hinh-he-thong/thong-so-mac-dinh" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true"
+                [useHeaderDefault]="false" [headerTemplate]="headerTemplate" [checkboxAble]="false" pageSize="50"
+                [groups]="groups">
+            </app-grid>
+        </div>
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <app-dropdownlist id="LoaiCauHinh" fxFlex="300px" fxFlex.sm="auto" [(model)]="searchInfo.CauHinh"
+                    [modelText]="searchInfo.TenCauHinh" label="Loại" url="CauHinh/GetLoaiCauHinh" popupSettings=""
+                    class="mt-1 mr-2 on-header" (selectionChange)="onDropDownLoaiCauHinh($event)"
+                    style="margin-top: 21px;margin-left: 5px;">
+                </app-dropdownlist>
+                <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                    fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-3 py-2 border-0 outline-none w-full bg-transparent"
+                        placeholder="{{searchPlaceHolder}}" type="search" name="searchString" [(ngModel)]="searchString"
+                        (keyup)="onKey($event)" (ngModelChange)="searchChange()" />
+                </div>
+                <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="searchCauHinh()">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #moTaTemplate let-dataItem>
+            <a (click)="edit(dataItem.Id, dataItem.IsCauHinh)">{{dataItem.Description}}</a>
+        </ng-template>
+        <ng-template #loaiGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+        <ng-template #groupTemplate let-dataItem>
+            <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu"
+                mat-icon-button type="button">
+                <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+            </button>
+            <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                <ng-template let-customer="customer" matMenuContent>
+                    <button (click)="edit(dataItem.Id, dataItem.IsCauHinh)" mat-menu-item>
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                        <span>Sửa</span>
+                    </button>
+                </ng-template>
+            </mat-menu>
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>

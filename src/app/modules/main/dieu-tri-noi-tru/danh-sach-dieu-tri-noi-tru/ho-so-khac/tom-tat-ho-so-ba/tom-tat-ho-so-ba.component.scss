@@ -1,0 +1,49 @@
+.order-form {
+    flex-direction: column !important;
+}
+
+.order-btn {
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.order-thong-tin {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+.order-info-area {
+    flex-direction: column !important;
+}
+
+.po-h {
+    color: #005dab;
+    position: relative;
+    left: 5px;
+    mat-icon {
+        display: contents;
+    }
+}
+
+table,
+td,
+tr,
+th {
+    border: 1px solid #000000;
+}
+
+th {
+    font-size: 20px;
+}
+
+td {
+    &.bold-font {
+        font-weight: bold;
+    }
+}
+
+.normal-font-weight {
+    font-weight: normal;
+}

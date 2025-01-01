@@ -1,0 +1,57 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>THAY ĐỔI QUYỀN</div>
+    <!-- <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button> -->
+</div>
+
+<mat-dialog-content>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3">
+            <legend>
+                Thông tin hành chính
+            </legend>
+
+            <div fxLayout="column">
+                <ul class="inline">
+                    <li>Họ tên: &nbsp;<strong>{{nhanVien.HoTen}}</strong></li>
+                    <li>Địa chỉ: &nbsp;<strong>{{nhanVien.DiaChi}}</strong></li>
+                    <li>Số điện thoại: &nbsp;<strong>{{nhanVien.SoDienThoai}}</strong></li>
+                    <li>Email: &nbsp;<strong>{{nhanVien.Email}}</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3 mt-3">
+            <legend>
+                Thông tin tài khoản
+            </legend>
+
+            <div fxLayout="column">
+
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+                    <app-multiselect fxFlex="50%" fxFlex.sm="50%" label="Quyền hiện tại"
+                        [(model)]="nhanVien.roleCurrent" url="QuanLyTaiKhoan/GetLstRole?nhanVienId={{nhanVienId}}"
+                        disabled="true">
+                    </app-multiselect>
+
+                    <app-multiselect fxFlex="50%" fxFlex.sm="50%" label="Quyền mới" [(model)]="nhanVien.roleNew"
+                        url="QuanLyTaiKhoan/GetLstRole?nhanVienId={{nhanVienId}}" [popupSettings]="null">
+                    </app-multiselect>
+
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions  fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button *ngIf="!loading" type="button" mat-button class="mr-1" (click)="huy()">Hủy</button>
+    <button *ngIf="!loading" type="button" (click)="capNhat()" color="primary" mat-raised-button>Cập
+        nhật</button>
+
+    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+            alt="Loading" /></button>
+</mat-dialog-actions>

@@ -1,0 +1,165 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    style="padding-top: 13px;padding-bottom: 10px;" [ngClass]="{'disableDiv':IsKetThucBenhAn}">
+
+    <app-multiselect id="DuocPhamIds" fxFlex="100%" fxFlex.sm="100%" [(model)]="banKiemTiemChungTreEm.DuocPhamIds"
+        (modelChange)="isDataChange()" [modelText]="" label="Loại vắc xin" url="ToaThuocMau/DuocPhams"
+        [templateHeader]="duocPhamTemplateHeader" [template]="duocPhamTemplate">
+        <ng-template #duocPhamTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="30%">Hoạt Chất</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #duocPhamTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="30%">{{dataItem.HoatChat}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-multiselect>
+
+    <div fxFlex="100%">
+        <div fxFlex="89%">
+            <label>
+                1. Sốt/hạ thân nhiệt (Sốt: nhiệt độ &ge; 37<sup>o</sup>C; Hạ thân nhiệt độ &le; 35.5<sup>o</sup>C)
+            </label>
+        </div>
+        <app-radio fxFlex="11%" id="SotHaThanNhiet" name="SotHaThanNhiet" class="no-label"
+            [items]="[{Value:false,Text:'Không'},{Value:true,Text:'Có'}]" (modelChange)="isDataChange()"
+            [(model)]="banKiemTiemChungTreEm.SotHaThanNhiet" label=" ">
+        </app-radio>
+    </div>
+
+    <div fxFlex="100%">
+        <div fxFlex="89%">
+            <label>
+                2. Nghe tim bất thường
+            </label>
+        </div>
+        <app-radio fxFlex="11%" id="NgheTimBatThuong" class="no-label"
+            [items]="[{Value:false,Text:'Không'},{Value:true,Text:'Có'}]" (modelChange)="isDataChange()"
+            [(model)]="banKiemTiemChungTreEm.NgheTimBatThuong" label=" ">
+        </app-radio>
+    </div>
+
+    <div fxFlex="100%">
+        <div fxFlex="89%">
+            <label>
+                3. Nghe phổi bất thường
+            </label>
+        </div>
+        <app-radio fxFlex="11%" id="NghePhoiBatThuong" class="no-label"
+            [items]="[{Value:false,Text:'Không'},{Value:true,Text:'Có'}]" (modelChange)="isDataChange()"
+            [(model)]="banKiemTiemChungTreEm.NghePhoiBatThuong" label=" ">
+        </app-radio>
+    </div>
+
+    <div fxFlex="100%">
+        <div fxFlex="89%">
+            <label>
+                4. Tri giác bất thường (ly bì hoặc kích thích, bú kém,...)
+            </label>
+        </div>
+        <app-radio fxFlex="11%" id="TriGiacBatThuong" class="no-label"
+            [items]="[{Value:false,Text:'Không'},{Value:true,Text:'Có'}]" (modelChange)="isDataChange()"
+            [(model)]="banKiemTiemChungTreEm.TriGiacBatThuong" label=" ">
+        </app-radio>
+    </div>
+
+    <div fxFlex="100%">
+        <div fxFlex="89%">
+            <label>
+                5. Cân nặng khi sinh dưới 2000g
+            </label>
+        </div>
+        <app-radio fxFlex="11%" id="CanNangDuoi2000g" class="no-label"
+            [items]="[{Value:false,Text:'Không'},{Value:true,Text:'Có'}]" (modelChange)="isDataChange()"
+            [(model)]="banKiemTiemChungTreEm.CanNangDuoi2000g" label=" ">
+        </app-radio>
+    </div>
+
+    <div fxFlex="100%">
+        <div fxFlex="89%">
+            <label>
+                6. Có các chống chỉ định khác
+            </label>
+        </div>
+        <app-radio fxFlex="11%" id="CoCacChongChiDinhKhac" class="no-label"
+            [items]="[{Value:false,Text:'Không'},{Value:true,Text:'Có'}]" (modelChange)="isDataChange()"
+            [(model)]="banKiemTiemChungTreEm.CoCacChongChiDinhKhac" label=" ">
+        </app-radio>
+    </div>
+    <h3 fxFlex="100%" class="sub-title mr-4 mt-0"><b>Kết luận</b></h3>
+
+    <app-checkbox fxFlex="100%" name="co-duyet" class="ml-2" value="coduyet"
+        [(model)]="banKiemTiemChungTreEm.DuDieuKienTiemChung" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+        (modelChange)="isDataChange()" fxLayoutAlign="start center"
+        label="Đủ điều kiện tiêm chủng ngay (tất cả đều KHÔNG có điểm bất thường)">
+    </app-checkbox>
+
+    <app-checkbox fxFlex="100%" name="co-duyet" class="ml-2" value="coduyet"
+        [(model)]="banKiemTiemChungTreEm.TamHoanTiemChung" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+        (modelChange)="isDataChange()" fxLayoutAlign="start center"
+        label="Tạm hoãn tiêm chủng (Khi CÓ bất ký một điểm bất thường)">
+    </app-checkbox>
+
+    <app-datetimepicker id="ThoiDiemThucHien" fxFlex="25%" [(model)]="banKiemTiemChungTreEm.ThoiDiemThucHien"
+        required="true" label="Ngày thực hiện sàng lọc" (modelChange)="isDataChange()"
+        [validationerror]="'ThoiDiemThucHien' | validationerror:validationErrors">
+    </app-datetimepicker>
+
+
+    <app-combobox id="NhanVienThucHienId" fxFlex="25%" [(model)]="banKiemTiemChungTreEm.NhanVienThucHienId"
+        url="ToaThuocMau/BacSiKeToa" [modelText]="banKiemTiemChungTreEm.TenNhanVienThucHien" required="true"
+        (modelChange)="isDataChange()" label="Người thực hiện sàng lọc"
+        [validationerror]="'NhanVienThucHienId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-upload id="Upload" #uploadFile [allowedExtensions]="allowedExtensions" fxFlex="50%"
+        [(model)]="banKiemTiemChungTreEm.NoiTruHoSoKhacFileDinhKems" [multiple]="true" label="File chữ ký"
+        (modelChange)="isDataChange()" [template]="templateFile">
+    </app-upload>
+    <ng-template #templateFile let-files let-rowIndex="rowIndex">
+        <table width="100%">
+            <tr>
+                <td>
+                    <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+ files[0].error}}"
+                        (click)="uploadFile.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                    <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="uploadFile.viewFile(files[0])"
+                        class="green" class="custom-name green">{{files[0].name}}</a>
+                </td>
+                <td style="width:25px">
+                    <a type="button" (click)="uploadFile.remove(files[0].uid)" mat-icon-button>
+                        <mat-icon [icIcon]="icClear"></mat-icon>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <label fxFlex="80%">
+        Người thực hiện: <strong>{{banKiemTiemChungTreEm.NhanVienDangNhap}}</strong> - Ngày thực hiện:
+        <strong>{{banKiemTiemChungTreEm.ThoiDiemThucHienDisplay}}</strong>
+    </label>
+
+    <div fxFlex="20%">
+        <div style="padding-top: 11px !important;float: right">
+            <button type="button" style="margin-right: 10px; pointer-events: all;" mat-raised-button mat-button
+                (click)="inBanKiemTiemChung()">
+                In
+            </button>
+            <!-- *ngIf="banKiemTiemChungTreEm.IsDataChange" -->
+            <button  type="button" style="margin-right: 10px;"
+                mat-raised-button mat-button (click)="huy()">
+                Hủy
+            </button>
+            <button type="button" color="primary" mat-raised-button mat-button (click)="luuBanKiemTiemChung()">
+                Lưu
+            </button>
+        </div>
+    </div>
+</div>

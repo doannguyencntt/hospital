@@ -1,0 +1,441 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0"
+    class="div-parent-contentThuoc">
+    <!-- [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}" -->
+    <ng-container *ngIf="!dieuTriNoiTruModel.KetThucBenhAn && laKhoaKhamBenhChiDinh">
+        <h3 fxFlex="100%" class="sub-title  mr-4">
+            <div fxFlex="100%" class="po-h-radio">
+                <app-radio id="Chon" name="Chon" class="no-format-css temp" [(model)]="LuaChonChiDinh"
+                    (modelChange)="selectLuaChonChiDinh($event)"
+                    [items]="[{Value:1,Text:'Khám'}, {Value:2,Text:'Dịch vụ kỹ thuật'}]">
+                </app-radio>
+            </div>
+        </h3>
+
+    <!-- Khám -->
+    <ng-container *ngIf="LuaChonChiDinh==1">
+        <!-- (keyup)="onKeyEnterAddItem($event)"  (openCombobox)="openCombobox($event)"-->
+        <app-combobox fxFlex="30%" label="Dịch vụ khám" id="DichVuKhamBenhBenhVienId" hierarchyKeyToSend="DichVuKhamBenhBenhVienId" [(model)]="yeuCauKhamBenh.DichVuKhamBenhBenhVienId" [validationerror]="'DichVuKhamBenhBenhVienId' | validationerror:validationErrors"
+            url="KhamBenh/GetDichVuKhamBenh" required="true" (modelChange)="getThongTinThanhToan($event)" (selectionChange)="chonDichVuKham($event)" [templateHeader]="dichVuKhamBenhBVTemplateHeader"
+            [template]="dichVuKhamBenhBVTemplate" class="item-no-padding">
+            <ng-template #dichVuKhamBenhBVTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th width="80%">Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #dichVuKhamBenhBVTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td width="80%">{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <!-- KhamBenh/LoaiGia -->
+        <!-- (keyup)="onKeyEnterAddItem($event)" (openDropDownList)="openCombobox($event)" -->
+        <app-dropdownlist #dropdownLoaiGiaDVKham id="loaiGiaDVKham" fxFlex="15%" label="Loại giá" url="KhamBenh/LoaiGiaHieuLucTheoDichVuKham" required="true" 
+            [autoSelectFirstItem]="true" [bind]="true" [(model)]="yeuCauKhamBenh.NhomGiaDichVuKhamBenhBenhVienId" (modelChange)="getThongTinThanhToan($event)"
+            hierarchyKeyToListen="DichVuKhamBenhBenhVienId"
+            [validationerror]="'NhomGiaDichVuKhamBenhBenhVienId' | validationerror:validationErrors">
+        </app-dropdownlist>
+
+        <!-- (keyup)="onKeyEnterAddItem($event)" -->
+        <app-textboxnumeric fxFlex="15%" label="Số lượng" [min]="1" [(model)]="yeuCauKhamBenh.SoLuongs" [disabled]="true" [tabIndex]="-1">
+        </app-textboxnumeric>
+        <app-textboxnumeric [disabled]="true" fxFlex="20%" label="Đơn giá" [min]="0" [(model)]="yeuCauKhamBenh.Gia" (modelChange)="onChangeDonGiaKhamBenh($event)" 
+            [tabIndex]="-1" [max]="999999999" [validationerror]="'SoLan' | validationerror:validationErrors">
+        </app-textboxnumeric>
+        <app-textboxnumeric [disabled]="true" fxFlex="20%" label="Thành tiền" [min]="0" [(model)]="yeuCauKhamBenh.ThanhTien" [tabIndex]="-1">
+        </app-textboxnumeric>
+        <!-- (keyup)="onKeyEnterAddItem($event)" (openCombobox)="openCombobox($event)" -->
+        <app-combobox fxFlex="30%" id="NoiDangKyId" label="Nơi thực hiện" url="KhamBenh/NoiThucHien" hierarchyKeyToListen="DichVuKhamBenhBenhVienId" 
+            [(model)]="yeuCauKhamBenh.NoiDangKyId" required="true" hierarchyKeyToSend="NoiDangKyId" [autoSelectFirstItem]="true"
+            [validationerror]="'NoiDangKyId' | validationerror:validationErrors" [templateHeader]="noiDangKyDVKBBVTemplateHeader" [template]="noiDangKyDVKBBVTemplate" class="item-no-padding">
+            <ng-template #noiDangKyDVKBBVTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th width="80%">Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #noiDangKyDVKBBVTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td width="80%">{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <!-- (keyup)="onKeyEnterAddItem($event)" (openCombobox)="openCombobox($event)" -->
+        <app-combobox id="BacSiDangKyId" fxFlex="30%" fxFlex.sm="100%" label="Bác sĩ" [(model)]="yeuCauKhamBenh.BacSiDangKyId" url="KhamBenh/BacSiKham" hierarchyKeyToListen="NoiDangKyId" 
+            [autoSelectFirstItem]="true">
+        </app-combobox>
+
+        <div fxFlex="20%" fxFlex.sm="20%">
+            <div class="container-custom no-label">
+                <label>&nbsp;</label>
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <!-- (keyup)="onKeyEnterAddItem($event)" -->
+                    <app-checkbox fxFlex="100%" id="ThamVan" label="Tham vấn" value="true" (modelChange)="autoHideShowTinhPhi($event, yeuCauKhamBenh)" [(model)]="yeuCauKhamBenh.LaThamVan"></app-checkbox>
+                </div>
+            </div>
+        </div>
+        <div fxFlex="20%" fxFlex.sm="20%" *ngIf="yeuCauKhamBenh.LaThamVan != true">
+            <div class="container-custom no-label">
+                <label>&nbsp;</label>
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <!-- (keyup)="onKeyEnterAddItem($event)" -->
+                    <app-checkbox fxFlex="100%" id="TinhPhi" label="Tính phí" value="true" (modelChange)="autoCheckDuocHuongBaoHiem($event, yeuCauKhamBenh)" [(model)]="yeuCauKhamBenh.TinhPhi"></app-checkbox>
+                </div>
+            </div>
+        </div>
+
+        <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="huyDichVuKhamBenh()" title="Phím tắt: Esc">Hủy</button>
+            <button type="button" color="primary" mat-raised-button mat-button class="mr-1" (click)="themDichVuKhamBenh()" title="Phím tắt: Ctrl + S">Thêm</button>
+        </div>
+    </ng-container>
+
+        <!-- dịch vụ kỹ thuật -->
+    <ng-container *ngIf="LuaChonChiDinh==2">
+        <div fxFlex="85%" class="mb-4">
+            <a (click)="xemNhomDichVuThuongDung()"
+                style="color:green; text-decoration: underline; font-weight: bold; bottom: 20px;" class="mr-2">
+                Nhóm dịch vụ thường dùng
+            </a>
+            <a *ngIf="coGoiDichVu" (click)="xemGoiDichVu()"
+                style="color:green; text-decoration: underline; font-weight: bold; bottom: 20px;">
+                Sử dụng gói dịch vụ
+            </a>
+        </div>
+    
+        <!-- cacDichVuKM -->
+        <div *ngIf="coDichVuKhuyenMai" fxFlex="15%">
+            <a (click)="xemGoiDichVuKhuyenMai()"
+                style="color:blue; text-decoration: underline; font-weight: bold; bottom: 20px;">
+                Dịch vụ khuyến mại</a>
+        </div>
+    
+        <div fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px">
+            <app-combobox-tree *ngIf="chiDinhDichVuKyThuatMultiselect.ShowComboboxNhomDichVuKyThuat" popupSettings="null"
+                fxFlex="30%" label="Nhóm dịch vụ" id="NhomDichVuBenhVienId" required="true"
+                url="KhamBenh/GetListNhomDichVuBenhVien" hierarchyKeyToSend="NhomDichVuBenhVienId"
+                [queryInfo]="{ParameterDependencies:'{LaPhieuDieuTri:' + true +'}', Take: 50}"
+                [(model)]="chiDinhDichVuKyThuatMultiselect.NhomDichVuBenhVienId"
+                [modelText]="chiDinhDichVuKyThuatMultiselect.TenNhomDichVu" (modelChange)="changeNhomDichVuKyThuat($event)"
+                [validationerror]="'NhomDichVuBenhVienId' | validationerror:validationErrors">
+            </app-combobox-tree>
+    
+            <app-multiselect id="dvkt" fxFlex="auto" hierarchyKeyToListen="NhomDichVuBenhVienId" [modelText]=""
+                label="Dịch vụ" class="item-no-padding" [template]="dichVuKyThuatTemplate"
+                [templateHeader]="dichVuKyThuatTemplateHeader"
+                url="KhamBenh/GetListDichVuKyThuatMultiSelect?isPhieuDieuTri={{true}}"
+                [(model)]="chiDinhDichVuKyThuatMultiselect.DichVuKyThuatBenhVienChiDinhs"
+                (modelChange)="changeMultiDichVuKyThuat($event)" [autoClose]="false"
+                (closeChange)="closeChangeDichVuKyThuat($event)" popupSettings="null"
+                [validationerror]="'DichVuKyThuatBenhVienChiDinhs' | validationerror:validationErrors" required="true">
+                <ng-template #dichVuKyThuatTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="15%">Nhóm</th>
+                            <th width="15%">Mã</th>
+                            <th width="30%">Dịch vụ</th>
+                            <th width="25%">Tên TT43</th>
+                            <th width="15%">Nơi thực hiện</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #dichVuKyThuatTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="15%">{{dataItem.TenNhomDichVuBenhVien}}</td>
+                            <td width="15%">{{dataItem.Ma}}</td>
+                            <td width="30%">{{dataItem.Ten}}</td>
+                            <td width="25%">{{dataItem.TenTT43}}</td>
+                            <td width="15%">{{dataItem.TenNoiThucHien}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-multiselect>
+    
+            <div fxFlex="15%" fxFlex.sm="15%">
+                <div class="container-custom no-label">
+                    <label>&nbsp;</label>
+                    <div fxLayout="row" fxLayoutGap="5px">
+                        <app-checkbox fxFlex="100%" id="KhongTinhPhi"
+                            [(model)]="chiDinhDichVuKyThuatMultiselect.KhongTinhPhi" label="Tính phí" value="true">
+                        </app-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div style="justify-content: flex-end;" fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+            <button type="button" mat-button class="mr-2" (click)="huyDichVuKyThuatMultiselect()">Hủy</button>
+            <button type="button" class="mr-2" color="primary" (click)="themDichVuKyThuatMultiselect()"
+                mat-raised-button>Thêm</button>
+        </div>
+    </ng-container>
+    </ng-container>
+
+    <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+        fxLayout.lt-md="column">
+        <app-grid #GridChiDinh fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" maxHeight="500"
+            reorderRowsMoveItemData="true" [gridColumns]="gridDichVuColumns" [gridDataSource]="gridDataSource"
+            [documentType]="documentType" [allowSortDefault]="true" [useAddDeault]="false" [useHeaderDefault]="false"
+            [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" [pageable]="false" [groups]="groups"
+            [removeGroupFooterIfIsOnlyOne]="true" [showStt]="true">
+        </app-grid>
+    </div>
+
+    <!-- <div class="div-content" style="justify-content: flex-end;" fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <button type="button" class="mr-2" color="primary" mat-raised-button>In chỉ định</button>
+    </div> -->
+
+
+
+</div>
+
+<ng-template #tenNhomGroupHeaderTemplate let-value="value" let-aggregates let-dataItem>
+    <div fxFlex="80%">
+        <strong>{{value}}</strong>
+    </div>
+
+    <div fxFlex="20%" fxLayoutAlign="end" kendoTooltip>
+        <button *ngIf="kiemTraCoKetQuaCLSXetNghiem(aggregates.items)" mat-icon-button kendoTooltip title="Xem"
+            type="button" (click)="xemKetQuaCLSXetNghiem(aggregates)">
+            <mat-icon [icIcon]="icRedEye"></mat-icon>
+        </button>
+        <!-- <button *ngIf="kiemTraCoFileDownloadCLSXetNghiem(aggregates.items)" mat-icon-button matTooltip="Tải về" type="button" (click)="downloadKetQuaCLSXetNghiem(aggregates)">
+            <mat-icon [icIcon]="icDownward"></mat-icon>
+        </button> -->
+    </div>
+</ng-template>
+
+<ng-template #loaiGiaTemplate let-value="value" let-dataItem>
+    <!-- <div *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true"></div>
+    *ngIf="dataItem.YeuCauGoiDichVuId === null"  -->
+
+    <app-dropdownlist *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true && dataItem.NhomId != 1"
+        [(model)]="dataItem.LoaiGia" [modelText]="dataItem.TenLoaiGia"
+        [disabled]="dataItem.TrangThaiDichVu != 'Chưa thực hiện' || dataItem.DaThanhToan || dataItem.IsThuocNhomDichVuTiemChung"
+        class=" item-no-padding no-label" popupSettings="null" url="KhamBenh/GetNhomGiaTheoLoaiDichVuKyThuat"
+        (modelChange)="CapNhatGridItemDichVuKyThuat(dataItem, $event, 'NhomGia')">
+    </app-dropdownlist>
+    <!-- <ng-container *ngIf="dataItem.YeuCauGoiDichVuId !== null">{{dataItem.TenLoaiGia}}</ng-container> -->
+    <div *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false || dataItem.NhomId == 1">
+        {{dataItem.TenLoaiGia}}
+    </div>
+</ng-template>
+
+
+<ng-template #thoiDiemChiDinhTemplate let-dataItem>
+    {{dataItem.ThoiDiemChiDinhDisplay}}
+</ng-template>
+
+<ng-template #donGiaTemplate let-dataItem>
+    {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+
+<ng-template #slTemplate let-value="value" let-dataItem>
+    <app-textboxnumeric *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true && dataItem.NhomId != 1"
+        id="txtSoLuongDVKT{{dataItem.Id}}" [(model)]="dataItem.SoLuong" class="no-label" label=" " min="1" max="9999999"
+        (modelChange)="CapNhatGridItemDichVuKyThuat(dataItem, $event, 'SoLan')"
+        [disabled]="dataItem.TrangThaiDichVu != 'Chưa thực hiện' || (dataItem.DaThanhToan && dataItem.YeuCauGoiDichVuId === null) || dataItem.IsThuocNhomDichVuTiemChung">
+    </app-textboxnumeric>
+    <div *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false || dataItem.NhomId == 1">
+        {{dataItem.SoLuong}}
+    </div>
+</ng-template>
+
+<ng-template #thanhTienTemplate let-dataItem>
+    {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #donGiaBaoHiemTemplate let-dataItem>
+    {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+
+<ng-template #dhBHYTTemplate let-value="value" let-dataItem>
+    <app-checkbox *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true && dataItem.NhomId != 1"
+        id="duocHuongBaoHiem{{dataItem.Id}}" label="" [(model)]="dataItem.DuocHuongBaoHiem"
+        [disabled]="!(dataItem.CoBHYT == true && dataItem.DonGiaBaoHiem != 0 && dataItem.DonGiaBaoHiem != null) || dataItem.IsThuocNhomDichVuTiemChung"
+        (modelChange)="CapNhatGridItemDichVuKyThuat(dataItem,$event, 'BaoHiem')">
+    </app-checkbox>
+
+    <app-checkbox *ngIf="laKhoaKhamBenhChiDinh == false || dataItem.NhomId == 1" id="duocHuongBaoHiem{{dataItem.Id}}" label=""
+        [(model)]="dataItem.DuocHuongBaoHiem" [disabled]="true">
+    </app-checkbox>
+
+</ng-template>
+
+<ng-template #noiThucHienTemplate let-value="value" let-dataItem>
+    <app-combobox *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true && dataItem.NhomId != 1"
+        [disabled]="dataItem.TrangThaiDichVu !== 'Chưa thực hiện' || dataItem.IsThuocNhomDichVuTiemChung" fxFlex="100%"
+        popupSettings="null" class="item-no-padding no-label" url="KhamBenh/GetPhongThucHienChiDinhKhamOrDichVuKyThuat"
+        [(model)]="dataItem.NoiThucHienId" [modelText]="dataItem.NoiThucHien"
+        (modelChange)="CapNhatGridItemDichVuKyThuat(dataItem, $event, 'NoiThucHien')" [template]="phongKhamTemplate"
+        [templateHeader]="phongKhamTemplateHeader" id="NoiThucHien{{dataItem.Id}}"
+        [queryInfo]="{ParameterDependencies:'{DichVuId:' +dataItem.LoaiYeuCauDichVuId +'}', Take: 50}">
+        <ng-template #phongKhamTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th width="40%">Tên phòng</th>
+                </tr>
+            </table>
+        </ng-template>
+
+        <ng-template #phongKhamTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.MaPhong}}</td>
+                    <td width="40%">{{dataItem.TenPhong}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true && dataItem.NhomId == 1"
+        [disabled]="dataItem.TrangThaiDichVuId != trangThaiYCKB.ChuaKham" [modelText]="dataItem.NoiThucHien"
+        fxFlex="100%" id="NoiDangKyKhamId{{dataItem.Id}}" url="KhamBenh/NoiThucHien" [(model)]="dataItem.NoiThucHienId"
+        (modelChange)="CapNhatGridItemDichVuKyThuat(dataItem, $event, 'NoiThucHien')" popupSettings="null"
+        [templateHeader]="noiDangKyKhamTemplateHeader" [template]="noiDangKyKhamTemplate" class="item-no-padding no-label"
+        [queryInfo]="{ParameterDependencies:'{DichVuId:' +dataItem.LoaiYeuCauDichVuId +'}', Take: 50}">
+        <ng-template #noiDangKyKhamTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th width="80%">Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #noiDangKyKhamTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td width="80%">{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <div *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false">
+        {{dataItem.NoiThucHien}}
+    </div>
+</ng-template>
+
+<ng-template #trangThaiTemplate let-dataItem>
+    <div *ngIf="dataItem.KhongThucHien != true">
+        <span *ngIf="dataItem.NhomId != 1"
+            [ngStyle]="{'color': dataItem.TrangThaiDichVuId == 2 ?'orange': (dataItem.TrangThaiDichVuId == 3 ? 'green' : '')}">
+            {{dataItem.TrangThaiDichVu}}
+        </span>
+        <span *ngIf="dataItem.NhomId == 1" [ngClass]="{'blackText': dataItem.TrangThaiDichVuId == trangThaiYCKB.ChuaKham, 
+                                                            'orangeText': (dataItem.TrangThaiDichVuId == trangThaiYCKB.DangKham 
+                                                                            || dataItem.TrangThaiDichVuId == trangThaiYCKB.DangLamChiDinh
+                                                                            || dataItem.TrangThaiDichVuId == trangThaiYCKB.DangDoiKetLuan),
+                                                            'greenText': dataItem.TrangThaiDichVuId == trangThaiYCKB.DaKham,
+                                                            'redText': dataItem.TrangThaiDichVuId == trangThaiYCKB.HuyKham}"
+            kendoTooltip title="{{dataItem.LyDoHuyDichVu}}">
+            {{dataItem.TrangThaiDichVu}}
+        </span>
+    </div>
+    <div *ngIf="dataItem.KhongThucHien == true">
+        <span *ngIf="dataItem.NhomId != 1" fxFlex="70%"
+            [ngStyle]="{'color': dataItem.TrangThaiDichVuId == 2 ?'orange': (dataItem.TrangThaiDichVuId == 3 ? 'green' : '')}">
+            {{dataItem.TrangThaiDichVu}}
+        </span>
+        <span *ngIf="dataItem.NhomId == 1" [ngClass]="{'blackText': dataItem.TrangThaiDichVuId == trangThaiYCKB.ChuaKham, 
+                                                            'orangeText': (dataItem.TrangThaiDichVuId == trangThaiYCKB.DangKham 
+                                                                            || dataItem.TrangThaiDichVuId == trangThaiYCKB.DangLamChiDinh
+                                                                            || dataItem.TrangThaiDichVuId == trangThaiYCKB.DangDoiKetLuan),
+                                                            'greenText': dataItem.TrangThaiDichVuId == trangThaiYCKB.DaKham,
+                                                            'redText': dataItem.TrangThaiDichVuId == trangThaiYCKB.HuyKham}"
+            kendoTooltip title="{{dataItem.LyDoHuyDichVu}}">
+            {{dataItem.TrangThaiDichVu}}
+        </span>
+        <mat-icon class="icon-war-status-grid" fxFlex="30%" [icIcon]="icWarning" kendoTooltip
+            title="Lý do không thực hiện: {{dataItem.LyDoKhongThucHien}}">
+        </mat-icon>
+    </div>
+</ng-template>
+
+
+<ng-template #gioBatDauTemplate let-value="value" let-dataItem>
+    <app-timepicker *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true && dataItem.NhomId != 1"
+        id="GioBatDau" [(model)]="dataItem.GioBatDau" class="no-label" (blur)="blurGioBatDau($event, dataItem)"
+        placeHolder="Giờ" [disabled]="dataItem.IsThuocNhomDichVuTiemChung">
+    </app-timepicker>
+    <div *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false || dataItem.NhomId == 1">
+        {{dataItem.GioBatDauDisplay}}
+    </div>
+</ng-template>
+<ng-template #actionTemplate let-value="value" let-dataItem>
+    <div class="text-center" kendoTooltip
+        *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true && !dataItem.IsThuocNhomDichVuTiemChung">
+        <button *ngIf="kiemTraCoKetQuaCLS(dataItem)" mat-icon-button kendoTooltip title="Xem" type="button"
+            (click)="xemKetQuaCLS(dataItem)">
+            <mat-icon [icIcon]="icRedEye"></mat-icon>
+        </button>
+        <button *ngIf="!dataItem.IsThuocNhomDichVuTiemChung" style="color: red" mat-icon-button kendoTooltip title="Xóa"
+            type="button" (click)="xoaGoiDichVuKhac(dataItem)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #checkBoxTemplate let-dataItem>
+    <div *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true">
+        <input type="checkbox" id="vehicle1" [(ngModel)]="dataItem.isCheckRowItem" name="vehicle1"
+            (ngModelChange)="checkboxIn($event,dataItem)" [disabled]="dataItem.IsThuocNhomDichVuTiemChung">
+    </div>
+
+</ng-template>
+
+<ng-template #checkBoxHeaderTemplate let-dataItem>
+    <div *ngIf="this.dieuTriNoiTruModel.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true">
+        <input type="checkbox" id="vehicle1" name="vehicle1" [(ngModel)]="checkAll"
+            (ngModelChange)="SelectcheckAllboxIn($event)">
+    </div>
+</ng-template>
+
+<ng-template #tenDichVuTemplate let-dataItem>
+    <div>
+        <mat-icon fxFlex="30px" *ngIf="dataItem.YeuCauGoiDichVuId !== null || dataItem.LaDichVuKhuyenMai"
+            [icIcon]="icInfo" kendoTooltip title="{{dataItem.TenGoiDichVu}}">
+        </mat-icon>
+        <span fxFlex="auto" class="reverse-ellipsis r" kendoTooltip
+            title="{{dataItem.TenDichVu}}">{{dataItem.TenDichVu}} </span>
+    </div>
+</ng-template>
+
+<ng-template #dichVuTrongGoiTemplate let-dataItem>
+    <app-checkbox *ngIf="dataItem.CoDichVuNayTrongGoi" id="dvGoiMarketing{{dataItem.Id}}" label=""
+        [(model)]="dataItem.LaDichVuTrongGoi" [disabled]="dataItem.LaDichVuKhuyenMai || dieuTriNoiTruModel.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false"
+        (modelChange)="CapNhatGridItemDichVuKyThuat(dataItem, $event, 'SwapDichVuGoi')">
+    </app-checkbox>
+</ng-template>
+<ng-template #dichVuKhuyenMaiTemplate let-dataItem>
+    <app-checkbox *ngIf="dataItem.CoDichVuNayTrongGoiKhuyenMai" id="dvKhuyenMaiGoiMarketing{{dataItem.Id}}" label=""
+        [(model)]="dataItem.LaDichVuKhuyenMai" (modelChange)="CapNhatGridItemDichVuKyThuat(dataItem, $event, 'SwapDichVuKhuyenMai')" 
+        [disabled]="dataItem.LaDichVuTrongGoi || dieuTriNoiTruModel.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false || dataItem.TinhPhi != true">
+    </app-checkbox>
+</ng-template>
+
+<!-- BVHD-3654 -->
+<ng-template #tinhPhiDVKTTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-checkbox id="tinhPhiDVKT{{rowIndex}}" label="" [(model)]="dataItem.TinhPhi"
+        [disabled]="dataItem.YeuCauGoiDichVuId !== null || dataItem.LaDichVuKhuyenMai || dieuTriNoiTruModel.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false"
+        (modelChange)="CapNhatGridItemDichVuKyThuat(dataItem, $event, 'TinhPhi')">
+    </app-checkbox>
+</ng-template>

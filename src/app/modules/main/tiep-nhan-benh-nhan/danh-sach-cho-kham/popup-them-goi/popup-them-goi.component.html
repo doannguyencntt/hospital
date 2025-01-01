@@ -1,0 +1,128 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>THÊM GÓI DỊCH VỤ</div>
+    <!-- <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button> -->
+</div>
+
+<mat-dialog-content>
+    <app-grid *ngIf="isGoiCoChietKhau" [gridColumns]="gridCoChietKhauColumns" [gridDataSource]="gridCoChietKhauData" #goiCoChietKhau
+    [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true" 
+    [useHeaderDefault]="false" [useActionDefault]="false"
+    [checkboxAble]="false" height="300">
+</app-grid>
+
+<app-grid *ngIf="isGoiCoChietKhau == false" [gridColumns]="gridKhongCoChietKhauColumns" [gridDataSource]="gridKhongCoChietKhauData" #goiKhongCoChietKhau
+    [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true" 
+    [useHeaderDefault]="false" [useActionDefault]="false"
+    [checkboxAble]="false" height="300">
+</app-grid>
+
+<div class="div-bottom" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="8px">
+    <button type="button" mat-button class="mr-1" (click)="huy()">Hủy</button>
+    <button type="button" (click)="ok()" color="primary" mat-raised-button>Thêm</button>
+</div>
+
+</mat-dialog-content>
+
+
+<ng-template #noiThucHienKhongChietKhauTemplate let-dataItem>
+    <div *ngIf="dataItem.Nhom == 'DỊCH VỤ GIƯỜNG'">
+        <app-combobox popupSettings="" id="NoiThucHienPopup{{dataItem.MaDichVuId}}" fxFlex="100%" fxFlex.sm="100%"
+            label="" (dataForLookupChange)="noiThucHienChange($event, dataItem)"
+            url="TiepNhanBenhNhan/GetPhongKhamDichVuGiuongKhac/?id={{dataItem.MaDichVuId}}"
+            [(model)]="dataItem.NoiThucHienId" bind=true [required]="true"
+            [validationerror]="'NoiThucHienId' | validationerror:validationErrors"
+            [template]="phongKhamTemplate" [templateHeader]="phongKhamTemplateHeader"
+            class="item-no-padding no-label">
+
+            <ng-template #phongKhamTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th width="20%">Phòng</th>
+                        <th width="60%">SL đang thực hiện</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #phongKhamTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.MaPhong}}</td>
+                        <td width="60%">{{dataItem.TenPhong}}</td>
+                        <td width="20%">{{dataItem.Tong}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+    </div>
+
+    <div *ngIf="dataItem.Nhom == 'DỊCH VỤ KHÁM BỆNH'">
+        <app-combobox popupSettings="" id="NoiThucHienPopup{{dataItem.MaDichVuId}}" fxFlex="100%" fxFlex.sm="100%"
+            label="" url="TiepNhanBenhNhan/GetPhongKhamKhac/?id={{dataItem.MaDichVuId}}"
+            (dataForLookupChange)="noiThucHienChange($event, dataItem)" 
+            [(model)]="dataItem.NoiThucHienId" bind=true [required]="true"
+            [validationerror]="'NoiThucHienId' | validationerror:validationErrors"
+            [template]="phongKhamTemplate" [templateHeader]="phongKhamTemplateHeader"
+            class="item-no-padding no-label">
+
+            <ng-template #phongKhamTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Phòng</th>
+                        <th width="40%">Bác sĩ</th>
+                        <th width="20%">Đ.khám</th>
+                        <th width="20%">Tổng</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #phongKhamTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr [ngStyle]="{'color': dataItem.IsWarning==true?'orange':'black'}"
+                        kendoTooltip title="{{dataItem.IsWarning==true?'Bác sĩ này đã khám nhiều hơn ' + dataItem.TongSoKhamGioiHan + ' người bệnh':''}}">
+                        <td width="20%">{{dataItem.MaPhong}}</td>
+                        <td width="40%">{{dataItem.TenBacSi}}</td>
+                        <td width="20%">{{dataItem.DangKham}}</td>
+                        <td width="20%">{{dataItem.Tong}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+    </div>
+
+    <div *ngIf="dataItem.Nhom == 'DỊCH VỤ KỸ THUẬT'">
+        <app-combobox popupSettings="" id="NoiThucHienPopup{{dataItem.MaDichVuId}}" fxFlex="100%" fxFlex.sm="100%"
+            label="" url="TiepNhanBenhNhan/GetPhongKhamKyThuatKhac/?id={{dataItem.MaDichVuId}}"
+            (dataForLookupChange)="noiThucHienChange($event, dataItem)"
+            [(model)]="dataItem.NoiThucHienId" bind=true [required]="true"
+            [validationerror]="'NoiThucHienId' | validationerror:validationErrors"
+            [template]="phongKhamTemplate" [templateHeader]="phongKhamTemplateHeader"
+            class="item-no-padding no-label">
+
+            <ng-template #phongKhamTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                            <th width="20%">Mã</th>
+                            <th width="20%">Phòng</th>
+                            <th width="60%">SL đang thực hiện</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #phongKhamTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.MaPhong}}</td>
+                        <td width="60%">{{dataItem.TenPhong}}</td>
+                        <td width="20%">{{dataItem.Tong}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+    </div>
+</ng-template>
+
+<ng-template #duocHuongBHYTTemplate let-dataItem>
+    <app-checkbox [disabled]="true" [(model)]="dataItem.DuocHuongBHYTPopup" 
+        id="DuocHuongBHYTPopup{{dataItem.MaDichVuId}}{{dataItem.Nhom}}"
+        label="Có"></app-checkbox>
+</ng-template>

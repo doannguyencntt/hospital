@@ -1,0 +1,34 @@
+import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import icClose from '@iconify/icons-ic/twotone-close';
+import { DomSanitizer } from '@angular/platform-browser';
+
+@Component({
+  selector: 'app-chung-sinh-mang-thai-ho-popup',
+  templateUrl: './chung-sinh-mang-thai-ho-popup.component.html',
+  styleUrls: ['./chung-sinh-mang-thai-ho-popup.component.scss']
+})
+export class ChungSinhMangThaiHoPopupComponent implements OnInit {
+  hostingName: string;
+  modelPrint: any;
+  src = '';
+  icClose = icClose;
+  printLayout: string = 'Landscape';
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public sanitizer: DomSanitizer, private dialog: MatDialog) {
+      this.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(this.data.Model);
+  }
+
+  ngOnInit() {
+      this.modelPrint = this.data.Model;
+  }
+
+  getSharedPrintForm() {
+      return new Promise(resolve => {
+          resolve(this.modelPrint);
+      });
+  }
+
+  close() {
+      this.dialog.closeAll();
+  }
+}

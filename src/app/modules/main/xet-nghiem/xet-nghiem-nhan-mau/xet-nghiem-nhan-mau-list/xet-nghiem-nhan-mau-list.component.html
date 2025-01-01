@@ -1,0 +1,235 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                    {Title:'DS Nhận Mẫu',Path:'',Active:true}
+                    ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div @fadeInUp class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <kendo-splitter>
+                            <kendo-splitter-pane [collapsible]="true" size="30%" style="max-height: 800px;" class="sticky-panelbar">
+                                <fieldset fxFlex="100%">
+                                    <legend>Danh sách chỉ định</legend>
+                                    <div fxLayout="row wrap" fxLayoutAlign="start">
+                                        <div fxFlex="100%" class="sticky mb-2" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0px grid"
+                                            fxLayoutGap.lt-sm="0">
+                                            <mat-radio-button fxFlex="40%" fxFlex.sm="40%" name="tinhTrang" class="mb-3"
+                                                [checked]="timKiemNangCaoObj.TrangThai.ChuaNhanMau" value="true" (change)="changeValueTinhTrang('chuaNhanMau')"> Chờ nhận mẫu </mat-radio-button>
+                                            <mat-radio-button fxFlex="40%" fxFlex.sm="40%" name="tinhTrang"
+                                                [checked]="timKiemNangCaoObj.TrangThai.DaNhanMau" value="true" (change)="changeValueTinhTrang('daNhanMau')"> Đã nhận mẫu </mat-radio-button>
+                                    
+                                            <!-- <button *ngIf="timKiemNangCaoObj.TrangThai.DaNhanMau" class="ml-auto" fxFlex="none" color="primary" mat-icon-button kendoTooltip title="Xuất Excel" type="button">
+                                                <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                                            </button>
+                                             -->
+                                            <app-daterangepicker id="tuNgayDenNgay" fxFlex="49%" fxFlex.sm="49%" class="on-header mb-2"
+                                                [(model)]="timKiemNangCaoObj.TuNgayDenNgay" label="Từ ngày - đến ngày" (modelChange)="timKiemNangCao()">
+                                            </app-daterangepicker>
+
+                                            <app-combobox fxFlex="49%" fxFlex.sm="49%" label="Hợp đồng" id="HopDongKhamSucKhoeId"
+                                                class="on-header ml-1" url="XetNghiem/GetListHopDongKhamSucKhoeHieuLuc"
+                                                [(model)]="timKiemNangCaoObj.HopDongKhamSucKhoeId" (modelChange)="timKiemNangCao()" popupSettings="null"
+                                                [reloadForGrid]="true">
+                                                <!-- [templateHeader]="khoaTemplateHeader" [template]="khoaTemplate" -->
+                                                <!-- <ng-template #khoaTemplateHeader let-dataItem>
+                                                    <table width="100%" class="table-combobox">
+                                                        <tr>
+                                                            <th width="20%">Mã</th>
+                                                            <th>Ten</th>
+                                                        </tr>
+                                                    </table>
+                                                </ng-template>
+                                                <ng-template #khoaTemplate let-dataItem>
+                                                    <table width="100%" class="table-combobox">
+                                                        <tr>
+                                                            <td width="20%">{{dataItem.Ma}}</td>
+                                                            <td>{{dataItem.Ten}}</td>
+                                                        </tr>
+                                                    </table>
+                                                </ng-template> -->
+                                            </app-combobox>
+
+                                            <div class="h-15 mt-2" fxFlex="95%">
+                                                <div class="bg-card rounded-full border" fxFlex="100%" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                                                    fxLayoutAlign="start center" style="margin-top: 2px;">
+                                                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search"
+                                                        name="searchString" [(ngModel)]="timKiemNangCaoObj.SearchString" (keyup)="onKey($event)"
+                                                        (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa..." />
+                                                    <button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button" class="button-barcoe-in-search"
+                                                        kendoTooltip title="Phím tắt: Ctrl + Q">
+                                                        <img src="assets/img/barcode.png" alt="Scan barcode" />
+                                                    </button>
+                                                    <app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none;">
+                                                    </app-barcode>
+                                                </div>
+                                                <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                                                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                                                </button>
+                                            </div>
+
+                                            
+                                        </div>
+                                    
+                                        <app-grid fxFlex="100%" #gridParent [gridColumns]="gridColumns" [documentType]="documentType" [autoHeight]="true"
+                                            [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false" [checkboxAble]="false" pageSize="10"
+                                            [allowSortDefault]="false" [searchString]="timKiemNangCaoObj.SearchString" [showStt]="true"
+                                            (extEnterChangePage)="getThongTinYeuCauTiepNhan($event.Id, $event.PhienXetNghiemId)" (extDoubleClick)="getThongTinYeuCauTiepNhan($event.Id, $event.PhienXetNghiemId)"
+                                            [urlGetData]="urlGetDataDaCapCode" [urlGetTotalPage]="urlGetTotalDaCapCode">
+                                        </app-grid>
+                                    </div>
+
+                                    
+                                </fieldset>
+                            </kendo-splitter-pane>
+
+                            <kendo-splitter-pane style="overflow:initial;">
+                                <fieldset fxFlex="100%">
+                                    <legend>Thông tin người bệnh</legend>
+                                    <ng-container *ngIf="dataYeuCauTiepNhan.YeuCauTiepNhanId != null">
+                                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                                            <!-- style="background: #e1f5fe;" -->
+                                            <fieldset fxFlex="100%" class="{{(dataYeuCauTiepNhan != null && dataYeuCauTiepNhan.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+                                                <div fxFlex="100%">
+                                                    <ul class="inline">
+                                                        <li>Mã TN:
+                                                            <strong>{{dataYeuCauTiepNhan.MaTiepNhan}}</strong>
+                                                        </li>
+                                                        <li>Mã NB:
+                                                            <strong>{{dataYeuCauTiepNhan.MaBenhNhan}}</strong>
+                                                        </li>
+                                                        <li>Họ tên:
+                                                            <strong>{{dataYeuCauTiepNhan.HoTen}}</strong>
+                                                        </li>
+                                                        <li>
+                                                            Giới tính:
+                                                            <strong>{{dataYeuCauTiepNhan.TenGioiTinh}}</strong>
+                                                        </li>
+                                                        <!-- <li>Tuổi:
+                                                            <strong *ngIf="!isDuoi6Tuoi">{{dataYeuCauTiepNhan.Tuoi}}</strong>
+                                                            <strong *ngIf="isDuoi6Tuoi">{{Duoi6TuoiDisplay}}</strong>
+                                                        </li> -->
+                                                        <li>
+                                                            Năm sinh:
+                                                            <strong>{{dataYeuCauTiepNhan.NamSinhDisplay}}</strong>
+                                                        </li>
+                                                        <li>
+                                                            SĐT:
+                                                            <strong>{{dataYeuCauTiepNhan.SoDienThoai}}</strong>
+                                                        </li>
+                                                        <!-- <li>Dân tộc:
+                                                            <strong>{{dataYeuCauTiepNhan.DanToc}}</strong>
+                                                        </li> -->
+                                                        <li>
+                                                            Địa chỉ:
+                                                            <strong>{{dataYeuCauTiepNhan.DiaChi}}</strong>
+                                                        </li>
+                                                        <!-- <li>
+                                                            Nghề nghiệp:
+                                                            <strong>{{dataYeuCauTiepNhan.NgheNghiep}}</strong>
+                                                        </li> -->
+                                                        <!-- <li>
+                                                            Tuyến khám: <strong style="color: green;">{{dataYeuCauTiepNhan.Tuyen}}</strong>
+                                                        </li> -->
+                                                        <li>
+                                                            Số thẻ BHYT: <strong>{{dataYeuCauTiepNhan.SoTheBHYT}}</strong>
+                                                        </li>
+                                                        <li>
+                                                            Đối tượng: <strong style="color: blue;">{{dataYeuCauTiepNhan.DoiTuong}}</strong>
+                                                        </li>
+                                                        <li>
+                                                            Trả KQ cho người bệnh: <strong>{{dataYeuCauTiepNhan.TraKetQuaChoBenhNhan}}</strong>
+                                                        </li>
+                                                        <li *ngIf="dataYeuCauTiepNhan.TenCongTy != null">
+                                                            Tên công ty: <strong>{{dataYeuCauTiepNhan.TenCongTy}}</strong>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </fieldset>
+
+                                            <app-combobox fxFlex="15%" fxFlex.sm="15%" class="pb-0 mt-1" [model]="dataYeuCauTiepNhan.BarcodeNumber" [required]="true"
+                                                    [modelText]="barcodeDisplay" [queryInfo]="queryInfoBarcode" [bind]="true" [reloadForGrid]="true"
+                                                    label="Chọn Barcode" url="Xetnghiem/GetListBarcodeTheoYeuCauTiepNhan" [disabled]="true">
+                                                </app-combobox>
+                                            <ng-container *ngIf="timKiemNangCaoObj.TrangThai.ChuaNhanMau">
+                                                <button type="button" class="my-3 pt-2" style="height: 2.7em;" color="primary" mat-raised-button mat-button
+                                                    (click)="xuLyXacNhanNhanMau()">
+                                                    <i class="ft-edit mr-2"></i> Tiếp nhận mẫu</button>
+                                            </ng-container>
+                                            <ng-container *ngIf="timKiemNangCaoObj.TrangThai.DaNhanMau">
+                                                <button type="button" class="my-3 pt-2"
+                                                    style="height: 2.7em; color: white; background-color: red; padding-left: 10px" mat-raised-button
+                                                    (click)="xacNhanHuyMauXetNghiem()">
+                                                    <i class="ft-edit mr-2"></i> Hủy tiếp nhận mẫu
+                                                </button>
+                                            </ng-container>
+
+                                            <app-grid #gridDVDaCapCode [gridColumns]="gridDichVuChuaCapColumns" fxFlex="100%" fxFlex.sm="100%"
+                                                [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+                                                [lazyLoadPage]="false" [allowSortDefault]="false" [autoHeight]="true" [pageable]="false" [showStt]="true"
+                                                searchString="{{dataYeuCauTiepNhan.YeuCauTiepNhanId}}" [autoRefreshDataSource]="true"
+                                                [additionalSearchString]="strAdditionalSearchString" [groups]="groups" [checkboxAble]="false"
+                                                (extOnDataBound)="onDataBoundGridChuaCapCode($event)"
+                                                masterName="gridDVDaCapCode" [urlGetData]="urlGetDataDVDaCapCode" [urlGetTotalPage]="urlGetTotalDVDaCapCode">
+                                            </app-grid>
+                                        </div>
+
+                                        <div class="sticky-button-action py-3 text-right">
+                                            <button type="button" mat-button class="mr-2" (click)="huyChonBenhNhan()">Hủy</button>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="dataYeuCauTiepNhan.YeuCauTiepNhanId == null">
+                                        Chưa chọn người bệnh
+                                    </ng-container>
+                                </fieldset>
+                            </kendo-splitter-pane>
+                        </kendo-splitter>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<ng-template #nhomGroupHeaderTemplate let-value="value">
+    <input *ngIf="kiemTraAnHienGroupDichVu(value)" type="checkbox" id="ckbGroup-{{value}}" (change)="changeCheckNhomDichVu($event, value)" value="true" class="mr-2"> {{value}}
+</ng-template>
+<ng-template #checkBoxHeaderTemplate let-dataItemParent="dataItemParent">
+    <input type="checkbox" id="ckbHeader" [(ngModel)]="isCheckedAll" (ngModelChange)="chonTatCaDichVuTrongGoi($event)">
+</ng-template>
+<ng-template #checkBoxTemplate let-dataItem>
+    <input *ngIf="dataItem.IsActive" id="{{dataItem.Id}}" type="checkbox" [attr.name]="'ckbItem-' + dataItem.Id"
+        [(ngModel)]="dataItem.IsChecked" (ngModelChange)="chonDichVu($event, dataItem)">
+</ng-template>
+<ng-template #thoiGianChiDinhTemplate let-dataItem>
+    <div class="reverse-ellipsis r">{{dataItem.ThoiGianChiDinhDisplay}}</div>
+</ng-template>
+<ng-template #thoiGianCapCodeTemplate let-dataItem>
+    <div class="reverse-ellipsis r">{{dataItem.NgayLayMauDisplay}}</div>
+</ng-template>
+<ng-template #tenLoaiMauTemplate let-dataItem>
+    <div class="reverse-ellipsis r">{{dataItem.TenLoaiMau}}</div>
+</ng-template>
+<ng-template #trangThaiNhomTemplate let-dataItem>
+    <div style="position: relative;">
+        <span [ngClass]="{'': dataItem.TrangThai == 1, 
+                'orangeText': dataItem.TrangThai == 2,
+                'blueText': dataItem.TrangThai == 3,
+                'greenText': dataItem.TrangThai == 4 || dataItem.TrangThai == 5}">
+            {{dataItem.TenTrangThai}}
+        </span>
+    </div>
+</ng-template>
+<ng-template #maTNTemplate let-dataItem>
+    <a (click)="getThongTinYeuCauTiepNhan(dataItem.Id, dataItem.PhienXetNghiemId)">
+        <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.MaTiepNhan}}">{{dataItem.MaTiepNhan}}
+        </p>
+    </a>
+</ng-template>

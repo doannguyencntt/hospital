@@ -1,0 +1,183 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    *ngFor="let item of gridKetLuanColumns">
+    <div fxFlex="100%">
+        <span >Tóm tắt kết quả CLS:<strong>{{item.TomTatKetQuaCLS}}</strong></span>
+   
+    </div>
+    <div fxFlex="100%">
+        <fieldset fxFlex="49.5%" class="mb-3">
+            <span>Chẩn đoán ICD chính:</span>
+            <div class="mt-1 ml-3">
+                <ul>
+                    <li *ngIf="item.ChuanDoanICDChinh != null">ICD chính: <strong>{{item.ChuanDoanICDChinh}}</strong></li>
+                    <li *ngIf="item.ChuThichChanDoanICDChinh != null">Chẩn đoán:
+                        <strong>{{item.ChuThichChanDoanICDChinh}}</strong>
+                    </li>
+                </ul>
+            </div>
+            <span *ngIf="item.CachGiaiQuyet !== null">Cách giải quyết: <strong>{{item.CachGiaiQuyet}}</strong></span>
+            <span *ngIf="item.CachGiaiQuyet === null">Cách giải quyết: <strong>Không có cách giải
+                    quyết.</strong></span>
+            <div class="mt-1 ml-3">
+                <app-checkbox id="co-ke-toa" fxFlex="29.5%" [(model)]="item.CoKeToa" [disabled]="true"
+                    label="Cho về, Kê đơn thuốc"></app-checkbox>
+                <app-checkbox id="co-ke-toa" fxFlex="41%" [(model)]="item.CoKeToa" [disabled]="true"
+                    label="Cho về, Không toa"></app-checkbox>
+            </div>
+        </fieldset>
+        <fieldset fxFlex="49.5%" class="ml-3">
+            <span>Chẩn đoán kèm theo:</span>
+            <div class="mt-1">
+                <app-grid fxFlex="100%" [gridColumns]="gridColumnChuanDoanKemTheo" [useAddDeault]="false"
+                    [gridDataSource]="dataSourceChanDoanKemTheo" [useHeaderDefault]="false" [useActionDefault]="false"
+                    [checkboxAble]="false" [autoHeight]="true" searchString="">
+                </app-grid>
+            </div>
+        </fieldset>
+    </div>
+    <div fxFlex="100%">
+        <app-lich-su-kham-benh-ke-toa *ngIf="item.CoKeToa == true" [yeuCauKhamBenhId]="KhamBenhId">
+        </app-lich-su-kham-benh-ke-toa>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="TaiKham" fxFlex="80%" fxFlex.sm="100%" value="true" [(model)]="item.TaiKham" label="Tái khám"
+            [disabled]="true">
+        </app-checkbox>
+    </div>
+    <div *ngIf="item.TaiKham == true" fxFlex="100%">
+        <div class="row ml-1">
+            <fieldset fxFlex="100%">
+                <div fxFlex="100%">
+                    <ul class="inline">
+                        <li>Ngày hẹn tái khám:
+                            <strong>{{item.NgayHenKhamDisplay}}</strong>
+                        </li>
+                        <li>Ghi chú:
+                            <strong>{{item.GhiChu}}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="TaiKham" fxFlex="80%" fxFlex.sm="100%" value="true" [(model)]="item.DieuTriNgoaiTru"
+            label="Điều trị ngoại trú" [disabled]="true">
+        </app-checkbox>
+    </div>
+    <div *ngIf="item.DieuTriNgoaiTru == true" fxFlex="100%">
+        <div class="row ml-1">
+            <fieldset fxFlex="100%">
+                <div fxFlex="100%">
+                    <ul class="inline">
+                        <li>Dịch vụ kỹ thuật:
+                            <strong>{{item.TenDichVuKyThuat}}</strong>
+                        </li>
+                        <li>Số lần điều trị:
+                            <strong>{{item.SoLanDieuTri}}</strong>
+                        </li>
+                        <li>Thời gian bắt đầu điều trị:
+                            <strong>{{item.ThoiGianBatDauDieuTri}}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="NhapVien" fxFlex="70%" value="true" [(model)]="item.NhapVien" label="Nhập viện"
+            [disabled]="true">
+        </app-checkbox>
+    </div>
+    <div *ngIf="item.NhapVien == true" fxFlex="100%">
+
+        <label fxFlex="50%">Khoa :{{item.Khoa}}</label>
+        <label fxFlex="50%">Lý do :{{item.LyDoNhapVien}}</label>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="ChuyenVien" fxFlex="70%" value="true" [(model)]="item.ChuyenVien" label="Chuyển viện"
+            [disabled]="true">
+        </app-checkbox>
+    </div>
+    <div *ngIf="item.ChuyenVien == true" fxFlex="100%">
+        <label fxFlex="50%">Bệnh viện chuyển đến :{{item.BenhVienChuyenDen}}</label>
+        <label fxFlex="50%">Tình trạng người bệnh lúc chuyển viện :{{item.TinhTrangChuyenVien}}</label>
+    </div>
+    <div *ngIf="item.ChuyenVien == true" fxFlex="100%">
+        <label fxFlex="100%">Lý do :{{item.LyDoChuyenVien}}</label>
+    </div>
+    <div *ngIf="item.ChuyenVien == true" fxFlex="100%">
+        <label fxFlex="25%">Thời điểm chuyển viện :{{item.ThoiDiemChuyenVien}}</label>
+        <label fxFlex="25%">Nhân viên hộ tống :{{item.NhanVienHoTong}}</label>
+        <label fxFlex="25%">Phương tiện vẫn chuyển :{{item.PhuongTienDiChuyen}}</label>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="CoTuVong" fxFlex="70%" value="true" [(model)]="item.CoTuVong" label="Tử vong"
+            [disabled]="true">
+        </app-checkbox>
+    </div>
+    <!-- <div fxFlex="100%">
+        <fieldset class="mb-3">
+            <span>
+                <app-checkbox fxFlex="100%" [disabled]="true" label="Hẹn tái khám"></app-checkbox>
+            </span>
+            <div class="mt-1 ml-3">
+                <ul class="inline">
+                    <li>Ngày hẹn tái khám: <strong>25/12/2020</strong></li>
+                    <li>Ghi chú: <strong>Khi đi nhớ man toa thuốc</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div fxFlex="100%">
+        <fieldset class="mb-3">
+            <span>
+                <app-checkbox fxFlex="100%" [disabled]="true" label="Điều trị ngoại trú"></app-checkbox>
+            </span>
+            <div class="mt-1 ml-3">
+                <ul class="inline">
+                    <li>Dịch vụ kỹ thuật: <strong>Đặt ống thông dẫn lưu bàng quang</strong></li>
+                    <li>Số lần điều trị: <strong>2</strong></li>
+                    <li>Thời gian bắt đầu điều trị: <strong>25/12/2020</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div fxFlex="100%">
+        <fieldset class="mb-3">
+            <span>
+                <app-checkbox fxFlex="100%" [disabled]="true" label="Nhập viện"></app-checkbox>
+            </span>
+            <div class="mt-1 ml-3">
+                <ul class="inline">
+                    <li>Khoa:<strong>Khoa Phụ Sản</strong></li>
+                    <li>Lý do:<strong>Nhập viện đẻ</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div fxFlex="100%">
+        <fieldset class="mb-3">
+            <span>
+                <app-checkbox fxFlex="100%" [disabled]="true" label="Chuyển viện"></app-checkbox>
+            </span>
+            <div class="mt-1 ml-3">
+                <ul class="inline">
+                    <li>Bệnh viện chuyển đến:<strong>Bệnh viện 105</strong></li>
+                    <li>Tình trạng NB lúc chuyển viện:<strong>Hơi yếu</strong></li>
+                    <li>Lý do chuyển viện:<strong>Đủ điều kiện chuyển tuyến</strong></li>
+                    <li>Thời điểm chuyển viện:<strong>01/10/2020 05:49 CH</strong></li>
+                    <li>Nhân viên hộ tống:<strong>Nguyễn Văn A</strong></li>
+                    <li>Phương tiện vận chuyễn:<strong>Xe cấp cứu</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div fxFlex="100%">
+        <fieldset class="mb-3">
+            <span>
+                <app-checkbox fxFlex="100%" [disabled]="true" label="Tử vong"></app-checkbox>
+            </span>
+        </fieldset>
+    </div> -->
+</div>

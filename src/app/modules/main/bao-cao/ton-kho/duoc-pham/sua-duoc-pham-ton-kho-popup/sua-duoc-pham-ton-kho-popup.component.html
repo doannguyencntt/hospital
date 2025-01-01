@@ -1,0 +1,147 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+  <div style="font: 500 18px/26px var(--font)">CHI TIẾT DƯỢC PHẨM TỒN KHO</div>
+  <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+    <mat-icon [icIcon]="icClose"></mat-icon>
+  </button>
+</div>
+<mat-dialog-content>
+  <app-grid #gridDuocPhamTonKho [gridColumns]="gridColumns" urlGetData="TonKho/GetChiTietTonKhoCuaDuocPham"
+    [useAddDeault]="false" [headerTemplate]="headerTemplate" [gridColumns]="gridColumns" height="500"
+    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [pageable]="true"
+    (extOnDataBound)="extOnDataBound($event)">
+  </app-grid>
+
+  <ng-template #headerTemplate>
+    <div style="border-bottom: 1px solid #ccc;">
+      <div fxFlex="100%" style="margin: 10px 20px 0 10px;">
+        <span>
+          <span style="font-weight: bold;">Kho: </span> <span class="red">{{duocPham.data.kho.TenKho}}</span>
+        </span>
+        <!-- <span style="margin-left: 20px;">
+          <span style="font-weight: bold;">Dược phẩm: </span> <span
+            class="red">{{duocPham.data.dataItem.DuocPham}}</span>
+        </span> -->
+        <!-- [queryInfo]="{ParameterDependencies:'{DuocPhamId:' + capNhatTonKhoItem.DuocPhamId +'}', Take: 50}" -->
+        <app-combobox [disabled]="true" fxFlex="25%" [(model)]="capNhatTonKhoItem.DuocPhamId" [required]="true"
+          [modelText]="capNhatTonKhoItem.DuocPham" id="DuocPhamId" label="Tên Dược Phẩm"
+          url="TonKho/GetDuocPhamBenhVien" [validationerror]="'DuocPhamId' | validationerror:validationErrors"
+          [templateHeader]="duocPhamTemplateHeader" [template]="duocPhamTemplate" class="item-no-padding">
+          <ng-template #duocPhamTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+              <tr>
+                <th width="40%">Hoạt Chất</th>
+                <th>Tên</th>
+              </tr>
+            </table>
+          </ng-template>
+          <ng-template #duocPhamTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+              <tr>
+                <td width="40%">{{dataItem.HoatChat}}</td>
+                <td>{{dataItem.Ten}}</td>
+              </tr>
+            </table>
+          </ng-template>
+        </app-combobox>
+        <span style="margin-left: 20px;">
+          <span style="font-weight: bold;">Đơn vị tính: </span> <span
+            class="red">{{duocPham.data.dataItem.DonViTinh}}</span>
+        </span>
+        <app-textbox [disabled]="true" label="Số đăng ký"
+          style="width: 200px;display: inline-block;margin-left: 15px;margin-bottom: 10px;"
+          [(model)]="duocPham.data.dataItem.SoDangKy"
+          [validationerror]="'SoDangKy' | validationerror:validationErrors"> </app-textbox>
+      </div>
+    </div>
+  </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+  <button mat-button mat-dialog-close (click)="close()">Hủy</button>
+  <!-- <button mat-raised-button mat-button color="primary" (click)="save()" cdkFocusInitial>Lưu</button> -->
+</mat-dialog-actions>
+
+<ng-template #hanSuSungTemplate let-dataItem let-rowIndex="rowIndex">
+  <app-datepicker [disabled]="true" *ngIf="dataItem.Loai === 1" class="no-label" label=" " style="width: 100%;"
+    [(model)]="dataItem.HanSuDung" [required]="true"
+    [validationerror]="'CapNhatTonKhoDuocPhamChiTiets['+rowIndex+'].HanSuDung' | validationerror:validationErrors">
+  </app-datepicker>
+</ng-template>
+
+<ng-template #soLuongTemplate let-dataItem let-rowIndex="rowIndex">
+  <app-textboxnumeric [disabled]="true" *ngIf="dataItem.Loai==1" class="no-label" [step]="1" label=" " style="width: 100%;"
+    [min]="dataItem.SoLuongDaXuat" [spinners]="true" [(model)]="dataItem.SoLuong" [required]="true" [decimals]="2" format="n2"
+    [validationerror]="'CapNhatTonKhoDuocPhamChiTiets['+rowIndex+'].DuocPhamBenhVienPhanNhomId' | validationerror:validationErrors">
+  </app-textboxnumeric>
+  <span *ngIf="dataItem.Loai!=1">{{dataItem.SoLuong}}</span>
+</ng-template>
+<ng-template #tonFooterTemplate let-dataItem>
+  <p style="color: blue; font-weight: bold;">
+    <span *ngIf="tongTonKho==null">Đang tính tồn....</span>
+    <span *ngIf="tongTonKho!=null">{{tongTonKho}}</span>
+</ng-template>
+
+<ng-template #loaiFooterTemplate let-dataItem>
+  <span>Tồn:</span>
+</ng-template>
+
+<ng-template #sttTemplate let-rowIndex="rowIndex">
+  <span>{{rowIndex+1}}</span>
+</ng-template>
+
+<ng-template #maChungTuTemplate let-dataItem>
+  <a *ngIf="dataItem.ThongTinBooking!=null && dataItem.ThongTinBooking!=''"  kendoTooltip title="{{dataItem.ThongTinBooking}}">{{dataItem.MaChungTu}}</a>
+  <span *ngIf="dataItem.ThongTinBooking==null || dataItem.ThongTinBooking==''">{{dataItem.MaChungTu}}</span>
+</ng-template>
+
+<ng-template #duocPhamBenhVienPhanNhomTemplate let-dataItem let-rowIndex="rowIndex">
+  <app-combobox-tree [disabled]="true" *ngIf="dataItem.Loai === 1" class="no-label" label=" " popupSettings="null"
+    id="DuocPhamBenhVienPhanNhomId" bind="true" [(model)]="dataItem.DuocPhamBenhVienPhanNhomId"    
+    [data]="duocPhamPhanNhomDataSource"
+    #cmbNhom [required]="true"
+    [validationerror]="'CapNhatTonKhoDuocPhamChiTiets['+rowIndex+'].DuocPhamBenhVienPhanNhomId' | validationerror:validationErrors">
+  </app-combobox-tree>
+</ng-template>
+<ng-template #donGiaTemplate let-dataItem let-rowIndex="rowIndex">
+  <app-textboxnumeric [disabled]="true" *ngIf="dataItem.Loai === 1" id="donGiaUuDai" [max]="99999999999999999" class="no-label"
+    [(model)]="dataItem.DonGiaNhap" [min]="0" label=" " [decimals]="2" format="n2" [required]="true"
+    [validationerror]="'CapNhatTonKhoDuocPhamChiTiets['+rowIndex+'].DonGiaNhap' | validationerror:validationErrors">
+  </app-textboxnumeric>
+</ng-template>
+
+<ng-template #vATTemplate let-dataItem let-rowIndex="rowIndex">
+  <app-textboxnumeric [disabled]="true" *ngIf="!dataItem.LaVatTuBHYT && dataItem.Loai === 1" class="no-label" [step]="1" label=" "
+    style="width: 100%;" [max]="999" [min]="0" required="true" [(model)]="dataItem.VAT"
+    [validationerror]="'CapNhatTonKhoDuocPhamChiTiets['+rowIndex+'].VAT' | validationerror:validationErrors">
+  </app-textboxnumeric>
+
+  <span *ngIf="dataItem.LaVatTuBHYT"> {{dataItem.VAT}}</span>
+</ng-template>
+
+<ng-template #tiLeBHYTThanhToanTemplate let-dataItem let-rowIndex="rowIndex">
+  <app-textboxnumeric [disabled]="true" *ngIf="dataItem.LaVatTuBHYT && dataItem.Loai === 1" class="no-label" [step]="1" label=" "
+    style="width: 100%;" [max]="100" [min]="1" required="true" [(model)]="dataItem.TiLeBHYTThanhToan"
+    [validationerror]="'CapNhatTonKhoDuocPhamChiTiets['+rowIndex+'].TiLeBHYTThanhToan' | validationerror:validationErrors">
+  </app-textboxnumeric>
+
+  <span *ngIf="!dataItem.LaVatTuBHYT"> {{dataItem.TiLeBHYTThanhToan}}</span>
+</ng-template>
+
+<ng-template #maRefTemplate let-dataItem>
+  <app-textbox [disabled]="true" *ngIf="dataItem.Loai === 1" [(model)]="dataItem.MaRef" maxlength="200" label=" " class="no-label">
+  </app-textbox>
+  <span *ngIf="dataItem.Loai !== 1"> {{dataItem.MaRef}}</span>
+</ng-template>
+
+<ng-template #maVachTemplate let-dataItem>
+  <app-textbox [disabled]="true" *ngIf="dataItem.Loai === 1" [(model)]="dataItem.MaVach" maxlength="100" label=" " class="no-label">
+  </app-textbox>
+  <span *ngIf="dataItem.Loai !== 1"> {{dataItem.MaVach}}</span>
+</ng-template>
+
+<ng-template #soLoTemplate let-dataItem let-rowIndex="rowIndex">
+  <app-textbox [disabled]="true" *ngIf="dataItem.Loai === 1" required="true" [(model)]="dataItem.SoLo" maxlength="50" label=" "
+    class="no-label"
+    [validationerror]="'CapNhatTonKhoDuocPhamChiTiets['+rowIndex+'].SoLo' | validationerror:validationErrors">
+  </app-textbox>
+  <span *ngIf="dataItem.Loai !== 1"> {{dataItem.SoLo}}</span>
+</ng-template>

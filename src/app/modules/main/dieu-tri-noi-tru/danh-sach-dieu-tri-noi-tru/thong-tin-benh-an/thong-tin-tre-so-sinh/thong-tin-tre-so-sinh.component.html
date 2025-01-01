@@ -1,0 +1,97 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <span class="item-no mt-2 mb-1">1. Đặc điểm trẻ sơ sinh</span>
+    <button class="po-h item-no-padding" color="primary" (click)="them()">
+        <mat-icon [icIcon]="icAddCircle"></mat-icon>
+    </button>
+</div>
+<div class="mt-1" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" HideCheckAll="true"
+        [gridColumns]="gridColumnDacTinhTreSoSinhs" [documentType]="documentType" [useHeaderDefault]="false"
+        [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false" [pageable]="false" height="auto"
+        [gridDataSource]="dataSourceTreSoSinhs">
+    </app-grid>
+</div>
+
+<ng-template #ngayGioTemplate let-dataItem>
+    <app-datetimepicker id="ngay" [(model)]="dataItem.DeLuc" class="item-no-padding" label="">
+    </app-datetimepicker>
+</ng-template>
+<ng-template #gioiTinhTemplate let-dataItem>
+    <app-combobox id="gioi-tinh" [(model)]="dataItem.GioiTinhId" 
+        (selectionChange)="selectionGioiTinh($event , dataItem)" [popupSettings]="null" url="DieuTriNoiTru/GetGioiTinh"
+        [(modelText)]="dataItem.GioiTinh" class="item-no-padding">
+    </app-combobox>
+</ng-template>
+<ng-template #tinhTrangTemplate let-dataItem let-i="index">
+    <app-combobox id="trang-thai" [(model)]="dataItem.TinhTrangId"
+        (selectionChange)="selectionTinhTrang($event , dataItem)" [popupSettings]="null"
+        url="DieuTriNoiTru/GetTrangThai" [(modelText)]="dataItem.TenTinhTrang" class="item-no-padding">
+    </app-combobox>
+</ng-template>
+<ng-template #diTatTemplate let-dataItem>
+    <app-textbox [(model)]="dataItem.DiTat" class="item-no-padding" maxlength="500">
+    </app-textbox>
+</ng-template>
+<ng-template #canNangTemplate let-dataItem>
+    <app-textboxnumeric [(model)]="dataItem.CanNang" class="item-no-padding" min="1" max="999999" format="n2"
+        decimals="2">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #caoTemplate let-dataItem>
+    <app-textboxnumeric [(model)]="dataItem.Cao" class="no-label" label="" max="999999" format="n2" decimals="2">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #vongDauTemplate let-dataItem>
+    <app-textboxnumeric [(model)]="dataItem.VongDau" class="no-label" label="" max="999">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #coHauMonTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.CoHauMon" class="item-no-padding" label="">
+    </app-checkbox>
+</ng-template>
+
+<ng-template #aPGARTemplate let-dataItem>
+    <!-- 1 phút -->
+    <app-dropdownlist fxFlex="50%" [(model)]="dataItem.ApGar" [data]="apGarSelectItems" [popupSettings]="null"
+        class="no-label ml-2">
+    </app-dropdownlist>
+    <app-textboxnumeric min="1" max="999999" [(model)]="dataItem.ChiSoApGar" class="no-label ml-2" label="" fxFlex="25%"
+        fxFlex.sm="100%">
+    </app-textboxnumeric>
+
+    <!-- 5 phút -->
+    <app-dropdownlist fxFlex="50%" [(model)]="dataItem.ApGar5" [data]="apGarSelectItems" [popupSettings]="null"
+        class="no-label ml-2">
+    </app-dropdownlist>
+    <app-textboxnumeric min="1" max="999999" [(model)]="dataItem.ChiSoApGar5" class="no-label ml-2" label=""
+        fxFlex="25%" fxFlex.sm="100%">
+    </app-textboxnumeric>
+
+    <!-- 10 phút -->
+    <app-dropdownlist fxFlex="50%" [(model)]="dataItem.ApGar10" [data]="apGarSelectItems" [popupSettings]="null"
+        class="no-label ml-2">
+    </app-dropdownlist>
+    <app-textboxnumeric min="1" max="999999" [(model)]="dataItem.ChiSoApGar10" class="no-label ml-2" label=""
+        fxFlex="25%" fxFlex.sm="100%">
+    </app-textboxnumeric>
+
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <button *ngIf="dataItem.YeuCauTiepNhanConId == null" color="primary" mat-icon-button kendoTooltip title="Xóa"
+            type="button" (click)="xoa(dataItem)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #tinhTrangTreSoSinhTemplate let-dataItem>
+    <app-textbox [(model)]="dataItem.TinhTrang" class="item-no-padding" maxlength="1000">
+    </app-textbox>
+</ng-template>
+
+<ng-template #kqXuLyTemplate let-dataItem>
+    <app-textbox [(model)]="dataItem.KetQuaXuLy" class="item-no-padding" maxlength="1000">
+    </app-textbox>
+</ng-template>

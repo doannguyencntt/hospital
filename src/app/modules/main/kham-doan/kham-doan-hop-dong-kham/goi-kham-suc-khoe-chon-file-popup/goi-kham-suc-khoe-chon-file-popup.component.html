@@ -1,0 +1,26 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">Nhập danh sách gói khám từ excel</div>
+    <button type="button" mat-icon-button mat-dialog-close [mat-dialog-close]="null" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 80px;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-upload id="upload" #fileChuKy fxFlex="100%" fxFlex.sm="100%" [allowedExtensions]="allowedExtensions"
+            [invalidFileExtensionMess]="invalidFileExtensionMess" label="Chọn đường dẫn" [(model)]="file"
+            (uploadFileDone)="uploadFileDone($event)" [required]="true"
+            [validationerror]="'file' | validationerror:validationErrors">
+        </app-upload>       
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions class="mt-4 pb-5">
+    <div class="sticky-button-action py-3 text-right" kendoTooltip>
+        <div style="float: left;">
+            <button (click)="TaiFileMau()" type="button" mat-button class="mr-2">Tải file mẫu</button>
+        </div>
+    </div>
+    <button style="margin-left: auto;" type="button" mat-stroked-button color="primary"
+        [mat-dialog-close]="null">Hủy</button>
+    <button (click)="xuLyFile()" mat-raised-button mat-button color="primary">Ok</button>
+</mat-dialog-actions>

@@ -1,0 +1,64 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>XEM TRƯỚC KHI IN</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+
+    <div style="overflow-y: auto;max-height: 553px;">
+
+        <table class="table table-border" width="100%">
+            <tr *ngIf="this.isInPhieuThu" style="background: #005dab;color:#fff;">
+                <th>PHIẾU THU</th>
+            </tr>
+            <tr *ngIf="this.isInPhieuThu">
+                <td style="padding: 0;">
+                    <div class="container-iframe">
+                        <iframe width="100%" [src]="srcPhieuThu|safe" allowTransparency="true"
+                            background="transparent"></iframe>
+                    </div>
+                </td>
+            </tr>
+            <tr *ngIf="this.isInTamUng" style="background: #005dab;color:#fff;">
+                <th>PHIẾU THU TẠM ỨNG</th>
+            </tr>
+            <tr *ngIf="this.isInTamUng">
+                <td style="padding: 0;">
+                    <div class="container-iframe">
+                        <iframe width="100%" [src]="srcTamUng|safe" allowTransparency="true"
+                            background="transparent"></iframe>
+                    </div>
+                </td>
+            </tr>
+            <tr *ngIf="this.isInPhieuChi" style="background: #005dab;color:#fff;">
+                <th>PHIẾU CHI TIỀN</th>
+            </tr>
+            <tr *ngIf="this.isInPhieuChi">
+                <td style="padding: 0;">
+                    <div class="container-iframe">
+                        <iframe width="100%" [src]="srcPChi|safe" allowTransparency="true"
+                            background="transparent"></iframe>
+                    </div>
+                </td>
+            </tr>
+            <tr *ngIf="this.isInBenhNhanTraTien" style="background: #005dab;color:#fff;">
+                <th>PHIẾU THU TIỀN NGƯỜI BỆNH</th>
+            </tr>
+            <tr *ngIf="this.isInBenhNhanTraTien">
+                <td style="padding: 0;">
+                    <div class="container-iframe">
+                        <iframe width="100%" [src]="srcPBNTraTien|safe" allowTransparency="true"
+                            background="transparent"></iframe>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="mt-3">
+    <app-print-form textPrint="In" type="PDF" [event]="19" style="text-align: right;" typeSize="A5" typeLayout="landscape"
+        [bodyComponent]="this">
+    </app-print-form>
+</mat-dialog-actions>

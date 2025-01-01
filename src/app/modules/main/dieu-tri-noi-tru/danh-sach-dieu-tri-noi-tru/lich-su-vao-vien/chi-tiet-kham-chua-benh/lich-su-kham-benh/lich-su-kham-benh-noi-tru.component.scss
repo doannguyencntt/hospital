@@ -1,0 +1,25 @@
+ul.inline > li{
+    padding-right: 10px !important;
+    padding-bottom: 0.625em;
+    display: inline-block !important;
+}
+
+.po-h{
+    color: #005dab;
+    position: relative;
+    top: 5px;
+    left: 5px;
+    mat-icon{
+        display: contents;
+    }
+}
+
+.icon-close{    
+    position: absolute;
+    z-index: 9;
+    right: 0;
+    cursor: pointer;
+    &:hover{
+        color: #005dab;
+    }
+}

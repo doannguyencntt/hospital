@@ -1,0 +1,163 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between" *ngIf="loaiKhoThuoc === true ">
+    <div fxFlex="100%" *ngIf="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='5'">
+        <h4 style="color: red;">Lý do: {{thongTinDuTruMuaDuocPhamTaiKhoaDuoc.LyDoTruongKhoaTuChoi}}</h4>
+    </div>
+    <app-textbox id="soPhieu" fxFlex="20%" [required]="true" [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.SoPhieu"
+        maxlength="50" label="Số phiếu" [validationerror]="'SoPhieu' | validationerror:validationErrors"
+        [disabled]="isDisableTrangThai">
+    </app-textbox>
+    <app-textbox id="Khoa" fxFlex="20%" [required]="true" [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.Khoa"
+        bind="true" label="Khoa" class="item-no-padding" [validationerror]="'Khoa' | validationerror:validationErrors"
+        [disabled]="isDisableTrangThai">
+    </app-textbox>
+    <app-combobox id="KyDuTru" fxFlex="20%" [required]="true" fxFlex.sm="20%" [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.KyDuTru"
+        [modelText]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.KyDuTru" label="Kỳ dự trù" [disabled]="isDisableTrangThai"
+        url="">
+    </app-combobox>
+    <app-textbox id="nguoiYeuCau" fxFlex="20%" [required]="true"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TenNguoiYeuCau" label="Người yêu cầu" class="item-no-padding"
+        [validationerror]="'TenNguoiYeuCau' | validationerror:validationErrors" [disabled]="isDisableTrangThai">
+    </app-textbox>
+
+    <app-datepicker id="NgayYeuCau" fxFlex="20%" [required]="true"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.NgayYeuCau" label="Ngày yêu cầu"
+        [validationerror]="'NgayYeuCau' | validationerror:validationErrors" [disabled]="isDisableTrangThai">
+    </app-datepicker>
+
+    <app-textbox id="GhiChu" fxFlex="100%"  [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.GhiChu"
+        bind="true" label="Ghi chú" class="item-no-padding"
+        [validationerror]="'GhiChu' | validationerror:validationErrors" [disabled]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='2' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='5' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='3' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='4'">
+    </app-textbox>
+    <span fxFlex="100%"><b>THÔNG TIN CHI TIẾT</b></span>
+    <app-grid baseRoute="" #gridCreate fxFlex="100%" [gridColumns]="gridChildColumns"  [documentType]="documentType"
+        [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+        [lazyLoadPage]="true" [gridDataSource]="gridDataSource" [detailTemplate]="detailChildTemplate"  [pageable]="false"
+        [autoHeight]="true" [groups]="groups">
+    </app-grid>
+    <ng-template #detailChildTemplate let-dataItem>
+        <app-grid baseRoute="" [gridColumns]="gridChildChildKhoaColumns" [documentType]="documentType"
+            [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+            [lazyLoadPage]="true" urlGetData="YeuCauMuaDuocPham/GetDataChildKhoaForGridAsync" [pageable]="false"
+            additionalSearchString="{{dataItem.Id}}-{{dataItem.Loai}}-{{dataItem.DuocPhamId}}"
+            [autoHeight]="true">
+        </app-grid>
+
+    </ng-template>
+
+</div>
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between" *ngIf="loaiKhoThuoc === false">
+    <div fxFlex="100%" *ngIf="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='5'">
+        <h4 style="color: red;">Lý do: {{thongTinDuTruMuaDuocPhamTaiKhoaDuoc.LyDoTruongKhoaTuChoi}}</h4>
+    </div>
+    <app-textbox id="soPhieu" fxFlex="20%" [required]="true" [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.SoPhieu"
+        maxlength="50" label="Số phiếu" [validationerror]="'SoPhieu' | validationerror:validationErrors"
+        [disabled]="isDisableTrangThai">
+    </app-textbox>
+
+    <app-combobox id="LoaiDuTruId" fxFlex="20" fxFlex.sm="20" [required]="true"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.LoaiDuTruId"
+        [modelText]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.LoaiDuTru" url="" label="Nhóm"
+        [validationerror]="'LoaiDuTruId' | validationerror:validationErrors" [disabled]="isDisableTrangThai">
+    </app-combobox>
+    <app-combobox id="khoNhapId" fxFlex="20" fxFlex.sm="20" [required]="true"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.KhoId" [disabled]="true"
+        [modelText]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TenKho" url="" label="Kho"
+        [validationerror]="'KhoId' | validationerror:validationErrors">
+    </app-combobox>
+    <app-combobox id="KyDuTru" fxFlex="20%" fxFlex.sm="20%" [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.KyDuTru"
+        [modelText]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.KyDuTru" label="Kỳ dự trù" [disabled]="isDisableTrangThai"
+        url="">
+    </app-combobox>
+    <app-textbox id="nguoiYeuCau" fxFlex="20%" [required]="true"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TenNguoiYeuCau" label="Người yêu cầu" class="item-no-padding"
+        [validationerror]="'TenNguoiYeuCau' | validationerror:validationErrors" [disabled]="isDisableTrangThai">
+    </app-textbox>
+
+    <app-datepicker id="NgayYeuCau" fxFlex="20%" [required]="true"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.NgayYeuCau" label="Ngày yêu cầu"
+        [validationerror]="'NgayYeuCau' | validationerror:validationErrors" [disabled]="isDisableTrangThai">
+    </app-datepicker>
+
+    <app-textbox id="GhiChu" fxFlex="80%"  [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.GhiChu"
+        bind="true" label="Ghi chú" class="item-no-padding"
+        [validationerror]="'GhiChu' | validationerror:validationErrors" [disabled]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='2' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='5' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='3' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='4'">
+    </app-textbox>
+   
+    <span fxFlex="100%"><b>THÔNG TIN CHI TIẾT </b></span>
+    <app-grid baseRoute="" fxFlex="100%" #gridCreate [gridColumns]="gridColumns" [documentType]="documentType"
+        [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [pageable]="false" 
+        [lazyLoadPage]="true" [gridDataSource]="gridDataSource" additionalSearchString="" [autoHeight]="true" [groups]="groups"
+        >
+    </app-grid>
+    <!-- <ng-template #detailChildKhoaTemplate let-dataItem>
+        <app-grid baseRoute="" [gridColumns]="gridChildChildKhoColumns" [documentType]="documentType"
+            [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+            [lazyLoadPage]="true" urlGetData="YeuCauMuaDuocPham/GetDataChildForGridAsync" [pageable]="false"
+            additionalSearchString="{{dataItem.Id}}-{{dataItem.Loai}}-{{dataItem.DuocPhamId}}"
+            [autoHeight]="true">
+        </app-grid>
+
+    </ng-template> -->
+
+</div>
+<ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+    {{rowIndex + 1}}
+</ng-template>
+<ng-template #tongTonKhoTemplate let-dataItem>
+    <ng-template #templateInfo let-dataItem>
+        <table class="table table-border" width="100%">
+            <tr *ngFor="let item of khos">
+                <td>{{item.TenKhoTong}}:</td>
+                <td>{{item.TongTon | number:'1.0':'vi-VN' }}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <div class="kho-tong-ton-ng-template" kendoTooltip>
+        <span class="kho-tong-ton-label">{{dataItem.KhoTongTon | number:'1.0':'vi-VN' }}</span>
+        <span *ngIf="dataItem.KhoTongTon != 0" class="kho-tong-ton-ng-template" kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block" position="left" [tooltipTemplate]="templateInfo" filter="*">
+            <mat-icon [icIcon]="icInfo"  (mouseover)="TooltipCustom(dataItem)" class="info"></mat-icon>
+        </span>
+    </div>
+</ng-template>
+<ng-template #hDChuaNhanTemplate let-dataItem>
+    <ng-template #templateInfo let-dataItem>
+        <table class="table table-border" width="100%">
+            <tr *ngFor="let item of hdts">
+                <td>{{item.TenHopDong}}:</td>
+                <td>{{item.TongTon | number:'1.0':'vi-VN' }}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <div class="kho-tong-ton-ng-template" kendoTooltip>
+        <span class="kho-tong-ton-label">{{dataItem.HDChuaNhap | number:'1.0':'vi-VN' }}</span>
+        <span *ngIf="dataItem.HDChuaNhap != 0" class="kho-tong-ton-ng-template" kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block" position="left" [tooltipTemplate]="templateInfo" filter="*">
+            <mat-icon [icIcon]="icInfo" (mouseover)="TooltipCustom(dataItem)" class="info"></mat-icon>
+        </span>
+    </div>
+</ng-template>
+<ng-template #sLDuTruKhoTDuocDuyet let-dataItem let-rowIndex="rowIndex">
+    <app-textboxnumeric class="no-label numeric-in-grid" (modelChange)="modelChangeSoLuongDuyet($event ,dataItem)"
+        [(model)]="dataItem.SLDuTruTKhoDuyet" max="1000000" min="1" [disabled]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='2' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='5' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='3' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='4'">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #loaiTemplate let-dataItem>
+    <span *ngIf="dataItem.Loai == true">BHYT</span>
+    <span *ngIf="dataItem.Loai == false">Không BHYT</span>
+</ng-template>
+<ng-template #SLDuTruKhoDuocDuyet let-dataItem let-rowIndex="rowIndex">
+    <app-textboxnumeric class="no-label numeric-in-grid" (modelChange)="modelChangeSoLuongKDDuyet($event ,dataItem)"
+        [(model)]="dataItem.SLDuTruKhoDuocDuyet" max="1000000" min="1" [disabled]="thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='2' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='5' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='3' || thongTinDuTruMuaDuocPhamTaiKhoaDuoc.TrangThai=='4'">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #loaiNhomGroupHeaderTemplate let-value="value" let-dataItem>
+    <div fxFlex="100%">
+        <strong fxFlex="15%">
+            <span *ngIf="value == true"><b>BHYT</b></span>
+            <span *ngIf="value == false"><b>Không BHYT</b></span>
+        </strong>
+    </div>
+</ng-template>

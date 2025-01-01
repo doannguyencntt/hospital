@@ -1,0 +1,1010 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>THÔNG TIN NGƯỜI BỆNH ĐÃ HOÀN THÀNH PTTT</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <div fxLayout="column" style="position: relative;">
+        <!-- TAB NGƯỜI BỆNH CHỜ PHẪU THUẬT/TT -->
+        <!-- style="background: #e1f5fe;"  -->
+        <div class="row ml-1 mb-2">
+            <fieldset fxFlex="100%" class="{{(benhNhanHienTai != undefined && benhNhanHienTai != null && benhNhanHienTai.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+                <legend>Thông tin hành chính</legend>
+                <div fxFlex="100%" *ngIf="this.yeuCauTiepNhanId !== 0">
+                    <ul class="inline">
+                        <li>Mã TN: <strong>{{benhNhanHienTai.MaTN}}</strong></li>
+                        <li>Mã NB: <strong>{{benhNhanHienTai.MaBN}}</strong></li>
+                        <li>Họ tên: <strong>{{benhNhanHienTai.HoTen}}</strong></li>
+                        <li>Giới tính:<strong>{{benhNhanHienTai.GioiTinh}}</strong></li>
+                        <li>Tuổi: <strong>{{benhNhanHienTai.Tuoi}}</strong></li>
+                        <li>SĐT: <strong>{{benhNhanHienTai.SDT}}</strong></li>
+                        <li>Dân tộc: <strong>{{benhNhanHienTai.DanToc}}</strong></li>
+                        <li>Địa chỉ:<strong>{{benhNhanHienTai.DiaChi}}</strong></li>
+                        <li>Nghề nghiệp:<strong>{{benhNhanHienTai.NgheNghiep}}</strong></li>
+                        <li>Tuyến khám:<strong>{{benhNhanHienTai.TuyenKham}}</strong></li>
+                        <li>Mức hưởng:<strong>{{benhNhanHienTai.MucHuong}}%</strong></li>
+                        <li>Lí do TN:<strong>{{benhNhanHienTai.LyDoTN}}</strong></li>
+                        <li>Ngày TN: <strong>{{benhNhanHienTai.NgayTN}}</strong></li>
+                    </ul>
+                </div>
+            </fieldset>
+        </div>
+        <div id="card" class="row ml-1 temp d-inline">
+            <kendo-tabstrip fxFlex="100%"
+                class="content-has-border tabstrip-pad sticky-kendotab-item tabstrip-on-popup">
+                <!--------------------------------------------------------------------- TAB CẬN LÂM SÀNG -------------------------------------------------------------------------->
+                <kendo-tabstrip-tab [selected]="true">
+                    <ng-template kendoTabTitle>
+                        <div kendoTooltip>
+                            CẬN LÂM SÀNG
+                            ({{dichVuKyThuatChuaHoanThanhTrenHoanThanh.DichVuKyThuatDaHoanThanh}}/{{dichVuKyThuatChuaHoanThanhTrenHoanThanh.TongDichVuKyThuat}})
+                        </div>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <div class="content-tab-popup">
+                            <div fxFlex="100%">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0">
+                                    <app-grid #GridChiDinh fxFlex="100%" fxFlex.sm="100%" style="width: 1px;"
+                                        [gridColumns]="gridColumnCanLamSangs" [allowSortDefault]="true"
+                                        urlGetData="PhauThuatThuThuat/GetDanhSachCanLamSang"
+                                        (extOnDataBound)="onDataBoundChild($event)"
+                                        urlGetTotalPage="PhauThuatThuThuat/GetTotalPageForGridCanLamSang"
+                                        [additionalSearchString]="yeuCauTiepNhanSoLanPT" [documentType]="documentType"
+                                        [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+                                        [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500" [pageable]="false"
+                                        [groups]="groups" [showStt]="true">
+                                    </app-grid>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <ng-template #nhomGroupHeaderTemplate let-value="value" let-aggregates let-dataItem>
+                        <strong fxFlex="90%">
+                            {{value}}
+                        </strong>
+                        <div fxFlex="10%">
+                            <!-- <button
+                                *ngIf="aggregates.items[0].TrangThaiDichVu === 'Đã thực hiện' && aggregates.value !== 'Chẩn đoán hình ảnh' && aggregates.value !== 'Thăm dò chức năng'"
+                                type="button" (click)="OpenClickPopupXemKetQuaNhomXetNghiemCLS(aggregates)"
+                                color="primary" mat-raised-button class="mr-2">Xem</button>
+                            <button
+                                *ngIf="kiemTraCoKetQuaCLSXetNghiem(aggregates.items)"
+                                type="button" (click)="downloadFileNhomXetNghiem(aggregates)" color="primary"
+                                mat-raised-button>Tải
+                                về
+                            </button> -->
+                            <!-- <button  type="button"
+                                (click)="OpenClickPopupXemKetQuaNhomXetNghiemCLS(aggregates)" mat-icon-button
+                                class="mr-2">
+                                <mat-icon [icIcon]="icRedEye"></mat-icon>
+                            </button> -->
+                            <button *ngIf="kiemTraCoKetQuaCLSXetNghiem(aggregates.items)" fileName="KetQuaXetNghiem"
+                                (click)="InPhieuXn()" color="primary" mat-raised-button>Xem và tải
+                                về</button>
+                            <!-- <button *ngIf="kiemTraCoFileDownloadCLSXetNghiem(aggregates.items)" type="button"
+                                (click)="downloadFileNhomXetNghiem(aggregates)" mat-icon-button>
+                                <mat-icon [icIcon]="icDownward"></mat-icon>
+                            </button> -->
+                        </div>
+                    </ng-template>
+                    <ng-template #xemKetQuaActionTemplate let-dataItem>
+                        <div kendoTooltip>
+                            <!------------------------------------- Chuẩn đoán hình ảnh và thăm dò chức năng ---------------------------------------------->
+                            <button *ngIf="dataItem.LoaiDichVuKyThuat !== 2" type="button"
+                                (click)="OpenClickPopupXemKetQuaCLS(dataItem)" color="primary" mat-raised-button
+                                class="mr-2">
+                                Xem và tải về
+                            </button>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+                <!--------------------------------------------------------------------- TAB TƯỜNG TRÌNH---------------------------------------------------------------------------->
+                <kendo-tabstrip-tab>
+                    <ng-template kendoTabTitle>
+                        <div kendoTooltip *ngIf="dichVuKyThuatTuongTrinh != null">
+                            TƯỜNG TRÌNH PT/TT
+                            ({{dichVuKyThuatTuongTrinh.DichVuKyThuatDaTuongTrinh}}/{{dichVuKyThuatTuongTrinh.TongDichVuKyThuat}})
+                        </div>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <div class="content-tab-popup">
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap.lt-sm="0">
+                                <app-combobox id="ten-pttt" fxFlex="50%" fxFlex.sm="80%"
+                                    (selectionChange)="chonDichVu($event)" label="DS PTTT của NB "
+                                    [data]="ptttCombobox.lstPttt" [(model)]="ptttCombobox.ptttId" [popupSettings]="null"
+                                    (openCombobox)="OnOpen($event)" [modelText]="ptttCombobox.ptttDisplay"
+                                    [template]="truocPhauThuatTemplate" [templateHeader]="truocPhauThuatTemplateHeader"
+                                    class="no-padding" #lstPtttCmb>
+                                    <ng-template #truocPhauThuatTemplateHeader let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <th width="30%">Loại</th>
+                                                <th width="60%">Dịch vụ</th>
+                                                <th width="20%">Bác sĩ chính</th>
+                                                <th width="20%">Tình trạng</th>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                    <ng-template #truocPhauThuatTemplate let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <td width="30%">{{dataItem.LoaiPTTT}}</td>
+                                                <td width="60%">{{dataItem.TenDv}}</td>
+                                                <td width="20%">{{dataItem.BacSi}}</td>
+                                                <td *ngIf="dataItem.IsDaTuongTrinh" width="20%"><span
+                                                        style="color:green;">{{dataItem.TuongTrinhDisplay}}</span>
+                                                </td>
+                                                <td *ngIf="!dataItem.IsDaTuongTrinh" width="20%">
+                                                    {{dataItem.TuongTrinhDisplay}}</td>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                </app-combobox>
+                                <div fxFlex="50%">
+                                    <a *ngIf="coDichVuHuy == true" (click)="hienThiDichVuKhongThucHien()"
+                                        id="show-khong-thuc-hien">
+                                        <span
+                                            style="color:#005dab; text-decoration: underline; font-weight: bold; margin: 15px">
+                                            Dv không thực hiện
+                                        </span>
+                                    </a>
+                                </div>
+                                <kendo-tabstrip fxFlex="100%" [tabPosition]="'left'"
+                                    class="content-has-border tabstrip-pad sticky-kendotab-item tabstrip-on-popup tab-strip-lich-su"
+                                    *ngIf="soLan != null && dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null"
+                                    [keepTabContent]="true" (tabSelect)="onTabSelect($event)">
+                                    <kendo-tabstrip-tab [selected]="true">
+                                        <ng-template kendoTabTitle>
+                                            <div kendoTooltip>
+                                                EKIP <br />THỰC HIỆN
+                                            </div>
+                                        </ng-template>
+                                        <ng-template kendoTabContent>
+                                            <div class="p-2">
+                                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                                    fxLayoutGap.lt-sm="0">
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Khoa phòng</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.TenKhoaPhong != null">{{dataThongTinLichSuEkipPTTT.TenKhoaPhong}}</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Chẩn đoán vào khoa</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanVaoKhoa != null">{{dataThongTinLichSuEkipPTTT.ChanDoanVaoKhoa}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanVaoKhoa == null">Không
+                                                                có chẩn đoán vào khoa.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Mô tả</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.MoTaChanDoan != null">{{dataThongTinLichSuEkipPTTT.MoTaChanDoan}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.MoTaChanDoan == null">Không
+                                                                có mô tả chẩn đoán.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">CĐ trước phẫu thuật</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanTruocPT != null">{{dataThongTinLichSuEkipPTTT.ChanDoanTruocPT}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanTruocPT == null">Không
+                                                                có chẩn đoán trước phẫu thuật.</label>
+                                                        </ng-container>
+                                                    </div>
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Thời gian PT</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label>{{dataThongTinLichSuEkipPTTT.ThoiGianTruocPT}}</label>
+                                                        </ng-container>
+                                                    </div>
+                                                    <h3 class="sub-title">Người thực hiện</h3>
+                                                    <app-grid [gridColumns]="gridNguoiThucHienColumns"
+                                                        [documentType]="documentType" [useAddDeault]="false"
+                                                        urlGetData="PhauThuatThuThuat/GetDataForGridAsyncLichSuEkipBacSi"
+                                                        urlGetTotalPage="PhauThuatThuThuat/GetTotalPageForGridAsyncLichSuEkipBacSi"
+                                                        class="k-grid-border"
+                                                        [additionalSearchString]="yeuCauDichVuKyThuatId"
+                                                        [useHeaderDefault]="false" [useActionDefault]="false"
+                                                        [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true"
+                                                        [pageable]="false" #gridThucHien>
+                                                    </app-grid>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Ghi chú</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.GhiChuCaPTTT != null">{{dataThongTinLichSuEkipPTTT.GhiChuCaPTTT}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.GhiChuCaPTTT == null">Không có ghi chú.</label>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="p-2"
+                                                *ngIf="dataThongTinLichSuEkipPTTT === undefined && dataThongTinLichSuEkipPTTT === null">
+                                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                                    fxLayoutGap.lt-sm="0">
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+                                    <kendo-tabstrip-tab>
+                                        <ng-template kendoTabTitle>
+                                            <div kendoTooltip>
+                                                TƯỜNG TRÌNH PT/TT
+                                            </div>
+                                        </ng-template>
+                                        <ng-template kendoTabContent>
+                                            <div class="p-2"
+                                                *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                                    fxLayoutGap.lt-sm="0">
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Khoa phòng</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.TenKhoaPhong != null">{{dataThongTinLichSuEkipPTTT.TenKhoaPhong}}</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Chẩn đoán vào khoa</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanVaoKhoa != null">{{dataThongTinLichSuEkipPTTT.ChanDoanVaoKhoa}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanVaoKhoa == null">Không
+                                                                có chẩn đoán vào khoa.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Mô tả</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.MoTaChanDoan != null">{{dataThongTinLichSuEkipPTTT.MoTaChanDoan}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.MoTaChanDoan == null">Không
+                                                                có mô tả chẩn đoán.</label>
+
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Thời gian bắt đầu gây mê</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ThoiGianBatDauGayMe != null">{{dataThongTinLichSuEkipPTTT.ThoiGianBatDauGayMe}}</label>
+                                                            <label *ngIf="dataThongTinLichSuEkipPTTT.ThoiGianBatDauGayMe == null">Không có thời gian bắt đầu gây
+                                                                mê.</label>
+                                                        </ng-container>
+                                                    </div>
+                                                
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Thời gian bắt đầu PT</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ThoiDiemPhauThuat != null">{{dataThongTinLichSuEkipPTTT.ThoiDiemPhauThuat}}</label>
+                                                            <label *ngIf="dataThongTinLichSuEkipPTTT.ThoiDiemPhauThuat == null">Không có thời gian bắt đầu PT.</label>
+                                                        </ng-container>
+                                                    </div>
+                                                
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Thời gian kết thúc PT</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ThoiDiemKetThucPhauThuat != null">{{dataThongTinLichSuEkipPTTT.ThoiDiemKetThucPhauThuat}}</label>
+                                                            <label *ngIf="dataThongTinLichSuEkipPTTT.ThoiDiemKetThucPhauThuat == null">Không có thời gian kết thúc
+                                                                PT.</label>
+                                                        </ng-container>
+                                                    </div>
+
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">CĐ trước phẫu thuật</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanTruocPT != null">{{dataThongTinLichSuEkipPTTT.ChanDoanTruocPT}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanTruocPT == null">Không
+                                                                có chẩn đoán trước phẫu
+                                                                thuật.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Mô tả</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.MoTaTruocPT != null">{{dataThongTinLichSuEkipPTTT.MoTaTruocPT}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.MoTaTruocPT == null">Không
+                                                                có mô tả trước phẫu thuật.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">CĐ sau phẫu thuật</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanSauPT != null">{{dataThongTinLichSuEkipPTTT.ChanDoanSauPT}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanSauPT == null">Không
+                                                                có chẩn đoán sau phẫu thuật.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Mô tả</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.MoTaSauPT != null">{{dataThongTinLichSuEkipPTTT.MoTaSauPT}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.MoTaSauPT == null">Không
+                                                                có mô tả sau phẫu thuật.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Phương pháp PTTT</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.PhuongPhapPTTT != null">{{dataThongTinLichSuEkipPTTT.PhuongPhapPTTT}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.PhuongPhapPTTT == null">Không
+                                                                có phương pháp phẫu thuật thủ
+                                                                thuật.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Loại PTTT</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.LoaiPhauThuatThuThuat != null">{{dataThongTinLichSuEkipPTTT.LoaiPhauThuatThuThuat}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.LoaiPhauThuatThuThuat == null">Không
+                                                                có loại phương pháp phẫu thuật
+                                                                thủ thuật.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Phương pháp vô cảm</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.PhuongPhapVoCam != null">{{dataThongTinLichSuEkipPTTT.PhuongPhapVoCam}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.PhuongPhapVoCam == null">Không
+                                                                có phương pháp vô cảm.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">PTTT viên chính</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.PTTTVienChinh != null">{{dataThongTinLichSuEkipPTTT.PTTTVienChinh}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.PTTTVienChinh == null">Không
+                                                                có PTTT viên chính.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Tình hình PTTT</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.TinhHinhPTTT != null">{{dataThongTinLichSuEkipPTTT.TinhHinhPTTT}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.TinhHinhPTTT == null">Không
+                                                                có tình hình PTTT.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Tai biến PTTT</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.TaiBienPTTT != null">{{dataThongTinLichSuEkipPTTT.TaiBienPTTT}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.TaiBienPTTT == null">Không
+                                                                có tai biến PTTT.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Trình tự phẫu thuật</h3>
+                                                    <div fxFlex="100%">
+                                                        <ng-container
+                                                            *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.TrinhTuPT != null">{{dataThongTinLichSuEkipPTTT.TrinhTuPT}}</label>
+                                                            <label
+                                                                *ngIf="dataThongTinLichSuEkipPTTT.TrinhTuPT == null">Không
+                                                                có trình tự phẫu thuật.</label>
+                                                        </ng-container>
+                                                    </div>
+
+                                                    <h3 fxFlex="100%" class="sub-title mt-0">Lược đồ</h3>
+                                                    <div fxFlex="100%"
+                                                        *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null"
+                                                        class="mb-3">
+                                                        <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                            fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                                                            <div fxFlex="25%"
+                                                                *ngFor="let item of dataThongTinLichSuEkipPTTT.ImgLuocDoPT">
+                                                                <div class="card overflow-hidden"
+                                                                    style="border: 1px solid #ccc;position: relative;">
+                                                                    <div
+                                                                        class="mat-ripple p-4 text-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                                                                        <img (click)="xemHinhAnhBoPhanTonThuong(item)"
+                                                                            src="{{item.LuocDo}}" class="mx-auto" />
+                                                                    </div>
+                                                                    <div class="bg-app-bar p-2">
+                                                                        <p>{{item.MoTa}}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+                                    <kendo-tabstrip-tab>
+                                        <ng-template kendoTabTitle>
+                                            <div kendoTooltip>
+                                                GHI NHẬN<br /> VT/THUỐC
+                                            </div>
+                                        </ng-template>
+                                        <ng-template kendoTabContent>
+                                            <div class="p-2">
+                                                <app-grid #gridVTTHThuoc fxFlex="100%" fxFlex.sm="100%"
+                                                    style="width: 1px;" [gridColumns]="gridVTTHThuocColumns"
+                                                    [allowSortDefault]="true" [gridDataSource]="gridDataSourceVTTHThuoc"
+                                                    [documentType]="documentType" [useAddDeault]="false"
+                                                    [useHeaderDefault]="false" [useActionDefault]="false"
+                                                    [checkboxAble]="false" [lazyLoadPage]="true" [pageable]="false"
+                                                    [groups]="groupsGhiNhanVTHHThuoc" masterName="gridVTTHThuoc"
+                                                    [removeGroupFooterIfIsOnlyOne]="true" reorderRowsMoveItemData="true"
+                                                    [showStt]="true">
+                                                </app-grid>
+                                            </div>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+                                    <kendo-tabstrip-tab>
+                                        <ng-template kendoTabTitle>
+                                            <div kendoTooltip>
+                                                CHỈ SỐ <br />SINH TỒN
+                                            </div>
+                                        </ng-template>
+                                        <ng-template kendoTabContent>
+                                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                                fxLayoutGap.lt-sm="0">
+                                                <app-grid [gridColumns]="gridChiSoSinhTonColumns" fxFlex="100%"
+                                                    fxFlex.sm="100%" [documentType]="documentType"
+                                                    [useAddDeault]="false"
+                                                    urlGetData="PhauThuatThuThuat/GetDataForGridAsyncChiSoSinhHieuHoanThanhPTTT"
+                                                    urlGetTotalPage="PhauThuatThuThuat/GetTotalPageForGridAsyncChiSoSinhHieuHoanThanhPTTT"
+                                                    [additionalSearchString]="yeuCauTiepNhanId" class="k-grid-border"
+                                                    [useHeaderDefault]="false" [useActionDefault]="false"
+                                                    [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true"
+                                                    [pageable]="false">
+                                                </app-grid>
+                                            </div>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+                                </kendo-tabstrip>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+                <!--------------------------------------------------------------------- TAB KẾT LUẬN ------------------------------------------------------------------------------>
+                <kendo-tabstrip-tab *ngIf="thongTinKetLuanPTTT != null  && kiemTraCoPhauThuat">
+                    <ng-template kendoTabTitle>
+                        <div kendoTooltip>
+                            KẾT LUẬN
+                        </div>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <div class="content-tab-popup">
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0" *ngIf="thongTinKetLuanPTTT.BacSiPhuTrachTheoDoi != null">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0" *ngIf="thongTinKetLuanPTTT.BacSiPhuTrachTheoDoi != null">
+                                    <h3 fxFlex="100%" class="sub-title mt-0">Tình Trạng</h3>
+                                    <label
+                                        *ngIf="thongTinKetLuanPTTT != null">{{thongTinKetLuanPTTT.TinhTrangDisplay}}</label>
+                                    <label *ngIf="thongTinKetLuanPTTT == null">Không có tình trạng theo dõi.</label>
+
+                                    <div *ngIf="thongTinKetLuanPTTT != null" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                        fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxFlex="100%">
+                                        <h3 fxFlex="100%" class="sub-title mt-0">Bác sĩ phụ trách</h3>
+                                        <label
+                                            *ngIf="thongTinKetLuanPTTT != null && thongTinKetLuanPTTT.BacSiPhuTrachTheoDoi != null">
+                                            {{thongTinKetLuanPTTT.BacSiPhuTrachTheoDoi}}</label>
+                                        <label
+                                            *ngIf="thongTinKetLuanPTTT == null ||(thongTinKetLuanPTTT != null && thongTinKetLuanPTTT.BacSiPhuTrachTheoDoi == null)">
+                                            Không có bác sĩ phụ trách theo dõi.</label>
+
+                                        <h3 fxFlex="100%" class="sub-title mt-0">Điều dưỡng phụ trách</h3>
+                                        <label
+                                            *ngIf="thongTinKetLuanPTTT != null && thongTinKetLuanPTTT.DieuDuongPhuTrachTheoDoi != null">
+                                            {{thongTinKetLuanPTTT.DieuDuongPhuTrachTheoDoi}}</label>
+                                        <label
+                                            *ngIf="thongTinKetLuanPTTT == null ||(thongTinKetLuanPTTT != null && thongTinKetLuanPTTT.DieuDuongPhuTrachTheoDoi == null)">
+                                            Không có điều dưỡng phụ trách theo dõi.</label>
+
+
+                                        <h3 fxFlex="100%" class="sub-title mt-0">Thời gian theo dõi đến</h3>
+                                        <label
+                                            *ngIf="thongTinKetLuanPTTT != null && thongTinKetLuanPTTT.ThoiDiemTheoDoi != null">
+                                            {{thongTinKetLuanPTTT.ThoiDiemTheoDoi}}</label>
+                                        <label
+                                            *ngIf="thongTinKetLuanPTTT == null ||(thongTinKetLuanPTTT != null && thongTinKetLuanPTTT.ThoiDiemTheoDoi == null)">
+                                            Không có thời gian theo dõi.</label>
+
+                                        <h3 fxFlex="100%" class="sub-title mt-0">Ghi chú</h3>
+                                        <label
+                                            *ngIf="thongTinKetLuanPTTT != null && thongTinKetLuanPTTT.GhiChuTheoDoi != null">
+                                            {{thongTinKetLuanPTTT.GhiChuTheoDoi}}</label>
+                                        <label
+                                            *ngIf="thongTinKetLuanPTTT == null ||(thongTinKetLuanPTTT != null && thongTinKetLuanPTTT.GhiChuTheoDoi == null)">
+                                            Không có ghi chú.</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0" *ngIf="thongTinKetLuanPTTT.BacSiPhuTrachTheoDoi == null">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0">
+                                    <div *ngIf="thongTinKetLuanPTTT != null" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                        fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxFlex="100%">
+                                        <h3 fxFlex="100%" class="sub-title mt-0">Tình Trạng</h3>
+                                        <label
+                                            *ngIf="thongTinKetLuanPTTT != null">{{thongTinKetLuanPTTT.TinhTrangDisplay}}</label>
+                                        <label *ngIf="thongTinKetLuanPTTT == null">Không có tình trạng theo dõi.</label>
+
+                                        <h3 fxFlex="100%" class="sub-title mt-0">Ghi chú</h3>
+                                        <label
+                                            *ngIf="thongTinKetLuanPTTT != null && thongTinKetLuanPTTT.GhiChuTheoDoi != null">
+                                            {{thongTinKetLuanPTTT.GhiChuTheoDoi}}</label>
+                                        <label
+                                            *ngIf="thongTinKetLuanPTTT == null ||(thongTinKetLuanPTTT != null && thongTinKetLuanPTTT.GhiChuTheoDoi == null)">
+                                            Không có ghi chú.</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+                <!--------------------------------------------------------------------- TAB THEO DÕI ------------------------------------------------------------------------------>
+                <kendo-tabstrip-tab
+                    *ngIf=" thongTinKhamKhacPTTTTheoDoi != undefined && thongTinKhamKhacPTTTTheoDoi.length > 0">
+                    <ng-template kendoTabTitle>
+                        <div kendoTooltip>
+                            THEO DÕI
+                        </div>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <div class="content-tab-popup">
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0">
+                                <div fxFlex="100%" fxFlex.sm="100%">
+                                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                        fxLayoutGap.lt-sm="0">
+                                        <!--Begin chỉ sô sinh tồn -->
+                                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                            fxLayoutGap.lt-sm="0">
+                                            <h3 fxFlex="100%" class="sub-title mr-4"> CHỈ SỐ SINH TỒN </h3>
+                                            <app-grid
+                                                *ngIf="yeuCauTiepNhanId  != undefined &&  yeuCauTiepNhanId != null"
+                                                [gridColumns]="gridChiSoSinhTonColumns" [documentType]="documentType"
+                                                [useAddDeault]="false"
+                                                urlGetData="PhauThuatThuThuat/GetDataForGridAsyncChiSoSinhHieuHoanThanhPTTT"
+                                                urlGetTotalPage="PhauThuatThuThuat/GetTotalPageForGridAsyncChiSoSinhHieuHoanThanhPTTT"
+                                                [additionalSearchString]="yeuCauTiepNhanId" class="k-grid-border"
+                                                [useHeaderDefault]="false" [useActionDefault]="false"
+                                                [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true"
+                                                [pageable]="false">
+                                            </app-grid>
+
+                                            <ng-template #nhipTimTemplate let-dataItem>
+                                                <app-textboxnumeric *ngIf="dataItem.Id == 0"
+                                                    [(model)]="dataItem.NhipTim" class="no-label">
+                                                </app-textboxnumeric>
+                                                <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.NhipTim}}</p>
+                                            </ng-template>
+                                            <ng-template #huyetApTemplate let-dataItem>
+                                                <div style="width:100%;display: block;overflow: hidden;">
+                                                    <div *ngIf="dataItem.Id == 0"
+                                                        style="width: calc(50% - 10px);float: left;">
+                                                        <app-textboxnumeric *ngIf="dataItem.Id == 0"
+                                                            [(model)]="huyetApTamThu" class="no-label" [min]="90"
+                                                            [max]="140">
+                                                        </app-textboxnumeric>
+                                                    </div>
+                                                    <div *ngIf="dataItem.Id == 0"
+                                                        style="width: 20px;text-align: center;float: left;line-height: 43px;">
+                                                        /</div>
+                                                    <div *ngIf="dataItem.Id == 0"
+                                                        style="width: calc(50% - 10px);float: left;">
+                                                        <app-textboxnumeric *ngIf="dataItem.Id == 0"
+                                                            [(model)]="huyetApTamTruong" class="no-label" [min]="60"
+                                                            [max]="90">
+                                                        </app-textboxnumeric>
+                                                    </div>
+                                                </div>
+                                                <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.HuyetAp}} </p>
+                                            </ng-template>
+                                            <ng-template #thanNhietTemplate let-dataItem>
+                                                <app-textboxnumeric [format]="format" *ngIf="dataItem.Id == 0"
+                                                    [(model)]="dataItem.ThanNhiet" class="no-label">
+                                                </app-textboxnumeric>
+                                                <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.ThanNhiet | number}}
+                                                </p>
+                                            </ng-template>
+                                            <ng-template #nhipThoTemplate let-dataItem>
+                                                <app-textboxnumeric *ngIf="dataItem.Id == 0"
+                                                    [(model)]="dataItem.NhipTho" class="no-label">
+                                                </app-textboxnumeric>
+                                                <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.NhipTho | number}}
+                                                </p>
+                                            </ng-template>
+                                            <ng-template #canNangTemplate let-dataItem>
+                                                <app-textboxnumeric *ngIf="dataItem.Id == 0" [format]="format"
+                                                    [(model)]="dataItem.CanNang" class="no-label" [min]="2.0"
+                                                    [max]="222.0">
+                                                </app-textboxnumeric>
+                                                <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.CanNang | number}}
+                                                </p>
+                                            </ng-template>
+                                            <ng-template #BMITemplate let-dataItem>
+                                                <app-textboxnumeric *ngIf="dataItem.Id == 0" [format]="format"
+                                                    [(model)]="dataItem.BMI" class="no-label">
+                                                </app-textboxnumeric>
+                                                <p class="ml-1" *ngIf="dataItem.Id != 0">
+                                                    {{dataItem.BMI | number: '1.2-2'}}
+                                                </p>
+                                            </ng-template>
+                                            <ng-template #chieuCaoTemplate let-dataItem>
+                                                <app-textboxnumeric *ngIf="dataItem.Id == 0" [format]="format"
+                                                    [(model)]="dataItem.ChieuCao" class="no-label" [min]="100.0"
+                                                    [max]="250.0">
+                                                </app-textboxnumeric>
+                                                <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.ChieuCao}} </p>
+                                            </ng-template>
+                                            <ng-template #glassgowTemplate let-dataItem>
+                                                <app-textboxnumeric *ngIf="dataItem.Id == 0" [format]="format"
+                                                    [spinners]="false" [(model)]="dataItem.Glassgow" [decimals]="1"
+                                                    class="no-label">
+                                                </app-textboxnumeric>
+                                                <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.Glassgow | number}}
+                                                </p>
+                                            </ng-template>
+                                            <ng-template #sPO2Template let-dataItem>
+                                                <app-textboxnumeric *ngIf="dataItem.Id == 0" [format]="format"
+                                                    [spinners]="false" [(model)]="dataItem.SpO2" [decimals]="1"
+                                                    class="no-label">
+                                                </app-textboxnumeric>
+                                                <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.SpO2 | number}}</p>
+                                            </ng-template>
+                                        </div>
+                                        <!--End chỉ số sinh tồn -->
+                                        <div fxFlex="100%">
+                                            <kendo-tabstrip fxFlex="100%"
+                                                *ngIf="thongTinKhamKhacPTTTTheoDoi != undefined"
+                                                class="content-has-border tabstrip-pad tabstrip-on-popup k-tabstrip-items-top-0"
+                                                (tabSelect)="onTabSelect($event)">
+                                                <ng-container
+                                                    *ngFor="let item of thongTinKhamKhacPTTTTheoDoi; index as i">
+                                                    <kendo-tabstrip-tab [selected]="i === 0">
+                                                        <ng-template kendoTabTitle>
+                                                            <div kendoTooltip>
+                                                                LẦN KHÁM {{i+1}}
+                                                            </div>
+                                                        </ng-template>
+                                                        <ng-template kendoTabContent>
+                                                            <div class="p-2">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                    fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                                                                    <div fxFlex="100%">
+                                                                        <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                            fxLayoutGap="16px grid"
+                                                                            fxLayoutGap.lt-sm="0">
+                                                                            <h3 fxFlex="100%" class="sub-title mt-0">
+                                                                                Khám
+                                                                                toàn thân </h3>
+                                                                            <label>{{item.KhamToanThan}}</label>
+
+                                                                            <h3 fxFlex="100%" class="sub-title mt-0">
+                                                                                Khám
+                                                                                các cơ quan khác </h3>
+                                                                            <ng-container
+                                                                                *ngIf="thongTinKhamTheoDoiTemplateObj == undefined || thongTinKhamTheoDoiTemplateObj == null">
+                                                                                <label fxFlex="100%"
+                                                                                    class="font-weight-bold">Không có
+                                                                                    khám
+                                                                                    các cơ quan
+                                                                                    khác.</label>
+                                                                            </ng-container>
+                                                                            <ng-container
+                                                                                *ngIf="thongTinKhamTheoDoiTemplateObj != undefined && thongTinKhamTheoDoiTemplateObj != null && thongTinKhamTheoDoiTemplateObj.ComponentDynamics!=null && thongTinKhamTheoDoiTemplateObj.ComponentDynamics.length>0">
+                                                                                <ng-container
+                                                                                    *ngFor="let item of thongTinKhamTheoDoiTemplateObj.ComponentDynamics">
+                                                                                    <ng-container
+                                                                                        *ngIf="item.Type == 4 && item.groupItems != undefined && item.groupItems.length > 0">
+                                                                                        <div fxFlex="100%"
+                                                                                            class="row ml-1 mb-2">
+                                                                                            <fieldset fxFlex="100%">
+                                                                                                <legend>{{item.Label}}
+                                                                                                </legend>
+                                                                                                <div fxLayout="row wrap"
+                                                                                                    fxLayout.lt-sm="column"
+                                                                                                    fxLayoutGap="16px grid"
+                                                                                                    fxLayoutGap.lt-sm="0">
+                                                                                                    <ng-container
+                                                                                                        *ngFor="let itemInGroup of item.groupItems">
+                                                                                                        <h3 *ngIf="itemInGroup.Type==1"
+                                                                                                            fxFlex="20%"
+                                                                                                            class="sub-title">
+                                                                                                            {{itemInGroup.Label}}
+                                                                                                        </h3>
+                                                                                                        <label
+                                                                                                            fxFlex="100%"
+                                                                                                            *ngIf="itemInGroup.Type==2"><span
+                                                                                                                style="font-weight: bold;">{{itemInGroup.Label}}
+                                                                                                            </span>:
+                                                                                                            {{itemInGroup.Value}}</label>
+                                                                                                        <label
+                                                                                                            fxFlex="100%"
+                                                                                                            *ngIf="itemInGroup.Type==3"><span
+                                                                                                                style="font-weight: bold;">{{itemInGroup.Label}}</span>
+                                                                                                            :
+                                                                                                            {{itemInGroup.Value}}</label>
+                                                                                                    </ng-container>
+                                                                                                </div>
+                                                                                            </fieldset>
+                                                                                        </div>
+                                                                                    </ng-container>
+                                                                                    <ng-container
+                                                                                        *ngIf="item.groupItems == undefined || item.groupItems == null || item.groupItems.length == 0">
+                                                                                        <h3 *ngIf="item.Type==1"
+                                                                                            fxFlex="20%"
+                                                                                            class="sub-title">
+                                                                                            {{item.Label}}
+                                                                                        </h3>
+                                                                                        <label fxFlex="100%"
+                                                                                            *ngIf="item.Type==2"><span
+                                                                                                style="font-weight: bold;">{{item.Label}}
+                                                                                                :</span>
+                                                                                            {{item.Value}}</label>
+                                                                                        <label fxFlex="100%"
+                                                                                            *ngIf="item.Type==3"><span
+                                                                                                style="font-weight: bold;">{{item.Label}}
+                                                                                                :</span>
+                                                                                            {{item.Value}}</label>
+                                                                                    </ng-container>
+                                                                                </ng-container>
+                                                                            </ng-container>
+                                                                        </div>
+
+                                                                        <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                            fxLayoutGap="16px grid"
+                                                                            fxLayoutGap.lt-sm="0">
+                                                                            <h3 fxFlex="50%" class="sub-title mr-4">
+                                                                                Khám
+                                                                                khác</h3>
+                                                                            <app-grid
+                                                                                [gridColumns]="gridKhamKhacColumns"
+                                                                                [documentType]="documentType"
+                                                                                [useAddDeault]="false"
+                                                                                urlGetData="PhauThuatThuThuat/GetDataForGridAsyncLichSuKhamCacCoQuan"
+                                                                                urlGetTotalPage="PhauThuatThuThuat/GetTotalPageForGridAsyncLichSuKhamCacCoQuan"
+                                                                                [additionalSearchString]="item.Id"
+                                                                                class="k-grid-border"
+                                                                                [useHeaderDefault]="false"
+                                                                                [useActionDefault]="false"
+                                                                                [checkboxAble]="false" [maxHeight]="200"
+                                                                                [lazyLoadPage]="true"
+                                                                                [pageable]="false">
+                                                                            </app-grid>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+                                                    </kendo-tabstrip-tab>
+                                                </ng-container>
+                                            </kendo-tabstrip>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+            </kendo-tabstrip>
+        </div>
+    </div>
+    <div class="gridViewGoiDichViKhacTemplate">
+        <ng-template #nhomGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+        <ng-template #congTienGroupFooterTemplate let-dataItem>
+            <span>Cộng:</span>
+        </ng-template>
+        <ng-template #tongTienFooterTemplate let-dataItem>
+            <span>Tổng cộng:</span>
+        </ng-template>
+        <ng-template #donGiaTemplate let-dataItem>
+            {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #thanhTienTemplate let-dataItem>
+            {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #thanhTienFooterTemplate let-dataItem>
+            <p style="color: blue; font-weight: bold;">
+                <span>{{totalNotChietKhau('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+        <ng-template #thanhTienGroupFooterTemplate let-aggregates>
+            {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #donGiaBaoHiemTemplate let-dataItem>
+            {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #duocHuongBaoHiemTemplate let-dataItem>
+            <app-checkbox id="duocHuongBaoHiem{{dataItem.Id}}" label="" [(model)]="dataItem.DuocHuongBaoHiem"
+                disabled="{{true}}">
+            </app-checkbox>
+        </ng-template>
+        <ng-template #noiThucHienTemplate let-dataItem>
+            <span style="color:red;">
+                {{dataItem.NoiThucHien}}
+            </span>
+        </ng-template>
+        <ng-template #trangThaiTemplate let-dataItem>
+            <ng-container [ngSwitch]="dataItem.NhomId">
+                <span *ngSwitchCase="1" [ngClass]="{
+                        'blueText': dataItem.TrangThaiDichVuId == trangThaiYCKB.ChuaKham,
+                        'greenText': dataItem.TrangThaiDichVuId == trangThaiYCKB.DangKham,
+                        'yellowText': dataItem.TrangThaiDichVuId == trangThaiYCKB.DangLamChiDinh,
+                        'orangeText': dataItem.TrangThaiDichVuId == trangThaiYCKB.DangDoiKetLuan,
+                        'redText': dataItem.TrangThaiDichVuId == trangThaiYCKB.DaKham}">
+                    {{dataItem.TrangThaiDichVu}}
+                </span>
+
+                <span *ngSwitchDefault [ngClass]="{
+                        'blueText': dataItem.TrangThaiDichVuId == trangThaiYCDVKT.ChuaThucHien,
+                        'greenText': dataItem.TrangThaiDichVuId == trangThaiYCDVKT.DangThucHien,
+                        'redText': dataItem.TrangThaiDichVuId == trangThaiYCDVKT.DaThucHien }">
+                    {{dataItem.TrangThaiDichVu}}
+                </span>
+            </ng-container>
+        </ng-template>
+    </div>
+
+
+    <!-- ghi nhận thuốc vật tư -->
+    <div class="gripViewGoiDichViKhacTemplate">
+        <!-- <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template> -->
+
+        <ng-template #nhomGroupHeaderVTTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+
+        <ng-template #donGiaGhiNhanTemplate let-dataItem>
+            <!-- {{dataItem.DonGia | number:'0.2-2':'vi-VN'}} -->
+            <p *ngFor="let item of dataItem.ThongTinGias">
+                {{item.DonGia | number:'0.2-2':'vi-VN'}}
+            </p>
+        </ng-template>
+
+        <ng-template #soLuongGhiNhanVTTHThuocTemplate let-dataItem>
+            <!-- <app-textboxnumeric [disabled]="(dataItem.PhieuLinh != null && dataItem.PhieuLinh != '') || (dataItem.PhieuXuat != null && dataItem.PhieuXuat != '')" [(model)]="dataItem.SoLuong" class="no-label" [format]="format" [decimals]="2" label=" " min="1" max="9999999"
+                (modelChange)="CapNhatGridItemGhiNhanVTTHThuoc($event, dataItem)"> 
+            </app-textboxnumeric> -->
+
+            <!-- <div *ngIf="dataItem.LoaiKho == 5">{{dataItem.SoLuong | number:'0.2'}}</div>
+            <div *ngIf="dataItem.LoaiKho != 5">{{dataItem.SoLuong | number}}</div> -->
+
+            <p *ngFor="let item of dataItem.ThongTinGias">
+                <ng-container *ngIf="dataItem.LoaiKho == 5">{{item.SoLuong | number:'0.2'}}</ng-container>
+                <ng-container *ngIf="dataItem.LoaiKho != 5">{{item.SoLuong | number}}</ng-container>
+            </p>
+
+            <!-- <app-textboxnumeric [disabled]="(dataItem.PhieuLinh != null && dataItem.PhieuLinh != '') || (dataItem.PhieuXuat != null && dataItem.PhieuXuat != '')" [(model)]="dataItem.SoLuong" class="no-label" label=" " min="1" max="9999999"
+                (blur)="CapNhatGridItemGhiNhanVTTHThuoc($event, dataItem)"> 
+            </app-textboxnumeric> -->
+        </ng-template>
+
+        <ng-template #thanhTienTemplate let-dataItem>
+            <!-- {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}} -->
+            <p *ngFor="let item of dataItem.ThongTinGias">
+                {{item.ThanhTien | number:'0.2-2':'vi-VN'}}
+            </p>
+        </ng-template>
+
+        <ng-template #thanhTienGhiNhanVTTHThuocFooterTemplate let-dataItem>
+            <span style="color:blue">{{totalGhiNhanVTTHThuoc('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+
+        <ng-template #thanhTienGhiNhanVTTHThuocGroupFooterTemplate let-aggregates>
+            {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+
+        <ng-template #donGiaBaoHiemTemplate let-dataItem>
+            <!-- {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}} -->
+            <ng-container *ngIf="dataItem.DonGiaBaoHiem != null">
+                {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+            </ng-container>
+            <ng-container *ngIf="dataItem.DonGiaBaoHiem == null">
+                <p *ngFor="let item of dataItem.ThongTinGias">
+                    {{item.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+                </p>
+            </ng-container>
+        </ng-template>
+
+        <ng-template #tinhPhiGhiNhanVHTTTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-checkbox id="tinhPhiGhiNhanVTTH{{rowIndex}}" label="" [(model)]="dataItem.TinhPhi" disabled="{{true}}">
+            </app-checkbox>
+        </ng-template>
+
+        <ng-template #duocHuongBaoHiemGhiNhanVHTTTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-checkbox id="duocHuongBaoHiem{{rowIndex}}" label="" [(model)]="dataItem.DuocHuongBaoHiem"
+                disabled="{{true}}">
+            </app-checkbox>
+        </ng-template>
+    </div>
+</mat-dialog-content>
+<ng-template #trangThaiTemplate1 let-dataItem>
+    <ng-container [ngSwitch]="dataItem.NhomId">
+        <span *ngSwitchCase="1" [ngClass]="{
+                'blackText': dataItem.TrangThaiDichVuId == trangThaiYCKB.ChuaKham, 
+                'orangeText': dataItem.TrangThaiDichVuId == trangThaiYCKB.DangKham || dataItem.TrangThaiDichVuId == trangThaiYCKB.DangLamChiDinh || dataItem.TrangThaiDichVuId == trangThaiYCKB.DangDoiKetLuan,
+                'greenText': dataItem.TrangThaiDichVuId == trangThaiYCKB.DaKham}">
+            {{dataItem.TrangThaiDichVu}}
+        </span>
+
+        <span *ngSwitchDefault [ngClass]="{
+                'blackText': dataItem.TrangThaiDichVuId == trangThaiYCDVKT.ChuaThucHien, 
+                'orangeText': dataItem.TrangThaiDichVuId == trangThaiYCDVKT.DangThucHien,
+                'greenText': dataItem.TrangThaiDichVuId == trangThaiYCDVKT.DaThucHien }">
+            {{dataItem.TrangThaiDichVu}}
+        </span>
+    </ng-container>
+</ng-template>

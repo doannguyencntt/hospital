@@ -1,0 +1,57 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="m-0">
+    <div>TÌM KIẾM BỆNH ÁN</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <app-grid #gridTimKiem [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" height="511"
+        [allowSortDefault]="false" [headerTemplate]="headerTemplate" [urlGetData]="urlGetDataGrid" [showStt]="true"
+        [urlGetTotalPage]="urlGetTotalPageGrid" [additionalSearchString]="strAdditionalSearchString">
+    </app-grid>
+</mat-dialog-content>
+
+<ng-template #actionTemplate let-dataItem>
+    <button mat-raised-button type="button" color="primary" (click)="chonBenhAn(dataItem)">
+        Chọn
+    </button>
+</ng-template>
+
+<ng-template #headerTemplate>
+    <div style="border-bottom: 1px solid #ccc;">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap.lt-sm="0">
+            <div  class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                    fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;" kendoTooltip>
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        type="search" name="searchString" [(ngModel)]="timKiemNangCaoObj.SearchString"
+                        (keyup)="onKey($event)" (ngModelChange)="searchChanges($event)"
+                        placeholder="Họ tên, Mã NB, Mã TN" />
+                    <button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button"
+                        class="button-barcoe-in-search" kendoTooltip title="Quét mã vạch thẻ"
+                        title="Phím tắt: Ctrl + Q">
+                        <img src="assets/img/barcode.png" alt="Scan barcode" />
+                    </button>
+                </div>
+
+                <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                </button>
+
+                <app-daterangepicker id="tuNgayDenNgay" fxFlex="20%" fxFlex.sm="20%" class="on-header ml-2"
+                    [(model)]="timKiemNangCaoObj.TuNgayDenNgayNhapVien" label="Nhập viện" (keyup)="onKey($event)">
+                </app-daterangepicker>
+                
+                <app-daterangepicker id="tuNgayDenNgay" fxFlex="20%" fxFlex.sm="20%" class="on-header ml-2"
+                    [(model)]="timKiemNangCaoObj.TuNgayDenNgayXuatVien" label="Xuất viện" (keyup)="onKey($event)">
+                </app-daterangepicker>
+                <button type="button" color="primary" (click)="timKiemNangCao()" class="ml-2"
+                    mat-raised-button>Tìm</button>
+                <div fxFlex="auto"></div>
+            </div>
+        </div>
+    </div>
+</ng-template>

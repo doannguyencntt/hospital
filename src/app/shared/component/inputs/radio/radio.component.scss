@@ -1,0 +1,100 @@
+app-radio{
+    //padding-bottom: 1.34375em;
+    .mt-4{
+        margin-top: 33px !important;
+    }
+    .mat-radio-label{
+      color: rgba(0, 0, 0, 1);
+    }
+    .mat-radio-disabled {
+        background: #ECEFF1;
+        .mat-radio-label-content{
+            color: rgba(0, 0, 0, 1) !important;
+        }
+    }
+    &.rad-white *{
+        color:white;
+        border-color:white !important;
+        .mat-radio-inner-circle{
+            background-color:white !important;
+        }
+        
+    }
+    kendo-textbox-container{        
+        background-color: rgba(0, 0, 0, 0.04);
+        width: 100% !important;
+        border-radius: 4px 4px 0 0;
+        padding: .75em .75em 0 .75em;
+        border-bottom: 1px solid rgba(82, 63, 105, 0.42);
+        >.k-label{
+            margin-left: 10px;
+            background: none !important;
+            transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+        }
+        &.k-state-empty{            
+            >.k-label{
+                transform: translate(0, 0) scale(1) !important;
+                margin-top: -9px;
+                font-size: 11px;
+            }
+        }
+        &.k-state-focused>.k-label {
+            color:#005dab !important;
+        }
+        mat-radio-group{
+            display:inline-block !important;
+            .mat-radio-button{                
+                margin-top: 14px;
+                margin-bottom: 6px;
+            }
+        }
+        
+        &::after {
+            display: block;
+            z-index: 2;
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            margin: auto;
+            opacity: 0;
+            transform: scaleX(0.5);
+            transition: transform .3s;
+            background-color: #005dab;
+        }
+        &:hover{ 
+          &::after {
+            opacity: 1;
+            transform: scaleX(1);
+          }
+        }
+    }
+    &.no-format-css{
+        kendo-textbox-container{
+            padding:0;
+            background: none;
+            border: none;
+            mat-radio-button{
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }      
+            &:hover{ 
+            &::after {
+                opacity: 0;
+            }
+            }
+        }
+    }
+    &.no-label{    
+        kendo-textbox-container{  
+            padding-top: 0;
+            height: 41px;
+            .k-clear-value{
+                top: 14px;
+            }
+            
+        }
+    }
+}

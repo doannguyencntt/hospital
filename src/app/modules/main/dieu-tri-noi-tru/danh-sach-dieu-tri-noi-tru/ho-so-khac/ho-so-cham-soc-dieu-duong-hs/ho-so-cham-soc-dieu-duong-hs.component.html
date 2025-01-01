@@ -1,0 +1,149 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+	style="padding-top: 13px;" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+	<app-textbox id="HoVaTen" fxFlex="65%" fxFlex.sm="65%" label="Họ và tên NB" maxlength="200"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.HoVaTen" [isWhiteBackground]="true">
+	</app-textbox>
+	<app-textboxnumeric id="Tuoi" fxFlex="20%" fxFlex.sm="20%" min="1" [(model)]="hoSoChamSocDieuDuongHoSinh.Tuoi" label="Tuổi">
+	</app-textboxnumeric>
+	<app-radio id="GioiTinh" fxFlex="15%" fxFlex.sm="15%" label="Giới tính"
+		[items]="[{Value:true,Text:'Nam'},{Value:false,Text:'Nữ'}]" [(model)]="hoSoChamSocDieuDuongHoSinh.GioiTinh" >
+	</app-radio>
+	<app-textbox id="DiaChi" fxFlex="100%" fxFlex.sm="100%" label="Địa chỉ"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.DiaChi" [isWhiteBackground]="true">
+	</app-textbox>
+	<app-textbox id="NgheNghiep" fxFlex="70%" fxFlex.sm="70%" label="Nghề nghiệp"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.NgheNghiep" [isWhiteBackground]="true">
+	</app-textbox>
+	<app-textboxmask id="SoDienThoai" fxFlex="30%" fxFlex.sm="30%" mask="000 000-0000" label="Số Điện Thoại"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.DienThoai">
+	</app-textboxmask>
+	<app-textbox id="HoTenNguoiNha" fxFlex="100%" fxFlex.sm="100%" label="Họ và tên người nhà khi cần báo tin"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.HoTenNguoiNha" [isWhiteBackground]="true">
+	</app-textbox>
+	<app-textboxmask id="DienThoaiLienLacNguoiNha" fxFlex="100%" fxFlex.sm="100%" mask="000 000-0000"
+		label="Điện thoại liên lạc" style="margin-left: 10px;"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.DienThoaiLienLacNguoiNha">
+	</app-textboxmask>
+	<app-datetimepicker fxFlex="25%" [(model)]="hoSoChamSocDieuDuongHoSinh.NgayVaoVien" id="NgayVaoVien"
+		label="Ngày vào viện">
+	</app-datetimepicker>
+	<app-textbox id="ChanDoankhiVaoVien" fxFlex="100%" fxFlex.sm="100%" label="Chẩn đoán khi vào viện"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.ChanDoankhiVaoVien" [isWhiteBackground]="true">
+	</app-textbox>
+	<app-textbox id="LyDoVaoVien" fxFlex="100%" fxFlex.sm="100%" label="Lý do vào viện"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.LyDoVaoVien" [isWhiteBackground]="true">
+	</app-textbox>
+	<app-textbox id="KhaiThacBenhSu" fxFlex="100%" fxFlex.sm="100%" label="Khai thác bệnh sử"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.KhaiThacBenhSu" [isWhiteBackground]="true">
+	</app-textbox>
+	<app-textbox id="TienSu" fxFlex="90%" fxFlex.sm="90%" label="Tiền sử" style="margin-left: 10px;"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.TienSu" [isWhiteBackground]="true">
+	</app-textbox>
+	<div fxFlex="90%" fxFlex.sm="90%">
+		<span fxFlex="50%" fxFlex.sm="50%">Tiền sử dị ứng ( Thuốc, côn trùng, thời tiết)
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<app-radio fxFlex="20%" fxFlex.sm="20%" id="IsDisabled" name="IsOfficial" popupSettings="null" class="no-label"
+			[items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="tienSuDiUng" (modelChange)="changeTienSuDiUng($event)">
+		</app-radio>
+	</div>
+	<app-textbox id="TienSuDiUngneuCo" fxFlex="90%" fxFlex.sm="90%" label="Nếu có kể tên" [disabled]="!tienSuDiUng"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.TienSuDiUngneuCo" [isWhiteBackground]="true">
+	</app-textbox>
+	<div fxFlex="90%" fxFlex.sm="90%">
+		<app-checkbox id="CoHutThuoc" fxFlex="20%" fxFlex.sm="20%" [(model)]="hoSoChamSocDieuDuongHoSinh.CoHutThuoc"
+			label="Có hút thuốc">
+		</app-checkbox>
+		<app-checkbox id="CoNghienRuouBia" fxFlex="20%" fxFlex.sm="20%"
+			[(model)]="hoSoChamSocDieuDuongHoSinh.CoNghienRuouBia" label="Có nghiện rượu bia">
+		</app-checkbox>
+	</div>
+	<app-textbox id="NguoiBenhCoKhuyetTat" fxFlex="90%" fxFlex.sm="90%" label="Người bệnh có khuyết tật gì không"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.NguoiBenhCoKhuyetTat" [isWhiteBackground]="true">
+	</app-textbox>
+	<h4 fxFlex="100%" fxFlex.sm="100%">Tình trạng hiện tại của người bệnh:</h4>
+	<div fxFlex="100%" fxFlex.sm="100%">
+		<app-radio fxFlex="35%" fxFlex.sm="35%" id="IsDisabled" name="IsOfficial" popupSettings="null" class="no-label"
+			[items]="[{Value:1,Text:'Tỉnh táo tiếp xúc tốt'},{Value:2,Text:'Mê'},{Value:3,Text:'Lơ Mơ'}]" [(model)]="tinhTrangBN" 
+			(modelChange)="changeTinhTrang($event)">
+		</app-radio>
+	</div>
+	<app-textbox id="TinhTrangHienTaiCuaNB" fxFlex="100%" fxFlex.sm="100%" label="Tình trạng hiện tại của người bệnh"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.TinhTrangHienTaiCuaNB" [isWhiteBackground]="true">
+	</app-textbox>
+	<app-textbox id="KeHoachChamSocVaTheoDoi" fxFlex="100%" fxFlex.sm="100%"
+		label="Kế hoạch chăm sóc và theo dõi (chú ý những diễn biễn đặc biệt của người bệnh)"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.KeHoachChamSocVaTheoDoi" [isWhiteBackground]="true">
+	</app-textbox>
+	<h4 fxFlex="100%" fxFlex.sm="100%">Đánh giá tình trạng NB khi ra viện:</h4>
+	<div fxFlex="100%" fxFlex.sm="100%">
+		<mat-icon>
+			<h4>NB khỏi:</h4>
+		</mat-icon> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<app-radio fxFlex="35%" fxFlex.sm="35%" id="IsDisabled" name="IsOfficial" popupSettings="null" class="no-label"
+			[items]="[{Value:1,Text:'BS cho về nhà'},{Value:2,Text:'Chuyển viện'},{Value:3,Text:'Nặng xin về'}]" [(model)]="tinhTrangBNRaVien" 
+			(modelChange)="changeTinhTrangRaVien($event)">
+		</app-radio>
+	</div>
+	<app-textbox id="DanhGiaTinhTrangNBKhiRaVien" fxFlex="100%" fxFlex.sm="100%"
+		label="Đánh giá tình trạng NB khi ra viện" [(model)]="hoSoChamSocDieuDuongHoSinh.DanhGiaTinhTrangNBKhiRaVien"
+		[isWhiteBackground]="true">
+	</app-textbox>
+	<app-textbox id="HuongDanNBNhungDieuCanThiet" fxFlex="100%" fxFlex.sm="100%"
+		label="Hướng dẫn NB những điều cần thiết:(hướng dẫn vệ sinh, ăn uống, luyện tập ....)"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.HuongDanNBNhungDieuCanThiet" [isWhiteBackground]="true">
+	</app-textbox>
+	<h4 fxFlex="100%" fxFlex.sm="100%">Bàn giao cho NB giấy tờ khi ra viện</h4>
+	<div fxFlex="90%" fxFlex.sm="90%" style="margin-left: 15px;">
+		<span fxFlex="30%" fxFlex.sm="30%" style="font-size: 13px;">+ Giấy ra viện</span>
+		<app-checkbox id="GiayRaVien" fxFlex="30%" fxFlex.sm="30%" [(model)]="hoSoChamSocDieuDuongHoSinh.GiayRaVien"
+			label="">
+		</app-checkbox>
+	</div>
+	<div fxFlex="90%" fxFlex.sm="90%" style="margin-left: 15px;">
+		<span fxFlex="30%" fxFlex.sm="30%" style="font-size: 13px;">+ Đơn thuốc</span>
+		<app-checkbox id="DonThuoc" fxFlex="30%" fxFlex.sm="30%" [(model)]="hoSoChamSocDieuDuongHoSinh.DonThuoc"
+			label="">
+		</app-checkbox>
+	</div>
+	<div fxFlex="90%" fxFlex.sm="90%" style="margin-left: 15px;">
+		<span fxFlex="30%" fxFlex.sm="30%" style="font-size: 13px;">Biên lai thanh toán viện phí
+		</span>
+		<app-checkbox id="BienLaiThanhToanVienPhi" fxFlex="30%" fxFlex.sm="30%"
+			[(model)]="hoSoChamSocDieuDuongHoSinh.BienLaiThanhToanVienPhi" label="">
+		</app-checkbox>
+	</div>
+	<div fxFlex="90%" fxFlex.sm="90%" style="margin-left: 15px;">
+		<span fxFlex="30%" fxFlex.sm="30%" style="font-size: 13px;">Giấy tờ theo chuyên khoa:</span>
+	</div>
+	<div fxFlex="80%" fxFlex.sm="80%" style="margin-left: 30px;">
+		<span fxFlex="32%" fxFlex.sm="32%" style="font-size: 13px;">-
+			Giấy chứng nhận phẫu thuật</span>
+		<app-checkbox id="GiayChungNhanPhauThuat" fxFlex="30%" fxFlex.sm="30%"
+			[(model)]="hoSoChamSocDieuDuongHoSinh.GiayChungNhanPhauThuat" label="">
+		</app-checkbox>
+	</div>
+	<div fxFlex="80%" fxFlex.sm="80%" style="margin-left: 30px;">
+		<span fxFlex="32%" fxFlex.sm="32%" style="font-size: 13px;">- Giấy chứng sinh </span>
+		<app-checkbox id="GiayChungSinh" fxFlex="30%" fxFlex.sm="30%"
+			[(model)]="hoSoChamSocDieuDuongHoSinh.GiayChungSinh" label="">
+		</app-checkbox>
+	</div>
+	<app-textbox id="HuongDanNBNhungDieuCanThiet" fxFlex="100%" fxFlex.sm="100%" label="Hẹn đến khám lại"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.HenDenKham" [isWhiteBackground]="true">
+	</app-textbox>
+	<app-autocomplete id="HoSinhTruong" popupSettings="null" fxFlex="30%" fxFlex.sm="30%"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.HoSinhTruong" [dataList]="data" label="Hộ sinh trưởng">
+	</app-autocomplete>
+	<app-autocomplete id="HoSinhChamSocNguoiBenh" popupSettings="null" fxFlex="30%" fxFlex.sm="30%"
+		[(model)]="hoSoChamSocDieuDuongHoSinh.HoSinhChamSocNguoiBenh" [dataList]="data"
+		label="Điều dưỡng/Hộ sinh chăm sóc người bệnh">
+	</app-autocomplete>
+	<div fxFlex="100%" style="padding-bottom: 50px;text-align: right;">
+		<button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="In()"
+			style="pointer-events: all;">In</button>
+		<button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="Huy()">Hủy</button>
+		<button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+			Lưu
+		</button>
+	</div>
+</div>

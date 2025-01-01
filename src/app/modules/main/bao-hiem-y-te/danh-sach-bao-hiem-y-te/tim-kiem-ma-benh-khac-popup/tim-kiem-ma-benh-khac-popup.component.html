@@ -1,0 +1,36 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+	<div style="font: 500 18px/26px var(--font)">TÌM KIẾM THÔNG TIN BỆNH</div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+<mat-dialog-content>
+	<div width="100%" fxLayout="row">
+		<table class="table table-border" width="100%">
+			<tr>
+				<td width="100%">
+					<app-multiselect *ngIf="layMaBenhOrTenBenh === true" id="ChuanDoanLienKetICD" fxFlex="100%"
+						fxFlex.sm="100%" label="Danh Sách Chuẩn Đoán Bệnh " class="item-no-padding" [required]="true"
+						[popupSettings]="null" url="ChuanDoan/GetListChuanDoanTheoMaBenh"
+						(modelChange)="modelChangeMaBenhKhac($event)">
+					</app-multiselect>
+					<app-multiselect *ngIf="layMaBenhOrTenBenh === false" id="ChuanDoanLienKetICD" fxFlex="100%"
+						fxFlex.sm="100%" label="Danh Sách Chuẩn Đoán Bệnh " class="item-no-padding" [required]="true"
+						[popupSettings]="null" url="ChuanDoan/GetListChuanDoanTheoTenBenh"
+						(modelChange)="modelChangeMaBenhKhac($event)">
+					</app-multiselect>
+				</td>
+			</tr>
+			<tr>
+				<app-textarea fxFlex="100%" class="no-label" [readonly]="true" [(model)]="strMaBenhOrTenBenhKhac">
+				</app-textarea>
+			</tr>
+		</table>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<button mat-button mat-dialog-close (click)="huy()">Hủy</button>
+	<button
+		*ngIf="strMaBenhOrTenBenhKhac !== undefined && strMaBenhOrTenBenhKhac !== null && strMaBenhOrTenBenhKhac !=='' "
+		mat-raised-button mat-button color="primary" (click)="btThemMaBenhKhac()" cdkFocusInitial>Thêm</button>
+</mat-dialog-actions>

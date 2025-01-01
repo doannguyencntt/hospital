@@ -1,0 +1,23 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+	<div>Chọn phiếu in</div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+<mat-dialog-content style="overflow: hidden">
+	<div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+		<fieldset class="row ml-1" fxFlex="100%" *ngIf="data.Model != undefined">
+			<table class="table table-border" width="100%" *ngFor="let item of data.Model">
+				<tr>
+					<td width="100%">
+						<app-checkbox fxFlex="100%" label="{{item.LoaiDichVuKyThuat}}" [(model)]="item.IsCheckPhieuIn" (modelChange)="checkModelChange()"> </app-checkbox>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<!-- <button mat-button mat-dialog-close color="primary" (click)="Ok()">Ok</button> -->
+	<button type="button" color="primary" mat-raised-button mat-button (click)="Ok()" [disabled]="!checkSelect">Ok</button>
+</mat-dialog-actions>

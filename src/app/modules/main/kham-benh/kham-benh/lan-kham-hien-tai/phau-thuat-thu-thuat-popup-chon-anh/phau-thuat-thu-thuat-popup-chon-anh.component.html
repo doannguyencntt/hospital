@@ -1,0 +1,41 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1 border-bottom">
+    <div>Chọn ảnh</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="max-height: 86vh;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="p-2 mb-6">
+        <app-radio id="ChonThongTin" name="ChonThongTin" fxFlex="100%" fxFlex.sm="100%" [(model)]="ChonThongTin"
+            class="no-format-css" [items]="[{Value:1,Text:'Bộ phận cơ thể'},{Value:2,Text:'Khác'}]">
+        </app-radio>
+        <app-combobox id="dl-chon-bo-phan-co-the" fxFlex="50%" fxFlex.sm="100%" [(model)]="boPhanCoTheCurrent"
+            url="KhamBenh/GetListBoPhanCoThe" (selectionChange)="onSelectionChange($event)" label="Chọn Bộ Phận Cơ Thể"
+            *ngIf="ChonThongTin==1">
+        </app-combobox>
+        <app-upload id="Upload" label="Chọn ảnh khác" fxFlex="50%" fxFlex.sm="100%"
+            [allowedExtensions]="['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG']"
+            (uploadFileDone)="uploadFileDone($event)" *ngIf="ChonThongTin==2">
+        </app-upload>
+        <app-textarea id="mota" fxFlex="50%" fxFlex.sm="100%" maxlength="1000" label="Mô tả"
+            [(model)]="sanhSachThongTinAnhs.MoTa" minHeight="20">
+        </app-textarea>
+        <div fxFlex="100%" fxFlex.sm="100%" *ngIf="sanhSachThongTinAnhs.Url!=null && sanhSachThongTinAnhs.Url!=''" style="position: relative;">
+            <image-drawing [src]="sanhSachThongTinAnhs.Url" outputMimeType="'image/jpeg'" showCancelButton={{true}} saveBtnText="Lưu"
+                cancelBtnText="Hủy ảnh" loadingText="Đang xử lý ảnh..."
+                (save)="save($event)" (cancel)="cancel()" enableRemoveImage={{true}} forceSizeExport={{true}}
+                (click)="showErrorIfNoImage($event)" #imageDrawing [loadingTemplate]="loadingTemplate">
+            </image-drawing>
+            <ng-template #loadingTemplate>                
+                <button class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif" alt="Loading" /></button>
+            </ng-template>         
+            <button class="btn btn-raised btn-raised btn-primary btn-loading" *ngIf="loading"><img src="/assets/img/loader.gif"
+                alt="Loading" /></button>
+        </div>
+        <div fxFlex="100%" fxFlex.sm="100%" *ngIf="sanhSachThongTinAnhs.Url==null || sanhSachThongTinAnhs.Url==''">
+            <div style="border:1px solid #ccc;width:100%;height:400px;text-align: center;padding:15px;">
+                Bạn chưa chọn ảnh
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>

@@ -1,0 +1,29 @@
+<app-header-form [isicMoreVert]="false"
+                    [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Nhóm Hệ Thống',Path:''}
+                    ,{Title:'Bảo Hiểm Y Tế'}
+                    ,{Title:'Chỉ Số Xét nghiệm',Path:'/danh-muc/nhom-he-thong/bao-hiem-y-te/chi-so-xet-nghiem',Active:true}
+                    ]">
+></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chỉnh Chỉ Số Xét nghiệm</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-chi-so-xet-nghiem-share></app-chi-so-xet-nghiem-share>
+
+
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <app-formfooter [bodyComponent]="shared" type="update" (updated)="onUpdated()"></app-formfooter>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

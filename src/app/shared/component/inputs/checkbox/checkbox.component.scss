@@ -1,0 +1,34 @@
+app-checkbox{
+    margin: 2px 0 2px 0;
+    .mat-checkbox-label{
+      color: rgba(0, 0, 0, 0.87);
+    }
+    .mat-checkbox-disabled .mat-checkbox-label {
+        color: rgba(0, 0, 0, 1) !important;
+    }
+
+    &.color-green{
+      // .mat-checkbox-label{
+        
+      // }
+      .mat-checkbox-label{
+        color: green;
+      }
+      .mat-checkbox-background{
+        background-color: green;
+      }
+    }
+
+    
+&.color-red{
+  .mat-checkbox-label{
+    color: red;
+  }
+  .mat-checkbox-background{
+    background-color: red;
+  }
+}
+
+}
+
+

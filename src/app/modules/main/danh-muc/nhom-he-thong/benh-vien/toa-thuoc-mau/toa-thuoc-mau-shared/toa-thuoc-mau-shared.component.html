@@ -1,0 +1,155 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="Ten" required="true" fxFlex="40%" fxFlex.sm="50%" maxlength="200" [(model)]="toaMau.Ten"
+        [validationerror]="'Ten' | validationerror:validationErrors" label="Tên Toa Thuốc Mẫu">
+    </app-textbox>
+
+    <app-combobox fxFlex="40%" [(model)]="toaMau.BacSiKeToaId" [required]="true" [modelText]="toaMau.TenBacSiKeToa"
+        id="BacSiKeToaId" label="Bác Sĩ Kê Toa" url="ToaThuocMau/BacSiKeToa"
+        [validationerror]="'BacSiKeToaId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-combobox fxFlex="20%" [(model)]="toaMau.TrieuChungId" [modelText]="toaMau.TenTrieuChung" id="TrieuChungId"
+        label="Triệu Chứng" url="ToaThuocMau/TrieuChung">
+    </app-combobox>
+
+
+    <app-combobox fxFlex="40%" [(model)]="toaMau.ChuanDoanId"
+        [validationerror]="'ChuanDoanId' | validationerror:validationErrors" [modelText]="toaMau.TenChuanDoan"
+        id="ChuanDoanId" label="Chẩn Đoán" url="ToaThuocMau/ChuanDoan" [templateHeader]="chuanDoanTemplateHeader"
+        [template]="chuanDoanTemplate" class="item-no-padding">
+        <ng-template #chuanDoanTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #chuanDoanTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox fxFlex="40%" [(model)]="toaMau.ICDId" [validationerror]="'ICDId' | validationerror:validationErrors"
+        [modelText]="toaMau.TenICD" id="ICDId" label="Tên ICD" url="ToaThuocMau/ICD" [queryInfo]="queryInfoICD"
+        [templateHeader]="iCDTemplateHeader" [template]="iCDTemplate" class="item-no-padding">
+        <ng-template #iCDTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #iCDTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-radio fxFlex="20%" fxFlex.sm="40%" id="IsDisabled" name="IsDisabled"
+        [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" [(model)]="toaMau.IsDisabled" label="Sử Dụng">
+    </app-radio>
+
+    <app-textarea id="GhiChu" fxFlex="100%" [(model)]="toaMau.GhiChu" maxlength="1000" minHeight="20" label="Ghi Chú"></app-textarea>
+
+    <h4 class="sub-title" fxFlex="100%">Toa Thuốc Mẫu Chi Tiết</h4>
+    <div fxFlex="100%" fxFlex.sm="100%" *ngFor="let item of toaMau.ToaThuocMauChiTiets;let i = index">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-combobox fxFlex="25%" [(model)]="item.DuocPhamId" [required]="true" [modelText]="item.TenDuocPham"
+                id="DuocPhamId" label="Tên Dược Phẩm" url="ToaThuocMau/DuocPhams"
+                [queryInfo]="{ParameterDependencies:'{DuocPhamId:' + item.DuocPhamId +'}', Take: 50}"
+                [validationerror]="'ToaThuocMauChiTiets['+i+'].DuocPhamId' | validationerror:validationErrors"
+                [templateHeader]="duocPhamTemplateHeader" [template]="duocPhamTemplate" class="item-no-padding">
+                <ng-template #duocPhamTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="40%">Hoạt Chất</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #duocPhamTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="40%">{{dataItem.HoatChat}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+
+            <app-textboxnumeric id="SoNgayDung" fxFlex="8%" fxFlex.sm="20%" [(model)]="item.SoNgayDung" min="0"
+                (modelChange)="inputSoNgayDeTinhSoLuong($event, i)" max="9999" label="Số Ngày"></app-textboxnumeric>
+
+            <app-autocomplete #sang label="Sáng" fxFlex="5%" [(model)]="item.DungSangDisplay"
+                (modelChange)="kiemTraNhapCacBuoiTrongNgay($event, 'Sang', i)" [dataList]="thoiGianDonThuocDataSource"
+                (onValueChange)="onValueChange('Sang', i)" placeHolder="SL"
+                [validationerror]="'ToaThuocMauChiTiets['+i+'].DungSangDisplay' | validationerror:validationErrors"
+                class="no-label" class="pr-0">
+            </app-autocomplete>
+            <app-timepicker id="GioSang" fxFlex="8%" [(model)]="item.ThoiGianDungSang" moreClass="pl-0"
+                placeHolder="Giờ" [modelIsNumber]="true">
+            </app-timepicker>
+
+            <app-autocomplete #trua label="Trưa" fxFlex="5%" [(model)]="item.DungTruaDisplay"
+                (modelChange)="kiemTraNhapCacBuoiTrongNgay($event, 'Trua', i)" [dataList]="thoiGianDonThuocDataSource"
+                (onValueChange)="onValueChange('Trua', i)" placeHolder="SL"
+                [validationerror]="'ToaThuocMauChiTiets['+i+'].DungTruaDisplay' | validationerror:validationErrors"
+                class="no-label" class="pr-0">
+            </app-autocomplete>
+            <app-timepicker id="GioTrua" fxFlex="8%" [(model)]="item.ThoiGianDungTrua" moreClass="pl-0"
+                placeHolder="Giờ" [modelIsNumber]="true">
+            </app-timepicker>
+
+            <app-autocomplete #chieu label="Chiều" fxFlex="5%" [(model)]="item.DungChieuDisplay"
+                (modelChange)="kiemTraNhapCacBuoiTrongNgay($event, 'Chieu', i)" [dataList]="thoiGianDonThuocDataSource"
+                (onValueChange)="onValueChange('Chieu', i)" placeHolder="SL"
+                [validationerror]="'ToaThuocMauChiTiets['+i+'].DungChieuDisplay' | validationerror:validationErrors"
+                class="no-label" class="pr-0">
+            </app-autocomplete>
+            <app-timepicker id="GioChieu" fxFlex="8%" [(model)]="item.ThoiGianDungChieu" moreClass="pl-0"
+                placeHolder="Giờ" [modelIsNumber]="true">
+            </app-timepicker>
+
+            <app-autocomplete #toi label="Tối" fxFlex="5%" [(model)]="item.DungToiDisplay"
+                (modelChange)="kiemTraNhapCacBuoiTrongNgay($event, 'Toi', i)" [dataList]="thoiGianDonThuocDataSource"
+                (onValueChange)="onValueChange('Toi', i)" placeHolder="SL"
+                [validationerror]="'ToaThuocMauChiTiets['+i+'].DungToiDisplay' | validationerror:validationErrors"
+                class="no-label" class="pr-0">
+            </app-autocomplete>
+            <app-timepicker id="GioToi" fxFlex="8%" [(model)]="item.ThoiGianDungToi" moreClass="pl-0" placeHolder="Giờ"
+                [modelIsNumber]="true">
+            </app-timepicker>
+
+            <app-textboxnumeric fxFlex="10%" [(model)]="item.SoLuong" min="0" max="999999999" label="Số lượng"
+                [decimals]="2"
+                [validationerror]="'ToaThuocMauChiTiets['+i+'].SoLuong' | validationerror:validationErrors"
+                [format]="format" [disabled]="item.IsDisabled" required="true">
+            </app-textboxnumeric>
+
+            <div fxFlex="5%" fxFlex.sm="20%">
+                <button mat-icon-button kendoTooltip title="Xóa" class="mt-3" (click)="xoaToaMauChiTiet(i)">
+                    <mat-icon [icIcon]="icRemove" color="warn"></mat-icon>
+                </button>
+            </div>
+            <app-textarea fxFlex="95%" [(model)]="item.GhiChu" height="auto" minHeight="20" maxlength="1000" label="Cách dùng">
+            </app-textarea>
+
+        </div>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <button mat-mini-fab color="primary" (click)="themToaMauChiTiet()">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+</div>

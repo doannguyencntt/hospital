@@ -1,0 +1,26 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>XÁC NHẬN</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <!-- <h3 class="sub-title">Thông Tin Thẻ</h3> -->
+    <span>Còn các chỉ số chưa có kết quả: </span>
+    <ul style="max-height: 100px; height: 100px; overflow: auto;">
+        <li *ngFor="let item of lstData">
+            <span>&nbsp;&nbsp; + {{item.Ten}}<strong></strong></span>
+        </li>
+    </ul>
+
+    <div style="margin-top: 20px">
+        <span>Bạn có chắc chắn muốn gởi duyệt kết quả mẫu này không?</span>
+    </div>
+
+    <div class="div-title-bottom">
+        <button type="button" mat-button class="mr-1" (click)="Khong()">Không</button>
+        <button type="button" (click)="Co()" color="primary" mat-raised-button>Có</button>
+    </div>
+    
+</mat-dialog-content>

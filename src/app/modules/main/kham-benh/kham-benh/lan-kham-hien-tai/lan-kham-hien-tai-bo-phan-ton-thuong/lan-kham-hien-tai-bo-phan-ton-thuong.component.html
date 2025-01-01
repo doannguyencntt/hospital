@@ -1,0 +1,31 @@
+<div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title">BỘ PHẬN TỔN THƯƠNG
+        <button class="po-h" color="primary" (click)="themBoPhanTonThuong()">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+    <ng-container
+        *ngIf="dataBoPhanTonThuong == undefined || dataBoPhanTonThuong == null || dataBoPhanTonThuong.length == 0">
+        <p>Không có bộ phận tổn thương</p>
+    </ng-container>
+
+    <div fxFlex="100%"
+        *ngIf="dataBoPhanTonThuong != undefined && dataBoPhanTonThuong != null && dataBoPhanTonThuong.length > 0"
+        class="mb-3">
+        <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="25%" *ngFor="let boPhanTonThuong of dataBoPhanTonThuong">
+                <div class="card overflow-hidden" style="border: 1px solid #ccc;position: relative;">
+                    <mat-icon [icIcon]="icClose" class="icon-close" (click)="xoaBoPhanTonThuong(boPhanTonThuong)">
+                    </mat-icon>
+                    <div class="mat-ripple p-4 text-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                        <img (click)="xemHinhAnhBoPhanTonThuong(boPhanTonThuong)" src="{{boPhanTonThuong.HinhAnh}}"
+                            class="mx-auto" />
+                    </div>
+                    <div class="bg-app-bar p-2">
+                        <p>{{boPhanTonThuong.MoTa}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

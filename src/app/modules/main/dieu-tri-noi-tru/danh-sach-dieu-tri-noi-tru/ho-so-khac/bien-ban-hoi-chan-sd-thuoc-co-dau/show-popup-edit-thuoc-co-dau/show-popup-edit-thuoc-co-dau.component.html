@@ -1,0 +1,56 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Sửa Thuốc Có Dấu (*)</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="overflow: hidden">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+		<app-textarea id="LyDo" fxFlex="100%" maxlength="1000" [(model)]="thuocCoDau.LyDo" minHeight="20" label="Lý do" >
+        </app-textarea>
+        <app-multiselect fxFlex="100%" [(model)]="thuocCoDaus"   [autoClose]="false"
+        [modelText]="" label="Thuốc đã điều trị"  [template]="duocPhamCoDauTemplate"
+        required="true" [templateHeader]="duocPhamCoDauTemplateHeader" 
+        url="DieuTriNoiTru/GetDuocPhamCoDau" [popupSettings]="null">
+        <ng-template #duocPhamCoDauTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="10%">
+                    </th>
+                    <th width="23%">Tên Thuốc</th>
+                    <th width="15%">Hoạt chất</th>
+                    <th width="15%">Hàm lượng</th>
+                    <th width="7%">Đơn vị tính</th>
+                    <th width="15%">Đường dùng</th>
+                    <th width="15%">NSX</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #duocPhamCoDauTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="10%">
+                        <input type="checkbox" class="k-checkbox" [checked]="isItemSelected(dataItem)">
+                        <label  class="k-checkbox-label"></label>
+                    </th>
+                    <th width="23%">{{dataItem.DisplayName}}</th>
+                    <th width="15%">{{dataItem.HoatChat}}</th>
+                    <th width="15%">{{dataItem.HamLuong}}</th>
+                    <th width="7%">{{dataItem.DVT}}</th>
+                    <th width="15%">{{dataItem.DuongDung}}</th>
+                    <th width="15%">{{dataItem.NhaSanXuat}}</th>
+                </tr>
+            </table>
+        </ng-template>
+    </app-multiselect>
+    <app-textarea id="HamLuong" fxFlex="50%" maxlength="1000" [(model)]="thuocCoDau.HamLuong" minHeight="20" label="Hàm lượng ">
+    </app-textarea>
+    <app-textarea id="DuongDung" fxFlex="50%" maxlength="1000" [(model)]="thuocCoDau.DuongDung" minHeight="20" label="Đường dùng " >
+    </app-textarea>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<!-- <button mat-button mat-dialog-close color="primary" (click)="Ok()">Ok</button> -->
+    <button type="button"  mat-raised-button mat-button (click)="close()">Hủy</button>
+	<button type="button" color="primary" mat-raised-button mat-button (click)="Ok()">Cập nhật</button>
+</mat-dialog-actions>

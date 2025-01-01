@@ -1,0 +1,10 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 30% 40% 30%;
+    padding: 10px;
+    .program {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+}

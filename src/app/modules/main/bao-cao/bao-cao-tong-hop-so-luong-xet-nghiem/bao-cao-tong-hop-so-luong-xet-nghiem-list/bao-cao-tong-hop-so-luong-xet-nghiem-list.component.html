@@ -1,0 +1,141 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'Xét Nghiệm', Path:''},
+                    {Title:'Tổng Hợp Số Lượng Xét Nghiệm', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="55%" fxFlex.sm="55%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                    <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 mt-2" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" [ngStyle]="{'min-height': height+'px'}" class="pb-0">
+                    <app-grid *ngIf="ishowView" [gridColumns]="gridColumns" [useAddDeault]="false"
+                        [checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [documentType]="documentType" [gridDataSource]="gridView"
+                        [groups]="groups">
+                    </app-grid>
+
+                    <ng-template #sttTemplate let-rowIndex="rowIndex" let-dataItem>
+                        <span *ngIf="dataItem.ToDam === true" style="font-weight: bold"> {{rowIndex + 1}}</span>
+                        <span *ngIf="dataItem.ToDam === false"> {{rowIndex + 1}}</span>
+                    </ng-template>
+
+                    <ng-template #tenToDamTemplate let-rowIndex="rowIndex" let-dataItem>
+                        <span *ngIf="dataItem.ToDam === true" style="font-weight: bold">
+                            {{dataItem.TenDichVu}}</span>
+                        <span *ngIf="dataItem.ToDam === false"> {{dataItem.TenDichVu}}</span>
+                    </ng-template>
+
+                    <ng-template #soLuongMauNoiTruToDamTemplate let-rowIndex="rowIndex" let-dataItem>
+                        <span *ngIf="dataItem.ToDam === true" style="font-weight: bold">
+                            {{dataItem.SoLuongMauNoiTru}}</span>
+                        <span *ngIf="dataItem.ToDam === false"> {{dataItem.SoLuongMauNoiTru}}</span>
+                    </ng-template>
+
+                    <ng-template #soLuongMauNgoaiTruToDamTemplate let-rowIndex="rowIndex" let-dataItem>
+                        <span *ngIf="dataItem.ToDam === true" style="font-weight: bold">
+                            {{dataItem.SoLuongMauNgoaiTru}}</span>
+                        <span *ngIf="dataItem.ToDam === false"> {{dataItem.SoLuongMauNgoaiTru}}</span>
+                    </ng-template>
+
+                    <ng-template #soLuongMauBHYTNoiTruToDamTemplate let-rowIndex="rowIndex" let-dataItem>
+                        <span *ngIf="dataItem.ToDam === true" style="font-weight: bold">
+                            {{dataItem.SoLuongMauBHYTNoiTru}}</span>
+                        <span *ngIf="dataItem.ToDam === false"> {{dataItem.SoLuongMauBHYTNoiTru}}</span>
+                    </ng-template>
+
+                    <ng-template #soLuongMauBHYTNgoaiTruToDamTemplate let-rowIndex="rowIndex" let-dataItem>
+                        <span *ngIf="dataItem.ToDam === true" style="font-weight: bold">
+                            {{dataItem.SoLuongMauBHYTNgoaiTru}}</span>
+                        <span *ngIf="dataItem.ToDam === false"> {{dataItem.SoLuongMauBHYTNgoaiTru}}</span>
+                    </ng-template>
+
+
+                    <ng-template #soLuongDichVuToDamTemplate let-rowIndex="rowIndex" let-dataItem>
+                        <span *ngIf="dataItem.ToDam === true" style="font-weight: bold">
+                            {{dataItem.SoLuongDichVu}}</span>
+                        <span *ngIf="dataItem.ToDam === false"> {{dataItem.SoLuongDichVu}}</span>
+                    </ng-template>
+
+                    <ng-template #soLuongKhamSucKhoeToDamTemplate let-rowIndex="rowIndex" let-dataItem>
+                        <span *ngIf="dataItem.ToDam === true" style="font-weight: bold">
+                            {{dataItem.SoLuongKhamSucKhoe}}</span>
+                        <span *ngIf="dataItem.ToDam === false"> {{dataItem.SoLuongKhamSucKhoe}}</span>
+                    </ng-template>
+
+                    <ng-template #soLuongTongHopToDamTemplate let-rowIndex="rowIndex" let-dataItem>
+                        <span *ngIf="dataItem.ToDam === true" style="font-weight: bold">
+                            {{dataItem.SoLuongTongHop}}</span>
+                        <span *ngIf="dataItem.ToDam === false"> {{dataItem.SoLuongTongHop}}</span>
+                    </ng-template>
+
+
+                    <ng-template #nhomDVBVGroupTemplate let-value="value">
+                        <strong></strong>
+                    </ng-template>
+
+                    <ng-template #sumSoLuongMauNoiTruGroupHeaderTemplate let-aggregates let-field="field">
+                        <span>{{aggregates.SoLuongMauNoiTru.sum | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #sumSoLuongMauNgoaiTruGroupHeaderTemplate kendoGridGroupHeaderTemplate let-aggregates
+                        let-field="field">
+                        <span>{{aggregates.SoLuongMauNgoaiTru.sum | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #sumSoLuongMauBHYTNoiTruGroupHeaderTemplate kendoGridGroupHeaderTemplate let-aggregates
+                        let-field="field">
+                        <span>{{aggregates.SoLuongMauBHYTNoiTru.sum | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #sumSoLuongMauBHYTNgoaiTruGroupHeaderTemplate kendoGridGroupHeaderTemplate
+                        let-aggregates let-field="field">
+                        <span>{{aggregates.SoLuongMauBHYTNgoaiTru.sum | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #sumSoLuongDichVuGroupHeaderTemplate kendoGridGroupHeaderTemplate let-aggregates
+                        let-field="field">
+                        <span>{{aggregates.SoLuongDichVu.sum | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #sumSoLuongKhamSucKhoeGroupHeaderTemplate kendoGridGroupHeaderTemplate let-aggregates
+                        let-field="field">
+                        <span>{{aggregates.SoLuongKhamSucKhoe.sum | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #sumSoLuongTongHopGroupHeaderTemplate kendoGridGroupHeaderTemplate let-aggregates
+                        let-field="field">
+                        <span>{{aggregates.SoLuongTongHop.sum | number:'0.2'}}</span>
+                    </ng-template>
+                </div>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

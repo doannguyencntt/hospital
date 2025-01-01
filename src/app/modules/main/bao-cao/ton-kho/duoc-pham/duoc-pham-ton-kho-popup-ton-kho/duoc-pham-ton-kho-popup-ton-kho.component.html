@@ -1,0 +1,20 @@
+<mat-dialog-content>
+    <div style="float: right;">
+        <button type="button" mat-icon-button (click)="close()">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+    <div class="showPdf2">
+        <div style="text-align: center; margin-top:80px;" *ngIf="loading==true">
+            <h4 class="mb-3">Đang load dữ liệu</h4>
+            <button *ngIf="loading" color="primary" mat-raised-button type="button">
+                <img src="/assets/img/loader.gif" alt="Loading" style="display: inline;" />
+            </button>
+        </div>
+    </div>
+
+</mat-dialog-content>
+<hr style="border: 1px solid black; margin-top: 50px;">
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <app-print-form fxFlex='100%' textPrint="In Báo Cáo" type="PDF" [bodyComponent]="this"></app-print-form>
+</mat-dialog-actions>

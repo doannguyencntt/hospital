@@ -1,0 +1,36 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="khoa-phong" fxFlex="20%" label="Khoa phòng" [(model)]="ekip.KhoaPhong" [disabled]="true">
+    </app-textbox>
+    
+    <app-textarea id="chan-doan-vao-khoa" fxFlex="40%" [(model)]="ekip.ChanDoanKhoa" label="Chẩn đoán vào khoa" [disabled]="true">
+    </app-textarea>
+
+    <app-textarea id="mo-ta-chan-doan-vao-khoa" fxFlex="40%" [(model)]="ekip.GhiChuChanDoanKhoa" label="Mô tả" [disabled]="true">
+    </app-textarea>
+    <app-combobox popupSettings="null" id="cd-truoc-phau-thuat" [disabled]="!canChange || IsDaTuongTrinh || thongTinBenhNhan.IsTuongTrinhLai" [required]="true" fxFlex="100%" fxFlex.sm="100%" label="CĐ trước phẫu thuật" class="item-no-padding" url="DieuTriNoiTru/GetChanDoanICD" [template]="truocPhauThuatTemplate"
+        [templateHeader]="truocPhauThuatTemplateHeader" [(model)]="ekip.ICDTruocId" [modelText]="ekip.ICDTruoc" (selectionChange)="OnChange()" #cdTruocPhauThuat [validationerror]="'ICDTruocId' | validationerror:validationErrors">
+        <ng-template #truocPhauThuatTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #truocPhauThuatTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.TenTiengViet}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+<app-pttt-ekip-thuc-hien-nv fxFlex="100%" fxFlex.sm="100%" [IsDaTuongTrinh]="IsDaTuongTrinh" [IsPhauThuat]="ekip.IsPhauThuat" [dataBenhNhan]="thongTinBenhNhan" [ycdvktId]="ycdvktId" (outDisplaySaveCancel)="OnChange()" #ekipGrid>
+</app-pttt-ekip-thuc-hien-nv>
+
+
+<app-textarea id="ghi-chu-ca-pt" fxFlex="100%" fxFlex.sm="100%" [(model)]="ekip.GhiChuCaPTTT" [disabled]="!canChange || IsDaTuongTrinh || thongTinBenhNhan.IsTuongTrinhLai" label="Ghi chú" (modelChange)="OnChange()">
+</app-textarea>
+</div>

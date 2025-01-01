@@ -1,0 +1,19 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between">
+    <app-textbox id="Ten" fxFlex="60%" fxFlex.sm="100%" [required]="true" [(model)]="quaTang.Ten" label="Tên"
+        maxlength="250" [validationerror]="'Ten' | validationerror: validationErrors">
+    </app-textbox>
+
+    <app-textbox id="DonViTinh" fxFlex="20%" fxFlex.sm="100%" [required]="true" [(model)]="quaTang.DonViTinh"
+        label="Đơn vị" maxlength="50" [validationerror]="'DonViTinh' | validationerror: validationErrors">
+    </app-textbox>
+
+    <app-radio id="IsDisabled" fxFlex="20%" fxFlex.sm="100%" name="isDisabled" label="Sử dụng" [required]="true"
+        [items]="[{ Value: true, Text: 'Có' }, { Value: false, Text: 'Không' }]" [(model)]="quaTang.HieuLuc"
+        [validationerror]="'HieuLuc' | validationerror: validationErrors">
+    </app-radio>
+
+    <app-textarea id="MoTa" fxFlex="100%" fxFlex.sm="100%" [(model)]="quaTang.MoTa" label="Mô tả" maxlength="4000"
+        [validationerror]="'MoTa' | validationerror: validationErrors">
+    </app-textarea>
+</div>

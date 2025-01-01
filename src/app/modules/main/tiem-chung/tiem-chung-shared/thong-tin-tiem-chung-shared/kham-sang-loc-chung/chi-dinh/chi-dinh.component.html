@@ -1,0 +1,46 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mr-4">
+        <div fxFlex="100%" class="po-h-radio">
+            <app-radio id="chonLoaiDichVu" name="chonLoaiDichVu" class="no-format-css temp" [(model)]="LuaChonChiDinh" (modelChange)="selectLuaChonChiDinh($event)" [items]="[
+                    {Value: 1, Text:'Vắcxin'},
+                    {Value: 2, Text:'DVKT'},
+                    {Value: 3, Text:'Thuốc/Vật tư'}
+                ]">
+            </app-radio>
+        </div>
+    </h3>
+
+    <ng-container *ngIf="LuaChonChiDinh === 1">
+        <div fxFlex="100%">
+            <app-vac-xin [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan" [isVacxinReadonly]="isTabKhamLocChungReadOnly">
+            </app-vac-xin>
+        </div>
+
+        <h3 fxFlex="100%" class="sub-title mr-4">HẸN LỊCH TIÊM MŨI TIẾP THEO</h3>
+
+        <app-textboxnumeric fxFlex="25%" [label]="'Nhập khoảng cách ngày'" [disabled]="isTabKhamLocChungReadOnly" [max]="9999" [min]="1" [spinners]="false" 
+            [(model)]="thongTinBenhNhan.KhamSangLocTiemChung.SoNgayHenTiemMuiTiepTheo" (modelChange)="evtNgayHenTiemChanged($event)">
+        </app-textboxnumeric>
+
+        <app-datepicker fxFlex="25%" [label]="'Ngày hẹn tiêm mũi tiếp theo'" 
+            [disabled]="true" 
+            [(model)]="thongTinBenhNhan.KhamSangLocTiemChung.NgayHenTiemMuiTiepTheo" 
+            (modelChange)="evtModelOnChange()">
+        </app-datepicker>
+
+        <app-textbox fxFlex="50%" maxlength="1000" [label]="'Ghi chú'" [disabled]="isTabKhamLocChungReadOnly" [(model)]="thongTinBenhNhan.KhamSangLocTiemChung.GhiChuHenTiemMuiTiepTheo" (modelChange)="evtModelOnChange()">
+        </app-textbox>
+    </ng-container>
+
+    <ng-container *ngIf="LuaChonChiDinh === 2">
+        <div fxFlex="100%">
+            <app-dich-vu [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan" [isDichVuKyThuatReadonly]="isTabKhamLocChungReadOnly"></app-dich-vu>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="LuaChonChiDinh === 3">
+        <div fxFlex="100%">
+            <app-thuoc-vat-tu [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan" [isThuocVatTuReadonly]="isTabKhamLocChungReadOnly" [isShowTitle]="false"></app-thuoc-vat-tu>
+        </div>
+    </ng-container>
+</div>

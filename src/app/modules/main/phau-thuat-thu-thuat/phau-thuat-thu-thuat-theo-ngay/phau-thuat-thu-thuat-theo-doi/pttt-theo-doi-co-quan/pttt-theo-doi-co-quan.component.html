@@ -1,0 +1,73 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mr-4">KHÁM CÁC CƠ QUAN
+    </h3>
+    
+    <ng-container *ngIf="!thongTinKhamTheoDoiTemplateObj">
+        <p>Khám các cơ quan</p>
+    </ng-container>
+
+    <ng-container
+        *ngIf="thongTinKhamTheoDoiTemplateObj!=null && thongTinKhamTheoDoiTemplateObj.ComponentDynamics!=null && thongTinKhamTheoDoiTemplateObj.ComponentDynamics.length>0">
+        <ng-container *ngFor="let item of thongTinKhamTheoDoiTemplateObj.ComponentDynamics">
+            <ng-container *ngIf="item.Type == 4 && item.groupItems != undefined && item.groupItems.length > 0">
+                <div fxFlex="100%" class="row ml-1 mb-2">
+                <fieldset fxFlex="100%">
+                    <legend>{{item.Label}}</legend>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                        <ng-container *ngFor="let itemInGroup of item.groupItems">
+                            <ng-container *ngIf="isReadonly">
+                                <h3 *ngIf="itemInGroup.Type==1" fxFlex="20%" class="sub-title">{{itemInGroup.Label}}</h3>
+                                <app-textbox *ngIf="itemInGroup.Type==2" [disabled]="true" fxFlex="{{itemInGroup.fxFlex}}" fxFlex.sm="{{itemInGroup.fxFlexSm}}" id="{{itemInGroup.Id}}"
+                                    placeHolder="{{itemInGroup.placeholder}}" label="{{itemInGroup.Label}}" [(model)]="itemInGroup.Value"
+                                    (modelChange)="onDataChange($event)" maxlength="{{itemInGroup.maxlength}}">
+                                </app-textbox>
+                                <app-textarea *ngIf="itemInGroup.Type==3" [disabled]="true" id="{{itemInGroup.Id}}" fxFlex="{{itemInGroup.fxFlex}}" label="{{itemInGroup.Label}}"
+                                    maxlength="{{itemInGroup.maxlength}}" minHeight="{{itemInGroup.minHeight}}" [(model)]="itemInGroup.Value"
+                                    (modelChange)="onDataChange($event)">
+                                </app-textarea>
+                            </ng-container>
+
+                            <ng-container *ngIf="!isReadonly">
+                                <h3 *ngIf="itemInGroup.Type==1" fxFlex="20%" class="sub-title">{{itemInGroup.Label}}</h3>
+                                <app-textbox *ngIf="itemInGroup.Type==2" fxFlex="{{itemInGroup.fxFlex}}" fxFlex.sm="{{itemInGroup.fxFlexSm}}" id="{{itemInGroup.Id}}"
+                                    placeHolder="{{itemInGroup.placeholder}}" label="{{itemInGroup.Label}}" [(model)]="itemInGroup.Value"
+                                    (modelChange)="onDataChange($event)" maxlength="{{itemInGroup.maxlength}}">
+                                </app-textbox>
+                                <app-textarea *ngIf="itemInGroup.Type==3" id="{{itemInGroup.Id}}" fxFlex="{{itemInGroup.fxFlex}}" label="{{itemInGroup.Label}}"
+                                    maxlength="{{itemInGroup.maxlength}}" minHeight="{{itemInGroup.minHeight}}" [(model)]="itemInGroup.Value"
+                                    (modelChange)="onDataChange($event)">
+                                </app-textarea>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </fieldset>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="item.groupItems == undefined || item.groupItems == null || item.groupItems.length == 0">
+                <ng-container *ngIf="isReadonly">
+                    <h3 *ngIf="item.Type==1" fxFlex="20%" class="sub-title">{{item.Label}}</h3>
+                    <app-textbox *ngIf="item.Type==2" [disabled]="true" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}" id="{{item.Id}}"
+                        placeHolder="{{item.placeHolder}}" label="{{item.Label}}" [(model)]="item.Value" (modelChange)="onDataChange($event)"
+                        maxlength="{{item.maxlength}}">
+                    </app-textbox>
+                    <app-textarea *ngIf="item.Type==3" [disabled]="true" id="{{item.Id}}" fxFlex="{{item.fxFlex}}" label="{{item.Label}}"
+                        maxlength="{{item.maxlength}}" minHeight="{{item.minHeight}}" [(model)]="item.Value"
+                        (modelChange)="onDataChange($event)"></app-textarea>
+                    <!-- useVoice="{{item.useVoice}}" -->
+                </ng-container>
+
+                <ng-container *ngIf="!isReadonly">
+                    <h3 *ngIf="item.Type==1" fxFlex="20%" class="sub-title">{{item.Label}}</h3>
+                    <app-textbox *ngIf="item.Type==2" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}" id="{{item.Id}}"
+                        placeHolder="{{item.placeHolder}}" label="{{item.Label}}" [(model)]="item.Value" (modelChange)="onDataChange($event)"
+                        maxlength="{{item.maxlength}}">
+                    </app-textbox>
+                    <app-textarea *ngIf="item.Type==3" id="{{item.Id}}" fxFlex="{{item.fxFlex}}" label="{{item.Label}}"
+                        maxlength="{{item.maxlength}}" minHeight="{{item.minHeight}}" [(model)]="item.Value"
+                        (modelChange)="onDataChange($event)"></app-textarea>
+                    <!-- useVoice="{{item.useVoice}}" -->
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</div>

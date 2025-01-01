@@ -1,0 +1,30 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <!-- <h1 class="title mt-0 mb-1">Danh Mục Quốc Gia</h1> -->
+                <vex-breadcrumbs [crumbs]="[
+                    { Title: 'Marketing', Path: '' },
+                    { Title: 'Quà Tặng', Path: '/marketing/qua-tang' , Active: true }]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/marketing/qua-tang" [gridColumns]="gridColumns" [documentType]="documentType"
+                [showExportExcel]="true" (extExportExcel)="exportExcel()" [useActionDefault]="true"
+                [lazyLoadPage]="true">
+            </app-grid>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<ng-template #hieuLucTemplate let-dataItem>
+    <button *ngIf="dataItem.HieuLuc" (click)="updateTinhTrang(dataItem)" mat-menu-item>
+        <mat-icon [icIcon]="icdone" color="primary"></mat-icon><span>{{dataItem.HieuLucDisplay}}</span>
+    </button>
+    <button *ngIf="!dataItem.HieuLuc" (click)="updateTinhTrang(dataItem)" mat-menu-item>
+        <mat-icon [icIcon]="icclose" color="warn"></mat-icon><span>{{dataItem.HieuLucDisplay}}</span>
+    </button>
+</ng-template>

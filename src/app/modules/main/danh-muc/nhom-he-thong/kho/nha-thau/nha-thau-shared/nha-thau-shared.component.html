@@ -1,0 +1,47 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="NCC" fxFlex="15%" fxFlex.sm="15%" [(model)]="nhaThau.Ma" label="Mã Nhà Cung Cấp"
+        maxlength="50" >
+    </app-textbox>
+
+    <app-textbox id="Ten" fxFlex="25%" fxFlex.sm="25%" [(model)]="nhaThau.Ten" [required]="true" label="Tên"
+        maxlength="250" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+
+
+    <app-textbox id="MaSoThue" fxFlex="20%" fxFlex.sm="50%" [(model)]="nhaThau.MaSoThue" [required]="true"
+        label="Mã Số Thuế" maxlength="20" [validationerror]="'MaSoThue' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="TaiKhoanNganHang" fxFlex="20%" fxFlex.sm="50%" [(model)]="nhaThau.TaiKhoanNganHang"
+        [required]="true" label="Tài Khoản Ngân Hàng" maxlength="20"
+        [validationerror]="'TaiKhoanNganHang' | validationerror:validationErrors">
+    </app-textbox>
+
+
+
+    <app-textbox id="NguoiDaiDien" fxFlex="20%" fxFlex.sm="50%" [(model)]="nhaThau.NguoiDaiDien" [required]="true"
+        label="Người Đại Diện" maxlength="100" [validationerror]="'NguoiDaiDien' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="NguoiLienHe" fxFlex="20%" fxFlex.sm="50%" [(model)]="nhaThau.NguoiLienHe" [required]="true"
+        label="Người Liên Hệ" maxlength="100" [validationerror]="'NguoiLienHe' | validationerror:validationErrors">
+    </app-textbox>
+
+
+
+    <app-textbox id="SoDienThoaiLienHe" fxFlex="20%" fxFlex.sm="50%" [(model)]="nhaThau.SoDienThoaiLienHe"
+        [required]="true" label="Số Điện Thoại Liên Hệ"
+        [validationerror]="'SoDienThoaiLienHe' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="EmailLienHe" fxFlex="20%" fxFlex.sm="50%" [(model)]="nhaThau.EmailLienHe" [required]="true"
+        label="Email Liên Hệ" maxlength="200" [validationerror]="'EmailLienHe' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="DiaChi" fxFlex="40%" fxFlex.sm="50%" [(model)]="nhaThau.DiaChi" [required]="true" label="Địa Chỉ"
+        maxlength="250" [validationerror]="'DiaChi' | validationerror:validationErrors">
+    </app-textbox>
+
+</div>

@@ -1,0 +1,63 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Chỉnh Sửa Truyền Máu Chi Tiết</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 195px;">
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3">
+            <legend>
+                Thông tin truyền máu
+            </legend>
+
+            <div fxLayout="column">
+                <ul class="inline">
+                    <li>Tên: &nbsp;<strong>{{keMauVaCPEdit.Ten}}</strong></li>
+                    <li>Mã: &nbsp;<strong>{{keMauVaCPEdit.Ma}}</strong></li>
+                    <li>Đơn giá DV:
+                        &nbsp;<strong>{{keMauVaCPEdit.DonGiaBan | number:'0.2-2':'vi-VN'}}</strong>
+                    </li>
+                    <li>Đơn giá BH:
+                        &nbsp;<strong>{{keMauVaCPEdit.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}</strong>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3 mt-3">
+            <legend>
+                Thông tin chỉnh sửa
+            </legend>
+
+            <div fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                    style="padding-top: 16px;">
+                    <app-combobox id="NhomMau" fxFlex="40%" fxFlex.sm="40%" label="Nhóm máu"
+                        url="DieuTriNoiTru/GetNhomMauRH" (openCombobox)="openCombobox($event)" [required]="true"
+                        [(model)]="keMauVaCPEdit.NhomMauRH" [modelText]="keMauVaCPEdit.NhomMauDisplay"
+                        (modelChange)="nhomMauRHChange($event)" popupSettings="null"
+                        [validationerror]="'NhomMau' | validationerror:validationErrors">
+                    </app-combobox>
+
+                    <app-textbox id="TheTich" fxFlex="30%" fxFlex.sm="30%" label="Thể tích" disabled={{true}}
+                        [(model)]="keMauVaCPEdit.TheTich">
+                    </app-textbox>
+                    <!-- required="true"
+                    [validationerror]="'ThoiGianBatDauTruyen' | validationerror:validationErrors" -->
+                    <app-timepicker id="ThoiGianBatDauTruyen" fxFlex="30%" fxFlex.sm="30%" label="Giờ bắt đầu"
+                        [(model)]="keMauVaCPEdit.ThoiGianBatDauTruyen" [modelIsNumber]="true" moreClass="pl-0">
+                    </app-timepicker>
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" mat-stroked-button color="primary" mat-dialog-close>Hủy</button>
+    <button tabindex="-1" type="button" (click)="luuKeTruyenMau()" mat-stroked-button color="primary"
+        class="md-primary">Cập nhật</button>
+</mat-dialog-actions>

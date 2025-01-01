@@ -1,0 +1,45 @@
+.size-icon-duoc-bhyt {
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  line-height: 20px;
+  -moz-border-radius: 5px;
+  border-radius: 7px;
+  background-color: green;
+  color: #fff;
+  text-align: center;
+  right: -4px;
+  top: 6px;
+  margin: 0;
+}
+
+.mouse-cursor{
+  cursor: pointer;
+}
+
+.reverse-ellipsis.r {
+  text-align: right;
+  direction: inherit;
+}
+
+.size-icon-khong-bhyt {
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  line-height: 20px;
+  -moz-border-radius: 5px;
+  border-radius: 7px;
+  background-color: red;
+  color: #fff;
+  text-align: center; 
+  right: -4px;
+  top: 6px;
+  margin: 0;  
+}
+.float_right {
+  float: right;
+}
+
+.mat-icon {
+  font-size: 16px !important;
+}

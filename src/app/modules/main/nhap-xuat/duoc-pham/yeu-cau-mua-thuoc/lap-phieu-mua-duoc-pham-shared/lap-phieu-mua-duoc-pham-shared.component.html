@@ -1,0 +1,410 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <div fxFlex="100%" *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai == false">
+        <h4 style="color: red;">Lý do: {{yeuCauMuaThuoc.LyDoTruongKhoaTuChoi}}</h4>
+    </div>
+
+    <app-dropdownlist id="NhomDuocPhamDuTru" fxFlex="20" fxFlex.sm="20" [required]="true"
+        [(model)]="yeuCauMuaThuoc.NhomDuocPhamDuTru" [modelText]="yeuCauMuaThuoc.TenNhomDuTru" label="Nhóm"
+        (modelChange)="clearGridDuocPham()" url="YeuCauMuaDuocPham/GetNhomDuocPhamDuTru"
+        [disabled]="(trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false) && icDisable == true) || (icDisable == true)"
+        [validationerror]="'NhomDuocPhamDuTru' | validationerror:validationErrorsDuocPham">
+    </app-dropdownlist>
+
+    <app-combobox id="KhoId" fxFlex="20" fxFlex.sm="20" [required]="true" [(model)]="yeuCauMuaThuoc.KhoId"
+        [modelText]="yeuCauMuaThuoc.TenKho" label="Kho" (modelChange)="clearGridDuocPham()"
+        (openCombobox)="openCombobox($event)"
+        [disabled]="(trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false) && icDisable == true) || (icDisable == true)"
+        url="YeuCauMuaDuocPham/GetKho?laDuocPham={{true}}" [validationerror]="'KhoId' | validationerror:validationErrorsDuocPham">
+    </app-combobox>
+
+    <app-combobox id="duTruTheo" fxFlex="20" [required]="true"
+        [disabled]="(trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.IsKhoaDuyet == true || trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false)"
+        [(model)]="yeuCauMuaThuoc.KyDuTruMuaDuocPhamVatTuId" [modelText]="yeuCauMuaThuoc.TenKyDuTru" label="Kỳ dự trù"
+        url="YeuCauMuaDuocPham/GetKyDuTru" (openCombobox)="openCombobox($event)"
+        [validationerror]="'KyDuTruMuaDuocPhamVatTuId' | validationerror:validationErrorsDuocPham">
+    </app-combobox>
+
+    <app-textbox id="nguoiYeuCau" [fxFlex]="20" [fxFlex.sm]="20" [(model)]="yeuCauMuaThuoc.TenNhanVienYeuCau"
+        [required]="true" maxlength="250" label="Người yêu cầu" [disabled]="true">
+    </app-textbox>
+
+    <app-datetimepicker id="ngayYeuCau" [fxFlex]="20" [fxFlex.sm]="20" [(model)]="yeuCauMuaThuoc.NgayYeuCau"
+        [disabled]="true" [required]="true" label="Ngày yêu cầu">
+    </app-datetimepicker>
+
+    <app-textbox
+        *ngIf="trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == true ||trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false)"
+        id="khoaduyet" [fxFlex]="20" [fxFlex.sm]="20" [(model)]="yeuCauMuaThuoc.TenTruongKhoa" [required]="true"
+        maxlength="250" label="T.Khoa duyệt" [disabled]="true">
+    </app-textbox>
+
+    <app-datetimepicker
+        *ngIf="trangThaiVo != null && ( trangThaiVo.IsKhoaDuyet == true || trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false)"
+        id="ngaykhoaduyet" [fxFlex]="20" [fxFlex.sm]="20" [(model)]="yeuCauMuaThuoc.NgayTruongKhoaDuyet"
+        [disabled]="true" [required]="true" label="Ngày t.Khoa duyệt">
+    </app-datetimepicker>
+
+    <app-textbox
+        *ngIf="trangThaiVo != null && ((trangThaiVo.IsKhoaDuyet == true && trangThaiVo.IsKhoDuocDuyet == true) || trangThaiVo.TrangThai == true 
+            || (trangThaiVo.IsKhoDuocDuyet == false || (trangThaiVo.IsKhoDuocDuyet == false && trangThaiVo.TrangThai == false)))"
+        id="khoaduocduyet" [fxFlex]="20" [fxFlex.sm]="20" [(model)]="yeuCauMuaThuoc.TenNhanVienKhoDuoc"
+        [required]="true" maxlength="250" label="K.dược duyệt" [disabled]="true">
+    </app-textbox>
+
+    <app-datetimepicker
+        *ngIf="trangThaiVo != null && ((trangThaiVo.IsKhoaDuyet == true && trangThaiVo.IsKhoDuocDuyet == true) || trangThaiVo.TrangThai == true 
+    || (trangThaiVo.IsKhoDuocDuyet == false || (trangThaiVo.IsKhoDuocDuyet == false && trangThaiVo.TrangThai == false)))"
+        id="ngaykhoaduocduyet" [fxFlex]="20" [fxFlex.sm]="20" [(model)]="yeuCauMuaThuoc.NgayKhoDuocDuyet"
+        [disabled]="true" [required]="true" label="Ngày k.dược duyệt">
+    </app-datetimepicker>
+
+    <app-textbox
+        *ngIf="!isCreate && trangThaiVo != null && (trangThaiVo.TrangThai == true 
+    || (trangThaiVo.IsGiamDocDuyet == false || (trangThaiVo.IsGiamDocDuyet == false && trangThaiVo.TrangThai == false)))"
+        id="giamdocduyet" [fxFlex]="20" [fxFlex.sm]="20" [(model)]="yeuCauMuaThuoc.TenGiamDoc" [required]="true"
+        maxlength="250" label="Giám đốc duyệt" [disabled]="true">
+    </app-textbox>
+
+    <app-datetimepicker *ngIf="!isCreate && trangThaiVo != null 
+                                        && (trangThaiVo.TrangThai == true 
+                                        || trangThaiVo.IsGiamDocDuyet == false 
+                                        || (trangThaiVo.IsGiamDocDuyet == false && trangThaiVo.TrangThai == false))"
+        id="ngaygiamdocduyet" [fxFlex]="20" [fxFlex.sm]="20" [(model)]="yeuCauMuaThuoc.NgayGiamDocDuyet"
+        [disabled]="true" [required]="true" label="Ngày g.đốc duyệt">
+    </app-datetimepicker>
+
+    <app-textarea id="ghiChu" fxFlex="auto" fxFlex.sm="100" maxlength="1000" label="Ghi chú" minHeight="20"
+        [disabled]="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == true || trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false)"
+        [(model)]="yeuCauMuaThuoc.GhiChu">
+    </app-textarea>
+
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin dược phẩm chi tiết</h3>
+
+
+    <ng-container>
+        <app-radio
+            *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+            id="loai" label="Loại" fxFlex="20%" fxFlex.sm="15%" [(model)]="duocPhamGrid.LoaiDuocPham"
+            (modelChange)="huy()" [disabled]="yeuCauMuaThuoc.NhomDuocPhamDuTru == undefined || yeuCauMuaThuoc.KhoId == undefined ||
+            yeuCauMuaThuoc.NhomDuocPhamDuTru == null || yeuCauMuaThuoc.KhoId == null"
+            [items]="[{Value:1,Text:'Không BHYT'},{Value:2,Text:'BHYT'}]">
+        </app-radio>
+
+        <app-combobox
+            *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+            id="duocPham" fxFlex="35%" fxFlex.sm="35%" [required]="true" url="YeuCauMuaDuocPham/GetDuocPhamMuaDuTru"
+            [(model)]="duocPhamGrid.DuocPhamId" (selectionChange)="chonDuocPham($event)" [template]="duocPhamTemplate"
+            (keyup)="onKey($event)" (openCombobox)="openCombobox($event)" [templateHeader]="duocPhamTemplateHeader"
+            [disabled]="yeuCauMuaThuoc.NhomDuocPhamDuTru == undefined || yeuCauMuaThuoc.KhoId == undefined ||
+            yeuCauMuaThuoc.NhomDuocPhamDuTru == null || yeuCauMuaThuoc.KhoId == null" label="Dược phẩm"
+            [queryInfo]="{ParameterDependencies:'{KhoId:' + yeuCauMuaThuoc.KhoId +', LaDuocPhamBHYT: '+ duocPhamGrid.LoaiDuocPham+'}', Take: 50}"
+            class="item-no-padding" [validationerror]="'DuocPhamId' | validationerror:validationErrors"
+            [popupSettings]="{width: 800,popupClass:'item-no-padding'}">
+            <ng-template #duocPhamTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th>Dược phẩm</th>
+                        <th width="30%">Hoạt chất</th>
+                        <th width="5%">ĐVT</th>
+                        <th width="20%">ĐD</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #duocPhamTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td>{{dataItem.Ten}}</td>
+                        <td width="30%">{{dataItem.HoatChat}}</td>
+                        <td width="5%">{{dataItem.DVT}}</td>
+                        <td width="20%">{{dataItem.TenDuongDung}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <div fxFlex="5%" class="mt-2" fxLayoutAlign="start center">
+            <button
+                *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+                (click)="themThuoc()" class="right" color="primary" fxFlex="none" mat-mini-fab kendoTooltip
+                title="Thêm dược phẩm" type="button"
+                [disabled]="yeuCauMuaThuoc.NhomDuocPhamDuTru == undefined || yeuCauMuaThuoc.KhoId == undefined ||
+                                                                 yeuCauMuaThuoc.NhomDuocPhamDuTru == null || yeuCauMuaThuoc.KhoId == null">
+                <mat-icon [icIcon]="icAdd"></mat-icon>
+            </button>
+        </div>
+
+        <app-textboxnumeric
+            *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+            [fxFlex]="(!isCreate && trangThaiVo != null && (trangThaiVo.TrangThai == false || trangThaiVo.TrangThai == true) && yeuCauMuaThuoc.NhomDuocPhamDuTru == 2) || yeuCauMuaThuoc.NhomDuocPhamDuTru == 2  ? '20%' : '7%'"
+            id="slDuTru" label="SL dự trù" [(model)]="duocPhamGrid.SoLuongDuTru" [required]="true" max="999999999"
+            (keyup)="onKey($event)"
+            [disabled]="yeuCauMuaThuoc.NhomDuocPhamDuTru == undefined || yeuCauMuaThuoc.KhoId == undefined ||
+                                                                 yeuCauMuaThuoc.NhomDuocPhamDuTru == null || yeuCauMuaThuoc.KhoId == null"
+            min="1" [validationerror]="'SoLuongDuTru' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-textboxnumeric
+            *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+            [fxFlex]="(!isCreate && trangThaiVo != null && (trangThaiVo.TrangThai == false || trangThaiVo.TrangThai == true) && yeuCauMuaThuoc.NhomDuocPhamDuTru == 2) || yeuCauMuaThuoc.NhomDuocPhamDuTru == 2 ? '20%' : '13%'"
+            id="slDuKienTrongKy" label="D.kiến s.dụng trong kỳ" [required]="true" max="999999999" min="1"
+            (keyup)="onKey($event)" [(model)]="duocPhamGrid.SoLuongDuKienSuDung" [disabled]="yeuCauMuaThuoc.NhomDuocPhamDuTru == undefined || yeuCauMuaThuoc.KhoId == undefined ||
+            yeuCauMuaThuoc.NhomDuocPhamDuTru == null || yeuCauMuaThuoc.KhoId == null"
+            [validationerror]="'SoLuongDuKienSuDung' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-combobox
+            *ngIf="(trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null) && (yeuCauMuaThuoc.NhomDuocPhamDuTru == undefined || yeuCauMuaThuoc.NhomDuocPhamDuTru == null 
+                        || (trangThaiVo != null && trangThaiVo.TrangThai == null) && yeuCauMuaThuoc.NhomDuocPhamDuTru == 1)"
+            id="nhomDuPhong" fxFlex="auto" fxFlex.sm="20%" [(model)]="duocPhamGrid.NhomDieuTriDuPhong"
+            (openCombobox)="openCombobox($event)" [modelText]="duocPhamGrid.NhomDieuTriDuTru" (keyup)="onKey($event)"
+            url="YeuCauMuaDuocPham/GetNhomDuocPhamDieuTriDuPhong" [disabled]="yeuCauMuaThuoc.NhomDuocPhamDuTru == undefined || yeuCauMuaThuoc.KhoId == undefined ||
+            yeuCauMuaThuoc.NhomDuocPhamDuTru == null || yeuCauMuaThuoc.KhoId == null" label="Nhóm đ.trị/dự phòng">
+        </app-combobox>
+
+        <app-textarea id="ghiChuChiTiet" fxFlex="100%" fxFlex.sm="100" maxlength="2000" label="Ghi chú" minHeight="20"
+            *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+            (keyup)="onKey($event)" [disabled]="yeuCauMuaThuoc.NhomDuocPhamDuTru == undefined || yeuCauMuaThuoc.KhoId == undefined ||
+        yeuCauMuaThuoc.NhomDuocPhamDuTru == null || yeuCauMuaThuoc.KhoId == null" [(model)]="duocPhamGrid.GhiChu">
+        </app-textarea>
+
+        <ng-container *ngIf="duocPhamGrid.DuocPhamId != undefined && duocPhamGrid.DuocPhamId != null">
+            <ng-template #templateInfo let-dataItem>
+                <table class="tablecolor " width="100%">
+                    <tr *ngFor="let khoTong of thongTinDuocPham.ThongTinChiTietTonKhoTongs">
+                        <td>{{khoTong.Ten}}: {{khoTong.SoLuongTon}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+
+            <ng-template #templateInfoHDT let-dataItem>
+                <table class="tablecolor " width="100%">
+                    <tr *ngFor="let hdt of thongTinDuocPham.ThongTinChiTietTonHDTs">
+                        <td>{{hdt.Ten}}: {{hdt.SoLuongTon}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0" fxFlex="100%"
+                style="padding-top: 10px;">
+                <div fxFlex="100%" kendoTooltip>
+                    <fieldset
+                        style="border:1px solid #ccc;border-radius: 5px;padding: 7px 15px 8px 15px;background: #e3f2fd;">
+                        <div fxFlex="100%">
+                            <ul class="inline">
+                                <li>Hoạt chất: <strong>{{thongTinDuocPham.HoatChat}}</strong></li>
+                                <li>Số đăng ký: <strong>{{thongTinDuocPham.SoDangKy}}</strong></li>
+                                <li>Nồng độ/ Hàm lượng: <strong>{{thongTinDuocPham.HamLuong}}</strong></li>
+                                <li>Đơn vị tính: <strong>{{thongTinDuocPham.DVT}}</strong></li>
+                                <li>Đường dùng: <strong>{{thongTinDuocPham.TenDuongDung}}</strong></li>
+                                <!-- </ul><br>
+                            <ul class="inline"> -->
+                                <li>Nhà SX: <strong>{{thongTinDuocPham.NhaSX}}</strong></li>
+                                <li>Nước SX: <strong>{{thongTinDuocPham.NuocSX}}</strong></li>
+
+                                <li *ngIf="thongTinDuocPham.SLTonDuTru > 0" style="color:red">
+                                    Số lượng tồn trong kho dự trù:
+                                    <strong>{{thongTinDuocPham.SoLuongTonDuTru}}</strong>
+                                </li>
+
+                                <li *ngIf="thongTinDuocPham.SLTonDuTru == 0 || thongTinDuocPham.SLTonDuTru == null"
+                                    style="color:red">
+                                    Số lượng tồn trong kho dự trù:
+                                    <strong>0</strong>
+                                </li>
+
+                                <li *ngIf="thongTinDuocPham.SLTonKhoTong > 0">
+                                    <span fxFlex="90%" style="color:green">Số lượng tồn trong kho tổng:
+                                        <strong>{{thongTinDuocPham.SoLuongTonKhoTong}}</strong>
+                                    </span>
+                                    <span fxFlex="10%" #tooltip="kendoTooltip" tooltipClass="tooltip-block" kendoTooltip
+                                        [tooltipTemplate]="templateInfo" filter="*">
+                                        <mat-icon [icIcon]="icInfo" class="info">
+                                        </mat-icon>
+                                    </span>
+                                </li>
+                                <li *ngIf="thongTinDuocPham.SLTonKhoTong == 0 || thongTinDuocPham.SLTonKhoTong == null">
+                                    <span style="color:green">Số lượng tồn trong kho tổng:
+                                        <strong>0</strong>
+                                    </span>
+                                </li>
+
+                                <li *ngIf="thongTinDuocPham.SLChuaNhapVeHDT > 0">
+                                    <span fxFlex="95%" style="color:blue">Số lượng chưa nhập về trong HĐ thầu:
+                                        <strong>{{thongTinDuocPham.SoLuongChuaNhapVeHDT}}</strong>
+                                    </span>
+                                    <span fxFlex="5%" #tooltip="kendoTooltip" tooltipClass="tooltip-block" kendoTooltip
+                                        [tooltipTemplate]="templateInfoHDT" filter="*">
+                                        <mat-icon [icIcon]="icInfo" class="info">
+                                        </mat-icon>
+                                    </span>
+                                </li>
+                                <li
+                                    *ngIf="thongTinDuocPham.SLChuaNhapVeHDT == 0 || thongTinDuocPham.SLChuaNhapVeHDT == null">
+                                    <span style="color:blue">Số lượng chưa nhập về trong HĐ thầu:
+                                        <strong>0</strong>
+                                    </span>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </ng-container>
+
+
+
+        <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+            <button
+                *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+                type="button" color="primary" (click)="huy()" [disabled]="yeuCauMuaThuoc.NhomDuocPhamDuTru == undefined || yeuCauMuaThuoc.KhoId == undefined ||
+            yeuCauMuaThuoc.NhomDuocPhamDuTru == null || yeuCauMuaThuoc.KhoId == null" mat-stroked-button mat-button
+                class="mr-1">Hủy</button>
+
+            <button
+                *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+                type="button" color="primary" (click)="themDuocPham()" [disabled]="yeuCauMuaThuoc.NhomDuocPhamDuTru == undefined || yeuCauMuaThuoc.KhoId == undefined ||
+            yeuCauMuaThuoc.NhomDuocPhamDuTru == null || yeuCauMuaThuoc.KhoId == null" mat-raised-button
+                mat-button>Thêm</button>
+        </div>
+    </ng-container>
+    <div fxFlex="100%"
+        [style.display]="(trangThaiVo != undefined && trangThaiVo != null  
+                     && (yeuCauMuaThuoc.NhomDuocPhamDuTru == undefined || yeuCauMuaThuoc.NhomDuocPhamDuTru == null || yeuCauMuaThuoc.NhomDuocPhamDuTru == 1)) ? 'block' : 'none'">
+        <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridDataSource]="gridDataSource"
+            #gridDuocPhamThuocVacxin [gridColumns]="gridColumnsThuocVacxin" [allowSortDefault]="true"
+            [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+            [groups]="groups" [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500" [pageable]="false">
+        </app-grid>
+        <ng-template #STTTemplate let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+        <ng-template #nhomGroupThuocVacxinHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+        <ng-template #actionTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <button color="primary" style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                    *ngIf="trangThaiVo != undefined && trangThaiVo != null && ((trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null))"
+                    (click)="xoaDuocPham(dataItem)">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #nhomDieuTriDuPhongTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-combobox
+                *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+                class="no-label" [(model)]="dataItem.NhomDieuTriDuPhong" popupSettings="null"
+                (openCombobox)="openCombobox($event)" [modelText]="dataItem.NhomDieuTriDuTru"
+                url="YeuCauMuaDuocPham/GetNhomDuocPhamDieuTriDuPhong" label=" ">
+            </app-combobox>
+
+            <span *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == true || trangThaiVo.TrangThai == true ||
+            trangThaiVo.TrangThai == false)" class="no-label">
+                {{dataItem.NhomDieuTriDuTru}}
+            </span>
+        </ng-template>
+
+        <ng-template #slDuTruThuocVacxinTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-textboxnumeric [(model)]="dataItem.SoLuongDuTru" [required]="true" class="no-label" min="1"
+                *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+                [max]="999999999" label=" "
+                [validationerror]="'DuTruMuaDuocPhamChiTiets['+rowIndex+'].SoLuongDuTru' | validationerror:validationErrorsDuocPham">
+            </app-textboxnumeric>
+
+            <span *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == true ||trangThaiVo.TrangThai == true ||
+            trangThaiVo.TrangThai == false)" class="no-label">
+                {{dataItem.SoLuongDuTru}}
+            </span>
+        </ng-template>
+
+
+        <ng-template #slDuKienThuocVacxinTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-textboxnumeric
+                *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+                [(model)]="dataItem.SoLuongDuKienSuDung" [required]="true" class="no-label" min="1" [max]="999999999"
+                label=" "
+                [validationerror]="'DuTruMuaDuocPhamChiTiets['+rowIndex+'].SoLuongDuKienSuDung' | validationerror:validationErrorsDuocPham">
+            </app-textboxnumeric>
+            <span *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == true || trangThaiVo.TrangThai == true ||
+            trangThaiVo.TrangThai == false)" class="no-label">
+                {{dataItem.SoLuongDuKienSuDung}}
+            </span>
+        </ng-template>
+
+        <ng-template #ghiChuChiTietThuocVacxinTemplate let-dataItem>
+            <app-textarea
+                *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null)"
+                minHeight="20" [(model)]="dataItem.GhiChu" class="no-label" label=" " maxlength="2000">
+            </app-textarea>
+
+            <span *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == true || trangThaiVo.TrangThai == true ||
+            trangThaiVo.TrangThai == false)" class="no-label">
+                {{dataItem.GhiChu}}
+            </span>
+        </ng-template>
+
+    </div>
+
+    <div fxFlex="100%" [style.display]="(trangThaiVo != undefined && trangThaiVo != null  
+                 && yeuCauMuaThuoc.NhomDuocPhamDuTru == 2) ? 'block' : 'none'">
+        <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridDataSource]="gridDataSourceHoaChat"
+            #gridDuocPhamHoaChat [gridColumns]="gridColumnsHoaChat" [allowSortDefault]="true" [groups]="groups"
+            [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500" [pageable]="false">
+        </app-grid>
+        <ng-template #STTTemplate let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+        <ng-template #nhomGroupHoachatHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+        <ng-template #actionTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <button
+                    *ngIf="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null"
+                    color="primary" style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                    (click)="xoaDuocPham(dataItem)">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #slDuTruHoaChatTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-textboxnumeric [(model)]="dataItem.SoLuongDuTru" [required]="true" class="no-label" min="1"
+                *ngIf="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null"
+                [max]="999999999" label=" "
+                [validationerror]="'DuTruMuaDuocPhamChiTiets['+rowIndex+'].SoLuongDuTru' | validationerror:validationErrorsDuocPham">
+            </app-textboxnumeric>
+            <span *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == true || trangThaiVo.TrangThai == true ||
+            trangThaiVo.TrangThai == false)" class="no-label">
+                {{dataItem.SoLuongDuTru}}
+            </span>
+        </ng-template>
+
+        <ng-template #slDuKienHoaChatTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-textboxnumeric [(model)]="dataItem.SoLuongDuKienSuDung" [required]="true" class="no-label" min="1"
+                *ngIf="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null"
+                [max]="999999999" label=" "
+                [validationerror]="'DuTruMuaDuocPhamChiTiets['+rowIndex+'].SoLuongDuKienSuDung' | validationerror:validationErrorsDuocPham">
+            </app-textboxnumeric>
+            <span *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == true || trangThaiVo.TrangThai == true ||
+            trangThaiVo.TrangThai == false)" class="no-label">
+                {{dataItem.SoLuongDuKienSuDung}}
+            </span>
+        </ng-template>
+
+        <ng-template #ghiChuChiTietHoaChatTemplate let-dataItem>
+            <app-textarea minHeight="20"
+                *ngIf="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.IsKhoaDuyet == null && trangThaiVo.TrangThai == null"
+                [(model)]="dataItem.GhiChu" class="no-label" label=" " maxlength="2000">
+            </app-textarea>
+
+            <span *ngIf="trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.IsKhoaDuyet == true || trangThaiVo.TrangThai == true ||
+            trangThaiVo.TrangThai == false)" class="no-label">
+                {{dataItem.GhiChu}}
+            </span>
+        </ng-template>
+    </div>
+</div>

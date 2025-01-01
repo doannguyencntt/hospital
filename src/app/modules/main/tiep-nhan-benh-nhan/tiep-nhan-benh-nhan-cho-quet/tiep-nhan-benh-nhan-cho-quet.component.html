@@ -1,0 +1,27 @@
+<div class="px-6 py-4" fxLayout="column">
+
+    <div style="margin-top: 5px;" fxLayout="row wrap" fxLayout.lt-sm="column">
+        <div fxFlex="100%" style="padding-left: 7px; text-align: center;">
+            Số thẻ BHYT: <span style="font-weight: bold;">{{data.MaThe}}</span>
+        </div>
+        <div fxFlex="100%" style="padding-left: 7px; text-align: center;">
+            Họ và tên: <span style="font-weight: bold;">{{data.TenBenhNhan}}</span>
+        </div>
+        <div fxFlex="100%" style="padding-left: 7px; text-align: center;">
+            Ngày sinh: <span style="font-weight: bold;">{{data.NgaySinhDisplay}}</span>
+        </div>
+    </div>
+
+</div>
+
+<div style="text-align: center;">
+    <h4>Hệ thống đang kiểm tra thông tin BHYT...</h4>
+    <button color="primary" mat-raised-button type="button">
+        <img src="/assets/img/loader.gif" alt="Loading" style="display: inline;" />
+    </button>
+</div>
+
+
+<!-- <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="menu" (click)="close()">Đóng</button>
+</div> -->

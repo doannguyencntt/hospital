@@ -1,0 +1,61 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" style="border-bottom-width: 1px;">
+    <div>Sơ Đồ Giường Bệnh Tại {{tenKhoa}}</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<!-- <mat-dialog-content> -->
+    <div fxLayout="row wrap">
+        <app-combobox id="phongId" fxFlex="40%" class="item-no-padding"
+            [templateHeader]="khoaTemplateHeader" [template]="khoaTemplate" label="Phòng"
+            url="SoDoGiuongBenh/GetListPhongForPopup/?khoaId={{khoaId}}" bind="true" [(model)]="phongId"
+            (modelChange)="phongChange($event)">
+        </app-combobox>
+        <ng-template #khoaTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #khoaTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+
+        <div fxFlex="5%">
+
+        </div>
+
+        <app-checkbox class="color-green" style="padding: 35px 0px 0px 20px;" id="GiuongTrong" fxFlex="20%"
+            label="Giường trống" model="giuongTrong" (modelChange)="giuongTrongChange($event)">
+        </app-checkbox>
+
+        <app-checkbox class="color-red" style="padding: 35px 0px 0px 20px;" id="GiuongDaCoBN" fxFlex="20%"
+            label="Giường đã có NB" model="giuongDaCoBenhNhan" (modelChange)="giuongDaCoBenhNhanChange($event)">
+        </app-checkbox>
+    </div>
+
+
+    <div class="div-giuong" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+        *ngFor="let item of resultGiuong.lstPhong; let i = index">
+        <span style="font-weight: 500">
+            {{item.DisplayName}}
+        </span>
+
+        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            *ngFor="let itemChild of resultGiuong.lstPhong[i].lstGiuong">
+
+            <div *ngIf="(itemChild.IsGiuongTrong == true && giuongTrong == true) || (itemChild.IsGiuongTrong == false && giuongDaCoBenhNhan == true)" class="div-item-giuong" [ngStyle]="{'background-color':itemChild.IsGiuongTrong == true  ? 'green' : 'red' }">
+                {{itemChild.TenGiuong}} | {{itemChild.SoBenhNhan}}
+            </div>
+        </div>
+
+    </div>
+<!-- </mat-dialog-content> -->

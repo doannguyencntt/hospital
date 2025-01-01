@@ -1,0 +1,83 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                    {Title:'Marketing',Path:''}
+                    ,{Title:'Xuất Kho',Path:'/marketing/xuat-kho', queryParams: {holdQuery : true}}
+                    ,{Title:'Xuất Kho Chi Tiết',Path:'', Active:true} 
+                    ]">
+            </vex-breadcrumbs>
+
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <div class="row mb-3">
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0" fxLayoutAlign="space-between">
+
+                                <app-textbox id="soPX" [fxFlex]="20" [fxFlex.sm]="20"
+                                    [(model)]="xuatKhoMarketing.SoPhieu" maxlength="250" label="Số PX"
+                                    [disabled]="true">
+                                </app-textbox>
+                                <app-combobox id="khoXuatId" fxFlex="20" fxFlex.sm="20" [required]="true"
+                                    [(model)]="xuatKhoMarketing.KhoXuatId" [modelText]="xuatKhoMarketing.TenKhoXuat"
+                                    label="Kho xuất" class="item-no-padding" [disabled]="true">
+                                </app-combobox>
+
+                                <app-combobox id="nguoiXuatId" fxFlex="20" fxFlex.sm="20" [required]="true"
+                                    url="Marketing/GetNhanVienXuatMarketing" [(model)]="xuatKhoMarketing.NguoiXuatId"
+                                    [modelText]="xuatKhoMarketing.NhanVienXuat" label="Người xuất"
+                                    class="item-no-padding" [disabled]="true">
+                                </app-combobox>
+
+                                <app-combobox id="nguoiNhanId" fxFlex="20" fxFlex.sm="20" [required]="true"
+                                    url="Marketing/GetNguoiNhanMarketing" [(model)]="xuatKhoMarketing.BenhNhanId"
+                                    [modelText]="xuatKhoMarketing.NguoiNhan" label="Người nhận" class="item-no-padding"
+                                    [disabled]="true">
+                                </app-combobox>
+
+                                <app-datepicker id="ngayXuat" [fxFlex]="20" [fxFlex.sm]="20" [required]="true"
+                                    [(model)]="xuatKhoMarketing.NgayXuat" disabled={{true}} label="Ngày xuất">
+                                </app-datepicker>
+
+                                <app-textarea fxFlex="100%" id="ghiChu" label="Ghi Chú" [disabled]="true"
+                                    [(model)]="xuatKhoMarketing.GhiChu" maxlength="4000" minHeight="20">
+                                </app-textarea>
+
+
+                                <app-grid [gridColumns]="gridColumns" [documentType]="documentType"
+                                    [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                                    [additionalSearchString]="additionString" [showStt]="true"
+                                    urlGetData="Marketing/GetDSQuaTangMarketingDataForGridAsync"
+                                    urlGetTotalPage="Marketing/GetDSQuaTangMarketingTotalPageForGridAsync" height="auto"
+                                    [checkboxAble]="false">
+                                </app-grid>
+                            </div>
+
+
+
+                        </div>
+
+                        <ng-template #STTTemplate let-rowIndex="rowIndex">
+                            {{rowIndex + 1}}
+                        </ng-template>
+
+                        <div class="row pt-4">
+                            <button type="button" color="default" title="Phím tắt: Esc" (click)="quayLai()"
+                                mat-raised-button mat-button class="float-right">
+                                Quay lại</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+
+</vex-page-layout>

@@ -1,0 +1,135 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                {Title:'Thống Kê', Path:''},
+                {Title:'Báo Cáo', Path:''},
+                {Title:'Dược', Path:''},
+                {Title:'Doanh Thu Nhà Thuốc',Path:'',Active:true}
+                  ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid [baseRoute]="baseRoute" [gridColumns]="gridColumns" [useAddDeault]="false" [showStt]="true" [checkboxAble]="false" 
+              [autoHeight]="true" [lazyLoadPage]="true" [useHeaderDefault]="false" [headerTemplate]="headerTemplate" [useActionDefault]="false"
+              [documentType]="documentType" (extOnDataBound)="GetListAsync($event)" [sort]="sort"
+              urlGetData="BaoCaoDoanhThuNhaThuoc/GetDataForGrid" urlGetTotalPage="BaoCaoDoanhThuNhaThuoc/GetTotalPageForGrid"></app-grid>
+        </div>
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar px-0 h-15 border-b sticky left-0">
+                <div fxFlex="80%" fxFlex.sm="80%">
+                    <!-- <app-daterangepicker id="tuNgayDenNgay" fxFlex="300px" fxFlex.sm="auto" class="mt-1 ml-2 on-header" 
+                      [(model)]="timKiemNangCaoObj.TuNgayDenNgay" label="Từ ngày - đến ngày">
+                    </app-daterangepicker> -->
+
+                    <app-datetimepicker id="NgayVaoVien" fxFlex="15%" fxFlex.sm="15%" 
+                        [(model)]="timKiemNangCaoObj.TuNgayDenNgay.startDate"
+                        label="Từ ngày" class="mt-1 ml-2 on-header"  [maxDate]="timKiemNangCaoObj.TuNgayDenNgay.endDate">
+                    </app-datetimepicker>
+                    <app-datetimepicker id="NgayRaVien" fxFlex="15%" fxFlex.sm="15%" 
+                        label="Đến ngày" class="mt-1 ml-2 on-header" 
+                        [(model)]="timKiemNangCaoObj.TuNgayDenNgay.endDate" [minDate]="timKiemNangCaoObj.TuNgayDenNgay.startDate">
+                    </app-datetimepicker>
+
+                    <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;margin-left: 5px;">
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-3 py-2 border-0 outline-none w-full bg-transparent" type="search" name="searchString" 
+                          [(ngModel)]="timKiemNangCaoObj.SearchString" (keyup)="onKey($event)" placeholder="Tìm kiếm..." (ngModelChange)="searchChange($event)" />
+                    </div>
+                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                      <mat-icon [icIcon]="icSearch"></mat-icon>
+                  </button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="ml-1 mt-1 mb-1"
+                        (click)="timKiemNangCao()">Xem Báo Cáo</button>
+                </div>
+                <div fxFlex="20%" fxFlex.sm="20%" class="text-right" style="margin: 5px;">
+                  <!-- [disabled]="!coData" -->
+                  <button  (click)="exportExcel()" type="button" color="primary" mat-raised-button mat-button
+                      class="mr-2">Xuất Excel</button>
+                  <!-- <button type="button" color="primary" mat-raised-button mat-button
+                        (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #ngayHetHanTemplate let-dataItem>
+            <span style="color: orange;" class="badge badge-pill">{{dataItem.NgayHetHanDisplay}}
+      </span>
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<ng-template #ngayTemplate let-dataItem>
+    <span>
+    {{dataItem.NgayDisplay}}
+  </span>
+</ng-template>
+
+<ng-template #thanhTienTemplate let-dataItem>
+    <span>
+    {{dataItem.ThanhTien | number:'0.2'}}
+  </span>
+</ng-template>
+
+<ng-template #tienMatTemplate let-dataItem>
+    <span>
+    {{dataItem.TienMat | number:'0.2'}}
+  </span>
+</ng-template>
+
+<ng-template #chuyenTemplate let-dataItem>
+    <span>
+    {{dataItem.ChuyenKhoan | number:'0.2'}}
+  </span>
+</ng-template>
+
+<ng-template #posTemplate let-dataItem>
+    <span>
+    {{dataItem.Pos | number:'0.2'}}
+  </span>
+</ng-template>
+
+<ng-template #congNoTemplate let-dataItem>
+    <span>
+    {{dataItem.CongNo | number:'0.2'}}
+  </span>
+</ng-template>
+
+<ng-template #soChungTuFooterTemplate let-dataItem>
+    <strong>
+    Tổng tiền:
+  </strong>
+</ng-template>
+
+<ng-template #thanhTienFooterTemplate let-dataItem>
+    <strong>
+    {{totalThanhTienKhoLe('ThanhTien') | number:'0.2'}}
+  </strong>
+</ng-template>
+
+<ng-template #tienMatFooterTemplate let-dataItem>
+    <strong>
+    {{totalThanhTienKhoLe('TienMat') | number:'0.2'}}
+  </strong>
+</ng-template>
+
+<ng-template #chuyenFooterTemplate let-dataItem>
+    <strong>
+    {{totalThanhTienKhoLe('ChuyenKhoan') | number:'0.2'}}
+  </strong>
+</ng-template>
+
+<ng-template #posFooterTemplate let-dataItem>
+    <strong>
+    {{totalThanhTienKhoLe('Pos') | number:'0.2'}}
+  </strong>
+</ng-template>
+
+<ng-template #congNoFooterTemplate let-dataItem>
+    <strong>
+    {{totalThanhTienKhoLe('CongNo') | number:'0.2'}}
+  </strong>
+</ng-template>

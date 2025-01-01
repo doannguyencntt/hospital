@@ -1,0 +1,385 @@
+<div class="mb-4" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <div *ngIf="!thongTinHoSoPhieuSangLocDinhDuong.DungChoPhuNuMangThai" fxLayout="row wrap" fxLayout.lt-sm="column"
+        fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+        <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+            <h3 class="blue-text" style="display: inline; float: left;">I. SÀNG LỌC VÀ ĐÁNH GIÁ DINH DƯỠNG</h3>
+        </div>
+    </div>
+
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div *ngIf="thongTinHoSoPhieuSangLocDinhDuong.DungChoPhuNuMangThai" fxFlex="100%" fxFlex.sm="100%"></div>
+
+            <!-- Row 1 -->
+            <app-textbox id="chan-doan" fxFlex="40%" fxFlex.md="100%" fxFlex.sm="100%" maxlength="1000"
+                label="Chẩn đoán" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.ChanDoan"
+                [validationerror]="'ChanDoan' | validationerror:validationErrors">
+            </app-textbox>
+
+            <div fxFlex="60%" fxHide.md fxHide.sm></div>
+
+            <!-- Row 2 -->
+            <app-checkbox id="dung-cho-phu-nu-mang-thai" class="mt-4" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%"
+                label="Dùng cho phụ nữ mang thai" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.DungChoPhuNuMangThai"
+                [validationerror]="'DungChoPhuNuMangThai' | validationerror: validationErrors">
+            </app-checkbox>
+
+            <app-datetimepicker id="ngay-danh-gia" class="item-no-padding" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%"
+                label="Ngày đánh giá" [formatDate]="'dd/MM/yyyy'"
+                [(model)]="thongTinHoSoPhieuSangLocDinhDuong.NgayDanhGia"
+                [validationerror]="'NgayDanhGia' | validationerror: validationErrors">
+            </app-datetimepicker>
+
+            <app-combobox *ngIf="thongTinHoSoPhieuSangLocDinhDuong.DungChoPhuNuMangThai" id="ngươithuchien"
+                label="Người thực hiện" fxFlex="20%" fxFlex.md="100%" fxFlex.sm="100%" popupSettings="null"
+                [(model)]="thongTinHoSoPhieuSangLocDinhDuong.NguoiThucHienId"  [bind]="true"
+                url="PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=1"
+                (selectionChange)="selectionChangeNguoiThucHien($event)"
+                [validationerror]="'NguoiThucHienId' | validationerror:validationErrors">
+            </app-combobox>
+
+            <div fxFlex="60%" fxHide.md fxHide.sm></div>
+        </div>
+
+        <div *ngIf="!thongTinHoSoPhieuSangLocDinhDuong.DungChoPhuNuMangThai" fxFlex="100%" fxLayout="row wrap"
+            fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <!-- Row 2 -->
+            <app-textboxnumeric id="can-nang" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" min="1" max="366"
+                label="Cân nặng (kg)" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.CanNang"
+                (modelChange)="evtCanNangVaChieuCaoChanged()"
+                [validationerror]="'CanNang' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-textboxnumeric id="chieu-cao" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" min="1" max="1000"
+                label="Chiều cao (cm)" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.ChieuCao"
+                (modelChange)="evtCanNangVaChieuCaoChanged()"
+                [validationerror]="'ChieuCao' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-textbox id="bmi" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" maxlength="1000" label="BMI"
+                [disabled]="true" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.BMI"
+                [validationerror]="'BMI' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="dai-tham-chieu-bmi" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" maxlength="1000"
+                label="Dải tham chiếu BMI" [disabled]="true"
+                [(model)]="thongTinHoSoPhieuSangLocDinhDuong.DaiThamChieuBMI"
+                [validationerror]="'DaiThamChieuBMI' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="muc-do-bmi" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" maxlength="1000"
+                label="Mức độ BMI" [disabled]="true" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.MucDoBMI"
+                [validationerror]="'MucDoBMI' | validationerror:validationErrors">
+            </app-textbox>
+
+            <div fxFlex.md="50%" fxHide.gt-md fxHide.lg fxHide.sm></div>
+
+            <!-- Row 3 -->
+            <p fxFlex="30%" fxFlex.md="40%" fxFlex.sm="100%" class="mt-4 mt-sm-0">1. Gần đây anh/chị có giảm cân?</p>
+
+            <app-combobox id="is-giam-can" fxFlex="30%" fxFlex.md="40%" fxFlex.sm="100%" [popupSettings]="null"
+                [url]="urlGetDanhSachGiamCan" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.GiamCan"
+                [modelText]="thongTinHoSoPhieuSangLocDinhDuong.GiamCanDisplay"
+                (selectionChange)="evtGiamCanChanged($event)"
+                [validationerror]="'GiamCan' | validationerror: validationErrors">
+            </app-combobox>
+
+            <app-textbox id="diem-giam-can" fxFlex="10%" fxFlex.md="20%" fxFlex.sm="100%" maxlength="1000" label="Điểm"
+                [disabled]="true" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.DiemGiamCan"
+                [validationerror]="'DiemGiamCan' | validationerror:validationErrors">
+            </app-textbox>
+
+            <div fxFlex="30%" fxHide.md fxHide.sm></div>
+
+            <!-- Row 4 -->
+            <p fxFlex="30%" fxFlex.md="40%" fxFlex.sm="100%" class="mt-4 mt-sm-0">Anh chị giảm bao nhiêu kg?</p>
+
+            <app-combobox id="so-can-giam" fxFlex="30%" fxFlex.md="40%" fxFlex.sm="100%" [popupSettings]="null"
+                [url]="urlGetDanhSachSoKgGiam" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.SoKgGiam"
+                [modelText]="thongTinHoSoPhieuSangLocDinhDuong.SoKgGiamDisplay"
+                (selectionChange)="evtSoCanGiamChanged($event)"
+                [validationerror]="'SoKgGiam' | validationerror: validationErrors">
+            </app-combobox>
+
+            <app-textbox id="diem-kg-giam-can" fxFlex="10%" fxFlex.md="20%" fxFlex.sm="100%" maxlength="1000"
+                label="Điểm" [disabled]="true" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.DiemSoKgGiam"
+                [validationerror]="'DiemSoKgGiam' | validationerror:validationErrors">
+            </app-textbox>
+
+            <div fxFlex="30%" fxHide.md fxHide.sm></div>
+
+            <!-- Row 5 -->
+            <p fxFlex="30%" fxFlex.md="40%" fxFlex.sm="100%" class="mt-4 mt-sm-0">2. Anh/chị ăn uống kém do giảm ngon
+                miệng?</p>
+
+            <app-combobox id="is-an-uong-kem" fxFlex="30%" fxFlex.md="40%" fxFlex.sm="100%" [popupSettings]="null"
+                [url]="urlGetDanhSachAnUongKem" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.AnUongKem"
+                [modelText]="thongTinHoSoPhieuSangLocDinhDuong.AnUongKemDisplay"
+                (selectionChange)="evtAnUongKemChanged($event)"
+                [validationerror]="'AnUongKem' | validationerror: validationErrors">
+            </app-combobox>
+
+            <app-textbox id="diem-an-uong-kem" fxFlex="10%" fxFlex.md="20%" fxFlex.sm="100%" maxlength="1000"
+                label="Điểm" [disabled]="true" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.DiemAnUongKem"
+                [validationerror]="'DiemAnUongKem' | validationerror:validationErrors">
+            </app-textbox>
+
+            <div fxFlex="30%" fxHide.md fxHide.sm></div>
+
+            <!-- Row 6 -->
+            <p fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%"><b>Ghi chú:</b></p>
+
+            <app-radio id="su-dung-ruou-bia" fxFlex="30%" fxFlex.md="40%" fxFlex.sm="100%"
+                label="Bổ sung dinh dưỡng đường uống" [items]="radioBoSungDinhDuongDuongUongItems"
+                [(model)]="thongTinHoSoPhieuSangLocDinhDuong.BoSungDinhDuongDuongUong"
+                [validationerror]="'BoSungDinhDuongDuongUong' | validationerror:validationErrors">
+            </app-radio>
+
+            <app-textbox id="loi-khuyen-dinh-duong-khac" fxFlex="35%" fxFlex.md="30%" fxFlex.sm="100%" maxlength="1000"
+                label="Lời khuyên dinh dưỡng khác" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.LoiKhuyenDinhDuongKhac"
+                [validationerror]="'LoiKhuyenDinhDuongKhac' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-combobox id="tinh-trang-benh-ly-nang" fxFlex="35%" fxFlex.md="30%" fxFlex.sm="100%"
+                [popupSettings]="null" [label]="'Tình trạng bệnh lý nặng'" [url]="urlGetDanhSachTinhTrangBenhLyNang"
+                [(model)]="thongTinHoSoPhieuSangLocDinhDuong.TinhTrangBenhLyNang"
+                [modelText]="thongTinHoSoPhieuSangLocDinhDuong.TinhTrangBenhLyNangDisplay"
+                (selectionChange)="evtTinhTrangBenhLyNangChanged($event)"
+                [validationerror]="'TinhTrangBenhLyNang' | validationerror: validationErrors">
+            </app-combobox>
+
+            <!-- Row 7 -->
+            <app-textbox id="tong-diem-mst" fxFlex="20%" fxFlex.md="20%" fxFlex.sm="100%" maxlength="1000"
+                label="3. Tổng điểm MST" [disabled]="true" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.TongDiemMST"
+                [validationerror]="'TongDiemMST' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="chan-doan-muc-do-suy-dinh-duong" fxFlex="80%" fxFlex.md="80%" fxFlex.sm="100%"
+                maxlength="1000" label="4. Chẩn đoán mức độ suy dinh dưỡng" [disabled]="true"
+                [(model)]="thongTinHoSoPhieuSangLocDinhDuong.ChanDoanMucDoSuyDinhDuong"
+                [validationerror]="'ChanDoanMucDoSuyDinhDuong' | validationerror:validationErrors">
+            </app-textbox>
+        </div>
+
+        <div *ngIf="thongTinHoSoPhieuSangLocDinhDuong.DungChoPhuNuMangThai" fxFlex="100%" fxLayout="row wrap"
+            fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <!-- Row 0  -->
+            <app-textboxnumeric id="tuoi-thai" fxFlex="20%" fxFlex.md="100%" fxFlex.sm="100%" min="1" max="52"
+                label="Tuổi thai (tuần)" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.TuoiThai"
+                [validationerror]="'TuoiThai' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-checkbox name="theo-kinh-cuoi-cung" class="mt-4" fxFlex="20%" fxFlex.md="100%" fxFlex.sm="100%"
+                label="Theo kinh cuối cùng" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.TheoKinhCuoiCung"
+                [validationerror]="'TheoKinhCuoiCung' | validationerror: validationErrors">
+            </app-checkbox>
+
+            <app-checkbox name="sieu-am-3-thang-dau-thai-ky" class="mt-4" fxFlex="20%" fxFlex.md="100%" fxFlex.sm="100%"
+                label="Siêu âm 3 tháng đầu thai kỳ" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.SieuAmBaThangDauThaiKy"
+                [validationerror]="'SieuAmBaThangDauThaiKy' | validationerror: validationErrors">
+            </app-checkbox>
+
+            <div fxFlex="40%" fxHide.md fxHide.sm></div>
+
+            <!-- Row 1 -->
+            <app-textboxnumeric id="can-nang-truoc-mang-thai" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" min="1"
+                max="366" label="Cân nặng trước mang thai (kg)"
+                [(model)]="thongTinHoSoPhieuSangLocDinhDuong.CanNangTruocMangThai"
+                (modelChange)="evtCanNangVaChieuCaoTruocMangThaiChanged()"
+                [validationerror]="'CanNangTruocMangThai' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-textboxnumeric id="chieu-cao-mang-thai" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" min="1" max="366"
+                label="Chiều cao (cm)" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.ChieuCaoTruocMangThai"
+                (modelChange)="evtCanNangVaChieuCaoTruocMangThaiChanged()"
+                [validationerror]="'ChieuCaoTruocMangThai' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-textbox id="bmi-truoc-mang-thai" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" maxlength="1000"
+                label="BMI trước mang thai (kg/m2)" [disabled]="true"
+                [(model)]="thongTinHoSoPhieuSangLocDinhDuong.BMITruocMangThai"
+                [validationerror]="'BMITruocMangThai' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textboxnumeric id="can-nang-hien-tai" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" min="1" max="366"
+                label="Cân nặng hiện tại (kg)" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.CanNangHienTai"
+                [validationerror]="'CanNangHienTai' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <!-- Row 2 -->
+            <p fxFlex="25%" fxFlex.md="25%" fxFlex.sm="100%" class="mt-4 mt-sm-0">BMI trước mang thai</p>
+
+            <app-textbox id="bmi-truoc-mang-thai" fxFlex="50%" fxFlex.md="50%" fxFlex.sm="100%" maxlength="1000"
+                label="BMI trước mang thai" [disabled]="true"
+                [(model)]="thongTinHoSoPhieuSangLocDinhDuong.KhoangBMITruocMangThai"
+                [validationerror]="'KhoangBMITruocMangThai' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="diem-bmi-truoc-mang-thai" fxFlex="25%" fxFlex.md="25%" fxFlex.sm="100%" maxlength="1000"
+                label="Điểm" [disabled]="true" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.DiemBMITruocMangThai"
+                [validationerror]="'DiemBMITruocMangThai' | validationerror:validationErrors">
+            </app-textbox>
+
+            <!-- Row 3 -->
+            <p fxFlex="25%" fxFlex.md="25%" fxFlex.sm="100%" class="mt-4 mt-sm-0">Tốc độ tăng cân</p>
+
+            <app-combobox id="toc-do-tang-can" fxFlex="50%" fxFlex.md="50%" fxFlex.sm="100%" [popupSettings]="null"
+                [label]="'Tốc độ tăng cân'" [url]="urlGetDanhSachTocDoTangCan"
+                [(model)]="thongTinHoSoPhieuSangLocDinhDuong.TocDoTangCan"
+                [modelText]="thongTinHoSoPhieuSangLocDinhDuong.TocDoTangCanDisplay"
+                (selectionChange)="evtTocDoTangCanChanged($event)"
+                [validationerror]="'TocDoTangCan' | validationerror: validationErrors">
+            </app-combobox>
+
+            <app-textbox id="diem-toc-do-tang-can" fxFlex="25%" fxFlex.md="25%" fxFlex.sm="100%" maxlength="1000"
+                label="Điểm" [disabled]="true" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.DiemTocDoTangCan"
+                [validationerror]="'DiemTocDoTangCan' | validationerror:validationErrors">
+            </app-textbox>
+
+            <!-- Row 4 -->
+            <p fxFlex="25%" fxFlex.md="25%" fxFlex.sm="100%" class="mt-4 mt-sm-0">Bệnh kèm theo</p>
+
+            <app-combobox id="benh-kem-theo" fxFlex="50%" fxFlex.md="50%" fxFlex.sm="100%" [popupSettings]="null"
+                [label]="'Bệnh kèm theo'" [url]="urlGetDanhSachBenhKemTheo"
+                [(model)]="thongTinHoSoPhieuSangLocDinhDuong.BenhKemTheo"
+                [modelText]="thongTinHoSoPhieuSangLocDinhDuong.BenhKemTheoDisplay"
+                (selectionChange)="evtBenhKemTheoChanged($event)"
+                [validationerror]="'BenhKemTheo' | validationerror: validationErrors">
+            </app-combobox>
+
+            <app-textbox id="diem-toc-do-tang-can" fxFlex="25%" fxFlex.md="25%" fxFlex.sm="100%" maxlength="1000"
+                label="Điểm" [disabled]="true" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.DiemBenhKemTheo"
+                [validationerror]="'DiemBenhKemTheo' | validationerror:validationErrors">
+            </app-textbox>
+
+            <hr fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" />
+
+            <p fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" class="mb-8">
+                Kết luận:
+                <b [ngClass]="thongTinHoSoPhieuSangLocDinhDuong.TongDiemTruocMangThai < 2 ? 'green-text' : 'red-text'">
+                    {{thongTinHoSoPhieuSangLocDinhDuong.KetLuan}}
+                </b>
+            </p>
+        </div>
+    </div>
+
+    <div *ngIf="!thongTinHoSoPhieuSangLocDinhDuong.DungChoPhuNuMangThai" fxLayout="row wrap" fxLayout.lt-sm="column"
+        fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+        <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+            <h3 class="blue-text" style="display: inline; float: left;">II. KẾT LUẬN VÀ CHĂM SÓC DINH DƯỠNG</h3>
+        </div>
+    </div>
+
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div *ngIf="!thongTinHoSoPhieuSangLocDinhDuong.DungChoPhuNuMangThai" fxFlex="50%" fxFlex.md="50%"
+            fxFlex.sm="100%">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <p fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%">Xác định nhu cầu dinh dưỡng</p>
+
+                <app-grid #gridNhuCauDinhDuong fxFlex="100%" fxFlex.sm="100%" style="width: 1px;"
+                    masterName="gridNhuCauDinhDuong" maxHeight="500" reorderRowsMoveItemData="true"
+                    [gridColumns]="gridColumns" [gridDataSource]="gridDataSource" [documentType]="documentType"
+                    [allowSortDefault]="true" [useAddDeault]="false" [useHeaderDefault]="false"
+                    [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false" [showStt]="false">
+                </app-grid>
+            </div>
+        </div>
+
+        <div *ngIf="!thongTinHoSoPhieuSangLocDinhDuong.DungChoPhuNuMangThai" fxFlex="50%" fxFlex.md="50%"
+            fxFlex.sm="100%">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <p fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%">Nhu cầu khác</p>
+
+                <app-textboxnumeric id="nhu-cau-khac-nang-luong" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" min="1"
+                    max="366" label="Năng lượng (kcal)"
+                    [(model)]="thongTinHoSoPhieuSangLocDinhDuong.NhuCauKhacNangLuong"
+                    [validationerror]="'NhuCauKhacNangLuong' | validationerror:validationErrors">
+                </app-textboxnumeric>
+
+                <app-textboxnumeric id="nhu-cau-khac-duong" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" min="1"
+                    max="366" label="Đường (g)" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.NhuCauKhacDuong"
+                    [validationerror]="'NhuCauKhacDuong' | validationerror:validationErrors">
+                </app-textboxnumeric>
+
+                <app-textboxnumeric id="nhu-cau-khac-dam" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" min="1"
+                    max="366" label="Đạm (g)" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.NhuCauKhacDam"
+                    [validationerror]="'NhuCauKhacDam' | validationerror:validationErrors">
+                </app-textboxnumeric>
+
+                <app-textboxnumeric id="nhu-cau-khac-beo" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" min="1"
+                    max="366" label="Béo (g)" [(model)]="thongTinHoSoPhieuSangLocDinhDuong.NhuCauKhacBeo"
+                    [validationerror]="'NhuCauKhacBeo' | validationerror:validationErrors">
+                </app-textboxnumeric>
+
+                <app-combobox id="ke-hoach-dinh-duong" fxFlex="50%" fxFlex.md="50%" fxFlex.sm="100%"
+                    [popupSettings]="null" [label]="'Kế hoạch dinh dưỡng'" [url]="urlGetDanhSachKeHoachDinhDuong"
+                    [(model)]="thongTinHoSoPhieuSangLocDinhDuong.KeHoachDinhDuong"
+                    [modelText]="thongTinHoSoPhieuSangLocDinhDuong.KeHoachDinhDuongDisplay"
+                    (selectionChange)="evtKeHoachDinhDuongChanged($event)"
+                    [validationerror]="'KeHoachDinhDuong' | validationerror: validationErrors">
+                </app-combobox>
+
+                <app-upload id="upload" #chuKyPhieuSangLocDinhDuong [allowedExtensions]="allowedExtensions"
+                    fxFlex="100%" [(model)]="noiTruHoSoKhac.FilesChuKy" [multiple]="true" label="File chữ ký"
+                    [template]="templateFileChuanDoanHAInfo">
+                </app-upload>
+                <ng-template #templateFileChuanDoanHAInfo let-files>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td>
+                                <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                                    (click)="chuKyPhieuSangLocDinhDuong.viewFile(files[0])"
+                                    class="custom-name red">{{files[0].name}}</a>
+                                <a *ngIf="!files[0].error" title="{{files[0].name}}"
+                                    (click)="chuKyPhieuSangLocDinhDuong.viewFile(files[0])" class="green"
+                                    class="custom-name green">{{files[0].name}}</a>
+                            </td>
+                            <td style="width:25px">
+                                <a type="button" (click)="chuKyPhieuSangLocDinhDuong.remove(files[0].uid)"
+                                    mat-icon-button>
+                                    <mat-icon [icIcon]="icClear"></mat-icon>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </div>
+        </div>
+
+        <p fxFlex="70%" fxFlex.md="70%" fxFlex.sm="100%">
+            Người thực hiện: <b>{{noiTruHoSoKhac.NhanVienThucHienDisplay}}</b>
+            Ngày thực hiện: <b>{{noiTruHoSoKhac.ThoiDiemThucHienDisplay}}</b>
+        </p>
+
+        <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+            <button type="button" class="mr-2" mat-button color="primary" style="pointer-events: all;"
+                (click)="in()">In</button>
+            <button type="button" class="mr-2" mat-button color="primary" (click)="huy()">Huỷ</button>
+            <button type="button" class="mr-2" color="primary" mat-raised-button
+                (click)="luuPhieuSangLocDinhDuong()">Lưu</button>
+        </div>
+    </div>
+</div>
+
+<ng-template #chieuCaoTemplate let-dataItem>
+    {{dataItem.ChieuCaoDisplay}}
+</ng-template>
+
+<ng-template #canNangTemplate let-dataItem>
+    {{dataItem.CanNangDisplay}}
+</ng-template>
+
+<ng-template #nangLuongTemplate let-dataItem>
+    {{dataItem.NangLuongDisplay}}
+</ng-template>
+
+<ng-template #damTemplate let-dataItem>
+    {{dataItem.DamDisplay}}
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-checkbox id="nhu-cau-dinh-duong-{{rowIndex + 1}}" [(model)]="dataItem.isCheck"
+        (modelChange)="evtNhuCauDinhDuongChanged($event, dataItem)"
+        [validationerror]="'dataItem[' + dataItem.Id + '].NhuCauDinhDuong' | validationerror: validationErrors">
+    </app-checkbox>
+</ng-template>

@@ -1,0 +1,137 @@
+<!-- <vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Marketing',Path:''}
+                    ,{Title:'Nhập kho',Path:'/danh-muc/marketing/nhap-kho-marketing', queryParams: {holdQuery : true}}
+                    ,{Title:'Nhập kho Chi Tiết',Path:'', Active:true} 
+                    ]">
+            </vex-breadcrumbs>
+
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <div class="row mb-3"></div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            class="paddingThemQuaTang">
+                            <app-textbox id="soPX" fxFlex="18%" [required]="true"
+                                [(model)]="nhapKhoChiTietMarketing.SoChungTu" maxlength="50" label="Số chứng từ">
+                            </app-textbox>
+                            <app-combobox id="NguoiNhap" fxFlex="18%" [required]="true"
+                                url="Marketing/GetNhanVienTaiBenhVien" [(model)]="nhapKhoChiTietMarketing.NguoiNhapId"
+                                [modelText]="nhapKhoChiTietMarketing.TenNguoiNhap" label="Người nhập"
+                                class="item-no-padding" [disabled]="true">
+                            </app-combobox>
+                            <app-radio id="LoaiNguoiGiao" fxFlex="28%" label="Loại người giao"
+                                [(model)]="nhapKhoChiTietMarketing.LoaiNguoiGiao" [required]="true"
+                                [items]="[{Value:1,Text:'Trong hệ thống'},{Value:2,Text:'Ngoài hệ thống'}]">
+                            </app-radio>
+                            <app-combobox id="NhanVienTaiBenhVien" fxFlex="18%" [required]="true" [required]="true"
+                                url="Marketing/GetNhanVienTaiBenhVien"
+                                [(model)]="nhapKhoChiTietMarketing.NhanVienGiaoId"
+                                [modelText]="nhapKhoChiTietMarketing.TenNguoiGiao" label="Tên người giao"
+                                class="item-no-padding">
+                            </app-combobox>
+
+                            <app-datepicker id="ngaynhap" fxFlex="18%" [required]="true"
+                                [(model)]="nhapKhoChiTietMarketing.NgayNhap" disabled={{true}} label="Ngày nhập">
+                            </app-datepicker>
+                            <span fxFlex="100%"><b>THÔNG TIN QUÀ TẶNG</b></span>
+                            <app-textbox id="NhaCungCap" fxFlex="18%" [required]="true"
+                                [(model)]="nhapKhoChiTietMarketing.NhaCungCap" maxlength="50" label="Nhà cung cấp">
+                            </app-textbox>
+                            <app-combobox id="QuaTang" fxFlex="21%" [required]="true"
+                                url="Marketing/GetListQuaTang"
+                                [(model)]="nhapKhoChiTietMarketing.QuaTang"
+                                [modelText]="nhapKhoChiTietMarketing.QuaTang" 
+                                (selectionChange)="ChangeQuaTang($event)"
+                                label="Quà Tặng" class="item-no-padding">
+                            </app-combobox>
+                            <app-textbox id="DVT" fxFlex="10%" [required]="true"
+                                [(model)]="nhapKhoChiTietMarketing.DonViTinh" maxlength="50" label="Đơn vị tính"
+                                [disabled]="true">
+                            </app-textbox>
+                            <app-textboxnumeric fxFlex="12%" label="Số lượng" (modelChange)="modelChangeSoLuong($event)"
+                                [(model)]="nhapKhoChiTietMarketing.SoLuong" [required]="true">
+                            </app-textboxnumeric>
+                            <app-textboxnumeric fxFlex="12%" label="Giá nhập" (modelChange)="modelChangeGiaNhap($event)"
+                                [(model)]="nhapKhoChiTietMarketing.GiaNhap" [required]="true">
+                            </app-textboxnumeric>
+
+                            <app-textboxnumeric fxFlex="12%" label="Thành tiền"
+                                [(model)]="nhapKhoChiTietMarketing.ThanhTien" [disabled]="true">
+                            </app-textboxnumeric>
+                            <div fxFlex="15%">
+                                <div style="padding-top: 11px !important;">
+                                    <button type="button" style="margin-right: 5px;" mat-raised-button mat-button
+                                        (click)="Huy()">
+                                        Hủy
+                                    </button>
+                                    <button type="button" color="primary" mat-raised-button mat-button (click)="Them()">
+                                        Thêm
+                                    </button>
+                                </div>
+                            </div>
+
+                            <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridColumns"
+                                #gridCreate [allowSortDefault]="true" [gridDataSource]="gridDataSource"
+                                [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+                                [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500"
+                                [pageable]="false" [groups]="groups">
+                            </app-grid>
+                            <ng-template #thanhTienTemplate let-dataItem>
+                                <span>{{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}</span>
+                            </ng-template>
+                            <ng-template #soLuongTemplate let-dataItem>
+                                <app-textboxnumeric class="no-label numeric-in-grid"
+                                (modelChange)="modelChangeSoLuongMua($event , dataItem)"
+                                [(model)]="dataItem.SoLuong">
+                            </app-textboxnumeric>
+                            </ng-template>
+                            <ng-template #giaNhapTemplate let-dataItem>
+                                <app-textboxnumeric class="no-label numeric-in-grid"
+                                (modelChange)="modelChangeGiaNhapMua($event , dataItem)"
+                                [(model)]="dataItem.GiaNhap">
+                            </app-textboxnumeric>
+                            </ng-template>
+                            <ng-template #TongCongFooter let-dataItem>
+                                <span style="color:blue">Tổng cộng :</span>
+                            </ng-template>
+                            <ng-template #TongCongThanhTienFooter let-dataItem>
+                                <span style="color:blue">{{TongCong | number:'0.2-2':'vi-VN'}}</span>
+                            </ng-template>
+                            <ng-template #actionemplate let-dataItem>
+                                <button type="button" class="float-right" mat-raised-button mat-button (click)="Xoa(dataItem)" style="background-color: red;color: white;">
+                                    Xóa
+                                </button>
+                            </ng-template>
+                            <ng-template #STTTemplate let-rowIndex="rowIndex">
+                                {{rowIndex + 1}}
+                            </ng-template>
+
+                            <div fxFlex="100%">
+                                <button type="button" class="float-right" style="margin-right: 5px;" color="primary"
+                                    mat-raised-button mat-button (click)="Luu()">
+                                    Lưu
+                                </button>
+                                <button type="button" class="float-right" mat-raised-button mat-button (click)="Huy()">
+                                    Hủy
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+
+</vex-page-layout> -->

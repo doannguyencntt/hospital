@@ -1,0 +1,217 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+	<div style="font: 500 18px/26px var(--font)">Thông tin gói bệnh nhân: <span style="color: green"> {{tenGoiDichVu}}
+		</span></div>
+
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+
+</div>
+<mat-dialog-content>
+	<div width="100%" fxLayout="row" class="mt-5">Chuyển gói:
+		<strong style="color: red;margin-left: 8px;">
+			{{tenBenhNhan}} ({{ngayThangNamSinh}} - {{soDienThoai}})
+		</strong>
+		<app-combobox id="goi-marketing" fxFlex="50%" fxFlex.sm="100%" label="Chọn gói mới muốn chuyển"
+			style="margin-top: -11px" url="ThuNganMarketing/GetListGoiMarketingChuyenGoi"
+			[(model)]="chonGoiMarketing.KeyId" [modelText]="chonGoiMarketing.DisplayName" class="ml-2 on-header"
+			[templateHeader]="goiTemplateHeader"
+			[queryInfo]="{ParameterDependencies:'{YeuCauGoiDichVuId:' + yeuCauGoiDichVuId +'}', Take: 50}"
+			(selectionChange)="selectionChangeGoiMarketing($event)" [template]="goiTemplate">
+			<ng-template #goiTemplateHeader let-dataItem>
+				<table width="100%" class="table-combobox">
+					<tr>
+						<th width="20%">Mã</th>
+						<th>Tên</th>
+					</tr>
+				</table>
+			</ng-template>
+			<ng-template #goiTemplate let-dataItem>
+				<table width="100%" class="table-combobox">
+					<tr>
+						<td width="20%">{{dataItem.Ma}}</td>
+						<td>{{dataItem.DisplayName}}</td>
+					</tr>
+				</table>
+			</ng-template>
+		</app-combobox>
+	</div>
+	<div width="100%" fxLayout="row" class="mt-2">
+		<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+			<ng-container>
+				<app-textbox id="maGoiMoi" fxFlex="50%" label="Mã gói mới" [required]="true"
+					[(model)]="luuThongTinChuyenGoiMoi.MaGoiMoi"
+					[validationerror]="'MaGoiMoi' | validationerror:validationErrors">
+				</app-textbox>
+				<app-textbox id="tenGoiMoi" fxFlex="50%" label="Tên gói mới" [required]="true"
+					[(model)]="luuThongTinChuyenGoiMoi.TenGoiMoi"
+					[validationerror]="'TenGoiMoi' | validationerror:validationErrors">
+				</app-textbox>
+				<app-grid fxFlex="50%" HideCheckAll="true" [gridColumns]="gridColumnGoiChuaChuyens"
+					[documentType]="documentType" [useHeaderDefault]="false" [useActionDefault]="false" 
+					[lazyLoadPage]="true" [checkboxAble]="false" [pageable]="false" height="500" #gridGoiChuaChuyen
+					[gridDataSource]="goiChuaChuyen">
+				</app-grid>
+				<app-grid fxFlex="50%" HideCheckAll="true" [gridColumns]="gridColumnGoiDaChuyens"
+					[documentType]="documentType" [useHeaderDefault]="false" [useActionDefault]="false" 
+					[lazyLoadPage]="true" [checkboxAble]="false" [pageable]="false" height="500" #gridGoiDaChuyen
+					[gridDataSource]="goiDaChuyen">
+				</app-grid>
+			</ng-container>
+
+			<!-- GRID DATA 1  CONTENT-->
+			<ng-template #sTTTemplateGrid1 let-rowIndex="rowIndex">
+				{{rowIndex + 1}}
+			</ng-template>
+
+			<ng-template #maDichVuChuaChuyenFooter let-dataItem>
+				Tổng cộng
+			</ng-template>
+
+			<ng-template #dgbvChuaChuyenTemplate let-dataItem>
+				{{dataItem.DonGiaBenhVien | number:'0.2-2':'vi-VN'}}
+			</ng-template>
+
+			<ng-template #donGiaTruocCKChuaChuyenTemplate let-dataItem>
+				{{dataItem.DonGiaTruocChietKhau | number:'0.2-2':'vi-VN'}}
+			</ng-template>
+
+			<ng-template #donGiaSauCKChuaChuyenTemplate let-dataItem>
+				{{dataItem.DonGiaSauChietKhau | number:'0.2-2':'vi-VN'}}
+			</ng-template>
+
+			<ng-template #thanhTienTruocCKChuaChuyenTemplate let-dataItem>
+				{{dataItem.ThanhTienTruocChietKhau | number:'0.2-2':'vi-VN'}}
+			</ng-template>
+
+			<ng-template #thanhTienSauCKChuaChuyenTemplate let-dataItem>
+				{{dataItem.ThanhTienSauChietKhau | number:'0.2-2':'vi-VN'}}
+			</ng-template>
+
+			<ng-template #thanhTienBvChuaChuyenTemplate let-dataItem>
+				{{dataItem.ThanhTienBenhVien | number:'0.2-2':'vi-VN'}}
+			</ng-template>
+
+			<ng-template #tongChiDonGiaTruocCKFooterChuaChuyenTemplate let-dataItem>
+				<span> {{totalChuaChuyen('DonGiaTruocChietKhau') | number:'0.2-2':'vi-VN'}}</span>
+			</ng-template>
+
+			<ng-template #tongChiDonGiaSauChietKhauFooterChuaChuyenTemplate let-dataItem>
+				<span> {{totalChuaChuyen('DonGiaSauChietKhau') | number:'0.2-2':'vi-VN'}}</span>
+			</ng-template>
+
+			<ng-template #tongChiThanhTienBenhVienFooterChuaChuyenTemplate let-dataItem>
+				<span> {{totalChuaChuyen('ThanhTienBenhVien') | number:'0.2-2':'vi-VN'}}</span>
+			</ng-template>
+
+			<ng-template #thanhTienTruocCKFooterChuaChuyenTemplate let-dataItem>
+				<span> {{totalChuaChuyen('ThanhTienTruocChietKhau') | number:'0.2-2':'vi-VN'}}</span>
+			</ng-template>
+
+			<ng-template #thanhTienSauCKFooterChuaChuyenTemplate let-dataItem>
+				<span> {{totalChuaChuyen('ThanhTienSauChietKhau') | number:'0.2-2':'vi-VN'}}</span>
+			</ng-template>
+
+			<ng-template #nhomGroupHeaderChuaChuyenTemplate let-value="value">
+				<strong>{{value}}</strong>
+			</ng-template>
+
+			<ng-template #transferTemplate1 let-dataItem>
+				<div style="text-align: left;">
+					<button (click)="dieuChuyenGoiChuaChuyenGrid1(dataItem)"
+						[ngClass]="['bg-gray-500', 'text-contrast-white']" kendoTooltip title="Chọn: {{dataItem.Ma}}"
+						class="p-0" style="min-width: 0;line-height: 26px;" mat-raised-button type="button">
+						<mat-icon [icIcon]="icRight"></mat-icon>
+					</button>
+				</div>
+			</ng-template>
+
+			<!-- GRID DATA 2  CONTENT-->
+			<ng-template #sTTTemplateGrid2 let-rowIndex="rowIndex">
+				{{rowIndex + 1}}
+			</ng-template>
+
+			<ng-template #maDichVuFooter let-dataItem>
+				Tổng cộng
+			</ng-template>
+
+			<ng-template #soluongGoiDaChuyenTemplate let-dataItem>
+				<app-textboxnumeric class="no-label p-0" fxFlex="100%" [(model)]="dataItem.SoLuong" decimals="2"
+					(modelChange)="modelChangeSoLuong(dataItem , $event)" [format]="format" min="0.00">
+				</app-textboxnumeric>
+			</ng-template>
+
+			<ng-template #dgbvTemplate let-dataItem>
+				{{dataItem.DonGiaBenhVien | number:'0.2-2':'vi-VN'}}
+			</ng-template>
+
+			<ng-template #donGiaTruocCKTemplate let-dataItem>
+				<app-textboxnumeric class="no-label p-0"
+					(modelChange)="modelChangeDonGiaTruocChiecKhau(dataItem , $event)"
+					[(model)]="dataItem.DonGiaTruocChietKhau" decimals="2" [format]="format" min="0.00">
+				</app-textboxnumeric>
+			</ng-template>
+
+			<ng-template #donGiaSauCKTemplate let-dataItem>
+				<app-textboxnumeric class="no-label p-0"
+					(modelChange)="modelChangeDonGiaSauChiecKhau(dataItem , $event)"
+					[(model)]="dataItem.DonGiaSauChietKhau" decimals="2" [format]="format" min="0.00">
+				</app-textboxnumeric>
+			</ng-template>
+
+			<ng-template #thanhTienTruocCKTemplate let-dataItem>
+				{{dataItem.ThanhTienTruocChietKhau | number:'0.2-2':'vi-VN'}}
+			</ng-template>
+
+			<ng-template #thanhTienSauCKTemplate let-dataItem>
+				{{dataItem.ThanhTienSauChietKhau | number:'0.2-2':'vi-VN'}}
+			</ng-template>
+
+			<ng-template #thanhTienBvDaChuyenTemplate let-dataItem>
+				{{dataItem.ThanhTienBenhVien | number:'0.2-2':'vi-VN'}}
+			</ng-template>
+
+			<ng-template #tongChiDonGiaTruocCKFooterDaChuyenTemplate let-dataItem>
+				<span> {{totalDaChuyen('DonGiaTruocChietKhau') | number:'0.2-2':'vi-VN'}}</span>
+			</ng-template>
+
+			<ng-template #tongChiDonGiaSauChietKhauFooterDaChuyenTemplate let-dataItem>
+				<span> {{totalDaChuyen('DonGiaSauChietKhau') | number:'0.2-2':'vi-VN'}}</span>
+			</ng-template>
+
+			<ng-template #tongChiThanhTienBenhVienFooterDaChuyenTemplate let-dataItem>
+				<span> {{totalDaChuyen('ThanhTienBenhVien') | number:'0.2-2':'vi-VN'}}</span>
+			</ng-template>
+
+			<ng-template #thanhTienTruocCKFooterDaChuyenTemplate let-dataItem>
+				<span> {{totalDaChuyen('ThanhTienTruocChietKhau') | number:'0.2-2':'vi-VN'}}</span>
+			</ng-template>
+
+			<ng-template #thanhTienSauCKFooterDaChuyenTemplate let-dataItem>
+				<span> {{totalDaChuyen('ThanhTienSauChietKhau') | number:'0.2-2':'vi-VN'}}</span>
+			</ng-template>
+
+			<ng-template #nhomGroupHeaderTemplate let-value="value">
+				<strong>{{value}}</strong>
+			</ng-template>
+
+			<ng-template #transferTemplate2 let-dataItem>
+				<button (click)="dieuChuyenGoiDaChuyenGrid2(dataItem)"
+					[ngClass]="['bg-gray-500', 'text-contrast-white']" kendoTooltip title="Bỏ chọn: {{dataItem.Ma}}"
+					class="p-0" style="min-width: 0;line-height: 26px;" mat-raised-button type="button">
+					<mat-icon [icIcon]="icLeft"></mat-icon>
+				</button>
+			</ng-template>
+		</div>
+	</div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<button type="button" (click)="huyChuyenGoi()" class="mr-2" title="Hủy chuyển gói" color="warn"
+		mat-raised-button>
+		<span>Hủy chuyển gói</span>
+	</button>
+	<button type="button" (click)="luuChuyenGoi()" title="Lưu" color="primary" mat-raised-button>
+		<span>Lưu</span>
+	</button>
+</mat-dialog-actions>

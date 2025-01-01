@@ -1,0 +1,34 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Hành chính - KSNK',Path:''}
+                ,{Title:'Xuất khác',Path:'/nhap-xuat/ksnk/xuat-kho-khac', Active: true}
+                ]">
+</app-header-form>
+
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Tạo yêu cầu xuất kho khác</h2>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-xuat-kho-khac-ksnk-shared [validationErrors]="validationErrors" [isCreate]="true"
+                    [trangThaiVo]="trangThaiVo">
+                </app-xuat-kho-khac-ksnk-shared>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" title="Phím tắt: Esc" (click)="cancel()" mat-button
+                        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Hủy</button>
+                    <button type="button" (click)="duyetXuat()" color="primary" mat-raised-button><i
+                            class="ft-save"></i> Duyệt Xuất</button>
+                            
+                    <button type="button" (click)="create()" color="primary" mat-raised-button><i class="ft-save"></i>
+                        Lưu</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

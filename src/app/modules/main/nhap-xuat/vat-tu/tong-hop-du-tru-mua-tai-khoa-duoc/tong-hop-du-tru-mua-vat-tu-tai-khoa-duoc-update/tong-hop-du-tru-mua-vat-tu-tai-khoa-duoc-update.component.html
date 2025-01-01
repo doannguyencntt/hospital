@@ -1,0 +1,32 @@
+<app-header-form [crumbs]="[
+{Title:'Nhập xuất',Path:''}
+,{Title:'Vật Tư',Path:''}
+,{Title:'Tổng Hợp Dự Trù Mua Vật Tư Tại Khoa Dược​',Path:'/nhap-xuat/vat-tu/tong-hop-du-tru-mua-vat-tu-tai-khoa-duoc',Active:true}
+]" [isicMoreVert]="false">
+</app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">CHI TIẾT DỰ TRÙ MUA VẬT TƯ</h2>
+                <b class="status-yeu-cau-linh {{trangThai.DuocDuyet == null ? 'ycl-cho-duyet': trangThai.DuocDuyet == false ? 'ycl-tu-choi' : 'ycl-da-duyet'}}">{{trangThai.TenTrangThai}}</b>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-tong-hop-du-tru-mua-vat-tu-tai-khoa-duoc-shared (trangThaiYeuCau)="getTrangThai($event)">
+                </app-tong-hop-du-tru-mua-vat-tu-tai-khoa-duoc-shared>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <span *ngIf="isShow === false">
+                        <button type="button" (click)="back()" mat-button class="mr-1 align-right-fx"><i
+                                class="ft-arrow-left"></i>
+                            Quay
+                            lại</button>
+                    </span>
+                    <!-- <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img
+                            src="/assets/img/loader.gif" alt="Loading" /></button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,20 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>BN Tử vong</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="height: 22vh;flex-direction: column;display: flex;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="p-2 mb-6 clear-margin-bottom">
+        <app-dropdownlist [disabled]="IsDaTuongTrinh" [required]="true" id="thoi-gian-tu-vong" fxFlex="50%" fxFlex.sm="100%" label="Thời gian tử vong" url="PhauThuatThuThuat/GetListThoiGianTuVongPTTTTrongNgay" [(model)]="ttTuVong.TgTuVong" [modelText]="ttTuVong.TgTuVongDisplay"
+            [validationerror]="'TgTuVong' | validationerror:validationErrors">
+        </app-dropdownlist>
+
+        <app-dropdownlist [disabled]="IsDaTuongTrinh" [required]="true" id="tu-vong" fxFlex="50%" fxFlex.sm="100%" label="Tử vong" url="PhauThuatThuThuat/GetListTuVongPTTTTrongNgay" [(model)]="ttTuVong.TuVong" [modelText]="ttTuVong.TuVongDisplay" [validationerror]="'TuVong' | validationerror:validationErrors">
+        </app-dropdownlist>
+    </div>
+    <div style="flex-direction: row;justify-content: flex-end;align-items: flex-end;display: flex;margin: 0;" fxFlex="100%" class="mt-2">
+        <button type="button" color="primary" mat-stroked-button mat-button class="mr-1 mt-2" (click)="close()">Không</button>
+        <button *ngIf="!IsDaTuongTrinh" type="button" style="background: #005dab; color: white;" mat-raised-button mat-button class="mr-1 mt-2" (click)="confirmTuVong()">Có</button>
+    </div>
+</mat-dialog-content>

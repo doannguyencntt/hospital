@@ -1,0 +1,130 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Kế toán',Path:''}
+                ,{Title:'Duyệt yêu cầu điều chuyển kho nội bộ',Path:'/ke-toan/duyet-dieu-chuyen-duoc-pham',queryParams: {holdQuery : true},Active:true}
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Duyệt yêu cầu điều chuyển kho nội bộ</h2>
+                <b class="status-yeu-cau-linh ycl-cho-duyet" *ngIf="yeuCauDieuChuyenDuocPham.DuocKeToanDuyet == true"
+                    style="color:green">Đã duyệt</b>
+                <b class="status-yeu-cau-linh ycl-cho-duyet" *ngIf="yeuCauDieuChuyenDuocPham.DuocKeToanDuyet == false"
+                    style="color:red">Từ chối duyệt</b>
+                <b class="status-yeu-cau-linh ycl-cho-duyet" *ngIf="yeuCauDieuChuyenDuocPham.DuocKeToanDuyet == null"
+                    style="color:orange">Chờ duyệt</b>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+                    <div fxFlex="100%" *ngIf="yeuCauDieuChuyenDuocPham.DuocKeToanDuyet == false">
+                        <h4 style="color: red;">Lý do: {{yeuCauDieuChuyenDuocPham.LyDoKhongDuyet}}</h4>
+                    </div>
+
+                    <app-combobox id="KhoXuatId" fxFlex="25%" fxFlex.sm="25%"
+                        [(model)]="yeuCauDieuChuyenDuocPham.KhoXuatId" [required]="true"
+                        [modelText]="yeuCauDieuChuyenDuocPham.TenKhoXuat" label="Kho xuất"
+                        (modelChange)="TimkiemNangCao()" [disabled]="true"
+                        [queryInfo]="{ParameterDependencies:'{KhoId:' + yeuCauDieuChuyenDuocPham.KhoXuatId +'}', Take: 50}"
+                        url="XuatKhoDieuChuyenKhoNoiBoDuocPham/GetKhoTongCap2VaNhaThuocs"
+                        [validationerror]="'KhoXuatId' | validationerror:validationErrors">
+                    </app-combobox>
+
+                    <app-combobox id="KhoNhapId" fxFlex="25%" fxFlex.sm="25%"
+                        [(model)]="yeuCauDieuChuyenDuocPham.KhoNhapId" [modelText]="yeuCauDieuChuyenDuocPham.TenKhoNhap"
+                        label="Kho nhập" [disabled]="true"
+                        [queryInfo]="{ParameterDependencies:'{KhoId:' + yeuCauDieuChuyenDuocPham.KhoNhapId +'}', Take: 50}"
+                        url="XuatKhoDieuChuyenKhoNoiBoDuocPham/GetKhoTongCap2VaNhaThuocs" [required]="true"
+                        [validationerror]="'KhoNhapId' | validationerror:validationErrors">
+                    </app-combobox>
+
+                    <app-combobox id="NguoiXuatId" fxFlex="25%" fxFlex.sm="25%"
+                        [(model)]="yeuCauDieuChuyenDuocPham.NguoiXuatId" [required]="true"
+                        [modelText]="yeuCauDieuChuyenDuocPham.TenNguoiXuat" label="Người xuất"
+                        url="YeuCauLinhDuocPham/GetCurrentUser" [disabled]="true"
+                        [validationerror]="'NguoiXuatId' | validationerror:validationErrors">
+                    </app-combobox>
+
+                    <app-combobox id="NguoiNhapId" fxFlex="25%" fxFlex.sm="25%"
+                        [(model)]="yeuCauDieuChuyenDuocPham.NguoiNhapId" [required]="true"
+                        [modelText]="yeuCauDieuChuyenDuocPham.TenNguoiNhap" label="Người nhập" [disabled]="true"
+                        url="XuatKhoDieuChuyenKhoNoiBoDuocPham/GetNguoiNhap"
+                        [queryInfo]="{ParameterDependencies:'{NguoiNhapId:' + yeuCauDieuChuyenDuocPham.NguoiNhapId +'}', Take: 50}"
+                        [validationerror]="'NguoiNhapId' | validationerror:validationErrors">
+                    </app-combobox>
+
+                    <app-grid #gridDuocPhamDieuChuyenDaTaoYeuCau fxFlex="100%" HideCheckAll="true"
+                        [gridColumns]="gridColumnsUpdateDuyet" [documentType]="documentType"
+                        [urlGetData]="urlGetDataDaTaoYeuCau" (extOnDataBound)="onDataBoundChild($event)"
+                        [urlGetTotalPage]="urlGetTotalDaTaoYeuCau" [useHeaderDefault]="false" [useActionDefault]="false"
+                        [lazyLoadPage]="true" [checkboxAble]="false" pageSize="50" height="500"
+                        [headerTemplate]="headerTemplateDaTaoYeuCau" [groups]="groups">
+                    </app-grid>
+
+                    <ng-template #headerTemplateDaTaoYeuCau>
+                        <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row"
+                            fxLayoutAlign="start center">
+                            <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px"
+                                fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                                <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                                <input [formControl]="searchCtrl"
+                                    class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search"
+                                    name="searchString"
+                                    [(ngModel)]="yeuCauDieuChuyenDuocPhamChiTietTheoKhoXuatVoSearch.SearchString"
+                                    (keyup)="onKeyGridDaTaoYeuCau($event)"
+                                    (ngModelChange)="searchChangesDaTaoYeuCau($event)" placeholder="Nhập từ khóa..." />
+                            </div>
+                        </div>
+                    </ng-template>
+
+                    <ng-template #hsdTemplate let-dataItem>
+                        {{dataItem.HanSuDungDisplay}}
+                    </ng-template>
+
+                    <ng-template #donGiaTemplate let-dataItem>
+                        {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+                    <ng-template #thanhTienTemplate let-dataItem>
+                        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #donGiaFooterTemplate>
+                        <span style="float:right">Tổng tiền xuất </span>
+                    </ng-template>
+
+                    <ng-template #thanhTienFooterGrid3Template let-dataItem>
+                        <p style="color: blue; font-weight: bold;">
+                            <span>{{totalThanhTien('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+                    </ng-template>
+
+                    <ng-template #soLuongXuatGrid2Template let-dataItem let-rowIndex="rowIndex">
+                        {{dataItem.SoLuongDieuChuyen | number:'1.0':'vi-VN' }}
+                    </ng-template>
+
+                    <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem>
+                        <strong>{{value}}</strong>
+                    </ng-template>
+                </div>
+
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" (click)="inPhieu()" color="primary" mat-raised-button><i
+                        class="ft-arrow-left"></i> In Phiếu</button>
+                    <button type="button" title="Phím tắt: Esc" (click)="cancel()" mat-button
+                        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Quay lại</button>
+                    <button *ngIf="yeuCauDieuChuyenDuocPham.DuocKeToanDuyet == null" type="button"
+                        (click)="duyetDieuChuyenThuoc()" color="primary" mat-raised-button><i class="ft-save"></i>
+                        Duyệt</button>
+
+                    <button *ngIf="yeuCauDieuChuyenDuocPham.DuocKeToanDuyet == null" type="button" mat-raised-button
+                        color="warn" (click)="khongDuyetDieuChuyenThuoc()"><i class="ft-save"></i>
+                        Không duyệt</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

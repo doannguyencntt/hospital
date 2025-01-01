@@ -1,0 +1,15 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-0">
+    <div>PHIẾU HOÀN TRẢ VẬT TƯ</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <div class="container-iframe"><iframe width="100%" [src]="src| safe" allowTransparency="true"
+            background="transparent"></iframe>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <app-print-form fxFlex='100%' class="mr-1 mt-2" textPrint="In phiếu" type="PDF" [bodyComponent]="this">
+    </app-print-form>
+</mat-dialog-actions>

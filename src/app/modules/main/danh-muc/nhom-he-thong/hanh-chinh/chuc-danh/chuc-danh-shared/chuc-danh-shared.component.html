@@ -1,0 +1,43 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="Textbox1" fxFlex="25%" fxFlex.sm="25%" maxlength="50" [required]="true" [(model)]="chucDanh.Ma"
+        label="Mã" [validationerror]="'Ma' | validationerror:validationErrors" [disabled]="chucDanh.IsDefault">
+    </app-textbox>
+    <app-textbox id="Textbox" fxFlex="25%" fxFlex.sm="25%" maxlength="250" [required]="true" [(model)]="chucDanh.Ten"
+        label="Tên" [validationerror]="'Ten' | validationerror:validationErrors" [disabled]="chucDanh.IsDefault">
+    </app-textbox>
+
+    <!-- <app-dropdownlist id="TenNhomChucDanh" fxFlex="25%" fxFlex.sm="5%" [(model)]="chucDanh.NhomChucDanhId"
+        [required]="true" [modelText]="chucDanh.TenNhomChucDanh" label="Tên Nhóm Chức Danh"
+        url="ChucDanh/GetListNhomChucDanh" [validationerror]="'TenNhomChucDanh' | validationerror:validationErrors" 
+        [disabled]="chucDanh.IsDefault">
+    </app-dropdownlist> -->
+    <app-dropdownlist id="TenNhomChucDanh" fxFlex="25%" fxFlex.sm="25%" label="Tên Nhóm Chức Danh"
+        hierarchyKeyToSend="TenNhomChucDanh" url="ChucDanh/GetListNhomChucDanh" [(model)]="chucDanh.NhomChucDanhId"
+        [modelText]="chucDanh.TenNhomChucDanh" class="item-no-padding" [template]="TenNhomChucDanhTemplate"
+        [templateHeader]="TenNhomChucDanhTemplateHeader" [required]="true"
+        [validationerror]="'NhomChucDanhId' | validationerror:validationErrors" [disabled]="chucDanh.IsDefault">
+        <ng-template #TenNhomChucDanhTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #TenNhomChucDanhTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-dropdownlist>
+    <app-radio fxFlex="25%" fxFlex.sm="25%" id="IsDisabled" name="IsOfficial"
+        [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" [(model)]="chucDanh.IsDisabled" label="Sử Dụng"
+        [validationerror]="'IsDisabled' | validationerror:validationErrors" [disabled]="chucDanh.IsDefault">
+    </app-radio>
+    <app-textarea id="Textarea" fxFlex="100%" [(model)]="chucDanh.MoTa" label="Mô Tả" maxlength="2000"
+        [validationerror]="'MoTa' | validationerror:validationErrors" [disabled]="chucDanh.IsDefault">
+    </app-textarea>
+</div>

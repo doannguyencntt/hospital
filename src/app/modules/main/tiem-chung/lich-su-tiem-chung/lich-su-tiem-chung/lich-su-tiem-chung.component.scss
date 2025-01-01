@@ -1,0 +1,19 @@
+.thoi-gian-cach-lich-hen-numeric {
+    margin-left: 5px;
+    flex: 1 1 300px;
+    box-sizing: border-box;
+    max-width: 300px;
+    min-width: 300px;
+    height: 41px;
+
+    .k-textbox-container {
+        border-radius: 9999px;
+        background-color: white;
+        height: 41px;
+        padding-top: 5px;
+
+        .k-label {
+            top: calc(1.03125em + 1px);
+        }
+    }
+}

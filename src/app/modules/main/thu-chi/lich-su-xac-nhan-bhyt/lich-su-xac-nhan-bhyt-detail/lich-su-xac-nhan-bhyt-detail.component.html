@@ -1,0 +1,242 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Ngoại Trú',Path:''},
+            {Title:'Xác Nhận BHYT',Path:''},
+            {Title:'Lịch Sử Xác Nhận BHYT',Path:'/lich-su-xac-nhan-bhyt/ngoai-tru', queryParams: {holdQuery : true}, Active:true}
+                    ]">
+            </vex-breadcrumbs>
+            <app-hot-key [keys]="[
+                {Key:'Esc',Description:'Quay lại', End:true}
+            ]"></app-hot-key>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="auto">
+                    <div class="px-6 py-4" fxLayout="column">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+
+                            <!-- Thông tin hành chính -->
+                            <div fxFlex="100%" class="mb-3">
+                                <fieldset>
+                                    <legend>Thông tin hành chính</legend>
+                                    <div fxFlex="100%">
+                                        <ul class="inline">
+                                            <li>Mã TN:
+                                                <strong>
+                                                    {{thongTinHanhChinh.MaTN}}
+                                                </strong>
+                                            </li>
+                                            <li>Mã NB:
+                                                <strong>
+                                                    {{thongTinHanhChinh.MaBN}}
+                                                </strong>
+                                            </li>
+                                            <li>Họ Tên:
+                                                <strong>
+                                                    {{thongTinHanhChinh.HoTen}}
+                                                </strong>
+                                            </li>
+                                            <li>Năm Sinh:
+                                                <strong>
+                                                    {{thongTinHanhChinh.NamSinh}}
+                                                </strong>
+                                            </li>
+                                            <li>Địa chỉ:
+                                                <strong>
+                                                    {{thongTinHanhChinh.DiaChi}}
+                                                </strong>
+                                            </li>
+                                            <li>Số điện thoại:
+                                                <strong>
+                                                    {{thongTinHanhChinh.SoDienThoaiStr}}
+                                                </strong>
+                                            </li>
+                                            <li>Email:
+                                                <strong>
+                                                    {{thongTinHanhChinh.Email}}
+                                                </strong>
+                                            </li>
+                                            <li>Đối tượng ưu đãi:
+                                                <strong>
+                                                    {{thongTinHanhChinh.DoiTuongUuDai}}
+                                                </strong>
+                                            </li>
+                                            <li>Công ty ưu đãi:
+                                                <strong>
+                                                    {{thongTinHanhChinh.CongTyUuDai}}
+                                                </strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <!-- Thông tin bảo hiểm y tế -->
+                            <div fxFlex="100%" class="mb-3">
+                                <fieldset>
+                                    <legend>Thông tin BHYT</legend>
+                                    <div fxFlex="100%">
+                                        <ul class="inline">
+                                            <li>Số thẻ:
+                                                <strong>
+                                                    {{thongTinBaoHiemXaHoi.SoThe}}
+                                                </strong>
+                                            </li>
+                                            <li>Ngày hiệu lực:
+                                                <strong>
+                                                    {{thongTinBaoHiemXaHoi.NgayHieuLucStr}}
+                                                </strong>
+                                            </li>
+                                            <li>Ngày hết hạn:
+                                                <strong>
+                                                    {{thongTinBaoHiemXaHoi.NgayHetHanStr}}
+                                                </strong>
+                                            </li>
+                                            <li>Nơi đăng ký khám BH:
+                                                <strong>
+                                                    {{thongTinBaoHiemXaHoi.NoiDangKyKhamBenh}}
+                                                </strong>
+                                            </li>
+                                            <li>Mức hưởng:
+                                                <strong>
+                                                    {{thongTinBaoHiemXaHoi.MucHuong}} %
+                                                </strong>
+                                            </li>
+                                            <li>Tuyến khám:
+                                                <strong class="color-green">
+                                                    {{thongTinBaoHiemXaHoi.TuyenKham}}
+                                                </strong>
+                                            </li>
+                                            <li>Giấy chuyển viện:
+                                                <strong *ngIf="thongTinBaoHiemXaHoi.GiayChuyenVien !== null">
+                                                    <a class="color-blue"
+                                                        (click)="viewDocument(thongTinBaoHiemXaHoi.GiayChuyenVienId, 1)">{{thongTinBaoHiemXaHoi.GiayChuyenVien}}
+                                                    </a>
+                                                </strong>
+                                            </li>
+                                            <li>Giấy miễn cùng chi trả:
+                                                <strong *ngIf="thongTinBaoHiemXaHoi.GiayMiemCungTriTra !== null">
+                                                    <a class="color-blue"
+                                                        (click)="viewDocument(thongTinBaoHiemXaHoi.GiayMienCungTriTraId, 2)">{{thongTinBaoHiemXaHoi.GiayMiemCungTriTra}}
+                                                    </a>
+                                                </strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div fxFlex="100%" class="mb-3">
+                                <fieldset>
+                                    <legend>Thông tin xét duyệt</legend>
+                                    <div fxFlex="100%">
+                                        <ul class="inline">
+                                            <li>Người duyệt:
+                                                <strong>
+                                                    {{thongTinDuyet.NhanVienDuyet}}
+                                                </strong>
+                                            </li>
+                                            <li>Thời điểm duyệt:
+                                                <strong>
+                                                    {{thongTinDuyet.ThoiDiemDuyet}}
+                                                </strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div fxFlex="100%" class="mb-3">
+                                <fieldset>
+                                    <legend>Thông tin đã xác nhận BHYT</legend>
+                                    <div class="mt-1">
+                                        <app-grid [gridColumns]="gridColumnsXacNhanBHYT" [useAddDeault]="false"
+                                            class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+                                            [checkboxAble]="false" [documentType]="documentType" [autoHeight]="true"
+                                            style="width: 1px;" [pageable]="false" [groups]="groups"
+                                            [urlGetData]="urlGetDataGrid" [urlGetTotalPage]="urlGetTotalPageGrid"
+                                            additionalSearchString={{thisId}}
+                                            (extOnDataBound)="onDataBoundChild($event)" masterName="XacNhan"
+                                            [removeGroupFooterIfIsOnlyOne]="true">
+                                        </app-grid>
+                                        <ng-template #orderTemplate let-i="rowIndex"><span>{{i+1}}</span></ng-template>
+                                        <!-- Đơn giá bệnh viện template-->
+                                        <ng-template #donGiaBenhVienTemplate let-dataItem>
+                                            {{dataItem.DonGiaBenhVien | number:'0.2-2':'vi-VN'}}
+                                        </ng-template>
+
+                                        <ng-template #templateDGBHYTCT let-dataItem>
+                                            {{dataItem.DGBHYTChiTra | number:'0.2-2':'vi-VN'}}
+                                        </ng-template>
+
+                                        <!-- Thành tiền custome grid -->
+                                        <ng-template #thanhTienTemplate let-dataItem>
+                                            {{dataItem.ThanhTienBenhVien | number:'0.2-2':'vi-VN'}}
+                                        </ng-template>
+                                        <ng-template #thanhTienGroupFooterTemplate let-aggregates>
+                                            {{aggregates.ThanhTienBenhVien.sum | number:'0.2-2':'vi-VN'}}
+                                        </ng-template>
+                                        <ng-template #donGiaGroupFooterTemplate let-dataItem>
+                                            <span style="float: right;">Cộng:</span>
+                                        </ng-template>
+                                        <ng-template #donGiaFooterTemplate let-dataItem>
+                                            <span style="float: right;">Tổng:</span>
+                                        </ng-template>
+                                        <ng-template #thanhTienFooterTemplate let-dataItem>
+                                            <span style="color:blue">{{totalThanhTien('ThanhTienBenhVien') |
+                                                number:'0.2-2':'vi-VN'}}</span>
+                                        </ng-template>
+
+                                        <ng-template #dgbhytThamKhaoTemplate let-dataItem>
+                                            {{dataItem.DGBHYTThamKhao | number:'0.2-2':'vi-VN'}}
+                                        </ng-template>
+
+                                        <ng-template #thanhTienBHYTThamKhaoTemplate let-dataItem>
+                                            {{dataItem.ThanhTienBHYTThamKhao | number:'0.2-2':'vi-VN'}}
+                                        </ng-template>
+
+
+                                        <ng-template #ttBHYTChiTraTemplate let-dataItem>
+                                            {{dataItem.TTBHYTChiTra | number:'0.2-2':'vi-VN'}}
+                                        </ng-template>
+                                        <ng-template #ttBHYTChiTraGroupFooterTemplate let-aggregates>
+                                            {{aggregates.TTBHYTChiTra.sum | number:'0.2-2':'vi-VN'}}
+                                        </ng-template>
+                                        <ng-template #ttBHYTChiTraFooterTemplate let-dataItem>
+                                            <span style="color:red">{{totalTTBHYTChiTra('TTBHYTChiTra') |
+                                                number:'0.2-2':'vi-VN'}}</span>
+                                        </ng-template>
+
+                                        <ng-template #nhomGroupHeaderTemplate let-value="value">
+                                            <strong>{{value}}</strong>
+                                        </ng-template>
+
+                                        <ng-template #tiLeTheoDvTemplate let-dataItem>
+                                            <span>{{dataItem.TiLeDv}}%</span>
+                                        </ng-template>
+                                        <ng-template #mucHuongTemplate let-dataItem>
+                                            <span>{{dataItem.MucHuong}}%</span>
+                                        </ng-template>
+                                        <!--END GRID DANH SÁCH ĐANG CHỜ XÁC NHẬN BHYT -->
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" kendoTooltip>
+                            <button (click)="phieuLinhThuocBenhNhanBHYT()" color="primary" mat-raised-button
+                                class="mr-2"> Phiếu lĩnh thuốc
+                            </button>                         
+                            <button (click)="onHuy()" type="button" color="" mat-raised-button
+                                title="Phím tắt: ESC">Quay lại</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,213 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'Kế Toán', Path:''},
+                    {Title:'Sổ Chi Tiết Vật Tư Hàng Hóa', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+
+                <app-combobox id="KhoId" fxFlex="15%" fxFlex.sm="15%" class="mt-1 on-header" label="Kho" bind="true"
+                    url="BaoCao/GetKhoHangHoa" [(model)]="baoCaoSearch.KhoId" [autoSelectFirstItem]="true"
+                    (selectionChange)="KhoChange($event)">
+                </app-combobox>
+
+                <app-combobox id="duocPhamHoacVatTuBenhVienId" fxFlex="15%" fxFlex.sm="15%" popupSettings=""
+                    class="mt-1 on-header pb-0 mr-1" label="Dược Phẩm và Vật Tư" bind="true"
+                    url="BaoCao/GetKhoDuocPhamVatTuTheoKhoHangHoa"
+                    (selectionChange)="DuocPhamHoacVatTuBenhVienChange($event)"
+                    [(model)]="baoCaoSearch.DuocPhamHoacVatTuBenhVienId" [autoSelectFirstItem]="true"
+                    [queryInfo]="{ParameterDependencies:'{KhoId:' + baoCaoSearch.KhoId + '}', Take: 50}">
+                </app-combobox>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="35%" fxFlex.sm="35%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                    <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 mt-2" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" [ngStyle]="{'min-height': height+'px'}" class="pb-0">
+                    <kendo-grid [data]="gridView" class="k-grid1 grid-bao-cao" [pageable]="true" [resizable]="true"
+                        [height]="height" [pageSize]="pageSize" [skip]="skip" (pageChange)="pageChange($event)"
+                        id="baoCaoGrid" #baoCaoGrid [group]="groups">
+                        <kendo-grid-column hidden="true" field="GroupNgayXuatNhap" width="0">
+                            <ng-template kendoGridGroupHeaderTemplate let-group="group" let-aggregates="aggregates">
+                                <span title="">
+                                    Tổng cộng tháng: {{group.value.slice(0,2)}}
+                                </span>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(0)}}" title="{{getTitleColumn(0)}}"
+                            width="{{getWidthColumn(0)}}"
+                            [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                {{rowIndex + 1}}
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(1)}}" title="{{getTitleColumn(1)}}"
+                            width="{{getWidthColumn(1)}}"
+                            [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.NgayXuatNhapStr}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column-group title="Chừng Từ">
+                            <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                <div class="text-center">{{getTitleColumn(2)}}</div>
+                            </ng-template>
+                            <kendo-grid-column field="{{getFieldColumn(3)}}" title="{{getTitleColumn(3)}}"
+                                width="{{getWidthColumn(3)}}" [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div> {{ dataItem.SoChungTu}}</div>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <kendo-grid-column field="{{getFieldColumn(4)}}" title="{{getTitleColumn(4)}}"
+                                width="{{getWidthColumn(4)}}" [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div> {{ dataItem.NgayChungTuStr }}</div>
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid-column-group>
+
+                        <kendo-grid-column field="{{getFieldColumn(5)}}" title="{{getTitleColumn(5)}}"
+                            width="{{getWidthColumn(5)}}"
+                            [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.DienGiai}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(6)}}" title="{{getTitleColumn(6)}}"
+                            width="{{getWidthColumn(6)}}"
+                            [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.DonGia | number:'0.2-2':'vi-VN'}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column-group title="Nhập">
+                            <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                <div class="text-center">{{getTitleColumn(7)}}</div>
+                            </ng-template>
+                            <kendo-grid-column field="{{getFieldColumn(8)}}" title="{{getTitleColumn(8)}}"
+                                width="{{getWidthColumn(8)}}" [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div> {{ dataItem.SoLuongNhap}}</div>
+                                </ng-template>
+                                <ng-template kendoGridGroupFooterTemplate let-aggregates let-field="field">
+                                    <span>{{aggregates.SoLuongNhap.sum}}</span>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(9)}}" title="{{getTitleColumn(9)}}"
+                                width="{{getWidthColumn(9)}}" [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div> {{ dataItem.ThanhTienNhap | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                                <ng-template kendoGridGroupFooterTemplate let-aggregates let-field="field">
+                                    <span>{{aggregates.ThanhTienNhap.sum | number:'0.2-2':'vi-VN'}}</span>
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid-column-group>
+
+                        <kendo-grid-column-group title="Xuat">
+                            <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                <div class="text-center">{{getTitleColumn(10)}}</div>
+                            </ng-template>
+                            <kendo-grid-column field="{{getFieldColumn(11)}}" title="{{getTitleColumn(11)}}"
+                                width="{{getWidthColumn(11)}}" [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div> {{ dataItem.SoLuongXuat}}</div>
+                                </ng-template>
+                                <ng-template kendoGridGroupFooterTemplate let-aggregates let-field="field">
+                                    <span>{{aggregates.SoLuongXuat.sum}}</span>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(12)}}" title="{{getTitleColumn(12)}}"
+                                width="{{getWidthColumn(12)}}" [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div> {{ dataItem.ThanhTienXuat  | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                                <ng-template kendoGridGroupFooterTemplate let-aggregates let-field="field">
+                                    <span>{{aggregates.ThanhTienXuat.sum | number:'0.2-2':'vi-VN'}}</span>
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid-column-group>
+
+                        <kendo-grid-column-group title="Tồn">
+                            <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                <div class="text-center">{{getTitleColumn(13)}}</div>
+                            </ng-template>
+                            <kendo-grid-column field="{{getFieldColumn(14)}}" title="{{getTitleColumn(14)}}"
+                                width="{{getWidthColumn(14)}}" [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div> {{ dataItem.SoLuongTon}}</div>
+                                </ng-template>
+                                <ng-template kendoGridGroupFooterTemplate let-aggregates let-field="field"
+                                    let-group="group">
+                                    <span> {{ soLuongTonCuoiCung(group)}}</span>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(15)}}" title="{{getTitleColumn(15)}}"
+                                width="{{getWidthColumn(15)}}" [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div> {{ dataItem.ThanhTienTon  | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                                <ng-template kendoGridGroupFooterTemplate let-aggregates let-field="field" let-group="group">
+                                    <span>{{soLuongTonThanhTien(group) | number:'0.2-2':'vi-VN'}}</span>
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid-column-group>
+
+                        <kendo-grid-messages noRecords="Không có dữ liệu." pagerOf="trong số" pagerItems="dòng"
+                            detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết">
+                        </kendo-grid-messages>
+
+                        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+                            <div style="justify-content: center;" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                fxLayoutAlign="space-between" fxFlex="100%" *ngIf="_showDefaultPagerTemplate">
+                                <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                                <kendo-pager-numeric-buttons [buttonCount]="5" class="d-none d-sm-none d-md-block">
+                                </kendo-pager-numeric-buttons>
+                                <button *ngIf="_isLoadingTotalPage" kendoButton
+                                    class="btn btn-raised btn-default btn-min-width mb-0">
+                                    <img src="/assets/img/loader_circle.gif" alt="Đang tính..." style="height: 20px;" />
+                                </button>
+                                <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                                <kendo-pager-info></kendo-pager-info>
+                                <div kendoTooltip class="k-icon k-i-refresh"
+                                    style="order: 10;cursor: pointer; align-self: center;" title="Làm mới"
+                                    (click)="XemBaoCao()"></div>
+                                <div *ngIf="_isLoading" class="grid-loading k-i-loading"></div>
+                            </div>
+                        </ng-template>
+                    </kendo-grid>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

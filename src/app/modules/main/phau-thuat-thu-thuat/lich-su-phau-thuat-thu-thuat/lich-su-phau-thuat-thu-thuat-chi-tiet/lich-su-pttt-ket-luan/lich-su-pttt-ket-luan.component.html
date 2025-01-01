@@ -1,0 +1,52 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mt-0">Tình Trạng</h3>
+    <label *ngIf="thongTinLichSuKetLuanPTTT != null">{{thongTinLichSuKetLuanPTTT.TinhTrangDisplay}}</label>
+
+    <label *ngIf="thongTinLichSuKetLuanPTTT == null">Không có tình trạng theo dõi.</label>
+
+    <div *ngIf="thongTinLichSuKetLuanPTTT != null" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+        fxLayoutGap.lt-sm="0" fxFlex="100%">
+        <h3 fxFlex="100%"
+            *ngIf="thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.BacSiPhuTrachTheoDoi != null"
+            class="sub-title mt-0">Bác sĩ phụ trách</h3>
+        <label *ngIf="thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.BacSiPhuTrachTheoDoi != null">
+            {{thongTinLichSuKetLuanPTTT.BacSiPhuTrachTheoDoi}}</label>
+        <!-- <label
+            *ngIf="thongTinLichSuKetLuanPTTT == null ||(thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.BacSiPhuTrachTheoDoi == null)">
+            Không có bác sĩ phụ trách theo dõi.</label> -->
+
+        <h3 fxFlex="100%"
+            *ngIf="thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.DieuDuongPhuTrachTheoDoi != null"
+            class="sub-title mt-0">Điều dưỡng phụ trách</h3>
+        <label *ngIf="thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.DieuDuongPhuTrachTheoDoi != null">
+            {{thongTinLichSuKetLuanPTTT.DieuDuongPhuTrachTheoDoi}}</label>
+        <!-- <label *ngIf="thongTinLichSuKetLuanPTTT == null ||(thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.DieuDuongPhuTrachTheoDoi == null)">
+            Không có điều dưỡng phụ trách theo dõi.</label> -->
+
+
+        <h3 fxFlex="100%" *ngIf="thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.BacSiPhuTrachTheoDoi != null"
+            class="sub-title mt-0">Thời gian theo dõi đến</h3>
+        <label *ngIf="thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.BacSiPhuTrachTheoDoi != null">
+            {{thongTinLichSuKetLuanPTTT.ThoiDiemTheoDoi}}</label>
+        <!-- <label
+            *ngIf="thongTinLichSuKetLuanPTTT == null ||(thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.ThoiDiemTheoDoi == null)">
+            Không có thời gian theo dõi.</label> -->
+
+        <h3 fxFlex="100%" class="sub-title mt-0">Ghi chú</h3>
+        <label *ngIf="thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.GhiChuTheoDoi != null">
+            {{thongTinLichSuKetLuanPTTT.GhiChuTheoDoi}}</label>
+        <label
+            *ngIf="thongTinLichSuKetLuanPTTT == null ||(thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.GhiChuTheoDoi == null)">
+            Không có ghi chú.</label>
+    </div>
+
+    <!-- <div *ngIf="thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.TinhTrang == 2" fxLayout="row wrap"
+        fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxFlex="100%">
+        <h3 fxFlex="100%" class="sub-title mt-0">Ghi chú</h3>
+        <label *ngIf="thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.GhiChuTheoDoi != null">
+            {{thongTinLichSuKetLuanPTTT.GhiChuTheoDoi}}</label>
+        <label
+            *ngIf="thongTinLichSuKetLuanPTTT == null ||(thongTinLichSuKetLuanPTTT != null && thongTinLichSuKetLuanPTTT.GhiChuTheoDoi == null)">
+            Không có ghi chú.</label>
+    </div> -->
+</div>

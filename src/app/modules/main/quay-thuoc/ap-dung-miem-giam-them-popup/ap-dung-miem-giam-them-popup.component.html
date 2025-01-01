@@ -1,0 +1,52 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="font: 500 18px/26px var(--font)">
+        MIỄN GIẢM TẤT CẢ DỊCH VỤ
+    </div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <div width="100%" fxLayout="row">
+        <table class="table table-border" width="100%">
+            <tr>
+                <td width="100%">
+                    <app-checkbox id="phan-tram" [(model)]="apDungMiemGiamThem.ChietKhauTheoTiLe" value="1" fxFlex="30%"
+                        label="%" value="true" (modelChange)="apDungPhanTram($event)">
+                    </app-checkbox>
+                    <app-textboxnumeric fxFlex="60%" label="" class="no-label" max="100" min="0"
+                        [(model)]="apDungMiemGiamThem.TiLe" [required]="true" [disabled]="disablePhanTram"
+                        [validationerror]="'TiLe' | validationerror: validationErrors">
+                    </app-textboxnumeric>
+                    <label class="red" fxFlex="10%">(*)</label>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%">
+                    <app-checkbox id="so-tien" [(model)]="apDungMiemGiamThem.ChietKhauTheoSoTien" value="1" fxFlex="30%"
+                         label="Tiền" value="true"
+                        (modelChange)="apDungSoTien($event)">
+                    </app-checkbox>
+                    <app-textboxnumeric  fxFlex="60%" class="no-label"
+                          [disabled]="disableSoTien"
+                          [(model)]="apDungMiemGiamThem.SoTien" [required]="true"
+                        [validationerror]="'SoTien' | validationerror: validationErrors">
+                    </app-textboxnumeric>
+                    <label class="red" fxFlex="10%">(*)</label>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%">
+                    <app-textarea id="ghichu" [(model)]="apDungMiemGiamThem.GhiChu" label="Ghi chú" maxlength="2000"
+                        minHeight="60">
+                    </app-textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-button mat-dialog-close (click)="HuyApDungMGT()">Hủy</button>
+    <button *ngIf="apDungMiemGiamThem.ChietKhauTheoTiLe || apDungMiemGiamThem.ChietKhauTheoSoTien" mat-raised-button
+        mat-button color="primary" (click)="ApDungMGT()" cdkFocusInitial>Áp dụng</button>
+</mat-dialog-actions>

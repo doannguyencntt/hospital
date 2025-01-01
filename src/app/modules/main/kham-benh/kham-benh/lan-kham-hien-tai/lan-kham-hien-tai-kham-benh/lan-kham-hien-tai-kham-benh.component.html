@@ -1,0 +1,447 @@
+<div *ngIf="!laChuyenKhoaKhamNhieu" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <!-- benhNhanHienTai.YeuCauTiepNhan.TrieuChungTiepNhan -->
+    <app-textarea id="LyDoKham" fxFlex="100%" label="Lý do vào viện" maxlength="200" minHeight="20"
+        [(model)]="benhNhanHienTai.YeuCauKhamBenh.TrieuChungTiepNhan" (modelChange)="dataChange()"
+        [disabled]="isReadOnly">
+    </app-textarea>
+    
+    <app-textarea id="BenhSu" fxFlex="100%" label="Bệnh sử" maxlength="4000" minHeight="20"
+        [(model)]="benhNhanHienTai.YeuCauKhamBenh.BenhSu" (modelChange)="dataChange()"
+        [disabled]="isReadOnly" [showButtonClearData]="!isReadOnly" [useVoice]="false">
+    </app-textarea>
+
+    <app-textarea *ngIf="benhNhanHienTai.YeuCauTiepNhan.NoiGioiThieuId != null && benhNhanHienTai.YeuCauTiepNhan.NoiGioiThieuId != 0" id="ChanDoanCuaNoiGioiThieu" fxFlex="100%" label="Chẩn đoán của nơi giới thiệu" maxlength="4000" minHeight="20"
+        [(model)]="benhNhanHienTai.YeuCauKhamBenh.ChanDoanCuaNoiGioiThieu" (modelChange)="dataChange()"
+        [disabled]="isReadOnly">
+    </app-textarea>
+
+    <!-- tiền sử bệnh -->
+    <app-lan-kham-hien-tai-kham-benh-tien-su-benh fxFlex="100%" [data]="benhNhanHienTai" [dataTienSuBenh]="benhNhanHienTai.YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanTienSuBenhs"
+        [isReadOnly]="isReadOnly">
+    </app-lan-kham-hien-tai-kham-benh-tien-su-benh>
+
+    <!-- dị ứng thuốc -->
+    <app-lan-kham-hien-tai-kham-benh-di-ung-thuoc fxFlex="100%" [data]="benhNhanHienTai" [dataDiUngThuoc]="benhNhanHienTai.YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs"
+        [isReadOnly]="isReadOnly">
+    </app-lan-kham-hien-tai-kham-benh-di-ung-thuoc>
+
+    <!-- chỉ số sinh tồn -->
+    <app-lan-kham-hien-tai-kham-benh-chi-so-sinh-ton fxFlex="100%" [data]="benhNhanHienTai.YeuCauKhamBenh"
+        [phongKhamId]="phongKhamHienTai" [dataChiSoSinhTon]="benhNhanHienTai.YeuCauTiepNhan.KetQuaSinhHieus"
+        [isReadOnly]="isReadOnly">
+    </app-lan-kham-hien-tai-kham-benh-chi-so-sinh-ton>
+
+    <!-- khám toàn thân -->
+    <ng-container *ngIf="!isKhamDoan">
+        <h3 fxFlex="100%" class="sub-title mt-0">Khám toàn thân</h3>
+        <app-textarea id="KhamToanThan" fxFlex="100%" label="Nội dung" maxlength="4000" minHeight="20"
+            [(model)]="benhNhanHienTai.YeuCauKhamBenh.KhamToanThan" (modelChange)="dataChange()">
+        </app-textarea>
+    </ng-container>
+
+    <!-- phân loại thể lực -->
+    <ng-container *ngIf="isKhamDoan && dataPhanLoaiSucKhoes.length > 0">
+        <!-- <h3 fxFlex="100%" class="sub-title mt-0">Phân loại thể lực</h3> -->
+        <!-- url="KhamDoan/GetPhanLoaiSucKhoes" -->
+        <app-combobox id="KSKPhanLoaiTheLuc" fxFlex="100%" fxFlex.sm="100%" label="Phân loại thể lực"
+            [(model)]="benhNhanHienTai.YeuCauTiepNhan.KSKPhanLoaiTheLuc" popupSettings="null" [data]="dataPhanLoaiSucKhoes" [bind]="true"
+            (modelChange)="dataChange()" [bind]="true" [disabled]="isReadOnly">
+        </app-combobox>
+    </ng-container>
+    
+    <!-- khám các cơ quan -->
+    <h3 id="contentbpk" fxFlex="100%" class="sub-title mt-0">Khám các cơ quan</h3>
+    <ng-container *ngIf="!isKhamDoan">
+        <ng-container
+            *ngIf="templateKhamCacCoQuanObj!=null && templateKhamCacCoQuanObj.ComponentDynamics!=null && templateKhamCacCoQuanObj.ComponentDynamics.length>0">
+            <ng-container *ngFor="let item of templateKhamCacCoQuanObj.ComponentDynamics">
+                <ng-container *ngIf="item.Type == 4 && item.groupItems != undefined && item.groupItems.length > 0">
+                    <div fxFlex="100%" class="row ml-1 mb-2">
+                        <fieldset fxFlex="100%">
+                            <legend>{{item.Label}}</legend>
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                                <ng-container *ngFor="let itemInGroup of item.groupItems">
+                                    <h3 *ngIf="itemInGroup.Type==1" fxFlex="20%" class="sub-title">{{itemInGroup.Label}}
+                                    </h3>
+                                    <app-textbox *ngIf="itemInGroup.Type==2" fxFlex="{{itemInGroup.fxFlex}}"
+                                        fxFlex.sm="{{itemInGroup.fxFlexSm}}" id="{{itemInGroup.Id}}"
+                                        placeHolder="{{itemInGroup.placeholder}}" label="{{itemInGroup.Label}}"
+                                        [(model)]="itemInGroup.Value" (modelChange)="dataChange()"
+                                        maxlength="{{itemInGroup.maxlength}}">
+                                    </app-textbox>
+                                    <app-textarea *ngIf="itemInGroup.Type==3" id="{{itemInGroup.Id}}"
+                                        fxFlex="{{itemInGroup.fxFlex}}" label="{{itemInGroup.Label}}"
+                                        maxlength="{{itemInGroup.maxlength}}" minHeight="{{itemInGroup.minHeight}}"
+                                        [(model)]="itemInGroup.Value" (modelChange)="dataChange()"></app-textarea>
+                                </ng-container>
+                            </div>
+                        </fieldset>
+                    </div>
+                </ng-container>
+                <ng-container
+                    *ngIf="item.groupItems == undefined || item.groupItems == null || item.groupItems.length == 0">
+                    <h3 *ngIf="item.Type==1" fxFlex="20%" class="sub-title">{{item.Label}}</h3>
+                    <app-textbox *ngIf="item.Type==2" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}"
+                        id="{{item.Id}}" placeHolder="{{item.placeHolder}}" label="{{item.Label}}" [(model)]="item.Value"
+                        (modelChange)="dataChange()" maxlength="{{item.maxlength}}">
+                    </app-textbox>
+                    <app-textarea *ngIf="item.Type==3" id="{{item.Id}}" fxFlex="{{item.fxFlex}}" label="{{item.Label}}"
+                        maxlength="{{item.maxlength}}" minHeight="{{item.minHeight}}" [(model)]="item.Value"
+                        (modelChange)="dataChange()"></app-textarea>
+                    <!-- useVoice="{{item.useVoice}}" -->
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="isKhamDoan">
+        <kendo-tabstrip fxFlex="100%" class="mr-4 mb-2 kham-doan-cac-co-quan" style="z-index: 1;">
+            <ng-container *ngFor="let item of templateDichVuKhamSucKhoes, let i=index">
+                <kendo-tabstrip-tab [selected]="item.IsDungChuyenKhoaLogin" cssClass="{{item.IsDaKham ? 'tab-dich-vu-da-kham' : ''}}">
+                    <ng-template kendoTabTitle>
+                        <div kendoTooltip>
+                            <app-checkbox *ngIf="isKhamDoanTatCa" id="khamDichVu{{i}}" fxFlex="auto" title="Khám dịch vụ" [(model)]="item.IsCheckedDichVu"
+                                (modelChange)="xuLyChonKhamDichVu($event, item)" [disabled]="item.IsDaHoanThanhKham || isReadOnly">
+                            </app-checkbox>
+                            <div class="ml-1" fxFlex="auto">{{item.TenChuyenKhoa}}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="py-2" [ngClass]="{'disableDiv': (isKhamDoanTatCa && !item.IsCheckedDichVu) || isReadOnly}"
+                            *ngIf="item.TemplateKhamCacCoQuanObj!=null && item.TemplateKhamCacCoQuanObj.ComponentDynamics!=null && item.TemplateKhamCacCoQuanObj.ComponentDynamics.length>0">
+                            <ng-container *ngFor="let itemChild of item.TemplateKhamCacCoQuanObj.ComponentDynamics">
+                                <ng-container *ngIf="itemChild.Type == 4 && itemChild.groupItems != undefined && itemChild.groupItems.length > 0">
+                                    <div fxFlex="{{itemChild.fxFlex}}" class="mb-2">
+                                        <fieldset fxFlex="100%">
+                                            <legend>{{itemChild.Label}}</legend>
+                                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                                                <ng-container *ngFor="let itemInGroup of itemChild.groupItems">
+                                                    <h3 *ngIf="itemInGroup.Type==1" fxFlex="20%" class="sub-title">{{itemInGroup.Label}}
+                                                    </h3>
+                                                    <app-textbox *ngIf="itemInGroup.Type==2" fxFlex="{{itemInGroup.fxFlex}}"
+                                                        fxFlex.sm="{{itemInGroup.fxFlexSm}}" id="{{itemInGroup.Id}}"
+                                                        placeHolder="{{itemInGroup.placeholder}}" label="{{itemInGroup.Label}}"
+                                                        [(model)]="itemInGroup.Value" (modelChange)="dataChange()"
+                                                        maxlength="{{itemInGroup.maxlength}}" [disabled]="item.IsDisabled">
+                                                    </app-textbox>
+                                                    <app-textarea *ngIf="itemInGroup.Type==3" id="{{itemInGroup.Id}}"
+                                                        fxFlex="{{itemInGroup.fxFlex}}" label="{{itemInGroup.Label}}"
+                                                        maxlength="{{itemInGroup.maxlength}}" minHeight="{{itemInGroup.minHeight}}"
+                                                        [(model)]="itemInGroup.Value" (modelChange)="dataChange()" [disabled]="item.IsDisabled">
+                                                    </app-textarea>
+                                                    <!-- url="KhamDoan/GetPhanLoaiSucKhoes"  -->
+                                                    <app-combobox *ngIf="itemInGroup.Type==5 && dataPhanLoaiSucKhoes.length > 0" id="{{itemInGroup.Id}}" fxFlex="{{itemInGroup.fxFlex}}" fxFlex.sm="{{itemInGroup.fxFlexSm}}"
+                                                        label="{{itemInGroup.Label}}" [(model)]="itemInGroup.Value" popupSettings="null" [data]="dataPhanLoaiSucKhoes"
+                                                        [disabled]="item.IsDisabled" (modelChange)="dataChange()" [bind]="true">
+                                                    </app-combobox>
+                                                </ng-container>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                    *ngIf="itemChild.groupItems == undefined || itemChild.groupItems == null || itemChild.groupItems.length == 0">
+                                    <h3 *ngIf="itemChild.Type==1" fxFlex="20%" class="sub-title">{{itemChild.Label}}</h3>
+                                    <app-textbox *ngIf="itemChild.Type==2" fxFlex="{{itemChild.fxFlex}}" fxFlex.sm="{{itemChild.fxFlexSm}}"
+                                        id="{{itemChild.Id}}" placeHolder="{{itemChild.placeHolder}}" label="{{itemChild.Label}}" [(model)]="itemChild.Value"
+                                        (modelChange)="dataChange()" maxlength="{{itemChild.maxlength}}" [disabled]="item.IsDisabled">
+                                    </app-textbox>
+                                    <app-textarea *ngIf="itemChild.Type==3" id="{{itemChild.Id}}" fxFlex="{{itemChild.fxFlex}}" fxFlex.sm="{{itemChild.fxFlexSm}}" 
+                                        label="{{itemChild.Label}}" maxlength="{{itemChild.maxlength}}" minHeight="{{itemChild.minHeight}}" [(model)]="itemChild.Value"
+                                        (modelChange)="dataChange()" [disabled]="item.IsDisabled">
+                                    </app-textarea>
+                                    <!-- url="KhamDoan/GetPhanLoaiSucKhoes"  -->
+                                    <app-combobox *ngIf="itemChild.Type==5 && dataPhanLoaiSucKhoes.length > 0" id="{{itemChild.Id}}" fxFlex="{{itemChild.fxFlex}}" fxFlex.sm="{{itemChild.fxFlexSm}}" label="{{itemChild.Label}}"
+                                        [(model)]="itemChild.Value" (modelChange)="dataChange()" popupSettings="null" [data]="dataPhanLoaiSucKhoes"
+                                        [disabled]="item.IsDisabled" [bind]="true">
+                                    </app-combobox>
+                                </ng-container>
+                            </ng-container>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+            </ng-container>
+        </kendo-tabstrip>
+    </ng-container>
+
+    <ng-container *ngIf="!isKhamDoan">
+        <!-- khám khác -->
+        <app-lan-kham-hien-tai-kham-khac fxFlex="100%" [data]="benhNhanHienTai"
+            [dataKhamBoPhanKhac]="benhNhanHienTai.YeuCauKhamBenh.YeuCauKhamBenhKhamBoPhanKhacs">
+        </app-lan-kham-hien-tai-kham-khac>
+    
+        <!-- Bộ phận tổn thương -->
+        <app-lan-kham-hien-tai-bo-phan-ton-thuong fxFlex="100%" [data]="benhNhanHienTai"
+            [dataBoPhanTonThuong]="benhNhanHienTai.YeuCauKhamBenh.YeuCauKhamBenhBoPhanTonThuongs">
+        </app-lan-kham-hien-tai-bo-phan-ton-thuong>
+    
+        <!-- chuẩn đoán sơ bộ -->
+        <h3 fxFlex="100%" class="sub-title mt-0">Chẩn đoán sơ bộ</h3>
+        <!-- [idWhere]="benhNhanHienTai.YeuCauKhamBenh.ChanDoanSoBoICDId" -->
+        <app-combobox fxFlex="50%" label="ICD" url="KhamBenh/GetListICDBaoGomItemDaChon"
+            [(model)]="benhNhanHienTai.YeuCauKhamBenh.ChanDoanSoBoICDId"
+            [(modelText)]="benhNhanHienTai.YeuCauKhamBenh.TenChanDoanSoBoICD" (modelChange)="dataChange()"
+            (selectionChange)="chonChanDoanSoBoICD($event)"
+            [queryInfo]="{ParameterDependencies:'{ChanDoanSoBoICDId:' + benhNhanHienTai.YeuCauKhamBenh.ChanDoanSoBoICDId +'}', Take: 50}"
+            [templateHeader]="chanDoanSoBoTemplateHeader" [template]="chanDoanSoBoTemplate" class="item-no-padding">
+            <ng-template #chanDoanSoBoTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th>Dịch vụ</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #chanDoanSoBoTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        <app-textarea id="GhiChu" fxFlex="50%" label="Chẩn đoán" maxlength="4000" minHeight="20"
+            [(model)]="benhNhanHienTai.YeuCauKhamBenh.ChanDoanSoBoGhiChu" (modelChange)="dataChange()">
+        </app-textarea>
+    
+        <!-- chuẩn đoán phân biệt -->
+        <app-lan-kham-hien-tai-chan-doan-phan-biet [data]="benhNhanHienTai"
+            [dataChanDoanPhanBiet]="benhNhanHienTai.YeuCauKhamBenh.YeuCauKhamBenhChanDoanPhanBiets">
+        </app-lan-kham-hien-tai-chan-doan-phan-biet>
+    </ng-container>
+
+    <ng-container *ngIf="isKhamDoanTatCa">
+        <h3 fxFlex="100%" class="sub-title mt-0">Kết luận cận lâm sàng</h3>
+        <!-- (click)="ketQuaMau()" -->
+        <span fxFlex="50%" style="text-align: right;"> 
+            <button *ngIf="!isReadOnly"  type="button" color="primary" mat-stroked-button mat-button
+                class="mr-1" (click)="ketQuaMauDichVuKyThuatVer2()">Kết quả mẫu</button></span>
+        <span fxFlex="50%"></span>
+        <app-textarea id="KetQua" fxFlex="50%" fxFlex.sm="50%" maxlength="1000" label="Kết quả"
+            minHeight="30" (modelChange)="dataChange()" [disabled]="isReadOnly"
+            [(model)]="benhNhanHienTai.YeuCauTiepNhan.KSKKetQuaCanLamSang"
+            [validationerror]="'YeuCauTiepNhan.KSKKetQuaCanLamSang' | validationerror:benhNhanHienTai.validationErrors">
+        </app-textarea>
+        <app-textarea id="DanhGia" fxFlex="50%" fxFlex.sm="50%" maxlength="1000" label="Đánh giá"
+            minHeight="30" (modelChange)="dataChange()" [disabled]="isReadOnly"
+            [(model)]="benhNhanHienTai.YeuCauTiepNhan.KSKDanhGiaCanLamSang"
+            [validationerror]="'YeuCauTiepNhan.KSKDanhGiaCanLamSang' | validationerror:benhNhanHienTai.validationErrors">
+        </app-textarea>
+
+        <!-- //BVHD-3349 -->
+        <!-- <ng-container *ngIf="benhNhanHienTai.YeuCauTiepNhan.IsDuChuyenKhoaKhamSucKhoeChinh"> -->
+            <h3 fxFlex="100%" class="sub-title mt-0">Kết luận</h3>
+            <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+                <button *ngIf="!isReadOnly" type="button" class="mr-1" color="primary" mat-stroked-button mat-button
+                    (click)="showKetQuaMauKhamBenh()">Kết quả mẫu</button>
+            </div>
+            <!-- url="KhamDoan/GetPhanLoaiSucKhoes"  -->
+            <app-combobox *ngIf="benhNhanHienTai.YeuCauTiepNhan.IsDuChuyenKhoaKhamSucKhoeChinh && dataPhanLoaiSucKhoes.length > 0" id="PhanLoaiSucKhoeId" fxFlex="15%" fxFlex.sm="30%" label="Phân loại sức khỏe"
+                [required]="true" (modelChange)="dataChange()"  [data]="dataPhanLoaiSucKhoes" [bind]="true"
+                [(model)]="benhNhanHienTai.YeuCauTiepNhan.PhanLoaiSucKhoeId"
+                [modelText]="benhNhanHienTai.YeuCauTiepNhan.KSKKetLuanPhanLoaiSucKhoe" [disabled]="isReadOnly"
+                [validationerror]="'YeuCauTiepNhan.PhanLoaiSucKhoeId' | validationerror:benhNhanHienTai.validationErrors">
+            </app-combobox>
+            <app-textarea id="cacBenhKhac" fxFlex="auto" fxFlex.sm="auto" label="Các bệnh tật (nếu có)" [maxlength]="4000"
+                [(model)]="benhNhanHienTai.YeuCauTiepNhan.KSKKetLuanCacBenhTat" (modelChange)="dataChange()"
+                [disabled]="isReadOnly">
+            </app-textarea>
+            <!-- (click)="ketQuaMau()" -->
+            
+            
+            <app-textarea id="ghiChu" fxFlex="100%" fxFlex.sm="100%" label="Đề nghị" [maxlength]="4000"
+                [(model)]="benhNhanHienTai.YeuCauTiepNhan.KSKKetLuanGhiChu" (modelChange)="dataChange()"
+                [disabled]="isReadOnly">
+            </app-textarea>
+        <!-- </ng-container> -->
+    </ng-container>
+</div>
+
+<!-- sắp xếp layout chia đôi màn hình -->
+<!-- benhNhanHienTai.YeuCauTiepNhan.TrieuChungTiepNhan -->
+<div *ngIf="laChuyenKhoaKhamNhieu" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textarea id="LyDoKham" fxFlex="30%" label="Lý do vào viện" maxlength="200" minHeight="20"
+        [(model)]="benhNhanHienTai.YeuCauKhamBenh.TrieuChungTiepNhan" (modelChange)="dataChange()"
+        [disabled]="isReadOnly">
+    </app-textarea>
+    
+    <app-textarea id="BenhSu" fxFlex="70%" label="Bệnh sử" maxlength="4000" minHeight="20"
+        [(model)]="benhNhanHienTai.YeuCauKhamBenh.BenhSu" (modelChange)="dataChange()"
+        [disabled]="isReadOnly" [showButtonClearData]="!isReadOnly" [useVoice]="false">
+    </app-textarea>
+
+    <app-textarea *ngIf="benhNhanHienTai.YeuCauTiepNhan.NoiGioiThieuId != null && benhNhanHienTai.YeuCauTiepNhan.NoiGioiThieuId != 0" id="ChanDoanCuaNoiGioiThieu" fxFlex="100%" label="Chẩn đoán của nơi giới thiệu" maxlength="4000" minHeight="20"
+        [(model)]="benhNhanHienTai.YeuCauKhamBenh.ChanDoanCuaNoiGioiThieu" (modelChange)="dataChange()"
+        [disabled]="isReadOnly">
+    </app-textarea>
+
+    <!-- tiền sử bệnh -->
+    <app-lan-kham-hien-tai-kham-benh-tien-su-benh fxFlex="100%" [data]="benhNhanHienTai" [dataTienSuBenh]="benhNhanHienTai.YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanTienSuBenhs"
+        [isReadOnly]="isReadOnly" [laChuyenKhoaKhamNhieu]="laChuyenKhoaKhamNhieu">
+    </app-lan-kham-hien-tai-kham-benh-tien-su-benh>
+
+    <!-- dị ứng thuốc -->
+    <app-lan-kham-hien-tai-kham-benh-di-ung-thuoc fxFlex="100%" [data]="benhNhanHienTai" [dataDiUngThuoc]="benhNhanHienTai.YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs"
+        [isReadOnly]="isReadOnly" [laChuyenKhoaKhamNhieu]="laChuyenKhoaKhamNhieu">
+    </app-lan-kham-hien-tai-kham-benh-di-ung-thuoc>
+
+    <!-- chỉ số sinh tồn -->
+    <app-lan-kham-hien-tai-kham-benh-chi-so-sinh-ton fxFlex="100%" [data]="benhNhanHienTai.YeuCauKhamBenh"
+        [phongKhamId]="phongKhamHienTai" [dataChiSoSinhTon]="benhNhanHienTai.YeuCauTiepNhan.KetQuaSinhHieus"
+        [isReadOnly]="isReadOnly" [laChuyenKhoaKhamNhieu]="laChuyenKhoaKhamNhieu">
+    </app-lan-kham-hien-tai-kham-benh-chi-so-sinh-ton>
+
+    <div fxFlex="50%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+            <h3 fxFlex="20%" class="sub-title mt-0">Khám bệnh</h3>
+            <app-combobox fxFlex="75%" url="KhamBenh/GetListNoiDungMauKhamBenhTheoBacSi"
+                [(model)]="benhNhanHienTai.YeuCauKhamBenh.NoiDungMauKhamBenhId" class="no-label item-no-padding" label=" "
+                (selectionChange)="chonNoiDungMauKhamBenh($event)" 
+                [templateHeader]="noiDungKhamMauTemplateHeader" [template]="noiDungKhamMauTemplate">
+                <ng-template #noiDungKhamMauTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="20%">Mã</th>
+                            <th>Ten</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #noiDungKhamMauTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="20%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+            <button fxFlex="5%" fxFlex.sm="8%" type="button" title="Tìm kiếm" class="icon-color-button"
+                (click)="showPopupNoiDungMauKhamBenh()">
+                <mat-icon [icIcon]="addIcon"></mat-icon>
+            </button>
+            <div id="contentkhamkhac" fxFlex="20%" style="position: relative;">
+                <a *ngIf="!showNoiDungKhamKhac" id="hienKhamKhac" (click)="xuLyAnHienKhamKhac(true, 'anKhamKhac')" style="color: #005dab;text-decoration: underline;">
+                    Hiển thị khám khác
+                </a>
+
+                <a *ngIf="showNoiDungKhamKhac" (click)="xuLyAnHienKhamKhac(false, 'hienKhamKhac')" style="color: #005dab;text-decoration: underline; position: absolute; bottom: 0px">
+                    Ẩn khám khác
+                </a>
+            </div>
+            <!-- <app-editor id="noiDungKhamBenh" fxFlex="80%" label="Nội dung"
+                [hideLinkButton]="true" [hideFileButton]="true" [(model)]="benhNhanHienTai.YeuCauKhamBenh.NoiDungKhamBenh"
+                [hideImageButton]="true" [showToolbar]="false" [maxlength]="4000" (modelChange)="dataChange()">
+            </app-editor> -->
+
+            <app-textarea id="noiDungKhamBenh" fxFlex="80%" label="Nội dung" maxlength="5000" minHeight="150"
+                [(model)]="benhNhanHienTai.YeuCauKhamBenh.NoiDungKhamBenh" (modelChange)="dataChange()">
+            </app-textarea>
+
+            <ng-container *ngIf="showNoiDungKhamKhac">
+                <div id="anKhamKhac" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="8px grid" fxLayoutGap.lt-sm="0">
+                    <!-- khám toàn thân -->
+                    <h3 fxFlex="100%" class="sub-title mt-0">Khám toàn thân</h3>
+                    <app-textarea id="KhamToanThan" fxFlex="100%" label="Nội dung" maxlength="4000" minHeight="20"
+                        [(model)]="benhNhanHienTai.YeuCauKhamBenh.KhamToanThan" (modelChange)="dataChange()">
+                    </app-textarea>
+                
+                    <!-- khám các cơ quan -->
+                    <h3 id="contentbpk" fxFlex="100%" class="sub-title mt-0">Khám các cơ quan</h3>
+                    <ng-container>
+                        <ng-container
+                            *ngIf="templateKhamCacCoQuanObj!=null && templateKhamCacCoQuanObj.ComponentDynamics!=null && templateKhamCacCoQuanObj.ComponentDynamics.length>0">
+                            <ng-container *ngFor="let item of templateKhamCacCoQuanObj.ComponentDynamics">
+                                <ng-container *ngIf="item.Type == 4 && item.groupItems != undefined && item.groupItems.length > 0">
+                                    <div fxFlex="100%" class="row ml-1 mb-2">
+                                        <fieldset fxFlex="100%">
+                                            <legend>{{item.Label}}</legend>
+                                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                                fxLayoutGap.lt-sm="0">
+                                                <ng-container *ngFor="let itemInGroup of item.groupItems">
+                                                    <h3 *ngIf="itemInGroup.Type==1" fxFlex="20%" class="sub-title">{{itemInGroup.Label}}
+                                                    </h3>
+                                                    <app-textbox *ngIf="itemInGroup.Type==2" fxFlex="{{itemInGroup.fxFlex}}"
+                                                        fxFlex.sm="{{itemInGroup.fxFlexSm}}" id="{{itemInGroup.Id}}"
+                                                        placeHolder="{{itemInGroup.placeholder}}" label="{{itemInGroup.Label}}"
+                                                        [(model)]="itemInGroup.Value" (modelChange)="dataChange()"
+                                                        maxlength="{{itemInGroup.maxlength}}">
+                                                    </app-textbox>
+                                                    <app-textarea *ngIf="itemInGroup.Type==3" id="{{itemInGroup.Id}}"
+                                                        fxFlex="{{itemInGroup.fxFlex}}" label="{{itemInGroup.Label}}"
+                                                        maxlength="{{itemInGroup.maxlength}}" minHeight="{{itemInGroup.minHeight}}"
+                                                        [(model)]="itemInGroup.Value" (modelChange)="dataChange()"></app-textarea>
+                                                </ng-container>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </ng-container>
+                                <ng-container
+                                    *ngIf="item.groupItems == undefined || item.groupItems == null || item.groupItems.length == 0">
+                                    <h3 *ngIf="item.Type==1" fxFlex="20%" class="sub-title">{{item.Label}}</h3>
+                                    <app-textbox *ngIf="item.Type==2" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}"
+                                        id="{{item.Id}}" placeHolder="{{item.placeHolder}}" label="{{item.Label}}"
+                                        [(model)]="item.Value" (modelChange)="dataChange()" maxlength="{{item.maxlength}}">
+                                    </app-textbox>
+                                    <app-textarea *ngIf="item.Type==3" id="{{item.Id}}" fxFlex="{{item.fxFlex}}" label="{{item.Label}}"
+                                        maxlength="{{item.maxlength}}" minHeight="{{item.minHeight}}" [(model)]="item.Value"
+                                        (modelChange)="dataChange()"></app-textarea>
+                                    <!-- useVoice="{{item.useVoice}}" -->
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                
+                    <!-- khám khác -->
+                    <app-lan-kham-hien-tai-kham-khac fxFlex="100%" [data]="benhNhanHienTai"
+                        [dataKhamBoPhanKhac]="benhNhanHienTai.YeuCauKhamBenh.YeuCauKhamBenhKhamBoPhanKhacs">
+                    </app-lan-kham-hien-tai-kham-khac>
+                
+                    <!-- Bộ phận tổn thương -->
+                    <app-lan-kham-hien-tai-bo-phan-ton-thuong fxFlex="100%" [data]="benhNhanHienTai"
+                        [dataBoPhanTonThuong]="benhNhanHienTai.YeuCauKhamBenh.YeuCauKhamBenhBoPhanTonThuongs">
+                    </app-lan-kham-hien-tai-bo-phan-ton-thuong>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div fxFlex="50%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+            <!-- chuẩn đoán sơ bộ -->
+            <h3 fxFlex="15%" class="sub-title mt-0">Chẩn đoán sơ bộ</h3>
+            <app-combobox fxFlex="30%" label="ICD" url="KhamBenh/GetListICDBaoGomItemDaChon"
+                [(model)]="benhNhanHienTai.YeuCauKhamBenh.ChanDoanSoBoICDId"
+                [(modelText)]="benhNhanHienTai.YeuCauKhamBenh.TenChanDoanSoBoICD" (modelChange)="dataChange()"
+                (selectionChange)="chonChanDoanSoBoICD($event)" title="{{benhNhanHienTai.YeuCauKhamBenh.TenChanDoanSoBoICD}}" kendoTooltip
+                [queryInfo]="{ParameterDependencies:'{ChanDoanSoBoICDId:' + benhNhanHienTai.YeuCauKhamBenh.ChanDoanSoBoICDId +'}', Take: 50}"
+                [templateHeader]="chanDoanSoBoTemplateHeader" [template]="chanDoanSoBoTemplate" class="item-no-padding">
+                <ng-template #chanDoanSoBoTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="20%">Mã</th>
+                            <th>Dịch vụ</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #chanDoanSoBoTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="20%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+            <app-textarea id="GhiChu" fxFlex="54%" label="Chẩn đoán" maxlength="4000" minHeight="20" class="ml-1"
+                [(model)]="benhNhanHienTai.YeuCauKhamBenh.ChanDoanSoBoGhiChu" (modelChange)="dataChange()">
+            </app-textarea>
+    
+            <!-- chuẩn đoán phân biệt -->
+            <app-lan-kham-hien-tai-chan-doan-phan-biet fxFlex="100%" [data]="benhNhanHienTai"
+                [dataChanDoanPhanBiet]="benhNhanHienTai.YeuCauKhamBenh.YeuCauKhamBenhChanDoanPhanBiets"
+                [laChuyenKhoaKhamNhieu]="laChuyenKhoaKhamNhieu">
+            </app-lan-kham-hien-tai-chan-doan-phan-biet>
+        </div>
+    </div>
+
+    
+</div>

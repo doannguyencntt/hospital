@@ -1,0 +1,184 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0" class="order-form">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}" style="padding-top: 13px;">
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textboxnumeric id="nang" fxFlex="10%" fxFlex.md="50%" [format]="format" fxFlex.sm="100%" [max]="999" [spinners]="false" [(model)]="phieuKhamGayMeTruocMo.Nang" label="Nặng (kg)" [decimals]="1">
+                </app-textboxnumeric>
+
+                <app-textboxnumeric id="cao" fxFlex="10%" fxFlex.md="50%" [format]="format" fxFlex.sm="100%" [max]="999" [spinners]="false" [(model)]="phieuKhamGayMeTruocMo.Cao" label="Cao (cm)" [decimals]="1">
+                </app-textboxnumeric>
+
+                <app-textbox id="asa" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="phieuKhamGayMeTruocMo.Asa" label="ASA" maxlength="10">
+                </app-textbox>
+
+                <app-textbox id="mallampati" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="phieuKhamGayMeTruocMo.Mallampati" label="Mallampati" maxlength="10">
+                </app-textbox>
+
+                <app-textbox id="kc-cam-giap" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="phieuKhamGayMeTruocMo.KcCamGiap" label="K/c cằm giáp" maxlength="10">
+                </app-textbox>
+
+                <app-textbox id="ha-mieng" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="phieuKhamGayMeTruocMo.HaMieng" label="Há miệng" maxlength="10">
+                </app-textbox>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-radio fxFlex="40%" fxFlex.md="50%" fxFlex.sm="100%" id="rang-gia" [items]="[{Value:0,Text:'Không'},{Value:1,Text:'Tháo được'},{Value:2,Text:'Cố định'}]" [(model)]="phieuKhamGayMeTruocMo.RangGia" label="Răng giả">
+                </app-radio>
+
+                <app-textboxnumeric id="bua-an-cuoi-truoc-mo" fxFlex="40%" fxFlex.md="50%" fxFlex.sm="100%" [max]="999"  [(model)]="phieuKhamGayMeTruocMo.GioMoTruocBuaAn" label="Bữa ăn cuối trước mổ (giờ)" [decimals]="1">
+                </app-textboxnumeric>
+
+                <app-checkbox class="order-cap-cuu" id="cap-cuu" fxFlex="10%" fxFlex.md="50%" fxFlex.sm="100%" label="Cấp cứu" [(model)]="phieuKhamGayMeTruocMo.CapCuu">
+                </app-checkbox>
+
+                <app-checkbox class="order-da-day-day" id="da-day-day" fxFlex="10%" fxFlex.md="50%" fxFlex.sm="100%" label="Dạ dày đầy" [(model)]="phieuKhamGayMeTruocMo.DaDayDay">
+                </app-checkbox>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="chan-doan" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Chẩn đoán" [(model)]="phieuKhamGayMeTruocMo.ChanDoan">
+                </app-textarea>
+
+                <app-textarea id="huong-dieu-tri" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Hướng điều trị" [(model)]="phieuKhamGayMeTruocMo.HuongDieuTri">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="tien-su-noi-khoa" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Tiền sử nội khoa" [(model)]="phieuKhamGayMeTruocMo.TienSuNoiKhoa">
+                </app-textarea>
+
+                <app-textarea id="tien-su-ngoai-khoa" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Tiền sử ngoại khoa" [(model)]="phieuKhamGayMeTruocMo.TienSuNgoaiKhoa">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="tien-su-gay-me" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Tiền sử gây mê, gây tê" [(model)]="phieuKhamGayMeTruocMo.TienSuGayMe">
+                </app-textarea>
+
+                <app-textarea id="tien-su-ngoai-khoa" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Dị ứng" [(model)]="phieuKhamGayMeTruocMo.DiUng">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <div fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%">
+                    <strong>Nghiện:</strong>
+                    <div>
+                        <app-checkbox id="thuoc-la" fxFlex="40%" fxFlex.md="40%" fxFlex.sm="40%" label="Thuốc lá thuốc lào" [(model)]="phieuKhamGayMeTruocMo.ThuocLa">
+                        </app-checkbox>
+                        <app-checkbox id="ruou" fxFlex="30%" fxFlex.md="30%" fxFlex.sm="30%" label="Rượu" [(model)]="phieuKhamGayMeTruocMo.Ruou">
+                        </app-checkbox>
+                        <app-checkbox id="ma-tuy" fxFlex="30%" fxFlex.md="30%" fxFlex.sm="30%" label="Ma túy" [(model)]="phieuKhamGayMeTruocMo.MaTuy">
+                        </app-checkbox>
+                    </div>
+                </div>
+
+                <app-textarea id="benh-lay-nhiem" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Bệnh lây nhiễm" [(model)]="phieuKhamGayMeTruocMo.BenhLayNhiem">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="thuoc-dieu-tri" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Thuốc đang điều trị" [(model)]="phieuKhamGayMeTruocMo.ThuocDangDieuTri">
+                </app-textarea>
+
+                <app-textarea id="kham-lam-sang" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Khám lâm sàng" [(model)]="phieuKhamGayMeTruocMo.KhamLamSang">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="tuan-hoan" fxFlex="30%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Tuần hoàn" [(model)]="phieuKhamGayMeTruocMo.TuanHoan">
+                </app-textarea>
+
+                <app-textarea id="m" fxFlex="10%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="M" [(model)]="phieuKhamGayMeTruocMo.M">
+                </app-textarea>
+
+                <app-textarea id="ha" fxFlex="10%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="HA" [(model)]="phieuKhamGayMeTruocMo.Ha">
+                </app-textarea>
+
+                <app-textarea id="ho-hap" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Hô hấp" [(model)]="phieuKhamGayMeTruocMo.HoHap">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="than-kinh" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Thần kinh" [(model)]="phieuKhamGayMeTruocMo.ThanKinh">
+                </app-textarea>
+
+                <app-textarea id="cot-song" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Cột sống" [(model)]="phieuKhamGayMeTruocMo.CotSong">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="xn-bat-thuong" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Xét nghiệm bất thường" [(model)]="phieuKhamGayMeTruocMo.XnBatThuong">
+                </app-textarea>
+
+                <app-textarea id="yc-bo-sung" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Yêu cầu bổ sung" [(model)]="phieuKhamGayMeTruocMo.YcBoSung">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="dk-cach-thuoc-vc" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Dự kiến cách và thuốc vô cảm" [(model)]="phieuKhamGayMeTruocMo.DkCachThuocVc">
+                </app-textarea>
+
+                <app-textarea id="dk-giam-dau-sau-mo" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Dự kiến giảm đau sau mổ" [(model)]="phieuKhamGayMeTruocMo.DkGiamDauSauMo">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="y-lenh-truoc-mo" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Y lệnh trước mổ" [(model)]="phieuKhamGayMeTruocMo.YlenhTruocMo">
+                </app-textarea>
+
+                <app-textarea id="thuoc-tien-me" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Thuốc tiền mê" [(model)]="phieuKhamGayMeTruocMo.ThuocTienMe">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-datetimepicker id="ngay-kham" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="phieuKhamGayMeTruocMo.NgayKham" label="Ngày khám" [required]="true" [validationerror]="'NgayKham' | validationerror:validationErrors">
+                </app-datetimepicker>
+
+                <app-datetimepicker id="ngay-tham-kham" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="phieuKhamGayMeTruocMo.NgayHenKham" label="Ngày thăm lại trước mổ" [required]="true" [validationerror]="'NgayHenKham' | validationerror:validationErrors">
+                </app-datetimepicker>
+
+                <app-autocomplete id="dd-thuc-hien" popupSettings="null" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="phieuKhamGayMeTruocMo.DdThucHien" url="PhauThuatThuThuat/GetListDieuDuongAutoComplete" [required]="true" label="ĐD thực hiện" maxlength="120" [validationerror]="'DdThucHien' | validationerror:validationErrors">
+                </app-autocomplete>
+
+                <app-autocomplete id="bs-gmhs" popupSettings="null" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="phieuKhamGayMeTruocMo.BsGmHs" url="PhauThuatThuThuat/GetListBacSiAutoComplete" [required]="true" label="BS GMHS" maxlength="120" [validationerror]="'BsGmHs' | validationerror:validationErrors">
+                </app-autocomplete>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-upload id="Upload" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" #upload15NgayDieuTri [allowedExtensions]="allowedExtensions" [(model)]="phieuKhamGayMeTruocMo.FileChuKy" [multiple]="true" label="File chữ ký" [template]="templateFileChuanDoanHAInfo">
+                </app-upload>
+            </div>
+
+
+            <ng-template #templateFileChuanDoanHAInfo let-files>
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                            <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="green" class="custom-name green">{{files[0].name}}</a>
+                        </td>
+                        <td style="width:25px">
+                            <a type="button" (click)="upload15NgayDieuTri.remove(files[0].uid)" mat-icon-button>
+                                <mat-icon [icIcon]="icClear"></mat-icon>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </ng-template>
+        </div>
+
+        <div style="justify-content: space-between;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="order-btn">
+            <div style="display: flex;align-items: center;">
+                <p>Người thực hiện:&nbsp;</p>
+                <strong>{{phieuKhamGayMeTruocMo.NguoiThucHienReadonly}}&nbsp;</strong>
+                <p>Ngày thực hiện:&nbsp;</p>
+                <strong>{{phieuKhamGayMeTruocMo.NgayThucHienReadonly}}&nbsp;</strong>
+            </div>
+            <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+                <button type="button" class="mr-2" mat-button color="primary" (click)="print()">In</button>
+                <button type="button" class="mr-2" mat-button color="primary" (click)="cancel()">Huỷ</button>
+                <button type="button" class="mr-2" color="primary" mat-raised-button (click)="save()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>

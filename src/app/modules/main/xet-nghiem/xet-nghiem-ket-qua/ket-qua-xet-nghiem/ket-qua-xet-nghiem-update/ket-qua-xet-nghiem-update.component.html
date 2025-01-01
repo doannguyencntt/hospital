@@ -1,0 +1,56 @@
+<app-header-form [crumbs]="[
+        {Title:'Xét Nghiệm',Path:''}
+        ,{Title:'Kết Quả Xét Nghiệm',Path:'/xet-nghiem/ket-qua', queryParams: {holdQuery : true}, Active: true}
+        
+            ]" [isicMoreVert]="false">
+        </app-header-form>
+
+    <!-- <vex-page-layout-content [class.px-gutter]="true" class="-mt-6"> -->
+        <div class="p-gutter" vexContainer>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="auto">
+                    <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                        <h2 style="margin-right: 15px !important; width: 40%;" class="title m-0">Chi Tiết Kết Quả Xét Nghiệm</h2>
+                        
+                        <span style="text-align: right; width: 60%;" [ngStyle]="{'color': (titleString == ChoKQChayLai ? 'red' : (titleString == ChoKQ ? 'orange' : (titleString == ChoDuyetKQ ? 'blue' : 'green') ) )}">
+                            {{titleString}}
+                        </span>
+                        <!-- (modelChange)="lyDoVaoVienChange($event)" -->
+                        <!-- <app-radio id="IsXuatKhac" class="no-label" [(model)]="IsXuatKhac"
+                             [items]="[{Value:false,Text:'Xuất qua kho khác'},{Value:true,Text:'Xuất khác'}]">
+                        </app-radio> -->
+                    
+                    </div>
+
+                    <div class="px-6 py-4" fxLayout="column">
+
+                        <app-ket-qua-xet-nghiem-shared (trangThaiIn)="getTrangThaiIn($event)">
+                        </app-ket-qua-xet-nghiem-shared>
+
+                        <div style="padding-top: 30px; width: 100%; display: flex;">
+                            <div style="width: 50%;">
+                                <button type="button" (click)="quayLai()" mat-button class="mr-1"><i class="ft-arrow-left"></i> Quay
+                                    lại</button>
+                            </div>
+                            <div style="width: 50%;" class="form-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                                <button *ngIf="!loading && (type == 1 || type == 2)" type="button" (click)="GoiDuyet()" color="primary" mat-raised-button>
+                                    Gởi duyệt
+                                </button>
+
+                                <button *ngIf="!loading && type != 4" type="button" (click)="luu()" color="primary" mat-raised-button>
+                                    <i class="ft-save"></i> Lưu
+                                </button>
+
+                                <!-- <button *ngIf="type == 4" type="button" (click)="xuatFileKetQua()" mat-button class="mr-1">
+                                    Xuất file kết quả
+                                </button> -->
+                                
+                                <button *ngIf="type == 4 || trangThaiIn == true" type="button" (click)="inKetQua()" mat-button class="mr-1">
+                                     In kết quả
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

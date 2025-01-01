@@ -1,0 +1,84 @@
+.po-right {
+    text-align: right;
+    flex-grow: 1;
+}
+
+.d-unset {
+    display: unset !important;
+}
+
+kendo-splitter {
+    border-width: 0px !important;
+    min-height: 100px;
+    ul>li.right-0 {
+        margin-right: 0px;
+        padding-right: 15px;
+    }
+}
+
+fieldset {
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    border: 1px #e0e0e0;
+    border-style: inherit;
+    //border-radius: 4%;
+    .item_right {
+        text-align: right !important;
+        float: right;
+    }
+    ul>li {
+        padding-right: 15px !important;
+    }
+    ul.inline>li {
+        display: inline !important;
+    }
+}
+
+kendo-panelbar-item {
+    ul.inline>li {
+        padding-right: 10px !important;
+        padding-bottom: 0.625em;
+        display: inline-block !important;
+    }
+    .inline_b {
+        display: inline-block !important;
+        margin-right: 10px;
+        padding-right: 15px;
+    }
+    .panelbar-row {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        &:hover {
+            background: rgba(227, 242, 253, 0.5);
+        }
+    }
+    .panelbar-group-b {
+        border-top: 1px rgba(0, 0, 0, 0.08) outset;
+    }
+}
+
+.sticky-panelbar {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 64px;
+}
+
+.sticky-button-action {
+    position: sticky;
+    position: -webkit-sticky;
+    bottom: 0px;
+    background-color: white;
+    border-top: 1px solid var(--foreground-divider);
+}
+
+so-du-tai-khoan {
+    color: rgb(54, 179, 126);
+}
+
+so-du-uoc-luong-con-lai {
+    color: rgb(255, 86, 48);
+}

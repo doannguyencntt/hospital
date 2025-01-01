@@ -1,0 +1,76 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs
+                    [crumbs]="[{Title:'Danh Mục',Path:''},{Title:'Nhóm Hệ Thống',Path:''},{Title:'Bệnh Viện',Path:''},
+          {Title:'Nhóm Dịch Vụ Tại Bệnh Viện',Path:'/danh-muc/nhom-he-thong/benh-vien/nhom-dich-vu-benh-vien', Active: true}]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <!-- <app-grid baseRoute="danh-muc/nhom-he-thong/benh-vien/nhom-dich-vu-benh-vien" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useActionDefault]="true"
+                [showExportExcel]="true" (extExportExcel)="exportExcel()"
+                [lazyLoadPage]="true">
+            </app-grid>
+            
+            <ng-template #defaultTemplate let-dataItem>
+                <span class="red" *ngIf="dataItem.IsDefault==true">Phải</span>
+                <span *ngIf="dataItem.IsDefault!=true">Không</span>
+            </ng-template> -->
+
+            <div class="bg-app-bar px-6 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                    fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        placeholder="{{searchPlaceHolder}}" type="search" name="searchString"
+                        [(ngModel)]="nhomDichVuBenhVien.SearchString" (keyup)="onKey($event)"
+                        (ngModelChange)="searchChanges($event)" />
+                </div>
+                <span fxFlex></span>
+                <button (click)="themNhomDichVu()" class="ml-4 right" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm"
+                    type="button">
+                    <mat-icon [icIcon]="icAdd"></mat-icon>
+                </button>
+            </div>
+            <div class="csxn-content">
+                <kendo-treeview [nodes]="data" textField="Ten" [hasChildren]="hasChildren" [children]="fetchChildren"
+                    kendoTreeViewExpandable [expandBy]="'IdCap'" [(expandedKeys)]="expandedKeys" childrenField="items">
+
+                    <ng-template kendoTreeViewNodeTemplate let-dataItem>
+                        <span [ngClass]="iconClass(dataItem)" (click)="chinhSua(dataItem.Id)"></span>
+                        <a (click)="chinhSua(dataItem.Id)">
+                            {{dataItem.Ma}} - {{dataItem.Ten}}</a>
+                        <span fxFlex></span>
+                        <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động"
+                            [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                            <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+                        </button>
+                        <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                            <ng-template let-customer="customer" matMenuContent>
+                                <button (click)="themCon(dataItem.Id)" mat-menu-item>
+                                    <mat-icon [icIcon]="icAdd"></mat-icon>
+                                    <span>Thêm dịch vụ con </span>
+                                </button>
+                                <button (click)="chinhSua(dataItem.Id)" mat-menu-item>
+                                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                                    <span>Sửa</span>
+                                </button>
+                                <button *ngIf="!dataItem.IsDefault" (click)="xoaCon(dataItem.Id)" mat-menu-item>
+                                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                                    <span>Xóa</span>
+                                </button>
+                            </ng-template>
+                        </mat-menu>
+                    </ng-template>
+                </kendo-treeview>
+
+            </div>
+        </div>
+
+    </vex-page-layout-content>
+</vex-page-layout>

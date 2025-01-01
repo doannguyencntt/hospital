@@ -1,0 +1,378 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0"
+	[ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+	<!-------------------------------------------------- BEGIN LÝ DO VÀO VIỆN --------------------------------------------->
+	<div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+		<h3 class="blue-text" style="display: inline; float: left">I. LÝ DO VÀO VIỆN</h3>
+	</div>
+
+	<!-- <div fxFlex="100%">
+		<app-textarea id="ly-do-vao-vien" [(model)]="thongTinBenhAnKhoaNhi.LyDoVaoVien" class="item-no-padding"
+			fxFlex="80%" fxFlex.sm="100%" label="Lý do vào viện" maxlength="4000"> </app-textarea>
+		<app-textbox id="thu-may-vao-vien" [(model)]="thongTinBenhAnKhoaNhi.ThuMayVaoVien" class="item-no-padding"
+			fxFlex="20%" fxFlex.sm="100%" label="Vào ngày thứ (của bệnh)" maxlength="50"> </app-textbox>
+	</div> -->
+	<div fxFlex="100%">
+		<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+			<app-textarea id="ly-do-vao-vien" [(model)]="thongTinBenhAnKhoaNhi.LyDoVaoVien" class="item-no-padding"
+				fxFlex="80%" fxFlex.sm="100%" label="Lý do vào viện" maxlength="4000"> </app-textarea>
+			<app-textbox id="thu-may-vao-vien" [(model)]="thongTinBenhAnKhoaNhi.ThuMayVaoVien" class="item-no-padding"
+				fxFlex="20%" fxFlex.sm="100%" label="Vào ngày thứ (của bệnh)" maxlength="50"> </app-textbox>
+		</div>
+	</div>
+	<!---------------------------------------------------END LÝ DO VÀO VIỆN ------------------------------------------------->
+	<!-------------------------------------------------- BEGIN THÔNG TIN HỎI BỆNH ------------------------------------------->
+	<div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+		<h3 class="blue-text" style="display: inline; float: left">II. HỎI BỆNH</h3>
+	</div>
+	<h5 class="mt-2 mb-2"><strong>1. Quá trình hỏi bệnh</strong></h5>
+	<app-textarea id="qua-trinh-hoi-benh" [(model)]="thongTinBenhAnKhoaNhi.QuaTrinhHoiBenh" class="item-no-padding"
+		fxFlex="100%" fxFlex.sm="100%" label="Quá trình hỏi bệnh" maxlength="4000"> </app-textarea>
+	<h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%"><strong>2. Tiền sử bệnh</strong></h5>
+	<span class="mt-2 mb-2">+ Bản thân:</span>
+	<app-textarea id="qua-trinh-hoi-benh" [(model)]="thongTinBenhAnKhoaNhi.TienSuBenhBanThan" class="item-no-padding"
+		fxFlex="100%" fxFlex.sm="100%" label="Bản thân" maxlength="4000"> </app-textarea>
+	<span class="mt-2 mb-2">+ Gia đình:</span>
+	<app-textarea id="qua-trinh-hoi-benh" [(model)]="thongTinBenhAnKhoaNhi.TienSuBenhGiaDinh" class="item-no-padding"
+		fxFlex="100%" fxFlex.sm="100%" label="gia đình" maxlength="4000"> </app-textarea>
+	<!-------------------------------------------------- END THÔNG TIN HỎI BỆNH -------------------------------------------->
+	<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+		<h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%"><strong>3. Quá trình sinh trưởng</strong></h5>
+
+		<app-textboxnumeric fxFlex="10%" fxFlex.sm="10%" label="Con thứ mấy" min="1" max="999"
+			[(model)]="thongTinBenhAnKhoaNhi.ConThuMay"> </app-textboxnumeric>
+		<div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%">
+			<div class="container-custom">
+				<label style="display: flex">Tiền thai(Para) </label>
+				<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+					<app-textboxnumeric fxFlex="25%" fxFlex.sm="100%" label=" " class="no-label" min="1" max="999999"
+						[(model)]="thongTinBenhAnKhoaNhi.TienThaiPara1"> </app-textboxnumeric>
+					<app-textboxnumeric fxFlex="25%" fxFlex.sm="100%" label=" " class="no-label" min="1" max="999999"
+						[(model)]="thongTinBenhAnKhoaNhi.TienThaiPara2"> </app-textboxnumeric>
+					<app-textboxnumeric fxFlex="25%" fxFlex.sm="100%" label=" " class="no-label" min="1" max="999999"
+						[(model)]="thongTinBenhAnKhoaNhi.TienThaiPara3"> </app-textboxnumeric>
+					<app-textboxnumeric fxFlex="25%" fxFlex.sm="100%" label=" " class="no-label" min="1" max="999999"
+						[(model)]="thongTinBenhAnKhoaNhi.TienThaiPara4"> </app-textboxnumeric>
+				</div>
+			</div>
+		</div>
+		<app-radio id="tinh-trang-khi-sinh" fxFlex="40%" fxFlex.md="40%" fxFlex.sm="100%" label="Tình trạng khi sinh"
+			[items]="TinhTrangSauSinhSelectItems" [(model)]="thongTinBenhAnKhoaNhi.TinhTrangKhiSinh"> </app-radio>
+		<app-textboxnumeric fxFlex="20%" fxFlex.sm="20%" label="Cân nặng lúc sinh(kg)" decimals="2" [format]="format"
+			min="1" max="999999" format="n2" decimals="2" [(model)]="thongTinBenhAnKhoaNhi.CanNangLucSinh">
+		</app-textboxnumeric>
+
+		<app-checkbox class="item-no-padding" fxFlex="100%" fxFlex.sm="100%" label="Dị tật bẩm sinh"
+			[(model)]="thongTinBenhAnKhoaNhi.DiTatBamSinh"> </app-checkbox>
+		<app-textarea class="item-no-padding" *ngIf="thongTinBenhAnKhoaNhi.DiTatBamSinh" fxFlex="100%" fxFlex.sm="100%"
+			label="Mô tả dị tật" [(model)]="thongTinBenhAnKhoaNhi.ThongTinDiTatBamSinh" maxlength="4000">
+		</app-textarea>
+		<app-textarea class="item-no-padding" fxFlex="30%" fxFlex.sm="100%" label="Phát triển tinh thần"
+			[(model)]="thongTinBenhAnKhoaNhi.PhatTrienVeTinhThan" maxlength="4000"> </app-textarea>
+		<app-textarea class="item-no-padding" fxFlex="30%" fxFlex.sm="100%" label="Phát triển vận động"
+			[(model)]="thongTinBenhAnKhoaNhi.PhatTrienVeVanDong" maxlength="4000"> </app-textarea>
+		<app-textarea class="item-no-padding" fxFlex="40%" fxFlex.sm="100%" label="Các bệnh lý khác"
+			[(model)]="thongTinBenhAnKhoaNhi.CacBenhLyKhac" maxlength="4000"> </app-textarea>
+		<app-radio id="nuoi-duong" fxFlex="50%" fxFlex.sm="50%" label="Nuôi dưỡng" [items]="NuoiDuongSelectItems"
+			[(model)]="thongTinBenhAnKhoaNhi.NuoiDuong"> </app-radio>
+		<app-textboxnumeric fxFlex="20%" fxFlex.sm="20%" label="Cai sữa tháng thứ" min="1" max="999"
+			[(model)]="thongTinBenhAnKhoaNhi.CaiSuaThangThu"> </app-textboxnumeric>
+		<app-radio id="cham-soc" fxFlex="20%" fxFlex.sm="20%" label="Chăm sóc" [items]="ChamSocSelectItems"
+			[(model)]="thongTinBenhAnKhoaNhi.ChamSoc"> </app-radio>
+		<div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%">
+			<div class="container-custom">
+				<label style="display: flex">Đã tiêm chủng </label>
+				<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+					<app-checkbox class="item-no-padding" fxFlex="10%" fxFlex.sm="100%" label="Lao"
+						[(model)]="thongTinBenhAnKhoaNhi.Lao"> </app-checkbox>
+					<app-checkbox class="item-no-padding" fxFlex="10%" fxFlex.sm="100%" label="Bại liệt"
+						[(model)]="thongTinBenhAnKhoaNhi.BaiLiet"> </app-checkbox>
+					<app-checkbox class="item-no-padding" fxFlex="10%" fxFlex.sm="100%" label="Sởi"
+						[(model)]="thongTinBenhAnKhoaNhi.Soi"> </app-checkbox>
+					<app-checkbox class="item-no-padding" fxFlex="10%" fxFlex.sm="100%" label="Ho gà"
+						[(model)]="thongTinBenhAnKhoaNhi.HoGa"> </app-checkbox>
+					<app-checkbox class="item-no-padding" fxFlex="10%" fxFlex.sm="100%" label="Uốn váng"
+						[(model)]="thongTinBenhAnKhoaNhi.UonVang"> </app-checkbox>
+					<app-checkbox class="item-no-padding" fxFlex="10%" fxFlex.sm="100%" label="Bạch hầu "
+						[(model)]="thongTinBenhAnKhoaNhi.BachHau"> </app-checkbox>
+					<app-checkbox class="item-no-padding" fxFlex="15%" fxFlex.sm="100%" label="Tiêm chủng khác"
+						[(model)]="thongTinBenhAnKhoaNhi.TiemChungKhac"> </app-checkbox>
+				</div>
+			</div>
+		</div>
+		<app-textarea id="tiem-chung-khac" *ngIf="thongTinBenhAnKhoaNhi.TiemChungKhac"
+			[(model)]="thongTinBenhAnKhoaNhi.NoiDungTiemChungKhac" fxFlex="100%" fxFlex.sm="100%"
+			class="item-no-padding" label="Cụ thể những bệnh khác được tiêm chủng" maxlength="4000"> </app-textarea>
+	</div>
+	<!-------------------------------------------------- BEGIN QUÁ TRÌNH SINH TRƯỞNG  --------------------------------------->
+
+	<!-------------------------------------------------- BEGIN THÔNG TIN HỎI BỆNH ------------------------------------------->
+
+	<!-------------------------------------------------- END QUÁ TRÌNH SINH TRƯỞNG  ----------------------------------------->
+	<div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+		<h3 class="blue-text" style="display: inline; float: left">III. KHÁM BỆNH</h3>
+	</div>
+	<h5 class="mt-2 mb-2"><strong>1. Toàn thân</strong></h5>
+	<div fxFlex="100%">
+		<div class="mt-1">
+			<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+				<app-textboxnumeric label="Chiều cao(cm)" fxFlex="25%" fxFlex.sm="100%" decimals="2" [format]="format"
+					min="1" max="999999" [(model)]="thongTinBenhAnKhoaNhi.ChieuCao"> </app-textboxnumeric>
+				<app-textboxnumeric label="Vòng ngực(cm)" fxFlex="25%" fxFlex.sm="100%" decimals="2" [format]="format"
+					min="1" max="999" [(model)]="thongTinBenhAnKhoaNhi.VongNguc"> </app-textboxnumeric>
+				<app-textboxnumeric label="Vòng đầu(cm)" fxFlex="25%" fxFlex.sm="100%" decimals="2" [format]="format"
+					min="1" max="999" [(model)]="thongTinBenhAnKhoaNhi.VongDau"> </app-textboxnumeric>
+				<app-textarea id="toan-than" label="Toàn thân" [(model)]="thongTinBenhAnKhoaNhi.KhamBenhToanThan"
+					fxFlex="100%" fxFlex.sm="100%" maxlength="4000"> </app-textarea>
+			</div>
+		</div>
+	</div>
+	<div class="mt-1">
+		<app-thong-tin-chi-so-sinh-ton [dataSourceChiSoSinhTons]="dataSourceChiSoSinhTons">
+		</app-thong-tin-chi-so-sinh-ton>
+		<!------------------------------------------------ END CHỈ SỐ SINH TỒN -------------------------------------------->
+	</div>
+	<h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%"><strong>2. Các cơ quan</strong></h5>
+	<div fxFlex="100%">
+		<div class="mt-1">
+			<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+				<app-textarea class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Tuần hoàn"
+					[(model)]="thongTinBenhAnKhoaNhi.TuanHoan" maxlength="4000"> </app-textarea>
+				<app-textarea class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Hô hấp"
+					[(model)]="thongTinBenhAnKhoaNhi.HoHap" maxlength="4000"> </app-textarea>
+				<app-textarea class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Tiêu hóa"
+					[(model)]="thongTinBenhAnKhoaNhi.TieuHoa" maxlength="4000"> </app-textarea>
+				<app-textarea class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Thận-Tiết niệu-Sinh dục"
+					[(model)]="thongTinBenhAnKhoaNhi.ThanTietNieu" maxlength="4000"> </app-textarea>
+				<app-textarea class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Thần kinh"
+					[(model)]="thongTinBenhAnKhoaNhi.ThanKinh" maxlength="4000"> </app-textarea>
+				<app-textarea class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Cơ-xương-khớp"
+					[(model)]="thongTinBenhAnKhoaNhi.CoXuongKhop" maxlength="4000"> </app-textarea>
+				<app-textarea class="item-no-padding" fxFlex="100%" fxFlex.sm="100%"
+					label="Tai-mũi-họng, Răng-hàm-mặt" [(model)]="thongTinBenhAnKhoaNhi.TaiMuiHong" maxlength="4000">
+				</app-textarea>
+			</div>
+		</div>
+	</div>
+	<div fxFlex="100%">
+		<div class="mt-1">
+			<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+				<div fxFlex="50%" fxFlex.sm="100%">
+					<strong>3. Các xét nghiệm CLS đã có và cần làm</strong>
+					<app-textarea class="item-no-padding" maxlength="4000" label="Các xét nghiệm CLS đã có và cần làm"
+						[(model)]="thongTinBenhAnKhoaNhi.CacXetNghiemCanLam"> </app-textarea>
+				</div>
+				<div fxFlex="50%" fxFlex.sm="100%">
+					<strong>4. Tóm tắt bệnh án</strong>
+					<app-textarea class="item-no-padding" label="Tóm tắt bệnh án"
+						[(model)]="thongTinBenhAnKhoaNhi.TomTatBenhAn" maxlength="4000"> </app-textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-------------------------------------------------- END THÔNG TIN KHÁM BỆNH ------------------------------------------->
+	<!------------------------------------------------- BEGIN CHẨN ĐOÁN KHI VÀO KHOA ĐIỀU TRỊ ------------------------------>
+	<div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+		<h3 class="blue-text" style="display: inline; float: left">IV. CHẨN ĐOÁN KHI VÀO KHOA ĐIỀU TRỊ</h3>
+	</div>
+	<div fxFlex="100%">
+		<div class="mt-1">
+			<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+				<div fxFlex="50%" fxFlex.sm="100%">
+					<span class="item-no">ICD chính</span>
+					<app-combobox label="Chẩn đoán ICD chính" url="KhamBenh/ICD"
+						[(model)]="thongTinBenhAnKhoaNhi.ICDChinh" [(modelText)]="thongTinBenhAnKhoaNhi.TenICDChinh"
+						(selectionChange)="iCDSelectionChange($event)" [template]="iCDChinhTemplate"
+						[templateHeader]="iCDChinhTemplateHeader" class="item-no-padding"
+						[queryInfo]="{ParameterDependencies:'{ChanDoanICDId:' + thongTinBenhAnKhoaNhi.ICDChinh +'}', Take: 50}">
+						<ng-template #iCDChinhTemplateHeader let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<th width="25%">Mã</th>
+									<th>Tên Tiếng Việt</th>
+								</tr>
+							</table>
+						</ng-template>
+						<ng-template #iCDChinhTemplate let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<td width="25%">{{dataItem.Ma}}</td>
+									<td>{{dataItem.Ten}}</td>
+								</tr>
+							</table>
+						</ng-template>
+					</app-combobox>
+				</div>
+				<div fxFlex="50%" fxFlex.sm="100%">
+					<span class="item-no">Chẩn đoán</span>
+					<app-textarea id="GhiChu" label="Chẩn đoán" [(model)]="thongTinBenhAnKhoaNhi.ChuanDoan"
+						maxlength="4000" minHeight="20"> </app-textarea>
+				</div>
+			</div>
+		</div>
+		<div class="mt-1">
+			<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+				<span fxFlex="9%" class="item-no mt-2">Chẩn đoán kèm theo</span>
+				<button class="po-h item-no mt-0 mb-1" color="primary" (click)="themChanDoanKemTheo()">
+					<mat-icon [icIcon]="icAddCircle"></mat-icon>
+				</button>
+				<app-grid fxFlex="100%" fxFlex.sm="100%" HideCheckAll="true"
+					(extOnDataBound)="onDataBoundChuanDoanKemTheo($event)" [gridColumns]="gridChanDoanKemTheoColumns"
+					[documentType]="documentType" [useHeaderDefault]="false" [useActionDefault]="false"
+					[lazyLoadPage]="true" [checkboxAble]="false" [pageable]="false" height="auto" #gridChanDoanKemTheo
+					[gridDataSource]="dataSourceICDsPhuKhac">
+					<ng-template #teniCDsPhuKhacTemplate ngFor let-item let-rowIndex="rowIndex"
+						[ngForOf]="thongTinBenhAnKhoaNhi.ChuanDoanKemTheos">
+						<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+							<app-combobox popupSettings="null" [template]="iCDsPhuTemplate" [(model)]="item.ICD"
+								[modelText]="item.TenICD" [templateHeader]="iCDsPhuTemplateHeader"
+								[required]="item.ICD == null" (selectionChange)="onChangeSetTenICDPhu($event, rowIndex)"
+								fxFlex="100%"
+								[queryInfo]="{ParameterDependencies:'{ICDId:' + item.ICDId +'}', Take: 50}"
+								url="KhamBenh/ICD" class="no-label item-no-padding" label=" "
+								[validationerror]="'thongTinBenhAnKhoaNhi.ChuanDoanKemTheos['+rowIndex+'].ICD' | validationerror:validationICDPhuErrors">
+								<ng-template #iCDsPhuTemplateHeader let-dataItem>
+									<table width="100%" class="table-combobox">
+										<tr>
+											<th width="15%">Mã</th>
+											<th>Tên Tiếng Việt</th>
+										</tr>
+									</table>
+								</ng-template>
+								<ng-template #iCDsPhuTemplate let-dataItem>
+									<table width="100%" class="table-combobox">
+										<tr>
+											<td width="15%">{{dataItem.Ma}}</td>
+											<td>{{dataItem.Ten}}</td>
+										</tr>
+									</table>
+								</ng-template>
+							</app-combobox>
+						</div>
+					</ng-template>
+					<ng-template #ghiChuICDsPhuKhacTemplate ngFor let-item
+						[ngForOf]="thongTinBenhAnKhoaNhi.ChuanDoanKemTheos">
+						<app-textarea fxFlex="100%" id="ChuanDoan" fxFlex="100%" class="no-label" maxlength="4000"
+							[(model)]="item.ChuanDoan" minHeight="20"> </app-textarea>
+					</ng-template>
+					<ng-template #actionICDsPhuKhacTemplate let-dataItem let-rowIndex="rowIndex">
+						<div class="text-center" kendoTooltip>
+							<button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button"
+								(click)="xoaICDPhanKemTheo(dataItem)">
+								<mat-icon [icIcon]="icDelete"></mat-icon>
+							</button>
+						</div>
+					</ng-template>
+				</app-grid>
+			</div>
+		</div>
+		<div class="mt-1">
+			<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+				<span fxFlex="9%" class="item-no mt-2">Chẩn đoán phân biệt</span>
+				<button class="po-h item-no mt-0 mb-1" color="primary" (click)="themChanDoanPhanBiet()">
+					<mat-icon [icIcon]="icAddCircle"></mat-icon>
+				</button>
+				<app-grid fxFlex="100%" fxFlex.sm="100%" HideCheckAll="true" [gridColumns]="gridChanDoanPhanBietColumns"
+					[documentType]="documentType" [useHeaderDefault]="false" [useActionDefault]="false"
+					[lazyLoadPage]="true" [checkboxAble]="false" [pageable]="false" height="auto"
+					[gridDataSource]="dataSourceChuanDoanPhanBiets">
+					<ng-template #teniCDsPhanBietTemplate ngFor let-item let-rowIndex="rowIndex"
+						[ngForOf]="thongTinBenhAnKhoaNhi.ChuanDoanPhanBiets">
+						<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+							<app-combobox popupSettings="null" [template]="iCDsPhuTemplate" [(model)]="item.ICD"
+								[modelText]="item.TenICD" [templateHeader]="iCDsPhuTemplateHeader"
+								[required]="item.ICD == null"
+								(selectionChange)="onChangeChuanDoanPhanBiet($event, rowIndex)" fxFlex="100%"
+								[queryInfo]="{ParameterDependencies:'{ICDId:' + item.ICDId +'}', Take: 50}"
+								url="KhamBenh/ICD" class="no-label item-no-padding" label=" "
+								[validationerror]="'thongTinBenhAnKhoaNhi.ChuanDoanPhanBiets['+rowIndex+'].ICD' | validationerror:validationICDPhanBietErrors">
+								<ng-template #iCDsPhuTemplateHeader let-dataItem>
+									<table width="100%" class="table-combobox">
+										<tr>
+											<th width="15%">Mã</th>
+											<th>Tên Tiếng Việt</th>
+										</tr>
+									</table>
+								</ng-template>
+								<ng-template #iCDsPhuTemplate let-dataItem>
+									<table width="100%" class="table-combobox">
+										<tr>
+											<td width="15%">{{dataItem.Ma}}</td>
+											<td>{{dataItem.Ten}}</td>
+										</tr>
+									</table>
+								</ng-template>
+							</app-combobox>
+						</div>
+					</ng-template>
+					<ng-template #ghiChuICDsPhuKhacTemplate ngFor let-item
+						[ngForOf]="thongTinBenhAnKhoaNhi.ChuanDoanPhanBiets">
+						<app-textarea fxFlex="100%" id="ChuanDoan" fxFlex="100%" class="no-label" maxlength="4000"
+							[(model)]="item.ChuanDoan" minHeight="20"> </app-textarea>
+					</ng-template>
+					<ng-template #actionICDsPhanBietTemplate let-dataItem let-rowIndex="rowIndex">
+						<div class="text-center" kendoTooltip>
+							<button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button"
+								(click)="xoaICDPhanBiet (dataItem)">
+								<mat-icon [icIcon]="icDelete"></mat-icon>
+							</button>
+						</div>
+					</ng-template>
+				</app-grid>
+			</div>
+		</div>
+	</div>
+	<div fxFlex="100%">
+		<div class="mt-1">
+			<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+				<div fxFlex="50%" fxFlex.sm="100%">
+					<h3 class="blue-text">V. TIÊN LƯỢNG</h3>
+					<app-textarea [minHeight]="60" id="tien-luong" class="item-no-padding" label="Tiên lượng"
+						[(model)]="thongTinBenhAnKhoaNhi.TienLuong" maxlength="4000"> </app-textarea>
+				</div>
+				<div fxFlex="50%" fxFlex.sm="100%">
+					<h3 class="blue-text">VI. HƯỚNG DẪN ĐIỀU TRỊ</h3>
+					<app-textarea [minHeight]="60" id="huong-dan-dieu-tri" class="item-no-padding"
+						label="Hướng dẫn điều trị" [(model)]="thongTinBenhAnKhoaNhi.HuongDanDieuTri"
+						maxlength="4000"> </app-textarea>
+				</div>
+				<div fxFlex="100%" fxFlex.sm="100%">
+					<h3 class="blue-text">VII.Hướng xử trí và lời dặn của bác sĩ</h3>
+					<div fxFlex="80%" fxFlex.sm="100%" class="d-flex flex-row-reverse">
+						<button class="ml-1 mt-2" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm"
+							type="button" (click)="showPopupDuLieuMacDinh()">
+							<mat-icon style="color: white;" [icIcon]="icAdd"></mat-icon>
+						</button>
+						<app-combobox id="ketQuaMau" fxFlex="30%" fxFlex.sm="30%" url="DieuTriNoiTru/GetListNoiDungMau?LoaiBenhAn={{LoaiBenhAn}}"
+							popupSettings="null" label="Nội dung mẫu" class="item-no-padding mr-2"
+							(selectionChange)="selectionChangeLoiDanBS($event)"
+							style="padding-bottom: 0px;" [template]="ketQuaTemplate"
+							[templateHeader]="ketQuaTemplateHeader">
+							<ng-template #ketQuaTemplateHeader let-dataItem>
+								<table width="100%" class="table-combobox">
+									<tr>
+										<th width="20%">Mã</th>
+										<th>Tên</th>
+									</tr>
+								</table> 
+							</ng-template>
+							<ng-template #ketQuaTemplate let-dataItem>
+								<table width="100%" class="table-combobox">
+									<tr>
+										<td width="20%">{{dataItem.Ma}}</td>
+										<td>{{dataItem.Ten}}</td>
+									</tr>
+								</table>
+							</ng-template>
+						</app-combobox>
+					</div>
+				</div>
+				<div fxFlex="100%" fxFlex.sm="100%">
+					<app-textarea [minHeight]="60" id="huong-dan-dieu-tri" class="item-no-padding" maxlength="4000"
+						label="Hướng xử trí và lời dặn của bác sĩ" [(model)]="thongTinBenhAnKhoaNhi.HuongXuLyLoiDanBs">
+					</app-textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!------------------------------------------------- END CHẨN ĐOÁN KHI VÀO KHOA ĐIỀU TRỊ -------------------------------->
+</div>

@@ -1,0 +1,23 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">{{Title}}</div>
+    <button type="button" mat-icon-button (click)="close(null)" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div fxFlex="100" fxFlex.sm="100" [innerHtml]="Message"></div>
+    
+        <app-textarea id="lyDo" [(model)]="lyDo" fxFlex="100" fxFlex.sm="100" maxlength="1000" label="Lý do"
+            minHeight="20" [required]="true"
+            [validationerror]="'lyDo' | validationerror:validationErrors">
+        </app-textarea>
+    </div>
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end" class="mt-3">
+    <button mat-button (click)="close(null)">Không</button>
+    <button mat-button color="primary" (click)="close('ok')">Có</button>
+</mat-dialog-actions>

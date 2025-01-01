@@ -1,0 +1,92 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    style="padding-top: 5px;">
+
+    <app-combobox id="CongTyKhamSucKhoeId" fxFlex="30%" fxFlex.sm="20%" label="Tên công ty" [required]="true"
+        url="KhamDoan/GetCongTys" [(model)]="khamDoanDaKetLuanSearch.CongTyKhamSucKhoeId" [reloadForGrid]="true"
+        [modelText]="khamDoanDaKetLuanSearch.TenCongTy" (selectionChange)="congTyKhamSucKhoeChange($event)"
+        (openCombobox)="openCombobox($event)" (keyup)="onKey($event)">
+    </app-combobox>
+
+    <app-combobox id="HopDongKhamSucKhoeId" fxFlex="30%" fxFlex.sm="20%" label="Số hợp đồng" [required]="true"
+        url="KhamDoan/GetHopDongKhamSucKhoes?LaHopDongKetThuc={{true}}"
+        [(model)]="khamDoanDaKetLuanSearch.HopDongKhamSucKhoeId" [modelText]="khamDoanDaKetLuanSearch.TenSoHopDong" 
+        (selectionChange)="soHopDongChange($event)" [reloadForGrid]="true" 
+        [bind]="true" (dataForLookupChange)="changeLookupHopDong($event)"
+        [queryInfo]="{ParameterDependencies:'{CongTyKhamSucKhoeId:' + khamDoanDaKetLuanSearch.CongTyKhamSucKhoeId + '}', Take: 50}"
+        (openCombobox)="openCombobox($event)" (keyup)="onKey($event)">
+    </app-combobox>
+</div>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between" style="padding-top: 15px;">
+    <h3 fxFlex="100%" class="sub-title mt-0">Danh sách nhân viên</h3>
+    <app-grid #gridChildDaKetLuan [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+        [lazyLoadPage]="true" [useHeaderDefault]="false" [checkboxAble]="false" pageSize="50" [showStt]="true"
+        urlGetData="KhamDoan/GetDataForGridAsyncDanhSachKetLuanCLSKhamSucKhoe" [sort]="sort" heightToolbar="326"
+        urlGetTotalPage="KhamDoan/GetTotalPageForGridAsyncDanhSachKetLuanCLSKhamSucKhoe" [headerTemplate]="headerTemplate">
+        <ng-template #ketLuanTemplate let-dataItem>
+            <label *ngIf="dataItem.TinhTrangCLS == 0">
+                <span>{{dataItem.KSKKetLuanCLSDisplay}}</span>
+            </label>
+            <label *ngIf="dataItem.TinhTrangCLS == 1" class="green">
+                <span>{{dataItem.KSKKetLuanCLSDisplay}}</span>
+            </label>
+
+        </ng-template>
+        <ng-template #maTNTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <a (click)="chinhSua(dataItem.Id, dataItem.YeuCauTiepNhanId,dataItem.CongTyKhamSucKhoeId,dataItem.HopDongKhamSucKhoeId)">
+                    <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.MaTN}}">
+                        {{dataItem.MaTN}}</p>
+                </a>
+            </div>
+        </ng-template>
+
+        <ng-template #gioiTinhTemplate let-dataItem>
+            {{dataItem.GioiTinhDisplay}}
+        </ng-template>
+
+        <ng-template #dichVuDaThucHienTemplate let-dataItem>
+            <div *ngIf="dataItem.DichVuDaThucHien == dataItem.TongDichVu">
+                <label style="color:green">
+                    {{dataItem.DichVuDaThucHien}}
+                </label>/
+                <label>
+                    <b>{{dataItem.TongDichVu}}</b>
+                </label>
+            </div>
+
+            <div *ngIf="dataItem.DichVuDaThucHien < dataItem.TongDichVu">
+                <label style="color:orange">
+                    {{dataItem.DichVuDaThucHien}}
+                </label>/
+                <label>
+                    <b>{{dataItem.TongDichVu}}</b>
+                </label>
+            </div>
+        </ng-template>
+    </app-grid>
+
+    <ng-template #headerTemplate>
+        <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+
+            <app-checkbox name="co-duyet" (modelChange)="trangThaiCheckBox($event,'chuaketluan')" class="ml-2"
+                value="coduyet" [(model)]="khamDoanDaKetLuanSearch.ChuaKetLuan" fxFlex.lt-md="auto" fxHide.xs
+                fxLayout="row" fxLayoutAlign="start center" label="Chưa KL">
+            </app-checkbox>
+
+            <app-checkbox name="co-duyet" (modelChange)="trangThaiCheckBox($event,'daketluan')" class="ml-2"
+                value="coduyet" [(model)]="khamDoanDaKetLuanSearch.DaKetLuan" fxFlex.lt-md="auto" fxHide.xs
+                fxLayout="row" fxLayoutAlign="start center" label="Đã KL">
+            </app-checkbox>
+
+            <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                fxLayoutAlign="start center" style="margin-top: 2px;margin-left: 10px;">
+                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                    type="search" name="searchString" [(ngModel)]="khamDoanDaKetLuanSearch.SearchString"
+                    (keyup)="onKey($event)" (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa..." />
+            </div>
+        </div>
+    </ng-template>
+</div>

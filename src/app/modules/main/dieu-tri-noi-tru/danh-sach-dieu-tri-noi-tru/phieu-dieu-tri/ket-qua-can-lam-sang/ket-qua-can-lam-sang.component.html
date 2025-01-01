@@ -1,0 +1,275 @@
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+    <div class="card" fxFlex="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+            <!--Begin Chuẩn đoán hình ảnh  -->
+            <fieldset fxFlex="100%" class="mb-3">
+                <legend>KẾT QUẢ CĐHA VÀ TDCN</legend>
+                <div class="mt-1">
+                    <app-grid masterName="gridCDHAVaTDCNCLS" fxFlex="100%" [gridColumns]="gridColumns"
+                        [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="true"
+                        [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                        [urlGetData]="urlGetDataGrid" [urlGetTotalPage]="urlGetTotalPageGrid" [autoHeight]=true
+                        #gridCDHAVaTDCNCLS [detailTemplate]="detailTemplate" [additionalSearchString]="additionString"
+                        [groups]="groups" maxHeight="400">
+                    </app-grid>
+                </div>
+            </fieldset>
+            <!--End Chuẩn đoán hình ảnh -->
+            <!--Begin Xét Nghiệm  -->
+            <fieldset fxFlex="100%" class="mb-3">
+                <legend>KẾT QUẢ XÉT NGHIỆM</legend>
+
+                <div class="mt-1">
+                    <app-grid masterName="gridDuyetYeuCauChayLaiXN" fxFlex="100%" [sort]="sort"
+                        #gridDuyetYeuCauChayLaiXN [documentType]="documentType" [useHeaderDefault]="false"
+                        [useAddDeault]="false" [useAddDeault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                        [gridColumns]="gridXetNghiemColumns" [groups]="groupXNs" [pageable]="false"
+                        [headerTemplate]="headerTemplate" maxHeight="400" [gridDataSource]="dataSourceXetNghiem"
+                        [collapseGroup]="true">
+                    </app-grid>
+                    <ng-template #headerTemplate>
+                        <div class="div-header bg-app-bar px-6 h-15 border-b sticky left-0" fxLayout="row"
+                            fxLayoutAlign="start center">
+                            <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                                fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                <!-- [(ngModel)]="searchString" -->
+                                <input type="search" name="searchString"
+                                    class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                                    placeholder="Nhập từ khóa tìm kiếm" [formControl]="searchCtrl"
+                                    (ngModelChange)="searchChanges($event)" (keyup)="onKeySearchChanges($event)" />
+                            </div>
+                            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+                                <mat-icon [icIcon]="icSearch"></mat-icon>
+                            </button>
+
+                            <div fxFlex="50%" class="order-color">
+                                <div class="set-color black"></div>
+                                <p>Bình thường</p>
+                                <div class="set-color blue"></div>
+                                <p>Bất thường</p>
+                                <div class="set-color red"></div>
+                                <p>Nguy hiểm</p>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+
+                <div class="mt-2" fxLayout="column" style="position: relative">
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+                        <div *ngIf="dataSourceXetNghiem != undefined && dataSourceXetNghiem.data.length > 0"
+                            class="sticky-button-action py-3 text-right" kendoTooltip fxFlex="100%">
+                            <!-- <div style="float: left;">
+                               
+                            </div> -->
+                            <!-- <button type="button" mat-raised-button (click)="InPhieuXn()" class="icon-color-button"
+                                color="primary" mat-raised-button>In Phiếu
+                                XN</button> -->
+                            <!-- <button type="button" mat-raised-button (click)="yeuCauChayLaiXN()"
+                                class="mr-2 icon-color-button" color="primary" mat-raised-button>Yêu cầu chạy
+                                lại XN</button> -->
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <!--End Xét Nghiệm  -->
+            <!--Begin Khám Bệnh  -->
+            <fieldset *ngIf="phieuDieuTriHienTaiId != undefined && phieuDieuTriHienTaiId != null && phieuDieuTriHienTaiId != 0" fxFlex="100%" class="mb-3">
+                <legend>KẾT QUẢ KHÁM</legend>
+                <div class="mt-1">
+                    <app-grid #gridKhamBenh masterName="gridKhamBenh" fxFlex="100%" [gridColumns]="gridLichSuKhamColumns"
+                        [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="true"
+                        [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                        [urlGetData]="urlGetDataGridLichSuKham" [urlGetTotalPage]="urlGetTotalPageGridLichSuKham" [autoHeight]=true
+                        [additionalSearchString]="additionString" maxHeight="400">
+                    </app-grid>
+                </div>
+            </fieldset>
+            <!--End Khám Bệnh -->
+        </div>
+    </div>
+</div>
+
+<ng-template #nhomTemplate let-value="value" let-dataItem>
+    <div style="width: 163%" kendoTooltip>
+        <strong style="width: 100%;">
+            {{value}}
+        </strong>
+    </div>
+    <div style="width: 17%" kendoTooltip>
+        <button type="button" mat-raised-button
+            (click)="xemXetNghiemTheoNhom(value)" color="primary"  mat-raised-button class="mr-2">
+              Xem 
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #tenTemplate let-dataItem>
+    <span
+        [ngStyle]="{'padding-left':(dataItem.Level)*20+'px','font-weight':dataItem.IdChilds.length>0?'bold':'normal'}">{{dataItem.Ten}}</span>
+</ng-template>
+
+<ng-template #kqCuTemplate let-dataItem>
+    <span *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)"
+        [ngStyle]="{'color':dataItem.LoaiKetQuaTuMay == 1 ? 'black' : (dataItem.LoaiKetQuaTuMay == 2 ? 'blue' : 'red'),'font-weight':dataItem.ToDamGiaTri?'bold':'normal'}">{{dataItem.GiaTriCu}}</span>
+</ng-template>
+
+<ng-template #kqMoiTemplate let-dataItem>
+    <span
+        [ngStyle]="{'color':dataItem.LoaiKetQuaTuMay == 1 ? 'black' : (dataItem.LoaiKetQuaTuMay == 2 ? 'blue' : 'red'),'font-weight':dataItem.ToDamGiaTri?'bold':'normal'}">{{dataItem.KetQuaMoi}}</span>
+</ng-template>
+
+<ng-template #nhomGroupHeaderTemplate let-aggregates let-value="value">
+    <ng-template #templateInfo let-dataItem>
+        <table class="table table-border" width="100%" *ngIf="lichSuYeuCauChayLais.length > 0">
+            <ng-container *ngFor="let item of lichSuYeuCauChayLais" style="font-size: 10px !important;">
+                <tr>
+                    <td>Người yêu cầu: {{item.NguoiYeuCau}}</td>
+                </tr>
+                <tr>
+                    <td>Ngày yêu cầu: {{item.NguoiYeuCau}}</td>
+                </tr>
+                <tr>
+                    <td>Lý do yêu cầu: {{item.LyDoYeuCau}}</td>
+                </tr>
+
+                <!-- Trạng thái duyệt -->
+                <tr *ngIf="item.TrangThai ===  true">
+                    <td>Người duyệt: {{item.NguoiTuChoi}}</td>
+                </tr>
+                <tr class="in-dam" *ngIf="item.TrangThai ===  true">
+                    <td>Ngày duyệt: {{item.NgayTuChoi}}</td>
+                </tr>
+
+                <!-- Trạng thái từ chối -->
+                <tr *ngIf="item.TrangThai ===  false">
+                    <td>Người từ chối: {{item.NguoiTuChoi}}</td>
+                </tr>
+                <tr *ngIf="item.TrangThai ===  false">
+                    <td>Ngày từ chối: {{item.NgayTuChoi}}</td>
+                </tr>
+                <tr class="in-dam" *ngIf="item.TrangThai ===  false">
+                    <td>Lý do yêu cầu: {{item.LyDoTuChoi}}</td>
+                </tr>
+            </ng-container>
+        </table>
+        <span *ngIf="lichSuYeuCauChayLais.length <= 0">Chưa có thông tin chạy lại.</span>
+
+    </ng-template>
+    <strong fxFlex="60%">{{value}}</strong>
+</ng-template>
+
+<ng-template #trangThaiTemplate let-dataItem>
+    <div *ngIf="dataItem.LoaiKetQuaCLS === 'Xét nghiệm' && dataItem.TrangThaiXetNghiemLai=== true">
+        <strong style="color: sandybrown;"> Đang Chạy Lại XN</strong>
+    </div>
+</ng-template>
+
+<ng-template #detailTemplate let-dataItem>
+    <div style="overflow: auto;">
+        <table class="table table-hover table-bordered table-responsive-xl"
+            *ngIf="dataItem.KetQuaCLSGridChiTietVos !== null && dataItem.KetQuaCLSGridChiTietVos.length > 0">
+            <thead>
+                <th resizable class="w-450">TÊN</th>
+                <th resizable style="width: 100px;"> KẾT QUẢ CŨ</th>
+                <th resizable style="width: 100px;"> KẾT QUẢ</th>
+                <th resizable style="width: 100px;"> CSBT </th>
+                <th resizable style="width: 100px;"> ĐƠN VỊ</th>
+                <th resizable style="width: 100px;"> Máy XN</th>
+                <th resizable style="width: 100px;"> Người duyệt </th>
+                <th resizable style="width: 100px;"> Ngày duyệt </th>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let data of dataItem.KetQuaCLSGridChiTietVos">
+                    <tr [class]="data.NgayDuyet == null ? 'bg-light-red' : ''" (click)="data.expanded = !data.expanded">
+                        <td [class]="!data.IsParent ? 'pl-5' : ''"
+                            [style.font-weight]="data.Items !== null && data.Items.length > 0 ? 'bold' : ''">
+                            <ng-container *ngIf="data.IsParent">
+                                <span style="cursor: pointer;"> {{!data.expanded ? '+' : '&ndash;'}} </span>
+                            </ng-container>
+                            {{data.TenDichVu}}
+                        </td>
+                        <ng-container *ngIf="data.IsRoot">
+                            <td colspan="12"></td>
+                        </ng-container>
+                        <ng-container *ngIf="!data.IsRoot">
+                            <td [ngClass]="{ 'in-dam': data.IsBold}"> {{data.KetQuaCu}} </td>
+                            <td [ngClass]="{ 'in-dam': data.IsBold}"> {{data.KetQuaMoi}} </td>
+                            <td [ngClass]="{ 'in-dam': data.IsBold}"> {{data.CSBT}} </td>
+                            <td> {{data.DonVi}} </td>
+                            <td> {{data.MayXN}} </td>
+                            <td> {{data.NguoiDuyet}} </td>
+                            <td> {{data.NgayDuyet}} </td>
+                        </ng-container>
+                    </tr>
+                    <ng-container *ngIf="data.expanded">
+                        <ng-container *ngFor="let detail of data.Items">
+                            <tr [class]="detail.NgayDuyet == null ? 'bg-light-red' : ''"
+                                (click)="detail.expanded = !detail.expanded">
+                                <td [class]="!detail.IsParent ? 'pl-8' : 'pl-5'"
+                                    [style.font-weight]="detail.Items != null && detail.Items.length > 0 ? 'bold' : ''">
+                                    <ng-container *ngIf="detail.IsParent">
+                                        <span style="cursor: pointer;"> {{!detail.expanded ? '+' : '&ndash;'}} </span>
+                                    </ng-container>
+                                    {{detail.TenDichVu}}
+                                </td>
+                                <td [ngClass]="{ 'in-dam': detail.IsBold}"> {{detail.KetQuaCu}} </td>
+                                <td [ngClass]="{ 'in-dam': detail.IsBold}"> {{detail.KetQuaMoi}} </td>
+                                <td [ngClass]="{ 'in-dam': detail.IsBold}"> {{detail.CSBT}} </td>
+                                <td> {{detail.DonVi}} </td>
+                                <td> {{detail.MayXN}} </td>
+                                <td> {{detail.NguoiDuyet}} </td>
+                                <td> {{detail.NgayDuyet}} </td>
+                            </tr>
+
+                            <ng-container *ngIf="detail.expanded">
+                                <ng-container *ngFor="let detail of detail.Items">
+                                    <tr [class]="detail.NgayDuyet == null ? 'bg-light-red' : ''">
+                                        <td [class]="!detail.IsParent ? 'pl-12' : 'pl-10'">{{detail.TenDichVu}}</td>
+                                        <td [ngClass]="{ 'in-dam': detail.IsBold}"> {{data.KetQuaCu}} </td>
+                                        <td [ngClass]="{ 'in-dam': detail.IsBold}"> {{data.KetQuaMoi}} </td>
+                                        <td [ngClass]="{ 'in-dam': detail.IsBold}"> {{data.CSBT}} </td>
+                                        <td> {{data.DonVi}} </td>
+                                        <td> {{data.MayXN}} </td>
+                                        <td> {{data.NguoiDuyet}} </td>
+                                        <td> {{data.NgayDuyet}} </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template #sttTemplate let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+</ng-template>
+
+<ng-template #xemKetQuaActionTemplate let-dataItem>
+    <!-- type == 1 => pdf type == 2 => file -->
+    <!------------------------------------- Chuẩn đoán hình ảnh và thăm dò chức năng ---------------------------------------------->
+    <button *ngIf="dataItem.LoaiKetQuaCLS !== 'Xét nghiệm'" type="button" (click)="xemKetQua(dataItem)" color="primary"
+        mat-raised-button class="mr-2">Xem</button>
+    <!------------------------------------ Xét nghiệm ----------------------------------------------------------------------------->
+    <!-- <button *ngIf="dataItem.LoaiKetQuaCLS === 'Xét nghiệm'" fileName="KetQuaXetNghiem" (click)="downloadXNCLS(dataItem)"
+        color="primary" mat-raised-button>Tải
+        về</button> -->
+</ng-template>
+
+    
+
+<!-- <ng-template #checkBoxTemplate let-dataItem>
+    <input *ngIf="dataItem.Level==1" type="checkbox" id="vehicle1" [(ngModel)]="dataItem.CheckBox"
+        (ngModelChange)="checkBoxChange($event,dataItem)" name="vehicle1">
+</ng-template>
+<ng-template #checkBoxHeaderTemplate let-dataItem>
+    <input type="checkbox" id="vehicle1" (ngModelChange)="checkBoxAllChange($event)" name="vehicle1"
+        [(ngModel)]="checkAll">
+</ng-template> -->
+
+<ng-template #tenDichVuKhamTemplate let-dataItem>
+    <a (click)=" xemLichSuKham(dataItem)">{{dataItem.TenDichVuKham}}</a>
+</ng-template>

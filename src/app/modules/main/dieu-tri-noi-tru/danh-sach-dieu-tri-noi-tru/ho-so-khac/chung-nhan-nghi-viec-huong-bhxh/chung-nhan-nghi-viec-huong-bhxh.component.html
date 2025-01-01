@@ -1,0 +1,56 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" style="padding-top: 15px;"
+        [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <app-textbox id="MauSo" fxFlex="20%" label="Mẫu số" [(model)]="giayChungNhanNghiViecHuongBHXH.MauSo">
+        </app-textbox>
+        <app-textbox id="SoSeri" fxFlex="20%" label="Số seri" [(model)]="giayChungNhanNghiViecHuongBHXH.SoSeri">
+        </app-textbox>
+        <app-textarea id="ChanDoan" fxFlex="100%" fxFlex.sm="100%" minHeight="20"
+            [(model)]="giayChungNhanNghiViecHuongBHXH.ChanDoanVaPhuongPhapDieuTri"
+            label="Chẩn đoán và phương pháp điều trị">
+        </app-textarea>
+        <app-datetimepicker id="NghiTuNgay" fxFlex="15%" fxFlex.sm="15%"
+            [(model)]="giayChungNhanNghiViecHuongBHXH.NghiTuNgay" (modelChange)="changeValueNghiTuNgay($event)"
+            label="Nghỉ từ ngày" required="true" [validationerror]="'NghiTuNgay' | validationerror:validationErrors">
+        </app-datetimepicker>
+        <app-datetimepicker id="NghiDenNgay" fxFlex="15%" fxFlex.sm="15%"
+            [(model)]="giayChungNhanNghiViecHuongBHXH.NghiDenNgay" (modelChange)="changeValueNghiDenNgay($event)"
+            label="Nghỉ đến ngày" required="true" [validationerror]="'NghiDenNgay' | validationerror:validationErrors">
+        </app-datetimepicker>
+        <app-textboxnumeric id="SoNgayNghi" fxFlex="10%" fxFlex.sm="10%" (modelChange)="onChangeSoNgayNghi($event)"
+            [(model)]="giayChungNhanNghiViecHuongBHXH.SoNgayNghi" label="Số ngày nghỉ">
+        </app-textboxnumeric>
+        <label fxFlex="10%"></label>
+        <app-textbox id="HoTenCha" fxFlex="25%" label="Họ tên cha" [(model)]="giayChungNhanNghiViecHuongBHXH.HoTenCha">
+        </app-textbox>
+        <app-textbox id="HoTenMe" fxFlex="25%" label="Họ tên mẹ" [(model)]="giayChungNhanNghiViecHuongBHXH.HoTenMe">
+        </app-textbox>
+        <app-datetimepicker id="NgayThucHien" fxFlex="25%" fxFlex.sm="25%"
+            [(model)]="giayChungNhanNghiViecHuongBHXH.NgayThucHien" (modelChange)="changeValueNgayThucHien($event)"
+            label="Ngày thực hiện" required="true"
+            [validationerror]="'NgayThucHien' | validationerror:validationErrors">
+        </app-datetimepicker>
+        <app-autocomplete popupSettings="null" id="NguoiHanhNghe" fxFlex="25%" fxFlex.sm="25%"
+            [(model)]="giayChungNhanNghiViecHuongBHXH.NguoiHanhNgheKBCB" [dataList]="dataNhanVien" (modelChange)="changeMa($event,1)"
+            label="Người hành nghề KB,CB">
+        </app-autocomplete>
+        <app-autocomplete id="ChuToa" fxFlex="25%" fxFlex.sm="25%" popupSettings="null"
+            [(model)]="giayChungNhanNghiViecHuongBHXH.ThuTruongDonVi" [dataList]="dataNhanVien" label="Thủ trưởng đơn vị" >
+        </app-autocomplete>
+        <div fxFlex="100%" style="padding-bottom: 50px;">
+            <label fxFlex="25%" style="padding-top: 30px;">Người thực hiện :
+                <b>{{giayChungNhanNghiViecHuongBHXH.TaiKhoanDangNhap}}</b></label>
+            <label fxFlex="25%" style="padding-top: 30px;">Ngày thực hiện :
+                <b>{{giayChungNhanNghiViecHuongBHXH.NgayThucHienDisplay}}</b></label>
+            <span fxFlex="50%" style="text-align: right;">
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                    (click)="InPhieu()" style="pointer-events: all;">In </button>
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                    (click)="Huy()">Hủy</button>
+                <button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+                    Lưu
+                </button>
+            </span>
+        </div>
+    </div>
+</div>

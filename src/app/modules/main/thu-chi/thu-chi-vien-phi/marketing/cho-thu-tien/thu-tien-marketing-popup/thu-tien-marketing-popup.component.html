@@ -1,0 +1,109 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-0">
+    <div>THU TIỀN</div>
+    <button (click)="huy()" type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <div class="container-custom">
+        <app-grid [gridColumns]="gridColumns" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false"
+            [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true"
+            [gridDataSource]="goiChuaQuyetToanMarketing" style="width: 1px;" [pageable]="false">
+        </app-grid>
+
+        <!--Begin thông tin chua thu  -->
+        <ng-template #chuaThuTemplate let-dataItem>
+            {{dataItem.ChuaThu | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+
+        <ng-template #chuaThuGroupFooter>
+            <span style="color: green;"> {{total('ChuaThu') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+
+        <ng-template #thuLanNayTemplate let-dataItem>
+            <app-textboxnumeric class="no-label p-0" label="" [step]="100" fxFlex="50%" [max]="dataItem.ChuaThu"
+                (keyup)="modelChangeSoTienThuLanNay($event , dataItem)" [min]="0"
+                [(model)]="dataItem.SoTienThuLanNay" [spinners]="false"></app-textboxnumeric>
+        </ng-template>
+
+        <ng-template #tongSoTienThuLanNayGroupFooter>
+            <span style="color: red;"> {{total('SoTienThuLanNay') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+        
+        <ng-template #ngungSuDungTemplate let-dataItem>
+            <div kendoTooltip *ngIf="dataItem.NgungSuDung">
+                <app-checkbox value="true" [disabled]="true" [model]="dataItem.NgungSuDung" class="pl-2">
+                </app-checkbox>
+            </div>
+        </ng-template>
+        <!--End thông tin chua thu  -->
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+            <span fxFlex="100%" class="sub-title mt-7 text-left">
+                <strong> SỐ TIỀN THU LẦN NÀY:</strong>
+                <strong class='red-text'>
+                    {{soTienChuaThu | number:'0.2-2':'vi-VN'}}
+                </strong>
+            </span>
+
+            <app-multiselect fxFlex="100%" fxFlex.sm="100%" label="Hình thức thanh toán" [required]="true"
+                [data]="hinhThucThanhToanItems" [style.display]="soTienChuaThu < 0 ? 'none' : 'block'"
+                [(model)]="hinhThucThanhToan" (valueChange)="evtHinhThucThanhToanChanged($event)"
+                [validationerror]="'HinhThucThanhToan' | validationerror:validationErrors">
+            </app-multiselect>
+
+            <app-textboxnumeric *ngIf="isTienMatSelected" id="so-tien" fxFlex="100%" fxFlex.sm="100%" label="Tiền mặt"
+                [step]="100" [required]="true"
+                [(selectMoney)]="selectMoneyTienMat" [(model)]="thuTienMarketing.TienMat"
+                (modelChange)="evtTienMatChanged($event , 1)"
+                [validationerror]="'TienMat' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-textboxnumeric *ngIf="isChuyenKhoanSelected" id="chuyen-khoan" fxFlex="100%" fxFlex.sm="100%"
+                label="Chuyển khoản"  [step]="100" [required]="true"
+                [(selectMoney)]="selectMoneyTienChuyenKhoan" [(model)]="thuTienMarketing.ChuyenKhoan"
+                (modelChange)="evtChuyenKhoanChanged($event , 2)"
+                [validationerror]="'ChuyenKhoan' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-textboxnumeric *ngIf="isPOSSelected" id="pos" fxFlex="100%" fxFlex.sm="100%" label="POS"
+                [step]="100" [required]="true"
+                [(selectMoney)]="selectMoneyTienPOS" [(model)]="thuTienMarketing.POS"
+                (modelChange)="evtPOSChanged($event , 3)" [validationerror]="'POS' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <p *ngIf="showCanhBaoSoTienNhap" style="margin-top:-6px;" class="red-text">Số tiền nhập vượt quá số tiền
+                chưa thu.</p>
+
+            <app-textboxnumeric *ngIf="isTienMatSelected" id="benh-nhan-dua" fxFlex="100%" fxFlex.sm="100%"
+                label="Người bệnh đưa" [isFormatCurrenly]="true" [spinners]="false" [step]="100" [min]="0"
+                [(selectMoney)]="selectMoneyTienBenhNhanDua" [style.display]="soTienChuaThu < 0 ? 'none' : 'block'"
+                [(model)]="thuTienMarketing.TienBenhNhanDua" (modelChange)="evtTienBenhNhanDuaChanged($event)">
+            </app-textboxnumeric>
+
+            <app-textboxnumeric *ngIf="isTienMatSelected" id="tra-lai" fxFlex="100%" fxFlex.sm="100%" label="Trả lại"
+                [isFormatCurrenly]="true" [spinners]="false" [readonly]="true"
+                [style.display]="soTienChuaThu < 0 ? 'none' : 'block'" [(model)]="thuTienMarketing.TienTraLaiBenhNhan">
+            </app-textboxnumeric>
+
+            <app-datepicker id="ngay-thu" fxFlex="100%" fxFlex.sm="100%" label="Ngày thu" [readonly]="true"
+                [required]="true" [(model)]="thuTienMarketing.NgayThu"
+                [validationerror]="'NgayThu' | validationerror: validationErrors">
+            </app-datepicker>
+
+            <app-textbox id="noi-dung-thu" fxFlex="100%" fxFlex.sm="100%" label="Nội dung thu" maxlength="10000"
+                [required]="true" [(model)]="thuTienMarketing.NoiDungThu"
+                [validationerror]="'NoiDungThu' | validationerror: validationErrors">
+            </app-textbox>
+        </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+        <button type="button" (click)="huy()" color="primary" mat-button>
+            <span>Huỷ</span>
+        </button>
+        <button *ngIf="soTienChuaThu > 0" type="button" (click)="xuLythuTienMarketing()" title="Phím tắt: Ctrl + S"
+            color="primary" mat-raised-button>
+            <span>Thu tiền</span>
+        </button>
+    </div>
+</mat-dialog-content>

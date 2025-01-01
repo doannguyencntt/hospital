@@ -1,0 +1,44 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Dược phẩm',Path:''}
+                ,{Title:'Hoàn trả',Path:''}
+                ,{Title:'Từ người bệnh',Path:''}
+                ,{Title:'Yêu cầu trả',Path:''}
+                ,{Title:'Chi tiết phiếu trả vật tư',Path:'/nhap-xuat/duoc-pham/tu-benh-nhan/yeu-cau-tra-duoc-pham',queryParams: {holdQuery : true},Active:true}
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chi tiết phiếu trả vật tư từ người bệnh nội trú</h2>
+                <b class="status-yeu-cau-linh ycl-cho-duyet"
+                    *ngIf="trangThaiVo != null && trangThaiVo.TrangThai == true"
+                    style="color:green">{{trangThaiVo.Ten}}</b>
+                <b class="status-yeu-cau-linh ycl-cho-duyet"
+                    *ngIf="trangThaiVo != null && trangThaiVo.TrangThai == false"
+                    style="color:red">{{trangThaiVo.Ten}}</b>
+                <b class="status-yeu-cau-linh ycl-cho-duyet"
+                    *ngIf="trangThaiVo != null && trangThaiVo.TrangThai == null"
+                    style="color:orange">{{trangThaiVo.Ten}}</b>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-yeu-cau-tra-vat-tu-tu-benh-nhan-shared #temp *ngIf="trangThaiVo!=null" [isCreate]="false"
+                    (hideDuyetbtn)="anHienButtonDuyet($event)" [validationErrors]="validationErrors"
+                    [trangThaiVo]="trangThaiVo">
+                </app-yeu-cau-tra-vat-tu-tu-benh-nhan-shared>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" title="Phím tắt: Esc" (click)="cancel()" mat-button
+                        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Quay lại</button>
+                    <button type="button" *ngIf="trangThaiVo != null && trangThaiVo.TrangThai== null"
+                        (click)="luuPhieuLinhTraVatTu()" color="primary" mat-raised-button><i class="ft-save"></i>
+                        Lưu</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

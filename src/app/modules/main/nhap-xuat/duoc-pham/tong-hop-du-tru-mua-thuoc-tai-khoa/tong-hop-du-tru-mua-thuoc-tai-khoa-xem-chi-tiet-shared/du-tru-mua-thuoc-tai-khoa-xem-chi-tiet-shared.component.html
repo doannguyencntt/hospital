@@ -1,0 +1,59 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <div fxFlex="100%" *ngIf="trangThaiVo != null && trangThaiVo.TrangThai == false">
+        <h4 style="color: red;">Lý do: {{danhSachTongHopDuTruMuaThuocTaiKhoa.LyDoTruongKhoaTuChoi}}</h4>
+    </div>
+
+    <app-textbox id="soPhieu" fxFlex="20" fxFlex.sm="20" [(model)]="danhSachTongHopDuTruMuaThuocTaiKhoa.SoPhieu"
+        [required]="true" maxlength="250" label="Số phiếu" [disabled]="true">
+    </app-textbox>
+    <app-combobox id="LoaiDuTru" fxFlex="20" fxFlex.sm="20" [required]="true" url="YeuCauLinhDuocPham/GetKhoLinh"
+        [(model)]="danhSachTongHopDuTruMuaThuocTaiKhoa.LoaiDuTru"
+        [modelText]="danhSachTongHopDuTruMuaThuocTaiKhoa.TenLoaiDuTru" label="Nhóm" [disabled]="true"
+        [validationerror]="'LoaiDuTru' | validationerror:validationErrors">
+    </app-combobox>
+    <app-combobox id="khoNhapId" fxFlex="20" fxFlex.sm="20" [required]="true"
+        [(model)]="danhSachTongHopDuTruMuaThuocTaiKhoa.KhoNhapId" [disabled]="true"
+        [modelText]="danhSachTongHopDuTruMuaThuocTaiKhoa.TenKho" url="YeuCauLinhDuocPham/GetKhoCurrentUser" label="Kho"
+        [validationerror]="'KhoNhapId' | validationerror:validationErrors">
+    </app-combobox>
+    <app-textbox id="KyDuTru" fxFlex="20" fxFlex.sm="20" [(model)]="danhSachTongHopDuTruMuaThuocTaiKhoa.KyDuTru"
+        [required]="true" maxlength="250" label="Kỳ dự trù" [disabled]="true">
+    </app-textbox>
+    <app-textbox id="TenNhanVienYeuCau" fxFlex="20" fxFlex.sm="20"
+        [(model)]="danhSachTongHopDuTruMuaThuocTaiKhoa.TenNhanVienYeuCau" [required]="true" maxlength="250"
+        label="Người yêu cầu" [disabled]="true">
+    </app-textbox>
+    <app-datetimepicker id="ngayYeuCau" fxFlex="20" fxFlex.sm="20"
+        [(model)]="danhSachTongHopDuTruMuaThuocTaiKhoa.NgayYeuCau" [disabled]="true" [required]="true"
+        label="Ngày yêu cầu">
+    </app-datetimepicker>
+    <app-textbox id="GhiChu" fxFlex="80" fxFlex.sm="80" [(model)]="danhSachTongHopDuTruMuaThuocTaiKhoa.GhiChu"
+        [disabled]="true" [required]="true" maxlength="250" label="Ghi chú">
+    </app-textbox>
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin chi tiết</h3>
+    <!-- <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault]="false" [sort]="sortDuTruChild"
+        [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotal" [additionalSearchString]="duTruMuaDuocPhamId"
+        [useHeaderDefault]="false" [useActionDefault]="false" [groups]="groups" [checkboxAble]="false"
+        [detailTemplate]="detailTemplate" [lazyLoadPage]="true" [autoHeight]="true" [showStt]="true"
+        (extOnDataBound)="onDataBound($event)">
+        <ng-template #nhomGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+    </app-grid>
+    <ng-template #detailTemplate let-dataItem>
+        <app-grid [gridColumns]="gridChildColumns" [documentType]="documentType" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            [urlGetData]="urlGetDataChild" [urlGetTotalPage]="urlGetTotalChild" [autoHeight]="true" [showStt]="true"
+            [additionalSearchString]="dataItem.DuTruMuaDuocPhamTheoKhoaChiTietId + ';' + dataItem.LaBHYT">
+        </app-grid>
+    </ng-template> -->
+    <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault]="false" [sort]="sortDuTruChild"
+        [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotal" [additionalSearchString]="duTruMuaDuocPhamId"
+        [useHeaderDefault]="false" [useActionDefault]="false" [groups]="groups" [checkboxAble]="false"
+        [lazyLoadPage]="true" [autoHeight]="true" [showStt]="true">
+        <ng-template #nhomGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+    </app-grid>
+</div>

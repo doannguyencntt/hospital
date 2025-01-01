@@ -1,0 +1,30 @@
+<!--Bengin Thông tin bệnh án nội khoa và nhi khoa-->
+<app-thong-tin-ra-vien-noi-khoa-nhi [yeuCauTiepNhanId]="yeuCauTiepNhanId" *ngIf="loaiThongTinBenhAn === this.loaiBenhAn.NoiKhoa || loaiThongTinBenhAn === this.loaiBenhAn.NhiKhoa
+    || loaiThongTinBenhAn === this.loaiBenhAn.TreSoSinh" [dieuTriNoiTruModel]="dieuTriNoiTruModel">
+</app-thong-tin-ra-vien-noi-khoa-nhi>
+<!--End Thông tin bệnh án nội khoa và nhi khoa-->
+<!-- ================================================================================================================================== -->
+<!--Bengin Thông tin bệnh án ngoại khoa và thẩm mỹ-->
+<app-thong-tin-ngoai-khoa-tham-my [yeuCauTiepNhanId]="yeuCauTiepNhanId"
+    *ngIf="loaiThongTinBenhAn === this.loaiBenhAn.NgoaiKhoa || loaiThongTinBenhAn === this.loaiBenhAn.ThamMy"
+    [dieuTriNoiTruModel]="dieuTriNoiTruModel">
+</app-thong-tin-ngoai-khoa-tham-my>
+<!--Bengin Thông tin bệnh án ngoại khoa và thẩm mỹ-->
+<!-- ================================================================================================================================== -->
+<!--Bengin Thông tin bệnh án phụ khoa-->
+<app-thong-tin-phu-khoa [yeuCauTiepNhanId]="yeuCauTiepNhanId" *ngIf="loaiThongTinBenhAn === this.loaiBenhAn.PhuKhoa"
+    [dieuTriNoiTruModel]="dieuTriNoiTruModel">
+</app-thong-tin-phu-khoa>
+<!--Bengin Thông tin bệnh án phụ khoa-->
+<!-- ================================================================================================================================== -->
+<!--Bengin Thông tin bệnh án sản khoa đẻ thường-->
+<app-thong-tin-san-khoa-thuong [yeuCauTiepNhanId]="yeuCauTiepNhanId"
+    *ngIf="loaiThongTinBenhAn === this.loaiBenhAn.SanKhoaThuong" [dieuTriNoiTruModel]="dieuTriNoiTruModel">
+</app-thong-tin-san-khoa-thuong>
+<!--Bengin Thông tin bệnh án sản khoa đẻ thường-->
+<!-- ================================================================================================================================== -->
+<!--Bengin Thông tin bệnh án sản khoa đẻ mỗ-->
+<app-thong-tin-san-khoa-mo [yeuCauTiepNhanId]="yeuCauTiepNhanId"
+    *ngIf="loaiThongTinBenhAn === this.loaiBenhAn.SanKhoaMo" [dieuTriNoiTruModel]="dieuTriNoiTruModel">
+</app-thong-tin-san-khoa-mo>
+<!--Bengin Thông tin bệnh án sản khoa đẻ mỗ-->

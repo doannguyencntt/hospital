@@ -1,0 +1,688 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                    {Title:isKhamDoan ?'Khám đoàn': 'Khám bệnh',Path:'',Active:true}
+                    ]">
+            </vex-breadcrumbs>
+            <app-hot-key [keys]="[
+                {Key:'Ctrl + F1',Description:'Di chuyển tới và mở tab Khám bệnh'},
+                {Key:'Ctrl + F2',Description:'Di chuyển tới và mở tab Lịch sử khám'},
+                {Key:'Ctrl + F3',Description:'Di chuyển tới và mở tab Chỉ định'},
+                {Key:'Ctrl + F5',Description:'Di chuyển tới và mở tab Kết quả CLS'},
+                {Key:'Ctrl + F6',Description:'Di chuyển tới và mở tab Chẩn đoán'},
+
+                {Key:'Ctrl + F7',Description:'Di chuyển tới và ' + (isKhamDoan ? 'mở tab Tư vấn thuốc' : 'check Cho về, kê đơn thuốc')},
+                {Key:'Ctrl + F8',Description:'Di chuyển tới và check Hẹn tái khám'},
+                {Key:'Ctrl + F9',Description:'Di chuyển tới và check Chuyển khám'},
+                {Key:'Ctrl + F10',Description:'Di chuyển tới và check Nhập viện'},
+                {Key:'Ctrl + F11',Description:'Di chuyển tới và check Chuyển viện'},
+                {Key:'Ctrl + F12',Description:'Di chuyển tới và check Tử vong'},
+
+                {Key:'Ctrl + H',Description:'Hoàn thành khám'},
+                {Key:'Ctrl + P',Description:'In chỉ định'},
+                {Key:'Ctrl + P',Description:'In kê toa'},
+                {Key:'Ctrl + S',Description:'Lưu form khám bệnh'},
+                {Key:'Esc',Description:'Hủy', End:true}
+            ]"></app-hot-key>
+
+            <!-- {Key:'Ctrl + →',Description:'Người bệnh tiếp theo', End:true}, -->
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div @fadeInUp class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <!-- <div class="po-right" style="position: absolute;right: 25px;top: 20px;z-index: 9;">
+                            <ul class="inline">
+                                <li class="right-0">
+                                    Phòng khám:
+                                    <app-dropdownlist id="PhongKhamId" label=""
+                                        url="PhongBenhVien/GetListPhongBenhVienByCurrentUser"
+                                        style="min-width: 150px;max-width: 300px;font-weight: bold;padding: 0;"
+                                        popupSettings="" bind="true" class="dropdown on-li"
+                                        [(model)]="phongKhamHienTai.KeyId" [modelText]="phongKhamHienTai.DisplayName"
+                                        [autoSelectFirstItem]="true" (modelChange)="chonPhongKham($event)"
+                                        (selectionChange)="selectionChangePhongKham($event)">
+                                    </app-dropdownlist>
+                                </li>
+                                <li class="right-0">
+                                    Bác sỹ:
+                                    <strong>{{HoTen}}</strong>
+                                </li>
+                            </ul>
+                        </div> -->
+                        <kendo-tabstrip *ngIf="phongKhamHienTai.KeyId != null && phongKhamHienTai.KeyId != 0" fxFlex="100%" class="tab-no-padding-content field-set-p kendotab-button-right" (tabSelect)="onParentTabSelect($event)">
+
+                            <!-- tab khám bệnh -->
+                            <!-- [title]="'Khám bệnh'"  -->
+                            <kendo-tabstrip-tab [selected]="true">
+                                <ng-template kendoTabTitle>
+                                    {{isKhamDoan ? 'Khám đoàn':'Khám bệnh'}}
+                                </ng-template>
+                                <ng-template kendoTabContent>
+                                    <kendo-splitter>
+                                        <kendo-splitter-pane [collapsible]="true" size="25%" style="max-height: 800px;" class="sticky-panelbar">
+                                            <div fxLayoutAlign="start center" fxLayout="row" class="px-2 py-3">
+                                                <div>
+                                                    <!-- <h3 class="title m-0">HÀNG ĐỢI</h3> -->
+                                                    <button type="button" color="primary" mat-raised-button (click)="xuLyShowHangDoiChung()">HÀNG ĐỢI</button>
+                                                </div>
+                                                <div class="po-right d-unset">
+                                                    <div class="bg-card rounded-full border px-2" fxFlex="260px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px; float: right;">
+                                                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                                        <input class="px-1 py-2 border-0 outline-none w-full bg-transparent" [(ngModel)]="searchBenhNhan" placeholder="Tìm kiếm mã TN/BN" type="search" name="searchString" (keyup)="timKiemBenhNhan($event)" (ngModelChange)="searchChange($event)" />
+                                                        <button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button"
+                                                            class="button-barcoe-in-search" kendoTooltip title="Phím tắt: Ctrl + Q">
+                                                            <img src="assets/img/barcode.png" alt="Scan barcode" />
+                                                        </button>
+                                                    </div>
+                                                    <app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none;"></app-barcode>
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <kendo-panelbar class="m-1">
+                                                    <kendo-panelbar-item *ngIf="showHangDoiChung" [title]="'Danh sách Người bệnh đợi khám ('+slYeuCauHienTai.ChuanBiKhamHangDoiChung+')'" expanded="true" class="panelbar-item">
+                                                        <ng-template kendoPanelBarContent>
+                                                            <app-grid fxFlex="100%" masterName="nguoiBenhDoiKham" [allowSortDefault]="false" [autoRefreshDataSource]="true" [gridColumns]="gridChuanBiKhamHangDoiChungColumns" [documentType]="documentType" [useAddDeault]="false" class="k-grid-border cursor-pointer" [useHeaderDefault]="false"
+                                                                [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true" [gridDataSource]="dataSourceChuanBiKhamHangDoiChung" [lazyLoadPage]="true" style="width: 1px;"
+                                                                [pageable]="true" [pageSize]="10" [buttonCount]="1" [widthColumnSTT]="20" titleColumnSTT="#" keyCode="Enter" (extEnterChangePage)="xuLyBatDauKhamNguoiBenhTuHangDoiChung($event)" (extDoubleClick)="xuLyBatDauKhamNguoiBenhTuHangDoiChung($event)" [showStt]="true" [groups]="isKhamDoan ? null :groupHangCho">
+                                                            </app-grid>
+                                                        </ng-template>
+                                                    </kendo-panelbar-item>
+                                                    <kendo-panelbar-item *ngIf="showHangDoiChung && !isKhamDoan" [title]="'Danh sách Người bệnh đợi kết luận ('+slYeuCauHienTai.ChoKetLuanHangDoiChung+')'" expanded="true" class="panelbar-item">
+                                                        <ng-template kendoPanelBarContent>
+                                                            <app-grid fxFlex="100%" masterName="nguoiBenhDoiKetLuanChung" [allowSortDefault]="false" [autoRefreshDataSource]="true" [gridColumns]="gridChoKetLuanHangDoiChungColumns" [documentType]="documentType" [useAddDeault]="false" class="k-grid-border cursor-pointer" [useHeaderDefault]="false"
+                                                                [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true" [gridDataSource]="dataSourceChoKetLuanHangDoiChung" [lazyLoadPage]="true" style="width: 1px;"
+                                                                [pageable]="true" [pageSize]="10" [buttonCount]="1" [widthColumnSTT]="20" titleColumnSTT="#" keyCode="Enter" (extEnterChangePage)="xuLyKetLuanNguoiBenhTuHangDoiChung($event)" (extDoubleClick)="xuLyKetLuanNguoiBenhTuHangDoiChung($event)" [showStt]="true" [groups]="groupHangCho">
+                                                            </app-grid>
+                                                        </ng-template>
+                                                    </kendo-panelbar-item>
+
+                                                    <kendo-panelbar-item [title]="'Người bệnh chuẩn bị khám ('+slYeuCauHienTai.ChuanBiKham+')'" expanded="true" class="panelbar-item">
+                                                        <ng-template kendoPanelBarContent>
+                                                            <!-- [detailTemplate]="isKhamDoan ? null : chuanBiKhamDetailTemplate"  -->
+                                                            <!-- <app-grid *ngIf="!LaChuyenKhoaKhamNhieu" fxFlex="100%" masterName="ChuanBiKham" [allowSortDefault]="false" [autoRefreshDataSource]="true" [gridColumns]="gridChuanBiKhamColumns" [documentType]="documentType" [useAddDeault]="false" class="k-grid-border cursor-pointer" [useHeaderDefault]="false"
+                                                                [useActionDefault]="false" [checkboxAble]="isKhamDoan ? false : true" [autoHeight]="true" [gridDataSource]="dataSourceChuanBiKham" [lazyLoadPage]="true" style="width: 1px;" (extCheckboxSelection)="chonBenhNhanCanChuyenPhong($event)"
+                                                                [pageable]="true" [pageSize]="10" [buttonCount]="1" [widthColumnSTT]="15" titleColumnSTT="#" keyCode="Enter" (extEnterChangePage)="batDauKham($event)" (extDoubleClick)="batDauKham($event)" [showStt]="true" [groups]="isKhamDoan ? null :groupHangCho">
+                                                            </app-grid>
+                                                            <ng-template #chuanBiKhamDetailTemplate let-dataItem>
+                                                                <ul class="inline">
+                                                                    <li>Lý do khám:
+                                                                        <strong>{{dataItem.LyDoKham}}</strong></li>
+                                                                </ul>
+                                                                <div class="mt-1">
+                                                                    <p class="mb-1" style="text-decoration-line: underline; font-weight: bold;">
+                                                                        Chỉ số sinh tồn:
+                                                                    </p>
+
+                                                                    <ul class="inline">
+                                                                        <li>Nhóm máu:
+                                                                            <strong>{{dataItem.TenNhomMau}}</strong>
+                                                                        </li>
+                                                                        <li>Mạch (nhịp/ phút):
+                                                                            <strong>{{dataItem.Mach | number:'0.0-2'}}</strong>
+                                                                        </li>
+                                                                        <li>Huyết áp (mmHg):
+                                                                            <strong>{{dataItem.HuyetApDisplay}}</strong>
+                                                                        </li>
+                                                                        <li>Nhiệt độ (C):
+                                                                            <strong>{{dataItem.NhietDo | number:'0.0-2'}}</strong>
+                                                                        </li>
+                                                                        <li>Nhịp thở (lần/phút):
+                                                                            <strong>{{dataItem.NhipTho | number:'0.0-2'}}</strong>
+                                                                        </li>
+                                                                        <li>Cân nặng (kg):
+                                                                            <strong>{{dataItem.CanNang | number:'0.0-2'}}</strong>
+                                                                        </li>
+                                                                        <li>Chiều cao (cm):
+                                                                            <strong>{{dataItem.ChieuCao | number:'0.0-2'}}</strong>
+                                                                        </li>
+                                                                        <li>BMI:
+                                                                            <strong>{{dataItem.BMI | number:'0.0-2'}}</strong>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </ng-template> -->
+
+                                                            <!-- áp dụng hàng chờ mới cho màn hình khám bệnh: chỉ có hàng chờ khám và kết luận -->
+                                                            <app-grid fxFlex="100%" masterName="ChuanBiKham" [allowSortDefault]="false" [autoRefreshDataSource]="true" [gridColumns]="gridChuanBiKhamKhoaKhamNhieuColumns" [documentType]="documentType" [useAddDeault]="false" class="k-grid-border cursor-pointer" [useHeaderDefault]="false"
+                                                                [useActionDefault]="false" [checkboxAble]="isKhamDoan ? false : true" [autoHeight]="true" [gridDataSource]="dataSourceChuanBiKham" [lazyLoadPage]="true" style="width: 1px;" (extCheckboxSelection)="chonBenhNhanCanChuyenPhong($event)"
+                                                                [pageable]="true" [pageSize]="10" [buttonCount]="1" [widthColumnSTT]="15" titleColumnSTT="#" keyCode="Enter" (extEnterChangePage)="batDauKham($event)" (extDoubleClick)="batDauKham($event)" [showStt]="true" [groups]="isKhamDoan ? null :groupHangCho">
+                                                            </app-grid>
+                                                        </ng-template>
+                                                    </kendo-panelbar-item>
+                                                    <!-- <kendo-panelbar-item *ngIf="!isKhamDoan && !LaChuyenKhoaKhamNhieu" [title]="'Người bệnh đang làm chỉ định ('+slYeuCauHienTai.DangLamChiDinh+')'" [expanded]="false" class="panelbar-item">
+                                                        <ng-template kendoPanelBarContent>
+                                                            <app-grid fxFlex="100%" masterName="DangLamChiDinh" [autoRefreshDataSource]="true" [gridColumns]="gridLamChiDinhColumns" [documentType]="documentType" [useAddDeault]="false" class="k-grid-border cursor-pointer" [allowSortDefault]="false" [useHeaderDefault]="false"
+                                                                [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true" style="width: 1px;" [pageable]="true" [pageSize]="10" [gridDataSource]="dataSourceLamChiDinh"
+                                                                keyCode="Enter" [buttonCount]="1" [widthColumnSTT]="15" titleColumnSTT="#" (extEnterChangePage)="batDauKham($event)" (extDoubleClick)="batDauKham($event)" [showStt]="true" [groups]="isKhamDoan ? null :groupHangCho">
+                                                            </app-grid>
+                                                            <ng-template #doiKetLuanDetailTemplate let-dataItem>
+                                                                <ul class="inline">
+                                                                    <li>Lý do khám:
+                                                                        <strong>{{dataItem.LyDoKham}}</strong></li>
+                                                                </ul>
+                                                                <ng-container *ngIf="dataItem.YeuCauDichVuKyThuats != null">
+                                                                    <p style="text-decoration-line: underline; font-weight: bold;">
+                                                                        Kết quả</p>
+                                                                    <div class="inline">
+                                                                        <app-checkbox *ngFor="let item of dataItem.YeuCauDichVuKyThuats" value="true" id="ycdvkt{{item.Id}}" [(model)]="item.TrangThai == yeuCauDichVuKyThuatDaHoanThanh" [disabled]="true" class="inline_b py-1" label="{{item.TenDichVu}}">
+                                                                        </app-checkbox>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </ng-template>
+                                                        </ng-template>
+                                                    </kendo-panelbar-item> -->
+                                                    <kendo-panelbar-item [title]="(isKhamDoan ? 'Người bệnh đã khám và đang làm dịch vụ khác' : 'Người bệnh đang đợi kết luận') + '('+slYeuCauHienTai.DangDoiKetLuan+')'" expanded="true" class="panelbar-item">
+                                                        <ng-template kendoPanelBarContent>
+                                                            <!-- [detailTemplate]="isKhamDoan ? null : doiKetLuanDetailTemplate" -->
+                                                            <!-- <app-grid *ngIf="!LaChuyenKhoaKhamNhieu" fxFlex="100%" masterName="DangDoiKetLuan" [autoRefreshDataSource]="true" [gridColumns]="gridDoiKetLuanColumns" [documentType]="documentType" [useAddDeault]="false" class="k-grid-border cursor-pointer" [allowSortDefault]="false" [useHeaderDefault]="false"
+                                                                [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true" style="width: 1px;" [pageable]="true" [pageSize]="10" [gridDataSource]="dataSourceDoiKetLuan"
+                                                                keyCode="Enter" [buttonCount]="1" [widthColumnSTT]="15" titleColumnSTT="#" (extEnterChangePage)="batDauKham($event)" (extDoubleClick)="batDauKham($event)" [showStt]="true" [groups]="isKhamDoan ? null : groupHangCho">
+                                                            </app-grid>
+                                                            <ng-template #doiKetLuanDetailTemplate let-dataItem>
+                                                                <ul class="inline">
+                                                                    <li>Lý do khám:
+                                                                        <strong>{{dataItem.LyDoKham}}</strong></li>
+                                                                </ul>
+                                                                <ng-container *ngIf="dataItem.YeuCauDichVuKyThuats != null">
+                                                                    <p style="text-decoration-line: underline; font-weight: bold;">
+                                                                        Kết quả</p>
+                                                                    <div class="inline">
+                                                                        <app-checkbox *ngFor="let item of dataItem.YeuCauDichVuKyThuats" value="true" id="ycdvkt{{item.Id}}" [(model)]="item.TrangThai == yeuCauDichVuKyThuatDaHoanThanh" [disabled]="true" class="inline_b py-1" label="{{item.TenDichVu}}">
+                                                                        </app-checkbox>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </ng-template> -->
+
+                                                            <!-- áp dụng hàng chờ mới cho màn hình khám bệnh: chỉ có hàng chờ khám và kết luận -->
+                                                            <app-grid fxFlex="100%" masterName="DangDoiKetLuan" [autoRefreshDataSource]="true" [gridColumns]="gridDoiKetLuanKhoaKhamNhieuColumns" [documentType]="documentType" [useAddDeault]="false" class="k-grid-border cursor-pointer" [allowSortDefault]="false" [useHeaderDefault]="false"
+                                                                [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true" style="width: 1px;" [pageable]="true" [pageSize]="10" [gridDataSource]="dataSourceDoiKetLuan"
+                                                                keyCode="Enter" [buttonCount]="1" [widthColumnSTT]="15" titleColumnSTT="#" (extEnterChangePage)="batDauKham($event)" (extDoubleClick)="batDauKham($event)" [showStt]="true" [groups]="isKhamDoan ? null : groupHangCho">
+                                                            </app-grid>
+                                                        </ng-template>
+                                                    </kendo-panelbar-item>
+                                                </kendo-panelbar>
+                                            </div>
+                                        </kendo-splitter-pane>
+
+                                        <kendo-splitter-pane style="overflow:initial;">
+                                            <div *ngIf="!LaChuyenKhoaKhamNhieu" style="display: flow-root;" class="ml-4 py-3 border-b">
+                                                <h3 class="title blue" style="float: left;">NGƯỜI BỆNH ĐANG KHÁM</h3>
+                                                <h3 *ngIf="benhNhanHienTai.Id != 0 && benhNhanHienTai.YeuCauKhamBenh.LaThamVan" class="title red" style="float: right;">DỊCH VỤ KHÁM THAM VẤN</h3>
+                                            </div>
+                                            <ng-container *ngIf="benhNhanHienTai.Id == 0">
+                                                <p class="ml-4 mt-2">Chưa chọn người bệnh</p>
+                                            </ng-container>
+                                            <ng-container *ngIf="benhNhanHienTai.Id != 0">
+                                                <div class="row ml-1 mb-2 {{isKhamDoan ? 'sticky-div' : ''}}">
+                                                    <!-- style="background: #e1f5fe;"  -->
+                                                    <fieldset fxFlex="100%" 
+                                                        class="{{(benhNhanHienTai.YeuCauTiepNhan != null && benhNhanHienTai.YeuCauTiepNhan.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+                                                        <legend>Thông tin hành chính</legend>
+                                                        <div fxFlex="100%" *ngIf="benhNhanHienTai.YeuCauTiepNhan != null">
+                                                            <ul *ngIf="!LaChuyenKhoaKhamNhieu" class="inline">
+                                                                <li>Mã TN:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.MaYeuCauTiepNhan}}</strong>
+                                                                </li>
+                                                                <li>Mã NB:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.BenhNhan.MaBN}}</strong>
+                                                                </li>
+                                                                <li>Họ tên:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.HoTen}}</strong>
+                                                                </li>
+                                                                <li>Giới tính:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.TenGioiTinh}}</strong>
+                                                                </li>
+                                                                <ng-container *ngIf="!isKhamDoan">
+                                                                    <li *ngIf="!isDuoi6Tuoi">Tuổi:
+                                                                        <strong>{{benhNhanHienTai.YeuCauTiepNhan.Tuoi}}</strong>
+                                                                    </li>
+                                                                    <li *ngIf="isDuoi6Tuoi">Tuổi:
+                                                                        <strong>{{Duoi6TuoiDisplay}}</strong>
+                                                                    </li>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="isKhamDoan">
+                                                                    <li>Năm sinh:
+                                                                        <strong>{{benhNhanHienTai.YeuCauTiepNhan.NamSinh}}</strong>
+                                                                </ng-container>
+
+                                                                <li>SĐT:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.SoDienThoaiDisplay}}</strong>
+                                                                </li>
+                                                                <li>Dân tộc:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.DanToc == null ? null : benhNhanHienTai.YeuCauTiepNhan.DanToc.Ten}}</strong>
+                                                                </li>
+                                                                <li>Địa chỉ:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.DiaChiDisplay}}</strong>
+                                                                </li>
+                                                                <li>Nghề nghiệp:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.NgheNghiep == null ? null : benhNhanHienTai.YeuCauTiepNhan.NgheNghiep.Ten}}</strong>
+                                                                </li>
+                                                                <ng-container *ngIf="!isKhamDoan">
+                                                                    <li>Tuyến khám: <strong style="color: green;">{{benhNhanHienTai.YeuCauTiepNhan.TenLyDoVaoVien}}</strong>
+                                                                    </li>
+                                                                    <li>Số BHYT: <strong>{{benhNhanHienTai.YeuCauTiepNhan.BHYTMaSoThe}}</strong>
+                                                                    </li>
+                                                                    <li>Mức hưởng: <strong style="color: blue;">{{benhNhanHienTai.YeuCauTiepNhan.BHYTMucHuong}}%</strong>
+                                                                    </li>
+                                                                    <li>Ngày hiệu lực: <strong
+                                                                            [style.color]="benhNhanHienTai.YeuCauTiepNhan.IsBHYTHetHan ? 'red' : ''">{{benhNhanHienTai.YeuCauTiepNhan.BHYTThoiGianHieuLucDisplay}}</strong>
+                                                                    </li>
+                                                                
+                                                                    <li>Lý do TN:
+                                                                        <strong>{{benhNhanHienTai.YeuCauTiepNhan.TenLyDoTiepNhan}}</strong>
+                                                                    </li>
+                                                                    <li>Ngày TN:
+                                                                        <strong>{{benhNhanHienTai.YeuCauTiepNhan.ThoiDiemTiepNhanDisplay}}</strong>
+                                                                    </li>
+                                                                    <li *ngIf="benhNhanHienTai.YeuCauTiepNhan.TrangThaiTiepNhan == yeuCauTiepNhanDangThucHien">
+                                                                        <a style="text-decoration: underline; color: blue; float:right;" (click)="capNhatDoiTuong()"><i>Cập nhật đối tượng</i></a>
+                                                                    </li>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="isKhamDoan">
+                                                                    <li>Công ty:
+                                                                        <strong style="color: red;">{{benhNhanHienTai.YeuCauTiepNhan.TenCongTy}}</strong>
+                                                                    </li>
+                                                                </ng-container>
+                                                            </ul>
+
+                                                            <ul *ngIf="LaChuyenKhoaKhamNhieu" class="inline">
+                                                                <li>Mã TN:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.MaYeuCauTiepNhan}}</strong>
+                                                                </li>
+                                                                <li>Họ tên:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.HoTen}}</strong>
+                                                                </li>
+                                                                <li>Giới tính:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.TenGioiTinh}}</strong>
+                                                                </li>
+                                                                <li>Ngày sinh:
+                                                                    <strong>{{benhNhanHienTai.YeuCauTiepNhan.NgaySinhDisplay}}</strong>
+                                                                </li>
+                                                                <li>Mức hưởng: <strong style="color: blue;">{{benhNhanHienTai.YeuCauTiepNhan.BHYTMucHuong}}%</strong>
+                                                                </li>
+
+                                                                <li style="margin-right: -20px; float:right;">
+                                                                    <a style="text-decoration: underline; color: blue;" (click)="showChiTietHanhChinh = !showChiTietHanhChinh">
+                                                                        <i>{{showChiTietHanhChinh ? 'Ẩn chi tiết' : 'Xem chi tiết'}}</i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                            <ng-container *ngIf="LaChuyenKhoaKhamNhieu && showChiTietHanhChinh">
+                                                                <div style="width:100%"></div>
+                                                                <ul class="inline">
+                                                                    <li>Mã NB:
+                                                                        <strong>{{benhNhanHienTai.YeuCauTiepNhan.BenhNhan.MaBN}}</strong>
+                                                                    </li>
+                                                            
+                                                                    <li>SĐT:
+                                                                        <strong>{{benhNhanHienTai.YeuCauTiepNhan.SoDienThoaiDisplay}}</strong>
+                                                                    </li>
+                                                                    <li>Dân tộc:
+                                                                        <strong>{{benhNhanHienTai.YeuCauTiepNhan.DanToc == null ? null :
+                                                                            benhNhanHienTai.YeuCauTiepNhan.DanToc.Ten}}</strong>
+                                                                    </li>
+                                                                    <li>Địa chỉ:
+                                                                        <strong>{{benhNhanHienTai.YeuCauTiepNhan.DiaChiDisplay}}</strong>
+                                                                    </li>
+                                                                    <li>Nghề nghiệp:
+                                                                        <strong>{{benhNhanHienTai.YeuCauTiepNhan.NgheNghiep == null ? null :
+                                                                            benhNhanHienTai.YeuCauTiepNhan.NgheNghiep.Ten}}</strong>
+                                                                    </li>
+                                                                    <li>Tuyến khám: <strong style="color: green;">{{benhNhanHienTai.YeuCauTiepNhan.TenLyDoVaoVien}}</strong>
+                                                                    </li>
+                                                                    <li>Số BHYT: <strong>{{benhNhanHienTai.YeuCauTiepNhan.BHYTMaSoThe}}</strong>
+                                                                    </li>
+                                                            
+                                                                    <li>Ngày hiệu lực: <strong
+                                                                            [style.color]="benhNhanHienTai.YeuCauTiepNhan.IsBHYTHetHan ? 'red' : ''">{{benhNhanHienTai.YeuCauTiepNhan.BHYTThoiGianHieuLucDisplay}}</strong>
+                                                                    </li>
+                                                            
+                                                                    <li>Lý do TN:
+                                                                        <strong>{{benhNhanHienTai.YeuCauTiepNhan.TenLyDoTiepNhan}}</strong>
+                                                                    </li>
+                                                                    <li>Ngày TN:
+                                                                        <strong>{{benhNhanHienTai.YeuCauTiepNhan.ThoiDiemTiepNhanDisplay}}</strong>
+                                                                    </li>
+                                                                    <li *ngIf="benhNhanHienTai.YeuCauTiepNhan.TrangThaiTiepNhan == yeuCauTiepNhanDangThucHien">
+                                                                        <a style="text-decoration: underline; color: blue; float:right;" (click)="capNhatDoiTuong()"><i>Cập nhật đối tượng</i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </ng-container>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+
+                                                <div class="row ml-1 mb-2">
+                                                    <fieldset *ngIf="benhNhanHienTai.GoiDichVus != null && benhNhanHienTai.GoiDichVus.length > 0 && (!LaChuyenKhoaKhamNhieu || (LaChuyenKhoaKhamNhieu && showChiTietHanhChinh))" fxFlex="100%">
+                                                        <legend>Thông tin tạm ứng gói marketing</legend>
+                                                        <div fxFlex="100%">
+                                                            <ng-container *ngFor="let goiDichVu of benhNhanHienTai.GoiDichVus">
+                                                                <p class="mb-3"><strong>{{goiDichVu.TenGoiDichVu}}: 
+                                                                </strong> TẠM ỨNG: <strong class="green">{{goiDichVu.BenhNhanDaThanhToanDisplay}}</strong> 
+                                                                - CÒN LẠI: <strong class="red">{{goiDichVu.ConLaiDisplay}}</strong></p>                                                           
+                                                            </ng-container>
+                                                        </div>
+                                                    </fieldset> 
+                                                </div>
+                                                <div class="row ml-1 temp d-inline">
+                                                    <kendo-tabstrip fxFlex="100%" id="card" class="content-has-border tabstrip-pad {{isKhamDoan ? 'sticky-kendotab-kham-doan-item' : 'sticky-kendotab-item'}}" (tabSelect)="chuyenDen('card', $event, isKhamDoan)">
+                                                        <kendo-tabstrip-tab [selected]="lstStatusSelectTabKhambenh.selectedTabKhamBenh">
+                                                            <ng-template kendoTabTitle>
+                                                                <div kendoTooltip title="Phím tắt: Ctrl + F1">
+                                                                    KHÁM BỆNH
+                                                                </div>
+                                                            </ng-template>
+                                                            <ng-template kendoTabContent>
+                                                                <div class="p-2">
+                                                                    <app-lan-kham-hien-tai-kham-benh [data]="benhNhanHienTai" [tenKP]="tenKhoaPhong" 
+                                                                        [phongKhamId]="phongKhamHienTai.KeyId" [templateKhamCacCoQuanObj]="benhNhanHienTai.YeuCauKhamBenh.ThongTinKhamTheoDichVuTemplateObj"
+                                                                        [isKhamDoan]="isKhamDoan" [laChuyenKhoaKhamNhieu]="LaChuyenKhoaKhamNhieu"
+                                                                        [templateDichVuKhamSucKhoes]="benhNhanHienTai.YeuCauKhamBenh.TemplateDichVuKhamSucKhoes"
+                                                                        [documentType]="documentType">
+                                                                    </app-lan-kham-hien-tai-kham-benh>
+
+
+                                                                    <div class="sticky-button-action py-3 text-right" kendoTooltip>
+                                                                        <button type="button" mat-button class="mr-2" *ngIf="isKhamDoan ||benhNhanHienTai.YeuCauKhamBenh.IsChangeKhamBenh" (click)="cancelChangeData()" title="Phím tắt: Esc">Hủy</button>
+                                                                        <button type="button" class="mr-2" color="primary" mat-raised-button *ngIf="isKhamDoan || benhNhanHienTai.YeuCauKhamBenh.IsChangeKhamBenh" (click)="saveChangeData(null, true)" title="Phím tắt: Ctrl + S">Lưu</button>
+                                                                        <button type="button" class="mr-2" color="primary" mat-raised-button (click)="chuyenPhongKhamBenhNhanDangChon(benhNhanHienTai.Id)">Chuyển phòng khám</button>
+                                                                        <!-- *ngIf="benhNhanHienTai.YeuCauKhamBenh.TrangThai == 1"  -->
+                                                                        <ng-container *ngIf="!isKhamDoan">
+                                                                            <!-- <button type="button" class="mr-2" color="primary" mat-raised-button (click)="xuLyChuyenDichVuKham()">Chuyển dịch vụ khám</button> -->
+
+                                                                            <button type="button" class="mr-2 float-left" mat-button (click)="bnVang(benhNhanHienTai)" mat-raised-button color="warn">BN vắng</button>
+                                                                            <button type="button" color="primary" mat-raised-button (click)="xuLyQuayLaiChuaKham()" class="float-left">Quay lại chưa khám</button>
+                                                                        </ng-container>
+                                                                        <!-- <button type="button"
+                                                                            *ngIf="benhNhanHienTai.YeuCauKhamBenh.TrangThai != yeuCauKhamBenhDangKetLuan"
+                                                                            color="primary" mat-raised-button mat-button
+                                                                            class="mr-2" (click)="bnTiepTheo()">BN tiếp
+                                                                            theo</button> -->
+
+                                                                        <ng-container *ngIf="isKhamDoan">
+                                                                            <button type="button" color="primary" mat-raised-button (click)="xuLyQuayLaiChuaKhamKhamDoanTheoPhong()" class="float-left">Quay lại chưa khám</button>
+
+                                                                            <button type="button" color="primary" mat-raised-button mat-button class="mr-1" 
+                                                                                [disabled]="benhNhanHienTai.YeuCauKhamBenh.CoDieuTriNgoaiTru == true" 
+                                                                                (click)="kiemTraDichVuChuaThucHien(true)" title="Phím tắt: Ctrl + H">Lưu và Hoàn thành khám</button>
+                                                                                <!-- luuVaHoanThanhKhamDoan() -->
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </div>
+
+                                                            </ng-template>
+                                                        </kendo-tabstrip-tab>
+                                                        <kendo-tabstrip-tab [selected]="lstStatusSelectTabKhambenh.selectedTabLichSuKham">
+                                                            <ng-template kendoTabTitle>
+                                                                <div kendoTooltip title="Phím tắt: Ctrl + F2">
+                                                                    LỊCH SỬ KHÁM 
+                                                                </div>
+                                                            </ng-template>
+                                                            
+                                                            <ng-template kendoTabContent>
+                                                                <app-kham-benh-lich-su-kham-list [BenhNhan]="benhNhanHienTai.YeuCauTiepNhan.BenhNhanId" [tenKP]="tenKhoaPhong" 
+                                                                    [YeuCauTiepNhanId]="benhNhanHienTai.YeuCauTiepNhanId" [documentType]="documentType">
+                                                                </app-kham-benh-lich-su-kham-list>
+                                                            </ng-template>
+                                                        </kendo-tabstrip-tab>
+
+                                                        <!-- tab chỉ định -->
+                                                        <kendo-tabstrip-tab [selected]="lstStatusSelectTabKhambenh.selectedTabChiDinh">
+                                                            <ng-template kendoTabTitle>
+                                                                <div kendoTooltip title="Phím tắt: Ctrl + F3">
+                                                                    CHỈ ĐỊNH
+                                                                </div>
+                                                            </ng-template>
+                                                            <ng-template kendoTabContent>
+                                                                <div class="m-2">
+                                                                    <app-lan-kham-hien-tai-kham-benh-chi-dinh [data]="benhNhanHienTai" [templateKp]="templateKhoaPhong" [tenKp]="tenKhoaPhong" 
+                                                                        [isKhamDoan]="isKhamDoan" [hinhThucKhamBenh]="hinhThucKham" [documentType]="documentType">
+                                                                    </app-lan-kham-hien-tai-kham-benh-chi-dinh>
+                                                                </div>
+                                                            </ng-template>
+                                                        </kendo-tabstrip-tab>
+
+                                                        <!-- tab kết quả cls -->
+                                                        <kendo-tabstrip-tab [selected]="lstStatusSelectTabKhambenh.selectedTabKetQuaCLS">
+                                                            <ng-template kendoTabTitle>
+                                                                <div kendoTooltip title="Phím tắt: Ctrl + F5">
+                                                                    KQ CLS
+                                                                </div>
+                                                            </ng-template>
+                                                            <ng-template kendoTabContent>
+                                                                <div class="mt-2 ml-2 mr-2">
+                                                                    <app-lan-kham-hien-tai-ket-qua-cls  [YeuCauTiepNhanId]="benhNhanHienTai.YeuCauTiepNhanId"
+                                                                        [documentType]="documentType">
+                                                                    </app-lan-kham-hien-tai-ket-qua-cls>
+                                                                </div>
+                                                            </ng-template>
+                                                        </kendo-tabstrip-tab>
+
+
+                                                        <kendo-tabstrip-tab *ngIf="!isKhamDoan" [selected]="lstStatusSelectTabKhambenh.selectedTabChanDoan">
+                                                            <ng-template kendoTabTitle>
+                                                                <div kendoTooltip title="Phím tắt: Ctrl + F6">
+                                                                    CHẨN ĐOÁN
+                                                                </div>
+                                                            </ng-template>
+                                                            <ng-template kendoTabContent>
+                                                                <div class="p-2">
+                                                                    <app-lan-kham-hien-tai-ket-luan [data]="benhNhanHienTai" [dataYeuCauKhamBenh]="benhNhanHienTai.YeuCauKhamBenh" 
+                                                                        [dataICDKhacs]="benhNhanHienTai.YeuCauKhamBenh.YeuCauKhamBenhICDKhacs" [dataYeuCauKhamBenhPrevious]="yeuCauKhamBenhPrevious" 
+                                                                        [validationErrors]="validationKetLuanErrors" [documentType]="documentType">
+                                                                    </app-lan-kham-hien-tai-ket-luan>
+
+                                                                    <div class="sticky-button-action py-3 text-right" kendoTooltip>
+                                                                        <button (click)="huy()" type="button" *ngIf="this.benhNhanHienTai.YeuCauKhamBenh.IsChangeChanDoan" color="primary" mat-stroked-button mat-button class="mr-1 mt-2" title="Phím tắt: Esc">Hủy</button>
+                                                                        <button (click)="luuKetLuan()" type="button" *ngIf="this.benhNhanHienTai.YeuCauKhamBenh.IsChangeChanDoan" color="primary" mat-raised-button mat-button class="mr-1 mt-2" title="Phím tắt: Ctrl + S">Lưu</button>
+                                                                        
+                                                                        <button type="button" color="primary" *ngIf="this.benhNhanHienTai.YeuCauKhamBenh.DichVuKhamBenhBenhVienId == cauHinhDichVuKhamThai" mat-raised-button mat-button class="mr-1" (click)="inGiayNghiDuongThai()">In giấy nghỉ dưỡng thai
+                                                                        </button>
+
+                                                                        <button type="button" color="primary" mat-raised-button mat-button class="mr-1" [disabled]="benhNhanHienTai.YeuCauKhamBenh.CoDieuTriNgoaiTru == true" (click)="kiemTraDichVuChuaThucHien()" title="Phím tắt: Ctrl + H">Lưu và Hoàn thành
+                                                                            khám</button>
+                                                                            <!-- hoanThanhKham() -->
+
+                                                                        <button type="button" color="primary" mat-raised-button mat-button class="mr-1" (click)="inPhieuKham()">In phiếu khám
+                                                                            bệnh</button>
+
+                                                                        <button *ngIf="this.benhNhanHienTai.YeuCauKhamBenh.CoNhapVien" type="button" color="primary" mat-raised-button mat-button class="mr-1" (click)="inPhieuKhamVaoVien()">In phiếu khám
+                                                                                bệnh vào viện</button>
+                                                                        <button type="button" color="primary" *ngIf="this.benhNhanHienTai.YeuCauTiepNhan.CoBHYT == true" mat-raised-button mat-button class="mr-1" (click)="inGiayNghiHuongBHXH()">In giấy nghỉ
+                                                                            hưởng BHXH</button>
+                                                                           
+                                                                    </div>
+                                                                    <!-- <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2 border-t">
+                                                                            <div class="text-right" fxFlex="100%">
+                                                                                <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                                                                                    (click)="hoanThanhKham()">Lưu và Hoàn thành khám</button>
+                                                                            </div>
+                                                                        </div> -->
+
+                                                                    <!-- <div class="my-2 border-t">
+                                                                            <div fxFlex="20%">
+                                                                                <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                                                                                    (click)="hoanThanhKham()">Hoàn
+                                                                                    thành khám</button>
+                                                                            </div>
+                                                                            <div class="text-right" fxFlex="80%">
+                                                                                <button type="button" mat-stroked-button color="primary" mat-button class="mr-1 mt-2">Nhập
+                                                                                    viện</button>
+                                                                                <button type="button" mat-stroked-button color="primary" mat-button class="mr-1 mt-2">Chuyển
+                                                                                    viện</button>
+                                                                            </div>
+                                                                        </div> -->
+                                                                </div>
+                                                            </ng-template>
+                                                        </kendo-tabstrip-tab>
+
+                                                        <!-- tab tường trình pttt -->
+                                                        <!-- <kendo-tabstrip-tab *ngIf="showTuongTrinh"
+                                                            [title]="'TƯỜNG TRÌNH PT/TT'"
+                                                            [selected]="lstStatusSelectTabKhambenh.selectedTabTuongTrinhPttt">
+                                                            <ng-template kendoTabContent>
+                                                                <div class="p-2">
+                                                                    <app-phau-thuat-thu-thuat-tuong-trinh
+                                                                        [thongTinBenhNhan]="benhNhanHienTai">
+                                                                    </app-phau-thuat-thu-thuat-tuong-trinh>
+                                                                    <div *ngIf="benhNhanHienTai.YeuCauKhamBenh.IsChangePhauThuat"
+                                                                        class="sticky-button-action py-3 text-right">
+                                                                        <button type="button" mat-flat-button mat-button
+                                                                            class="mr-1"
+                                                                            (click)="onResetTuongTrinh()">Hủy</button>
+
+                                                                        <button type="button" color="primary"
+                                                                            mat-raised-button mat-button class="mr-1"
+                                                                            (click)="onSaveTuongTrinh()">Lưu</button>
+                                                                    </div>
+                                                                </div>
+                                                            </ng-template>
+                                                        </kendo-tabstrip-tab> -->
+
+                                                        <!-- tab kết luận khám đoàn -->
+                                                        <kendo-tabstrip-tab *ngIf="isKhamDoan" [selected]="lstStatusSelectTabKhambenh.selectedTabTuVanThuocKhamDoan">
+                                                            <ng-template kendoTabTitle>
+                                                                <div kendoTooltip title="Phím tắt: Ctrl + F6">
+                                                                    TƯ VẤN THUỐC
+                                                                </div>
+                                                            </ng-template>
+                                                            <ng-template kendoTabContent>
+                                                                <div class="p-2">
+                                                                    <app-lan-kham-hien-tai-tu-van-thuoc-kham-doan [YeuCauTiepNhanId]="benhNhanHienTai.YeuCauTiepNhanId"
+                                                                        [YeuCauKhamBenhId]="benhNhanHienTai.YeuCauKhamBenhId" [documentType]="documentType">
+                                                                    </app-lan-kham-hien-tai-tu-van-thuoc-kham-doan>
+                                                                    <!-- <div class="sticky-button-action py-3 text-right" kendoTooltip>
+                                                                        <button type="button" mat-button class="float-left">In phiếu</button>
+                                                                        <button type="button" mat-button class="mr-1">In toa thuốc</button>
+                                                                        <button type="button" color="primary" mat-raised-button mat-button class="mr-1" 
+                                                                            [disabled]="benhNhanHienTai.YeuCauKhamBenh.CoDieuTriNgoaiTru == true" title="Phím tắt: Ctrl + H" (click)="luuVaHoanThanhKhamDoan()">
+                                                                            Lưu và Hoàn thành khám
+                                                                        </button>
+                                                                    </div> -->
+                                                                </div>
+                                                            </ng-template>
+                                                        </kendo-tabstrip-tab>
+                                                        <!-- số dư tạm ứng -->
+                                                        <kendo-tabstrip-tab [disabled]="true" cssClass="tab-right-po">
+                                                            <ng-template kendoTabTitle>
+                                                                Tạm ứng:
+                                                                <b>{{benhNhanHienTai.YeuCauKhamBenh.SoDuTaiKhoanDisplay}}</b>
+                                                                -
+                                                                Còn lại: <b>{{benhNhanHienTai.YeuCauKhamBenh.SoDuTaiKhoanConLaiDisplay}}</b>
+                                                            </ng-template>
+                                                            <ng-template kendoTabContent>
+                                                            </ng-template>
+                                                        </kendo-tabstrip-tab>
+                                                    </kendo-tabstrip>
+                                                </div>
+                                            </ng-container>
+                                        </kendo-splitter-pane>
+                                    </kendo-splitter>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <!-- tab danh sách đã khám bệnh -->
+                            <kendo-tabstrip-tab [title]="'Danh sách hoàn thành khám'">
+                                <ng-template kendoTabContent>
+                                    <app-danh-sach-da-kham-list [phongKham]="phongKhamHienTai.KeyId" [documentType]="documentType">
+                                    </app-danh-sach-da-kham-list>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <kendo-tabstrip-tab *ngIf="LaChuyenKhoaKhamNhieu" cssClass="disable-select-tab" [disabled]="true">
+                                <ng-template kendoTabTitle>
+                                    <div kendoTooltip>
+                                        <h3 class="title blue">NGƯỜI BỆNH ĐANG KHÁM 
+                                            <span *ngIf="benhNhanHienTai.Id != 0 && benhNhanHienTai.YeuCauKhamBenh.LaThamVan" class="title red"> (DỊCH VỤ KHÁM THAM VẤN)</span>
+                                        </h3>
+                                    </div>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <!-- tab hiện button chuyển loại khám -->
+                            <kendo-tabstrip-tab *ngIf="hinhThucKham == loginNoiVien" cssClass="tab-right-po">
+                                <ng-template kendoTabTitle>
+                                    <!-- *ngIf="!isLoadingKhamDoan" -->
+                                    <button  type="button" color="primary" mat-raised-button mat-button class="mr-1" (click)="chuyenLoaiKham()">
+                                        {{isKhamDoan ? 'Chuyển Khám bệnh' : 'Khám sức khỏe'}}
+                                    </button>
+                                    <!-- <button *ngIf="isLoadingKhamDoan" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                                        alt="Loading" /></button> -->
+                                </ng-template>
+                                <ng-template kendoTabContent>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+                        </kendo-tabstrip>
+                        <ng-container *ngIf="phongKhamHienTai.KeyId == null || phongKhamHienTai.KeyId == 0">
+                            Chưa chọn phòng khám
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<ng-template #maTNTemplate let-dataItem>
+    <a (click)="batDauKham(dataItem)">
+        <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.MaYeuCauTiepNhan}}">{{dataItem.MaYeuCauTiepNhan}}
+        </p>
+    </a>
+</ng-template>
+<ng-template #hoTenTemplate let-dataItem>
+    <p (click)="batDauKham(dataItem)" style="position: relative;">{{dataItem.HoTen}}<img *ngIf="dataItem.CoBaoHiem" src="assets/img/logoBHXH.png" class="icon-bhyt" /></p>
+</ng-template>
+<!-- hàng đợi chung -->
+<ng-template #maTNHangDoiChungTemplate let-dataItem>
+    <a (click)="xuLyBatDauKhamNguoiBenhTuHangDoiChung(dataItem)">
+        <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.MaYeuCauTiepNhan}}">{{dataItem.MaYeuCauTiepNhan}}
+        </p>
+    </a>
+</ng-template>
+<ng-template #hoTenHangDoiChungTemplate let-dataItem>
+    <p (click)="xuLyBatDauKhamNguoiBenhTuHangDoiChung(dataItem)" style="position: relative;">{{dataItem.HoTen}}<img *ngIf="dataItem.CoBaoHiem" src="assets/img/logoBHXH.png" class="icon-bhyt" /></p>
+</ng-template>
+
+<ng-template #maTNHangDoiChungKetLuanTemplate let-dataItem>
+    <a (click)="xuLyKetLuanNguoiBenhTuHangDoiChung(dataItem)">
+        <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.MaYeuCauTiepNhan}}">{{dataItem.MaYeuCauTiepNhan}}
+        </p>
+    </a>
+</ng-template>
+<ng-template #hoTenHangDoiChungKetLuanTemplate let-dataItem>
+    <p (click)="xuLyKetLuanNguoiBenhTuHangDoiChung(dataItem)" style="position: relative;">{{dataItem.HoTen}}<img *ngIf="dataItem.CoBaoHiem" src="assets/img/logoBHXH.png" class="icon-bhyt" /></p>
+</ng-template>
+<!-- END hàng đợi chung END -->
+<ng-template #tienTrinhTemplate let-dataItem>
+    <p kendoTooltip title="{{dataItem.TienTrinhKhamSucKhoe}}" class="reverse-ellipsis r">
+        <label [style.color]="dataItem.IsKhamDuDichVuKhamSucKhoe ? 'green' : 'orange'">{{dataItem.DichVuKhamDaThucHien}}</label>/{{dataItem.TongDichVuKham}}
+    </p>
+</ng-template>
+
+<ng-template #ngayKhamBenhGroupHeaderTemplate let-value="value">
+    <div class="text-left" kendoTooltip>
+        <strong>{{value | date:'dd/MM/yyyy'}}</strong>
+        <button *ngIf="kiemTraNgayCoBenhNhanChonChuyenPhong(value)" type="button" title="Chuyển phòng khám" color="primary" mat-stroked-button mat-button
+                class="icon-color-button ml-1" (click)="chuyenPhongKhamBenhNhanDangChon()">
+            <mat-icon [icIcon]="icSwap"></mat-icon>
+        </button>
+    </div>
+</ng-template>
+
+
+<!-- action chuẩn bị khám -->
+<ng-template #chuanBiKhamActionTemplate let-dataItem let-rowIndex="rowIndex">
+    <div class="text-center" kendoTooltip>
+        <button type="button" title="Bắt đầu khám" class="icon-color-button" (click)="batDauKham(dataItem)">
+            <mat-icon [icIcon]="icPlay"></mat-icon>
+        </button>
+        <button type="button" title="BN vắng" class="icon-color-button" (click)="bnVang(dataItem)" color="warn" mat-raised-button>
+            <mat-icon [icIcon]="icCancel"></mat-icon>
+        </button>
+    </div>
+</ng-template>

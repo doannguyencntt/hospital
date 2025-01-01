@@ -1,0 +1,64 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'CLS', Path:''},
+                    {Title:'Sổ Thống Kê CLS', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid #grid fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns" [documentType]="documentType"
+                [useActionDefault]="false" [lazyLoadPage]="true" [showStt]="true" [useHeaderDefault]="false"
+                [checkboxAble]="false" pageSize="50" [additionalSearchString]="additionalSearchString"
+                (extOnDataBound)="onDataBoundChild($event)" [sort]="sort" [headerTemplate]="headerTemplate"
+                urlGetData="BaoCaoThucHienCls/GetDataSoThongKeCLSForGridAsync"
+                urlGetTotalPage="BaoCaoThucHienCls/GetTotalPageSoThongKeCLSForGridAsync" [groups]="groups">
+            </app-grid>
+
+            <ng-template #headerTemplate>
+                <app-checkbox name="co-duyet" class="ml-2" value="coduyet" [(model)]="baoCaoClsSoThongKe.ChuaThucHien"
+                    fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" label="Chưa thực hiện">
+                </app-checkbox>
+
+                <app-checkbox name="co-duyet" class="ml-2" value="coduyet" [(model)]="baoCaoClsSoThongKe.DaThucHien"
+                    fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" label="Đã thực hiện">
+                </app-checkbox>
+
+                <app-datetimepicker fxFlex="245px" [(model)]="baoCaoClsSoThongKe.ThoiDiemTiepNhanTuFormat" #tiepnhantu
+                    id="ThoiDiemTiepNhanTuFormat" label="Từ ngày" class="mt-1 ml-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="245px" [(model)]="baoCaoClsSoThongKe.ThoiDiemTiepNhanDenFormat" #tiepnhanden
+                    id="ThoiDiemTiepNhanDenFormat" label="Đến ngày" class="mt-1 ml-1 on-header ">
+                </app-datetimepicker>
+
+                <app-combobox id="khoaphong" fxFlex="15%" fxFlex.sm="25%" [(model)]="baoCaoClsSoThongKe.KhoaId"
+                    (modelChange)="XemBaoCao()" label="Khoa" url="BaoCaoThucHienCls/KhoaPhongs"
+                    class="mt-1 ml-1 on-header">
+                </app-combobox>
+
+                <div fxFlex="35%" fxFlex.sm="70%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 ml-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button [disabled]="disabledXuatBaoCao" type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 ml-1 mt-2" (click)="XuatBaoCao()">Xuất Excel</button>
+                </div>
+            </ng-template>
+
+            <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem>
+                <strong>{{value}} </strong>
+            </ng-template>
+
+            <ng-template #donGiaTemplate let-dataItem>
+                <p> {{dataItem.Gia | number:'0.2-2':'vi-VN'}}</p>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

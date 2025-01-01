@@ -1,0 +1,50 @@
+app-slider{
+    //padding-bottom: 1.34375em;
+    .mat-slider-horizontal{
+        height: 40px !important;
+        margin: 0 !important;
+    }
+    kendo-textbox-container{        
+        background-color: rgba(0, 0, 0, 0.04);
+        width: 100% !important;
+        border-radius: 4px 4px 0 0;
+        padding: .75em .75em 0.1em .75em;
+        border-bottom: 1px solid rgba(82, 63, 105, 0.42);
+        >.k-label{
+            margin-left: 10px;
+            background: none !important;
+            transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+        }
+        &.k-state-empty{            
+            >.k-label{
+                transform: translate(0, 0) scale(1) !important;
+                margin-top: -9px;
+                font-size: 11px;
+            }
+        }
+        &.k-state-focused>.k-label {
+            color:#005dab !important;
+        }
+        &::after {
+          display: block;
+          z-index: 2;
+          content: "";
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          right: 0;
+          height: 2px;
+          margin: auto;
+          opacity: 0;
+          transform: scaleX(0.5);
+          transition: transform .3s;
+          background-color: #005dab;
+        }
+        &:hover{ 
+          &::after {
+            opacity: 1;
+            transform: scaleX(1);
+          }
+        }
+    }
+}

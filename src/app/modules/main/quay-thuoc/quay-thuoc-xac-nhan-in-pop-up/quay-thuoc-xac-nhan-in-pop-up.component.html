@@ -1,0 +1,14 @@
+
+
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>{{Title}}</div>
+</div>
+<p class="mb-3"> Thực hiện in phiếu cho NB : </p>
+<app-checkbox id="InPhieuThu" [(model)]="thongTin.InPhieuThu" label="In phiếu thu" class="pb-0"></app-checkbox>
+<app-checkbox id="InBangKe" [(model)]="thongTin.InBangKe" label="In bảng kê thuốc" class="pb-0"></app-checkbox>
+<div style="float: right;">
+    <button type="button"  mat-raised-button mat-button class="mr-1 mt-2"
+    (click)="close('No answer')">Không</button>
+    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+    (click)="close('In')">In</button>
+</div>

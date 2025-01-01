@@ -1,0 +1,52 @@
+<div>
+    <app-grid [gridColumns]="gridColumns" #gridPopup
+    urlGetData="TonKho/GetDataForGridNhapXuatTonChiTietAsync"
+              urlGetTotalPage="TonKho/GetTotalPageForGridNhapXuatTonChiTietAsync"
+         [useAddDeault]="false" [headerTemplate]="headerTemplate"
+         [gridColumns]="gridColumns"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+        [lazyLoadPage]="true">
+    </app-grid>
+
+    <ng-template #headerTemplate>
+        <div class="bg-app-bar p-0 h-15 border-b sticky left-0">
+            <div fxFlex="87%" style="margin: 10px 0 0 10px;">
+                <span>
+                    <span style="font-weight: bold;">Kho: </span> <span *ngIf="chiTietModel != null && chiTietModel != undefined">{{chiTietModel.KhoDisplay}}</span>
+                </span>
+                <span style="margin-left: 20px;">
+                    <span style="font-weight: bold;">Dược phẩm: </span> <span *ngIf="chiTietModel != null && chiTietModel != undefined">{{chiTietModel.DuocPhamDisplay}}</span>
+                </span>
+            </div>
+            <div class="text-right" fxFlex="13%" style="margin: 5px;">
+                <button (click)="excelexport.save()" type="button" color="primary" 
+                    mat-raised-button mat-button>Xuất excel
+                </button>
+            </div>
+        </div>
+    </ng-template>
+
+</div>
+
+
+<kendo-excelexport [group]="group" [data]="data" [collapsible]="true" fileName="TheKho.xlsx" #excelexport>
+    <kendo-excelexport-column field="STT" [locked]="true" title="STT" [width]="50">
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="NgayDisplay" title="Ngày" [width]="200">
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="MaChungTu" title="Mã chứng từ" width="100">
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="Nhap" title="Nhập" width="100">
+    </kendo-excelexport-column> 
+    <kendo-excelexport-column field="Xuat" title="Xuất" width="100">
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="Ton" title="Tồn" width="100">
+    </kendo-excelexport-column>
+
+    <kendo-excelexport-column field="ChiTiet" [hidden]="true">
+        <ng-template kendoExcelExportGroupHeaderTemplate  let-value="value">
+           Kho: {{value.kho}} - Dược phẩm: {{value.duocPham}}
+        </ng-template>
+    </kendo-excelexport-column>
+
+</kendo-excelexport>

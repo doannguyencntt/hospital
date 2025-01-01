@@ -1,0 +1,54 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[                   
+                {Title:'Thống Kê', Path:''},
+                {Title:'Dự trù số lượng người khám sức khỏe thực hiện DV LS-CLS', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-combobox id="CongTyId" fxFlex="20%" fxFlex.sm="20%" label="Chọn Đoàn" [required]="true"
+                    url="BaoCao/GetCongTys" [(model)]="baoCaoSearch.CongTyId" class="mt-1 on-header"
+                    (modelChange)="changeCongTy($event)" style="padding-left: 10px;">
+                </app-combobox>
+
+                <app-combobox id="HopDongId" fxFlex="20%" fxFlex.sm="20%" label="chọn hợp đồng" [required]="true"
+                    url="BaoCao/GetHopDongKhamSucKhoes" [(model)]="baoCaoSearch.HopDongId" class="mt-1 on-header"
+                    [reloadForGrid]="true" [bind]="true" (dataForLookupChange)="changeLookupHopDong($event)"
+                    [queryInfo]="{ParameterDependencies:'{CongTyKhamSucKhoeId:' + baoCaoSearch.CongTyId + '}', Take: 50}">
+                </app-combobox>
+
+                <div fxFlex="30%" fxFlex.sm="30%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="xem(true)">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button (click)="exportExcel()">Xuất
+                        Excel</button>
+                </div>
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                    <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+                        <app-grid [gridColumns]="gridColumns" [gridDataSource]="gridDataSource"
+                            [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true"
+                            [useHeaderDefault]="false"  [checkboxAble]="false"
+                             [groups]="groups" (extOnPageChange)="pageChange($event)">
+                        </app-grid>
+                    </div>
+                     <!-- (extOnPageChange)="pageChange($event)" -->
+                    <ng-template #nhomGroupHeaderTemplate let-value="value">
+                        <span>{{value}}</span>
+                    </ng-template>
+                    <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{rowIndex + 1}}
+                    </ng-template>
+                </div>
+
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

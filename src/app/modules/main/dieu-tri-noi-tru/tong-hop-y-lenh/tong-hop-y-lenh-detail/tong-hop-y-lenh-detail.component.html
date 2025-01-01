@@ -1,0 +1,293 @@
+<!-- <app-header-form [crumbs]="[
+        {Title:'Nội Trú',Path:''},
+        {Title:'Tổng Hợp Y Lệnh',Path:'/noi-tru/tong-hop-y-lenh', queryParams: {holdQuery : true}},
+        {Title:'Chi Tiết Tổng Hợp Y Lệnh',Path:'', Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chi tiết tổng hợp y lệnh</h2>
+            </div> -->
+
+            <div [class]="!IsDieuTriNoiTru ? 'px-6 py-4' : ''" fxLayout="column">
+                <!-- style="background: #e1f5fe;"  -->
+                <fieldset *ngIf="!IsDieuTriNoiTru" fxFlex="100%" class="{{(thongTinHanhChinh != null && thongTinHanhChinh.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+                    <legend>Thông tin hành chính</legend>
+                        <div fxFlex="100%">
+                            <ul class="inline">
+                                <li>Mã TN:
+                                    <strong>{{thongTinHanhChinh.MaTiepNhan}}</strong>
+                                </li>
+                                <li>Mã NB:
+                                    <strong>{{thongTinHanhChinh.MaBenhNhan}}</strong>
+                                </li>
+                                <li>Họ tên:
+                                    <strong>{{thongTinHanhChinh.HoTen}}</strong>
+                                </li>
+                                <li >Tuổi:
+                                    <strong *ngIf="!isDuoi6Tuoi">{{thongTinHanhChinh.Tuoi}}</strong>
+                                    <strong *ngIf="isDuoi6Tuoi">{{Duoi6TuoiDisplay}}</strong>
+                                </li>
+                                <li>
+                                    Giới tính:
+                                    <strong>{{thongTinHanhChinh.TenGioiTinh}}</strong>
+                                </li>
+                                <li>
+                                    Địa chỉ:
+                                    <strong>{{thongTinHanhChinh.DiaChi}}</strong>
+                                </li>
+                                <li>
+                                    Nghề nghiệp:
+                                    <strong>{{thongTinHanhChinh.NgheNghiep}}</strong>
+                                </li>
+                                <li>
+                                    Số BA:
+                                    <strong>{{thongTinHanhChinh.SoBenhAn}}</strong>
+                                </li>
+                                <li>
+                                    Loại BA:
+                                    <strong>{{thongTinHanhChinh.LoaiBenhAn}}</strong>
+                                </li>
+                                <li>
+                                    Khoa:
+                                    <strong>{{thongTinHanhChinh.Khoa}}</strong>
+                                </li>
+                                <li>
+                                    BS điều trị:
+                                    <strong>{{thongTinHanhChinh.BacSiDieuTri}}</strong>
+                                </li>
+                                <li>
+                                    Phòng:
+                                    <strong>{{thongTinHanhChinh.Phong}}</strong>
+                                </li>
+                                <li>
+                                    Giường:
+                                    <strong>{{thongTinHanhChinh.Giuong}}</strong>
+                                </li>
+                                <li>
+                                    Đối tượng: <strong style="color: blue;">{{thongTinHanhChinh.DoiTuong}}</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </fieldset>
+
+                    <fieldset fxFlex="100%" [class]="!IsDieuTriNoiTru ? 'mt-4' : 'fieldset_noi_tru'">
+                        <legend *ngIf="!IsDieuTriNoiTru">Thông tin y lệnh</legend>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                            <div fxFlex="15%">
+                                <mat-button-toggle-group fxFlex="100%"> 
+                                    <mat-button-toggle class="mat-btn-p0" fxFlex="20%" (click)="prevDateLink()">
+                                        <mat-icon [icIcon]="icChevronLeft"></mat-icon>
+                                    </mat-button-toggle>
+                                    <mat-button-toggle fxFlex="60%" (click)="datepicker.toggle()">
+                                        <kendo-datepicker #datepicker [weekNumber]="true" style="visibility: hidden;width: 0;height: 0;"
+                                            (ngModelChange)="changeDateLink($event)" [(ngModel)]="tongHopYLenhPhieuDieuTri.NgayYLenh"
+                                            [value]="tongHopYLenhPhieuDieuTri.NgayYLenh">
+                                        </kendo-datepicker>
+                                        <span class="reverse-ellipsis r" [innerHTML]="tongHopYLenhPhieuDieuTri.NgayYLenhDisplay"></span>
+                                    </mat-button-toggle>
+                                    <mat-button-toggle  class="mat-btn-p0" fxFlex="20%" (click)="nextDateLink()">
+                                        <mat-icon [icIcon]="icChevronRight"></mat-icon>
+                                    </mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                            <ng-container *ngIf="!IsDisableEdit">
+                                <app-timepicker id="gioYLenh" fxFlex="15%" [(model)]="tongHopYLenhThem.GioYLenh" moreClass="pl-0"
+                                    style="padding-bottom: 0px;" label="Giờ y lệnh" [required]="true" [modelIsNumber]="true" (modelChange)="changeGioYLenh($event)"
+                                    [validationerror]="'GioYLenh' | validationerror:validationErrors">
+                                </app-timepicker>
+                                <app-textarea fxFlex="70%" id="dienBien" label="Theo dõi diễn biến" maxlength="4000"
+                                    [(model)]="tongHopYLenhThem.DienBien" minHeight="21">
+                                </app-textarea>
+                                <app-textarea fxFlex="50%" id="moTa" label="Thực hiện y lệnh/ chăm sóc" maxlength="1000"
+                                    [(model)]="tongHopYLenhThem.MoTaYLenh" minHeight="21" [required]="true"
+                                    [validationerror]="'MoTaYLenh' | validationerror:validationErrors">
+                                </app-textarea>
+                                <app-combobox id="nguoiNhap" fxFlex="25%" fxFlex.sm="15%"
+                                    [(model)]="tongHopYLenhThem.NhanVienXacNhanThucHienId" [modelText]="tongHopYLenhThem.NhanVienXacNhanThucHienDisplay"
+                                    url="YeuCauLinhDuocPham/GetListNhanVien" label="Người thực hiện" (selectionChange)="chonYTaThucHien($event)"
+                                    [validationerror]="'NhanVienXacNhanThucHienId' | validationerror:validationErrors">
+                                </app-combobox>
+                                <app-timepicker id="gioThucHien" fxFlex="15%" [(model)]="tongHopYLenhThem.GioThucHien" moreClass="pl-0"
+                                    style="padding-bottom: 0px;" label="Giờ thực hiện" [modelIsNumber]="true"
+                                    [validationerror]="'GioThucHien' | validationerror:validationErrors">
+                                </app-timepicker>
+                                <div fxFlex="10%" fxFlex.sm="10%">
+                                    <div class="container-custom no-label">
+                                        <label>&nbsp;</label>
+                                        <div fxLayout="row" fxLayoutGap="16px">
+                                            <app-checkbox fxFlex="100%" value="true" id="daThucHien" label="Đã thực hiện"
+                                                [(model)]="tongHopYLenhThem.XacNhanThucHien"></app-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+                                    <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                                        (click)="huyThemYLenh()">Hủy</button>
+                                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1"
+                                        (click)="xuLyThemYLenh()">Thêm</button>
+                                </div>
+                            </ng-container>
+
+                            <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridColumns" [allowSortDefault]="true"
+                                [documentType]="documentype" [useAddDeault]="false" [useHeaderDefault]="false"
+                                [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500" [pageable]="false"
+                                [gridDataSource]="gridDataSource">
+                            </app-grid>
+
+                            <div style="width: 100%; padding: 0px 16px 16px 0px; display: flex">
+                                <button *ngIf="IsDieuTriNoiTru" type="button" color="primary" mat-stroked-button mat-button
+                                    [style.margin-left]="'auto'"  (click)="xuLyKiemTraInPhieu(true)" class="mr-1">In phiếu chăm sóc tất cả</button>
+                                <button *ngIf="IsShowButtonIn" type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                                    (click)="xuLyKiemTraInPhieu()">In phiếu chăm sóc</button>
+
+                                <button *ngIf="!IsDieuTriNoiTru" type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                                    [style.margin-left]="'auto'" (click)="quayLai()">Hủy</button>
+                                <button *ngIf="IsDieuTriNoiTru" type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                                    (click)="getById(id)">Hủy</button>
+                                <button *ngIf="!IsDisableEdit" type="button" color="primary" mat-raised-button mat-button class="mr-1"
+                                    (click)="showPopupXacNhanLuu()">Lưu</button>
+                            </div>
+
+                            <ng-template #gioYLenhTemplate let-dataItem>
+                                <p [style.marginBottom.px]="dataItem.TongHopYLenhDienBienChiTiets.length == 1 ? 21 : 47*dataItem.TongHopYLenhDienBienChiTiets.length">{{dataItem.GioYLenhDisplay}}</p>
+                            </ng-template>
+                            <ng-template #dienBienTemplate let-dataItem let-rowIndex="rowIndex">
+                                <app-textarea *ngIf="dataItem.TongHopYLenhDienBienChiTiets != undefined" (modelChange)="changeData()"
+                                    id="dienBien{{rowIndex}}" class="no-label" label="" maxlength="1000" [disabled]="tongHopYLenhPhieuDieuTri.IsDisableEdit"
+                                    [(model)]="dataItem.DienBien" [minHeight]="dataItem.TongHopYLenhDienBienChiTiets.length == 1 ? 21 : 47*dataItem.TongHopYLenhDienBienChiTiets.length">
+                                </app-textarea> 
+                            </ng-template>
+
+                            <ng-template #yLenhTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+                                    <ng-container *ngFor="let item of dataItem.TongHopYLenhDienBienChiTiets, let i = index">
+                                        <div fxFlex="100%" fxFlex.sm="100%">
+                                            <div fxLayout="row" *ngIf="!item.IsEdit">
+                                                <app-checkbox value="true" id="yLenh{{rowIndex}}{{i}}" (modelChange)="changeXacNhanThucHien($event, item)" [(model)]="item.XacNhanThucHien"
+                                                    [disabled]="item.IsDisabled || tongHopYLenhPhieuDieuTri.IsDisableEdit">
+                                                </app-checkbox>
+                                                <div style="margin-left: 15px;min-height: 43px;" class="container-custom no-label">
+                                                    <div fxLayout="row" fxLayoutGap="16px">
+                                                        <label class="pb-2 reverse-ellipsis r" [style.color]="(item.IsQuaThoiGianYLenh && !item.XacNhanThucHien) ? 'red': ''" fxFlex="auto" class="reverse-ellipsis r">
+                                                            {{item.MoTaYLenh}}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div fxLayout="row" fxLayoutGap="16px" *ngIf="item.IsEdit" class="position: relative">
+                                                <app-checkbox value="true" id="yLenh{{rowIndex}}{{i}}" (modelChange)="changeXacNhanThucHien($event, item)"
+                                                    [(model)]="item.XacNhanThucHien" [disabled]="item.IsDisabled || tongHopYLenhPhieuDieuTri.IsDisableEdit">
+                                                </app-checkbox>
+                                                <app-textarea *ngIf="!item.IsQuaNgayThucHien" id="moTaYLenh{{rowIndex}}{{i}}" class="no-label" 
+                                                    fxFlex="auto" (modelChange)="changeData()" [style.color]="(item.IsQuaThoiGianYLenh && !item.XacNhanThucHien) ? 'red': ''"
+                                                    [disabled]="item.IsDisabled || tongHopYLenhPhieuDieuTri.IsDisableEdit"
+                                                    label="" maxlength="1000" [(model)]="item.MoTaYLenh" [minHeight]="21">
+                                                </app-textarea>
+                                                <div *ngIf="item.IsQuaNgayThucHien" style="margin-left: 15px;min-height: 43px;" class="container-custom no-label">
+                                                    <div fxLayout="row" fxLayoutGap="16px">
+                                                        <label class="pb-2 reverse-ellipsis r" [style.color]="(item.IsQuaThoiGianYLenh && !item.XacNhanThucHien) ? 'red': ''" fxFlex="auto" class="reverse-ellipsis r">
+                                                            {{item.MoTaYLenh}}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <!-- [style.color]="(item.IsQuaThoiGianYLenh && !item.XacNhanThucHien) ? 'red': ''" -->
+                                                <button *ngIf="!item.IsDisabled && !tongHopYLenhPhieuDieuTri.IsDisableEdit && item.IsYLenhThemMoi"
+                                                    kendoTooltip title="Xóa" (click)="xuLyXoaYLenh(dataItem, item)" class="icon-action-ylenh">
+                                                    <mat-icon style="color: red;" [icIcon]="icDelete"></mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                            <ng-template #yTaThucHienTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+                                    <ng-container *ngFor="let item of dataItem.TongHopYLenhDienBienChiTiets, let i = index">
+                                        <app-combobox fxFlex="100%" label="" id="yTaThucHien{{rowIndex}}{{i}}" url="YeuCauLinhDuocPham/GetListNhanVien" popupSettings="null"
+                                            [(model)]="item.NhanVienXacNhanThucHienId" [modelText]="item.NhanVienXacNhanThucHienDisplay"  (modelChange)="changeData()"
+                                            class="no-label item-no-padding" label=" " [bind]="true"  [reloadForGrid]="true" [disabled]="item.IsDisabled || tongHopYLenhPhieuDieuTri.IsDisableEdit" [popupSettings]="null"
+                                            [validationerror]="'TongHopYLenhDienBiens['+rowIndex+'].TongHopYLenhDienBienChiTiets['+i+'].NhanVienXacNhanThucHienId' | validationerror:validationErrors">
+                                        </app-combobox>
+                                    </ng-container>
+                                    <!-- [reloadForGrid]="true" -->
+                                </div>
+                            </ng-template>
+                            <ng-template #gioThucHienTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+                                    <ng-container *ngFor="let item of dataItem.TongHopYLenhDienBienChiTiets, let i = index">
+                                        <app-timepicker id="gioThucHien{{rowIndex}}{{i}}" fxFlex="100%" [(model)]="item.GioThucHien" moreClass="pl-0"
+                                            class="no-label" style="padding-bottom: 0px;" label="" [modelIsNumber]="true" 
+                                            (modelChange)="changeData()" [disabled]="item.IsDisabled || tongHopYLenhPhieuDieuTri.IsDisableEdit"
+                                            [validationerror]="'TongHopYLenhDienBiens['+rowIndex+'].TongHopYLenhDienBienChiTiets['+i+'].GioThucHien' | validationerror:validationErrors">
+                                        </app-timepicker>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                            <ng-template #nguoiRaYLenhTemplate let-dataItem>
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+                                    <!-- <label *ngFor="let item of dataItem.TongHopYLenhDienBienChiTiets, let i = index" 
+                                        fxFlex="100%" class="pb-5 mb-2">
+                                        {{item.NhanVienChiDinhDisplay}}
+                                    </label> -->
+                                    <ng-container *ngFor="let item of dataItem.TongHopYLenhDienBienChiTiets, let i = index">
+                                        <div fxFlex="100%" fxFlex.sm="100%">
+                                            <div style="height: 43px;" class="container-custom no-label">
+                                                <div fxLayout="row" fxLayoutGap="16px">
+                                                    <label class="pb-2 reverse-ellipsis r" fxFlex="100%">
+                                                        {{item.NhanVienChiDinhDisplay}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                            <ng-template #nguoiCapNhatTemplate let-dataItem>
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+                                    <!-- <label *ngFor="let item of dataItem.TongHopYLenhDienBienChiTiets, let i = index" 
+                                        fxFlex="100%" class="pb-5">
+                                        {{item.NhanVienCapNhatDisplay}}
+                                    </label> -->
+                                    <ng-container *ngFor="let item of dataItem.TongHopYLenhDienBienChiTiets, let i = index">
+                                        <div fxFlex="100%" fxFlex.sm="100%">
+                                            <div style="height: 43px;" class="container-custom no-label">
+                                                <div fxLayout="row" fxLayoutGap="16px">
+                                                    <label class="pb-2 reverse-ellipsis r" fxFlex="100%">
+                                                        {{item.NhanVienCapNhatDisplay}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                            <ng-template #ngayCapNhatTemplate let-dataItem>
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+                                    <!-- <label *ngFor="let item of dataItem.TongHopYLenhDienBienChiTiets, let i = index" 
+                                        fxFlex="100%" class="pb-5">
+                                        {{item.ThoiDiemCapNhatDisplay}}
+                                    </label> -->
+
+                                    <ng-container *ngFor="let item of dataItem.TongHopYLenhDienBienChiTiets, let i = index">
+                                        <div fxFlex="100%" fxFlex.sm="100%">
+                                            <div style="height: 43px;" class="container-custom no-label">
+                                                <div fxLayout="row" fxLayoutGap="16px">
+                                                    <label class="pb-2 reverse-ellipsis r" fxFlex="100%">
+                                                        {{item.ThoiDiemCapNhatDisplay}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </fieldset>
+            </div>
+        <!-- </div>
+    </div>
+</div> -->

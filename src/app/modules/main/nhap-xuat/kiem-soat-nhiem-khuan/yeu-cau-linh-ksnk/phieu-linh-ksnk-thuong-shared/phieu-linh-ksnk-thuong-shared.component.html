@@ -1,0 +1,184 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <div fxFlex="100%" *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai == false">
+        <h4 style="color: red;">Lý do: {{yeuCauLinhKSNK.LyDoKhongDuyet}}</h4>
+    </div>
+
+    
+
+    <app-combobox *ngIf="yeuCauLinhKSNK.LaNguoiTaoPhieu == false" id="linhVeKho" fxFlex="15%" fxFlex.sm="15%"
+        [required]="true" url="YeuCauLinhKSNK/GetKhoCurrentUserKSNK" [(model)]="yeuCauLinhKSNK.KhoNhapId"
+        [modelText]="yeuCauLinhKSNK.TenKhoNhap" label="Lĩnh về kho" class="item-no-padding"
+        (modelChange)="clearGridKSNK()"
+        [disabled]="(trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false) && icDisable == true) || (icDisable == true)">
+    </app-combobox>
+   
+    <app-combobox *ngIf="yeuCauLinhKSNK.LaNguoiTaoPhieu == null || yeuCauLinhKSNK.LaNguoiTaoPhieu == true"
+        id="linhVeKho" fxFlex="15%" fxFlex.sm="15%" [required]="true" url="YeuCauLinhKSNK/GetKhoCurrentUserKSNK"
+        [(model)]="yeuCauLinhKSNK.KhoNhapId" [modelText]="yeuCauLinhKSNK.TenKhoNhap" label="Lĩnh về kho"
+        class="item-no-padding" (modelChange)="clearGridKSNK()"
+        [disabled]="(trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false) && icDisable == true) || (icDisable == true)"
+        [validationerror]="'KhoNhapId' | validationerror:validationErrorsLinhThuong">
+    </app-combobox>
+
+    <app-textbox id="nguoiYeuCau"
+        [fxFlex]="!isCreate && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false)   ? '13%' : '15%'"
+        [fxFlex.sm]="!isCreate && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false)? '13%' : '15%'"
+        maxlength="250" label="Người yêu cầu" disabled={{true}} [required]="true"
+        [(model)]="yeuCauLinhKSNK.HoTenNguoiYeuCau">
+    </app-textbox>
+
+    <app-datepicker id="ngayYeuCau"
+        [fxFlex]="!isCreate && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false)  ? '12%' : '25%'"
+        [fxFlex.sm]="!isCreate && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false)? '12%' : '25%'"
+        [(model)]="yeuCauLinhKSNK.NgayYeuCau" disabled={{true}} [required]="true" label="Ngày yêu cầu">
+    </app-datepicker>
+
+    <app-textbox *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai == true" id="nguoiPheDuyet"
+        fxFlex="13" fxFlex.sm="13" maxlength="250" label="Người phê duyệt" [(model)]="yeuCauLinhKSNK.HoTenNguoiDuyet"
+        disabled={{true}} [required]="true">
+    </app-textbox>
+
+    <app-datepicker *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai == true" id="ngayDuyet" fxFlex="12"
+        fxFlex.sm="12" [required]="true" label="Ngày duyệt" [(model)]="yeuCauLinhKSNK.NgayDuyet" disabled={{true}}>
+    </app-datepicker>
+
+    <app-textbox *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai == false" id="nguoiTuChoiDuyet"
+        fxFlex="13" fxFlex.sm="13" maxlength="250" label="Người từ chối duyệt"
+        [(model)]="yeuCauLinhKSNK.HoTenNguoiDuyet" disabled={{true}} [required]="true">
+    </app-textbox>
+
+    <app-datepicker *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai == false" id="ngayTuChoiDuyet"
+        fxFlex="12" fxFlex.sm="12" [required]="true" label="Ngày từ chối duyệt" [(model)]="yeuCauLinhKSNK.NgayDuyet"
+        disabled={{true}}>
+    </app-datepicker>
+
+    <app-textarea id="ghiChu" fxFlex="45%" fxFlex.sm="45%" maxlength="4000" label="Ghi chú" minHeight="20"
+        [disabled]="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == true || yeuCauLinhKSNK.LaNguoiTaoPhieu == false"
+        [(model)]="yeuCauLinhKSNK.GhiChu">
+    </app-textarea>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin KSNK</h3>
+
+    <ng-container *ngIf="yeuCauLinhKSNK.LaNguoiTaoPhieu == true || yeuCauLinhKSNK.LaNguoiTaoPhieu == null">
+        <app-combobox 
+            id="linhTuKho" fxFlex="15%" fxFlex.sm="15%" [required]="true" url="YeuCauLinhKSNK/GetKhoLinhKSNK"
+            [disabled]="disableKhiVaoChiTiet == true"
+            [(model)]="yeuCauLinhKSNK.KhoXuatId" [modelText]="yeuCauLinhKSNK.TenKhoXuat" label="Lĩnh từ kho"
+             class="item-no-padding"  [queryInfo]="{ParameterDependencies:'{KhoLinhVeId:' +yeuCauLinhKSNK.KhoNhapId +'}', Take: 50}"
+            [validationerror]="'KhoXuatId' | validationerror:validationErrorsLinhThuong"
+            >
+        </app-combobox>
+        <app-radio id="loai" label="Loại" fxFlex="15%" fxFlex.sm="15%" [(model)]="KSNKGrid.LoaiVatTu"
+            [disabled]="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == true || yeuCauLinhKSNK.KhoXuatId == null || yeuCauLinhKSNK.KhoNhapId == null"
+            (modelChange)="huy()" [items]="[{Value:1,Text:'Không BHYT'},{Value:2,Text:'BHYT'}]">
+        </app-radio>
+
+        <app-combobox id="KSNK" fxFlex="20%" fxFlex.sm="20%" [required]="true" url="YeuCauLinhKSNK/GetKSNKTheoKho"
+            [(model)]="KSNKGrid.VatTuBenhVienId"
+            [disabled]="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == true || yeuCauLinhKSNK.KhoXuatId == null || yeuCauLinhKSNK.KhoNhapId == null"
+            [queryInfo]="{ParameterDependencies:'{KhoId:' +yeuCauLinhKSNK.KhoXuatId +', LaKSNKBHYT: '+KSNKGrid.LoaiVatTu+', LoaiDuocPhamHayVatTu: '+loai+'}', Take: 50}"
+            (selectionChange)="chonKSNK($event)" [template]="KSNKTemplate" [templateHeader]="KSNKTemplateHeader"
+            label="Dược phẩm/VT/KSNK" class="item-no-padding" [popupSettings]="{width: 800,popupClass:'item-no-padding'}"
+            (keyup)="onKey($event)" (openCombobox)="openCombobox($event)"
+            [validationerror]="'VatTuBenhVienId' | validationerror:validationErrors">
+            <ng-template #KSNKTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th width="40%">Tên</th>
+                        <th width="10%">ĐVT</th>
+                        <th width="15%">SL Tồn</th>
+                        <th width="15%">HSD</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #KSNKTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td width="40%">{{dataItem.Ten}}</td>
+                        <td width="10%">{{dataItem.DVT}}</td>
+                        <td width="15%">{{dataItem.SLTonFormat}}</td>
+                        <td width="15%">{{dataItem.HanSuDung}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+
+
+        <app-textboxnumeric fxFlex="5" id="slTon" label="SL tồn" disabled={{true}} [(model)]="KSNKGrid.SLTon">
+        </app-textboxnumeric>
+        <app-textboxnumeric fxFlex="10" id="slYeuCau" label="SL yêu cầu" [required]="true" max="999999999" min="1"
+            [disabled]="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == true || yeuCauLinhKSNK.KhoXuatId == null || yeuCauLinhKSNK.KhoNhapId == null"
+            (keyup)="onKey($event)" [(model)]="KSNKGrid.SLYeuCau"
+            [validationerror]="'SLYeuCau' | validationerror:validationErrors">
+        </app-textboxnumeric>
+        <app-textbox id="dvt" fxFlex="5" fxFlex.sm="10" maxlength="1000" label="ĐVT" [(model)]="KSNKGrid.DVT"
+            disabled={{true}}>
+        </app-textbox>
+        <app-textbox id="hangSanXuat" fxFlex="15" fxFlex.sm="15" maxlength="1000" label="Hãng SX"
+            [(model)]="KSNKGrid.NhaSX" disabled={{true}}>
+        </app-textbox>
+        <app-textbox id="nuocSanXuat" fxFlex="10" fxFlex.sm="10" maxlength="1000" label="Nước SX"
+            [(model)]="KSNKGrid.NuocSX" disabled={{true}}>
+        </app-textbox>
+
+        <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+            <div
+                [style.display]="(trangThaiVo != undefined && trangThaiVo != null  && (trangThaiVo.TrangThai == null || trangThaiVo.TrangThai == false) || isCreate) ? 'block' : 'none'">
+                <button type="button"
+                    [disabled]="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == true || yeuCauLinhKSNK.KhoXuatId == null || yeuCauLinhKSNK.KhoNhapId == null"
+                    color="primary" (click)="huy()" mat-stroked-button mat-button class="mr-1">Hủy</button>
+            </div>
+            <button
+                [disabled]="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == true || yeuCauLinhKSNK.KhoXuatId == null || yeuCauLinhKSNK.KhoNhapId == null"
+                type="button" color="primary" (click)="themKSNK()" mat-raised-button mat-button>Thêm</button>
+        </div>
+    </ng-container>
+
+
+    <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridDataSource]="gridDataSource" #gridKSNK
+        [gridColumns]="gridColumns" [allowSortDefault]="true" [documentType]="documentType" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+        [groups]="groups" maxHeight="500" [pageable]="false">
+    </app-grid>
+
+    <ng-template #STTTemplate let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+    <ng-template #nhomGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-template #actionTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button color="primary" style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                [disabled]="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == true || yeuCauLinhKSNK.LaNguoiTaoPhieu == false"
+                (click)="xoaKSNK(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #slYeuCauTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-textboxnumeric fxFlex="80%" [(model)]="dataItem.SLYeuCau" [required]="true" class="no-label" min="1"
+            [max]="999999999" label=" "
+            [disabled]="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == true || yeuCauLinhKSNK.LaNguoiTaoPhieu == false"
+            [validationerror]="'YeuCauLinhVatTuChiTiets['+rowIndex+'].SoLuong' | validationerror:validationErrorsLinhThuong">
+        </app-textboxnumeric>
+        <!-- <mat-icon class="icon-war-status-grid"
+            *ngIf="dataItem.SoLuongCoTheXuat != null && dataItem.SLYeuCau > dataItem.SoLuongCoTheXuat" fxFlex="20%"
+            [icIcon]="icWarning" kendoTooltip title="Số lượng tồn không đủ">
+        </mat-icon> -->
+        <mat-icon class="icon-war-status-grid"
+            *ngIf="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == null && (dataItem.SLTon != null && dataItem.SLYeuCau > dataItem.SLTon)"
+            fxFlex="20%" [icIcon]="icWarning" kendoTooltip title="Số lượng tồn không đủ">
+        </mat-icon>
+        <mat-icon class="icon-war-status-grid"
+            *ngIf="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == false && (dataItem.SoLuongCoTheXuat != null && dataItem.SLYeuCau > dataItem.SoLuongCoTheXuat)"
+            fxFlex="20%" [icIcon]="icWarning" kendoTooltip title="Số lượng có thể xuất không đủ">
+        </mat-icon>
+    </ng-template>
+</div>

@@ -1,0 +1,52 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Vật tư',Path:''}
+                ,{Title:'Dự Trù Lĩnh',Path:''}
+                ,{Title:'Yêu cầu lĩnh vật tư',Path:'/nhap-xuat/vat-tu/yeu-cau-linh-vat-tu',queryParams: {holdQuery : true },Active:true}
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center" *ngIf="!shareChoGoi">
+                <h2 class="title m-0">Yêu cầu lĩnh trực tiếp vật tư</h2>
+                <b class="status-yeu-cau-linh {{trangThai.DuocDuyet == null ? 'ycl-cho-duyet': trangThai.DuocDuyet == false ? 'ycl-tu-choi' : 'ycl-da-duyet'}}">{{trangThai.TenTrangThai}}</b>
+            </div>
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center" *ngIf="shareChoGoi">
+                <h2 class="title m-0">Yêu cầu lĩnh trực tiếp vật tư</h2>
+                <b class="status-yeu-cau-linh {{trangThai.DuocDuyet == null ? 'ycl-cho-duyet': trangThai.DuocDuyet == false ? 'ycl-tu-choi' : 'ycl-da-duyet'}}">Chờ gởi</b>
+            </div>
+            <div class="px-6 py-4" fxLayout="column" *ngIf="!shareChoGoi">
+                <app-phieu-linh-vat-tu-truc-tiep-shared #temp1 [isCreate]="true" (trangThaiYeuCau)="getTrangThaiYeuCau($event)" (quyenUpdate)="quyenUpdatePhieuLinh($event)"></app-phieu-linh-vat-tu-truc-tiep-shared>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" (click)="inPhieu()" color="primary" mat-raised-button><i class="ft-save"></i>
+                        In phiếu lĩnh</button>
+
+                    <button type="button" (click)="cancel()" mat-button class="mr-1 align-right-fx"><i
+                            class="ft-arrow-left"></i> Hủy</button>
+                    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img
+                            src="/assets/img/loader.gif" alt="Loading" /></button>
+                </div>
+            </div>
+            <div class="px-6 py-4" fxLayout="column" *ngIf="shareChoGoi">
+                <app-phieu-linh-vt-truc-tiep-cho-goi-shared #temp></app-phieu-linh-vt-truc-tiep-cho-goi-shared>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" (click)="inPhieu()" color="primary" mat-raised-button><i class="ft-save"></i>
+                        In phiếu lĩnh</button>
+
+                    <button type="button" (click)="cancel()" mat-button class="mr-1 align-right-fx"><i
+                            class="ft-arrow-left"></i> Hủy</button>
+                    <button type="button"  (click)="guiLaiPhieu()" color="primary" mat-raised-button><i
+                                class="ft-save"></i> Lưu</button>
+                    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img
+                            src="/assets/img/loader.gif" alt="Loading" /></button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,110 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <ng-container *ngIf="isProcessAdd">
+        <h3 fxFlex="100%" class="sub-title  mr-4">THÊM</h3>
+        <div fxFlex="100%">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-dropdownlist fxFlex="50%" label="Vật tư tiêu hao" required="true" url="VatTuBenhVien/GetVatTuYTeBenhVien" (selectionChange)="chonVatTu($event)"
+                    [template]="dichVuKyThuatTemplate" [templateHeader]="dichVuKyThuatTemplateHeader" [(model)]="vatTuTieuHaoNew.VatTuId" [modelText]="vatTuTieuHaoNew.TenVatTu" class="item-no-padding">
+                    <ng-template #dichVuKyThuatTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="20%">Mã</th>
+                                <th>Tên</th>
+                                <th>Nhóm</th>
+                                <th>Đơn vị</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #dichVuKyThuatTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="20%">{{dataItem.Ma}}</td>
+                                <td>{{dataItem.Ten}}</td>
+                                <td>{{dataItem.Nhom}}</td>
+                                <td>{{dataItem.DonVi}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-dropdownlist>
+                <app-textboxnumeric fxFlex="25%" label="Số lượng" [(model)]="vatTuTieuHaoNew.SoLuong" required="true"></app-textboxnumeric>
+                <div fxFlex="25%" fxFlex.sm="25%">
+                    <div class="container-custom no-label">
+                        <label>&nbsp;</label>
+                        <div fxLayout="row" fxLayoutGap="16px">
+                            <app-checkbox fxFlex="100%" value="true" id="TinhTien" [(model)]="vatTuTieuHaoNew.TinhTien" label="Tính tiền">
+                            </app-checkbox>
+                        </div>
+                    </div>
+                </div>
+    
+                <app-textbox fxFlex="100%" [(model)]="vatTuTieuHaoNew.GhiChu" label="Ghi chú"></app-textbox>
+            </div>
+        </div>
+        <!-- <div fxFlex="25%" class="pl-4">
+            <fieldset fxFlex="100%">
+                <div fxFlex="100%">
+                    <ul>
+                        <li>Đơn giá: <strong class="item_right">5.000</strong></li>
+                        <li>Thành tiền: <strong class="item_right" style="color: blue;">105.000</strong></li>
+                        <li>BH chi trả: <strong class="item_right">105.000</strong></li>
+                        <li>BN chi trả: <strong class="item_right" style="color: red;">0</strong></li>
+                    </ul>
+                </div>
+            </fieldset>
+        </div> -->
+        <div fxFlex="100%" class="mt-2" fxLayoutAlign="end center">
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1 mt-2"
+                (click)="isProcessAdd = false">Hủy</button>
+            <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                (click)="themVatTu()">Thêm</button>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!isProcessAdd">
+        <div fxFlex="100%" class="mt-2" fxLayoutAlign="start center">
+            <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                (click)="isProcessAdd = true">
+                Thêm vật tư tiêu hao</button>
+        </div>
+    </ng-container>
+
+    <h3 fxFlex="100%" class="sub-title  mr-4">DANH SÁCH</h3>
+    <app-grid fxFlex="100%"  class="k-grid-border"
+        [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault] = "false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble] ="false" [autoHeight]="true"
+        [lazyLoadPage]="true" [gridDataSource]="dataSource" style="width: 1px;" [pageable]="false">
+    </app-grid>
+    <ng-template #actionTemplate let-dataItem>
+        <div class="text-center" kendoTooltip >
+            <button color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaVatTu(dataItem.Id, dataItem.STT)" type="button">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+    <ng-template #tinhTienTemplate let-dataItem>
+        {{dataItem.TinhTien == true ? "Có" : "Không"}}
+    </ng-template>
+    <ng-template #donGiaTemplate let-dataItem>
+        {{dataItem.DonGia | number}}
+    </ng-template>
+    <ng-template #thanhTienTemplate let-dataItem>
+        {{dataItem.ThanhTien | number}}
+    </ng-template>
+    <ng-template #bHChiTraTemplate let-dataItem>
+        {{dataItem.BHChiTra | number}}
+    </ng-template>
+    <ng-template #bNChiTraTemplate let-dataItem>
+        {{dataItem.BNChiTra | number}}
+    </ng-template>
+    <ng-template #tongCongFooterTemplate>
+        <b>Tổng: </b>
+    </ng-template>
+    <ng-template #thanhTienFooterTemplate>
+        <p style="color: blue; font-weight: bold;">{{(total["ThanhTien"] != undefined ? total["ThanhTien"].sum : 0) | number}}</p>
+    </ng-template>
+    <ng-template #bHChiTraFooterTemplate>
+        <p style="color: black; font-weight: bold;">{{(total["BHChiTra"] != undefined ? total["BHChiTra"].sum : 0) | number}}</p>
+    </ng-template>
+    <ng-template #bNChiTraFooterTemplate>
+        <p style="color: red; font-weight: bold;">{{(total["BNChiTra"] != undefined ? total["BNChiTra"].sum : 0) | number}}</p>
+    </ng-template>
+</div>

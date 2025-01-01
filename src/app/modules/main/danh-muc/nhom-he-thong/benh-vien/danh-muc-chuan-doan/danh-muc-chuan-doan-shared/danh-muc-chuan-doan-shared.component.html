@@ -1,0 +1,11 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="TenTiengViet" fxFlex="50%" fxFlex.sm="40%" maxlength="250" [required]="true"
+        [(model)]="danhMucChuanDoan.TenTiengViet" label="Tên Tiếng Việt"
+        [validationerror]="'TenTiengViet' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textbox id="TenTiengAnh" fxFlex="50%" fxFlex.sm="40%" maxlength="250" [required]="true"
+        [(model)]="danhMucChuanDoan.TenTiengAnh" label="Tên Tiếng Anh"
+        [validationerror]="'TenTiengAnh' | validationerror:validationErrors"></app-textbox>
+    <app-textbox id="GhiChu" fxFlex="100%" fxFlex.sm="40%" maxlength="250" [(model)]="danhMucChuanDoan.GhiChu"
+        label="Ghi Chú" [validationerror]="'GhiChu' | validationerror:validationErrors"></app-textbox>
+</div>

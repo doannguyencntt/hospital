@@ -1,0 +1,61 @@
+<fieldset class="m-0">
+    <legend>TÌM NGƯỜI BỆNH</legend>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div fxFlex="300px" fxFlex.sm="20%" style="position: relative;">
+            <div style="background-color: rgba(0, 0, 0, 0.04);height: 100%;
+            width: 100% !important;
+            border-radius: 4px 4px 0 0;
+            padding: 0.75em 0.75em 0 0.75em;
+            border-bottom: 1px solid rgba(82, 63, 105, 0.42);">
+                <app-checkbox name="dang-thanh-toan" (modelChange)="checkTrangThai($event,1)" fxFlex="150px"
+                    fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center"
+                    [(model)]="kiemTraDanhSachThanhToan" value="dangthanhtoan" label="Chờ thanh toán">
+                </app-checkbox>
+                <app-checkbox name="da-thanh-toan" (modelChange)="checkTrangThai($event,2)"
+                    [(model)]="kiemTraDanhSachDaThanhToan" value="dathanhtoan" fxFlex="150px" fxFlex.lt-md="auto"
+                    fxHide.xs fxLayout="row" fxLayoutAlign="start center" label="Đã thanh toán">
+                </app-checkbox>
+            </div>
+        </div>
+        <div fxFlex="10%" fxFlex.sm="10%" style="position: relative;">
+            <app-textbox id="SoTheBHYT" fxFlex="100%" fxFlex.sm="100%" label="Mã NB" [(model)]="timKiem.MaBenhNhan"
+                (keyup)="onKey($event)" [isAutoFocus]="true" (blurChange)="blurChange($event, true)"
+                (modelChange)="searchChangeMaBN($event)">
+            </app-textbox>
+            <button style="position: absolute;right: 21px;margin-top: 10px;" (click)="QuetMaQRCodeClick()"
+                color="primary" mat-mini-fab type="button" kendoTooltip title="Quét mã vạch thẻ BHYT">
+                <img src="assets/img/barcode.png" alt="Scan barcode" />
+            </button>
+
+        </div>
+        <!-- <app-textbox id="MaBN" fxFlex="20%" fxFlex.sm="40%" maxlength="4000" [(model)]="timKiem.MaBenhNhan"
+            label="Mã NB" [validationerror]="'MaBN' | validationerror:validationErrors">
+        </app-textbox> -->
+        <app-textbox id="MaTN" fxFlex="10%" fxFlex.sm="15%" maxlength="4000" [(model)]="timKiem.MaTiepNhan"
+            style="padding-left: 10px;" (keyup)="onKey($event)" label="Mã TN"
+            (modelChange)="searchChangeMaTN($event)" [validationerror]="'MaTN' | validationerror:validationErrors">
+        </app-textbox>
+        <app-textbox id="HoTen" fxFlex="15%" fxFlex.sm="15%" maxlength="4000" [(model)]="timKiem.HoTen"
+            style="padding-left: 10px;" (keyup)="onKey($event)" label="Họ Tên"
+            [validationerror]="'HoTen' | validationerror:validationErrors">
+        </app-textbox>
+        <!-- <app-textbox id="DienThoai" fxFlex="10%" fxFlex.sm="10%" maxlength="4000" [(model)]="timKiem.SoDienThoai"
+            style="padding-left: 10px;" (keyup)="onKey($event)" label="Điện thoại"
+            [validationerror]="'DienThoai' | validationerror:validationErrors">
+        </app-textbox> -->
+        <app-textboxmask id="SoDienThoai" onlynumber="true" fxFlex="10%" fxFlex.sm="10%" label="Số điện thoại" (keyup)="onKey($event)"
+                                maxlength="10" [(model)]="timKiem.SoDienThoai" mask="000 000 0000">
+        </app-textboxmask>
+        <app-daterangepicker id="Daterange" fxFlex="20%" fxFlex.sm="20%" (blur)="blur($event)"
+            [(model)]="timKiem.RangeDate" label="Từ ngày - Đến ngày" (keyup)="onKey3($event)"
+            (modelChange)="changRange($event)">
+        </app-daterangepicker>
+        <div fxFlex="209px">
+            <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-5" (click)="TimKiem(true)">Tìm
+                kiếm</button>
+            <button type="button" color="primary" mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+
+        </div>
+        <app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none;"></app-barcode>
+    </div>
+</fieldset>

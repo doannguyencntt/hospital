@@ -1,0 +1,158 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'Xét Ngiệm', Path:''},
+                    {Title:'Tồn Kho', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+
+                <app-combobox id="KhoId" fxFlex="15%" fxFlex.sm="15%" class="mt-1 on-header" label="Kho" bind="true"
+                    url="BaoCao/GetTatCaKhoTheoKhoaXetNghiems" [(model)]="baoCaoSearch.KhoId"
+                    [autoSelectFirstItem]="true">
+                </app-combobox>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="55%" fxFlex.sm="55%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                    <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 mt-2" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" [ngStyle]="{'min-height': height+'px'}" class="pb-0">
+                    <kendo-grid [data]="gridView" class="k-grid1 grid-bao-cao" [pageable]="true" [resizable]="true"
+                        [height]="height" [pageSize]="pageSize" [skip]="skip" (pageChange)="pageChange($event)"
+                        id="baoCaoGrid" #baoCaoGrid [group]="groups">
+
+                        <kendo-grid-column hidden="true" field="{{getFieldColumn(9)}}" title="{{getTitleColumn(9)}}">
+                            <ng-template kendoGridGroupHeaderTemplate let-value="value">
+                                {{ value }}
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column hidden="true" field="{{getFieldColumn(10)}}" title="{{getTitleColumn(10)}}">
+                            <ng-template kendoGridGroupHeaderTemplate let-value="value">
+                                {{ value }}
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(0)}}" title="{{getTitleColumn(0)}}"
+                            width="{{getWidthColumn(0)}}"
+                            [headerStyle]="{'text-align': 'left','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                {{rowIndex + 1}}
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="MaHoaChat" title="{{getTitleColumn(1)}}" width="{{getWidthColumn(1)}}"
+                            [headerStyle]="{'text-align': 'left','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.MaHoaChat}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(2)}}" title="{{getTitleColumn(2)}}"
+                            width="{{getWidthColumn(2)}}" [style]="{'text-align': 'left'}"
+                            [headerStyle]="{'text-align': 'left','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.TenHoaChat}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(3)}}" title="{{getTitleColumn(3)}}"
+                            width="{{getWidthColumn(3)}}" [style]="{'text-align': 'left'}"
+                            [headerStyle]="{'text-align': 'left','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.DVT}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(4)}}" title="{{getTitleColumn(4)}}"
+                            width="{{getWidthColumn(4)}}" [style]="{'text-align': 'left'}"
+                            [headerStyle]="{'text-align': 'left','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.TonDau}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(5)}}" title="{{getTitleColumn(5)}}"
+                            width="{{getWidthColumn(5)}}" [style]="{'text-align': 'left'}"
+                            [headerStyle]="{'text-align': 'left','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.Nhap}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(6)}}" title="{{getTitleColumn(6)}}"
+                            width="{{getWidthColumn(6)}}" [style]="{'text-align': 'left'}"
+                            [headerStyle]="{'text-align': 'left','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.TongSo}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(7)}}" title="{{getTitleColumn(7)}}"
+                            width="{{getWidthColumn(7)}}" [style]="{'text-align': 'left'}"
+                            [headerStyle]="{'text-al7ign': 'left','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.Xuat}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(8)}}" title="{{getTitleColumn(8)}}"
+                            width="{{getWidthColumn(8)}}" [style]="{'text-align': 'left'}"
+                            [headerStyle]="{'text-align': 'left','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.TonCuoi}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-messages noRecords="Không có dữ liệu." pagerOf="trong số" pagerItems="dòng"
+                            detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết">
+                        </kendo-grid-messages>
+
+                        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+                            <div style="justify-content: center;" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                fxLayoutAlign="space-between" fxFlex="100%" *ngIf="_showDefaultPagerTemplate">
+                                <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                                <kendo-pager-numeric-buttons [buttonCount]="5" class="d-none d-sm-none d-md-block">
+                                </kendo-pager-numeric-buttons>
+                                <button *ngIf="_isLoadingTotalPage" kendoButton
+                                    class="btn btn-raised btn-default btn-min-width mb-0">
+                                    <img src="/assets/img/loader_circle.gif" alt="Đang tính..." style="height: 20px;" />
+                                </button>
+                                <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                                <kendo-pager-info></kendo-pager-info>
+                                <div kendoTooltip class="k-icon k-i-refresh"
+                                    style="order: 10;cursor: pointer; align-self: center;" title="Làm mới"
+                                    (click)="XemBaoCao()"></div>
+                                <div *ngIf="_isLoading" class="grid-loading k-i-loading"></div>
+                            </div>
+                        </ng-template>
+                    </kendo-grid>
+                </div>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+
+</vex-page-layout>

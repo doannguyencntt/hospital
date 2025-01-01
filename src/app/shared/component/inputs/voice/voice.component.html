@@ -1,0 +1,20 @@
+<!-- <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Nói ngay bây giờ</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div> -->
+
+<mat-dialog-content>
+    <div id="results" fxLayoutAlign="start center" fxLayout="row" class="py-1">
+        <app-textarea [useVoicePopup]="true" fxFlex="100%" [(model)]="data" label="Nói ngay bây giờ" [useVoice]="false">
+        </app-textarea>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" onclick="clearFinalSpan()" mat-dialog-close="Cancel">Hủy</button>
+    <button type="button" mat-stroked-button color="primary" (click)="noiLai()">Nói lại</button>
+    <button mat-raised-button mat-button color="primary" onclick="clearFinalSpan()" [mat-dialog-close]="data" cdkFocusInitial *ngIf="data!='' && data!=null">Sử dụng</button>
+  </mat-dialog-actions>
+  

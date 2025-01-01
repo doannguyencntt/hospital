@@ -1,0 +1,34 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">Lựa chọn</div>
+    <button type="button" mat-icon-button mat-dialog-close [mat-dialog-close]="null" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 120px;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        Bạn muốn in hồ sơ nào:
+        <ul fxFlex="100%">
+            <li>
+                <app-checkbox id="hoSoKham" name="hoSoKham" fxFlex.lt-md="auto" label="Sổ KSK định kỳ" 
+                    [(model)]="chonPhieuInKhamSucKhoe.SoKhamSucKhoeDinhKy">
+                </app-checkbox>
+            </li>
+            <li>
+                <app-checkbox id ="phieuChiDinh" name="phieuChiDinh" fxFlex.lt-md="auto" label="Phiếu đăng ký KSK" 
+                    [(model)]="chonPhieuInKhamSucKhoe.PhieuDangKyKhamSucKhoe">
+                </app-checkbox>
+            </li>
+            <li>
+                <app-checkbox id ="phieuHuongDan" name="phieuHuongDan" fxFlex.lt-md="auto" label="Bảng hướng dẫn KSK" 
+                    [(model)]="chonPhieuInKhamSucKhoe.BangHuongDanKhamSucKhoe">
+                </app-checkbox>
+            </li>
+        </ul>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="mt-4 pb-5">
+    <button style="margin-left: auto;" type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Không</button>
+    <button mat-raised-button mat-button color="primary" (click)="close('ok')">In</button>
+</mat-dialog-actions>

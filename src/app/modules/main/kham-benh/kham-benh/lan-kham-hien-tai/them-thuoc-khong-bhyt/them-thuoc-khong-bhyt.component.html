@@ -1,0 +1,136 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxFlex="100%">
+        <h3 class="sub-title" style="text-transform: none;">THÊM DƯỢC PHẨM NGOÀI BỆNH VIỆN</h3>
+    </div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="overflow: hidden;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+        fxLayoutAlign="space-between">
+
+        <app-textbox id="Ten" fxFlex="50" fxFlex.sm="25" [required]="true" maxlength="250"
+            [(model)]="thuocNgoaiBenhVien.Ten" (keyup)="onKey($event)" label="Tên dược phẩm"
+            [validationerror]="'Ten' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-combobox id="DuongDungId" fxFlex="25%" fxFlex.sm="25%" [(model)]="thuocNgoaiBenhVien.DuongDungId"
+            [required]="true" [modelText]="thuocNgoaiBenhVien.TenDuongDung" label="Đường dùng" class="item-no-padding"
+            (openCombobox)="openCombobox($event)" (keyup)="onKey($event)" [template]="duongDungTemplate"
+            [templateHeader]="duongDungTemplateHeader" url="DuocPham/GetDanhSachDuongDung" popupSettings="null"
+            [validationerror]="'DuongDungId' | validationerror:validationErrors">
+            <ng-template #duongDungTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th>Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #duongDungTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+
+        <app-combobox id="DonViTinhId" fxFlex="25%" fxFlex.sm="25%" [(model)]="thuocNgoaiBenhVien.DonViTinhId"
+            maxlength="500" [required]="true" [modelText]="thuocNgoaiBenhVien.TenDonViTinh" label="Đơn vị tính"
+            (keyup)="onKey($event)" class="item-no-padding" [template]="donViTinhTemplate"
+            (openCombobox)="openCombobox($event)" [templateHeader]="donViTinhTemplateHeader"
+            url="DonViTinh/GetDanhSachDonViTinh" popupSettings="null"
+            [validationerror]="'DonViTinhId' | validationerror:validationErrors">
+            <ng-template #donViTinhTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th>Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #donViTinhTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0"
+            style="padding-top: 10px;">
+            <app-textboxnumeric id="SoLuongAdd" fxFlex="9%" [(model)]="thuocNgoaiBenhVien.SoLuong" min="1"
+                max="999999999" (modelChange)="SoLuongChange()" label="SL" format="#.##" [decimals]="2"
+                (keyup)="onKey($event)" [validationerror]="'SoLuong' | validationerror:validationErrors"
+                required="true">
+            </app-textboxnumeric>
+
+            <app-textbox fxFlex="10%" id="LieuDung" label="L.dùng/ngày" [(model)]="thuocNgoaiBenhVien.LieuDung"
+                (modelChange)="LieuDungChange()">
+            </app-textbox>
+
+            <app-autocomplete id="Sang" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+                [(model)]="thuocNgoaiBenhVien.SangDisplay" label="Sáng" placeHolder="SL"
+                (modelChange)="nhapDungCacBuoiTrongNgayThem($event, 'Sang')" (onValueChange)="onValueChangeAdd('Sang')"
+                [validationerror]="'SangDisplay' | validationerror:validationErrors" class="pr-0">
+            </app-autocomplete>
+            <app-timepicker id="GioSang" fxFlex="10%" label="" placeHolder="Giờ" (keyup)="onKey($event)" [tabindex]="-1"
+                [(model)]="thuocNgoaiBenhVien.ThoiGianDungSang" [modelIsNumber]="true" moreClass="pl-0">
+            </app-timepicker>
+
+            <app-autocomplete id="Trua" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+                [(model)]="thuocNgoaiBenhVien.TruaDisplay" label="Trưa" placeHolder="SL"
+                (modelChange)="nhapDungCacBuoiTrongNgayThem($event, 'Trua')" (onValueChange)="onValueChangeAdd('Trua')"
+                [validationerror]="'TruaDisplay' | validationerror:validationErrors" class="pr-0">
+            </app-autocomplete>
+            <app-timepicker id="GioTrua" fxFlex="10%" label="" placeHolder="Giờ" (keyup)="onKey($event)" [tabindex]="-1"
+                [(model)]="thuocNgoaiBenhVien.ThoiGianDungTrua" [modelIsNumber]="true" moreClass="pl-0">
+            </app-timepicker>
+
+            <app-autocomplete id="Chieu" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+                [(model)]="thuocNgoaiBenhVien.ChieuDisplay" label="Chiều" placeHolder="SL"
+                (modelChange)="nhapDungCacBuoiTrongNgayThem($event, 'Chieu')"
+                (onValueChange)="onValueChangeAdd('Chieu')"
+                [validationerror]="'ChieuDisplay' | validationerror:validationErrors" class="pr-0">
+            </app-autocomplete>
+            <app-timepicker id="GioChieu" fxFlex="10%" label="" placeHolder="Giờ" (keyup)="onKey($event)"
+                [tabindex]="-1" [(model)]="thuocNgoaiBenhVien.ThoiGianDungChieu" [modelIsNumber]="true"
+                moreClass="pl-0">
+            </app-timepicker>
+
+            <app-autocomplete id="Toi" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+                [(model)]="thuocNgoaiBenhVien.ToiDisplay" label="Tối" placeHolder="SL"
+                (modelChange)="nhapDungCacBuoiTrongNgayThem($event, 'Toi')" (onValueChange)="onValueChangeAdd('Toi')"
+                [validationerror]="'ToiDisplay' | validationerror:validationErrors" class="pr-0">
+            </app-autocomplete>
+            <app-timepicker id="GioToi" fxFlex="10%" label="" placeHolder="Giờ"
+                [(model)]="thuocNgoaiBenhVien.ThoiGianDungToi" [tabindex]="-1" (keyup)="onKey($event)"
+                [modelIsNumber]="true" moreClass="pl-0">
+            </app-timepicker>
+
+            <app-textboxnumeric fxFlex="13%" [(model)]="thuocNgoaiBenhVien.SoNgayDung" min="0"
+                (modelChange)="SoNgayDungChange()" (change)="convertInt()" (keyup)="onKey($event)" max="9999"
+                label="Số ngày">
+            </app-textboxnumeric>
+
+            <app-autocomplete fxFlex="100%" fxFlex.sm="100%" [(model)]="thuocNgoaiBenhVien.GhiChu"
+                (keyup)="onKey($event)"
+                [queryInfo]="{ParameterDependencies:'{LoaiDuocPhamHoacVatTu:' + 1 +'}', Take: 50}"
+                url="KhamBenh/GetGhiChuDonThuocChiTietString" label="Cách dùng" (openCombobox)="openCombobox($event)">
+            </app-autocomplete>
+        </div>
+
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" style="margin-top:10px">
+    <button mat-stroked-button color="primary" (click)="huy()" mat-dialog-close>Hủy</button>
+    <button type="button" (click)="luuDuocPham()" cdkFocusInitial mat-raised-button mat-button
+        color="primary">Thêm</button>
+</mat-dialog-actions>

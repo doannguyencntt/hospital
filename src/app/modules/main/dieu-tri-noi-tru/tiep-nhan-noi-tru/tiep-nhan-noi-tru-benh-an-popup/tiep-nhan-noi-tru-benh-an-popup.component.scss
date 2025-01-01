@@ -1,0 +1,53 @@
+fieldset {
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    border: 1px #e0e0e0;
+    border-style: inherit;
+    white-space: break-spaces;
+    legend {
+        margin-left: 15px;
+        text-transform: uppercase;
+    }
+
+    .item_right{
+        text-align: right !important;
+        float:right;
+    }
+
+    ul>li{
+        padding-right: 15px !important;
+    }
+
+    ul.inline > li{
+        display: inline !important;
+        &:last-child{
+            margin-right: -20px;
+            float:right;
+        }
+    }
+
+    ul.three-col{
+        -webkit-column-count: 3;
+        -moz-column-count: 3;
+        column-count: 3;
+        li{
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+    }
+  }
+
+.orangeText{
+    color: orange;
+}
+.blueText{
+    color:blue;
+}
+.greenText{
+    color:green;
+}

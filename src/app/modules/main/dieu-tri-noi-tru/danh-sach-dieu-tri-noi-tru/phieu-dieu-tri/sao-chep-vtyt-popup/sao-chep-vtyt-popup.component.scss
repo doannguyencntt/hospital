@@ -1,0 +1,69 @@
+.button-ngay-dieu-tri{
+    background-color: #005dab;
+    color: white;
+    width: 20px;
+    height: 28px;
+    cursor: pointer !important;
+} 
+
+.button-content{
+    padding: 0 5px 0 5px !important;
+    border-color: black;
+    border: 1px solid;
+    margin-left: 2px;
+    margin-right: 2px;
+    cursor: pointer !important;
+}
+
+.day-tag-active{
+    background-color: #005dab;
+    color: white;
+    margin-right: 5px;
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid;
+    border-color: #ccc;
+    cursor: pointer;
+    line-height: 30px;
+}
+
+.day-tag-non-active{
+    background-color: white;
+    color: black;
+    margin-right: 5px;
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    vertical-align: middle;
+    border-color: #ccc;
+    border: 1px solid;
+    cursor: pointer;
+    line-height: 30px;
+}
+
+.li-tag-div{
+    margin-left: 35px !important;
+}
+
+.div-bottom{
+    margin-top: 30px !important;
+}
+
+.day-tag-temporary{
+    background-color: #FFFF99;
+    color: black;
+    margin-right: 5px;
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid;
+    border-color: #ccc;
+    cursor: pointer;
+    line-height: 30px;
+}

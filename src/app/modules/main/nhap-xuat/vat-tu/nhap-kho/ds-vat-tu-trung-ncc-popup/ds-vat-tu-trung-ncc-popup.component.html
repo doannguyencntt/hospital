@@ -1,0 +1,40 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Danh Sách Vật Tư Đã Tạo Từ Các Nhà Cung Cấp</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+        <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridDataSource]="gridDataSource" #gridVatTuNCC
+            [gridColumns]="gridColumns" [allowSortDefault]="true" [documentType]="documentType" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            [groups]="groups" maxHeight="500" [pageable]="false">
+        </app-grid>
+        <ng-template #STTTemplate let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+        <ng-template #nhomGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+
+        <ng-template #giaTemplate let-dataItem>
+            {{dataItem.DonGiaNhap | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+
+        <ng-template #thanhTienTruocVatTemplate let-dataItem>
+            {{dataItem.ThanhTienTruocVat | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #thanhTienSauVatTemplate let-dataItem>
+            {{dataItem.ThanhTienSauVat | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+    </div>
+    <ng-template #nhomDisplayGroupHeaderTemplate let-value="value" let-dataItem>
+        <strong>{{value}}</strong>
+    </ng-template>
+</mat-dialog-content>
+<!-- 
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" (click)="close()" mat-stroked-button color="primary" mat-dialog-close>Đóng</button>
+</mat-dialog-actions> -->

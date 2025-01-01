@@ -1,0 +1,71 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1 border-bottom">
+    <div>Thêm hình ảnh đính kèm</div>
+    <div>
+        <button type="button" mat-icon-button (click)="fullscreen()" tabindex="-1">
+            <mat-icon [icIcon]="isFullscreen?icFullscreenExit:icFullscreen"></mat-icon>
+        </button>
+        <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+</div>
+<mat-dialog-content style="height: 600px;">
+    <div [ngClass]="{'hidden': showEdit}">
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="p-2 mb-6">
+            <app-upload id="Upload" label="Chọn hình ảnh" fxFlex="100%" fxFlex.sm="100%"
+                [allowedExtensions]="['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG']"
+                (uploadMultiFileDone)="uploadMultiFileDone($event)" required="true" [maxFileSize]="1"
+                (modelChange)="modelChangeHinhAnh($event)" #uploadFile
+                [validationerror]="'HinhAnh' | validationerror:validationErrors" [multiple]="true"
+                [template]="hinhAnhTemplate">
+            </app-upload>
+            <ng-template #hinhAnhTemplate kendoUploadFileTemplate let-files let-state="state">
+                <table class="table-border" width="100%">
+                    <tr>
+                        <td>
+                            <a (click)="showEditImage(files[0].TenGuid)"><img [src]="getSrc(files[0].TenGuid)"
+                                    alt="{{ files[0].name }}" kendoTooltip
+                                    title="Chọn để sửa ảnh: {{ files[0].name }}" /></a>
+                        </td>
+                        <td width="10%">{{ files[0].size/1000 | number }} KB</td>
+                        <td width="30%">
+                            <app-textarea style="width:100%" label="Mô tả" [(model)]="files[0].MoTa"
+                                (modelChange)="moTaChange(files[0])"></app-textarea>
+                        </td>
+                        <td width="10%"><button mat-raised-button mat-button color="warn" class="mb-0"
+                                (click)="xoaImages(files[0].TenGuid ,files[0].uid )">Xóa</button></td>
+                    </tr>
+                </table>
+
+            </ng-template>
+        </div>
+    </div>
+    <div *ngIf="showEdit" style="height: 100%;">
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="p-2 mb-6"
+            style="height: 100%;">
+            <image-drawing fxFlex="100%" fxFlex.sm="100%" [src]="hinhAnhDinhKemKetQuaEdit.HinhAnh" style="height: 100%;"
+                outputMimeType="'image/jpeg'" showCancelButton={{true}} outputQuality="1" (save)="save($event)"
+                (cancel)="cancel()" enableRemoveImage={{true}} forceSizeExport={{true}}
+                (click)="showErrorIfNoImage($event)" #imageDrawing [loadingTemplate]="loadingTemplate" saveBtnText="Lưu"
+                cancelBtnText="Hủy">
+            </image-drawing>
+            <ng-template #loadingTemplate>
+                <button class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                        alt="Loading" /></button>
+            </ng-template>
+            <button class="btn btn-raised btn-raised btn-primary btn-loading" *ngIf="loading"><img
+                    src="/assets/img/loader.gif" alt="Loading" /></button>
+        </div>
+    </div>
+
+
+</mat-dialog-content>
+
+<mat-dialog-actions [ngClass]="{'hidden': showEdit}">
+    <div class="text-right" style="width:100%">
+        <button mat-raised-button mat-button class="mb-0" (click)="huy()">Hủy</button>
+        <button mat-raised-button mat-button color="primary" class="mb-0" (click)="luu()">Lưu</button>
+    </div>
+</mat-dialog-actions>

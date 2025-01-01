@@ -1,0 +1,16 @@
+  .img-zoom-result {
+    border: 3px solid #015DAB;
+    /*set the size of the result div:*/
+    width: 320px;
+    height: 250px;  
+    position: absolute;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);    
+  }
+  .content-image{
+    height: 95%;overflow-y: auto;overflow-x: hidden;position: relative;
+  }
+  .content-description{
+    height: 21px;overflow-y: auto;overflow-x: hidden;position: relative;    
+  }

@@ -1,0 +1,284 @@
+<vex-page-layout>
+  <vex-secondary-toolbar>
+    <vex-breadcrumbs [crumbs]="[{Title:'Trang Chủ',Path:'', Active:true}]" fxFlex="auto"></vex-breadcrumbs>
+    <button class="ml-2" color="primary" mat-icon-button type="button">
+      <mat-icon [icIcon]="icMoreVert"></mat-icon>
+    </button>
+  </vex-secondary-toolbar>
+
+  <vex-page-layout-content vexContainer>
+    <div class="card p-gutter relative">
+      <app-datetimepicker id="tu-ngay" [(model)]="thongKeKhamBenhSearch.TuNgay" class="mr-2" fxFlex="15%"
+        fxFlex.sm="100%" label="Từ ngày" (keyup)="onKey($event)">
+      </app-datetimepicker>
+      <app-datetimepicker id="den-ngay" [(model)]="thongKeKhamBenhSearch.DenNgay" class="mr-2" fxFlex="15%"
+        fxFlex.sm="100%" label="Đến ngày" (keyup)="onKey($event)">
+      </app-datetimepicker>
+      <ng-container>
+        <div style="float: right; padding-top: 10px;">
+          <button tabindex="-1" type="button" (click)="lamMoi()" mat-raised-button mat-button color="primary"
+            class="md-primary mr-1 mt-2">Làm mới</button>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- THỐNG KÊ TIẾP NHẬN , KHÁM BỆNH , GIƯỜNG BỆNH, NỘI TRÚ -->
+    <div class="card p-gutter relative" style="margin-top: -40px;">
+      <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div class="card-body">
+          <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="20%" fxFlex.sm="100%">
+              <div class="small-box bg-info" style="height: 131px;">
+                <div class="inner">
+                  <h3 class="mb-3">TIẾP NHẬN: {{thongKeBenhVien.ThongKeTiepNhan.TongSoTiepNhan}}</h3>
+                  <table width="100%">
+                    <tr>
+                      <td width="35%">BHYT:</td>
+                      <td width="15%"><b>{{thongKeBenhVien.ThongKeTiepNhan.TongSoBHYT}}</b></td>
+                      <td width="35%">DỊCH VỤ:</td>
+                      <td width="15%"><b>{{thongKeBenhVien.ThongKeTiepNhan.TongSoDichVu}}</b></td>
+                    </tr>
+                    <tr>
+                      <td>VIỆN PHÍ:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeTiepNhan.TongSoVienPhi}}</b></td>
+                      <td>KHÁM SỨC KHỎE:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeTiepNhan.TongSoKSK}}</b></td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="icon">
+                  <i>
+                    <mat-icon [icIcon]="icPersonAdd"></mat-icon>
+                  </i>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="20%" fxFlex.sm="100%">
+              <div class="small-box bg-orange" style="height: 131px;">
+                <div class="inner">
+                  <h3 class="mb-3">KHÁM BỆNH: {{thongKeBenhVien.ThongKeKhamBenh.TongSoNguoiKhamBenh}}</h3>
+                  <table width="100%">
+                    <tr>
+                      <td width="50%">CHỜ KHÁM:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeKhamBenh.TongSoChoKham}}</b></td>
+                    </tr>
+                    <tr>
+                      <td>ĐANG KHÁM:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeKhamBenh.TongSoDangKham}}</b></td>
+                    </tr>
+                    <tr>
+                      <td>HOÀN THÀNH:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeKhamBenh.TongSoHoanThanh}}</b></td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="icon">
+                  <i>
+                    <mat-icon [icIcon]="medkit"></mat-icon>
+                  </i>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="20%" fxFlex.sm="100%">
+              <div class="small-box bg-green" style="height: 131px;">
+                <div class="inner">
+                  <h3 class="mb-3">GIƯỜNG BỆNH: {{thongKeBenhVien.ThongKeGiuongBenh.TongSoGiuongBenh}}</h3>
+                  <table width="100%">
+                    <tr>
+                      <td width="50%">GIƯỜNG ĐÃ DÙNG:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeGiuongBenh.TongSoDaDung}}</b></td>
+                    </tr>
+                    <tr>
+                      <td>GIƯỜNG TRỐNG:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeGiuongBenh.TongSoTrong}}</b></td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="icon">
+                  <i>
+                    <mat-icon [icIcon]="icHotel"></mat-icon>
+                  </i>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="20%" fxFlex.sm="100%">
+              <div class="small-box bg-yellow" style="height: 131px;">
+                <div class="inner">
+                  <h3 class="mb-3">NỘI TRÚ</h3>
+                  <table width="100%">
+                    <tr>
+                      <td width="35%">NHẬP VIỆN:</td>
+                      <td width="15%"><b>{{thongKeBenhVien.ThongKeNoiTru.TongSoNhapVien}}</b></td>
+                      <td width="35%">CHUYỂN VIỆN:</td>
+                      <td width="15%"><b>{{thongKeBenhVien.ThongKeNoiTru.TongChuyenVien}}</b></td>
+                    </tr>
+                    <tr>
+                      <td>ĐANG ĐIỀU TRỊ:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeNoiTru.TongSoDieuTri}}</b></td>
+                      <td>TỬ VONG:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeNoiTru.TongSoTuVong}}</b></td>
+                    </tr>
+                    <tr>
+                      <td>RA VIỆN:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeNoiTru.TongSoRaVien}}</b></td>
+                      <td></td>
+                      <td><b></b></td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="icon">
+                  <i>
+                    <mat-icon [icIcon]="wareHouse"></mat-icon>
+                  </i>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="20%" fxFlex.sm="100%">
+              <div class="small-box bg-blue" style="height: 131px;">
+                <div class="inner">
+                  <h3 class="mb-3">SƠ SINH</h3>
+                  <table width="100%">
+                    <tr>
+                      <td width="35%">SS THƯỜNG:</td>
+                      <td width="15%"><b>{{thongKeBenhVien.ThongKeSoSinh.TongSoSSThuong}}</b></td>
+                      <td width="35%">CHUYỂN VIỆN:</td>
+                      <td width="15%"><b>{{thongKeBenhVien.ThongKeSoSinh.TongSoChuyenVien}}</b></td>
+                    </tr>
+                    <tr>
+                      <td>SS BỆNH:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeSoSinh.TongSoSSBenh}}</b></td>
+                      <td>TỬ VONG:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeSoSinh.TongSoTuVong}}</b></td>
+                    </tr>
+                    <tr>
+                      <td>RA VIỆN:</td>
+                      <td><b>{{thongKeBenhVien.ThongKeSoSinh.TongSoRaVien}}</b></td>
+                      <td></td>
+                      <td><b></b></td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="icon">
+                  <i>
+                    <mat-icon [icIcon]="icChildFriendly"></mat-icon>
+                  </i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- THỐNG KÊ TIẾP NHẬN , KHÁM BỆNH , GIƯỜNG BỆNH, NỘI TRÚ -->
+
+    <!-- CHART TÌNH TRẠNG KHÁM   -->
+    <div class="card p-gutter relative">
+      <kendo-chart [categoryAxis]="{ labels: { rotation: 'auto' } }">
+        <kendo-chart-title text="TÌNH TRẠNG KHÁM" font="bold 20px Arial, sans-serif">
+        </kendo-chart-title>
+        <kendo-chart-legend position="top"></kendo-chart-legend>
+        <kendo-chart-value-axis>
+          <kendo-chart-value-axis-item *ngFor="let item of valueAxes" [name]="item.name" [title]="{ text: item.title }"
+            [min]="item.min" [max]="item.max" [color]="item.color">
+          </kendo-chart-value-axis-item>
+        </kendo-chart-value-axis>
+        <kendo-chart-value-axis>
+          <kendo-chart-value-axis-item [title]="{ text: 'Số người bệnh' }" font="bold 14px sans-serif">
+          </kendo-chart-value-axis-item>
+        </kendo-chart-value-axis>
+        <kendo-chart-category-axis>
+          <kendo-chart-category-axis-item [categories]="khoaKhams" [axisCrossingValue]="cVKhoaKham">
+            <kendo-chart-series-item-labels position="outsideEnd" background="none" font="15px sans-serif">
+            </kendo-chart-series-item-labels>
+          </kendo-chart-category-axis-item>
+        </kendo-chart-category-axis>
+        <kendo-chart-series>
+          <kendo-chart-series-item visible="true" *ngFor="let item of tinhTrangKhoaKhams" [name]="item.name | uppercase"
+            [data]="item.data" [type]="item.type" [stack]="item.stack" [color]="item.color" [axis]="item.axis">
+            <kendo-chart-series-item-labels position="center" background="none" font="bold 14px sans-serif">
+            </kendo-chart-series-item-labels>
+            <kendo-chart-series-item-tooltip background="{{item.color}}">
+              <ng-template let-value="value">
+                {{ item.name }} : {{value}}
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+        </kendo-chart-series>
+      </kendo-chart>
+    </div>
+    <!-- CHART TÌNH TRẠNG KHÁM   -->
+
+    <!-- CHART GIƯỜNG BỆNH VIỆN   -->
+    <div class="card p-gutter relative">
+      <kendo-chart>
+        <kendo-chart-tooltip> </kendo-chart-tooltip>
+        <kendo-chart-title text="TÌNH TRẠNG SỬ DỤNG GIƯỜNG" font="bold 20px Arial, sans-serif"></kendo-chart-title>
+        <kendo-chart-legend position="top"></kendo-chart-legend>
+        <kendo-chart-value-axis>
+          <kendo-chart-value-axis-item *ngFor="let item of valueAxes" [name]="item.name" [title]="{ text: item.title }"
+            [min]="item.min" [max]="item.max" [color]="item.color" font="bold 14px sans-serif">
+          </kendo-chart-value-axis-item>
+        </kendo-chart-value-axis>
+
+        <kendo-chart-category-axis>
+          <kendo-chart-category-axis-item [categories]="giuongTheokhoaKhams" [axisCrossingValue]="cVGiuong">
+            <kendo-chart-series-item-labels position="outsideEnd" background="none" font="15px sans-serif">
+            </kendo-chart-series-item-labels>
+          </kendo-chart-category-axis-item>
+        </kendo-chart-category-axis>
+
+        <kendo-chart-series>
+          <kendo-chart-series-item *ngFor="let item of giuongKhoaKhams" [name]="item.name" [data]="item.data"
+            [type]="item.type" [color]="item.color" [width]="4">
+            <kendo-chart-series-item-labels position="outsideEnd" background="none" font="bold 14px sans-serif">
+            </kendo-chart-series-item-labels>
+            <kendo-chart-series-item-tooltip background="{{item.color}}">
+              <ng-template let-value="value">
+                {{ item.name }} : {{value}}
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+        </kendo-chart-series>
+      </kendo-chart>
+    </div>
+    <!-- CHART GIƯỜNG BỆNH VIỆN   -->
+
+    <!-- CHART ĐIỀU TRỊ NỘI TRÚ   -->
+    <div class="card p-gutter relative">
+      <kendo-chart>
+        <kendo-chart-tooltip> </kendo-chart-tooltip>
+        <kendo-chart-title text="TRẠNG THÁI ĐIỀU TRỊ NỘI TRÚ" font="bold 20px Arial, sans-serif"></kendo-chart-title>
+        <kendo-chart-legend position="top"></kendo-chart-legend>
+        <kendo-chart-value-axis>
+          <kendo-chart-value-axis-item *ngFor="let item of valueAxesNoiTru" [name]="item.name"
+            [title]="{ text: item.title }" [min]="item.min" [max]="item.max" [color]="item.color">
+          </kendo-chart-value-axis-item>
+        </kendo-chart-value-axis>
+        <kendo-chart-value-axis>
+          <kendo-chart-value-axis-item [title]="{ text: 'Số người bệnh' }" font="bold 14px sans-serif">
+          </kendo-chart-value-axis-item>
+        </kendo-chart-value-axis>
+        <kendo-chart-category-axis>
+          <kendo-chart-category-axis-item [categories]="khoaNoiTru">
+            <kendo-chart-series-item-labels position="outsideEnd" background="none" font="15px sans-serif">
+            </kendo-chart-series-item-labels>
+          </kendo-chart-category-axis-item>
+        </kendo-chart-category-axis>
+        <kendo-chart-series>
+          <kendo-chart-series-item visible="true" *ngFor="let item of dataNoiTrus" [name]="item.name" [data]="item.data"
+            [type]="item.type" [color]="item.color">
+            <kendo-chart-series-item-labels position="outsideEnd" background="none" font="bold 14px sans-serif">
+            </kendo-chart-series-item-labels>
+            <kendo-chart-series-item-tooltip background="{{item.color}}">
+              <ng-template let-value="value">
+                {{ item.name }} : {{value}}
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+        </kendo-chart-series>
+      </kendo-chart>
+    </div>
+    <!-- CHART TÌNH TRẠNG KHÁM   -->
+
+  </vex-page-layout-content>
+</vex-page-layout>

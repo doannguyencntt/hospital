@@ -1,0 +1,132 @@
+<div class="row">
+    <fieldset fxFlex="100%" *ngIf="data != null">
+        <legend>THÔNG TIN HÀNH CHÍNH</legend>
+        <div fxFlex="100%">
+            <ul class="inline">
+                <!-- <li>Mã TN:
+                    <strong>{{data.MaTN}}</strong>
+                </li> -->
+                <li>Mã NB:
+                    <strong>{{data.MaBN}}</strong>
+                </li>
+                <li>Họ tên:
+                    <strong>{{data.HoTen}}</strong>
+                </li>
+                <li>Giới tính:
+                    <strong>{{data.GioiTinhHienThi}}</strong>
+                </li>
+                <li>Năm sinh:
+                    <strong>{{data.NamSinh}}</strong>
+                </li>
+                <li>Địa chỉ:
+                    <strong>{{data.DiaChiDayDu}}</strong>
+                </li>
+
+                <li>SĐT:
+                    <strong>{{data.SoDienThoai}}</strong>
+                </li>
+                <li>Email:
+                    <strong>{{data.Email}}</strong>
+                </li>
+            </ul>
+        </div>
+    </fieldset>
+
+
+    <fieldset fxFlex="100%" *ngIf="data == null">
+        <legend>THÔNG TIN HÀNH CHÍNH</legend>
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            fxLayoutAlign="space-between">
+            <app-textbox id="Ten" fxFlex="14%" fxFlex.sm="14%" maxlength="100" [(model)]="thongTinBenhNhan.HoTen" class="text-transform-uppercase"
+                [required]="true" (modelChange)="onSaveTen()" label="Họ tên"
+                [validationerror]="'HoTen' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-radio id="GioiTinh" label="Giới tính" fxFlex="11%" fxFlex.sm="11%"
+                (modelChange)="onSaveGioiTinh($event)" [(model)]="thongTinBenhNhan.GioiTinh"
+                [items]="[{Value:1,Text:'Nam'},{Value:2,Text:'Nữ'}]">
+            </app-radio>
+
+            <app-textboxnumeric id="NamSinh" fxFlex="12.5%" fxFlex.sm="12.5%" label="Năm sinh" [format]="'0'"
+                (modelChange)="onSaveNamSinh($event)" [(model)]="thongTinBenhNhan.NamSinh" [max]="9999"
+                [validationerror]="'NamSinh' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <!-- <app-textbox id="SDT" fxFlex="12.5%" fxFlex.sm="12.5%" maxlength="12" (modelChange)="onSaveSDT($event)"
+                [(model)]="thongTinBenhNhan.SoDienThoai" label="Điện thoại">
+            </app-textbox> -->
+            <app-textboxmask id="SDT" onlynumber="true" fxFlex="12.5%" fxFlex.sm="12.5%" label="Số điện thoại" (modelChange)="onSaveSDT($event)"
+                 maxlength="10" [(model)]="thongTinBenhNhan.SoDienThoai" mask="000 000 0000">
+            </app-textboxmask>
+            <app-combobox id="TinhThanhPho" fxFlex="12.5%" fxFlex.sm="12.5%" (modelChange)="TinhThanhPhoChange($event)"
+                label="Tỉnh/Thành Phố" url="QuayThuoc/GetTinhThanh" hierarchyKeyToSend="tinhThanh"
+                [(model)]="thongTinBenhNhan.TinhThanhId"  [modelText]="thongTinBenhNhan.TenTinhDisplay" bind ="true" class="item-no-padding" [template]="tinhThanhTemplate"
+                [templateHeader]="tinhThanhTemplateHeader">
+                <ng-template #tinhThanhTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="20%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #tinhThanhTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="20%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+
+            <app-combobox id="QuanHuyen" fxFlex="12.5%" fxFlex.sm="12.5%" label="Quận/Huyện"
+                (modelChange)="QuanHuyenChange($event)" [modelText]="thongTinBenhNhan.TenHuyenDisplay" url="QuayThuoc/GetQuanHuyen" hierarchyKeyToListen="tinhThanh"
+                hierarchyKeyToSend="quanHuyen" [(model)]="thongTinBenhNhan.QuanHuyenId" class="item-no-padding" bind ="true"
+                [template]="quanHuyenTemplate" [templateHeader]="quanHuyenTemplateHeader">
+                <ng-template #quanHuyenTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="20%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #quanHuyenTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="20%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+
+            <app-combobox id="PhuongXa" fxFlex="12.5%" fxFlex.sm="12.5%" label="Phường/Xã" url="QuayThuoc/GetPhuongXa"
+                hierarchyKeyToListen="quanHuyen" (modelChange)="PhuongXaChange($event)" 
+                [(model)]="thongTinBenhNhan.PhuongXaId" class="item-no-padding" [template]="phuongXaTemplate"
+                [templateHeader]="phuongXaTemplateHeader">
+                <ng-template #phuongXaTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="20%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #phuongXaTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="20%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+
+            <app-textbox id="DiaChi" fxFlex="12.5%" fxFlex.sm="12.5%" maxlength="200"
+                (modelChange)="onSaveDiaChi($event)" [(model)]="thongTinBenhNhan.DiaChi" label="Địa chỉ">
+            </app-textbox>
+        </div>
+    </fieldset>
+</div>

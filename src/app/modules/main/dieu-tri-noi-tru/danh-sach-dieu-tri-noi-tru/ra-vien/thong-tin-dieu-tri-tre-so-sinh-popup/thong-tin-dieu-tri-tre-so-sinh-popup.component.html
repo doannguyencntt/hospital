@@ -1,0 +1,59 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+	<div style="text-transform: uppercase">Chi tiết thời gian điều trị sơ sinh</div>
+
+	<button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+		<mat-icon [icIcon]="icClose" [mat-dialog-close]="null"></mat-icon>
+	</button>
+</div>
+
+<mat-dialog-content style="overflow:unset !important">
+	<table class="table table-striped table-condensed" style="width: 100%;">
+		<thead>
+			<tr>
+				<th style="width: 25%;">Ngày điều trị</th>
+				<th style="width: 25%;">Từ</th>
+				<th style="width: 25%;">Đến</th>
+				<th style="width: 25%;">Ghi chú</th>
+			</tr>
+		</thead>
+		<tbody *ngIf="thoiGianDieuTriSoSinhRaVienViewModel.length === 0">
+			<tr>
+				<td colspan="4" style="text-align: center;">Không có dữ liệu</td>
+			</tr>
+		</tbody>
+		<tbody *ngIf="thoiGianDieuTriSoSinhRaVienViewModel.length > 0">
+			<ng-container  *ngFor="let item of thoiGianDieuTriSoSinhRaVienViewModel, let i = index">
+				<tr>
+					<td [attr.rowspan]="item.ThoiGianDieuTriSoSinhViewModels.length + 1">{{item.NgayDieuTriString}}</td>
+				</tr>
+				<ng-container *ngFor="let dataItem of item.ThoiGianDieuTriSoSinhViewModels, let ii = index">
+					<tr>
+						<td style="width: 30%;">
+							<app-timepicker id="TuGio" label="" placeHolder="Giờ" [(model)]="dataItem.GioBatDau"
+								[modelIsNumber]="true"
+								[validationerror]="'ThoiGianDieuTriSoSinhRaVienViewModel['+i+'].ThoiGianDieuTriSoSinhViewModels['+ii+'].GioBatDau' | validationerror: validationErrors">
+							</app-timepicker>
+						</td>
+						<td style="width: 30%;">
+							<app-timepicker id="TuGio" label="" placeHolder="Giờ" [(model)]="dataItem.GioKetThuc"
+								[modelIsNumber]="true"
+								[validationerror]="'ThoiGianDieuTriSoSinhRaVienViewModel['+i+'].ThoiGianDieuTriSoSinhViewModels['+ii+'].GioKetThuc' | validationerror: validationErrors">
+							</app-timepicker>
+						</td>
+						<td style="width: 20%;">
+							<app-textarea id="GhiChu" label="" [(model)]="dataItem.GhiChuDieuTri">
+							</app-textarea>
+						</td>
+					</tr>
+				</ng-container>
+			</ng-container>
+		</tbody>
+	</table>
+</mat-dialog-content>
+
+<mat-dialog-actions class="pb-5">
+	<button type="button" style="margin-left: auto" [mat-dialog-close]="null" mat-button><i
+			class="ft-arrow-left"></i>Hủy</button>
+	<button *ngIf="thoiGianDieuTriSoSinhRaVienViewModel.length > 0" mat-raised-button mat-button color="primary"
+		(click)="luuThoiGianDieuTriSoSinh()">Lưu</button>
+</mat-dialog-actions>

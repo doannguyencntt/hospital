@@ -1,0 +1,278 @@
+<ng-container *ngIf="!laChuyenKhoaKhamNhieu">
+    <h3 class="sub-title">DỊ ỨNG
+        <button *ngIf="!isReadOnly" class="po-h" color="primary" (click)="themDiUngThuoc()">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+    <ng-container *ngIf="dataSourceDiUng.data.length == 0">
+        <p>Không có dị ứng </p>
+    </ng-container>
+    <app-grid *ngIf="dataSourceDiUng.data.length > 0" masterName="DiUngThuoc" [gridColumns]="gridDiUngThuocColumns"
+        [documentType]="documentType" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false"
+        [useActionDefault]="false" [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true"
+        [gridDataSource]="dataSourceDiUng" style="width: 1px;" [pageable]="false">
+    </app-grid>
+    
+</ng-container>
+
+<ng-container *ngIf="laChuyenKhoaKhamNhieu">
+    <div fxFlex="10%">
+        <h3 class="sub-title" style="margin-top: 0px !important;">DỊ ỨNG
+            <button *ngIf="!isReadOnly" class="po-h" color="primary" (click)="themDiUngThuoc()">
+                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </h3>
+    </div>
+    <div fxFlex="90%" class="ml-2">
+        <ng-container *ngIf="dataSourceDiUng.data.length == 0">
+            <span>Không có dị ứng</span>
+        </ng-container>
+
+        <ng-container *ngIf="dataSourceDiUng.data.length > 0">
+            <table id="tbl-di-ung" style="width: 100%;">
+                <tr>
+                    <th style="width: 20%; text-align: left;">Loại dị ứng</th>
+                    <th style="width: 35%; text-align: left;">Tên dị ứng</th>
+                    <th style="width: 20%; text-align: left;">Biểu hiện dị ứng</th>
+                    <th style="width: 20%; text-align: left;">Mức độ</th>
+                    <th style="width: 5%"></th>
+                </tr>
+                <tr *ngFor="let dataItem of dataSourceDiUng.data, let rowIndex = index">
+                    <td>
+                        <app-dropdownlist *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [(model)]="dataItem.LoaiDiUng" [modelText]="dataItem.TenLoaiDiUng"
+                            popupSettings="null" [template]="DuocPhamTemplate" [templateHeader]="DuocPhamTemplateHeader"
+                            url="KhamBenh/getListLoaiDiUng" [required]="true" [disabled]="(dataItem.Id != 0 && !dataItem.IsUpdate) || isReadOnly"
+                            [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].LoaiDiUng' | validationerror:benhNhanHienTai.validationErrors"
+                            (selectionChange)="onSelectLoaiDiUng($event, dataItem)" class="no-label item-no-padding" label=" ">
+                            <ng-template #DuocPhamTemplateHeader let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <th width="20%">Loại</th>
+                                        <th>Tên dị ứng</th>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                            <ng-template #DuocPhamTemplate let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <th width="20%" style="font-weight: normal;">{{dataItem.KeyId}}</th>
+                                        <th style="font-weight: normal;">{{dataItem.DisplayName}}</th>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                        </app-dropdownlist>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.TenLoaiDiUng}}</p>
+                    </td>
+                    <td>
+                        <!-- <app-combobox *ngIf="(dataItem.Id == 0 || dataItem.IsUpdate) && dataItem.LoaiDiUng == 1" [(model)]="dataItem.ThuocId" [bind]="true"
+                            [modelText]="dataItem.TenDiUng" popupSettings="null" [template]="DuocPhamTemplate"
+                            (selectionChange)="chonThuoc($event, dataItem)" [templateHeader]="DuocPhamTemplateHeader"
+                            url="KhamBenh/GetListThuoc" [required]="true" [disabled]="dataItem.Id != 0"
+                            [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].TenDiUng' | validationerror:benhNhanHienTai.validationErrors"
+                            class="no-label item-no-padding" label=" ">
+                            <ng-template #DuocPhamTemplateHeader let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <th width="15%">Dược Phẩm</th>
+                                        <th>Hoạt Chất</th>
+                                        <th width="25%">Đường Dùng</th>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                            <ng-template #DuocPhamTemplate let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <td width="15%">{{dataItem.HoatChat}}</td>
+                                        <td>{{dataItem.TenThuoc}}</td>
+                                        <td width="25%">{{dataItem.DuongDung}}</td>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                        </app-combobox> -->
+
+                        <app-autocomplete *ngIf="(dataItem.Id == 0 || dataItem.IsUpdate) && dataItem.LoaiDiUng == 1" maxlength="1000"
+                            popupSettings="null" [(model)]="dataItem.TenDiUng" valueField="TenThuoc" [template]="DuocPhamTemplate"
+                            (onValueChange)="changeData()" [templateHeader]="DuocPhamTemplateHeader" url="KhamBenh/GetListThuoc" [required]="true"
+                            [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].TenDiUng' | validationerror:benhNhanHienTai.validationErrors"
+                            class="no-label item-no-padding" label=" " [disabled]="(dataItem.Id != 0 && !dataItem.IsUpdate) || isReadOnly">
+                            <ng-template #DuocPhamTemplateHeader let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <th width="15%">Dược Phẩm</th>
+                                        <th>Hoạt Chất</th>
+                                        <th width="25%">Đường Dùng</th>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                            <ng-template #DuocPhamTemplate let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <td width="15%">{{dataItem.HoatChat}}</td>
+                                        <td>{{dataItem.TenThuoc}}</td>
+                                        <td width="25%">{{dataItem.DuongDung}}</td>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                        </app-autocomplete>
+
+                        <app-textbox *ngIf="(dataItem.Id == 0 || dataItem.IsUpdate) && dataItem.LoaiDiUng !=1" maxlength="1000" [(model)]="dataItem.TenDiUng"
+                            [required]="true" [disabled]="(dataItem.Id != 0 && !dataItem.IsUpdate) || isReadOnly"
+                            [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].TenDiUng' | validationerror:benhNhanHienTai.validationErrors"
+                            class="no-label" label=" ">
+                        </app-textbox>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.TenDiUng}}</p>
+                    </td>
+                    <td>
+                        <app-textbox *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" maxlength="2000" [(model)]="dataItem.BieuHienDiUng" class="no-label"
+                            [required]="true" [disabled]="(dataItem.Id != 0 && !dataItem.IsUpdate) || isReadOnly"
+                            [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].BieuHienDiUng' | validationerror:benhNhanHienTai.validationErrors"
+                            label=" ">
+                        </app-textbox>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.BieuHienDiUng}}</p>
+                    </td>
+                    <td>
+                        <app-dropdownlist *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [(model)]="dataItem.MucDo" (selectionChange)="chonMucDo($event, dataItem)"
+                            [modelText]="dataItem.TenMucDo" class="no-label" [popupSettings]="null" url="KhamBenh/GetListMucDoDiUng"
+                            [required]="true" [disabled]="(dataItem.Id != 0 && !dataItem.IsUpdate) || isReadOnly"
+                            [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].MucDo' | validationerror:benhNhanHienTai.validationErrors"
+                            label=" ">
+                        </app-dropdownlist>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.TenMucDo}}</p>
+                    </td>
+                    <td>
+                        <div *ngIf="!isReadOnly" class="text-center" kendoTooltip>
+                            <button *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate" color="primary" kendoTooltip title="Sửa"
+                                (click)="suaDiUngThuoc(dataItem)" class="btn-blue">
+                                <mat-icon [icIcon]="icEdit"></mat-icon>
+                            </button>
+                            <button color="primary" kendoTooltip title="Xóa" class="btn-blue"
+                                (click)="xoaDiUngThuoc(dataItem)">
+                                <mat-icon [icIcon]="icDelete"></mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </ng-container>
+    </div>
+</ng-container>
+
+<!-- template -->
+<ng-template #loaiDiUngTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-dropdownlist *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [(model)]="dataItem.LoaiDiUng" [modelText]="dataItem.TenLoaiDiUng"
+        popupSettings="null" [template]="DuocPhamTemplate" [templateHeader]="DuocPhamTemplateHeader"
+        url="KhamBenh/getListLoaiDiUng" [required]="true"
+        [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].LoaiDiUng' | validationerror:benhNhanHienTai.validationErrors"
+        (selectionChange)="onSelectLoaiDiUng($event, dataItem)" class="no-label item-no-padding" label=" ">
+        <ng-template #DuocPhamTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Loại</th>
+                    <th>Tên dị ứng</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #DuocPhamTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%" style="font-weight: normal;">{{dataItem.KeyId}}</th>
+                    <th style="font-weight: normal;">{{dataItem.DisplayName}}</th>
+                </tr>
+            </table>
+        </ng-template>
+    </app-dropdownlist>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.TenLoaiDiUng}}</p>
+</ng-template>
+
+<ng-template #tenThuocTemplate let-dataItem let-rowIndex="rowIndex">
+    <!-- <app-combobox *ngIf="(dataItem.Id == 0 || dataItem.IsUpdate) && dataItem.LoaiDiUng == 1" [(model)]="dataItem.ThuocId"
+        [modelText]="dataItem.TenDiUng" popupSettings="null" [template]="DuocPhamTemplate"
+        (selectionChange)="chonThuoc($event, dataItem)" [templateHeader]="DuocPhamTemplateHeader"
+        url="KhamBenh/GetListThuoc" [required]="true"
+        [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].TenDiUng' | validationerror:benhNhanHienTai.validationErrors"
+        class="no-label item-no-padding" label=" ">
+        <ng-template #DuocPhamTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="15%">Dược Phẩm</th>
+                    <th>Hoạt Chất</th>
+                    <th width="25%">Đường Dùng</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #DuocPhamTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="15%">{{dataItem.HoatChat}}</td>
+                    <td>{{dataItem.TenThuoc}}</td>
+                    <td width="25%">{{dataItem.DuongDung}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox> -->
+
+    <app-autocomplete *ngIf="(dataItem.Id == 0 || dataItem.IsUpdate) && dataItem.LoaiDiUng == 1" maxlength="1000"
+        popupSettings="null" [(model)]="dataItem.TenDiUng" valueField="TenThuoc"[template]="DuocPhamTemplate"
+        (onValueChange)="changeData()" [templateHeader]="DuocPhamTemplateHeader" url="KhamBenh/GetListThuoc"
+        [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].TenDiUng' | validationerror:benhNhanHienTai.validationErrors"
+        class="no-label item-no-padding" label=" " [required]="true">
+        <ng-template #DuocPhamTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="15%">Dược Phẩm</th>
+                    <th>Hoạt Chất</th>
+                    <th width="25%">Đường Dùng</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #DuocPhamTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="15%">{{dataItem.HoatChat}}</td>
+                    <td>{{dataItem.TenThuoc}}</td>
+                    <td width="25%">{{dataItem.DuongDung}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-autocomplete>
+
+    <app-textbox *ngIf="(dataItem.Id == 0 || dataItem.IsUpdate) && dataItem.LoaiDiUng !=1" maxlength="1000" [(model)]="dataItem.TenDiUng"
+        [required]="true"
+        [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].TenDiUng' | validationerror:benhNhanHienTai.validationErrors"
+        class="no-label" label=" ">
+    </app-textbox>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.TenDiUng}}</p>
+</ng-template>
+<ng-template #bieuHienDiUngTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" maxlength="2000" [(model)]="dataItem.BieuHienDiUng" class="no-label"
+        [required]="true"
+        [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].BieuHienDiUng' | validationerror:benhNhanHienTai.validationErrors"
+        label=" ">
+    </app-textbox>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.BieuHienDiUng}}</p>
+</ng-template>
+<ng-template #mucDoTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-dropdownlist *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [(model)]="dataItem.MucDo"
+        (selectionChange)="chonMucDo($event, dataItem)" [modelText]="dataItem.TenMucDo" class="no-label"
+        [popupSettings]="null" url="KhamBenh/GetListMucDoDiUng" [required]="true"
+        [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].MucDo' | validationerror:benhNhanHienTai.validationErrors"
+        label=" ">
+    </app-dropdownlist>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.TenMucDo}}</p>
+</ng-template>
+<ng-template #actionDiUngThuocTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <!-- <button *ngIf="dataItem.Id == 0" color="primary" mat-icon-button kendoTooltip title="Lưu" type="button"
+        (click)="luuDiUngThuoc(dataItem)">
+        <mat-icon [icIcon]="icSave"></mat-icon>
+    </button> -->
+        <button *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate" color="primary" mat-icon-button kendoTooltip title="Sửa"
+            type="button" (click)="suaDiUngThuoc(dataItem)">
+            <mat-icon [icIcon]="icEdit"></mat-icon>
+        </button>
+        <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button"
+            (click)="xoaDiUngThuoc(dataItem)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>

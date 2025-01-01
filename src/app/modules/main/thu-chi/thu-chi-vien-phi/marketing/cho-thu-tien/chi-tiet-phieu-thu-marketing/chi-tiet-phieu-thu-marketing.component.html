@@ -1,0 +1,27 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+	<div>Thông tin phiếu thu bệnh nhân</div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+<mat-dialog-content style="overflow: hidden">
+	<div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+		<fieldset class="row ml-1" fxFlex="100%">
+			<table class="table table-border" width="100%">
+				<tr>
+					<td width="100%">
+						Tổng số Tiền : <strong style="color: red;"> {{thongTinPhieuThu.SoTienThu | number:'0.2-2':'vi-VN' }}
+						</strong>
+						Người thu : <strong> {{thongTinPhieuThu.NguoiThu}} </strong>
+						Ngày thu : <strong> {{thongTinPhieuThu.NgayThuDisplay}} </strong>
+						Nội dung thu : <strong> {{thongTinPhieuThu.LyDo}} </strong>
+						Người thu hồi : <strong> {{thongTinPhieuThu.TenNguoiThuHoi}} </strong>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<button mat-button mat-dialog-close>Không</button>
+</mat-dialog-actions>

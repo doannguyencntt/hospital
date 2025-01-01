@@ -1,0 +1,38 @@
+<app-grid [sort]="sortDaQuyetToanConfig" [pageSize]="_pageSize" baseRoute="/danh-sach-thu-dich-vu-noi-tru" [gridColumns]="gridThuNganDaQuyetToanColumns" [useActionDefault]="false" [keyCode]="keyCode" [lazyLoadPage]="true" urlGetData="ThuNganNoiTru/GetDataNoiTruDaQuyetToanForGridAsync" heightToolbar="250" urlGetTotalPage="ThuNganNoiTru/GetTotalNoiTruDaQuyetToanPageForGridAsync" [useHeaderDefault]="false" #gridList [headerTemplate]="headerTemplate" [checkboxAble]="false" [documentType]="documentType" (extEnterChangePage)="extEnterChangePage($event)" [additionalSearchString]="queryStrings"> </app-grid>
+<!--============================================ Danh sách chưa quyết toán==============================================-->
+<ng-template #headerTemplate>
+	<div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">		
+		<div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px" kendoTooltip>
+			<ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+			<input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)" (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa(Mã NB,Tên NB,Năm sinh)..." />
+			<button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button" class="button-barcoe-in-search" kendoTooltip title="Quét mã vạch thẻ" title="Phím tắt: Ctrl + Q">
+				<img src="assets/img/barcode.png" alt="Scan barcode" />
+			</button>
+		</div>
+		<button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+			<mat-icon [icIcon]="icSearch"></mat-icon>
+		</button>		
+		<button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+			<mat-icon [icIcon]="icSearch"></mat-icon>
+		</button>	
+		<div class="tag-item-group" kendoTooltip style="height: 60px; white-space: nowrap; margin-left: 8px; margin-top: 4px"></div>
+		<div fxFlex="54%" fxFlex.sm="54%">
+			<button type="button" color="primary" (click)="TimkiemNangCao()" class="ml-2" mat-raised-button>Tìm</button>
+		</div>
+	</div>
+</ng-template>
+<ng-template #templateTextSoTienChoXacNhan let-dataItem>
+	<strong class="text-color"> {{dataItem.SoTienBNPhaiTT | number:'0.2-2':'vi-VN'}}</strong>
+</ng-template>
+<ng-template #templateTextSoTienDaXacNhan let-dataItem>
+	<strong class="text-color-blue"> {{dataItem.SoTienBNDaTT | number:'0.2-2':'vi-VN'}}</strong>
+</ng-template>
+<ng-template #templateSTT let-dataItem let-i="rowIndex">
+	<strong>{{i + 1}}</strong>
+</ng-template>
+<ng-template #maBenhAnTemplate let-dataItem>
+	<a (click)="thongTinChiTietThanhToan(dataItem.Id, dataItem)">{{dataItem.MaBenhAn}}</a>
+</ng-template>
+<app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none"></app-barcode>
+
+<!--============================================ Danh sách chưa quyết toán==============================================-->

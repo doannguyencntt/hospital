@@ -1,0 +1,93 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <ng-container *ngIf="isProcessAdd">
+        <h3  fxFlex="100%" class="sub-title  mr-4">THÊM</h3>
+        <div fxFlex="100%">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-dropdownlist fxFlex="25%" label="Nhóm dịch vụ" required="true" url=""></app-dropdownlist>
+                <app-dropdownlist fxFlex="50%" label="Dịch vụ" [(model)]="newPhauThuatThuThuat.DichVuId" 
+                    [modelText]="newPhauThuatThuThuat.TenDichVu" required="true" url=""></app-dropdownlist>
+                <app-dropdownlist fxFlex="25%" label="Loại"
+                    (selectionChange)="chonLoaiDichVu($event)" [(model)]="newPhauThuatThuThuat.LoaiId" 
+                    [modelText]="newPhauThuatThuThuat.TenLoai" required="true" [data]="loaiDataSource"></app-dropdownlist>
+                <app-textboxnumeric fxFlex="25%" label="Số lượng" required="true" [(model)]="newPhauThuatThuThuat.SoLuong"></app-textboxnumeric>
+                <app-dropdownlist fxFlex="25%" label="Nơi thực hiện" 
+                    (selectionChange)="chonNoiThucHien($event)" [(model)]="newPhauThuatThuThuat.NoiThucHienId"
+                    [modelText]="newPhauThuatThuThuat.TenNoiThucHien" required="true" [data]="noiThucHienDataSource"></app-dropdownlist>
+                <app-textbox fxFlex="50%" label="Ghi chú" [(model)]="newPhauThuatThuThuat.GhiChu"></app-textbox>
+            </div>
+        </div>
+        <!-- <div fxFlex="25%" class="pl-4">
+            <fieldset fxFlex="100%">
+                <div fxFlex="100%">
+                    <ul>
+                        <li>Đơn giá: <strong class="item_right">5.000</strong></li>
+                        <li>Thành tiền: <strong class="item_right" style="color: blue;">105.000</strong></li>
+                        <li>BH chi trả: <strong class="item_right">105.000</strong></li>
+                        <li>BN chi trả: <strong class="item_right" style="color: red;">0</strong></li>
+                    </ul>
+                </div>
+            </fieldset>
+        </div> -->
+        <div fxFlex="100%" class="mt-2" fxLayoutAlign="end center">
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1 mt-2"
+                (click)="huy()">Hủy</button>
+            <button type="button" (click)="themPhauThuatThuThuat()" color="primary" mat-raised-button mat-button class="mr-1 mt-2">Thêm</button>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!isProcessAdd">
+        <div fxFlex="100%" class="mt-2" fxLayoutAlign="start center">
+            <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                (click)="isProcessAdd = true">
+                Thêm phẫu thuật/thủ thuật</button>
+        </div>
+    </ng-container>
+
+    <h3 fxFlex="100%" class="sub-title  mr-4">DANH SÁCH</h3>
+    <app-grid fxFlex="100%" baseRoute="/danh-muc/nhom-he-thong/bao-hiem-y-te/dich-vu-ky-thuat" 
+            [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault] = "false"  class="k-grid-border"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble] ="false" [autoHeight]="true"
+            [lazyLoadPage]="true" [gridDataSource]="dataSource" style="width: 1px;" [pageable]="false">
+        </app-grid>
+        <ng-template #actionTemplate let-dataItem>
+            <div class="text-center" kendoTooltip >
+                <button  *ngIf="dataItem.TinhTrang == 'Chưa đóng tiền'" color="primary" mat-icon-button kendoTooltip title="Xóa" type="button">
+                    <!-- icon thay đổi theo từng trạng thái như mockup, hiện tại data test -->
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+                <button  *ngIf="dataItem.TinhTrang == 'Đã thực hiện'"  color="primary" mat-icon-button kendoTooltip title="Xóa" type="button">
+                    <!-- icon thay đổi theo từng trạng thái như mockup, hiện tại data test -->
+                    <mat-icon [icIcon]="icVisibility"></mat-icon> 
+                </button>
+                <button *ngIf="dataItem.TinhTrang == 'Chưa thực hiện'"  color="primary" mat-icon-button kendoTooltip title="Xóa" type="button">
+                    <!-- icon thay đổi theo từng trạng thái như mockup, hiện tại data test -->
+                    <mat-icon [icIcon]="icBlock"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #donGiaTemplate let-dataItem>
+            {{dataItem.DonGia | number}}
+        </ng-template>
+        <ng-template #thanhTienTemplate let-dataItem>
+            {{dataItem.ThanhTien | number}}
+        </ng-template>
+        <ng-template #bHChiTraTemplate let-dataItem>
+            {{dataItem.BHChiTra | number}}
+        </ng-template>
+        <ng-template #bNChiTraTemplate let-dataItem>
+            {{dataItem.BNChiTra | number}}
+        </ng-template>
+
+        <ng-template #tongCongFooterTemplate>
+            <b>Tổng: </b>
+        </ng-template>
+        <ng-template #thanhTienFooterTemplate>
+            <p style="color: blue; font-weight: bold;">{{total["ThanhTien"].sum | number}}</p>
+        </ng-template>
+        <ng-template #bHChiTraFooterTemplate>
+            <p style="color: black; font-weight: bold;">{{total["BHChiTra"].sum | number}}</p>
+        </ng-template>
+        <ng-template #bNChiTraFooterTemplate>
+            <p style="color: red; font-weight: bold;">{{total["BNChiTra"].sum | number}}</p>
+        </ng-template>
+    </div>

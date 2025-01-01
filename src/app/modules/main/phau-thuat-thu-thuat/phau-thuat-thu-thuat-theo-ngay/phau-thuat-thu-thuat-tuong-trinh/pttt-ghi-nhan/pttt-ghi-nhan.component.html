@@ -1,0 +1,201 @@
+<!-- Ghi nhận vật tư y tế/thuốc -->
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-radio fxFlex="100%" fxFlex.sm="100%" id="ket_luan" name="ketLuan" label="Loại" [items]="radioVatTuThuoc"
+        [(model)]="chiDinhGhiNhanVatTuThuoc.GiaiDoanPhauThuat">
+    </app-radio>
+
+    <div fxFlex="100%">
+        <a (click)="themDuocPhamVatTuTuGoi()"
+            style="color:blue; text-decoration: underline; font-weight: bold; bottom: 20px;">Thêm DP/VT từ gói trong
+            DVKT</a>
+    </div>
+
+    <app-combobox id="khoSuDung" fxFlex="25%" label="Kho sử dụng" class="item-no-padding" required="true"
+        url="KhamBenh/GetListKhoSapXepUutien" [(model)]="chiDinhGhiNhanVatTuThuoc.KhoId"
+        [modelText]="chiDinhGhiNhanVatTuThuoc.TenKho" (modelChange)="changeKhoSuDung($event)"
+        [autoSelectFirstItem]="true" bind="{{true}}" [validationerror]="'KhoId' | validationerror: validationErrors"
+        (keyup)="onKeyEnterAddItem($event)" (openCombobox)="openCombobox($event)">
+    </app-combobox>
+
+    <app-radio *ngIf="showGhiNhanCoBHYT" fxFlex="15%" fxFlex.sm="15%" id="isBHYT"
+        [items]="[{ Value: true, Text: 'Có' }, { Value: false, Text: 'Không' }]"
+        [(model)]="chiDinhGhiNhanVatTuThuoc.LaDuocPhamBHYT" label="BHYT" (modelChange)="changeBHYT($event)">
+    </app-radio>
+
+    <app-combobox #lstVTTHThuocCombobox id="lstVTTHThuoc" fxFlex="45%" fxFlex.sm="45%" class="item-no-padding"
+        required="true" url="KhamBenh/GetListVatTuTieuHaoThuoc" label="Vật tư/Thuốc"
+        [(model)]="chiDinhGhiNhanVatTuThuoc.DichVuGhiNhanId" [modelText]="chiDinhGhiNhanVatTuThuoc.TenDichVuGhiNhan"
+        (selectionChange)="chonDichVuTieuHao($event)"
+        [queryInfo]="{ ParameterDependencies: '{ KhoId:' + (chiDinhGhiNhanVatTuThuoc.KhoId ? chiDinhGhiNhanVatTuThuoc.KhoId : 0) + ', LaDuocPhamBHYT:' + chiDinhGhiNhanVatTuThuoc.LaDuocPhamBHYT +'}', Take: 50 }"
+        [templateHeader]="vatTuChiDinhTemplateHeader" [template]="vatTuChiDinhTemplate"
+        [validationerror]="'DichVuGhiNhanId' | validationerror:validationErrors" (keyup)="onKeyEnterAddItem($event)"
+        (openCombobox)="openCombobox($event)" [isAutoFocus]="true"
+        [popupSettings]="{width: 900,popupClass:'item-no-padding'}">
+
+        <ng-template #vatTuChiDinhTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="30%">Tên</th>
+                    <th width="10%">Hàm lượng</th>
+                    <th width="10%">Hoạt Chất</th>
+                    <th width="10%">ĐVT</th>
+                    <th width="10%">Đường dùng</th>
+                    <th width="20%">NSX</th>
+                    <th width="10%">Tồn</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #vatTuChiDinhTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="30%">{{dataItem.DisplayName}}</td>
+                    <td width="10%">{{dataItem.HamLuong}}</td>
+                    <td width="10%">{{dataItem.HoatChat}}</td>
+                    <td width="10%">{{dataItem.DonViTinh}}</td>
+                    <td width="10%">{{dataItem.DuongDung}}</td>
+                    <td width="20%">{{dataItem.NhaSanXuat}}</td>
+                    <td width="10%">{{dataItem.SoLuongTonDisplay}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textbox fxFlex="15%" label="ĐVT" required="true" disabled="{{true}}"
+        [(model)]="chiDinhGhiNhanVatTuThuoc.strDonViTinh" class="item-no-padding"
+        [validationerror]="'strDonViTinh' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textboxnumeric *ngIf="currentLoaiKho && currentLoaiKho == 5" fxFlex="15%" label="Số lượng" required="true"
+        [min]="0.01" [max]="999999999" [(model)]="chiDinhGhiNhanVatTuThuoc.SoLuong" [format]="format" [decimals]="2"
+        [validationerror]="'SoLuong' | validationerror: validationErrors" (keyup)="onKeyEnterAddItem($event)"
+        (openCombobox)="openCombobox($event)">
+    </app-textboxnumeric>
+
+    <app-textboxnumeric *ngIf="currentLoaiKho != 5" fxFlex="15%" label="Số lượng" required="true" [min]="1"
+        [max]="999999999" [(model)]="chiDinhGhiNhanVatTuThuoc.SoLuong"
+        [validationerror]="'SoLuong' | validationerror: validationErrors" (keyup)="onKeyEnterAddItem($event)"
+        (openCombobox)="openCombobox($event)">
+    </app-textboxnumeric>
+
+    <div fxFlex="15%" fxFlex.sm="15%">
+        <div class="container-custom no-label">
+            <label>&nbsp;</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <app-checkbox fxFlex="100%" id="TinhPhiVTTH" [(model)]="chiDinhGhiNhanVatTuThuoc.TinhPhi"
+                    label="Tính phí" value="true"></app-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <div kendoTooltip class="sticky-button-action py-3 text-right full-width-row">
+        <!-- Xuất sau khi thêm -->
+        <!-- <button type="button" mat-button mat-raised-button color="primary" class="float-left" (click)="xuatGhiNhanVatTuBenhVien()">Xuất</button> -->
+
+        <button type="button" color="primary" mat-button class="mr-2" title="Phím tắt: Chưa có"
+            (click)="huyGhiNhanVatTuBenhVien()">Huỷ</button>
+        <button type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Chưa có"
+            (click)="themGhiNhanVatTuBenhVien()">Thêm</button>
+    </div>
+
+    <app-grid #gridVTTHThuoc fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridVTTHThuocColumns"
+        [allowSortDefault]="true" [gridDataSource]="gridDataSourceVTTHThuoc" [documentType]="documentType"
+        [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+        [lazyLoadPage]="true" maxHeight="500" [pageable]="false" [groups]="groupsGhiNhanVTHHThuoc"
+        masterName="gridVTTHThuoc" [removeGroupFooterIfIsOnlyOne]="true" reorderRowsMoveItemData="true">
+    </app-grid>
+    <div class="gripViewGoiDichViKhacTemplate">
+        <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+
+        <ng-template #nhomGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+
+        <ng-template #donGiaTemplate let-dataItem>
+            <!-- {{dataItem.DonGia | number:'0.2-2':'vi-VN'}} -->
+            <p *ngFor="let item of dataItem.ThongTinGias">
+                {{item.DonGia | number:'0.2-2':'vi-VN'}}
+            </p>
+        </ng-template>
+
+        <ng-template #soLuongGhiNhanVTTHThuocTemplate let-dataItem>
+            <p *ngFor="let item of dataItem.ThongTinGias">
+                <ng-container *ngIf="dataItem.LoaiKho == 5">{{item.SoLuong | number:'0.2'}}</ng-container>
+                <ng-container *ngIf="dataItem.LoaiKho != 5">{{item.SoLuong | number}}</ng-container>
+            </p>
+
+        </ng-template>
+
+        <ng-template #thanhTienTemplate let-dataItem>
+            <!-- {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}} -->
+            <p *ngFor="let item of dataItem.ThongTinGias">
+                {{item.ThanhTien | number:'0.2-2':'vi-VN'}}
+            </p>
+        </ng-template>
+
+        <ng-template #thanhTienGhiNhanVTTHThuocFooterTemplate let-dataItem>
+            <span style="color:blue">{{totalGhiNhanVTTHThuoc('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+
+        <ng-template #thanhTienGhiNhanVTTHThuocGroupFooterTemplate let-aggregates>
+            {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+
+        <ng-template #donGiaBaoHiemTemplate let-dataItem>
+            <!-- {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}} -->
+            <ng-container *ngIf="dataItem.DonGiaBaoHiem != null">
+                {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+            </ng-container>
+            <ng-container *ngIf="dataItem.DonGiaBaoHiem == null">
+                <p *ngFor="let item of dataItem.ThongTinGias">
+                    {{item.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+                </p>
+            </ng-container>
+        </ng-template>
+
+        <ng-template #duocHuongBaoHiemGhiNhanVHTTTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-checkbox id="duocHuongBaoHiem{{rowIndex}}" label="" [(model)]="dataItem.DuocHuongBaoHiem"
+                disabled="{{true}}">
+            </app-checkbox>
+        </ng-template>
+
+        <ng-template #tinhPhiGhiNhanVHTTTemplate let-dataItem let-rowIndex="rowIndex">
+            <!-- <app-checkbox id="tinhPhiGhiNhanVTTH{{rowIndex}}" label="" [(model)]="dataItem.TinhPhi"
+                disabled="{{true}}">
+            </app-checkbox> -->
+
+            <app-checkbox id="tinhPhiGhiNhanVTTH{{rowIndex}}" label="" [(model)]="dataItem.TinhPhi"
+                [disabled]="(dataItem.PhieuLinh != null && dataItem.PhieuLinh != '')"
+                (modelChange)="changeTinhPhiGhiNhanVTTH($event, dataItem)">
+            </app-checkbox>
+        </ng-template>
+
+        <ng-template #actionVTTHThuocTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <button
+                    *ngIf="dataItem.IsCoYeuCauTraVatTuThuocTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.IsKhoTong"
+                    style="color:red" mat-icon-button kendoTooltip title="Hoàn trả" type="button"
+                    (click)="hoanTra(dataItem)">
+                    <mat-icon [icIcon]="icReturn"></mat-icon>
+                </button>
+                <button
+                    *ngIf="!dataItem.IsCoYeuCauTraVatTuThuocTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.IsKhoTong"
+                    color="primary" mat-icon-button kendoTooltip title="Hoàn trả" type="button"
+                    (click)="hoanTra(dataItem)">
+                    <mat-icon [icIcon]="icReturn"></mat-icon>
+                </button>
+
+                <button *ngIf="!dataItem.PhieuLinh" color="primary" mat-icon-button kendoTooltip title="Sửa"
+                    type="button" (click)="suaVatTuThuoc(dataItem)">
+                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                </button>
+
+                <button *ngIf="!dataItem.PhieuLinh" color="primary" mat-icon-button kendoTooltip title="Xóa"
+                    type="button" (click)="XoaGhiNhanVTTHThuoc(dataItem)">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</div>

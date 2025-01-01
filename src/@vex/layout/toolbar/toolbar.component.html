@@ -1,0 +1,151 @@
+<div class="toolbar w-full px-gutter" fxLayout="row" fxLayoutAlign="start center" vexContainer>
+  <button (click)="openSidenav()" [fxHide]="!mobileQuery" mat-icon-button type="button">
+    <mat-icon [icIcon]="icMenu"></mat-icon>
+  </button>
+
+  <a *ngIf="isVerticalLayout$ | async" [routerLink]="['/']" class="ltr:mr-4 rtl:ml-4 block" fxLayout="row"
+    fxLayoutAlign="start center">
+    <img class="w-8 select-none" src="assets/img/logo.png">
+    <h1 [fxHide]="mobileQuery" class="title ltr:pl-4 rtl:pr-4 m-0 select-none">BỆNH VIỆN ĐA KHOA QUỐC TẾ BẮC HÀ</h1>
+  </a>
+
+  <button *ngIf="isHorizontalLayout$ | async" [fxHide]="mobileQuery" [matMenuTriggerFor]="addNewMenu" color="primary"
+    mat-raised-button type="button">THAO TÁC NHANH
+  </button>
+
+  <mat-menu #addNewMenu="matMenu" [overlapTrigger]="false" xPosition="after" yPosition="below">
+    <button mat-menu-item (click)="thaoTacNhanh('them-yeu-cau-tiep-nhan')">
+      <mat-icon [icIcon]="icPersonAdd"></mat-icon>
+      <span>Tiếp Nhận Người Bệnh (<strong class="red">F2</strong>)</span>
+    </button>
+    <button mat-menu-item (click)="thaoTacNhanh('kham-benh')">
+      <mat-icon [icIcon]="medkit"></mat-icon>
+      <span>Khám Bệnh (<strong class="red">F3</strong>)</span>
+    </button>
+    <button mat-menu-item (click)="thaoTacNhanh('ket-qua-cdha-tdcn')">
+      <mat-icon [icIcon]="icAssignment"></mat-icon>
+      <span>Kết quả CĐHA, TDCN (<strong class="red">F9</strong>)</span>
+    </button>
+    <button mat-menu-item (click)="thaoTacNhanh('phau-thuat-thu-thuat')">
+      <mat-icon [icIcon]="icAccessible"></mat-icon>
+      <span>Phẫu thuật/Thủ thuật (<strong class="red">F4</strong>)</span>
+    </button>
+    <button mat-menu-item (click)="thaoTacNhanh('xac-nhan-bhyt')">
+      <mat-icon [icIcon]="icCheckCircle"></mat-icon>
+      <span>Xác nhận BHYT (<strong class="red">F6</strong>)</span>
+    </button>
+    <button mat-menu-item (click)="thaoTacNhanh('danh-sach-thu-dich-vu')">
+      <mat-icon [icIcon]="icPayment"></mat-icon>
+      <span>Thu ngân (<strong class="red">F7</strong>)</span>
+    </button>
+    <button mat-menu-item (click)="thaoTacNhanh('nha-thuoc')">
+      <mat-icon [icIcon]="icStore"></mat-icon>
+      <span>Nhà thuốc (<strong class="red">F8</strong>)</span>
+    </button>
+    <button mat-menu-item (click)="thaoTacNhanh('danh-sach-goi')">
+      <mat-icon [icIcon]="icSend"></mat-icon>
+      <span>Gửi Hồ Sơ Giám Định BHYT (<strong class="red">F10</strong>)</span>
+    </button>
+    <!-- <button mat-menu-item (click)="QuetMaQRCodeClick()">
+      <mat-icon [icIcon]="icQRCodeAdd"></mat-icon>
+      <span>Quét Mã</span>
+    </button> -->
+
+    <!-- <button mat-menu-item>
+      <mat-icon [icIcon]="icAssignmentTurnedIn"></mat-icon>
+      <span>Add Project</span>
+    </button>
+
+    <button [matMenuTriggerFor]="documentMenu" mat-menu-item>
+      <mat-icon [icIcon]="icBallot"></mat-icon>
+      <span>Add Document</span>
+    </button>
+  </mat-menu>
+
+  <mat-menu #documentMenu="matMenu">
+    <button mat-menu-item>
+      <mat-icon [icIcon]="icDescription"></mat-icon>
+      <span>Add Quote</span>
+    </button>
+
+    <button mat-menu-item>
+      <mat-icon [icIcon]="icAssignment"></mat-icon>
+      <span>Add Invoice</span>
+    </button>
+
+    <button mat-menu-item>
+      <mat-icon [icIcon]="icReceipt"></mat-icon>
+      <span>Add Receipt</span>
+    </button> -->
+  </mat-menu>
+
+  <!--   <div #megaMenuOriginRef class="ltr:ml-2 rtl:mr-2">
+    <button *ngIf="isHorizontalLayout$ | async"
+            [fxHide]="mobileQuery"
+            (click)="openMegaMenu(megaMenuOriginRef)"
+            color="primary"
+            mat-button
+            type="button">MEGA MENU
+      <ic-icon [icon]="icArrowDropDown" class="ltr:-mr-1 rtl:-ml-1" inline="true"></ic-icon>
+    </button>
+  </div>
+
+
+  <div *ngIf="(isVerticalLayout$ | async) && isNavbarInToolbar$ | async"
+       [fxHide]="mobileQuery"
+       class="px-gutter"
+       fxFlex="none"
+       fxLayout="row"
+       fxLayoutAlign="start center">
+    <vex-navigation-item *ngFor="let item of navigationItems" [item]="item"></vex-navigation-item>
+  </div> -->
+
+  <span fxFlex></span>
+
+  <div class="-mx-1 flex items-center">
+    <div class="px-1">
+      <button (click)="openSearch()" mat-icon-button type="button">
+        <mat-icon [icIcon]="icSearch"></mat-icon>
+      </button>
+    </div>
+
+    <div class="px-1">
+      <vex-toolbar-notifications></vex-toolbar-notifications>
+    </div>
+
+    <div class="body-1 font-medium leading-snug ltr:mr-3 rtl:ml-3" fxHide.xs>
+      <div [innerHtml]="currentUserInfo"></div>
+    </div>
+
+    <!-- <div class="px-1">
+      <button (click)="openQuickpanel()" mat-icon-button type="button">
+        <mat-icon [icIcon]="icBookmarks"></mat-icon>
+      </button>
+    </div>
+
+    <div class="px-1">
+      <button [matMenuTriggerFor]="languageMenu" mat-icon-button type="button">
+        <mat-icon [icIcon]="emojioneVN"></mat-icon>
+      </button>
+    </div> -->
+
+    <div class="px-1">
+      <vex-toolbar-user></vex-toolbar-user>
+    </div>
+
+    <!-- <mat-menu #languageMenu="matMenu" overlapTrigger="false" xPosition="before" yPosition="below">
+        <button mat-menu-item>
+          <mat-icon [icIcon]="emojioneVN"></mat-icon>
+          <span>Việt Nam</span>
+        </button>
+      <button mat-menu-item>
+        <mat-icon [icIcon]="emojioneUS"></mat-icon>
+        <span>English</span>
+      </button>
+
+    </mat-menu> -->
+  </div>
+</div>
+
+<vex-navigation *ngIf="(isVerticalLayout$ | async) && isNavbarBelowToolbar$ | async" [fxHide]="mobileQuery">
+</vex-navigation>

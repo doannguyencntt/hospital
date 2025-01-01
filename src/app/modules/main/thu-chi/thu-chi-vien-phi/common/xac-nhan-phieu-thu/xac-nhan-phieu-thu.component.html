@@ -1,0 +1,39 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+	<div>Xác Nhận</div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+<legend>Thực hiện in phiếu thu cho NB :</legend>
+<mat-dialog-content style="overflow: hidden">
+	<div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+		<fieldset class="row ml-1" fxFlex="100%">
+			<table class="table table-border" width="100%">
+				<tr>
+					<td width="100%">
+						<app-checkbox id="in-phieu-thu" value="1" fxFlex="100%" label="In phiếu thu" [(model)]="isInPhieuThu" (modelChange)="ChonPhieuInChange($event , 'InPhieuThu')"> </app-checkbox>
+					</td>
+				</tr>
+				<tr *ngIf="this.khongInPhieuHoanUng == true">
+					<td width="100%">
+						<app-checkbox id="in-phieu-hoan-ung" value="2" fxFlex="100%" label="In phiếu hoàn ứng" [(model)]="isInPhieuThu" (modelChange)="ChonPhieuInChange($event , 'InPhieuHoanUng')"> </app-checkbox>
+					</td>
+				</tr>
+				<tr *ngIf="this.khongBangKeThuoc == true">
+					<td width="100%">
+						<app-checkbox id="in-bang-ke-thuoc" value="2" fxFlex="100%" label="In bảng kê thuốc" [(model)]="isInBangKeThuoc" (modelChange)="ChonPhieuInChange($event , 'BangKeThuoc')"> </app-checkbox>
+					</td>
+				</tr>
+				<tr>
+					<td width="100%">
+						<app-checkbox id="in-bang-ke-thuoc-kham-chua-benh-ngoai-tru" value="3" fxFlex="100%" [(model)]="isInCPKhamNgoaiTru" (modelChange)="ChonPhieuInChange($event ,'InCPKhamNgoaiTru')" label="In bảng kê chi phí khám chữa bệnh" [validationerror]="'CheckPhieuIn' | validationerror:validationErrors"> </app-checkbox>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<button mat-button mat-dialog-close (click)="BackToList()">Không</button>
+	<button mat-raised-button mat-button color="primary" (click)="InPhieuThu()" [mat-dialog-close]="true" cdkFocusInitial>Có</button>
+</mat-dialog-actions>

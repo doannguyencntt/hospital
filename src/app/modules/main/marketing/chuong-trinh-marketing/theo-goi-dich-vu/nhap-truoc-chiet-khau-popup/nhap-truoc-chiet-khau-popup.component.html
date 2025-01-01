@@ -1,0 +1,21 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+	<div style="font: 500 18px/26px var(--font)">TRƯỚC CHIẾT KHẤU</div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+<mat-dialog-content style="height: 125px;">
+	<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">    
+    <app-textboxnumeric  id="ChietKhau" fxFlex="100%" fxFlex.sm="100%" [(model)]="truocChietKhau.ChietKhau" [spinners]="true"
+    [required]="true" label="Chiết khấu (%)" [min]="0" [max]="100"
+    [validationerror]="'ChietKhau' | validationerror:validationErrors" (keyup)="onKeyUp($event)">
+ </app-textboxnumeric>
+ <app-radio fxFlex="100%" fxFlex.sm="100%" name="LoaiChietKhau" class="no-format-css pl-4 temp" [(model)]="truocChietKhau.LoaiChietKhau"
+ [items]="[{Value:1,Text:'Tăng'},{Value:2,Text:'Giảm'}]">
+</app-radio>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<button mat-button mat-dialog-close (click)="close()">Hủy</button>
+	<button mat-raised-button mat-button color="primary" (click)="apDung()" cdkFocusInitial>Áp dụng</button>
+</mat-dialog-actions>

@@ -1,0 +1,102 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">Danh sách đơn vị mẫu</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 800px;">
+    <div class="card overflow-auto">
+        <kendo-splitter style="height: 600px;" [ngStyle]="{'width':isShow?'100%':'calc(100% - 8px)'}">
+            <kendo-splitter-pane style="overflow:hidden;" size="{{isShow?'40%':'100%'}}">
+                <app-grid #grid [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotalPage" [showStt]="true"
+                    [gridColumns]="gridColumns" [useActionDefault]="false" [lazyLoadPage]="true"
+                    [useHeaderDefault]="false" [headerTemplate]="headerTemplate" [documentType]="documentType"
+                    [checkboxAble]="false" height="600">
+                </app-grid>
+            </kendo-splitter-pane>
+
+            <kendo-splitter-pane style="overflow:auto;" [hidden]="!isShow">
+                <div class="px-4 pt-4" fxLayout="column">
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                        <app-textbox id="ma" fxFlex="30%" fxFlex.sm="20%" maxlength="50" [required]="true"
+                            [(model)]="donViMau.Ma" label="Mã"
+                            [validationerror]="'Ma' | validationerror:validationErrors">
+                        </app-textbox>
+                        <app-textbox id="Ten" fxFlex="70%" fxFlex.sm="30%" maxlength="250" [required]="true"
+                            [(model)]="donViMau.Ten" label="Tên"
+                            [validationerror]="'Ten' | validationerror:validationErrors">
+                        </app-textbox>
+
+                        <!-- <app-radio fxFlex="30%" fxFlex.sm="40%" id="IsDefault" name="IsDefault"
+                            [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="donViMau.IsDefault"
+                            label="Sử Dụng">
+                        </app-radio> -->
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="2px" class="mt-4 mb-2" kendoTooltip>
+                        <button type="button" mat-raised-button (click)="huy()">Hủy</button>
+                        <button type="button" color="primary" mat-raised-button (click)="luu()">Lưu</button>
+                    </div>
+                </div>
+            </kendo-splitter-pane>
+        </kendo-splitter>
+
+
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div class="bg-card rounded-full border px-4 ml-2" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                    fxLayout="row" fxLayoutAlign="start center">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)"
+                        (ngModelChange)="searchChange($event)" placeholder="Tìm kiếm ..." />
+                </div>
+                <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                </button>
+
+                <button [matMenuTriggerFor]="columnFilterMenu" class="ml-auto" fxFlex="none" mat-icon-button
+                    kendoTooltip title="Lọc cột" type="button">
+                    <mat-icon [icIcon]="icFilterList"></mat-icon>
+                </button>
+                <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                    <div *ngFor="let column of _gridColumnsFilter">
+                        <button class="checkbox-item mat-menu-item" *ngIf="!column.HideFilter">
+                            <mat-checkbox [disabled]="!column.HasFilter" [(ngModel)]="_isCheckColumnFilter"
+                                color="primary">
+                                {{ column.Title }}
+                            </mat-checkbox>
+                        </button>
+                    </div>
+                </mat-menu>
+                <button class="ml-3" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm" type="button"
+                    (click)="them()">
+                    <mat-icon [icIcon]="icAdd"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+    </div>
+
+    <ng-template #maTemplate let-dataItem>
+        <a (click)="xem(dataItem.Id, dataItem.IsDefault)">
+            <p class="reverse-ellipsis r" title="{{dataItem.Ma}}">{{dataItem.Ma}}</p>
+        </a>
+    </ng-template>
+    <ng-template #actionTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button style="color: red;" mat-icon-button kendoTooltip (click)="xoa(dataItem.Id, dataItem.IsDefault)" title="Xóa"
+                type="button">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #trangThaiTemplate let-dataItem>
+        <div *ngIf="dataItem.IsDefault != true" mat-menu-item>
+            <mat-icon [icIcon]="icClose" color="warn"></mat-icon><span>Ngừng sử dụng</span>
+        </div>
+        <div *ngIf="dataItem.IsDefault == true" mat-menu-item>
+            <mat-icon [icIcon]="icDone" color="primary"></mat-icon><span>Đang sử dụng</span>
+        </div>
+    </ng-template>
+</mat-dialog-content>

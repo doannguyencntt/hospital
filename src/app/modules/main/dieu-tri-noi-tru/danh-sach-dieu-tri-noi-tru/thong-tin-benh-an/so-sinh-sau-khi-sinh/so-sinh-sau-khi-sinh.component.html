@@ -1,0 +1,14 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mr-4">
+        Mô tả chỉ số Sliverman
+        <button class="po-h" color="primary">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+    <ng-container *ngIf="dataSourceSoSinhSauDes.data.length == 0">
+    </ng-container>
+    <app-grid fxFlex="100%" HideCheckAll="true" [gridColumns]="gridColumnSoSinhSauDes"
+        *ngIf="dataSourceSoSinhSauDes != null && dataSourceSoSinhSauDes.data != null && dataSourceSoSinhSauDes.data.length > 0"
+        [documentType]="documentType" [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true"
+        [checkboxAble]="false" [gridDataSource]="dataSourceSoSinhSauDes" [pageable]="false" height="auto"></app-grid>
+</div>

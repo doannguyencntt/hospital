@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>ĐĂNG NHẬP LẠI</h2>
+<mat-dialog-content fxLayout="column">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-textbox id="Textbox" fxFlex="50%" id="Username" label="SỐ ĐIỆN THOẠI/EMAIL" (keyup)="onKeySignIn($event)" [(model)]="login.userName" [validationerror]="'UserName' | validationerror:validationErrors"></app-textbox>
+        <app-textbox id="Password" fxFlex="50%" label="MẬT KHẨU" required="true" (keyup)="onKeySignIn($event)" [(model)]="login.password" type="password" [showIconEyeRight]="true" [validationerror]="'Password' | validationerror:validationErrors"></app-textbox>
+
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="pt-4 pb-4">
+    <button *ngIf="!loading" mat-button (click)="logout()">HỦY</button>
+    <button *ngIf="!loading" color="primary" mat-raised-button (click)="signin()">ĐĂNG NHẬP & TẢI LẠI</button>
+    <button *ngIf="!loading" color="primary" mat-raised-button (click)="signin(false)">ĐĂNG NHẬP</button>
+    <button *ngIf="loading" color="primary" mat-raised-button type="button">
+    <img src="/assets/img/loader.gif" alt="Loading" style="display: inline;"/>
+  </button>
+</mat-dialog-actions>

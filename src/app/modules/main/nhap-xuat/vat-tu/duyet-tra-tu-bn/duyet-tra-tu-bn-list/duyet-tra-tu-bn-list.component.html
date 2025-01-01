@@ -1,0 +1,175 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+      {Title:'Nhập Xuất',Path:''},
+      {Title:'Vật Tư',Path:''},
+      {Title:'Hoàn Trả',Path:''},
+      {Title:'Từ Người Bệnh',Path:''},
+      {Title:'Duyệt Hoàn Trả',
+      Path:'/nhap-xuat/vat-tu/hoan-tra/tu-benh-nhan/duyet-hoan-tra', Active: true}
+      ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid #gridParent baseRoute="nhap-xuat/vat-tu/hoan-tra/tu-benh-nhan/duyet-hoan-tra" [sort]="sort"
+                [additionalSearchString]="additionalSearchString" [gridColumns]="gridColumns" [lazyLoadPage]="true"
+                [documentType]="documentType" [useAddDeault]="false" (extOnDataBound)="SetColorForTrangThai()"
+                [checkboxAble]="false" [useHeaderDefault]="false" [searchString]="search.SearchString"
+                [headerTemplate]="headerTemplate" [useActionDefault]="false" [detailTemplate]="detailTemplate">
+            </app-grid>
+
+            <ng-template #detailTemplate let-dataItem>
+                <app-grid [gridColumns]="gridVatTuColumns" [documentType]="documentType" [useAddDeault]="false"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                    [urlGetData]="urlGetDataVatTu" [groups]="groups" [detailTemplate]="detailTemplateBenhNhan"
+                    additionalSearchString="{{dataItem.Id}}" [autoHeight]="true" [pageable]="false">
+                </app-grid>
+            </ng-template>
+
+            <ng-template #detailTemplateBenhNhan let-dataItem>
+                <app-grid [gridColumns]="gridYeuCauChiTietColumns" [documentType]="documentType" [useAddDeault]="false"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                    [urlGetData]="urlGetDataBenhNhan" [groups]="groupBenhNhan"
+                    additionalSearchString="{{dataItem.YeuCauTraVatTuTuBenhNhanId}};{{dataItem.VatTuBenhVienId}}"
+                    [autoHeight]="true" [pageable]="false">
+                </app-grid>
+            </ng-template>
+
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <app-checkbox (modelChange)="CheckboxChange($event, true)" id="DangChoDuyetId"
+                        [(model)]="search.DangChoDuyet" class="ml-2" label="Chờ duyệt">
+                    </app-checkbox>
+                    <app-checkbox (modelChange)="CheckboxChange($event, false, true)" id="DaDuyetId"
+                        [(model)]="search.DaDuyet" class="ml-2" label="Đã duyệt">
+                    </app-checkbox>
+
+                    <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px"
+                        fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                        <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                            type="search" name="searchString" [(ngModel)]="search.SearchString" (keyup)="onKey($event)"
+                            (ngModelChange)="clearSearch()" placeholder="Nhập từ khóa..." />
+                    </div>
+
+                    <app-daterangepicker style="margin-left: 5px;" id="range-yeu-cau" fxFlex="250px" fxFlex.sm="auto"
+                        [(model)]="search.RangeYeuCau" label="Yêu cầu từ ngày - đến ngày" (modelChange)="Timkiem()"
+                        class="mt-1 on-header">
+                    </app-daterangepicker>
+
+                    <app-daterangepicker style="margin-left: 5px;" id="range-duyet" fxFlex="250px" fxFlex.sm="auto"
+                        [(model)]="search.RangeDuyet" label="Duyệt từ ngày - đến ngày" (modelChange)="Timkiem()"
+                        class="mt-1 on-header">
+                    </app-daterangepicker>
+
+                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+                        <mat-icon [icIcon]="icSearch"></mat-icon>
+                    </button>
+
+                    <span fxFlex></span>
+                    <button [matMenuTriggerFor]="columnFilterMenu" class="mr-4" fxFlex="none" mat-icon-button
+                        kendoTooltip title="Lọc cột" type="button">
+                        <mat-icon [icIcon]="icFilterList"></mat-icon>
+                    </button>
+
+                    <button (click)="exportExcel()" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip
+                        title="Xuất Excel" type="button">
+                        <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                    </button>
+                    <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                        <div *ngFor="let column of gridColumns">
+                            <button *ngIf="!column.HideFilter"
+                                class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                                <mat-checkbox [disabled]="true" color="primary">
+                                    {{ column.Title }}
+                                </mat-checkbox>
+                            </button>
+                        </div>
+                    </mat-menu>
+                </div>
+            </ng-template>
+
+        </div>
+    </vex-page-layout-content>
+
+</vex-page-layout>
+<ng-template #actionTemplate let-dataItem>
+    <!-- <button *ngIf="dataItem.TinhTrang!=true" (click)="delete(dataItem.Id)" mat-menu-item>
+        <mat-icon [icIcon]="icDelete"></mat-icon>
+        <span>Xóa</span>
+    </button> -->
+    <button kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+        <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+    </button>
+    <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+        <ng-template let-customer="customer" matMenuContent>
+            <button (click)="inPhieu(dataItem.Id)" mat-menu-item>
+                <mat-icon [icIcon]="icPrint"></mat-icon>
+                <span>In phiếu</span>
+            </button>
+        </ng-template>
+    </mat-menu>
+</ng-template>
+
+<ng-template #trangThaiTemplate let-dataItem>
+    <div [innerHtml]="dataItem.TinhTrangDisplay"></div>
+</ng-template>
+
+<ng-template #soPhieuTemplate let-dataItem>
+    <a (click)="edit(dataItem.Id)">{{dataItem.SoPhieu}}</a>
+</ng-template>
+
+<ng-template #ngayYeuCauTemplate let-dataItem>
+    {{dataItem.NgayYeuCauDisplay}}
+</ng-template>
+
+<ng-template #ngayDuyetTemplate let-dataItem>
+    {{dataItem.NgayDuyetDisplay}}
+</ng-template>
+
+<ng-template #nhomGroupHeaderTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+
+<ng-template #soLuongDuTruTemplate let-dataItem>
+    <span>{{dataItem.SoLuongDuTru | number:'1.0':'vi-VN' }}</span>
+</ng-template>
+
+<ng-template #soLuongDuKienTemplate let-dataItem>
+    <span>{{dataItem.SoLuongDuKienTrongKy | number:'1.0':'vi-VN' }}</span>
+</ng-template>
+
+<ng-template #khoaGroupHeader let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+<ng-template #soLuongDuTruHeaderTemplate let-aggregates="aggregates">
+    <strong>{{aggregates.SoLuongDuTru.sum | number:'1.0':'vi-VN' }}</strong>
+</ng-template>
+
+<ng-template #soLuongDuKienHeaderTemplate let-aggregates="aggregates">
+    <strong>{{aggregates.SoLuongDuKienTrongKy.sum | number:'1.0':'vi-VN' }}</strong>
+</ng-template>
+
+<ng-template #benhNhanGroupHeaderTemplate let-value="value">
+    <div [innerHTML]="value" style="font-weight: normal;"></div>
+</ng-template>
+
+<ng-template #donGiaTemplate let-dataItem>
+    {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #thanhTienTemplate let-dataItem>
+    {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #ngayTraTemplate let-dataItem>
+    {{dataItem.NgayTraDisplay}}
+</ng-template>
+
+<ng-template #ngayDieuTriTemplate let-dataItem>
+    {{dataItem.NgayDieuTriDisplay}}
+</ng-template>

@@ -1,0 +1,24 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="Ma" fxFlex="25%" fxFlex.sm="25%" maxlength="50" [required]="true" [(model)]="gayBenhAn.Ma"
+        label="Mã" [validationerror]="'Ma' | validationerror:validationErrors"></app-textbox>
+
+    <app-textboxnumeric id="ViTriGay" fxFlex="25%" fxFlex.sm="10%" [min]="1" [max]="999999"
+        [(model)]="gayBenhAn.ViTriGay" label="Vị trí gáy" [required]="true"
+        [validationerror]="'ViTriGay' | validationerror:validationErrors">
+    </app-textboxnumeric>
+
+    <app-textbox id="Ten" fxFlex="25%" fxFlex.sm="40%" maxlength="250" [required]="true" [(model)]="gayBenhAn.Ten"
+        label="Tên" [validationerror]="'Ten' | validationerror:validationErrors"></app-textbox>
+
+    <app-multiselect #multiselectNoiThucHien id="PhongBenhVienId" fxFlex="25%"
+        [(model)]="gayBenhAn.GayBenhAnPhieuHoSoIds" [modelText]="" label="Phiếu/hồ sơ" 
+        url="BenhAnDienTu/GetPhieuHoSoGayBenhAnLookupVos" required="true"
+        [validationerror]="'GayBenhAnPhieuHoSoIds' | validationerror:validationErrors">
+    </app-multiselect>
+
+    <app-radio fxFlex="25%" fxFlex.sm="40%" id="IsDisabled" name="IsDisabled"
+        [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" [(model)]="gayBenhAn.IsDisabled" label="Sử Dụng"
+        [validationerror]="'IsDisabled' | validationerror:validationErrors">
+    </app-radio>
+
+</div>

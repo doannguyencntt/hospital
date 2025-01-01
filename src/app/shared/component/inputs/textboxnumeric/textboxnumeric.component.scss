@@ -1,0 +1,230 @@
+app-textboxnumeric{
+    padding-bottom: 1.34375em;
+    // max-height: 73px;
+    .k-numeric-wrap{
+        border: none !important;
+        &.k-state-disabled{
+            input{
+                background-color: #ECEFF1;
+            }
+        }
+    }
+    kendo-numerictextbox{
+        height: 42px !important;
+        .k-input{
+            margin-top: 5px;
+            font-size: 14px !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+    kendo-textbox-container{        
+        background-color: rgba(0, 0, 0, 0.04);
+        width: 100% !important;
+        border-radius: 4px 4px 0 0;
+        padding: .75em .75em 0 .75em;
+        border-bottom: 1px solid rgba(82, 63, 105, 0.42);
+        >.k-label{
+            margin-left: 10px;
+            background: none !important;
+            transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+        }
+        &.k-state-empty{            
+            >.k-label{
+                transform: translate(0, 0) scale(1) !important;
+            }
+        }
+        &.k-state-focused>.k-label {
+            transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+            color:#005dab !important;
+        }
+        &:hover{ 
+          &::after {
+            opacity: 1;
+            transform: scaleX(1);
+          }
+        }
+        input{
+            max-width: 100%;
+        }
+    }
+    
+    &.numeric-in-grid{
+        kendo-textbox-container{ 
+            padding:0;
+            input{
+                padding-left: 10px !important;
+            }
+        }
+    }&.on-header{
+        padding-bottom: 0;
+        kendo-textbox-container{
+            padding-top: 5px;
+            border-radius: 9999px;
+            background-color: rgba(0, 0, 0, 0.04);
+            height: 41px;
+            .k-label{
+                top:calc(1.03125em + 1px);
+            }
+        }
+        .clear{
+            top: 19px;
+        }
+    }
+    &.on-header-height{
+        padding-bottom: 0;
+        kendo-textbox-container{
+            padding-top: 5px;
+            border-radius: 9999px;
+            background: #fff;
+            height: 45px;
+            .k-label{
+                top:calc(1.03125em + 1px);
+            }
+        }
+        .clear{
+            top: 19px;
+        }
+    }
+    &.no-label{    
+        kendo-textbox-container{  
+            padding-top: 0;
+            vertical-align: middle !important;
+            
+            // kendo-numerictextbox{
+            //     height: 32px !important;
+            //     .k-input{    
+            //         height: 1.5rem !important;
+            //     }
+            // }
+            .k-textbox{
+                height: 32px;
+                margin-top: 0;
+            }
+        }
+        &.text-height-42{
+            .k-textbox{
+                height: 42px;
+            }
+        }
+    }
+}
+.text-green{
+    &.bold{
+        font-weight: bold;
+    }
+    .k-input{
+        color: green !important;
+    }
+}
+
+.text-red{
+    &.bold{
+        font-weight: bold;
+    }
+    .k-input{
+        color: red !important;
+    }
+}
+
+.selectMoneyNumber{
+    min-height: 2em;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: .75em;
+    line-height: 2;
+    box-shadow: none;
+    border-radius: 2em;
+    background: #dddddd;
+}
+
+#plus-texbox {
+    position: relative;
+    width: 100%;
+    
+  }
+
+.ns-plus {
+    position: absolute;
+    text-align: center;
+    line-height: 16px;
+    top: 0;
+    right: 0;
+    height: 16px;
+    display: block;
+    // border-left: 1px solid #ccc;
+    // border-bottom: 1px solid #ccc;
+    width: 16px;
+  }
+  
+  .ns-minus {
+    position: absolute;
+    text-align: center;
+    display: block;
+    line-height: 16px;
+    height: 16px;
+    // border-left: 1px solid #ccc;
+    bottom: 0;
+    right: 0;
+    width: 16px;
+  }
+
+app-textboxnumeric{
+    kendo-textbox-container{        
+        background-color: rgba(0, 0, 0, 0.04);
+        width: 100% !important;
+        border-radius: 4px 4px 0 0;
+        padding: .75em .75em 0 .75em;
+        border-bottom: 1px solid rgba(82, 63, 105, 0.42);
+        .k-textbox{
+            margin-top: 8px;
+            font-size: 14px;
+            border: none;
+            padding-bottom: 0;
+            padding-top: 0;
+        }
+        >.k-label{
+            margin-left: 10px;
+            background: none !important;
+            transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+        }
+        &.k-state-empty{            
+            >.k-label{
+                transform: translate(0, 0) scale(1) !important;
+            }
+            &.k-state-initial{
+                >.k-label{
+                    transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+                }
+            }
+        }
+        &.k-state-focused>.k-label {
+            transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+            color:#005dab !important;
+        }
+        &:hover{ 
+          &::after {
+            opacity: 1;
+            transform: scaleX(1);
+          }
+        }
+    }
+    &.no-label{    
+        kendo-textbox-container{  
+            padding-top: 0;
+            .k-clear-value{
+                top: 14px;
+            }
+            
+        }
+    }
+    .voice{
+        position: absolute;
+        right: 5px;
+        top: 20px;
+        cursor: pointer;
+        &:hover{
+            color:#005dab;
+        }
+    }
+}

@@ -1,0 +1,40 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập Xuất',Path:''}
+                ,{Title:'Dược Phẩm',Path:''}
+                ,{Title:'Dự trù lĩnh',Path:''}
+                ,{Title:'Duyệt Yêu Cầu Lĩnh',Path:'/nhap-xuat/duoc-pham/duyet-yeu-cau-linh-thuoc',queryParams: {holdQuery : true },Active:true}
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Duyệt yêu cầu lĩnh trực tiếp</h2>
+                <b *ngIf="trangThai != undefined" class="status-yeu-cau-linh {{trangThai.DuocDuyet == null ? 'ycl-cho-duyet': trangThai.DuocDuyet == false ? 'ycl-tu-choi' : 'ycl-da-duyet'}}">{{trangThai.TenTrangThai}}</b>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-duyet-yeu-cau-linh-thuoc-truc-tiep-shared [documentype]="documentype" 
+                    (trangThaiYeuCau)="getTrangThaiYeuCau($event)"
+                    [validationErrors]="validationErrors"></app-duyet-yeu-cau-linh-thuoc-truc-tiep-shared>
+
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="form-footer">
+                    <button *ngIf="trangThai != undefined && trangThai.DuocDuyet == null" type="button" (click)="xemPhieuLinh()" color="primary" mat-raised-button><i
+                        class="ft-save"></i>Xem phiếu lĩnh</button>
+                    <button type="button" (click)="cancel()" mat-button class="mr-1 align-right-fx"><i class="ft-arrow-left"></i>
+                        Hủy</button>
+                    <ng-container *ngIf="trangThai != undefined && trangThai.DuocDuyet == null">
+                        <button type="button" *ngIf="!loading" (click)="duyet()" color="primary" mat-raised-button><i
+                                class="ft-save"></i>Duyệt</button>
+                        <button type="button" *ngIf="!loading" (click)="khongDuyet()" color="primary" mat-raised-button><i
+                                class="ft-save"></i>Không duyệt</button>
+                    </ng-container>
+                    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                            alt="Loading" /></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

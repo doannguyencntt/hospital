@@ -1,0 +1,99 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-ls-ptt-cs-sinh-ton [yeuCauTiepNhanId]="yeuCauTiepNhanId">
+    </app-ls-ptt-cs-sinh-ton>
+
+    <div fxFlex="100%">
+        <kendo-tabstrip fxFlex="100%" class="content-has-border tabstrip-pad sticky-kendotab-item tabstrip-on-popup"
+            (tabSelect)="onTabSelect($event)">
+            <ng-container *ngFor="let item of thongTinKhamKhacPTTT; index as i">
+                <kendo-tabstrip-tab [selected]="i === 0">
+                    <ng-template kendoTabTitle>
+                        <div kendoTooltip>
+                            LẦN KHÁM {{i+1}}
+                        </div>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <div class="p-2">
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0">
+                                <div fxFlex="100%">
+                                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                        fxLayoutGap.lt-sm="0">
+                                        <h3 fxFlex="100%" class="sub-title mt-0">Khám toàn thân </h3>
+                                        <label>{{item.KhamToanThan}}</label>
+
+                                        <h3 fxFlex="100%" class="sub-title mt-0">Khám các cơ quan khác </h3>
+                                        <ng-container
+                                            *ngIf="thongTinKhamTheoDoiTemplateObj == undefined || thongTinKhamTheoDoiTemplateObj == null">
+                                            <label fxFlex="100%" class="font-weight-bold">Không có khám các cơ quan
+                                                khác.</label>
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="thongTinKhamTheoDoiTemplateObj != undefined && thongTinKhamTheoDoiTemplateObj != null && thongTinKhamTheoDoiTemplateObj.ComponentDynamics!=null && thongTinKhamTheoDoiTemplateObj.ComponentDynamics.length>0">
+                                            <ng-container
+                                                *ngFor="let item of thongTinKhamTheoDoiTemplateObj.ComponentDynamics">
+                                                <ng-container
+                                                    *ngIf="item.Type == 4 && item.groupItems != undefined && item.groupItems.length > 0">
+                                                    <div fxFlex="100%" class="row ml-1 mb-2">
+                                                        <fieldset fxFlex="100%">
+                                                            <legend>{{item.Label}}</legend>
+                                                            <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                                                                <ng-container
+                                                                    *ngFor="let itemInGroup of item.groupItems">
+                                                                    <h3 *ngIf="itemInGroup.Type==1" fxFlex="20%"
+                                                                        class="sub-title">{{itemInGroup.Label}}
+                                                                    </h3>
+                                                                    <label fxFlex="100%"
+                                                                        *ngIf="itemInGroup.Type==2"><span
+                                                                            style="font-weight: bold;">{{itemInGroup.Label}}
+                                                                        </span>:
+                                                                        {{itemInGroup.Value}}</label>
+                                                                    <label fxFlex="100%"
+                                                                        *ngIf="itemInGroup.Type==3"><span
+                                                                            style="font-weight: bold;">{{itemInGroup.Label}}</span>
+                                                                        :
+                                                                        {{itemInGroup.Value}}</label>
+                                                                </ng-container>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+                                                </ng-container>
+                                                <ng-container
+                                                    *ngIf="item.groupItems == undefined || item.groupItems == null || item.groupItems.length == 0">
+                                                    <h3 *ngIf="item.Type==1" fxFlex="20%" class="sub-title">
+                                                        {{item.Label}}
+                                                    </h3>
+                                                    <label fxFlex="100%" *ngIf="item.Type==2"><span
+                                                            style="font-weight: bold;">{{item.Label}} :</span>
+                                                        {{item.Value}}</label>
+                                                    <label fxFlex="100%" *ngIf="item.Type==3"><span
+                                                            style="font-weight: bold;">{{item.Label}} :</span>
+                                                        {{item.Value}}</label>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                                    </div>
+
+                                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                        fxLayoutGap.lt-sm="0">
+                                        <h3 fxFlex="50%" class="sub-title mr-4"> Khám khác</h3>
+                                        <app-grid [gridColumns]="gridKhamKhacColumns" [documentType]="documentType"
+                                            [useAddDeault]="false"
+                                            urlGetData="PhauThuatThuThuat/GetDataForGridAsyncLichSuKhamCacCoQuan"
+                                            urlGetTotalPage="PhauThuatThuThuat/GetTotalPageForGridAsyncLichSuKhamCacCoQuan"
+                                            [additionalSearchString]="item.Id" class="k-grid-border"
+                                            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                                            [maxHeight]="200" [lazyLoadPage]="true" [pageable]="false">
+                                        </app-grid>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+            </ng-container>
+        </kendo-tabstrip>
+    </div>
+</div>

@@ -1,0 +1,537 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" id="bodyContent"
+    style="position: relative;">
+    <button *ngIf="!isCreate" (click)="InTheBenhNhanBenhNhan()" class="btn-in-the-bn" type="button" color="primary"
+        mat-raised-button>
+        In Thẻ Người Bệnh</button>
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin hành chính
+    </h3>
+    <app-textbox id="HoTen" fxFlex="20%" fxFlex.sm="40%" maxlength="100" [required]="true" [(model)]="benhNhan.HoTen"
+        label="Họ tên" [validationerror]="'HoTen' | validationerror:validationErrors"></app-textbox>
+
+
+    <app-datepicker id="NgayThangNamSinh" fxFlex="14%" fxFlex.sm="40%" [(model)]="benhNhan.NgayThangNamSinh"
+        (modelChange)="ThongTinBenhNhanNgaySinhChange($event)" [required]="true" label="Ngày sinh"
+        [validationerror]="'NgayThangNamSinh' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-textboxnumeric [(model)]="benhNhan.NamSinh" id="Numerictextbox" fxFlex="6%" fxFlex.sm="6%" label="Năm sinh"
+        format="0" min="1" max="9999" (modelChange)="NamSinhChange($event)"
+        [disabled]="benhNhan.NgayThangNamSinh!=null">
+    </app-textboxnumeric>
+
+    <app-textbox *ngIf="under6yearsold" id="SoTuoi" fxFlex="20%" fxFlex.sm="20%" label="Số tuổi" [disabled]="true"
+        [(model)]="soTuoiDisplay">
+    </app-textbox>
+
+    <app-textboxmask id="SoDienThoai" fxFlex="20%" fxFlex.sm="20%" [(model)]="benhNhan.SoDienThoai"
+        label="Số điện thoại" mask="000 000 0000" maxlength="12">
+    </app-textboxmask>
+
+    <app-dropdownlist id="GioiTinh" fxFlex="20%" fxFlex.sm="20%" label="Giới tính" url="TiepNhanBenhNhan/GetGioiTinh"
+        [modelText]="benhNhan.GioiTinhDisplay" [(model)]="benhNhan.GioiTinh"
+        [validationerror]="'GioiTinh' | validationerror:validationErrors">
+    </app-dropdownlist>
+
+    <app-dropdownlist id="NhomMau" fxFlex="20%" fxFlex.sm="40%" [(model)]="benhNhan.NhomMau"
+        [modelText]="benhNhan.NhomMauText" label="Nhóm máu" url="KhamBenh/GetListNhomMau"
+        [validationerror]="'NhomMau' | validationerror:validationErrors"></app-dropdownlist>
+
+    <app-combobox id="NgheNghiep" fxFlex="20%" fxFlex.sm="40%" [(model)]="benhNhan.NgheNghiepId"
+        [modelText]="benhNhan.NgheNghiepText" label="Nghề nghiệp" url="TiepNhanBenhNhan/GetNgheNghiep"
+        [validationerror]="'NgheNghiepId' | validationerror:validationErrors"></app-combobox>
+
+
+    <app-combobox id="GetQuocTich" fxFlex="20%" fxFlex.sm="20%" label="Quốc tịch" url="TiepNhanBenhNhan/GetQuocTich"
+        [(model)]="benhNhan.QuocTichId" [modelText]="benhNhan.QuocTichText">
+    </app-combobox>
+
+    <app-combobox id="TinhThanhPho" fxFlex="20%" fxFlex.sm="20%" bind="true" (modelChange)="TinhThanhPhoChange($event)"
+        label="Tỉnh/Thành Phố" url="TiepNhanBenhNhan/GetTinhThanh/?quanHuyenId={{benhNhan.QuanHuyenId}}"
+        hierarchyKeyToSend="tinhThanh" [(model)]="benhNhan.TinhThanhId" class="item-no-padding"
+        [template]="tinhThanhTemplate" [templateHeader]="tinhThanhTemplateHeader">
+        <ng-template #tinhThanhTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #tinhThanhTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox id="QuanHuyen" fxFlex="20%" fxFlex.sm="20%" label="Quận/Huyện"
+        (modelChange)="QuanHuyenChange($event)" url="TiepNhanBenhNhan/GetQuanHuyen/?phuongXaId={{benhNhan.PhuongXaId}}"
+        hierarchyKeyToListen="tinhThanh" hierarchyKeyToSend="quanHuyen" bind="true" [(model)]="benhNhan.QuanHuyenId"
+        class="item-no-padding" [template]="quanHuyenTemplate" [templateHeader]="quanHuyenTemplateHeader">
+        <ng-template #quanHuyenTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #quanHuyenTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox id="PhuongXa" fxFlex="20%" fxFlex.sm="20%" label="Phường/Xã" url="TiepNhanBenhNhan/GetPhuongXa"
+        hierarchyKeyToListen="quanHuyen" (modelChange)="PhuongXaChange($event)" [(model)]="benhNhan.PhuongXaId"
+        class="item-no-padding" [template]="phuongXaTemplate" [templateHeader]="phuongXaTemplateHeader">
+        <ng-template #phuongXaTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #phuongXaTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textbox id="DiaChi" fxFlex="20%" fxFlex.sm="20%" maxlength="200" label="Số nhà/Đường phố"
+        [(model)]="benhNhan.DiaChi">
+    </app-textbox>
+
+    <app-textbox id="SoChungMinhThu" fxFlex="20%" fxFlex.sm="40%" [(model)]="benhNhan.SoChungMinhThu"
+        [validationerror]="'GioiTinh' | validationerror:validationErrors" onlynumber="true" label="Số CMND"
+        maxlength="12">
+    </app-textbox>
+    <app-textbox id="Email" fxFlex="20%" fxFlex.sm="20%" label="Email" maxlength="200"
+        [validationerror]="'Email' | validationerror:validationErrors" [(model)]="benhNhan.Email">
+    </app-textbox>
+
+    <app-textbox id="NoiLamViec" fxFlex="20%" fxFlex.sm="40%" [(model)]="benhNhan.NoiLamViec" label="Nơi làm việc"
+        maxlength="300" [validationerror]="'NoiLamViec' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-combobox bind="true" id="DanToc" fxFlex="20%" fxFlex.sm="20%" label="Dân tộc" url="TiepNhanBenhNhan/GetDanToc"
+        [reloadForGrid]="true"
+        [(model)]="benhNhan.DanTocId">
+    </app-combobox>
+
+</div>
+<div style="height: 30px;">
+
+</div>
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin người liên hệ
+
+    </h3>
+
+    <app-textbox id="NguoiLienHeHoTen" fxFlex="20%" fxFlex.sm="40%" [(model)]="benhNhan.NguoiLienHeHoTen" label="Họ tên"
+        maxlength="100" [validationerror]="'NguoiLienHeHoTen' | validationerror:validationErrors"></app-textbox>
+
+    <app-combobox id="NguoiLienHeQuanHeNhanThanId" fxFlex="20%" fxFlex.sm="20%" label="Quan hệ"
+        [modelText]="benhNhan.NguoiLienHeQuanHeNhanThanText" url="TiepNhanBenhNhan/GetQuanHe"
+        [(model)]="benhNhan.NguoiLienHeQuanHeNhanThanId">
+    </app-combobox>
+
+
+
+    <!-- <app-textbox id="NguoiLienHeSoDienThoai" fxFlex="20%" fxFlex.sm="20%" label="Số điện thoại" maxlength="12"
+        onlynumber="true" [(model)]="benhNhan.NguoiLienHeSoDienThoai">
+    </app-textbox> -->
+
+    <app-textboxmask id="NguoiLienHeSoDienThoai" fxFlex="20%" fxFlex.sm="20%" label="Số điện thoại"
+        [(model)]="benhNhan.NguoiLienHeSoDienThoai" mask="000 000 0000" maxlength="12">
+    </app-textboxmask>
+
+
+    <app-textbox id="NguoiLienHeEmail" fxFlex="20%" fxFlex.sm="20%" label="Email" maxlength="200"
+        [(model)]="benhNhan.NguoiLienHeEmail" [validationerror]="'NguoiLienHeEmail' | validationerror:validationErrors">
+    </app-textbox>
+
+    <!-- clone code -->
+
+    <app-combobox id="NguoiLienHeTinhThanhId" fxFlex="20%" fxFlex.sm="20%" bind="true"
+        (modelChange)="TinhThanhPhoNguoiLienHeChange($event)" label="Tỉnh/Thành Phố"
+        url="TiepNhanBenhNhan/GetTinhThanh/?quanHuyenId={{benhNhan.QuanHuyenId}}" hierarchyKeyToSend="tinhThanhLienHe"
+        [(model)]="benhNhan.NguoiLienHeTinhThanhId" bind="true" class="item-no-padding" [template]="tinhThanhTemplate"
+        [templateHeader]="tinhThanhTemplateHeader">
+        <ng-template #tinhThanhTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #tinhThanhTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox id="NguoiLienHeQuanHuyenId" fxFlex="20%" fxFlex.sm="20%" label="Quận/Huyện"
+        (modelChange)="QuanHuyenNguoiLienHeChange($event)"
+        url="TiepNhanBenhNhan/GetQuanHuyen/?phuongXaId={{benhNhan.PhuongXaId}}" hierarchyKeyToListen="tinhThanhLienHe"
+        hierarchyKeyToSend="quanHuyenLienHe" bind="true" [(model)]="benhNhan.NguoiLienHeQuanHuyenId"
+        class="item-no-padding" [template]="quanHuyenTemplate" [templateHeader]="quanHuyenTemplateHeader">
+        <ng-template #quanHuyenTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #quanHuyenTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox id="NguoiLienHePhuongXaId" fxFlex="20%" fxFlex.sm="20%" label="Phường/Xã"
+        url="TiepNhanBenhNhan/GetPhuongXa" hierarchyKeyToListen="quanHuyenLienHe"
+        (modelChange)="PhuongXaNguoiLienHeChange($event)" [(model)]="benhNhan.NguoiLienHePhuongXaId"
+        class="item-no-padding" [template]="phuongXaTemplate" [templateHeader]="phuongXaTemplateHeader">
+        <ng-template #phuongXaTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #phuongXaTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <!-- clone code -->
+
+
+
+
+
+    <app-textbox id="NguoiLienHeDiaChi" fxFlex="20%" fxFlex.sm="20%" maxlength="200" label="Địa chỉ"
+        [(model)]="benhNhan.NguoiLienHeDiaChi">
+    </app-textbox>
+</div>
+<div style="height: 30px;">
+
+</div>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin bảo hiểm y tế
+        <app-checkbox [(model)]="benhNhan.CoBHYT" id="CheckboxIsHaveBHYT" label="Có"></app-checkbox>
+    </h3>
+    <div fxFlex="20%" fxFlex.sm="20%" style="position: relative;" *ngIf="benhNhan.CoBHYT == true">
+        <app-textbox id="SoTheBHYT" fxFlex="100%" fxFlex.sm="100%" label="Số thẻ BHYT" [(model)]="benhNhan.BHYTMaSoThe"
+            [required]="true" (keyup)="getThongTinBHYTonKey(true)" (modelChange)="changeSoTheBHYT(benhNhan)"
+            (blurChange)="changeThongTinGetBHYT(benhNhan, isLoadingDataBHYT)"
+            (keyup)="onKeySoTheBHYT($event, benhNhan,isLoadingDataBHYT)"
+            [validationerror]="'BHYTMaSoThe' | validationerror:validationErrors">
+        </app-textbox>
+
+        <button (click)="QuetMaQRCodeClick()" color="primary" class="image-barcode" mat-mini-fab type="button"
+            kendoTooltip title="Lấy thông tin thẻ từ cổng BHYT">
+            <mat-icon [icIcon]="icCloudDownload"></mat-icon>
+            <app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none;"></app-barcode>
+        </button>
+    </div>
+
+    <app-textbox id="BHYTMaDKBD" fxFlex="20%" fxFlex.sm="20%" maxlength="200" label="Mã nơi ĐKBH"
+        [(model)]="benhNhan.BHYTMaDKBD" *ngIf="benhNhan.CoBHYT == true" [disabled]="true">
+    </app-textbox>
+    <app-textbox id="BHYTCoQuanBHXH" fxFlex="20%" fxFlex.sm="20%" maxlength="200" label="Nơi ĐKBH"
+        [(model)]="benhNhan.BHYTCoQuanBHXH" *ngIf="benhNhan.CoBHYT == true" [disabled]="true">
+    </app-textbox>
+
+
+    <app-datepicker id="BHYTNgayDu5Nam" fxFlex="20%" fxFlex.sm="20%" maxlength="200" label="Ngày đủ 5 năm"
+        [(model)]="benhNhan.BHYTNgayDu5Nam" *ngIf="benhNhan.CoBHYT == true" [disabled]="true">
+    </app-datepicker>
+
+    <app-datepicker id="BHYTNgayHieuLuc" fxFlex="20%" fxFlex.sm="20%" maxlength="200" label="Ngày có hiệu lực"
+        [(model)]="benhNhan.BHYTNgayHieuLuc" *ngIf="benhNhan.CoBHYT == true" [disabled]="true">
+    </app-datepicker>
+
+    <app-datepicker id="BHYTNgayHetHan" fxFlex="20%" fxFlex.sm="20%" maxlength="200" label="Ngày hết hiệu lực"
+        [(model)]="benhNhan.BHYTNgayHetHan" *ngIf="benhNhan.CoBHYT == true" [disabled]="true">
+    </app-datepicker>
+    <app-textbox id="BHYTDiaChi" fxFlex="40%" fxFlex.sm="40%" maxlength="200" label="Địa chỉ"
+        [(model)]="benhNhan.BHYTDiaChi" *ngIf="benhNhan.CoBHYT == true" [disabled]="true">
+    </app-textbox>
+</div>
+
+
+<!------------------------------------ THÔNG TIN BẢO HIỂM TƯ NHÂN -->
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 style="margin-top:10px !important" fxFlex="100%" class="sub-title mt-0">Thông Tin Bảo
+        Hiểm Tư Nhân &nbsp;
+        <!-- <app-checkbox id="CheckboxIsHaveBHTN" [(model)]="benhNhan.CoBHTN" label="Có"></app-checkbox> -->
+    </h3>
+    <div fxFlex="100%" fxFlex.sm="100%" [hidden]="showFormDetailBaoHiemTuNhan">
+        <button (click)="ThemTTBHNDetail()" type="button" color="primary" mat-raised-button> Thêm Bảo Hiểm Tư
+            Nhân</button>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%" [hidden]="!showFormDetailBaoHiemTuNhan">
+        <div fxLayout="row wrap" fxLayoutGap="16px grid" fxLayout.lt-sm="column" style="width: 100%;">
+            <app-combobox id="CongTyBaoHiemTuNhanId" fxFlex="20%" fxFlex.sm="20%"
+                [(model)]="baoHiemTuNhan.CongTyBaoHiemTuNhanId" label="Công ty"
+                (openCombobox)="openComboboxBHTN($event)" url="TiepNhanBenhNhan/GetCongTyBaoHiemTuNhan" bind="true"
+                (modelChange)="congTyBaoHiemChange($event)" [required]="true" (keyup)="onKey($event)"
+                [validationerror]="'CongTyBaoHiemTuNhanId' | validationerror:validationErrorsBHTN">
+            </app-combobox>
+
+            <app-textbox id="MaSoThe" fxFlex="20%" fxFlex.sm="20%" label="Số thẻ" [(model)]="baoHiemTuNhan.MaSoThe"
+                (keyup)="onKey($event)" maxlength="20">
+            </app-textbox>
+
+            <app-datepicker id="NgayHieuLuc" fxFlex="10%" fxFlex.sm="10%" label="Từ ngày" (keyup)="onKey($event)"
+                [(model)]="baoHiemTuNhan.NgayHieuLuc">
+            </app-datepicker>
+
+            <app-datepicker id="NgayHetHan" fxFlex="10%" fxFlex.sm="10%" label="Đến ngày" (keyup)="onKey($event)"
+                [validationerror]="'NgayHetHan' | validationerror:validationErrorsBHTN"
+                [(model)]="baoHiemTuNhan.NgayHetHan">
+            </app-datepicker>
+
+            <!-- <app-textbox id="SoDienThoai" fxFlex="20%" fxFlex.sm="20%" label="Điện thoại" readonly="true" maxlength="20"
+                [(model)]="baoHiemTuNhan.SoDienThoai">
+            </app-textbox> -->
+
+            <app-textboxmask id="SoDienThoai" fxFlex="20%" fxFlex.sm="20%" label="Số điện thoại" readonly="true"
+                [(model)]="baoHiemTuNhan.SoDienThoai" maxlength="100">
+            </app-textboxmask>
+
+            <app-textbox id="DiaChiTN" fxFlex="20%" fxFlex.sm="20%" label="Địa chỉ" readonly="true" maxlength="200"
+                [(model)]="baoHiemTuNhan.DiaChi">
+            </app-textbox>
+
+            <div style="margin-bottom: 20px;" fxLayoutAlign="end right" fxFlex="100%" fxFlex.sm="100%" class="mr-4">
+                <button (click)="huyBHTN()" mat-button class="mr-1 px-6 py-0"><i class="ft-arrow-left "></i>Hủy</button>
+                <button *ngIf="isUpdateGrid == false" (click)="themCongTyBHTN()" color="primary" mat-raised-button
+                    class="mr-1 px-6 py-o"><i class="ft-save"></i>Thêm</button>
+                <!-- <button *ngIf="isUpdateGrid == true" (click)="SuaBHTN()" color="primary" mat-raised-button
+                    class="mr-1 px-6 py-o"><i class="ft-save"></i>Cập
+                    nhật</button> -->
+            </div>
+        </div>
+    </div>
+
+    <app-grid [gridDataSource]="gridDataSourceBHTN" [gridColumns]="gridColumns" #gridBHTNBenhNhan
+        [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false" pageSize="5"
+        [autoHeight]="true" [pageable]="false">
+    </app-grid>
+</div>
+
+<ng-template #actionTemplate let-dataItem let-index>
+    <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoaCongTyBHTN(dataItem)">
+        <mat-icon [icIcon]="icDelete"></mat-icon>
+    </button>
+    <!-- <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu"
+        mat-icon-button type="button">
+        <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+    </button>
+    <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+        <ng-template let-customer="customer" matMenuContent>
+            <button (click)="updateGridBHTN(dataItem)" mat-menu-item>
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+                <span>Sửa</span>
+            </button>
+            <button (click)="removeGridBHTN(dataItem.CongTyBaoHiemTuNhanId)" mat-menu-item>
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+                <span>Xóa</span>
+            </button>
+        </ng-template>
+    </mat-menu> -->
+</ng-template>
+
+<!------------------------------------ TIỀN SỬ BỆNH -->
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 style="margin-top:10px !important" fxFlex="100%" class="sub-title mt-0">Tiền Sử Bệnh &nbsp;
+        <!-- <app-checkbox id="CheckTienSuBenh" [(model)]="benhNhan.CoTienSuBenh" label="Có"></app-checkbox> -->
+    </h3>
+    <div fxFlex="100%" fxFlex.sm="100%" [hidden]="showFormDetailTienSuBenh">
+        <button (click)="ThemTienSuBenhDetail()" type="button" color="primary" mat-raised-button> Thêm Tiền Sử
+            Bệnh</button>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%" [hidden]="!showFormDetailTienSuBenh">
+        <div fxLayout="row wrap" fxLayoutGap="16px grid" fxLayout.lt-sm="column" style="width: 100%;">
+            <app-dropdownlist id="LoaiTienSuBenh" fxFlex="20%" fxFlex.sm="20%" label="Loại Tiền Sử Bệnh"
+                [required]="true" url="BenhNhan/GetLoaiTienSuBenh" [modelText]="tienSuBenh.TenLoaiTienSuBenh"
+                [(model)]="tienSuBenh.LoaiTienSuBenh" (openDropDownList)="openDropDownListTSB($event)"
+                (keyup)="onKey($event)" [validationerror]="'LoaiTienSuBenh' | validationerror:validationErrorsTSB">
+            </app-dropdownlist>
+
+            <app-textbox id="TenBenh" fxFlex="40%" fxFlex.sm="20%" label="Tên Bệnh" maxlength="200" [required]="true"
+                (keyup)="onKey($event)" [validationerror]="'TenBenh' | validationerror:validationErrorsTSB"
+                [(model)]="tienSuBenh.TenBenh">
+            </app-textbox>
+            <div style="margin-bottom: 20px;" fxLayoutAlign="end right" fxFlex="100%" fxFlex.sm="100%" class="mr-4">
+                <button (click)="huyTienSuBenh()" mat-button class="mr-1 px-6 py-0"><i
+                        class="ft-arrow-left "></i>Hủy</button>
+                <button *ngIf="isUpdateGridTienSuBenh == false" (click)="themTienSuBenh()" color="primary"
+                    mat-raised-button class="mr-1 px-6 py-o"><i class="ft-save"></i>Thêm</button>
+                <!-- <button *ngIf="isUpdateGridTienSuBenh == true" (click)="suaTienSuBenh()" color="primary"
+                    mat-raised-button class="mr-1 px-6 py-o"><i class="ft-save"></i>Cập nhật</button> -->
+            </div>
+        </div>
+    </div>
+    <app-grid [gridDataSource]="gridDataSourceTienSuBenh" [gridColumns]="gridColumnsTienSuBenh" #gridTienSuBenh
+        [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false" pageSize="5"
+        [autoHeight]="true" [pageable]="false">
+    </app-grid>
+</div>
+
+<ng-template #actionTemplateTienSuBenh let-dataItem let-index>
+    <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoaTienSuBenh(dataItem)">
+        <mat-icon [icIcon]="icDelete"></mat-icon>
+    </button>
+    <!-- <button (click)="removeGridTienSuBenh(dataItem)" mat-menu-item>
+        <mat-icon [icIcon]="icDelete"></mat-icon>
+        <span>Xóa</span>
+    </button>
+    <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button
+        type="button">
+        <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+    </button>
+    <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+        <ng-template let-customer="customer" matMenuContent>
+            <button (click)="updateTienSuBenh(dataItem)" mat-menu-item>
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+                <span>Sửa</span>
+            </button>
+            <button (click)="removeGridTienSuBenh(dataItem)" mat-menu-item>
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+                <span>Xóa</span>
+            </button>
+        </ng-template>
+    </mat-menu> -->
+</ng-template>
+
+<!------------------------------------ DỊ ỨNG THUỐC -->
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 style="margin-top:10px !important" fxFlex="100%" class="sub-title mt-0">Dị Ứng&nbsp;
+        <!-- <app-checkbox id="CheckDiUngThuoc" [(model)]="benhNhan.CoDiUngThuoc" label="Có"></app-checkbox> -->
+    </h3>
+    <div fxFlex="100%" fxFlex.sm="100%" [hidden]="showFormDetailDiUngThuoc">
+        <button (click)="ThemDiUngThuocDetail()" type="button" color="primary" mat-raised-button> Thêm Dị Ứng</button>
+    </div>
+
+    <div fxFlex="100%" fxFlex.sm="100%" [hidden]="!showFormDetailDiUngThuoc">
+        <div fxLayout="row wrap" fxLayoutGap="16px grid" fxLayout.lt-sm="column" style="width: 100%;">
+            <app-dropdownlist [(model)]="diUngThuoc.LoaiDiUng" label="Loại Dị Ứng" [modelText]="diUngThuoc.TenDiUng"
+                [template]="DiUngTemplate" [templateHeader]="DiUngTemplateHeader"
+                (openDropDownList)="openDropDownListDUT($event)" (selectionChange)="onSelectLoaiDiUng()"
+                (keyup)="onKey($event)" url="KhamBenh/getListLoaiDiUng" [required]="true" fxFlex="20%"
+                [validationerror]="'LoaiDiUng' | validationerror:validationErrorsDUT" class="item-no-padding">
+                <ng-template #DiUngTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="40%">Loai Dị Ứng</th>
+                            <th>Tên Dị Ứng</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #DiUngTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="40%">{{dataItem.KeyId}}</td>
+                            <td>{{dataItem.DisplayName}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-dropdownlist>
+
+            <app-combobox
+                *ngIf="diUngThuoc.LoaiDiUng != undefined && diUngThuoc.LoaiDiUng != null && diUngThuoc.LoaiDiUng == 1"
+                [(model)]="diUngThuoc.ThuocId" fxFlex="20%" fxFlex.sm="20%" [modelText]="diUngThuoc.TenThuoc"
+                label="Tên Dị Ứng" [popupSettings]="null" (selectionChange)="onSelectThuoc($event)"
+                [template]="DuocPhamTemplate" [templateHeader]="DuocPhamTemplateHeader" url="KhamBenh/GetListThuoc"
+                [validationerror]="'ThuocId' | validationerror:validationErrorsDUT" [required]="true"
+                class="item-no-padding">
+                <ng-template #DuocPhamTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="40%">Mã </th>
+                            <th>Hoạt Chất</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #DuocPhamTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="40%">{{dataItem.HoatChat}}</td>
+                            <td>{{dataItem.TenThuoc}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+            <app-textbox *ngIf="diUngThuoc.LoaiDiUng !=1" id="TenDiUng" fxFlex="20%" fxFlex.sm="20%" label="Tên Dị Ứng"
+                (keyup)="onKey($event)" maxlength="200" [required]="true"
+                [validationerror]="'TenDiUng' | validationerror:validationErrorsDUT" [(model)]="diUngThuoc.TenDiUng">
+            </app-textbox>
+
+            <app-textbox id="BieuHienDiUng" fxFlex="40%" fxFlex.sm="40%" label="Biểu Hiện Dị Ứng" maxlength="200"
+                [(model)]="diUngThuoc.BieuHienDiUng" (keyup)="onKey($event)" [required]="true"
+                [validationerror]="'BieuHienDiUng' | validationerror:validationErrorsDUT">
+            </app-textbox>
+
+            <app-dropdownlist fxFlex="20%" [(model)]="diUngThuoc.MucDo" [modelText]="diUngThuoc.MucDoDisplay"
+                class="item-no-padding" [popupSettings]="null" url="KhamBenh/GetListMucDoDiUng" [required]="true"
+                [validationerror]="'MucDo' | validationerror:validationErrorsDUT" label="Mức độ">
+            </app-dropdownlist>
+
+            <div style="margin-bottom: 20px;" fxLayoutAlign="end right" fxFlex="100%" fxFlex.sm="100%" class="mr-4">
+                <button (click)="huyDiUngThuoc()" mat-button class="mr-1 px-6 py-0"><i
+                        class="ft-arrow-left "></i>Hủy</button>
+                <button *ngIf="isUpdateGridDiUngThuoc == false" (click)="ThemDiUngThuoc()" color="primary"
+                    mat-raised-button class="mr-1 px-6 py-o"><i class="ft-save"></i>Thêm</button>
+                <!-- <button *ngIf="isUpdateGridDiUngThuoc == true" (click)="suaDiUngThuoc()" color="primary"
+                    mat-raised-button class="mr-1 px-6 py-o"><i class="ft-save"></i>Cập nhật</button> -->
+            </div>
+        </div>
+    </div>
+
+    <app-grid [gridDataSource]="gridDataSourceDiUngThuoc" [gridColumns]="gridColumnsDiUngThuoc" #gridDiUngThuoc
+        [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false" pageSize="5"
+        [autoHeight]="true" [pageable]="false">
+    </app-grid>
+</div>
+
+<ng-template #actionTemplateDiUngThuoc let-dataItem let-index>
+    <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoaDiUngThuoc(dataItem)">
+        <mat-icon [icIcon]="icDelete"></mat-icon>
+    </button>
+</ng-template>

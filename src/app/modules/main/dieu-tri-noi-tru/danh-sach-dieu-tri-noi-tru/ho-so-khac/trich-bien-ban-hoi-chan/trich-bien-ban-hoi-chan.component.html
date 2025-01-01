@@ -1,0 +1,103 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    style="padding-top: 13px;" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <app-datetimepicker fxFlex="20%" [(model)]="trichBienBanHoiChan.HoiChanLuc" #hoiChanLuc id="HoiChanLucTuFormat" (modelChange)="change($event)"
+        (modelChange)="hoiChanLucChange()" label="Hội chẩn lúc" required="true" [validationerror]="'ThoiGianHoiChan' | validationerror:validationErrors">
+    </app-datetimepicker>
+    <app-autocomplete id="ChuToa" popupSettings="null" fxFlex="20%" fxFlex.sm="20%" [(model)]="trichBienBanHoiChan.ChuToa" [dataList]="data" label="Chủ tọa">
+    </app-autocomplete>
+    <app-autocomplete id="ThuKy" popupSettings="null" fxFlex="20%" fxFlex.sm="20%" label="Thư ký" [(model)]="trichBienBanHoiChan.ThuKy" [dataList]="data">
+    </app-autocomplete>
+    <kendo-textbox-container floatingLabel="{{label}}" fxFlex="40%" fxFlex.sm="40%" >
+        <kendo-multiselect  class="form-control" 
+        #multiselect 
+        [data]="dataSourceFilter"
+        [(ngModel)]="trichBienBanHoiChan.NguoiThamGia"
+        (open)="open()"
+        (blur)="blur()"
+        (filterChange)="filterChange($event)"
+        [filterable]="true"
+        (keyup)="onKey($event)"
+      >
+    <kendo-combobox-messages clearTitle="Xóa" noDataText="Không có dữ liệu">
+    </kendo-combobox-messages>
+    </kendo-multiselect>
+    </kendo-textbox-container>
+    <label>Chẩn đoán</label>
+    <app-textarea id="ChanDoan" fxFlex="100%" fxFlex.sm="100px" maxlength="1000" [(model)]="trichBienBanHoiChan.ChanDoan"
+        minHeight="20">
+    </app-textarea>
+    <label>Tóm tắt quá trình diễn biến bệnh, quá trình điều trị và chăm sóc người bệnh</label>
+    <app-textarea id="TomTat" fxFlex="100%" fxFlex.sm="100px" maxlength="1000" [(model)]="trichBienBanHoiChan.TomTat"
+        minHeight="20">
+    </app-textarea>
+    <label>Kết luận: (Sau khi đã khám lại và thảo luận)</label>
+    <app-textarea id="KetLuan" fxFlex="100%" fxFlex.sm="100px" maxlength="1000" [(model)]="trichBienBanHoiChan.KetLuan"
+        minHeight="20">
+    </app-textarea>
+    <label>Hướng điều trị tiếp</label>
+    <app-textarea id="HuongDieuTriTiep" fxFlex="100%" fxFlex.sm="100px" maxlength="1000"
+        [(model)]="trichBienBanHoiChan.HuongDieuTriTiep" minHeight="20">
+    </app-textarea>
+    <app-upload id="Upload" #upload15NgayDieuTri [allowedExtensions]="allowedExtensions" fxFlex="50%"
+        [(model)]="trichBienBanHoiChan.FileChuKy" [multiple]="true" label="File chữ ký"
+        [template]="templateFileChuanDoanHAInfo">
+    </app-upload>
+    <ng-template #templateFileChuanDoanHAInfo let-files>
+        <table width="100%" >
+            <tr>
+                <td>
+                    <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                        (click)="upload15NgayDieuTri.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                    <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="upload15NgayDieuTri.viewFile(files[0])"
+                        class="green" class="custom-name green">{{files[0].name}}</a>
+                </td>
+                <td style="width:25px">
+                    <a type="button" (click)="upload15NgayDieuTri.remove(files[0].uid)" mat-icon-button>
+                        <mat-icon [icIcon]="icClear"></mat-icon>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </ng-template>
+    <div fxFlex="100%" style="padding-bottom: 50px;">
+        <label fxFlex="25%" style="padding-top: 30px;">Người thực hiện :
+            <b>{{trichBienBanHoiChan.TaiKhoanDangNhap}}</b></label>
+        <label fxFlex="25%" style="padding-top: 30px;">Ngày thực hiện : <b>{{trichBienBanHoiChan.NgayThucHien}}</b></label>
+        <span fxFlex="50%" style="text-align: right;">
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="ThemPhieu()" *ngIf="checkDieuKienThemPhieuSoKet == true">Thêm BBHC mới</button>
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="In()" style="pointer-events: all;">In</button>
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="Huy()">Hủy</button>
+            <button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+                Lưu
+            </button>
+        </span>
+    </div>
+    <fieldset fxFlex="100%" [style.display]="gridDataSource.total > 0 ? 'block':'none'">
+        <legend>Danh sách trích biên bản hội chẩn</legend>
+        <div fxFlex="100%" style="padding: 15px;">
+            <app-grid #GridSoKet fxFlex="100%" fxFlex.sm="100%"  [gridColumns]="gridColumns" 
+            [allowSortDefault]="true" [gridDataSource]="gridDataSource" [documentType]="documentType" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            maxHeight="500" [pageable]="false"  masterName="GridSoKet"
+            >
+        </app-grid>
+        </div>
+    </fieldset>
+    <ng-template #actionTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoaTrichBienBan(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+    <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+    <ng-template #tuNgayTemplate let-dataItem>
+        <div kendoTooltip>
+            <a (click)="viewDataSoKet(dataItem.Id)">
+                {{dataItem.NgayHoiChanString}}
+            </a>
+        </div>
+    </ng-template>
+</div>

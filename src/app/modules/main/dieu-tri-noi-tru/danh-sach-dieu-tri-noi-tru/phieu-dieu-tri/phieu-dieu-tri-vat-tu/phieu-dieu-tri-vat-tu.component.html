@@ -1,0 +1,351 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0"
+    class="div-parent-contentThuoc">
+
+    <ng-container *ngIf="(this.dataBenhNhan.KetThucBenhAn || !laKhoaKhamBenhChiDinh)&& !isShowKhoLe && !isShowKhoTong">
+        <label>Người bệnh không có vật tư được chỉ định.</label>
+    </ng-container>
+    <ng-container *ngIf="!this.dataBenhNhan.KetThucBenhAn && laKhoaKhamBenhChiDinh">
+        <app-combobox id="dichVuKyThuat" fxFlex="80%" fxFlex.sm="80%" label="Dịch Vụ Kỹ Thuật"
+            [(model)]="keVatTuNew.YeuCauDichVuKyThuatId" url="DieuTriNoiTru/GetDichVuKyThuatDaThem"
+            (keyup)="onKey($event)" (openCombobox)="openCombobox($event)"
+            [queryInfo]="{ParameterDependencies:'{NoiTruPhieuDieuTriId:' + phieuDieuTriHienTaiId +'}', Take: 50}"
+            [template]="dvktTemplate" [templateHeader]="dvktTemplateHeader" popupSettings="null">
+            <ng-template #dvktTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="10%">Mã</th>
+                        <th>Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #dvktTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="10%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        <div fxFlex="20%" fxHide.sm></div>
+
+        <app-combobox id="TenKho" fxFlex="20%" fxFlex.sm="20%" label="Tên Kho" url="DieuTriNoiTru/GetKhoVatTu"
+            popupSettings="null" (selectionChange)="chonKho($event)" [(model)]="keVatTuNew.KhoId" [required]="true"
+            (openCombobox)="openCombobox($event)" [validationerror]="'KhoId' | validationerror:validationErrors">
+        </app-combobox>
+
+        <app-radio *ngIf="dataBenhNhan.CoBHYT == true" id="BHYT" label="BHYT" fxFlex="15%" fxFlex.sm="15%"
+            [(model)]="keVatTuNew.LaVatTuBHYT" (modelChange)="clearVatTu()"
+            [items]="[{Value:2,Text:'Có'},{Value:1,Text:'Không'}]">
+        </app-radio>
+
+        <app-combobox *ngIf="dataBenhNhan.CoBHYT == true" id="VatTuId" fxFlex="auto" fxFlex.sm="auto" #isFocus
+            label="Vật Tư" [required]="true" [(model)]="keVatTuNew.VatTuBenhVienId" [isAutoFocus]="true"
+            url="YeuCauLinhVatTu/GetVatTuTheoKho" class="item-no-padding" (modelChange)="chonVatTu($event)"
+            (keyup)="onKey($event)" (openCombobox)="openCombobox($event)"
+            [queryInfo]="{ParameterDependencies:'{KhoId:' + keVatTuNew.KhoId +', LaVatTuBHYT: ' + keVatTuNew.LaVatTuBHYT +'}', Take: 50}"
+            [template]="VatTuTemplate" [templateHeader]="VatTuTemplateHeader" popupSettings="null"
+            [validationerror]="'VatTuBenhVienId' | validationerror:validationErrors">
+            <ng-template #VatTuTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th width="40%">Tên</th>
+                        <th width="10%">ĐVT</th>
+                        <th width="15%">SL Tồn</th>
+                        <th width="15%">HSD</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #VatTuTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td width="40%">{{dataItem.Ten}}</td>
+                        <td width="10%">{{dataItem.DVT}}</td>
+                        <td width="15%">{{dataItem.SLTonFormat}}</td>
+                        <td width="15%">{{dataItem.HanSuDung}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <app-combobox *ngIf="dataBenhNhan.CoBHYT != true" id="VatTuId" fxFlex="auto" fxFlex.sm="auto" #isFocus
+            label="Vật Tư" [required]="true" [(model)]="keVatTuNew.VatTuBenhVienId" [isAutoFocus]="true"
+            url="YeuCauLinhVatTu/GetVatTuTheoKho" class="item-no-padding" (modelChange)="chonVatTu($event)"
+            (keyup)="onKey($event)" (openCombobox)="openCombobox($event)"
+            [queryInfo]="{ParameterDependencies:'{KhoId:' + keVatTuNew.KhoId +', LaVatTuBHYT: ' + 1 +'}', Take: 50}"
+            [template]="VatTuTemplate" [templateHeader]="VatTuTemplateHeader" popupSettings="null"
+            [validationerror]="'VatTuBenhVienId' | validationerror:validationErrors">
+            <ng-template #VatTuTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th width="40%">Tên</th>
+                        <th width="10%">ĐVT</th>
+                        <th width="15%">SL Tồn</th>
+                        <th width="15%">HSD</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #VatTuTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td width="40%">{{dataItem.Ten}}</td>
+                        <td width="10%">{{dataItem.DVT}}</td>
+                        <td width="15%">{{dataItem.SLTonFormat}}</td>
+                        <td width="15%">{{dataItem.HanSuDung}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        <app-textboxnumeric
+            *ngIf="keVatTuNew.LoaiKho != undefined && keVatTuNew.LoaiKho != null && keVatTuNew.LoaiKho == 5"
+            id="SoLuong" fxFlex="10%" [(model)]="keVatTuNew.SoLuong" [min]="0.01" max="999999999" label="SL"
+            (keyup)="onKey($event)" [format]="format" [decimals]="2"
+            [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+        </app-textboxnumeric>
+
+        <app-textboxnumeric
+            *ngIf="keVatTuNew.LoaiKho == undefined || keVatTuNew.LoaiKho == null || (keVatTuNew.LoaiKho != undefined && keVatTuNew.LoaiKho != null && keVatTuNew.LoaiKho != 5)"
+            id="SoLuong" fxFlex="10%" [(model)]="keVatTuNew.SoLuong" min="1" max="999999999" label="SL"
+            (keyup)="onKey($event)" [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+        </app-textboxnumeric>
+
+        <div fxFlex="10%" fxFlex.sm="10%">
+            <div class="container-custom no-label">
+                <label>&nbsp;</label>
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <app-checkbox fxFlex="100%" id="KhongTinhPhi" [(model)]="keVatTuNew.KhongTinhPhi" label="Tính phí"
+                        value="true"></app-checkbox>
+                </div>
+            </div>
+        </div>
+
+        <ng-container *ngIf="keVatTuNew.VatTuBenhVienId != undefined && keVatTuNew.VatTuBenhVienId != null">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0" fxFlex="100%"
+                style="padding-top: 10px;">
+                <div fxFlex="100%">
+                    <fieldset
+                        style="border:1px solid #ccc;border-radius: 5px;padding: 7px 15px 8px 15px;background: #e3f2fd;">
+                        <div fxFlex="100%">
+                            <ul class="inline">
+                                <li>Đơn vị tính: <strong>{{thongTinVatTu.DonViTinh}}</strong></li>
+                                <li>Vật tư đã kê:
+                                    <strong *ngIf="thongTinVatTu.FlagVatTuDaKe == true" class="red">
+                                        {{thongTinVatTu.VatTuDaKe}}
+                                    </strong>
+                                    <strong *ngIf="thongTinVatTu.FlagVatTuDaKe == false">
+                                        {{thongTinVatTu.VatTuDaKe}}
+                                    </strong>
+                                </li>
+                                <li>
+                                    Tồn kho:
+                                    <strong>
+                                        <span *ngIf="thongTinVatTu.TonKho <= 10" class="red">
+                                            {{thongTinVatTu.TonKhoFormat}}
+                                        </span>
+                                        <span *ngIf="thongTinVatTu.TonKho > 10" class="green">
+                                            {{thongTinVatTu.TonKhoFormat}}
+                                        </span>
+                                    </strong>
+                                </li>
+
+                                <li>
+                                    HSD:
+                                    <strong>
+                                        <strong>
+                                            {{thongTinVatTu.HSD}}
+                                        </strong>
+                                    </strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </ng-container>
+
+
+        <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+            <button type="button" mat-button class="mr-2" (click)="huy()">Hủy</button>
+            <button type="button" class="mr-2" color="primary" mat-raised-button (click)="themVatTu()">Thêm</button>
+        </div>
+    </ng-container>
+
+    <div [style.display]="isShowKhoLe ? 'block' : 'none'" fxFlex="100%">
+        <ng-container>
+            <h3 fxFlex="100%" class="sub-title  mr-4 mt-0">TỦ TRỰC</h3>
+            <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                fxLayout.lt-md="column">
+                <app-grid #gridVatTu masterName="gridVatTu" fxFlex="100%" style="width: 1px;"
+                    [gridColumns]="gridVatTuColumns" [documentType]="documentType" [groups]="groups"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="false"
+                    [removeGroupFooterIfIsOnlyOne]="true" [checkboxAble]="false" class="k-grid-border"
+                    [additionalSearchString]="additionString" urlGetData="DieuTriNoiTru/GetDataForGridDanhSachVatTu"
+                    urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachVatTu" [showStt]="true"
+                    (extOnDataBound)="onDataBoundChild($event)" [pageable]="false" [autoHeight]="true"
+                    [groups]="groups">
+
+                </app-grid>
+            </div>
+        </ng-container>
+    </div>
+
+    <div [style.display]="isShowKhoTong ? 'block' : 'none'" fxFlex="100%">
+        <ng-container>
+            <h3 fxFlex="100%" class="sub-title  mr-4 mt-0">KHO TỔNG</h3>
+            <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                fxLayout.lt-md="column">
+                <app-grid #gridVatTuKhoTong masterName="gridVatTuKhoTong" fxFlex="100%" style="width: 1px;"
+                    [gridColumns]="gridVatTuKhoTongColumns" [documentType]="documentType" [groups]="groups"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="false"
+                    [removeGroupFooterIfIsOnlyOne]="true" [checkboxAble]="false" class="k-grid-border"
+                    [additionalSearchString]="additionString" [showStt]="true"
+                    urlGetData="DieuTriNoiTru/GetDataForGridDanhSachVatTuKhoTong"
+                    urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachVatTuKhoTong"
+                    (extOnDataBound)="onDataBoundChildKhoTong($event)" [pageable]="false" [autoHeight]="true"
+                    [groups]="groups">
+
+                </app-grid>
+            </div>
+        </ng-container>
+    </div>
+
+    <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+        <!-- *ngIf="coThuocBHYT" -->
+        <button *ngIf="isShowKhoTong || isShowKhoLe" style="pointer-events: all;" type="button" class="mr-2"
+            color="primary" mat-raised-button (click)="inPhieuThucHienVatTu()">In phiếu thực hiện VTYT</button>
+        <button *ngIf="isShowKhoTong || isShowKhoLe" style="pointer-events: all;" type="button" class="mr-2"
+            color="primary" mat-raised-button (click)="inPhieuCongKhaiVatTu()">In phiếu công
+            khai vật tư</button>
+    </div>
+
+
+    <ng-template #donGiaTemplate let-dataItem>
+        <!-- {{dataItem.DonGia | number:'0.2-2':'vi-VN'}} -->
+        <p *ngFor="let item of dataItem.PhieuDieuTriVatTuGiaGroupGridVos" class="thanhTien">
+            {{item.DonGia | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+
+    <ng-template #slTemplate let-dataItem>
+        <!-- {{dataItem.SoLuong | number:'1.0-2':'vi-VN'}} -->
+
+        <p *ngFor="let item of dataItem.PhieuDieuTriVatTuGiaGroupGridVos">
+            {{item.SoLuong | number:'1.0-2':'vi-VN'}}
+        </p>
+    </ng-template>
+
+    <ng-template #thanhTienTemplate let-dataItem>
+        <!-- {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}} -->
+        <p *ngFor="let item of dataItem.PhieuDieuTriVatTuGiaGroupGridVos" class="thanhTien">
+            {{item.ThanhTien | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #thanhTienFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold; text-align: right;">
+            <span>{{totalThanhTienKhoLe('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+    <ng-template #donGiaFooterTemplate>
+        <span style="float:right">Tổng cộng:</span>
+    </ng-template>
+    <ng-template #thanhTienGroupFooterTemplate let-aggregates>
+        <p class="thanhTien">
+            {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #donGiaGroupFooterTemplate let-dataItem>
+        <span style="float:right">Cộng:</span>
+    </ng-template>
+
+
+    <ng-template #donGiaKhoTongTemplate let-dataItem>
+        <!-- {{dataItem.DonGia | number:'0.2-2':'vi-VN'}} -->
+        <p *ngFor="let item of dataItem.PhieuDieuTriVatTuGiaGroupGridVos" class="thanhTien">
+            {{item.DonGia | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #thanhTienKhoTongTemplate let-dataItem>
+        <!-- {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}} -->
+        <p *ngFor="let item of dataItem.PhieuDieuTriVatTuGiaGroupGridVos" class="thanhTien">
+            {{item.ThanhTien | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #thanhTienKhoTongFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold; text-align: right;">
+            <span>{{totalThanhTienKhoTong('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+    <ng-template #donGiaKhoTongFooterTemplate>
+        <span style="float:right">Tổng cộng:</span>
+    </ng-template>
+    <ng-template #thanhTienKhoTongGroupFooterTemplate let-aggregates>
+        <p class="thanhTien">
+            {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #donGiaKhoTongGroupFooterTemplate let-dataItem>
+        <span style="float:right">Cộng:</span>
+    </ng-template>
+
+
+
+    <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem>
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-template #actionVTTemplate let-dataItem let-rowIndex="rowIndex">
+        <div class="text-right" kendoTooltip
+            *ngIf="this.dataBenhNhan.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true">
+
+            <!-- <button *ngIf="dataItem.CoYeuCauTraVTTuBenhNhanChiTiet && dataItem.TinhTrang" style="color:red"
+                mat-icon-button kendoTooltip title="Hoàn trả" (click)="hoanTra(dataItem)" type="button">
+                <mat-icon [icIcon]="icReturn"></mat-icon>
+            </button>
+            <button *ngIf="!dataItem.CoYeuCauTraVTTuBenhNhanChiTiet && dataItem.TinhTrang" color="primary"
+                mat-icon-button kendoTooltip title="Hoàn trả" (click)="hoanTra(dataItem)" type="button">
+                <mat-icon [icIcon]="icReturn"></mat-icon>
+            </button> -->
+            <button *ngIf="dataItem.SoLuong != 0 && !dataItem.CoYeuCauTraVTTuBenhNhanChiTiet && dataItem.TinhTrang"
+                color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaVatTu(dataItem)" type="button">
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+            </button>
+            <button *ngIf="!dataItem.CoYeuCauTraVTTuBenhNhanChiTiet" color="primary" mat-icon-button kendoTooltip
+                title="Xóa" (click)="xoaVatTu(dataItem)" type="button">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #actionVTKhoTongTemplate let-dataItem let-rowIndex="rowIndex">
+        <div class="text-right" kendoTooltip
+            *ngIf="this.dataBenhNhan.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true">
+            <button *ngIf="dataItem.CoYeuCauTraVTTuBenhNhanChiTiet && dataItem.TinhTrang" style="color:red"
+                mat-icon-button kendoTooltip title="Hoàn trả" (click)="hoanTra(dataItem)" type="button">
+                <mat-icon [icIcon]="icReturn"></mat-icon>
+            </button>
+            <button *ngIf="!dataItem.CoYeuCauTraVTTuBenhNhanChiTiet && dataItem.TinhTrang" color="primary"
+                mat-icon-button kendoTooltip title="Hoàn trả" (click)="hoanTra(dataItem)" type="button">
+                <mat-icon [icIcon]="icReturn"></mat-icon>
+            </button>
+            <button *ngIf="dataItem.SoLuong !=0 && !dataItem.CoYeuCauTraVTTuBenhNhanChiTiet && !dataItem.TinhTrang"
+                color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaVatTu(dataItem)" type="button">
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+            </button>
+            <button *ngIf="!dataItem.TinhTrang && !dataItem.CoYeuCauTraVTTuBenhNhanChiTiet" color="primary"
+                mat-icon-button kendoTooltip title="Xóa" (click)="xoaVatTu(dataItem)" type="button">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #checkBoxTemplate let-dataItem>
+        <input *ngIf="this.dataBenhNhan.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true" type="checkbox"
+            id="vehicle1{{dataItem.Id}}" [(ngModel)]="dataItem.KhongTinhPhi" name="vehicle1"
+            (ngModelChange)="khongTinhPhiChange($event,dataItem)">
+
+        <input *ngIf="this.dataBenhNhan.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false" type="checkbox"
+            id="vehicle1{{dataItem.Id}}disabled" [disabled]="true" [(ngModel)]="dataItem.KhongTinhPhi" name="vehicle1">
+    </ng-template>
+</div>

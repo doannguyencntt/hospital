@@ -1,0 +1,37 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Khám Đoàn',Path:''}
+            ,{Title:'DS Kết Luận Khám Sức Khỏe Đoàn',Path:'',Active:true}
+            ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15" style="overflow: hidden; padding-top: 7px; padding-left: 7px;">
+            <kendo-tabstrip (tabSelect)="chuyenDen($event)">
+
+                <kendo-tabstrip-tab [title]="'HĐ CHƯA KẾT LUẬN XONG'"
+                    [selected]="listStatusSelectTabKhamDoanKetLuan.selectedTabChuaKetLuan">
+                    <ng-template kendoTabContent>
+                        <div class="content-tab-popup" style="margin-top: -13px;">
+                            <app-ket-luan-kham-suc-khoe-doan-chua-ket-luan-list>
+                            </app-ket-luan-kham-suc-khoe-doan-chua-ket-luan-list>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+
+                <kendo-tabstrip-tab [title]="'HĐ ĐÃ KẾT LUẬN XONG'"
+                    [selected]="listStatusSelectTabKhamDoanKetLuan.selectedTabDaKetLuan">
+                    <ng-template kendoTabContent>
+                        <div class="content-tab-popup" style="margin-top: -13px;">
+                            <app-ket-luan-kham-suc-khoe-doan-da-ket-luan-list>
+                            </app-ket-luan-kham-suc-khoe-doan-da-ket-luan-list>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+            </kendo-tabstrip>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

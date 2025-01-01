@@ -1,0 +1,45 @@
+<app-header-form [crumbs]="[ {Title:'Nhập Xuất',Path:''}
+        ,{Title:'Máu',Path:''}
+        ,{Title:'DS Nhập Kho Máu', Path: '/nhap-xuat/mau/nhap-kho', queryParams: {holdQuery : true}}
+        ,{Title:'Chi Tiết Phiếu Nhập Máu',Path:'',Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chi Tiết Phiếu Nhập Máu</h2>
+                <!-- <b *ngIf="trangThai != undefined" class="status-nhap-kho-mau {{trangThai.DuocDuyet == null ? 'nkm-cho-duyet': (trangThai.DuocDuyet == false ? 'nkm-tu-choi' : 'nkm-da-duyet')}}">{{trangThai.TenTrangThai}}</b> -->
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+            
+                <app-nhap-kho-mau-shared (trangThaiYeuCau)="getTrangThaiYeuCau($event)" [validationErrors]="validationErrors">
+                </app-nhap-kho-mau-shared>
+            
+                <div fxLayout="row" fxLayoutGap="8px" class="mt-6">
+                    <ng-container *ngIf="trangThai != undefined">
+                        <ng-container *ngIf="trangThai.DuocDuyet == null">
+                            <button type="button" mat-button class="mr-1" (click)="huy()"><i class="ft-arrow-left"></i>
+                                Hủy</button>
+                            <button type="button" class="ml-auto" *ngIf="!loading" color="primary" mat-raised-button (click)="xuLyLuu()">
+                                <i class="ft-save"></i>Lưu</button>
+                            <button type="button" *ngIf="!loading" color="primary" mat-raised-button (click)="xuLyLuu(true)">
+                                <i class="ft-save"></i>Lưu & In phiếu truyền máu</button>
+                        </ng-container>
+                        <ng-container *ngIf="trangThai.DuocDuyet == true">
+                            <button type="button" mat-button (click)="huy()"><i class="ft-arrow-left"></i>
+                                Quay lại</button>
+                            <button type="button" class="ml-auto" *ngIf="!loading" color="primary" mat-raised-button (click)="xuLyInPhieu()">
+                                <i class="ft-save"></i>In phiếu truyền máu</button>
+                        </ng-container>
+
+                        <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                                alt="Loading" /></button>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

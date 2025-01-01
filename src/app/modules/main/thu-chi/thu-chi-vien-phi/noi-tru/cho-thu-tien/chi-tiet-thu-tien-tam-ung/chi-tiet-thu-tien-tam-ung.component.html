@@ -1,0 +1,49 @@
+<div id="test" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+	<span fxFlex="100%" class="sub-title mt-0 text text-left">
+		<app-textboxnumeric id="pos" fxFlex="100%" fxFlex.sm="100%" label="Số Tiền" 
+			style="color: red; font-size: 20px; font-weight: 800; margin-bottom: -20px" [spinners]="false" [step]="100"
+			[(selectMoney)]="selectMoneyPos" [isFormatCurrenly]="true" (modelChange)="onValueChangeSoTienTamUng($event)"
+			[(model)]="tongSoTienTamUng" [required]="true"> </app-textboxnumeric>
+	</span>
+	<app-multiselect [(model)]="setDefeautTienMat" [modelText]="hinhThucThanhToan.DisplayName" fxFlex="100%"
+		fxFlex.sm="100%" label="Hình thức thanh toán" [required]="true"
+		 (valueChange)="evtHinhThucThanhToanChanged($event)"
+		[data]="hinhThucThanhToan"> </app-multiselect>
+
+	<!-- 3 hình thức tương ứng nếu chọn bên hình thức thanh toán tương ứng ta cho nhâp số tiền -->
+	<app-textboxnumeric *ngIf="flagCheckSeletedTienMat" id="so-tien" [(model)]="thuTienTamUng.TienMat" fxFlex="100%"
+		fxFlex.sm="100%" label="Tiền mặt"  [(selectMoney)]="selectMoney"
+		(modelChange)="evtTienMatChanged($event , 1)" [isFormatCurrenly]="true" [spinners]="false"
+		[validationerror]="'TienMat' | validationerror:validationErrors" [step]="100" [required]="true">
+	</app-textboxnumeric>
+	<app-textboxnumeric *ngIf="flagCheckSeletedChuyenKhoan" id="chuyen-khoan" [(model)]="thuTienTamUng.ChuyenKhoan"
+		 fxFlex="100%" fxFlex.sm="100%" label="Chuyển khoản" [spinners]="false"
+		[isFormatCurrenly]="true" [step]="100" [(selectMoney)]="selectMoneyChuyenKhoan"
+		(modelChange)="evtChuyenKhoanChanged($event , 2)" [validationerror]="'ChuyenKhoan' | validationerror:validationErrors"
+		[required]="true"> </app-textboxnumeric>
+	<app-textboxnumeric *ngIf="flagCheckSeletedPos" id="pos" fxFlex="100%" fxFlex.sm="100%" label="POS"
+		 [validationerror]="'POS' | validationerror:validationErrors" [spinners]="false"
+		[step]="100" [(selectMoney)]="selectMoneyPos" [isFormatCurrenly]="true" 
+		(modelChange)="evtPOSChanged($event , 3)"
+		[(model)]="thuTienTamUng.POS" [required]="true"> </app-textboxnumeric>
+	<!-------------------------------------------------------------------------------------->
+
+	<!-- ------------------------------------------------------------------------------ -->
+	<app-textboxnumeric *ngIf="flagCheckSeletedTienMat" id="benh-nhan-dua" fxFlex="100%" fxFlex.sm="100%" [step]="100"
+		[isFormatCurrenly]="true" (keyup)="changeValueTienBenhNhanDua($event)" [spinners]="false"
+		(modelChange)="modelChangeTienTamUngBNDua($event)" [(selectMoney)]="selectMoneyTienTamUngBNDua"
+		[(model)]="thuTienTamUng.TienBenhNhanDua" label="Người bệnh đưa"> </app-textboxnumeric>
+	<app-textboxnumeric *ngIf="flagCheckSeletedTienMat" id="tra-lai" fxFlex="100%" fxFlex.sm="100%" label="Trả lại"
+		[readonly]="true" [isFormatCurrenly]="true" [step]="100" [spinners]="false"
+		[(model)]="thuTienTamUng.TienTraLaiBenhNhan"> </app-textboxnumeric>
+	<app-datepicker id="ngay-thu" fxFlex="100%" fxFlex.sm="100%" label="Ngày thu" [readonly]="true"
+		[(model)]="thuTienTamUng.NgayThuTamUng" [validationerror]="'NgayThu' | validationerror:validationErrors"
+		[required]="true" [required]="true"> </app-datepicker>
+	<app-textbox id="noi-dung-thu" fxFlex="100%" fxFlex.sm="100%" label="Nội dung thu"
+		[(model)]="thuTienTamUng.NoiDungThuTamUng"
+		[validationerror]="'NoiDungThuTamUng' | validationerror:validationErrors" maxlength="10000" [required]="true">
+	</app-textbox>
+	<div fxFlex="100%" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="padding-thu-tien">
+		<button type="button" (click)="ThuTienTamUng()" color="primary" mat-raised-button>Thu tạm ứng</button>
+	</div>
+</div>

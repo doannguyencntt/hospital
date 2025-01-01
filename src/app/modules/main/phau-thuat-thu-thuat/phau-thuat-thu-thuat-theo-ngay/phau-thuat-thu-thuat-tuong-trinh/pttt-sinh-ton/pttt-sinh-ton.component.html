@@ -1,0 +1,8 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-pttt-theo-doi-sinh-ton fxFlex="100%" [IsDaTuongTrinh]="IsDaTuongTrinh" [thongTinBenhNhan]="thongTinBenhNhan" [dataChiSoSinhTon]="ketQuaSinhHieu" (displayBtnForSton)="OnDisplayForBtnSton($event)" #ptttStonGrid>
+            </app-pttt-theo-doi-sinh-ton>
+        </div>
+    </div>
+</div>

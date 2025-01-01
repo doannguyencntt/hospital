@@ -1,0 +1,221 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <h3 fxFlex="100%" class="sub-title mt-0">THÔNG TIN CHUNG
+    </h3>
+
+    <app-combobox id="nha-thau-vat-tu-lst" fxFlex="25%" fxFlex.sm="25%" label="Nhà Cung Cấp"
+        url="HopDongThauDuocPham/GetListNhaThau" [(model)]="hopDongThauVatTu.NhaThauId"
+        [modelText]="hopDongThauVatTu.NhaThau" class="item-no-padding" [template]="nhaThauTemplate"
+        [templateHeader]="nhaThauTemplateHeader" [required]="true" [disabled]="isDisableUpdate"
+        [validationerror]="'NhaThauId' | validationerror:validationErrors">
+        <ng-template #nhaThauTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="30%">Tên</th>
+                    <th>Địa Chỉ</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #nhaThauTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="30%">{{dataItem.Ten}}</td>
+                    <td>{{dataItem.DiaChi}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textbox id="SoHopDong" fxFlex="25%" fxFlex.sm="25%" [(model)]="hopDongThauVatTu.SoHopDong" label="Số Hợp Đồng"
+        maxlength="50" [disabled]="isDisableUpdate">
+    </app-textbox>
+
+    <app-textbox id="SoQuyetDinh" fxFlex="25%" fxFlex.sm="25%" [(model)]="hopDongThauVatTu.SoQuyetDinh"
+        [required]="true" label="Số Quyết Định" maxlength="50" [disabled]="isDisableUpdate"
+        [validationerror]="'SoQuyetDinh' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-datepicker id="CongBo" fxFlex="25%" fxFlex.sm="25%" [required]="true" [(model)]="hopDongThauVatTu.CongBo"
+        (modelChange)="ngayChange($event, true)" label="Công Bố" [disabled]="isDisableUpdate"
+        [validationerror]="'CongBo' | validationerror:validationErrors">
+    </app-datepicker>
+
+
+
+    <app-datepicker id="NgayKy" fxFlex="25%" fxFlex.sm="50%" [(model)]="hopDongThauVatTu.NgayKy" label="Ngày Ký"
+        [disabled]="isDisableUpdate">
+    </app-datepicker>
+
+    <app-datepicker id="NgayHieuLuc" fxFlex="25%" fxFlex.sm="50%" [required]="true"
+        [(model)]="hopDongThauVatTu.NgayHieuLuc" label="Ngày Hiệu Lực" [disabled]="isDisableUpdate"
+        (modelChange)="ngayChange($event, false)" [validationerror]="'NgayHieuLuc' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-datepicker id="NgayHetHan" fxFlex="25%" fxFlex.sm="50%" [required]="true"
+        [(model)]="hopDongThauVatTu.NgayHetHan" label="Ngày Hết Hạn" [disabled]="isDisableUpdate"
+        [validationerror]="'NgayHetHan' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-textboxnumeric id="Nam" fxFlex="25%" fxFlex.sm="50%" [(model)]="hopDongThauVatTu.Nam" [required]="true"
+        label="Năm" [min]="minYear" [max]="maxYear" [format]="'0'" [spinners]="false" [disabled]="isDisableUpdate"
+        [validationerror]="'Nam' | validationerror:validationErrors">
+    </app-textboxnumeric>
+
+
+
+    <app-combobox id="LoaiThau" fxFlex="50%" fxFlex.sm="100%" [(model)]="hopDongThauVatTu.LoaiThau"
+        [autoSelectFirstItem]="true" bind="true" [required]="true" [modelText]="hopDongThauVatTu.TenLoaiThau"
+        label="Loại Thầu" [disabled]="isDisableUpdate" url="HopDongThauDuocPham/GetListLoaiThau"
+        [validationerror]="'LoaiThau' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-textbox id="NhomThau" fxFlex="25%" fxFlex.sm="50%" [(model)]="hopDongThauVatTu.NhomThau" [required]="true"
+        [disabled]="isDisableUpdate" label="Nhóm Thầu" maxlength="50"
+        [validationerror]="'NhomThau' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="GoiThau" fxFlex="25%" fxFlex.sm="50%" [(model)]="hopDongThauVatTu.GoiThau" [required]="true"
+        [disabled]="isDisableUpdate" label="Gói Thầu" maxlength="2"
+        [validationerror]="'GoiThau' | validationerror:validationErrors">
+    </app-textbox>
+
+
+
+    <h3 fxFlex="100%" class="sub-title">THÔNG TIN CHI TIẾT
+    </h3>
+
+    <div fxFlex="100%" fxFlex.sm="100%" [hidden]="showFormDetail">
+        <button (click)="ThemVatTu()" type="button" color="primary" [disabled]="isDisableUpdate" mat-raised-button>
+            Thêm Vật Tư</button>
+    </div>
+
+    <div fxFlex="100%" fxFlex.sm="100%" [hidden]="!showFormDetail">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-combobox id="vat-tu-cmb" fxFlex="40%" fxFlex.sm="100%" label="Vật Tư"
+                url="HopDongThauVatTu/GetListVatTu" (keyup)="onKeyAddVt($event)" [reloadForGrid]="true"
+                [queryInfo]="{ParameterDependencies:'{VatTuId:' + hopDongThauVatTuChiTiet.VatTuId +'}', Take: 50}"
+                (openCombobox)="openComboboxHdt($event)" [(model)]="hopDongThauVatTuChiTiet.VatTuId"
+                [modelText]="hopDongThauVatTuChiTiet.VatTu" class="item-no-padding" [template]="vatTuTemplate"
+                [templateHeader]="vatTuTemplateHeader" [required]="true"
+                [validationerror]="'VatTuId' | validationerror:validationErrorsForDetail"
+                (selectionChange)="onChangeVatTu($event)">
+                <ng-template #vatTuTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="30%">Mã</th>
+                            <th width="30%">Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #vatTuTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="30%">{{dataItem.Ma}}</td>
+                            <td width="30%">{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+
+            <app-textboxnumeric id="Gia" fxFlex="10%" fxFlex.sm="10%" [(model)]="hopDongThauVatTuChiTiet.Gia"
+                (keyup)="onKeyAddVt($event)" [step]="100" [required]="true" label="Giá" decimals="2" format="n2"
+                [validationerror]="'Gia' | validationerror:validationErrorsForDetail">
+            </app-textboxnumeric>
+
+            <app-textboxnumeric id="SoLuong" fxFlex="10%" fxFlex.sm="10%" [(model)]="hopDongThauVatTuChiTiet.SoLuong"
+                [spinners]="false" (keyup)="onKeyAddVt($event)" [required]="true" label="Số Lượng" [decimals]="2"
+                [format]="format" [validationerror]="'SoLuong' | validationerror:validationErrorsForDetail">
+            </app-textboxnumeric>
+
+            <app-checkbox [disabled]="disabledSuDungTaiBenhVien==true" id="SuDungTaiBenhVien" fxFlex="15%"
+                fxFlex.sm="15%" class="mt-4" [(model)]="hopDongThauVatTuChiTiet.SuDungTaiBenhVien"
+                label="Sử dụng tại bệnh viện" (modelChange)="modelChangeSuDungTaiBenhVien($event)">
+            </app-checkbox>
+
+            <app-textbox [disabled]="disabledSuDungTaiBenhVien==true" fxFlex="10%" id="MaVatTuBenhVien"
+                label="Mã vật tư bệnh viện" maxlength="250" [(model)]="hopDongThauVatTuChiTiet.MaVatTuBenhVien"
+                [required]="true" [validationerror]="'MaVatTuBenhVien' | validationerror:validationErrorsForDetail"
+                *ngIf="hopDongThauVatTuChiTiet.SuDungTaiBenhVien == true">
+            </app-textbox>
+            <app-dropdownlist [disabled]="disabledSuDungTaiBenhVien==true" id="loai-su-dung" fxFlex="15%"
+                fxFlex.sm="25%" [(model)]="hopDongThauVatTuChiTiet.LoaiSuDungId" [bind]="true" label="Loại sử dụng"
+                url="VatTuBenhVien/GetLoaiSuDung" [required]="true"
+                [validationerror]="'LoaiSuDungId' | validationerror:validationErrorsForDetail"
+                *ngIf="hopDongThauVatTuChiTiet.SuDungTaiBenhVien == true"
+                (selectionChange)="onChangeLoaiSuDung($event)">
+            </app-dropdownlist>
+            <div fxFlex="100%" fxFlex.sm="100%">
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <div class="form-footer">
+                        <button type="button" class="mr-1" mat-button (click)="ClearData()">
+                            Hủy</button>
+                        <button *ngIf="!isUpdate" type="button" color="primary" mat-raised-button (click)="Add()">
+                            Thêm</button>
+                        <button *ngIf="isUpdate" type="button" color="primary" mat-raised-button (click)="Update()">
+                            Cập Nhật</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-grid fxFlex="100%" fxFlex.sm="100%" [height]="300" [gridDataSource]="gridDataSource" [useHeaderDefault]="false"
+        [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false" [useAddDeault]="false"
+        [checkboxAble]="false" [lazyLoadPage]="true" [autoHeight]="true" style="width: 1px;" [pageable]="false"
+        #gridHdtVt>
+    </app-grid>
+
+    <ng-template #giaTemplate let-dataItem>
+        {{dataItem.Gia | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #maVatTuTemplate let-dataItem let-rowIndex="rowIndex">
+        <p>{{dataItem.MaVatTuBenhVien}}</p>
+        <app-validationerrorother [validationerror]="'HopDongThauVatTuChiTiets['+rowIndex+'].MaVatTuBenhVien' | validationerror:validationErrors">
+        </app-validationerrorother>
+    </ng-template>
+
+    <ng-template #vatTuThauTemplate let-dataItem let-rowIndex="rowIndex">
+        <p>{{dataItem.VatTu}}</p>
+        <app-validationerrorother [validationerror]="'HopDongThauVatTuChiTiets['+rowIndex+'].VatTuId' | validationerror:validationErrors">
+        </app-validationerrorother>
+    </ng-template>
+
+    <ng-template #trangThaiTemplate let-dataItem>
+
+        <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu"
+            mat-icon-button type="button" [disabled]="isDisableUpdate">
+            <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+        </button>
+        <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+            <ng-template let-customer="customer" matMenuContent>
+                <button (click)="BindValue(dataItem)" mat-menu-item>
+                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                    <span>Sửa</span>
+                </button>
+                <button (click)="ConfirmDelete(dataItem)" mat-menu-item>
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                    <span>Xóa</span>
+                </button>
+            </ng-template>
+        </mat-menu>
+    </ng-template>
+</div>
+
+<div *ngIf="!isCreate" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+    <!-- // code này cheat quá nhiều -->
+    <!-- <app-formfooter [bodyComponent]="this" type="update" [read]="isDisableUpdate" (updated)="onUpdated()"
+        (validateClient)="onValidate($event)">
+    </app-formfooter> -->
+
+    <app-formfooter [bodyComponent]="this" type="update" [read]="isDisableUpdate" (updated)="onUpdated()">
+    </app-formfooter>
+</div>
+<div *ngIf="isCreate" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+    <!-- // code này cheat quá nhiều -->
+    <!-- <app-formfooter [bodyComponent]="this" type="create" (created)="onCreated()" (validateClient)="onValidate($event)">
+    </app-formfooter> -->
+    <app-formfooter [bodyComponent]="this" type="create" (created)="onCreated()">
+    </app-formfooter>
+</div>

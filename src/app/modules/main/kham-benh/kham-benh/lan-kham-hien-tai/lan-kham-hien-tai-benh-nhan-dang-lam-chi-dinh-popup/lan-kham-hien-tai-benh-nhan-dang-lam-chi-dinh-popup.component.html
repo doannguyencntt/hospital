@@ -1,0 +1,29 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Danh sách người bệnh đang làm chỉ định</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useHeaderDefault]="true"
+        [useActionDefault]="false" [lazyLoadPage]="true" [urlGetData]="urlData" [urlGetTotalPage]="urlTotalPage"
+        [checkboxAble]="false" [useAddDeault]="false" height="500" [additionalSearchString]="data"
+        [detailTemplate]="detailTemplate">
+    </app-grid>
+    <ng-template #detailTemplate let-dataItem>
+        <app-kham-benh-lich-su-kham-list [BenhNhan]="dataItem.MaBN">
+        </app-kham-benh-lich-su-kham-list>
+    </ng-template>
+    <ng-template #actionTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button  mat-button color="primary" [mat-dialog-close]="dataItem.Id" cdkFocusInitial>
+                <mat-icon [icIcon]="icAssignment"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+</mat-dialog-content>
+
+<!-- <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-raised-button mat-button color="primary" [mat-dialog-close]="''" cdkFocusInitial>Đóng</button>
+  </mat-dialog-actions> -->

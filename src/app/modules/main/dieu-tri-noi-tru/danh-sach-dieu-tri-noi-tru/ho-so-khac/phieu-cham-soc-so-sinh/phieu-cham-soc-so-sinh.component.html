@@ -1,0 +1,108 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    style="padding-top: 13px;padding-bottom: 10px;">
+
+    <app-combobox fxFlex="100%" label="Chẩn đoán" url="KhamBenh/ICD" [(model)]="phieuChamSocSoSinh.ICDId"
+        [modelText]="phieuChamSocSoSinh.TenICD" class="item-no-padding" [template]="iCDChinhTemplate"
+        [templateHeader]="iCDChinhTemplateHeader" (selectionChange)="iCDSelectionChange($event)"
+        [queryInfo]="{ParameterDependencies:'{ChanDoanICDId:' + phieuChamSocSoSinh.ICDId +'}', Take: 50}">
+
+        <ng-template #iCDChinhTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="25%">Mã</th>
+                    <th>Tên Tiếng Việt</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #iCDChinhTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="25%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+
+    </app-combobox>
+
+    <app-grid #gridPhieuSoSinh masterName="gridPhieuSoSinh" fxFlex="100%" fxFlex.sm="100%" style="width: 1px;"
+        [gridColumns]="gridColumns" [autoHeight]="true" [gridDataSource]="gridDataSource" [documentType]="documentType"
+        [allowSortDefault]="false" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+        [lazyLoadPage]="false" [pageable]="false" [checkboxAble]="false">
+    </app-grid>
+
+    <ng-template #ngayTemplate let-dataItem let-rowIndex="rowIndex">
+
+        <app-datetimepicker id="Ngay" label=" " [required]="true" [(model)]="dataItem.Ngay"
+            (modelChange)="isDataChange()" class="no-label"
+            [validationerror]="'ThongTinHoSoPhieuChamSocSoSinhs['+rowIndex+'].Ngay' | validationerror: validationErrors">
+        </app-datetimepicker>
+    </ng-template>
+
+    <ng-template #sLAnTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-textboxnumeric (modelChange)="isDataChange()" [(model)]="dataItem.SLAn" label=" " min="1" format="0"
+            [max]="999999" class="no-label">
+        </app-textboxnumeric>
+    </ng-template>
+
+
+    <ng-template #nonChoTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-radio id="NonCho" name="NonCho" [items]="[{Value:false,Text:'Không'},{Value:true,Text:'Có'}]"
+            [(model)]="dataItem.NonCho" label=" " class="no-label">
+        </app-radio>
+    </ng-template>
+
+    <ng-template #nuocTieuTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-radio id="NuocTieu" name="NuocTieu" [items]="[{Value:false,Text:'Không'},{Value:true,Text:'Có'}]"
+            [(model)]="dataItem.NuocTieu" label=" " class="no-label">
+        </app-radio>
+    </ng-template>
+
+    <ng-template #vangDaTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-radio id="VangDa" name="VangDa" [items]="[{Value:false,Text:'Không'},{Value:true,Text:'Có'}]"
+            [(model)]="dataItem.VangDa" label=" " class="no-label">
+        </app-radio>
+    </ng-template>
+
+    <ng-template #xaTriTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-textarea (modelChange)="isDataChange()" [(model)]="dataItem.XaTriChamSocDanhGia" maxlength="2000" label=" "
+            class="no-label">
+        </app-textarea>
+    </ng-template>
+
+    <ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+        <div class="text-center" kendoTooltip>
+            <button mat-icon-button kendoTooltip style="color: red" title="Xóa" type="button" (click)="xoa(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #footerTemplate>
+        <div class="text-center" kendoTooltip>
+            <button (click)="themThongTinKhac()" color="primary" mat-mini-fab kendoTooltip title="Thêm" type="button">
+                <mat-icon [icIcon]="icAdd"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <label fxFlex="80%">
+        Người thực hiện: <strong>{{phieuChamSocSoSinh.NhanVienDangNhap}}</strong> - Ngày thực hiện:
+        <strong>{{phieuChamSocSoSinh.ThoiDiemThucHienDisplay}}</strong>
+    </label>
+    <div fxFlex="20%">
+        <div style="padding-top: 11px !important;float: right">
+            <button type="button" style="margin-right: 10px;" mat-raised-button mat-button (click)="inBienBan()">
+                In
+            </button>
+            <button *ngIf="phieuChamSocSoSinh.IsDataChange" type="button" style="margin-right: 10px;" mat-raised-button
+                mat-button (click)="huy()">
+                Hủy
+            </button>
+            <button type="button" color="primary" mat-raised-button mat-button (click)="luuBienBan()">
+                Lưu
+            </button>
+        </div>
+    </div>
+
+</div>

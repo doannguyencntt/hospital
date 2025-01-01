@@ -1,0 +1,16 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Danh sách PTTT không thực hiện</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+      <mat-icon [icIcon]="icClose"></mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+    <div fxLayoutAlign="start center" fxLayout="row" class="py-1 content">
+        <fieldset class="row ml-1" fxFlex="100%">
+            <app-grid [gridColumns]="gridKhongThucHien" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true" style="width: 1px;" [pageable]="false" [gridDataSource]="dataSourcePtttKhongThucHien"
+                masterName="huongBhyt">
+            </app-grid>
+        </fieldset>
+    </div>
+</mat-dialog-content>

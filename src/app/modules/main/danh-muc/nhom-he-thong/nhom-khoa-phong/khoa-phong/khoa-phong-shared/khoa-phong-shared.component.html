@@ -1,0 +1,77 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="Ma" fxFlex="20%" fxFlex.sm="40%" [required]="true" [(model)]="khoaPhong.Ma" label="Mã"
+        maxlength="50" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Ten" fxFlex="40%" fxFlex.sm="40%" [required]="true" [(model)]="khoaPhong.Ten" label="Tên"
+        maxlength="250" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+
+    <app-multiselect id="TenKhoa" fxFlex="40%" fxFlex.sm="30%" [(model)]="khoaPhong.KhoaIds" [required]="true"
+        [modelText]="" label="Chuyên Khoa" class="item-no-padding" [template]="chuyenKhoaTemplate"
+        [templateHeader]="chuyenKhoaTemplateHeader" url="KhoaPhong/GetListKhoa"
+        [validationerror]="'KhoaIds' | validationerror:validationErrors">
+        <ng-template #chuyenKhoaTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #chuyenKhoaTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-multiselect>
+
+
+    <app-textboxnumeric fxFlex="20%" id="SoTienThuTamUng" [(model)]="khoaPhong.SoTienThuTamUng" [spinners]="false"
+        [isFormatCurrenly]="true" [step]="100" label="Số Tiền Thu Tạm Ứng">
+    </app-textboxnumeric>
+
+    <app-combobox id="LoaiKhoaPhong" fxFlex="20%" fxFlex.sm="40%" [(model)]="khoaPhong.LoaiKhoaPhong" [required]="true"
+        [modelText]="khoaPhong.TenLoaiKhoaPhong" label="Loại Khoa Phòng" url="KhoaPhong/GetListLoaiKhoaPhong"
+        [validationerror]="'LoaiKhoaPhong' | validationerror:validationErrors">
+    </app-combobox>
+
+    <!-- <app-combobox id="CoKhamNgoaiTru" fxFlex="20%" fxFlex.sm="40%" [(model)]="khoaPhong.CoKhamNgoaiTru"
+        [modelText]="khoaPhong.KieuKhamDisplay" label="Kiểu Khám" url="KhoaPhong/GetListKieuKham"
+        [validationerror]="'CoKhamNgoaiTru' | validationerror:validationErrors">
+    </app-combobox> -->
+
+    <div fxFlex="20%" fxFlex.sm="25%">
+        <div class="container-custom no-label">
+            <label>Kiểu Khám</label>
+            <div fxLayout="row">
+                <app-checkbox id="khongMangThai" label="Nội trú" class="ml-4 mb-1" fxFlex="35%"
+                    [(model)]="khoaPhong.CoKhamNoiTru" style="margin-top: 1px;"
+                    [validationerror]="'CoKhamNoiTru' | validationerror:validationErrors">
+                </app-checkbox>
+
+                <app-checkbox id="coMangThai" label="Ngoại trú" class="mb-1" [(model)]="khoaPhong.CoKhamNgoaiTru"
+                    style="margin-top: 1px;" [validationerror]="'CoKhamNgoaiTru' | validationerror:validationErrors">
+                </app-checkbox>
+
+            </div>
+        </div>
+    </div>
+
+    <app-textboxnumeric fxFlex="20%" id="SoGiuongKeHoach" [(model)]="khoaPhong.SoGiuongKeHoach"
+        label="Số Giường Kế Hoạch">
+    </app-textboxnumeric>
+
+    <app-radio fxFlex="20%" fxFlex.sm="40%" id="IsDisabled" name="IsDisabled"
+        [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" [(model)]="khoaPhong.IsDisabled" label="Sử Dụng">
+    </app-radio>
+
+    <app-textarea id="MoTa" fxFlex="100%" fxFlex.sm="100%" maxlength="2000" [(model)]="khoaPhong.MoTa" label="Mô Tả"
+        [validationerror]="'MoTa' | validationerror:validationErrors">
+    </app-textarea>
+</div>

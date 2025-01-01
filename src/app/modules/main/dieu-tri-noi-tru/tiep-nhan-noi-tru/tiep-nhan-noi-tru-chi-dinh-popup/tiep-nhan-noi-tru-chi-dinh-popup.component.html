@@ -1,0 +1,94 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">
+        Chỉ định bác sĩ & giường
+    </div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose" (click)="close()"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 220px;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-combobox fxFlex="25%" label="BS điều trị" id="bacSiDieuTriId" url="DieuTriNoiTru/GetListBacSiDieuTri"
+            popupSettings="null" required="{{true}}"
+            [(model)]="chiDinh.BacSiDieuTriId"
+            [validationerror]="'BacSiDieuTriId' | validationerror:validationErrors">
+        </app-combobox>
+        <app-combobox fxFlex="25%" label="Điều dưỡng" id="Điều dưỡng" url="DieuTriNoiTru/GetListDieuDuong"
+            popupSettings="null" required="{{true}}"
+            [(model)]="chiDinh.DieuDuongId"
+            [validationerror]="'DieuDuongId' | validationerror:validationErrors">
+        </app-combobox>
+        <app-datetimepicker fxFlex="25%" label="Từ ngày" required="{{true}}"
+            [(model)]="chiDinh.TuNgay" [disabled]="true"
+            [validationerror]="'TuNgay' | validationerror:validationErrors">
+        </app-datetimepicker>
+        <div fxFlex="25%">
+            <a class="ml-4" style="color:green; text-decoration: underline; font-weight: bold; bottom: 20px;"
+                (click)="xemGoiDichVu()">
+                Dịch vụ giường trong gói
+            </a>
+        </div>
+
+        <app-combobox fxFlex="75%" label="Dịch vụ giường" id="dichVuGiuongId" url="KhamBenh/GetDichVuGiuongBenhVien"
+            popupSettings="null" [required]="!chiDinh.KhongCanChiDinhGiuong" (modelChange)="changeDichVuGiuong($event)"
+            [(model)]="chiDinh.DichVuGiuongId" [modelText]="chiDinh.DichVuGiuongDisplay" [template]="dichVuGiuongTemplate" [templateHeader]="dichVuGiuongTemplateHeader"
+            (selectionChange)="chonDichVuGiuong($event)" [queryInfo]="getDichVuGiuongQueryInfo()"
+            [validationerror]="'DichVuGiuongId' | validationerror:validationErrors">
+            <ng-template #dichVuGiuongTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th width="80%">Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #dichVuGiuongTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td width="80%">{{dataItem.DichVu}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        <app-checkbox style="margin-top: 30px;" name="baoPhong" fxFlex.lt-md="25%" 
+            label="Bao Phòng" value="true" [disabled]="isDisabledBaoPhong"
+            (modelChange)="clearGiuongBenh()"
+            [(model)]="chiDinh.BaoPhong">
+        </app-checkbox>
+        <div fxFlex="50%" fxFlex.sm="50%">
+            <div class="container-custom">
+                <label style="display: flex;">Giường chuyển đến <p style="color: red; margin-left: 5px;">{{chiDinh.KhongCanChiDinhGiuong ? '' : '*'}}</p></label>
+                <div fxLayout="row" fxLayoutGap="16px" style="padding-bottom: 8px;"
+                    [style.cursor]="chiDinh.DichVuGiuongId != undefined && chiDinh.DichVuGiuongId != null ? '' : 'not-allowed'">
+                    <a 
+                        [style.pointer-events]="chiDinh.DichVuGiuongId != undefined && chiDinh.DichVuGiuongId != null ? '' : 'none'"
+                        style="text-decoration: underline; color: blue;" (click)="chonGiuong()">
+                        <i>
+                            <ng-container *ngIf="chiDinh.GiuongId == null">Chọn</ng-container>
+                            <ng-container *ngIf="chiDinh.GiuongId != null">{{chiDinh.TenGiuong}}</ng-container>
+                        </i>
+                    </a>
+                </div>
+                <app-validationerrorother
+                    [validationerror]="'GiuongId' | validationerror:validationErrors">
+                </app-validationerrorother>
+            </div>
+        </div>
+        <app-combobox fxFlex="25%" label="Loại giường" id="loaiGiuong" url="DichVuGiuongBenhVien/GetListLoaiGiuong"
+            popupSettings="null" [required]="!chiDinh.KhongCanChiDinhGiuong" [disabled]="true"
+            [(model)]="chiDinh.LoaiGiuong" [bind]="true"
+            [validationerror]="'LoaiGiuong' | validationerror:validationErrors">
+        </app-combobox>
+        <app-datetimepicker fxFlex="25%" label="Thời gian nhận" [required]="!chiDinh.KhongCanChiDinhGiuong"
+            [(model)]="chiDinh.ThoiGianNhan" [disabled]="true"
+            [validationerror]="'ThoiGianNhan' | validationerror:validationErrors">
+        </app-datetimepicker>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="mt-4 pb-5">
+    <button style="margin-left: auto;" type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Hủy</button>
+    <button mat-raised-button mat-button color="primary" (click)="xuLyLuuChiDinh()">Lưu</button>
+</mat-dialog-actions>

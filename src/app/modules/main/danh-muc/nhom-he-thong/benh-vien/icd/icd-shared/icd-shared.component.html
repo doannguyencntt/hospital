@@ -1,0 +1,108 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="Ma" fxFlex="20%" fxFlex.sm="15%" maxlength="20" [required]="true" [(model)]="icd.Ma" label="Mã"
+        [validationerror]="'Ma' | validationerror:validationErrors"></app-textbox>
+
+    <app-textbox id="MaChiTiet" fxFlex="20%" fxFlex.sm="15%" maxlength="20" [(model)]="icd.MaChiTiet"
+        label="Mã Chi Tiết"></app-textbox>
+
+    <app-textbox id="TenTiengViet" fxFlex="30%" fxFlex.sm="35%" maxlength="250" [required]="true"
+        [(model)]="icd.TenTiengViet" label="Tên Tiếng Việt"
+        [validationerror]="'TenTiengViet' | validationerror:validationErrors"></app-textbox>
+
+    <app-textbox id="TenTiengAnh" fxFlex="30%" fxFlex.sm="35%" maxlength="250" [(model)]="icd.TenTiengAnh"
+        label="Tên Tiếng Anh"></app-textbox>
+
+    <app-combobox id="TenLoaiICD" fxFlex="40%" label="Tên Loại ICD" required="true" url="QuanLyICD/GetTenLoaiICD"
+        [(model)]="icd.LoaiICDId" [modelText]="icd.TenLoaiICD" [template]="tenLoaiICDChinhTemplate"
+        [queryInfo]="{ParameterDependencies:'{LoaiICDId:' + icd.LoaiICDId +'}', Take: 50}"
+        [templateHeader]="tenLoaiICDTemplateHeader" class="item-no-padding"
+        [validationerror]="'LoaiICDId' | validationerror:validationErrors">
+        <ng-template #tenLoaiICDTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="25%">Mã</th>
+                    <th>Tên Tiếng Việt</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #tenLoaiICDChinhTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="25%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+
+    </app-combobox>
+    <app-combobox id="TenLoaiICD" fxFlex="40%" label="Tên Khoa" url="QuanLyICD/GetTenKhoa" [(model)]="icd.KhoaId"
+        [modelText]="icd.TenKhoa" [template]="tenKhoaChinhTemplate" [templateHeader]="tenKhoaTemplateHeader"
+        [queryInfo]="queryInfoKhoa" class="item-no-padding"
+        [validationerror]="'KhoaId' | validationerror:validationErrors">
+        <ng-template #tenKhoaTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="25%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #tenKhoaChinhTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="25%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+
+    </app-combobox>
+
+    <app-radio fxFlex="20%" fxFlex.sm="40%" id="GioiTinh" [items]="[{Value:1,Text:'Nam'},{Value:2,Text:'Nữ'}]"
+        [(model)]="icd.GioiTinh" label="Giới Tính">
+    </app-radio>
+
+    <app-radio fxFlex="20%" fxFlex.sm="40%" id="ManTinh" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+        [(model)]="icd.ManTinh" label="Mãn Tính">
+    </app-radio>
+
+    <app-radio fxFlex="20%" fxFlex.sm="40%" id="BenhThuongGap"
+        [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="icd.BenhThuongGap"
+        label="Bệnh Thường Gặp">
+    </app-radio>
+
+    <app-radio fxFlex="20%" fxFlex.sm="40%" id="BenhNam" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+        [(model)]="icd.BenhNam" label="Bệnh Năm">
+    </app-radio>
+
+    <app-radio fxFlex="20%" fxFlex.sm="40%" id="KhongBaoHiem"
+        [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="icd.KhongBaoHiem"
+        label="Không Bảo Hiểm">
+    </app-radio>
+
+    <app-radio fxFlex="20%" fxFlex.sm="40%" id="NgoaiDinhSuat"
+        [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="icd.NgoaiDinhSuat"
+        label="Ngoài Định Suất">
+    </app-radio>
+
+    <app-textarea id="ChuanDoanLamSan" fxFlex="100%" [(model)]="icd.ChuanDoanLamSan" maxlength="5000"
+        label="Chẩn Đoán Lâm Sàn">
+    </app-textarea>
+
+    <app-textarea id="ThongTinThamKhaoChoBenhNhan" fxFlex="100%" [(model)]="icd.ThongTinThamKhaoChoBenhNhan"
+        maxlength="5000" label="Thông Tin Tham Khảo Cho Người Bệnh">
+    </app-textarea>
+
+    <app-textarea id="TenGoiKhac" fxFlex="100%" [(model)]="icd.TenGoiKhac" maxlength="1000" label="Tên Gọi Khác">
+    </app-textarea>
+
+    <app-textarea id="LoiDanCuaBacSi" fxFlex="100%" [(model)]="icd.LoiDanCuaBacSi" maxlength="5000"
+        label="Lời dặn của bác sĩ">
+    </app-textarea>
+
+    <app-textarea id="MoTa" fxFlex="100%" [(model)]="icd.MoTa" maxlength="1000" label="Mô Tả"></app-textarea>
+
+    <app-checkbox id="HieuLuc" fxFlex="30%" label="Hiệu lực" [(model)]="icd.HieuLuc">
+    </app-checkbox>
+</div>

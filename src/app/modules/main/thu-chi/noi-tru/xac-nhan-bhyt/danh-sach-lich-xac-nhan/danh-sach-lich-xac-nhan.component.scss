@@ -1,0 +1,62 @@
+.title {
+    margin: 0;
+    position: relative;
+    height: 55px;
+    justify-content: flex-end !important;
+    h3 {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        text-shadow: 2px 3px 6px rgba(62, 41, 79, 0.59);
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-size: 22px;
+    }
+}
+
+.title::after {
+    content: "";
+    height: 4px;
+    background-color: rgba(17, 26, 26, 1);
+    width: 80%;
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.content {
+    legend {
+        font-size: 18px;
+        text-shadow: 0px 1px 0px rgba(145, 137, 150, 1);
+        text-transform: uppercase;
+        span {
+            font-size: 0.95em;
+            text-transform: lowercase;
+        }
+    }
+    table,
+    tr,
+    td,
+    th {
+        border: 3px solid rgba(36, 17, 24, 0.4);
+    }
+    table {
+        tr {
+            td {
+                font-size: 15px;
+            }
+            td.price {
+                text-align: right;
+                font-weight: bold;
+            }
+        }
+        th {
+            font-size: 16px;
+            font-weight: bold;
+            background: #005dab;
+            color: white;
+            text-align: center;
+        }
+    }
+}

@@ -1,0 +1,78 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="Ten" fxFlex="20%" fxFlex.sm="100%" label="Tên kho" maxlength="50" [(model)]="modelFE.Ten"
+        [required]="true" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-combobox *ngIf="modelFE.IsDefault" [disabled]="true" id="LoaiKho" fxFlex="20%" fxFlex.sm="100%"
+        [(model)]="modelFE.LoaiKho" (selectionChange)="OnChangeLoaiKho($event)" [modelText]="modelFE.TextLoaiKho"
+        label="Loại kho" [required]="true" url="KhoDuocPham/GetLoaiKhos"
+        [validationerror]="'LoaiKho' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-combobox *ngIf="!modelFE.IsDefault" id="LoaiKho" fxFlex="20%" fxFlex.sm="100%" [(model)]="modelFE.LoaiKho"
+        (selectionChange)="OnChangeLoaiKho($event)" [modelText]="modelFE.TextLoaiKho" label="Loại kho" [required]="true"
+        url="KhoDuocPham/GetLoaiKhos" [validationerror]="'LoaiKho' | validationerror:validationErrors">
+    </app-combobox>
+
+    <div fxFlex="20%" fxFlex.sm="20%">
+        <div class="container-custom no-label">
+            <label>Kho chứa</label>
+            <div fxLayout="row">
+                <app-checkbox id="duocPham" label="Dược phẩm" class="mb-1" [(model)]="modelFE.LoaiDuocPham"
+                    style="margin-top: 1px;">
+                </app-checkbox>
+
+                <app-checkbox id="vatTu" label="Vật tư" class="ml-4 mb-1" [(model)]="modelFE.LoaiVatTu"
+                    style="margin-top: 1px;">
+                </app-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <app-combobox *ngIf="enableKhoaPhong && modelFE.IsDefault" [disabled]="true" id="khoa-phong" fxFlex="20%"
+        fxFlex.sm="100%" (selectionChange)="OnChangeKhoaPhong($event)" [(model)]="modelFE.KhoaPhongId"
+        [modelText]="modelFE.KhoaPhong" label="Khoa" [required]="true" url="KhoaPhongNhanVien/GetListKhoaPhong"
+        [validationerror]="'KhoaPhongId' | validationerror:validationErrors">
+    </app-combobox>
+    <app-combobox *ngIf="enableKhoaPhong && !modelFE.IsDefault" id="khoa-phong" fxFlex="20%" fxFlex.sm="100%"
+        (selectionChange)="OnChangeKhoaPhong($event)" [(model)]="modelFE.KhoaPhongId" [modelText]="modelFE.KhoaPhong"
+        label="Khoa" [required]="true" url="KhoaPhongNhanVien/GetListKhoaPhong"
+        [validationerror]="'KhoaPhongId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-combobox *ngIf="enablePhongBenhVien && modelFE.IsDefault" [disabled]="true" id="phong-benh-vien" fxFlex="20%"
+        fxFlex.sm="100%" [(model)]="modelFE.PhongBenhVienId" [modelText]="modelFE.PhongBenhVien" [data]="data"
+        [url]="url" (openCombobox)="OnLoadPhongBenhVien($event)" label="Phòng bệnh viện">
+    </app-combobox>
+    <app-combobox *ngIf="enablePhongBenhVien && !modelFE.IsDefault" id="phong-benh-vien" fxFlex="20%" fxFlex.sm="100%"
+        [(model)]="modelFE.PhongBenhVienId" [modelText]="modelFE.PhongBenhVien" [data]="data" [url]="url"
+        (openCombobox)="OnLoadPhongBenhVien($event)" label="Phòng bệnh viện" [template]="TemplateData"
+        [templateHeader]="TemplateHeader">
+        <ng-template #TemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #TemplateData let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+  
+
+    <app-multiselect id="kho-nhan-vien-quan-ly" fxFlex="100%" [(model)]="modelFE.NhanVienIds" fxFlex.sm="100%"
+        label="Tên nhân viên" url="KhoaPhongNhanVien/GetListNhanVien" [required]="true"
+        [validationerror]="'NhanVienIds' | validationerror:validationErrors">
+    </app-multiselect>
+
+    
+</div>

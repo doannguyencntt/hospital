@@ -1,0 +1,50 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                                    {Title:'Báo Cáo',Path:''}
+                                    ,{Title:'Nhật Ký Hệ Thống',Path:''}
+                                    ,{Title:'Lịch Sử SMS',Path:'/bao-cao/nhat-ky-he-thong/lich-su-goi-sms', Active: true}
+                                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="bao-cao/nhat-ky-he-thong/lich-su-goi-sms" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true"
+                [useHeaderDefault]="false" [checkboxAble]="false" [headerTemplate]="headerTemplate"
+                [searchString]="searchString" [sort]="sortGrid">
+            </app-grid>
+            <ng-template #headerTemplate>
+
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                    class="m-0">
+                    <app-textboxmask id="GoiDen" fxFlex="16%" fxFlex.sm="16%" [(model)]="parameters.GoiDen"
+                        label="Gửi đến" mask="000 000 0000"></app-textboxmask>
+                    <app-dropdownlist id="TrangThai" fxFlex="16%" fxFlex.sm="16%" [(model)]="parameters.TrangThai"
+                        [modelText]="parameters.TenTrangThai" label="Trạng thái" url="LichSuSMS/GetTrangThaiSMS">
+                    </app-dropdownlist>
+                    <app-datepicker id="TuNgay" fxFlex="16%" fxFlex.sm="16%" [(model)]="parameters.TuNgay"
+                        label="Ngày gửi: từ">
+                    </app-datepicker>
+                    <app-datepicker id="DenNgay" fxFlex="16%" fxFlex.sm="16%" [(model)]="parameters.DenNgay"
+                        label="đến">
+                    </app-datepicker>
+                    <app-textbox class="col-sm-2" id="NoiDung" fxFlex="16%" fxFlex.sm="16%"
+                        [(model)]="parameters.NoiDung" label="Nội dung" [maxlength]="2000">
+                    </app-textbox>
+                    <div fxFlex="20%" fxFlex.sm="20%">
+                        <button (click)="Timkiem()" mat-flat-button color="primary" style="margin-top: 13px;">Tìm
+                            kiếm</button>
+                            <button (click)="reset()" *ngIf="displayResetButton === true" mat-flat-button style="margin-top: 13px;" class="ml-1">Hủy</button>
+                        <button (click)="exportExcel()" type="button" color="primary" mat-raised-button mat-button class="ml-1">Xuất Excel</button>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

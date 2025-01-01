@@ -1,0 +1,417 @@
+<div [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}"
+    *ngIf="phieuDieuTriId != undefined && phieuDieuTriId != null" fxFlex="100%" fxLayout="row wrap"
+    fxLayout.lt-md="column">
+    <div fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0">
+        <div fxFlex="20%">
+            <span>
+                Khoa chỉ định: <strong>{{phieuKhamThamKham.KhoaChiDinh}}</strong>
+            </span>
+        </div>
+        <div fxFlex="20%">
+            <span>
+                Phòng: <strong>{{phieuKhamThamKham.Phong}}</strong>
+            </span>
+        </div>
+        <div fxFlex="20%">
+            <span>
+                Giường: <strong>{{phieuKhamThamKham.Giuong}}</strong>
+            </span>
+        </div>
+        <div fxFlex="20%">
+            <span>
+                BS điều trị: <strong>{{phieuKhamThamKham.BSDieuTri}}</strong>
+            </span>
+        </div>
+        <div fxFlex="20%">
+            <span>
+                Điều dưỡng: <strong>{{phieuKhamThamKham.DieuDuong}}</strong>
+            </span>
+        </div>
+    </div>
+
+    <div class="mt-2" fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0">
+        <div fxFlex="20%">
+            <span>
+                Ngày Y lệnh: <strong>{{phieuKhamThamKham.NgayYLenh}}</strong>
+            </span>
+        </div>
+        <div fxFlex="80%">
+            <span>
+                Chẩn đoán nhập viện: <strong>{{phieuKhamThamKham.ChuanDoanNhapVien}}</strong>
+            </span>
+        </div>
+
+    </div>
+
+    <div class="mt-2" fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <app-datetimepicker id="ThoiDiemThamKham" fxFlex="20%" fxFlex.sm="20%" label="Thời gian khám"
+            [(model)]="phieuKhamThamKham.ThoiDiemThamKham" [required]="true"
+            [validationerror]="'ThoiDiemThamKham' | validationerror:validationErrors">
+        </app-datetimepicker>
+
+        <app-checkbox style="padding-top: 15px;" fxFlex="20%" fxFlex.sm="20%"
+            [(model)]="phieuKhamThamKham.BenhNhanCapCuu" id="BenhNhanCapCuu" label="NB cấp cứu">
+        </app-checkbox>
+
+    </div>
+
+    <div fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <h3 class="sub-title" fxFlex="100%">
+            Chẩn đoán chính
+        </h3>
+    </div>
+
+    <div style="margin-top: 5px;" fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <app-combobox id="ChanDoanChinh" fxFlex="40%" fxFlex.sm="40%" label="ICD"
+            [modelText]="phieuKhamThamKham.ChanDoanChinhICDModelText" [(model)]="phieuKhamThamKham.ChanDoanChinhICDId"
+            (selectionChange)="ICDChinhChange($event)" url="DieuTriNoiTru/GetICD?coHienThiMa={{true}}"
+            [templateHeader]="chanDoanTemplateHeader" [template]="chanDoanTemplate" class="item-no-padding">
+            <ng-template #chanDoanTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th>Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #chanDoanTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <app-textbox id="ChiTietChanDoan" fxFlex="auto" fxFlex.sm="auto" label="Chi tiết chẩn đoán"
+            [(model)]="phieuKhamThamKham.ChanDoanChinhGhiChu">
+        </app-textbox>
+
+    </div>
+
+    <div fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <h3 class="sub-title" fxFlex="100%">
+            Chẩn đoán kèm theo
+            <button class="po-h" color="primary" (click)="themChanDoanKemTheo()">
+                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </h3>
+    </div>
+
+    <div fxFlex="100%">
+        <app-grid #gridChanDoanKemTheo masterName="ICDKemTheoIds" [gridColumns]="gridChanDoanKemTheoColumns"
+            [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [gridDataSource]="dataSourceICDKemTheo" [maxHeight]="150" [lazyLoadPage]="true"
+            style="width: 1px;" [pageable]="false">
+        </app-grid>
+    </div>
+
+    <div fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <h3 class="sub-title" fxFlex="100%">
+            Chỉ số sinh tồn
+            <button class="po-h" color="primary" (click)="themChiSoSinhTon()">
+                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </h3>
+    </div>
+
+    <div style="margin-top: 5px;" fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <app-grid #gridKetQuaSinhHieu fxFlex="100%" HideCheckAll="true" style="width: 1px;"
+            [gridColumns]="gridChiSoSinhTonColumns" [documentType]="documentType" [useHeaderDefault]="false"
+            [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false" [pageable]="false" height="auto"
+            #gridChiSoSinhTon [gridDataSource]="dataSourceKetQuaSinhHieu"></app-grid>
+    </div>
+
+    <!-- <div fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <h3 class="sub-title" fxFlex="100%">
+            Diễn biến
+        </h3>
+    </div> -->
+
+    <div fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <h3 class="sub-title" fxFlex="100%">
+            Diễn biến
+            <button class="po-h" color="primary" (click)="themDienBien()">
+                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </h3>
+    </div>
+
+    <div style="margin-top: 5px;" fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <app-grid #gridDienBien fxFlex="100%" HideCheckAll="true" style="width: 1px;"
+            [gridColumns]="gridDienBienColumns" [documentType]="documentType" [useHeaderDefault]="false"
+            [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false" [pageable]="false" height="auto"
+            [gridDataSource]="dataSourceDienBien"></app-grid>
+    </div>
+
+    <div fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px"
+        *ngIf="dieuTriNoiTruModel.LoaiBenhAnEnum === 8">
+        <h3 class="sub-title" fxFlex="100%">
+            Thời gian điều trị
+            <button class="po-h" color="primary" (click)="themThoiGianDieuTri()">
+                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </h3>
+    </div>
+
+    <div style="margin-top: 5px;" fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px"
+        *ngIf="dieuTriNoiTruModel.LoaiBenhAnEnum === 8">
+        <app-grid #gridThoiGianDieuTri fxFlex="100%" HideCheckAll="true" style="width: 1px;"
+            [gridColumns]="gridThoiGianDieuTriColumns" [documentType]="documentType" [useHeaderDefault]="false"
+            [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false" [pageable]="false" height="auto"
+            [gridDataSource]="dataSourceThoiGianDieuTri"></app-grid>
+    </div>
+    <div fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px"
+        *ngIf="dieuTriNoiTruModel.LoaiBenhAnEnum === 8">
+        <span *ngIf="dieuTriNoiTruModel.LoaiBenhAnEnum === 8" fxFlex="100%">Thời gian điều trị:<strong
+                class="link-dieu-tri-so-sinh">{{phieuKhamThamKham.SoNgayDieuTriBenhAnSoSinh}}(ngày)</strong></span>
+    </div>
+
+    <!-- <div class="mt-2" fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <app-textarea fxFlex="40%" id="DienBien" label="Diễn biến" maxlength="2000"
+        [(model)]="phieuKhamThamKham.DienBien"
+            [validationerror]="'' | validationerror: validationErrors">
+        </app-textarea>
+    </div> -->
+
+    <!-- <div class="mt-2" fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <app-combobox id="CheDoChamSoc" fxFlex="25%" fxFlex.sm="20%" label="Chế độ chăm sóc" bind="true"
+            [(model)]="phieuKhamThamKham.CheDoChamSoc" popupSettings="" url="DieuTriNoiTru/GetCheDoChamSoc">
+        </app-combobox>
+        <app-combobox id="CheDoAn" fxFlex="25%" fxFlex.sm="20%" label="Chế độ ăn" bind="true"
+            [(model)]="phieuKhamThamKham.CheDoAnId" popupSettings="" url="CheDoAn/GetLookupAsync">
+        </app-combobox>
+    
+    </div> -->
+
+
+</div>
+
+<!-------------------ICD KÈM THEO------------------>
+<ng-template #icdTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-combobox *ngIf="dataItem.Id == 0" [(model)]="dataItem.ICDId"
+        (selectionChange)="onChangeSetTenICDPhu($event, rowIndex)" [modelText]="dataItem.TenICD" popupSettings="null"
+        url="DieuTriNoiTru/GetICD?coHienThiMa={{true}}" [required]="true"
+        [validationerror]="'NoiTruThamKhamChanDoanKemTheos['+rowIndex+'].ICDId' | validationerror:validationErrors"
+        class="no-label item-no-padding" label=" " [templateHeader]="chanDoanPhanbietTemplateHeader"
+        [template]="chanDoanPhanBietTemplate">
+        <ng-template #chanDoanPhanbietTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên Tiếng Việt</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #chanDoanPhanBietTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.TenICD}}</p>
+</ng-template>
+
+<ng-template #chanDoanTemplate let-dataItem>
+    <app-textarea *ngIf="dataItem.Id == 0" maxlength="4000" [(model)]="dataItem.GhiChu" class="no-label" label=""
+        minHeight="20">
+    </app-textarea>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.GhiChu}}</p>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <button mat-icon-button kendoTooltip title="Xóa" type="button" style="color: red"
+        (click)="xoaChanDoanKemTheo(dataItem)">
+        <mat-icon [icIcon]="icDelete"></mat-icon>
+    </button>
+</ng-template>
+
+<!------------------- END  ICD KÈM THEO------------------>
+
+<!-------------------CHỈ SỐ SINH HIỆU------------------>
+
+
+<ng-template #machTemplate let-value="value" let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0" id="NhipTim{{dataItem.IdView}}" class="no-label" [max]="9999"
+        [(model)]="dataItem.NhipTim" (modelChange)="onChangeNhipTim(dataItem, $event)">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.NhipTim}}</p>
+</ng-template>
+
+<ng-template #nhietDoTemplate let-value="value" let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0" id="ThanNhiet{{dataItem.IdView}}" class="no-label" [format]="format"
+        type="number" [decimals]="decimal" [max]="9999" [spinners]="true" [(model)]="dataItem.ThanNhiet">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.ThanNhiet}}</p>
+</ng-template>
+
+<ng-template #huyetApTemplate let-value="value" let-dataItem>
+
+    <table width="100%">
+        <td style="width:calc(50% - 3px);padding:0">
+            <app-textboxnumeric *ngIf="dataItem.Id == 0" [spinners]="false" id="HuyetApTamThu{{dataItem.IdView}}"
+                class="no-label" [(model)]="dataItem.HuyetApTamThu" [max]="9999"
+                (modelChange)="onChangeHuyetApTamThu($event, dataItem)">
+            </app-textboxnumeric>
+            <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.HuyetApTamThu}}</p>
+
+        </td>
+        <td style="width:6px;padding:0">
+            /
+        </td>
+        <td style="width:calc(50% - 3px);padding:0">
+            <app-textboxnumeric *ngIf="dataItem.Id == 0" [spinners]="false" id="HuyetApTamTruong{{dataItem.IdView}}"
+                class="no-label" [(model)]="dataItem.HuyetApTamTruong" [max]="9999"
+                (modelChange)="onChangeHuyetApTamTruong($event, dataItem)">
+            </app-textboxnumeric>
+            <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.HuyetApTamTruong}}</p>
+
+        </td>
+    </table>
+</ng-template>
+
+<ng-template #nhipThoTemplate let-value="value" let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0" id="NhipTho{{dataItem.IdView}}" class="no-label"
+        [(model)]="dataItem.NhipTho" [max]="9999" [spinners]="false" (modelChange)="onChangeNhipTho($event, dataItem)">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.NhipTho}}</p>
+
+</ng-template>
+
+<ng-template #canNangTemplate let-value="value" let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0" id="CanNang{{dataItem.IdView}}" class="no-label" [format]="format"
+        [spinners]="false" [decimals]="1" [max]="9999" [(model)]="dataItem.CanNang"
+        (modelChange)="onChangeCanNang(dataItem)">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.CanNang}}</p>
+
+</ng-template>
+
+<ng-template #chieuCaoTemplate let-value="value" let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0" id="ChieuCao{{dataItem.IdView}}" class="no-label" [spinners]="false"
+        [format]="format" [decimals]="1" [max]="9999" [(model)]="dataItem.ChieuCao"
+        (modelChange)="onChangeChieuCao(dataItem)">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.ChieuCao}}</p>
+</ng-template>
+
+<ng-template #bmiTemplate let-value="value" let-dataItem>
+    <p class="ml-1">{{dataItem.Bmi | number: '1.2-2'}}</p>
+</ng-template>
+
+<ng-template #glassTemplate let-value="value" let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0" id="Glassgow{{dataItem.IdView}}" class="no-label" [format]="format"
+        [max]="9999" [(model)]="dataItem.Glassgow">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.Glassgow}}</p>
+</ng-template>
+
+<ng-template #spoTemplate let-value="value" let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0" id="SpO2{{dataItem.IdView}}" class="no-label" [format]="format"
+        [max]="9999" [(model)]="dataItem.SpO2">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.SpO2}}</p>
+</ng-template>
+
+<ng-template #ngayThucHienTemplate let-value="value" let-dataItem let-rowIndex="rowIndex">
+    <!-- [disabled]="true" -->
+    <app-datetimepicker *ngIf="dataItem.Id == 0" id="ngayThucHien{{dataItem.IdView}}" class="no-label"
+        [validationerror]="'KetQuaSinhHieus['+rowIndex+'].ThoiDiemThucHien' | validationerror: validationErrors"
+        [(model)]="dataItem.ThoiDiemThucHien">
+    </app-datetimepicker>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.ThoiDiemThucHienDisplay}}</p>
+</ng-template>
+
+
+<ng-template #actionChiSoSinhTonTemplate let-dataItem>
+    <button mat-icon-button kendoTooltip title="Xóa" type="button" style="color: red; text-align: center;"
+        (click)="xoaChiSoSinhTon(dataItem)">
+        <mat-icon [icIcon]="icDelete"></mat-icon>
+    </button>
+</ng-template>
+
+<!------------------- END  CHỈ SỐ SINH HIỆU------------------>
+
+<!-------------------DIỄN BIẾN------------------>
+
+<ng-template #dienBienTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textarea *ngIf="dataItem.IdView == 0" id="DienBien{{dataItem.IdView}}" class="no-label"
+        [(model)]="dataItem.DienBien" maxlength="4000"
+        [validationerror]="'DienBiens['+rowIndex+'].DienBien' | validationerror: validationErrors">
+    </app-textarea>
+    <p class="ml-1" *ngIf="dataItem.IdView != 0">{{dataItem.DienBien}}</p>
+
+</ng-template>
+<ng-template #yLenhTemplate let-dataItem>
+    <app-textarea *ngIf="dataItem.IdView == 0" maxlength="4000" id="YLenh{{dataItem.IdView}}" class="no-label"
+        [(model)]="dataItem.YLenh">
+    </app-textarea>
+    <p class="ml-1" *ngIf="dataItem.IdView != 0">{{dataItem.YLenh}}</p>
+
+</ng-template>
+
+<ng-template #thoiGianTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-datetimepicker *ngIf="dataItem.IdView == 0" id="ThoiGian{{dataItem.IdView}}" class="no-label"
+        [(model)]="dataItem.ThoiGian"
+        [validationerror]="'DienBiens['+rowIndex+'].ThoiGian' | validationerror: validationErrors">
+    </app-datetimepicker>
+    <p class="ml-1" *ngIf="dataItem.IdView != 0">{{dataItem.ThoiGianDisplay}}</p>
+
+</ng-template>
+
+<ng-template #cheDoChamSocTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-combobox *ngIf="dataItem.IdView == 0" id="CheDoChamSoc" class="no-label" label=" "
+        [(model)]="dataItem.CheDoChamSocId" popupSettings="null" url="DieuTriNoiTru/GetCheDoChamSoc">
+    </app-combobox>
+    <p class="ml-1" *ngIf="dataItem.IdView != 0">{{dataItem.CheDoChamSoc}}</p>
+</ng-template>
+
+
+<ng-template #cheDoAnTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-combobox *ngIf="dataItem.IdView == 0" id="CheDoAn" class="no-label" label=" " [(model)]="dataItem.CheDoAnId"
+        popupSettings="null" url="CheDoAn/GetLookupAsync">
+    </app-combobox>
+    <p class="ml-1" *ngIf="dataItem.IdView != 0">{{dataItem.CheDoAn}}</p>
+</ng-template>
+
+<ng-template #actionDienBienTemplate let-dataItem>
+    <button (click)="xoaDienBien(dataItem)" mat-icon-button kendoTooltip title="Xóa" type="button"
+        style="color: red; text-align: center;">
+        <mat-icon [icIcon]="icDelete"></mat-icon>
+    </button>
+</ng-template>
+
+
+<!------------------- END  DIỄN BIẾN------------------>
+
+<!------------------- BEGIN THỜI GIAN ĐIỀU TRỊ BỆNH ÁN SƠ SINH Số 8 là bệnh án trẻ con ------------->
+<ng-template #tuGioTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-timepicker id="TuGio" label="" placeHolder="Giờ" [(model)]="dataItem.GioBatDau" [modelIsNumber]="true"
+        (modelChange)="congThucThoiGianDieuTriSoSinh(dataItem)"
+        [validationerror]="'ThoiGianDieuTriSoSinhViewModels['+rowIndex+'].GioBatDau' | validationerror: validationErrors">
+    </app-timepicker>
+</ng-template>
+
+<ng-template #ghiChuTemplate let-dataItem let-value="value">
+    <app-textarea id="GhiChu" label="" [(model)]="dataItem.GhiChuDieuTri"></app-textarea>
+</ng-template>
+
+<ng-template #denGioTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-timepicker id="DenGio" label="" placeHolder="Giờ" [(model)]="dataItem.GioKetThuc" [modelIsNumber]="true"
+        (modelChange)="congThucThoiGianDieuTriSoSinh(dataItem)"
+        [validationerror]="'ThoiGianDieuTriSoSinhViewModels['+rowIndex+'].GioKetThuc' | validationerror: validationErrors">
+    </app-timepicker>
+</ng-template>
+
+<ng-template #actionThoiGianDieuTriTemplate let-dataItem>
+    <button (click)="xoaThoiGianDieuTri(dataItem)" mat-icon-button kendoTooltip title="Xóa" type="button"
+        style="color: red; text-align: center;">
+        <mat-icon [icIcon]="icDelete"></mat-icon>
+    </button>
+</ng-template>
+
+<!------------------- END  THỜI GIAN ĐIỀU  TRỊ BỆNH ÁN SƠ SINH ---------------->

@@ -1,0 +1,27 @@
+.btn-disable-click{
+    pointer-events: none; 
+    opacity: 0.6;
+}
+
+.btn-select{
+    min-width: 100px;
+}
+
+.head-table{
+    background-color: whitesmoke; 
+    min-width: 190px;
+}
+
+mat-dialog-content{
+    >div{
+        min-height: 200px;
+    }
+}
+.select{
+    background-color: green;
+    border: 1px solid green;
+    color:#fff;
+}
+.not-available-select{
+    border: 1px solid green;
+}

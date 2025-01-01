@@ -1,0 +1,38 @@
+
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-0">
+    <div>THU TIỀN</div>
+    <button (click)="huy()" type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<app-grid [gridColumns]="gridColumns" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false"
+    [useActionDefault]="false" [autoHeight]="true" [lazyLoadPage]="true" [checkboxAble]="false"
+    urlGetData="ThuNganMarketing/GetDataThongTinPhieuThuForGridAsync" #gridList (extOnDataBound)="onDataBound($event)"
+    [additionalSearchString]="queryString" style="width: 1px;" [pageable]="false">
+</app-grid>
+<ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+    <div kendoTooltip>
+        <button type="button" (click)="InPhieu(dataItem)" title="Phiếu in" mat-button style="background: #3333;">
+            <span>In</span>
+        </button>
+    </div>
+</ng-template>
+<ng-template #thuCuaGoiTemplate let-dataItem>
+    <ng-container *ngFor="let item of dataItem.ThuCuaGoi, let i = index">
+        <strong>{{item}}</strong><br />
+    </ng-container>
+</ng-template>
+
+<ng-template #soTienThuTemplate let-dataItem>
+    {{dataItem.SoTienThu | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+
+<ng-template #nguoithuGroupFooter>
+    Tổng thu :
+</ng-template>
+
+<ng-template #tongSoTienThuGroupFooter>
+    <span style="color: red;"> {{totalSoTienThu('totalSoTienThu') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>

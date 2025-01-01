@@ -1,0 +1,49 @@
+<div id="div-phong-giuong-bs-dieu-tri" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <kendo-tabstrip #tabStrip fxFlex="100%" class="content-has-border sticky-kendotab-item-2" (tabSelect)="changeTab($event)">
+        <kendo-tabstrip-tab name="1" [selected]="listTabPhongGiuongBacSiDieuTri.tabBsDieuTriSelected">
+            <ng-template kendoTabTitle>
+                <div>
+                    BS điều trị
+                </div>
+            </ng-template>
+
+            <ng-template kendoTabContent>
+                <app-bs-dieu-tri 
+                    [dieuTriNoiTruModel]="dieuTriNoiTruModel"
+                    (outputEkipDieuTriChanged)="outputEkipDieuTriChanged($event)"
+                ></app-bs-dieu-tri>
+            </ng-template>
+        </kendo-tabstrip-tab>
+
+        <kendo-tabstrip-tab [selected]="listTabPhongGiuongBacSiDieuTri.tabCapGiuongSelected">
+            <ng-template kendoTabTitle>
+                <div>
+                    Cấp giường
+                </div>
+            </ng-template>
+
+            <ng-template kendoTabContent>
+                <app-cap-giuong 
+                    [dieuTriNoiTruModel]="dieuTriNoiTruModel"
+                    [IsBenhAnSoSinh]="IsBenhAnSoSinh"
+                    (outputCapGiuongChanged)="outputGiuongChanged($event)"
+                ></app-cap-giuong>
+            </ng-template>
+        </kendo-tabstrip-tab>
+
+        <kendo-tabstrip-tab [selected]="listTabPhongGiuongBacSiDieuTri.tabChuyenKhoaSelected">
+            <ng-template kendoTabTitle>
+                <div>
+                    Chuyển khoa
+                </div>
+            </ng-template>
+
+            <ng-template kendoTabContent>
+                <app-chuyen-khoa 
+                    [dieuTriNoiTruModel]="dieuTriNoiTruModel" [IsBenhAnSoSinh]="IsBenhAnSoSinh"
+                    (outputKhoaDieuTriChanged)="outputKhoaChanged($event)">
+                </app-chuyen-khoa>
+            </ng-template>
+        </kendo-tabstrip-tab>
+    </kendo-tabstrip>
+</div>

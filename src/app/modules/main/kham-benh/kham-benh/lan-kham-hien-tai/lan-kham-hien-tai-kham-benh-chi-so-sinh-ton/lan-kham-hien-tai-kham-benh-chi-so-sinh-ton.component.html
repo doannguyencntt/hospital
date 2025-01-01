@@ -1,0 +1,186 @@
+<div *ngIf="!laChuyenKhoaKhamNhieu" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mr-4">CHỈ SỐ SINH TỒN
+        <button *ngIf="!isReadOnly" class="po-h" color="primary" (click)="themChiSoSinhTon()">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+    <ng-container *ngIf="dataSourceSinhHieu.data.length == 0">
+        <p>Không có chỉ số sinh tồn</p>
+    </ng-container>
+    <app-grid fxFlex="100%" *ngIf="dataSourceSinhHieu.data.length > 0" masterName="SinhHieu" [gridColumns]="gridSinhHieuColumns" [documentType]="documentType" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+        [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true" [gridDataSource]="dataSourceSinhHieu" [pageable]="false">
+    </app-grid>
+    
+</div>
+
+<div *ngIf="laChuyenKhoaKhamNhieu" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div [fxFlex]="dataSourceSinhHieu.data.length == 0 ? '15%' : '10%'">
+        <h3 fxFlex="100%" class="sub-title mt-0">CHỈ SỐ SINH TỒN
+            <button *ngIf="!isReadOnly" class="po-h" color="primary" (click)="themChiSoSinhTon()">
+                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </h3>
+    </div>
+    <div [fxFlex]="dataSourceSinhHieu.data.length == 0 ? '85%' : '90%'" class="pl-1">
+        <ng-container *ngIf="dataSourceSinhHieu.data.length == 0">
+            <span>Không có chỉ số sinh tồn</span>
+        </ng-container>
+
+        <ng-container *ngIf="dataSourceSinhHieu.data.length > 0">
+            <table id="tbl-sinh-ton" style="width: 100%">
+                <tr>
+                    <th style="text-align: left; width: 110px;">Mạch (nhịp/phút)</th>
+                    <th style="text-align: left; width: 110px;">Nhiệt độ (°C)</th>
+                    <th style="text-align: left; width: 110px;">Huyết áp (mmHg)</th>
+                    <th style="text-align: left; width: 110px;">Nhịp thở (lần/phút)</th>
+                    <th style="text-align: left; width: 110px;">Cân nặng (kg)</th>
+                    <th style="text-align: left; width: 110px;">Chiều cao (cm)</th>
+                    <th style="text-align: left; width: 110px;">BMI (kg/m²)</th>
+                    <th style="text-align: left; width: 110px;">Glassgow</th>
+                    <th style="text-align: left; width: 110px;">SpO2 (%)</th>
+                    <th style="text-align: left; width: 110px;">Ngày thực hiện</th>
+                    <th style="width: 30px;"></th>
+                </tr>
+                <tr *ngFor="let dataItem of dataSourceSinhHieu.data, let rowIndex = index">
+                    <td>
+                        <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [spinners]="false" [(model)]="dataItem.NhipTim" class="no-label" (modelChange)="onChangeNhipTim(dataItem, $event)">
+                        </app-textboxnumeric>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.NhipTim}}</p>
+                    </td>
+                    <td>
+                        <app-textboxnumeric [format]="format" [max]="9999" [spinners]="false" *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [decimals]="1" [(model)]="dataItem.ThanNhiet" class="no-label">
+                        </app-textboxnumeric>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.ThanNhiet | number}}</p>
+                    </td>
+                    <td>
+                        <table width="100%" *ngIf="dataItem.Id == 0 || dataItem.IsUpdate">
+                            <tr>
+                                <td style="width:calc(50% - 3px);padding:0">
+                                    <app-textboxnumeric [spinners]="false" [(model)]="dataItem.HuyetApTamThu" class="no-label" [max]="9999" (modelChange)="onChangeHuyetApTamThu($event, dataItem)">
+                                    </app-textboxnumeric>
+                                </td>
+                                <td style="width:6px;padding:0">/</td>
+                                <td style="width:calc(50% - 3px);padding:0">
+                                    <app-textboxnumeric [spinners]="false" [(model)]="dataItem.HuyetApTamTruong" class="no-label" [max]="9999" (modelChange)="onChangeHuyetApTamTruong($event, dataItem)">
+                                    </app-textboxnumeric>
+                                </td>
+                            </tr>
+                        </table>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.HuyetAp}}</p>
+                    </td>
+                    <td>
+                        <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [spinners]="false" [(model)]="dataItem.NhipTho" class="no-label" (modelChange)="onChangeNhipTho($event, dataItem)">
+                        </app-textboxnumeric>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.NhipTho}}</p>
+                    </td>
+                    <td>
+                        <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [format]="format" [spinners]="false" [(model)]="dataItem.CanNang" class="no-label" [max]="9999" [decimals]="1" (modelChange)="onChangeCanNang(dataItem)">
+                        </app-textboxnumeric>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.CanNang | number}}</p>
+                    </td>
+                    <td>
+                        <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [format]="format" [spinners]="false" [(model)]="dataItem.ChieuCao" [decimals]="1" class="no-label" [max]="9999" (modelChange)="onChangeChieuCao(dataItem)">
+                        </app-textboxnumeric>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.ChieuCao | number}}</p>
+                    </td>
+                    <td>
+                        <p class="ml-1">{{dataItem.BMI | number: '1.2-2'}}</p>
+                    </td>
+                    <td>
+                        <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [format]="format" [spinners]="false" [(model)]="dataItem.Glassgow" [decimals]="1" class="no-label">
+                        </app-textboxnumeric>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.Glassgow | number}}</p>
+                    </td>
+                    <td>
+                        <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [format]="format" [spinners]="false" [(model)]="dataItem.SpO2" [decimals]="1" class="no-label">
+                        </app-textboxnumeric>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.SpO2 | number}}</p>
+                    </td>
+                    <td>
+                        {{dataItem.NgayThucHien}}
+                    </td>
+                    <td>
+                        <div *ngIf="!isReadOnly" class="text-center" kendoTooltip>
+                            <button color="primary" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate" kendoTooltip title="Sửa" (click)="suaChiSoSinhHieu(dataItem)" class="btn-blue">
+                                <mat-icon [icIcon]="icEdit"></mat-icon>
+                            </button>
+                            <button color="primary" kendoTooltip title="Xóa" (click)="xoaChiSoSinhHieu(dataItem)" class="btn-blue">
+                                <mat-icon [icIcon]="icDelete"></mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </ng-container>
+    </div>
+</div>
+
+<!-- template -->
+<ng-template #nhipTimTemplate let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [spinners]="false" [(model)]="dataItem.NhipTim" class="no-label" (modelChange)="onChangeNhipTim(dataItem, $event)">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.NhipTim}}</p>
+</ng-template>
+<ng-template #huyetApTemplate let-dataItem>
+    <table width="100%" *ngIf="dataItem.Id == 0 || dataItem.IsUpdate">
+        <tr>
+            <td style="width:calc(50% - 3px);padding:0">
+                <app-textboxnumeric [spinners]="false" [(model)]="dataItem.HuyetApTamThu" class="no-label" [max]="9999" (modelChange)="onChangeHuyetApTamThu($event, dataItem)">
+                </app-textboxnumeric>
+            </td>
+            <td style="width:6px;padding:0">/</td>
+            <td style="width:calc(50% - 3px);padding:0">
+                <app-textboxnumeric [spinners]="false" [(model)]="dataItem.HuyetApTamTruong" class="no-label" [max]="9999" (modelChange)="onChangeHuyetApTamTruong($event, dataItem)">
+                </app-textboxnumeric>
+            </td>
+        </tr>
+    </table>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.HuyetAp}}</p>
+</ng-template>
+<ng-template #thanNhietTemplate let-dataItem>
+    <app-textboxnumeric [format]="format" [max]="9999" [spinners]="false" *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [decimals]="1" [(model)]="dataItem.ThanNhiet" class="no-label">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.ThanNhiet | number}}</p>
+</ng-template>
+<ng-template #nhipThoTemplate let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [spinners]="false" [(model)]="dataItem.NhipTho" class="no-label" (modelChange)="onChangeNhipTho($event, dataItem)">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.NhipTho}}</p>
+</ng-template>
+<ng-template #canNangTemplate let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [format]="format" [spinners]="false" [(model)]="dataItem.CanNang" class="no-label" [max]="9999" [decimals]="1" (modelChange)="onChangeCanNang(dataItem)">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.CanNang | number}}</p>
+</ng-template>
+<ng-template #chieuCaoTemplate let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [format]="format" [spinners]="false" [(model)]="dataItem.ChieuCao" [decimals]="1" class="no-label" [max]="9999" (modelChange)="onChangeChieuCao(dataItem)">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.ChieuCao | number}}</p>
+</ng-template>
+<ng-template #BMITemplate let-dataItem>
+    <p class="ml-1">{{dataItem.BMI | number: '1.2-2'}}</p>
+</ng-template>
+<ng-template #glassgowTemplate let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [format]="format" [spinners]="false" [(model)]="dataItem.Glassgow" [decimals]="1" class="no-label">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.Glassgow | number}}</p>
+</ng-template>
+<ng-template #spO2Template let-dataItem>
+    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [format]="format" [spinners]="false" [(model)]="dataItem.SpO2" [decimals]="1" class="no-label">
+    </app-textboxnumeric>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.SpO2 | number}}</p>
+</ng-template>
+<ng-template #actionSinhHieuTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <!-- <button *ngIf="dataItem.Id == 0" color="primary" mat-icon-button kendoTooltip title="Lưu" type="button"
+            (click)="luuChiSoSinhHieu(dataItem)">
+            <mat-icon [icIcon]="icSave"></mat-icon>
+        </button> -->
+        <button color="primary" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate" mat-icon-button kendoTooltip title="Sửa" type="button" (click)="suaChiSoSinhHieu(dataItem)">
+            <mat-icon [icIcon]="icEdit"></mat-icon>
+        </button>
+        <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoaChiSoSinhHieu(dataItem)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>

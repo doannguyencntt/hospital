@@ -1,0 +1,59 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Khoa phòng</h3>
+    <div fxFlex="100%">
+        <ng-container *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+            <label
+                *ngIf="dataThongTinLichSuEkipPTTT.TenKhoaPhong != null">{{dataThongTinLichSuEkipPTTT.TenKhoaPhong}}</label>
+        </ng-container>
+    </div>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Chẩn đoán vào khoa</h3>
+    <div fxFlex="100%">
+        <ng-container *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+            <label
+                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanVaoKhoa != null">{{dataThongTinLichSuEkipPTTT.ChanDoanVaoKhoa}}</label>
+            <label *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanVaoKhoa == null">Không có chẩn đoán vào khoa.</label>
+        </ng-container>
+    </div>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Mô tả</h3>
+    <div fxFlex="100%">
+        <ng-container *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+            <label
+                *ngIf="dataThongTinLichSuEkipPTTT.MoTaChanDoan != null">{{dataThongTinLichSuEkipPTTT.MoTaChanDoan}}</label>
+            <label *ngIf="dataThongTinLichSuEkipPTTT.MoTaChanDoan == null">Không có mô tả chẩn đoán.</label>
+        </ng-container>
+    </div>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">CĐ trước phẫu thuật</h3>
+    <div fxFlex="100%">
+        <ng-container *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+            <label
+                *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanTruocPT != null">{{dataThongTinLichSuEkipPTTT.ChanDoanTruocPT}}</label>
+            <label *ngIf="dataThongTinLichSuEkipPTTT.ChanDoanTruocPT == null">Không có chẩn đoán trước phẫu
+                thuật.</label>
+        </ng-container>
+    </div>
+
+    <!-- <h3 fxFlex="100%" class="sub-title mt-0">Thời gian PT</h3>
+    <div fxFlex="100%">
+        <ng-container *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+            <label
+                *ngIf="dataThongTinLichSuEkipPTTT.ThoiGianTruocPT != null">{{dataThongTinLichSuEkipPTTT.ThoiGianTruocPT}}</label>
+            <label *ngIf="dataThongTinLichSuEkipPTTT.ThoiGianTruocPT == null">Không có thời gian trước phẫu thuật.</label>
+        </ng-container>
+    </div> -->
+
+    <!-- Người thực hiện -->
+    <app-lich-su-pttt-nth fxFlex="100%" [yeuCauDichVuKyThuatId]="yeuCauDichVuKyThuatId"></app-lich-su-pttt-nth>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Ghi chú</h3>
+    <div fxFlex="100%">
+        <ng-container *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+            <label
+                *ngIf="dataThongTinLichSuEkipPTTT.GhiChuCaPTTT != null">{{dataThongTinLichSuEkipPTTT.GhiChuCaPTTT}}</label>
+            <label *ngIf="dataThongTinLichSuEkipPTTT.GhiChuCaPTTT == null">Không có ghi chú.</label>
+        </ng-container>
+    </div>
+</div>

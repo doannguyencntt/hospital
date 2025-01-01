@@ -1,0 +1,175 @@
+<div>
+    <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+        <div>QUYẾT TOÁN : <strong style="color: red;font-weight: 900;">{{tenGoi}}</strong> </div>
+        <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content style="overflow: hidden" style="height: auto;">
+        <div fxLayout="row wrap">
+            <fieldset fxFlex="100%" class="mb-3">
+                <legend style="color: green;">Thông tin dịch vụ trong gói</legend>
+                <app-grid [gridColumns]="gridColumns" [useAddDeault]="false" class="k-grid-border" height="375"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true"
+                    [gridDataSource]="dataSource" style="width: 1px;" [pageable]="false" [checkboxAble]="false">
+                </app-grid>
+                <ng-template #daDungDgbvTemplate let-dataItem>
+                    {{dataItem.DGBV | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #daDungDGTruocCkTemplate let-dataItem>
+                    {{dataItem.DGTruoc | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #daDungDGSauCK let-dataItem>
+                    {{dataItem.DGSau | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #daDungDGSauCKGroupFooter let-dataItem>
+                    Tổng cộng
+                </ng-template>
+
+                <ng-template #daDungTTBVTemplate let-dataItem>
+                    {{dataItem.TTBVDaDung | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #daDungTTBVGroupFooter let-dataItem>
+                    <span> {{total('TTBVDaDung') | number:'0.2-2':'vi-VN'}}</span>
+                </ng-template>
+
+                <ng-template #daDungTTTruocCKTemplate let-dataItem>
+                    {{dataItem.TTTruocCKDaDung | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #daDungTTTruocCKGroupFooter let-dataItem>
+                    <span> {{total('TTTruocCKDaDung') | number:'0.2-2':'vi-VN'}}</span>
+                </ng-template>
+
+                <ng-template #daDungTTSauCKTemplate let-dataItem>
+                    {{dataItem.TTSauCKDaDung | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #daDungTTSauCKGroupFooter let-dataItem>
+                    <span style="color: green;"> {{total('TTSauCKDaDung') | number:'0.2-2':'vi-VN'}}</span>
+                </ng-template>
+
+
+                <ng-template #chuaDungTTBVTemplate let-dataItem>
+                    {{dataItem.TTBVChuaDung | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #chuaDungTTBVGroupFooter let-dataItem>
+                    <span> {{total('TTBVChuaDung') | number:'0.2-2':'vi-VN'}}</span>
+                </ng-template>
+
+                <ng-template #chuaDungTTTruocCKTemplate let-dataItem>
+                    {{dataItem.TTTruocCKChuaDung | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #chuaDungTTTruocCKGroupFooter let-dataItem>
+                    <span> {{total('TTTruocCKChuaDung') | number:'0.2-2':'vi-VN'}}</span>
+                </ng-template>
+
+                <ng-template #chuaDungTTSauCKTemplate let-dataItem>
+                    {{dataItem.TTSauCKChuaDung | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #chuaDungTTSauCKGroupFooter let-dataItem>
+                    <span> {{total('TTSauCKChuaDung') | number:'0.2-2':'vi-VN'}}</span>
+                </ng-template>
+
+
+
+                <ng-template #nhomGroupHeaderTemplate let-value="value">
+                    <strong>{{value}}</strong>
+                </ng-template>
+            </fieldset>
+        </div>
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+            <fieldset fxFlex="100%" class="mb-3">
+                <legend>CHI TIẾT THANH TOÁN </legend>
+                <table width="100%">
+                    <!-- <tr>
+                        <td width="100%">
+                            <strong>Tổng chưa thu = Tổng giá gói - Tổng đã thu </strong> =
+                            <strong> {{ thongTinQuyetToan.TongTienGoi | number:'0.2-2':'vi-VN'}}</strong> - <strong
+                                style="color: green;">
+                                <a
+                                    (click)="clickTongTienDaDung(thongTinQuyetToan.YeuCauGoiDichVuId , thongTinQuyetToan.BenhNhanId)">
+                                    {{thongTinQuyetToan.TongTienDaThu| number:'0.2-2':'vi-VN'}}</a></strong> =
+                            <strong style="color: red;"> {{ thongTinQuyetToan.TongTienGoi -
+                                thongTinQuyetToan.TongTienDaThu |
+                                number:'0.2-2':'vi-VN'}}</strong>
+                        </td>
+                    </tr> -->
+                    <tr>
+                        <td width="50%">
+                            <strong>Tổng chưa dùng = Tổng đã thu - Tổng đã dùng </strong> =
+                            <strong> {{ thongTinQuyetToan.TongTienDaThu | number:'0.2-2':'vi-VN'}}</strong> -
+                            <strong style="color: green;">{{thongTinQuyetToan.TongTienDaDung |
+                                number:'0.2-2':'vi-VN'}}</strong> =
+                            <strong style="color: red;"> {{thongTinQuyetToan.TongTienDaThu -
+                                thongTinQuyetToan.TongTienDaDung | number:'0.2-2':'vi-VN'}}</strong>
+                        </td>
+                        <td width="50%" *ngIf="kiemTraQuyetToan === false" style="text-align: right;">
+                            <div style="padding: 10px !important;display: inline-block;">
+                                Số tiền thực trả lại BN :
+                            </div>
+                            <app-textboxnumeric [(model)]="thongTinQuyetToan.SoTienTraLai" class="no-label p-0" label=""
+                                style="display: inline-block;width:200px;"></app-textboxnumeric>
+                        </td>
+                        <td width="50%" *ngIf="kiemTraQuyetToan === true" style="text-align: right;">
+                            <div style="padding: 10px !important;">Số tiền thực trả lại NB :
+                                <strong style="color: red;">
+                                    {{thongTinQuyetToan.SoTienTraLai | number:'0.2-2':'vi-VN'}}
+                                </strong>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <!-- TrangThaiQuyetToanDichVu === 2 đã quyết toán -->
+                <table width="100%" *ngIf="thongTinQuyetToan.TrangThaiQuyetToanDichVu !== 2">
+                    <tr>
+                        <td width="10%">
+                            <strong style="color: red;" class="mr-2"> Hủy gói</strong>
+                            <app-checkbox id="huy-goi" label="" [(model)]="thongTinQuyetToan.HuyGoi"> </app-checkbox>
+                        </td>
+                        <td width="90%">
+                            <app-textbox *ngIf="thongTinQuyetToan.HuyGoi === true" id="ly-do-huy-goi"
+                                label="Lý do hủy gói" maxlength="10000" [required]="true"
+                                [(model)]="thongTinQuyetToan.LyDoHuyGoi"
+                                [validationerror]="'LyDoHuyGoi' | validationerror: validationErrors"
+                                style="display: inline-block;width: 100%;">
+                            </app-textbox>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </div>
+    </mat-dialog-content>
+    <div class="sticky-button-action py-3 text-right mt-5" kendoTooltip style="border-top: 1px #333 solid;">
+        <div style="float: left">
+            <button (click)="InBangKeSuDung()" type="button" mat-button class="mr-2" mat-raised-button>In Bảng Kê
+                Sử Dụng</button>
+            <!-- <button (click)="InBangKeDichVu()" type="button" mat-button class="mr-2" mat-raised-button>In Bảng Kê
+                Dịch Vụ</button> -->
+        </div>
+
+        <div class="sticky-button-action text-right" kendoTooltip kendoTooltip
+            *ngIf="thongTinQuyetToan.HuyTrongNgay && kiemTraQuyetToan === true">
+            <!-- <button type="button" title="Quay Lại" class="mr-3" mat-button mat-raised-button>
+                <span>Quay Lại</span>
+            </button> -->
+            <button type="button" (click)="HuyQuyetToan()" title="Hủy quyết toán" color="warn" mat-raised-button>
+                <span>Hủy quyết toán</span>
+            </button>
+        </div>
+
+        <div class="sticky-button-action text-right" kendoTooltip kendoTooltip *ngIf="kiemTraQuyetToan === false">
+            <button type="button" (click)="QuyetToan()" title="Quyết toán" color="primary" mat-raised-button>
+                <span>Quyết toán</span>
+            </button>
+        </div>
+    </div>
+</div>

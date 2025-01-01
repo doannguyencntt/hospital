@@ -1,0 +1,49 @@
+<vex-page-layout>
+        <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+            <div [class.px-gutter]="true" class="w-full flex justify-between">
+                <div>
+                    <!-- <h1 class="title mt-0 mb-1">Danh Mục Dịch Vụ Kỹ Thuật</h1> -->
+                    <vex-breadcrumbs [crumbs]="[
+                        {Title:'Danh Mục',Path:''}
+                        ,{Title:'Nhóm Hệ Thống',Path:''}
+                        ,{Title:'Bệnh Viện',Path:''}
+                        ,{Title:'Dịch Vụ Kỹ Thuật',Path:'/danh-muc/nhom-he-thong/benh-vien/dich-vu-ky-thuat',Active:true}
+                        ]">
+                    </vex-breadcrumbs>
+                </div>
+            </div> 
+        </vex-page-layout-header>
+        <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+            <div class="card overflow-auto -mt-15">
+                <app-grid baseRoute="/danh-muc/nhom-he-thong/benh-vien/dich-vu-ky-thuat" 
+                    [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault] = "false"
+                    [useHeaderDefault]="true" [useActionDefault]="false" [checkboxAble] ="false"
+                    [lazyLoadPage]="true" >
+                </app-grid>
+                <!-- <ng-template #actionTemplate let-dataItem>
+                        <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                            <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+                        </button>
+                        <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                            <ng-template let-customer="customer" matMenuContent>
+                                <button *ngIf="dataItem.IsDisabled != 1" (click)="updateDichVuKyThuat(dataItem.Id)" mat-menu-item>
+                                        <span>Ngừng sử dụng</span>
+                                </button>
+                                <button *ngIf="dataItem.IsDisabled == 1" (click)="updateDichVuKyThuat(dataItem.Id,dataItem.IsDisabled)" mat-menu-item>
+                                        <span>Sử dụng</span> 
+                                </button>
+                            </ng-template>
+                        </mat-menu>
+                </ng-template>  -->
+                <ng-template #trangThaTemplate let-dataItem>
+                            <button *ngIf="dataItem.IsDisabled == 1" (click)="updateDichVuKyThuat(dataItem.Id,dataItem.IsDisabled)" mat-menu-item>
+                                <mat-icon [icIcon]="icclose" color="warn"  ></mat-icon><span>Ngừng sử dụng</span>
+                            </button>
+                            <button *ngIf="dataItem.IsDisabled != 1" (click)="updateDichVuKyThuat(dataItem.Id,dataItem.IsDisabled)" mat-menu-item>
+                                    <mat-icon [icIcon]="icicdone" color="primary" ></mat-icon><span>Đang Sử dụng</span>
+                            </button>
+                </ng-template>               
+                
+            </div>
+        </vex-page-layout-content>
+</vex-page-layout>

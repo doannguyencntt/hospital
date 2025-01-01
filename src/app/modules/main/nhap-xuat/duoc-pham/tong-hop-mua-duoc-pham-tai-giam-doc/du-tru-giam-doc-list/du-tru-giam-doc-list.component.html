@@ -1,0 +1,192 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+        {Title:'Nhập Xuất',Path:''},
+        {Title:'Dược Phẩm',Path:''},
+        {Title:'Dự Trù Mua',Path:''},
+        {Title:'Tổng Hợp Dự Trù Mua Dược Phẩm Tại Giám Đốc',
+        Path:'/nhap-xuat/duoc-pham/tong-hop-mua-duoc-pham-tai-giam-doc', Active: true}
+        ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid #gridParent baseRoute="nhap-xuat/duoc-pham/tong-hop-mua-duoc-pham-tai-giam-doc" [sort]="sort" [additionalSearchString]="additionalSearchString" [gridColumns]="gridColumns" [lazyLoadPage]="true" [documentType]="documentType" [useAddDeault]="false"
+                (extOnDataBound)="SetColorForTrangThai()" [checkboxAble]="false" [useHeaderDefault]="false" [searchString]="search.SearchString" [headerTemplate]="headerTemplate" [useActionDefault]="false" [detailTemplate]="detailTemplate">
+            </app-grid>
+
+            <ng-template #detailTemplate let-dataItem>
+                <app-grid [detailTemplate]="detailTemplateChild" *ngIf="dataItem.TrangThai==null" baseRoute="nhap-xuat/duoc-pham/tong-hop-mua-duoc-pham-tai-giam-doc" [gridColumns]="gridChildChoDuyetColumns" pageSize="5" [checkboxAble]="false" [lazyLoadPage]="true" [sort]="sortChild"
+                    [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [urlGetData]="urlGetDataGridChild" [groups]="groupLoais" [urlGetTotalPage]="urlGetTotalPageGridChild" [additionalSearchString]="dataItem.Id"
+                    [autoHeight]="true" [showStt]="true">
+                </app-grid>
+                <app-grid [detailTemplate]="detailTemplateChild" *ngIf="dataItem.TrangThai!=null" baseRoute="nhap-xuat/duoc-pham/tong-hop-mua-duoc-pham-tai-giam-doc" [gridColumns]="gridChildColumns" pageSize="5" [checkboxAble]="false" [lazyLoadPage]="true" [sort]="sortChild"
+                    [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [urlGetData]="urlGetDataGridChild" [groups]="groupLoais" [urlGetTotalPage]="urlGetTotalPageGridChild" [additionalSearchString]="dataItem.Id"
+                    [autoHeight]="true" [showStt]="true">
+                </app-grid>
+                <ng-template #detailTemplateChild let-dataItem>
+                    <app-grid baseRoute="nhap-xuat/duoc-pham/tong-hop-mua-duoc-pham-tai-giam-doc" [gridColumns]="gridResultColumns" pageSize="5" [checkboxAble]="false" [sort]="sortChildForChild" [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [urlGetData]="urlGetDataGridForChild" additionalSearchString="{{dataItem.Id}}-{{dataItem.IsBhyt}}" [autoHeight]="true" [groups]="groups" [showStt]="true">
+                    </app-grid>
+                </ng-template>
+            </ng-template>
+
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <app-checkbox (modelChange)="CheckboxChange($event, true)" id="DangChoDuyetId" [(model)]="search.DangChoDuyet" class="ml-2" label="Chờ duyệt">
+                    </app-checkbox>
+                    <app-checkbox (modelChange)="CheckboxChange($event, false, false, true)" id="DaDuyetId" [(model)]="search.DaDuyet" class="ml-2" label="Đã duyệt">
+                    </app-checkbox>
+                    <app-checkbox (modelChange)="CheckboxChange($event, false, true)" id="TuChoiDuyetId" [(model)]="search.TuChoiDuyet" class="ml-2" label="Từ chối">
+                    </app-checkbox>
+
+                    <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                        <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search" name="searchString" [(ngModel)]="search.SearchString" (keyup)="onKey($event)" (ngModelChange)="clearSearch()" placeholder="Nhập từ khóa..." />
+                    </div>
+
+                    <app-daterangepicker style="margin-left: 5px;" id="range-yeu-cau" fxFlex="250px" fxFlex.sm="auto" [(model)]="search.RangeYeuCau" label="Yêu cầu từ ngày - đến ngày" (modelChange)="Timkiem()" class="mt-1 on-header">
+                    </app-daterangepicker>
+
+                    <app-daterangepicker style="margin-left: 5px;" id="range-duyet" fxFlex="250px" fxFlex.sm="auto" [(model)]="search.RangeDuyet" label="Giám đốc duyệt từ ngày - đến ngày" (modelChange)="Timkiem()" class="mt-1 on-header">
+                    </app-daterangepicker>
+
+                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+                        <mat-icon [icIcon]="icSearch"></mat-icon>
+                    </button>
+
+                    <span fxFlex></span>
+                    <button [matMenuTriggerFor]="columnFilterMenu" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip title="Lọc cột" type="button">
+                        <mat-icon [icIcon]="icFilterList"></mat-icon>
+                    </button>
+
+                    <button (click)="exportExcel()" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip title="Xuất Excel" type="button">
+                        <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                    </button>
+                    <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                        <div *ngFor="let column of gridColumns">
+                            <button *ngIf="!column.HideFilter" class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                                <mat-checkbox [disabled]="true" color="primary">
+                                    {{ column.Title }}
+                                </mat-checkbox>
+                            </button>
+                        </div>
+                    </mat-menu>
+                </div>
+            </ng-template>
+
+        </div>
+    </vex-page-layout-content>
+
+</vex-page-layout>
+
+<ng-template #soLuongTemplate let-dataItem>
+    {{dataItem.SoLuongTra | number:'1.0':'vi-VN' }}
+</ng-template>
+
+<ng-template #giaTemplate let-dataItem>
+    {{dataItem.DonGiaNhap | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <button type="button" *ngIf="dataItem.TrangThai == null" (click)="Decline(dataItem)" color="warn" mat-raised-button>Từ
+        chối</button>
+    <button type="button" class="duyet" *ngIf="dataItem.TrangThai == null" (click)="Approve(dataItem)" color="primary" mat-raised-button>Duyệt</button>
+</ng-template>
+
+<ng-template #trangThaiTemplate let-dataItem>
+    <div [innerHtml]="dataItem.TrangThaiDisplay"></div>
+</ng-template>
+
+<ng-template #soPhieuTemplate let-dataItem>
+    <a (click)="edit(dataItem.Id)">{{dataItem.SoPhieu}}</a>
+</ng-template>
+
+<ng-template #ngayYeuCauTemplate let-dataItem>
+    {{dataItem.NgayYeuCauDisplay}}
+</ng-template>
+
+<ng-template #ngayDuyetTemplate let-dataItem>
+    {{dataItem.NgayDuyetDisplay}}
+</ng-template>
+
+<ng-template #orderTemplate let-i="rowIndex">
+    {{i + 1}}
+</ng-template>
+
+<ng-template #soLuongDuTruTemplate let-dataItem>
+    <span>{{dataItem.SoLuongDuTru | number:'1.0':'vi-VN' }}</span>
+</ng-template>
+
+<ng-template #soLuongDuKienTemplate let-dataItem>
+    <span>{{dataItem.SoLuongDuKienTrongKy | number:'1.0':'vi-VN' }}</span>
+</ng-template>
+
+<ng-template #soLuongDuTruTrKhoaTemplate let-dataItem>
+    <span>{{dataItem.SoLuongDuTruTrKhoa | number:'1.0':'vi-VN' }}</span>
+</ng-template>
+
+<ng-template #soLuongDuTruKhDuocTemplate let-dataItem>
+    <span>{{dataItem.SoLuongDuTruKhDuoc | number:'1.0':'vi-VN' }}</span>
+</ng-template>
+
+<ng-template #soLuongDuTruDirectorTemplate let-dataItem>
+    <span>{{dataItem.SoLuongDuTruDirector | number:'1.0':'vi-VN' }}</span>
+</ng-template>
+
+<ng-template #nhomGroupHeaderTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+
+<ng-template #khoDuTruTonTemplate let-dataItem>
+    <span>{{dataItem.KhoDuTruTon | number:'1.0':'vi-VN' }}</span>
+</ng-template>
+
+<ng-template #khoTongTonTemplate let-dataItem>
+    <ng-template #templateInfo let-dataItem>
+        <table class="table table-border" width="100%">
+            <tr *ngFor="let kho of khos">
+                <td>{{kho.Name}}:</td>
+                <td>{{kho.TongTon | number:'1.0':'vi-VN' }}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <div class="kho-tong-ton-ng-template" kendoTooltip>
+        <span class="kho-tong-ton-label">{{dataItem.KhoTongTon | number:'1.0':'vi-VN' }}</span>
+        <span *ngIf="dataItem.KhoTongTon != 0" class="kho-tong-ton-ng-template" kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block" position="left" [tooltipTemplate]="templateInfo" filter="*">
+            <mat-icon [icIcon]="icInfo" (mouseover)="TooltipCustom(dataItem)" class="info"></mat-icon>
+        </span>
+    </div>
+</ng-template>
+
+<ng-template #hdChuaNhapTemplate let-dataItem>
+    <ng-template #templateHdInfo let-dataItem>
+        <table class="table table-border" width="100%">
+            <tr *ngFor="let hdt of hdts">
+                <td>{{hdt.Name}}:</td>
+                <td>{{hdt.TongTon | number:'1.0':'vi-VN' }}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <div class="kho-tong-ton-ng-template" kendoTooltip>
+        <span class="kho-tong-ton-label">{{dataItem.HdChuaNhap | number:'1.0':'vi-VN' }}</span>
+        <span *ngIf="dataItem.HdChuaNhap != 0" class="kho-tong-ton-ng-template" kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block" position="left" [tooltipTemplate]="templateHdInfo" filter="*">
+            <mat-icon [icIcon]="icInfo" (mouseover)="TooltipCustom(dataItem)" class="info"></mat-icon>
+        </span>
+    </div>
+</ng-template>
+<ng-template #khoaGroupHeader let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+<ng-template #soLuongDuTruHeaderTemplate let-aggregates="aggregates">
+    <strong>{{aggregates.SoLuongDuTru.sum | number:'1.0':'vi-VN' }}</strong>
+</ng-template>
+
+<ng-template #soLuongDuKienHeaderTemplate let-aggregates="aggregates">
+    <strong>{{aggregates.SoLuongDuKienTrongKy.sum | number:'1.0':'vi-VN' }}</strong>
+</ng-template>

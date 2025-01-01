@@ -1,0 +1,103 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                {Title:'Marketing',Path:''}
+                ,{Title:'Nhập kho',Path:'/marketing/nhap-kho-marketing', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+                [lazyLoadPage]="true" [useHeaderDefault]="false" [searchString]="nhapKhoMarketing.SearchString"
+                [sort]="sort" urlGetData="Marketing/GetDSNhapKhoMarketingDataForGridAsync"
+                [additionalSearchString]="addtionStringDefault"
+                urlGetTotalPage="Marketing/GetDSNhapKhoMarketingTotalPageForGridAsync" [headerTemplate]="headerTemplate"
+                [checkboxAble]="false">
+
+                <ng-template #ngayNhapTemplate let-dataItem>
+                    {{dataItem.NgayNhapDisplay}}
+                </ng-template>
+                <ng-template #chiTietTemplate let-dataItem>
+                    <div class="text-center" kendoTooltip>
+                        <a (click)="view(dataItem.Id)">
+                            <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.SoPhieu}}">
+                                {{dataItem.SoPhieu}}</p>
+                        </a>
+                    </div>
+                </ng-template>
+            </app-grid>
+
+        </div>
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                    fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        type="search" name="searchString" [(ngModel)]="nhapKhoMarketing.SearchString"
+                        (keyup)="onKey($event)" (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa..." />
+                </div>
+                <app-datetimepicker fxFlex="205px" [(model)]="nhapKhoMarketing.NgayNhapTuFormat" #tiepnhantu
+                    id="NgayNhapTuFormat" (modelChange)="TimkiemNangCao()" label="Từ ngày" class="ml-2 on-header"
+                    (keyup)="onKey($event)">
+                </app-datetimepicker>
+                <app-datetimepicker fxFlex="205px" [(model)]="nhapKhoMarketing.NgayNhapDenFormat" #tiepnhanden
+                    id="NgayNhapDenFormat" (modelChange)="TimkiemNangCao()" label="Đến ngày" class="ml-2 on-header"
+                    (keyup)="onKey($event)">
+                </app-datetimepicker>
+                <button type="button" color="primary" (click)="TimkiemNangCao()" class="ml-2"
+                    mat-raised-button>Tìm</button>
+                <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                </button>
+                <span fxFlex></span>
+                <button [matMenuTriggerFor]="columnFilterMenu" fxFlex="none" class="mr-6" mat-icon-button kendoTooltip
+                    title="Lọc cột" type="button">
+                    <mat-icon [icIcon]="icFilterList" style="margin-right: -65px;"></mat-icon>
+                </button>
+
+                <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                    <div *ngFor="let column of gridColumns">
+                        <button *ngIf="column.Title != ''"
+                            class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                            <mat-checkbox [disabled]="true" color="primary">
+                                {{ column.Title }}
+                            </mat-checkbox>
+                        </button>
+                    </div>
+                </mat-menu>
+                <button class="ml-4 right" style="right: 0px;" type="button" mat-icon-button (click)="XuatExcel()"
+                    kendoTooltip title="Xuất Excel" fxFlex="none">
+                    <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                </button>
+
+                <button class="ml-3" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm" type="button"
+                    (click)="gridChild.navigate('/marketing/nhap-kho-marketing/them',168,3)">
+                    <mat-icon [icIcon]="icAdd"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #acTionTemplate let-dataItem>
+            <button kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+            </button>
+            <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                <ng-template let-customer="customer" matMenuContent>
+                    <button (click)="Edit(dataItem)" mat-menu-item>
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                        <span>Sửa</span>
+                    </button>
+                    <button (click)="Delete(dataItem)" mat-menu-item>
+                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                        <span>Xóa</span>
+                    </button>
+                </ng-template>
+            </mat-menu>
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,35 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1 border-bottom">
+    <div>Thêm bộ phận tổn thương</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="max-height: 86vh;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="p-2 mb-6">
+        <app-upload id="Upload" label="Chọn hình ảnh" fxFlex="50%" fxFlex.sm="100%"
+            [allowedExtensions]="['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG']"
+            (uploadFileDone)="uploadFileDone($event)" required="true"
+            [validationerror]="'HinhAnh' | validationerror:validationErrors">
+        </app-upload>
+        <app-textarea id="mota" fxFlex="50%" fxFlex.sm="100%" maxlength="4000" label="Mô tả"
+            [(model)]="boPhanTonThuong.MoTa" minHeight="20" required="true"
+            [validationerror]="'MoTa' | validationerror:validationErrors">
+        </app-textarea>
+        <div fxFlex="100%" fxFlex.sm="100%" *ngIf="boPhanTonThuong.HinhAnh!=null && boPhanTonThuong.HinhAnh!=''" style="position: relative;">
+            <image-drawing [src]="boPhanTonThuong.HinhAnh" outputMimeType="'image/jpeg'" showCancelButton={{true}}
+                 outputQuality="1" (save)="save($event)" (cancel)="cancel()" enableRemoveImage={{true}} forceSizeExport={{true}}
+                (click)="showErrorIfNoImage($event)" #imageDrawing [loadingTemplate]="loadingTemplate" saveBtnText="Lưu" cancelBtnText="Hủy">
+            </image-drawing>
+            <ng-template #loadingTemplate>                
+                <button class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif" alt="Loading" /></button>
+            </ng-template>         
+            <button class="btn btn-raised btn-raised btn-primary btn-loading" *ngIf="loading"><img src="/assets/img/loader.gif"
+                alt="Loading" /></button>
+        </div>
+        <div fxFlex="100%" fxFlex.sm="100%" *ngIf="boPhanTonThuong.HinhAnh==null || boPhanTonThuong.HinhAnh==''">
+            <div style="border:1px solid #ccc;width:100%;height:400px;text-align: center;padding:15px;">
+                Bạn chưa chọn ảnh
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>

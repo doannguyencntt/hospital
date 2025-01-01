@@ -1,0 +1,68 @@
+<app-grid #gridD [gridColumns]="gridChildColumnsChoThanhToan" [documentType]="documentType" [useAddDeault]="false"
+    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+    [sort]="sortConfig" [urlGetData]="urlGetDataGridChild" [urlGetTotalPage]="urlGetTotalPageGridChild"
+    heightToolbar="272" [additionalSearchString]="queryStringSearchUuTien" [detailTemplate]="detailTemplate"
+    (extOnDataBound)="onDataBound($event)">
+</app-grid>
+<ng-template #TongGiaTriDonThuocTemplate let-dataItem>
+    <strong class="text-color" style="color:red" *ngIf="dataItem.TrangThaiHienThi=='Chưa thanh toán'">
+        {{dataItem.TongGiaTriDonThuoc | number:'0.2-2':'vi-VN'}}</strong>
+    <strong class="text-color" style="color:blue" *ngIf="dataItem.TrangThaiHienThi=='Đã thanh toán'">
+        {{dataItem.TongGiaTriDonThuoc | number:'0.2-2':'vi-VN'}}</strong>
+</ng-template>
+<ng-template #SoTienChoThanhToanTemplate let-dataItem>
+    <strong class="text-color" style="color:red" *ngIf="dataItem.TrangThaiHienThi=='Chưa thanh toán'">
+        {{dataItem.SoTienChoThanhToan | number:'0.2-2':'vi-VN'}}</strong>
+    <strong class="text-color" style="color:blue" *ngIf="dataItem.TrangThaiHienThi=='Đã thanh toán'">
+        {{dataItem.SoTienChoThanhToan | number:'0.2-2':'vi-VN'}}</strong>
+</ng-template>
+<ng-template #trangThaiTemplate let-dataItem>
+    <strong class="text-color" style="color:red" *ngIf="dataItem.TrangThaiHienThi=='Chưa thanh toán'">
+        {{dataItem.TrangThaiHienThi}}</strong>
+    <strong class="text-color" style="color:blue" *ngIf="dataItem.TrangThaiHienThi =='Đã thanh toán'">
+        {{dataItem.TrangThaiHienThi}}</strong>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <button type="button" color="primary" (click)="Xem(dataItem)" class="mr-1 float-right" mat-raised-button>
+            Xem</button>
+    </div>
+</ng-template>
+
+<ng-template #maTNTemplate let-dataItem>
+    <a (click)="Xem(dataItem)">{{dataItem.MaTN}}</a>
+</ng-template>
+<ng-template #detailTemplate let-dataItem>
+    <app-grid baseRoute="" [gridColumns]="gridChild" [documentType]="documentType" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+        [urlGetData]="urlGetDataChild"
+        [additionalSearchString]="dataItem.Id + '-' +dataItem.DateStart + '-' + dataItem.DateEnd" [autoHeight]="true"
+        [pageable]="false">
+    </app-grid>
+</ng-template>
+<ng-template #nhomGroupHeaderTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+<ng-template #templatePrint let-dataItem>
+    <span *ngIf="dataItem.DonThuocBacSiKeToa == false">
+        <button kendoTooltip title="In phiếu"
+            (click)="PrinAllDonThuocBenhNhan(dataItem.DonThuocThanhToanId, dataItem.LoaiDonThuoc , dataItem.YeuCauKhambenhId)"
+            mat-icon-button type="button">
+            <mat-icon [icIcon]="icPrint"></mat-icon>
+        </button>
+    </span>
+</ng-template>
+<ng-template #SoTienThuoctemplate let-dataItem>
+    <span style="color:red"> {{dataItem.SoTienDisPlay}}</span>
+</ng-template>
+<ng-template #TinhTrangThuoctemplate let-dataItem>
+    <span style="color:red" *ngIf="dataItem.TinhTrang =='Chưa xuất thuốc' || dataItem.TinhTrang =='Chưa thanh toán'">
+        {{dataItem.TinhTrang}}</span>
+    <span style="color:blue" *ngIf="dataItem.TinhTrang =='Đã thanh toán'"> {{dataItem.TinhTrang}}</span>
+    <span style="color: blue;" *ngIf="dataItem.TinhTrang =='Đã xuất thuốc'"> {{dataItem.TinhTrang}}</span>
+</ng-template>
+<ng-template #nguoiDungKhongMuaThuocTemplate let-dataItem>
+    <button *ngIf="dataItem.TrangThai === 1"  type="button" color="primary" mat-raised-button (click)="nguoiBenhKhongMuaThuoc(dataItem)"
+     title="Phím tắt: Người bệnh không mua thuốc">NB không mua thuốc</button>
+</ng-template>

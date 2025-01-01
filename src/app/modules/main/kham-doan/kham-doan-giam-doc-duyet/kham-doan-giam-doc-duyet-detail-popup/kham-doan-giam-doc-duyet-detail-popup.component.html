@@ -1,0 +1,179 @@
+<app-header-form [crumbs]="[ {Title:'Khám Đoàn',Path:''}
+        ,{Title:'DS Duyệt Yêu Cầu Nhân Sự Khám Sức Khỏe - Giám Đốc', Path: '/kham-doan/giam-doc-duyet', queryParams: {holdQuery : true}}
+        ,{Title: 'Chi Tiết Duyệt Yêu Cầu Nhân Sự Khám Sức Khỏe',Path:'',Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center" class="space-between">
+                <h2 class="title m-0">{{title}}</h2>
+                <label [ngClass]="{'orangeText': khamDoanNhanSuDetail.TrangThai == 1,
+                        'greenText': khamDoanNhanSuDetail.TrangThai == 2,
+                        'redText': khamDoanNhanSuDetail.TrangThai == 3}">
+                    {{khamDoanNhanSuDetail.TenTinhTrang}}
+                </label>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <app-combobox id="congTy" fxFlex="20%" fxFlex.sm="20%" label="Tên công ty" [required]="true"
+                        [(model)]="khamDoanNhanSuDetail.CongTyId" [modelText]="khamDoanNhanSuDetail.CongTy"
+                        url="KhamDoan/GetCongTys" hierarchyKeyToSend="CongTyId" [disabled]="true"
+                        [validationerror]="'CongTyId' | validationerror:validationErrors">
+                    </app-combobox>
+                    <app-combobox id="hopDong" fxFlex="20%" fxFlex.sm="20%" label="Hợp đồng"
+                        url="KhamDoan/GetHopDongKhamSucKhoes" [required]="true" hierarchyKeyToListen="CongTyId"
+                        [(model)]="khamDoanNhanSuDetail.HopDongKhamSucKhoeId" [disabled]="true"
+                        [validationerror]="'HopDongKhamSucKhoeId' | validationerror:validationErrors">
+                    </app-combobox>
+                    <app-textboxnumeric id="soLuongBenhNhan" fxFlex="20%" fxFlex.sm="20%" [max]="999999" label="SL NB "
+                        [(model)]="khamDoanNhanSuDetail.SoNguoiKham" [decimals]="0" [disabled]="true">
+                    </app-textboxnumeric>
+                    <app-datepicker id="ngayBatDauKham" [(model)]="khamDoanNhanSuDetail.NgayHieuLuc" fxFlex="20%"
+                        fxFlex.sm="20%" label="Ngày BĐ khám" [disabled]="true">
+                    </app-datepicker>
+                    <app-datepicker id="NgayKetThucKham" [(model)]="khamDoanNhanSuDetail.NgayKetThuc" fxFlex="20%"
+                        fxFlex.sm="20%" label="Ngày KT khám" [disabled]="true">
+                    </app-datepicker>
+
+                    <app-grid *ngIf="diaDiemKhamDisplay==true" fxFlex="100%" fxFlex.sm="100%" masterName="diaDiemKham"
+                        [gridColumns]="gridDiaDiemKhamColumns" [documentType]="documentType" [useAddDeault]="false"
+                        class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+                        [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true"
+                        [gridDataSource]="gridDiaDiemKhamDatasource" style="width: 1px;" [pageable]="false">
+                    </app-grid>
+                    <ng-template #ngayKhamTemplate let-dataItem>
+                        {{dataItem.NgayDisplay}}
+                    </ng-template>
+
+                    <app-textboxnumeric id="tongSoLuongBacSi" [(model)]="khamDoanNhanSuDetail.TongSoBs" fxFlex="20%"
+                        fxFlex.sm="20%" [max]="999999" label="Tổng SL BS" [decimals]="0" [disabled]="true">
+                    </app-textboxnumeric>
+                    <app-textboxnumeric id="tongSoLuongDieuDuong" [(model)]="khamDoanNhanSuDetail.TongSoDd" fxFlex="20%"
+                        fxFlex.sm="20%" [max]="999999" label="Tổng SL ĐD" [decimals]="0" [disabled]="true">
+                    </app-textboxnumeric>
+                    <app-textboxnumeric id="tongSoLuongNhanVienKhac" [(model)]="khamDoanNhanSuDetail.TongNvKhac"
+                        fxFlex="20%" fxFlex.sm="20%" [max]="999999" label="Tổng NV khác" [decimals]="0"
+                        [disabled]="true">
+                    </app-textboxnumeric>
+
+                    <ng-container *ngIf="id!=0">
+                        <app-combobox id="nguoiGuiId" fxFlex="20%" fxFlex.sm="20%" label="Người gửi"
+                            [(model)]="khamDoanNhanSuDetail.NhanVienGuiYeuCauId"
+                            [modelText]="khamDoanNhanSuDetail.NhanVienGui" url="KhamDoan/GetListNguoiGui"
+                            [disabled]="true">
+                        </app-combobox>
+                        <app-datepicker id="ngayGui" fxFlex="20%" fxFlex.sm="20%" label="Ngày gửi"
+                            [(model)]="khamDoanNhanSuDetail.NgayGuiYeuCau" [disabled]="true">
+                        </app-datepicker>
+                    </ng-container>
+
+                    <ng-container *ngIf="khamDoanNhanSuDetail.DuocKHTHDuyet == true">
+                        <app-combobox id="KHTHDuyetId" fxFlex="20%" fxFlex.sm="20%" label="KHTH duyệt"
+                            [(model)]="khamDoanNhanSuDetail.NhanVienKHTHDuyetId"
+                            [modelText]="khamDoanNhanSuDetail.NhanVienKhthDuyet" url="KhamDoan/GetListNguoiDuyet"
+                            [disabled]="true">
+                        </app-combobox>
+                        <app-datepicker id="ngayKHTHDuyet" fxFlex="20%" fxFlex.sm="20%" label="Ngày KHTH duyệt"
+                            [(model)]="khamDoanNhanSuDetail.NgayKHTHDuyet" [disabled]="true">
+                        </app-datepicker>
+                    </ng-container>
+
+                    <ng-container *ngIf="khamDoanNhanSuDetail.DuocKHTHDuyet == false">
+                        <app-combobox id="KHTHTuChoiId" fxFlex="20%" fxFlex.sm="20%" label="KHTH từ chối"
+                            [(model)]="khamDoanNhanSuDetail.NhanVienKHTHDuyetId"
+                            [modelText]="khamDoanNhanSuDetail.NhanVienKhthDuyet" url="KhamDoan/GetListNguoiDuyet"
+                            [disabled]="true">
+                        </app-combobox>
+                        <app-datepicker id="ngayKHTHTuChoi" fxFlex="20%" fxFlex.sm="20%" label="Ngày KHTH từ chối"
+                            [(model)]="khamDoanNhanSuDetail.NgayKHTHDuyet" [disabled]="true">
+                        </app-datepicker>
+                        <app-textarea id="lyDoKHTHTuChoi" fxFlex="20%" fxFlex.sm="20%"
+                            [style.color]="khamDoanNhanSuDetail.TrangThai == 3 ? 'red' : ''" [disabled]="true"
+                            label="Lý do" [minHeight]="21" [(model)]="khamDoanNhanSuDetail.LyDoKHTHKhongDuyet">
+                        </app-textarea>
+                    </ng-container>
+
+                    <ng-container *ngIf="khamDoanNhanSuDetail.DuocNhanSuDuyet == true">
+                        <app-combobox id="NhanVienNhanSuDuyetId" fxFlex="20%" fxFlex.sm="20%" label="NS duyệt"
+                            [(model)]="khamDoanNhanSuDetail.NhanVienNhanSuDuyetId"
+                            [modelText]="khamDoanNhanSuDetail.NhanVienNhanSuDuyet" url="KhamDoan/GetListNguoiDuyet"
+                            [disabled]="true">
+                        </app-combobox>
+                        <app-datepicker id="NgayNhanSuDuyet" fxFlex="20%" fxFlex.sm="20%" label="Ngày NS duyệt"
+                            [(model)]="khamDoanNhanSuDetail.NgayNhanSuDuyet" [disabled]="true">
+                        </app-datepicker>
+                    </ng-container>
+
+                    <ng-container *ngIf="khamDoanNhanSuDetail.DuocNhanSuDuyet == false">
+                        <app-combobox id="NSTuChoiId" fxFlex="20%" fxFlex.sm="20%" label="NS từ chối"
+                            [(model)]="khamDoanNhanSuDetail.NhanVienNhanSuDuyetId"
+                            [modelText]="khamDoanNhanSuDetail.NhanVienNhanSuDuyet" url="KhamDoan/GetListNguoiDuyet"
+                            [disabled]="true">
+                        </app-combobox>
+                        <app-datepicker id="NgayNhanSuDuyet" fxFlex="20%" fxFlex.sm="20%" label="Ngày NS từ chối"
+                            [(model)]="khamDoanNhanSuDetail.NgayNhanSuDuyet" [disabled]="true">
+                        </app-datepicker>
+                        <app-textarea id="lyDoNSTuChoi" fxFlex="20%" fxFlex.sm="20%"
+                            [style.color]="khamDoanNhanSuDetail.TrangThai == 3 ? 'red' : ''" [disabled]="true"
+                            label="Lý do" [minHeight]="21" [(model)]="khamDoanNhanSuDetail.LyDoNhanSuKhongDuyet">
+                        </app-textarea>
+                    </ng-container>
+
+                    <ng-container *ngIf="khamDoanNhanSuDetail.DuocGiamDocDuyet == true">
+                        <app-combobox id="GiamDocId" fxFlex="20%" fxFlex.sm="20%" label="GĐ duyệt"
+                            [(model)]="khamDoanNhanSuDetail.GiamDocId" [modelText]="khamDoanNhanSuDetail.GiamDoc"
+                            url="KhamDoan/GetListNguoiDuyet" [disabled]="true">
+                        </app-combobox>
+                        <app-datepicker id="NgayGiamDocDuyet" fxFlex="20%" fxFlex.sm="20%" label="Ngày GĐ duyệt"
+                            [(model)]="khamDoanNhanSuDetail.NgayGiamDocDuyet" [disabled]="true">
+                        </app-datepicker>
+                    </ng-container>
+
+                    <ng-container *ngIf="khamDoanNhanSuDetail.DuocGiamDocDuyet == false">
+                        <app-combobox id="GDTuChoiId" fxFlex="20%" fxFlex.sm="20%" label="GĐ từ chối"
+                            [(model)]="khamDoanNhanSuDetail.GiamDocId" [modelText]="khamDoanNhanSuDetail.GiamDoc"
+                            url="KhamDoan/GetListNguoiDuyet" [disabled]="true">
+                        </app-combobox>
+                        <app-datepicker id="NgayGDDuyet" fxFlex="20%" fxFlex.sm="20%" label="Ngày GĐ từ chối"
+                            [(model)]="khamDoanNhanSuDetail.NgayGiamDocDuyet" [disabled]="true">
+                        </app-datepicker>
+                        <app-textarea id="lyDoNSTuChoi" fxFlex="20%" fxFlex.sm="20%"
+                            [style.color]="khamDoanNhanSuDetail.TrangThai == 3 ? 'red' : ''" [disabled]="true"
+                            label="Lý do" [minHeight]="21" [(model)]="khamDoanNhanSuDetail.LyDoGiamDocKhongDuyet">
+                        </app-textarea>
+                    </ng-container>
+
+                    <h3 fxFlex="100%" class="sub-title">Danh Sách Nhân Sự</h3>
+
+
+                    <app-grid #gridNhanSu fxFlex="100%" fxFlex.sm="100%" style="width: 1px;"
+                        [gridColumns]="gridNhanSuColumns" [allowSortDefault]="true" [documentType]="documentType"
+                        [useAddDeault]="false" [showStt]="true" [useHeaderDefault]="false" [useActionDefault]="false"
+                        [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500" [pageable]="false"
+                        [gridDataSource]="gridNhanSuDatasource">
+                    </app-grid>
+
+                    <ng-template #taiLieuTemplate let-dataItem>
+                        <a *ngIf="dataItem.NhanSuKhamSucKhoeTaiLieuDinhKem != null">
+                            <p kendoTooltip class="reverse-ellipsis l" title="{{getTenTaiLieuDinhKem(dataItem)}}">
+                                {{getTenTaiLieuDinhKem(dataItem)}}
+                            </p>
+                        </a>
+                    </ng-template>
+                </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="form-footer mt-6">
+                <button style="margin-left: auto;" type="button" mat-stroked-button color="primary"
+                    (click)="quayLai()">Hủy</button>
+                <button *ngIf="khamDoanNhanSuDetail.DuocGiamDocDuyet != true  && khamDoanNhanSuDetail.TrangThai==1" mat-raised-button mat-button color="primary"
+                    (click)="xuLyDuyet()">Duyệt</button>
+                <button *ngIf="khamDoanNhanSuDetail.DuocGiamDocDuyet != true  && khamDoanNhanSuDetail.TrangThai==1" mat-raised-button mat-button color="warn"
+                    (click)="xuLyTuChoi()">Từ chối</button>
+            </div>
+        </div>
+    </div>
+</div>

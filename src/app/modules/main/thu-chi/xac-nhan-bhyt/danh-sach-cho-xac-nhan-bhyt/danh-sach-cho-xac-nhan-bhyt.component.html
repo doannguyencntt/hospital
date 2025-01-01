@@ -1,0 +1,109 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="
+            [
+                {Title:'Ngoại Trú',Path:''},
+                {Title:'Xác Nhận BHYT',Path:''},
+                {Title:'DS Xác Nhận BHYT',Path:'', Active:true}
+            ]">
+            </vex-breadcrumbs>
+            <app-hot-key [keys]="[
+            {Key:'Ctrl + Q', Description:'Quét mã vạch',End:true}
+            ]"></app-hot-key>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid *ngIf="kiemTraDanhSachThanhToan" baseRoute="/xac-nhan-bhyt/ngoai-tru/danh-sach-cho-xac-nhan-bhyt"
+                #gridListXacNhan [gridColumns]="gridChoNhanBhytColumns" [sort]="sortConfig" [useActionDefault]="false"
+                [pageSize]="20" [lazyLoadPage]="false" [useHeaderDefault]="false" [headerTemplate]="headerTemplate"
+                [searchString]="xacNhanBhyt.SearchString" [checkboxAble]="false"
+                [additionalSearchString]="additionalSearchString" [documentType]="documentType">
+            </app-grid>
+        </div>
+    </vex-page-layout-content>
+    <!-- action chuẩn bị khám -->
+    <ng-template #headerTemplate>
+        <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+            <app-checkbox name="dang-thanh-toan" (modelChange)="checkTrangThai($event,1)" fxFlex="127px"
+                fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center"
+                [(model)]="xacNhanBhyt.ChuaXacNhan" value="dangthanhtoan" label="Chờ xác nhận">
+            </app-checkbox>
+            <app-checkbox name="da-thanh-toan" (modelChange)="checkTrangThai($event,2)"
+                [(model)]="xacNhanBhyt.DaXacNhan" value="dathanhtoan" fxFlex="127px" fxFlex.lt-md="auto" fxHide.xs
+                fxLayout="row" fxLayoutAlign="start center" label="Đã xác nhận">
+            </app-checkbox>
+            <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                fxLayoutAlign="start center" style="margin-top: 2px;" kendoTooltip>
+                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                    type="search" name="searchString" [(ngModel)]="xacNhanBhyt.SearchString" (keyup)="onKey($event)"
+                    (ngModelChange)="searchChanges($event)"
+                    placeholder="Nhập từ khóa(Mã NB,Tên NB,Năm sinh,Địa chỉ)..." />
+                <button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button"
+                    class="button-barcoe-in-search" title="Phím tắt: Ctrl + Q">
+                    <img src="assets/img/barcode.png" alt="Scan barcode" />
+                </button>
+            </div>
+            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                <mat-icon [icIcon]="icSearch"></mat-icon>
+            </button>
+            <app-datetimepicker fxFlex="205px" [(model)]="xacNhanBhyt.ThoiDiemTiepNhanTu" #tiepnhantu id="tiep-nhan-tu"
+                (modelChange)="thoiDiemTNChange()" label="Tiếp nhận từ" class="ml-2 on-header">
+            </app-datetimepicker>
+            <app-datetimepicker fxFlex="205px" [(model)]="xacNhanBhyt.ThoiDiemTiepNhanDen" #tiepnhanden
+                id="tiep-nhan-den" (modelChange)="thoiDiemTNChange()" label="Tiếp nhận đến" class="ml-2 on-header">
+            </app-datetimepicker>
+            <div fxFlex="65%" fxFlex.sm="40%"></div>
+            <button [matMenuTriggerFor]="columnFilterMenu" class="ml-3" fxFlex="none" mat-icon-button kendoTooltip
+                title="Lọc cột" type="button">
+                <mat-icon [icIcon]="icFilterList"></mat-icon>
+            </button>
+
+            <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                <div *ngFor="let column of gridChoNhanBhytColumns">
+                    <button class="checkbox-item mat-menu-item" *ngIf="!column.HideFilter">
+                        <mat-checkbox (click)="toggleColumnVisibility(column, $event)" [disabled]="!column.HasFilter"
+                            [(ngModel)]="column.Visible" color="primary">
+                            {{ column.Title }}
+                        </mat-checkbox>
+                    </button>
+                </div>
+            </mat-menu>
+            <button (click)="exportExcel()" class="ml-3" fxFlex="1%" fxFlex.sm="1%" mat-icon-button kendoTooltip
+                title="Xuất Excel" type="button">
+                <mat-icon [icIcon]="icFileExcel"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #statusTemplate let-dataItem>
+        <strong *ngIf="dataItem.ChuaXacNhan" class="text-color">
+            Chờ xác nhận</strong>
+        <strong class="blue-color" *ngIf="!dataItem.ChuaXacNhan">Đã xác nhận</strong>
+    </ng-template>
+
+    <ng-template #maTNTemplate let-dataItem>
+        <a (click)="thongTinChiTiet(dataItem)">{{dataItem.MaTN}}</a>
+    </ng-template>
+</vex-page-layout>
+<ng-template #orderTemplate let-i="rowIndex"><span>{{i+1}}</span></ng-template>
+<ng-template #templateTextSoTienDaXacNhan let-dataItem>
+    <strong style="color:blue">{{dataItem.SoTienDaXacNhan | number:'0.2-2':'vi-VN'}}</strong>
+</ng-template>
+<ng-template #templateTextSoTienChoXacNhan let-dataItem>
+    <strong class="text-color"> {{dataItem.SoTienChoXacNhan | number:'0.2-2':'vi-VN'}} </strong>
+</ng-template>
+<ng-template #templateTextSoTienDaXacNhanDaXacNhan let-dataItem>
+    <strong class="text-color"> {{dataItem.SoTienDaXacNhan | number:'0.2-2':'vi-VN'}} </strong>
+</ng-template>
+<ng-template #thoiDiemTiepNhanDisplay let-dataItem>
+    <span> {{dataItem.ThoiDiemTiepNhanDisplay}} </span>
+</ng-template>
+
+<ng-template #huongXuLyDisplay let-dataItem>
+    <strong style="color:red">{{dataItem.HuongXuLy}}</strong>
+</ng-template>
+
+<app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none;"></app-barcode>

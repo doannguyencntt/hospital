@@ -1,0 +1,144 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Gói dịch vụ</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="min-height: 200px;">
+    <app-grid #gridNhomGoiDichVu [fxFlex]="!isCapGiuong ? '80%' : '100%'" class="k-grid-border" [gridColumns]="gridColumns" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [HideHeader]="true" [documentType]="documentType"
+        [lazyLoadPage]="true" [autoHeight]="true" [urlGetData]="urlGetDataGoi" [urlGetTotalPage]="urlGetTotalDataGoi"
+        [pageable]="false" [additionalSearchString]="benhNhanId + ';' + isCapGiuong" [detailTemplate]="detailTemplate"
+        (extOnDataBound)="xemChiTietGoiDichVu($event)">
+    </app-grid>
+    <ng-template #detailTemplate let-dataItem>
+        <app-grid class="k-grid-border" [gridColumns]="gridColumnsChild" [useAddDeault]="false" [documentType]="documentType"
+            [useHeaderDefault]="true" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            [autoHeight]="true" [pageable]="false" [groups]="groups" [additionalSearchString]="dataItem.Id + ';' + strDichVuDaChon + ';' + isPTTT+ ';' + isCapGiuong"
+            masterName="gridChiTietGoiDichVu" (extOnDataBound)="xemChiTietDichVuTheoGoi($event)"
+            [urlGetData]="urlGetDataChiTietGoi" [urlGetTotalPage]="urlGetTotalDataChiTietGoi"
+            [dataItemParent]="dataItem">
+        </app-grid>
+        <!-- (extCheckboxSelection)="chonDichVuTrongGoi($event)" [hideDetailSelectedCheckbox]="true" -->
+    </ng-template>
+    <ng-template #tenGoiTemplate let-dataItem>
+        <span class="green title-grid-parent">{{dataItem.TenGoiDichVu}}</span>
+        <span style="float: right;">ĐÃ THU:
+            <b style="color: green;">{{dataItem.BenhNhanDaThanhToanDisplay}}</b>
+            -
+            CHƯA THU: <b style="color: orange;">{{dataItem.ChuaThuDisplay}}</b>
+            -
+            CÒN CHO PHÉP BẢO LÃNH: <b style="color: red;">{{dataItem.ConLaiDisplay}}</b></span>
+    </ng-template>
+    <ng-template #tongCongFooterTemplate let-dataItemParent="dataItemParent">
+        <span class="blue">{{dataItemParent.GiaGoi | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+    <ng-template #chietKhauFooterTemplate let-dataItemParent="dataItemParent">
+        CK: <span class="green">{{dataItemParent.ChietKhau | number}} %</span>
+    </ng-template>
+    <ng-template #giaGoiFooterTemplate let-dataItemParent="dataItemParent">
+        Giá gói: <span class="red">{{dataItemParent.GiaGoi | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+    
+    <ng-template #checkBoxHeaderTemplate let-dataItemParent="dataItemParent">
+        <input type="checkbox" id="ckbHeader-{{dataItemParent.Id}}" [(ngModel)]="dataItemParent.IsChecked" (ngModelChange)="chonTatCaDichVuTrongGoi($event, dataItemParent.Id)">
+    </ng-template>
+    <ng-template #checkBoxTemplate let-dataItem>
+        <input *ngIf="dataItem.IsActive" id="{{dataItem.Id}}" type="checkbox" [attr.name]="'ckbItem-' + dataItem.YeuCauGoiDichVuId"
+            [(ngModel)]="dataItem.IsChecked" (ngModelChange)="chonDichVu($event, dataItem)">
+    </ng-template>
+    <ng-template #tongTienFooterTemplate>
+        <span>Tổng cộng:</span>
+    </ng-template>
+    <ng-template #nhomDichVuTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+    <ng-template #sttTemplate let-rowIndex="rowIndex">
+        <strong>{{rowIndex + 1}}</strong>
+    </ng-template> 
+    <ng-template #soLuongTemplate let-dataItem>
+        <app-textboxnumeric id="abc-{{dataItem.Id}}" [disabled]="!dataItem.IsActive || !dataItem.IsChecked" [(model)]="dataItem.SoLuongDungLanNay"
+            class="no-label" label=" " [min]="(!dataItem.IsActive || !dataItem.IsChecked || dataItem.SoLuongConLai == 0) ? 0 : 1" [max]="dataItem.NhomGoiDichVu == 1 ? 1 : dataItem.SoLuongConLai"
+            (modelChange)="changeSoLuongDichVu($event, dataItem)"> 
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #donGiaTemplate let-dataItem>
+        {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #thanhTienTemplate let-dataItem>
+        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    
+    <ng-template #actionChonGiuongTemplate let-dataItem>
+        <div class="text-center" kendoTooltip *ngIf="dataItem.NhomGoiDichVu == nhomDichVuGiuong">
+            <button mat-raised-button mat-button color="primary" (click)="chonDichVuGiuong(dataItem)">Chọn</button>
+        </div>
+    </ng-template>
+
+    <!-- <div fxFlex="20%" class="ml-4">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <h3 fxFlex="100%">Dịch vụ sử dụng cho lần này</h3>
+            <ul *ngIf="arrChiTietDichVuDaChon.length > 0" fxFlex="100%" class="ml-2 dashed">
+                <li *ngFor="let item of arrChiTietDichVuDaChon">
+                    <strong>{{item.TenDichVu}}</strong>  (SL: {{item.SoLuongSuDung}})
+                </li>
+            </ul>
+            <ng-container *ngIf="arrChiTietDichVuDaChon.length == 0">
+                Chưa chọn dịch vụ
+            </ng-container>
+        </div>
+    </div> -->
+
+    <div *ngIf="!isCapGiuong" fxFlex="20%" class="ml-4">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <h3 fxFlex="100%">Dịch vụ sử dụng cho lần này</h3>
+            <ng-container *ngIf="arrChiTietDichVuDaChon.length > 0">
+                <ng-container *ngFor="let goiDichVu of arrGoiDangChon">
+                    <table class="mb-2" *ngIf="kiemTraGoiDichVuCoChonDichVu(goiDichVu.YeuCauGoiDichVuId)" fxFlex="100%">
+                        <tr>
+                            <th colspan="4" style="text-align: left;">
+                                {{goiDichVu.TenGoiDichVu}}
+                            </th>
+                        </tr>
+                        <ng-container *ngFor="let dichVu of getArrayDichVuDaChonTheoGoi(goiDichVu.YeuCauGoiDichVuId)">
+                            <tr>
+                                <td width='35%' style="max-width: 150px;" class='reverse-ellipsis r' kendoTooltip title="{{dichVu.TenDichVu}}">- {{dichVu.TenDichVu}}</td>
+                                <td width='5%' class='text-left-td'>{{dichVu.SoLuongSuDung}}</td>
+                                <td width='20%' class='text-right-td'>{{dichVu.DonGia | number}}</td>
+                                <td width='20%' class='text-right-td'>{{(dichVu.SoLuongSuDung * dichVu.DonGia) | number}}</td>
+                            </tr>
+                        </ng-container>
+                        <tr>
+                            <td colspan="3" class='text-right-td'>Tổng: </td>
+                            <td class='text-right-td'><b>{{tinhTongTienDichVuDangChon(goiDichVu.YeuCauGoiDichVuId) | number}}</b></td>
+                        </tr>
+                        <tr *ngIf="goiDichVu.TongTienConBaoLanhDuoc < tinhTongTienDichVuDangChon(goiDichVu.YeuCauGoiDichVuId)">
+                            <td colspan='4' class='text-right-td text-red'>Không đủ bảo lãnh</td>
+                        </tr>
+                    </table>
+                </ng-container>
+            </ng-container>
+            <ng-container *ngIf="arrChiTietDichVuDaChon.length == 0">
+                Chưa chọn dịch vụ
+            </ng-container>
+        </div>
+    </div>
+    <!-- <table fxFlex="100%">
+                                                <tr>
+                                                    <th colspan="4" style="text-align: left;">
+                                                        {{goiDichVu.TenGoiDichVu}}
+                                                    </th>
+                                                </tr>
+                                                <pre [innerHtml]="getHtmlDichVuTheoGoiDangChon(goiDichVu.YeuCauGoiDichVuId)"></pre>
+                                                <tr>
+                                                    <td colspan="3">Tổng: </td>
+                                                    <td>{{tinhTongTienDichVuDangChon(goiDichVu.YeuCauGoiDichVuId) | number:'0.2-2':'vi-VN'}}</td>
+                                                </tr>
+                                            </table> -->
+</mat-dialog-content>
+
+<mat-dialog-actions *ngIf="!isCapGiuong" fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Hủy</button>
+    <button mat-raised-button mat-button color="primary" (click)="luuDichVuChiDinh()">Chọn</button>
+</mat-dialog-actions>

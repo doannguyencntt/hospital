@@ -1,0 +1,220 @@
+<vex-page-layout>
+	<vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+		<div [class.px-gutter]="true" class="w-full flex justify-between">
+			<vex-breadcrumbs [crumbs]="[
+				 {Title:'Thu Ngân',Path:''},
+				 {Title:'Viện phí ngoại trú',Path:''},
+                 {Title:'DS Đã Thu Dịch Vụ',Path:'/danh-sach-thu-dich-vu', queryParams: {loaiThanhToan : typeThanhToan}, Active:true}             
+            ]">
+			</vex-breadcrumbs>
+			<app-hot-key [keys]="[{Key:'Esc',Description:'Quay lại',End:true}]"> </app-hot-key>
+		</div>
+	</vex-page-layout-header>
+
+	<vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+		<div class="-mt-16">
+			<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+				<div class="card" fxFlex="100%">
+					<div class="px-6 py-4" fxLayout="column" style="position: relative;">
+						<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+							<fieldset fxFlex="49.5%" class="mb-3">
+								<legend>Thông tin hành chính</legend>
+								<div class=" mt-1">
+									<ul class="inline">
+										<li>
+											Mã TN:
+											<strong> {{thongTinBenhNhan.MaYeuCauTiepNhan}} </strong>
+										</li>
+										<li>
+											Mã NB:
+											<strong> {{thongTinBenhNhan.MaBN}} </strong>
+										</li>
+										<li>
+											Họ Tên:
+											<strong> {{thongTinBenhNhan.HoTen}} </strong>
+										</li>
+										<li>
+											Năm Sinh:
+											<strong> {{thongTinBenhNhan.NamSinh}} </strong>
+										</li>
+										<li>
+											Địa chỉ:
+											<strong> {{thongTinBenhNhan.DiaChi}} </strong>
+											<strong *ngIf="thongTinBenhNhan.DiaChi === ''"> Không có </strong>
+										</li>
+										<li>
+											Số điện thoại:
+											<strong> {{thongTinBenhNhan.SoDienThoai}} </strong>
+											<strong *ngIf="thongTinBenhNhan.SoDienThoai === null"> Không có </strong>
+										</li>
+										<li>
+											Email:
+											<strong> {{thongTinBenhNhan.Email}} </strong>
+											<strong *ngIf="thongTinBenhNhan.Email === null"> Không có </strong>
+										</li>
+									</ul>
+								</div>
+							</fieldset>
+
+							<fieldset fxFlex="49.5%" class="mb-3">
+								<legend>Thông tin bảo hiểm y tế</legend>
+								<div class=" mt-1">
+									<!-- Thông tin bảo hiểm y tế -->
+									<ul class="inline" *ngIf="thongTinBenhNhan.CoBHYT ===  true">
+										<li>
+											Số thẻ:
+											<strong> {{thongTinBenhNhan.BHYTMaSoThe}} </strong>
+										</li>
+										<li>
+											Ngày hiệu lực:
+											<strong> {{thongTinBenhNhan.NgayHieuLucStr}} </strong>
+										</li>
+										<li>
+											Ngày hết hạn:
+											<strong> {{thongTinBenhNhan.NgayHetHanStr}} </strong>
+										</li>
+										<li>
+											Nơi đăng ký khám BH:
+											<strong> {{thongTinBenhNhan.BHYTDiaChi}} </strong>
+										</li>
+										<li>
+											Mức hưởng:
+											<strong> {{thongTinBenhNhan.BHYTMucHuong}}% </strong>
+										</li>
+										<li>
+											Tuyến khám:
+											<strong class="color-green"> {{thongTinBenhNhan.TuyenKham}} </strong>
+										</li>
+										<li>
+											Giấy chuyển viện:
+											<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien !== null">
+												<a class="color-green"
+													(click)="xemTaiLieu(thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien)">{{thongTinBenhNhan.TenGiayChuyenVien}}</a>
+											</strong>
+											<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien === null">
+												Không có </strong>
+										</li>
+										<li>
+											Giấy miễn cùng chi trả:
+											<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra !== null">
+												<a (click)="xemTaiLieu(thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra)"
+													class="color-green">{{thongTinBenhNhan.TenBHYTgiayMienCungChiTra}}</a>
+											</strong>
+											<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra === null">
+												Không có </strong>
+										</li>
+									</ul>
+									<p *ngIf="!(thongTinBenhNhan.CoBHYT ===  true)">(Không có)</p>
+								</div>
+							</fieldset>
+							<fieldset fxFlex="49.5%" class="mb-3">
+								<legend>Thông tin bảo hiểm tư nhân</legend>
+								<div class=" mt-1">
+									<app-grid [gridColumns]="gridBaoHiemTNs" [useAddDeault]="false"
+										class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+										[checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true"
+										[gridDataSource]="dataSourceDanhSachBHTN" style="width: 1px;" [pageable]="false"
+										*ngIf="kiemTraThongTinBaoHiemTN === true"> </app-grid>
+									<p *ngIf="kiemTraThongTinBaoHiemTN === false">(Không có)</p>
+								</div>
+							</fieldset>
+							<fieldset fxFlex="49.5%" class="mb-3">
+								<legend>Thông tin miễn giảm</legend>
+								<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid"
+									fxLayoutGap.lt-sm="0">
+									<div *ngIf="flagShowDoiTuongUuDai==true" fxFlex="100%">
+										<ul
+											style="background: rgba(0, 0, 0, 0.04);padding: 7px 10px;border-bottom: 1px solid rgba(0,0,0,0.4);">
+											<li>
+												Đối tượng ưu đãi:
+												<strong
+													*ngIf="thongTinMienGiamTheoDoiTuongUuDai.DoiTuongUuDai !== null">
+													{{thongTinMienGiamTheoDoiTuongUuDai.DoiTuongUuDai}} </strong>
+												<strong
+													*ngIf="thongTinMienGiamTheoDoiTuongUuDai.DoiTuongUuDai === null">
+													Không có </strong>
+											</li>
+											<li>
+												Công ty ưu đãi:
+												<strong *ngIf="thongTinMienGiamTheoDoiTuongUuDai.CongTyUudai !== null">
+													{{thongTinMienGiamTheoDoiTuongUuDai.CongTyUudai}} </strong>
+												<strong *ngIf="thongTinMienGiamTheoDoiTuongUuDai.CongTyUudai === null">
+													Không có </strong>
+											</li>
+										</ul>
+									</div>
+									<div fxFlex="40%">
+										<table width="100%">
+											<tr>
+												<td style="background:rgba(0, 0, 0, 0.04);padding:5px">
+													<span>Voucher</span>
+												</td>
+											</tr>
+											<tr>
+												<td style="background:rgba(0, 0, 0, 0.04);">
+													<div style="margin-top: -9px;position: relative;"
+														fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+														fxLayoutAlign="start center" kendoTooltip>
+														<kendo-multiselect #multiselect [data]="listVoucherItem"
+															[(ngModel)]="value" [filterable]="true" [disabled]="true">
+														</kendo-multiselect>
+														<button color="primary"
+															style="position: absolute;right: 3px;top: -10px;"
+															mat-mini-fab type="button" class="button-barcoe-in-search"
+															kendoTooltip title="Quét mã vạch thẻ"
+															title="Phím tắt: Ctrl + Q" [disabled]="true">
+															<img src="assets/img/barcode.png" alt="Scan barcode" />
+														</button>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div fxFlex="auto">
+										<app-upload id="Upload" label="Giấy miễn giảm đính kèm (nếu có)"
+											[model]="thongTinBenhNhan.TaiLieuDinhKemGiayMiemGiam"
+											(uploadFileDone)="uploadFileDone($event)" [disabled]="true"
+											[allowedExtensions]="allowedExtensions"
+											[validationerror]="'GiayMiemGiam' | validationerror:thuNganValidationErrors">
+										</app-upload>
+									</div>
+								</div>
+							</fieldset>
+
+							<div fxFlex="100%" class="mb-3">
+								<fieldset>
+									<legend>Thông tin thu chi</legend>
+									<a *ngIf="ktSuDungGoi != undefined && ktSuDungGoi != null"
+										(click)="chiTietGoiMarketing()"
+										style="z-index: 9999;margin-left: 13px; text-decoration: underline; color: blue">Chi
+										tiết gói
+										marketing</a>
+									<kendo-splitter>
+										<kendo-splitter-pane style="overflow:initial;">
+											<div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px"
+												style="position: absolute;right: 0;"><strong> Tạm ứng: </strong>
+												<strong class="color-green">{{0 | number:'0.2-2':'vi-VN'}} </strong>
+											</div>
+											<app-thong-tin-phieu-thu-ngoai-tru
+												(loadingCtThanhCong)="loadingCtThanhCong($event)"
+												(huyThanhCong)="huyThanhCong($event)">
+											</app-thong-tin-phieu-thu-ngoai-tru>
+										</kendo-splitter-pane>
+									</kendo-splitter>
+								</fieldset>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ng-template #actionTemplateSTCongNo let-dataItem let-rowIndex="rowIndex">
+			<div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="2px">
+				<app-textboxnumeric class="no-label p-0" label=" " [step]="100" fxFlex="50%" [disabled]="true"
+					[(model)]="dataItem.SoTienCongNo" [isFormatCurrenly]="true" [spinners]="false">
+				</app-textboxnumeric>
+			</div>
+		</ng-template>
+		<ng-template #actionTemplateSubmitCongNo let-dataItem let-rowIndex="rowIndex"> </ng-template>
+	</vex-page-layout-content>
+</vex-page-layout>

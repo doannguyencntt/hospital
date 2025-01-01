@@ -1,0 +1,33 @@
+.form-footer{
+    margin-top: 1.34375em;
+}
+.align-right-fx{
+    margin-left: auto;
+}
+.color-button{
+    background-color: red;
+    color: white;
+}
+.trang-thai{
+    &.t1{
+        color:sandybrown;
+    }
+    &.t2{
+        color:rgb(175, 180, 43);        
+    }
+    &.t3{
+        color:blue;        
+    }
+    &.t4{
+        color:green;        
+    }
+    &.t5{
+        color:red;        
+    }
+    &.t6{
+        color:red;        
+    }
+    &.t7{
+        color:green;        
+    }
+}

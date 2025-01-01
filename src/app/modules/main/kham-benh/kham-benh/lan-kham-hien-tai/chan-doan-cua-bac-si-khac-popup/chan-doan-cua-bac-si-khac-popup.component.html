@@ -1,0 +1,80 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Chẩn Đoán Của Bác Sĩ Khác</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+        <app-grid fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumns" [useAddDeault]="false"
+            [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotalPage" [useHeaderDefault]="false"
+            [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" [autoHeight]="true"
+            [additionalSearchString]="yeuCauKhamBenhId" [detailTemplate]="detailTemplate" style="width: 1px;"
+            [pageable]="false">
+        </app-grid>
+        <ng-template #detailTemplate let-dataItem>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0" class="pt-4">
+                <h3 fxFlex="100%" class="sub-title mt-0">TÓM TẮT KẾT QUẢ CLS </h3>
+                <label fxFlex="100%" *ngIf="dataItem.KetQuaCLS != null">Tóm tắt kết quả :{{dataItem.KetQuaCLS}}</label>
+                <label fxFlex="100%" *ngIf="dataItem.KetQuaCLS == null">Không có tóm tắt kết quả cận lâm sàng.</label>
+                <!-- <div fxFlex="100%">
+                    <ul class="inline">
+                        <li>Kết quả: <strong>{{dataItem.KetQuaCLS}}</strong></li>
+
+                    </ul>
+                </div> -->
+                <h3 fxFlex="100%" class="sub-title mt-0">Chẩn đoán ICD chính </h3>
+                <label fxFlex="50%" *ngIf="dataItem.TenICDChinh!= null"><span
+                        style="font-weight: bold;">ICD</span>:{{dataItem.TenICDChinh}}</label>
+                <label fxFlex="50%" *ngIf="dataItem.GhiChuICDChinh != null"><span style="font-weight: bold;">Chẩn
+                        đoán</span>
+                    :{{dataItem.GhiChuICDChinh}}</label>
+
+                <!-- <h4 fxFlex="100%" style="font-weight: bold">Chẩn đoán ICD Chính</h4>
+                <div fxFlex="100%">
+                    <ul class="inline">
+                        <li>ICD Chính: <strong>{{dataItem.TenICDChinh}}</strong></li><br>
+                        <li>Chẩn Đoán: <strong>{{dataItem.GhiChuICDChinh}}</strong></li>
+                    </ul>
+                </div> -->
+                <h3 fxFlex="100%" class="sub-title mt-0">CHẨN ĐOÁN ICD KÈM THEO </h3>
+
+                <label *ngIf="dataItem.YeuCauKhamBenhICDKhacs.length == 0" fxFlex="50%">Không có chẩn đoán icd kèm theo.</label>
+                <ng-container *ngIf="dataItem.YeuCauKhamBenhICDKhacs.length != null">
+                    <div fxFlex="100%" fxFlex.sm="100%" *ngFor="let item of dataItem.YeuCauKhamBenhICDKhacs">
+                        <label fxFlex="50%"><span style="font-weight: bold;">ICD</span> :{{item.TenICDKhac}}</label>
+                        <label fxFlex="50%"><span style="font-weight: bold;">Chẩn đoán</span>:{{item.GhiChu}}</label>
+                    </div>
+                </ng-container>
+
+                <!-- <h4 fxFlex="100%" style="font-weight: bold">
+                    Chẩn đoán ICD kèm theo
+                </h4>
+                <app-grid fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumnsChild" [useAddDeault]="false"
+                    [useActionDefault]="false" [useHeaderDefault]="false" [urlGetData]="urlGetDataDetail"
+                    [urlGetTotalPage]="urlGetTotalPageDetail" searchString="{{dataItem.Id}}" [checkboxAble]="false"
+                    [lazyLoadPage]="true" [autoHeight]="true" style="width: 1px;" [pageable]="false">
+                </app-grid> -->
+
+                <h3 fxFlex="100%" class="sub-title mt-0">CÁCH GIẢI QUYẾT </h3>
+                <label fxFlex="100%" *ngIf="dataItem.CachGiaiQuyet != null">Cách giải quyết :{{dataItem.CachGiaiQuyet}}</label>
+                <label fxFlex="100%" *ngIf="dataItem.CachGiaiQuyet == null">Không có cách giải quyết.</label>
+                <!-- <h4 fxFlex="100%" style="font-weight: bold">
+                    Cách giải quyết
+                </h4>
+                <div fxFlex="100%">
+                    <ul class="inline">
+                        <li>Nội dung: <strong>{{dataItem.CachGiaiQuyet}}</strong></li>
+                    </ul>
+                </div> -->
+            </div>
+
+        </ng-template>
+    </div>
+
+</mat-dialog-content>
+
+<!-- <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" (click)="close()" mat-stroked-button color="primary" mat-dialog-close>Đóng</button>
+</mat-dialog-actions> -->

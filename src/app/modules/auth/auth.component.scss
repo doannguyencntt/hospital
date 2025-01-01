@@ -1,0 +1,24 @@
+.wrapper{
+    // @media (min-width: 769px) and (max-width: 1024px) {        
+    //     background: url("/assets/img/bg-login-1024.jpg") no-repeat;
+    // }
+    // @media (min-width: 513px) and (max-width: 768px) {        
+    //     background: url("/assets/img/bg-login-768.jpg") no-repeat;
+    // }
+    // @media (max-width: 512px) {        
+    //     background: url("/assets/img/bg-login-512.jpg") no-repeat;
+    // }
+    // @media (min-width: 1025px) {        
+    //     background: url("/assets/img/bg-login.jpg") no-repeat;
+    // }
+    // background-position: center center !important;
+    // background-size: cover !important;  
+    background-color: #f1f1f1;
+    .content-wrapper{
+        padding: 0;
+        .container-fluid{            
+            padding-right: 0px;
+            padding-left: 0px;
+        }
+    }
+}

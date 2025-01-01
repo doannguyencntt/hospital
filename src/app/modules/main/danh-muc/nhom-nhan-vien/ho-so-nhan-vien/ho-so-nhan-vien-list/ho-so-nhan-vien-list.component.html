@@ -1,0 +1,21 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <!-- <h1 class="title mt-0 mb-1">Danh Mục Hồ Sơ Nhân Viên</h1> -->
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Nhóm Nhân Viên',Path:''}
+                    ,{Title:'Hồ Sơ Nhân Viên',Path:'/danh-muc/nhom-nhan-vien/ho-so-nhan-vien',Active:true}
+                ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/nhom-nhan-vien/ho-so-nhan-vien" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useActionDefault]="true" [showExportExcel]="true" (extExportExcel)="exportExcel()" [lazyLoadPage]="true"></app-grid>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

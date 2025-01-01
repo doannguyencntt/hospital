@@ -1,0 +1,87 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0" class="order-form" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"  style="padding-top: 13px;">
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="qua-trinh-benh-ly" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20"  label="Quá trình bệnh lý và diễn biến lâm sàng" [(model)]="tomTatHoSoBenhAn.DienBienLamSang">
+                </app-textarea>
+
+                <app-textarea id="ket-qua-xn-cls" maxlength="80" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" [(model)]="tomTatHoSoBenhAn.KqXnCls" label="Kết quả XN, CLS">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="pp-dieu-tri" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20"  label="Phương pháp điều trị" [(model)]="tomTatHoSoBenhAn.PpDieuTri">
+                </app-textarea>
+
+                <app-textarea id="tinh-trang-chuyen-tuyen" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20"  label="Tình trạng người bệnh lúc chuyển tuyến" [(model)]="tomTatHoSoBenhAn.TinhTrangChuyenTuyen">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="ghi-chu" fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20"  label="Ghi chú" [(model)]="tomTatHoSoBenhAn.GhiChu">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-datepicker id="ngay-thuc-hien" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Ngày thực hiện" [(model)]="tomTatHoSoBenhAn.NgayThucHien" [required]="true" [validationerror]="'NgayThucHien' | validationerror:validationErrors">
+                </app-datepicker>
+
+                <app-autocomplete id="giam-doc" popupSettings="null" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="tomTatHoSoBenhAn.GiamDoc" url="DieuTriNoiTru/GetListNhanVienAutoComplete" label="Thủ trưởng đơn vị" maxlength="120">
+                </app-autocomplete>
+
+                <app-upload id="file-chu-ky" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" #upload15NgayDieuTri [allowedExtensions]="allowedExtensions" [(model)]="tomTatHoSoBenhAn.FileChuKy" [multiple]="true" label="File chữ ký" [template]="templateFileChuanDoanHAInfo">
+                </app-upload>
+            </div>
+
+            <ng-template #templateFileChuanDoanHAInfo let-files>
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                            <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="green" class="custom-name green">{{files[0].name}}</a>
+                        </td>
+                        <td style="width:25px">
+                            <a type="button" (click)="upload15NgayDieuTri.remove(files[0].uid)" mat-icon-button>
+                                <mat-icon [icIcon]="icClear"></mat-icon>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </ng-template>
+        </div>
+
+        <div style="justify-content: space-between;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="order-btn">
+            <div style="display: flex;align-items: center;">
+                <p>Người thực hiện:&nbsp;</p>
+                <strong>{{tomTatHoSoBenhAn.NguoiThucHienReadonly}}&nbsp;</strong>
+                <p>Ngày thực hiện:&nbsp;</p>
+                <strong>{{tomTatHoSoBenhAn.NgayThucHienReadonly}}&nbsp;</strong>
+            </div>
+            <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+                <button type="button" class="mr-2" mat-button color="primary" (click)="print()" style="pointer-events: all;">In</button>
+                <button type="button" class="mr-2" mat-button color="primary" (click)="cancel()">Huỷ</button>
+                <button type="button" class="mr-2" color="primary" mat-raised-button (click)="save()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #hoTenTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox maxlength="120" [(model)]="dataItem.HoTen" class="no-label" label=" ">
+    </app-textbox>
+</ng-template>
+<ng-template #namSinhTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textboxnumeric [min]="1900" [max]="9999" [format]="'0'" [spinners]="false" [(model)]="dataItem.NamSinh" [decimals]="1" class="no-label">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #cmndTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox maxlength="150" [(model)]="dataItem.Cmnd" class="no-label" label=" ">
+    </app-textbox>
+</ng-template>
+<ng-template #quanHeTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-combobox popupSettings="null" class="no-label" label=" " [(model)]="dataItem.QuanHe" [bind]="true" url="TiepNhanBenhNhan/GetQuanHe">
+    </app-combobox>
+</ng-template>
+<ng-template #diaChiTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox maxlength="150" [(model)]="dataItem.DiaChi" class="no-label" label=" ">
+    </app-textbox>
+</ng-template>

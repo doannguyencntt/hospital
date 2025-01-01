@@ -1,0 +1,31 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Dược phẩm',Path:''}
+                ,{Title:'Xuất kho',Path:''}
+                ,{Title:'Tạo yêu cầu điều chuyển kho nội bộ',Path:'/nhap-xuat/duoc-pham/dieu-chuyen-kho-noi-bo-duoc-pham',Active:true}
+                ]">
+</app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Tạo yêu cầu điều chuyển kho nội bộ</h2>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-dieu-chuyen-kho-noi-bo-duoc-pham-shared [validationErrors]="validationErrors" [isCreate]="true"
+                    [trangThaiVo]="trangThaiVo">
+                </app-dieu-chuyen-kho-noi-bo-duoc-pham-shared>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" title="Phím tắt: Esc" (click)="cancel()" mat-button
+                        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Hủy</button>
+                    <button type="button" (click)="guiYeuCauDieuChuyenThuoc()" color="primary" mat-raised-button><i
+                            class="ft-save"></i> Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

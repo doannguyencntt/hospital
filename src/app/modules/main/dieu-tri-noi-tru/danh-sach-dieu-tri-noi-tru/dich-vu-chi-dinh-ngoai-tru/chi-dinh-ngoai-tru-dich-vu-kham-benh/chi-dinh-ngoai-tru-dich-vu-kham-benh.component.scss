@@ -1,0 +1,58 @@
+.yellowText{
+    color: yellowgreen;
+}
+.redText{ 
+    color:red; 
+}
+.greenText{
+     color:green;
+}
+.orangeText{
+    color: orange;
+}
+.blueText{
+    color:blue;
+}
+.blackText{
+    color: black;
+}
+
+.styleInChiDinh{
+    text-align: right;
+    float: right;
+    margin-left: 10px;
+}
+.styleTinhTong{
+    border:1px solid #ccc;border-radius: 5px;padding: 15px;background: #e3f2fd;text-align: right;margin: 10px -17px -17px -17px;
+}
+
+.size-icon{   
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background-color:green;    
+    color: #FFF;
+    text-align: center;  
+}
+
+.icon-war-status-grid
+{
+    position: absolute;
+    color: red; 
+    right: 0; 
+    background-color: white; 
+    height: 15px; 
+    top: 2px;
+}
+
+.icon-info-status-grid
+{
+    position: absolute;
+    right: 0; 
+    background-color: white; 
+    height: 15px; 
+    top: 2px;
+}

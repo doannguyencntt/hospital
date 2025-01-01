@@ -1,0 +1,36 @@
+<app-header-form [isicMoreVert]="false"
+                [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Dược phẩm',Path:''}
+                ,{Title:'Dự trù lĩnh',Path:''}
+                ,{Title:'Yêu cầu lĩnh dược phẩm',Path:'/nhap-xuat/duoc-pham/yeu-cau-linh-thuoc'}
+                ,{Title:'Dược phẩm cần lĩnh trực tiếp',Path:'/nhap-xuat/duoc-pham/duoc-pham-can-linh-truc-tiep',Active:true}
+                ]">
+></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Tạo phiếu lĩnh trực tiếp dược phẩm</h2>
+                <!-- <b class="status-yeu-cau-linh ycl-cho-duyet">Đang chờ duyệt</b> -->
+            </div>
+                <div class="px-6 py-4" fxLayout="column">
+    
+                    <app-phieu-linh-thuoc-truc-tiep-shared [isCreate]="false" [validationErrorsLinhTT]="validationErrors"></app-phieu-linh-thuoc-truc-tiep-shared>
+    
+                    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                        <button type="button" *ngIf="!loading"    mat-button class="mr-2 align-right-fx" (click)="xemPhieuLinh()" color="primary" mat-raised-button><i
+                            class="ft-save"></i> Xem phiếu lĩnh</button>
+                        <button type="button" (click)="cancel()" mat-raised-button><i class="ft-arrow-left"></i> Hủy</button>
+                        <button type="button" (click)="create(false)" color="primary" mat-raised-button class="ft-save"><i class="ft-arrow-left"></i> Lưu</button>
+                        <button type="button" *ngIf="!loading" (click)="create(true)" color="primary" mat-raised-button><i
+                                class="ft-save"></i> Gửi</button>
+                        <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                                alt="Loading" /></button>
+                </div>
+                </div>
+        </div>
+    </div>
+
+</div>

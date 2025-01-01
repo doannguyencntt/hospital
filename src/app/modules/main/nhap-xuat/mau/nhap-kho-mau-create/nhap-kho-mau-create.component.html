@@ -1,0 +1,33 @@
+<app-header-form [crumbs]="[ {Title:'Nhập Xuất',Path:''}
+        ,{Title:'Máu',Path:''}
+        ,{Title:'DS Nhập Kho Máu', Path: '/nhap-xuat/mau/nhap-kho', queryParams: {holdQuery : true}}
+        ,{Title:'Nhập Máu',Path:'',Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Nhập Máu</h2>
+                <!-- <b *ngIf="trangThai != undefined" class="status-nhap-kho-mau {{trangThai.DuocDuyet == null ? 'nkm-cho-duyet': trangThai.DuocDuyet == false ? 'nkm-tu-choi' : 'nkm-da-duyet'}}">{{trangThai.TenTrangThai}}</b> -->
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-nhap-kho-mau-shared (trangThaiYeuCau)="getTrangThaiYeuCau($event)" [validationErrors]="validationErrors"></app-nhap-kho-mau-shared>
+
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="form-footer mt-6">
+                    <button type="button" mat-button class="mr-1 align-right-fx" (click)="huy()"><i class="ft-arrow-left"></i>
+                        Hủy</button>
+                    <button type="button" *ngIf="!loading" color="primary" mat-raised-button (click)="xuLyLuu()">
+                        <i class="ft-save"></i>Lưu</button>
+                    <button type="button" *ngIf="!loading" color="primary" mat-raised-button (click)="xuLyLuu(true)">
+                        <i class="ft-save"></i>Lưu & In phiếu truyền máu</button>
+                    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                            alt="Loading" /></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

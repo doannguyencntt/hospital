@@ -1,0 +1,39 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Kết Quả CLS</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+
+    <app-grid fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumns" [documentType]="documentType"
+        [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+        [gridDataSource]="gridDataSource" [lazyLoadPage]="true" [autoHeight]="true" style="width: 1px;"
+        [pageable]="false">
+    </app-grid>
+
+    <ng-template #downLoadAllTemplate>
+        <div class="text-center">
+            <button type="button" color="primary" (click)="downloadFile()" mat-button 
+                class="mr-1 mt-2">
+                <!-- <mat-icon [icIcon]="icDownward"></mat-icon> -->
+                <span>Tải tất cả</span>
+
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #actionTemplate let-dataItem>
+        <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2" fxFlex="50%"
+            *ngIf="dataItem.LoaiFile != 10" (click)="Xem(dataItem)">
+            <span>Xem</span>
+        </button>
+        <div fxFlex="50%" *ngIf="dataItem.LoaiFile == 10">
+        </div>
+        <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2" fxFlex="50%"
+            (click)="Download(dataItem)">
+            <span>Tải</span>
+        </button>
+    </ng-template>
+
+</mat-dialog-content>

@@ -1,0 +1,31 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+    { Title: 'Danh Mục', Path: '' },
+    { Title: 'Nhóm Hệ Thống', Path: '' },
+    { Title: 'Bệnh Viện', Path: '' },
+    { Title: 'Kỳ Dự Trù', Path: '/danh-muc/nhom-he-thong/benh-vien/ky-du-tru', queryParams: {holdQuery : true}, Active: true }]">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Thêm Kỳ Dự Trù</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+                <app-ky-du-tru-shared></app-ky-du-tru-shared>
+
+                <!-- <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="pt-4">
+                    <app-formfooter [bodyComponent]="shared" type="create" (created)="onCreated()">
+                    </app-formfooter>
+                </div> -->
+                <div>
+                    <div kendoTooltip class="sticky-button-action py-3 text-right">
+                        <button type="button" mat-button color="primary" (click)="huy()">Huỷ</button>
+                        <button type="button" class="mr-2" color="primary" mat-raised-button (click)="them()">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

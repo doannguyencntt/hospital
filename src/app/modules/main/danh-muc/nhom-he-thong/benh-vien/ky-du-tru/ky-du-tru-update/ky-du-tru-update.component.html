@@ -1,0 +1,33 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+    { Title: 'Danh Mục', Path: '' },
+    { Title: 'Nhóm Hệ Thống', Path: '' },
+    { Title: 'Bệnh Viện', Path: '' },
+    { Title: 'Kỳ Dự Trù', Path: '/danh-muc/nhom-he-thong/benh-vien/ky-du-tru', queryParams: {holdQuery : true}, Active: true }]">
+</app-header-form>
+
+<div [@stagger]="true" class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 fxFlex="90%" fxFlex.sm="90%" class="title m-0">Chỉnh Sửa Kỳ Dự Trù</h2>
+                <span style="right: 38px;width: auto;position: absolute;" fxFlex="10%" fxFlex.sm="10%" class="da-su-dung"
+                    *ngIf="isDaDuocSuDung" >Kỳ dự trù đã được sử dụng</span>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+                <app-ky-du-tru-shared (outputIsDaDuocSuDung)="checkIsDaDuocSuDung($event)"></app-ky-du-tru-shared>
+                
+                <!-- <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <app-formfooter [bodyComponent]="shared" type="update" (updated)="onUpdated()"></app-formfooter>
+                </div> -->
+                <div>
+                    <div kendoTooltip class="sticky-button-action py-3 text-right">
+                        <button type="button" mat-button color="primary" (click)="huy()">Huỷ</button>
+                        <button type="button" class="mr-2" color="primary" mat-raised-button (click)="luu()">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

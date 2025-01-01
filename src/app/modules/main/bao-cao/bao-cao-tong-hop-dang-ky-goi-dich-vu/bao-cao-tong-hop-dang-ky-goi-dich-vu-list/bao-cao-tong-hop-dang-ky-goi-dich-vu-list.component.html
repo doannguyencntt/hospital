@@ -1,0 +1,112 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                {Title:'Thống Kê', Path:''},
+                {Title:'Báo Cáo', Path:''},
+                {Title:'Kế Toán', Path:''},
+                {Title:'Tổng Hợp Đăng Ký Gói Dịch Vụ', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid
+                [gridColumns]="gridColumns"
+                [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true"
+                [useHeaderDefault]="false" [headerTemplate]="headerTemplate" [checkboxAble]="false"
+                [showStt]="true" urlGetData="BaoCao/GetDataBaoCaoTongHopDangKyGoiDichVu" urlGetTotalPage="BaoCao/GetTotalBaoCaoTongHopDangKyGoiDichVu">
+            </app-grid>
+
+            <!-- <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+                {{rowIndex + 1}}
+            </ng-template> -->
+
+            <ng-template #giaTriGoiTemplate let-dataItem>
+                {{dataItem.GiaTriGoi | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #daThuTemplate let-dataItem>
+                {{dataItem.DaThu | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #conThieuTemplate let-dataItem>
+                {{dataItem.ConThieu | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #giaTriDichVuDaThucHienTemplate let-dataItem>
+                {{dataItem.GiaTriDichVuDaThucHien | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #giaTriDichVuChuaThucHienTemplate let-dataItem>
+                {{dataItem.GiaTriDichVuChuaThucHien | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #phiPhatHuyGoiTemplate let-dataItem>
+                {{dataItem.PhiPhatHuyGoi | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #soTienHoanTraTemplate let-dataItem>
+                {{dataItem.SoTienHoanTra | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #huyTemplate let-dataItem>
+                <app-checkbox [disabled]="true" id="huyGoi{{dataItem.Id}}" [(model)]="dataItem.HuyGoi" value="true"></app-checkbox>
+            </ng-template>
+        </div>
+
+        <ng-template #headerTemplate>
+              <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div class="h-15 mt-0" fxFlex="25%" style="padding: 3px !important" >
+                  <div class="bg-card rounded-full border" fxFlex="100%" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                      fxLayoutAlign="start center" style="margin-top: 0px">
+                      <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                      <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                          type="search" name="searchString" [(ngModel)]="baoCaoSearch.SearchString"
+                          placeholder="Tìm kiếm Họ tên, Mã NB" />
+                  </div>
+                  <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+                      <mat-icon [icIcon]="icSearch"></mat-icon>
+                  </button>
+                </div>
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header mr-1">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header mr-1" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="55%" fxFlex.sm="55%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                        (click)="exportExcel()">Xuất Excel</button>
+                    <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 mt-2" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                </div>
+
+                <span fxFlex></span>
+
+                <button [matMenuTriggerFor]="columnFilterMenu" fxFlex="none" class="mr-4" mat-icon-button kendoTooltip
+                    title="Lọc cột" type="button">
+                    <mat-icon [icIcon]="icFilterList"></mat-icon>
+                </button>
+
+                <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                    <div *ngFor="let column of gridColumns">
+                        <button *ngIf="column.Title != ''"
+                            class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                            <mat-checkbox [disabled]="true" color="primary">
+                                {{ column.Title }}
+                            </mat-checkbox>
+                        </button>
+                    </div>
+                </mat-menu>
+            </div>
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>

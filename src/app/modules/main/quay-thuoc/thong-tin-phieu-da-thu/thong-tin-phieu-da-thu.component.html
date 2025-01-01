@@ -1,0 +1,252 @@
+<div id="phieu-thu" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+	<fieldset fxFlex="100%" style="padding: 0 !important">
+		<div class="mt-1" fxFlex="100%">
+			<ul fxFlex="100%">
+				<li>
+					<app-combobox id="ten-pttt" fxFlex="30%" fxFlex.sm="30%" [data]="dataSoPhieus" label="Số phiếu"
+						(selectionChange)="selectionChangeSoPhieu($event)" [autoSelectFirstItem]="true" [bind]="true"
+						[(model)]="thongTinSoPhieuDaThu.SoPhieuId" [modelText]="thongTinSoPhieuDaThu.TenSoPhieu"
+						[template]="soPhieuTemplate" [templateHeader]="soPhieuTemplateHeader" [popupSettings]="null"
+						class="pb-0">
+						<ng-template #soPhieuTemplateHeader let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<th width="50%">Loại phiếu</th>
+									<th width="50%">Tình trạng</th>
+								</tr>
+							</table>
+						</ng-template>
+						<ng-template #soPhieuTemplate let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<td width="50%">{{dataItem.DisplayName}}</td>
+									<td width="50%" *ngIf="dataItem.TinhTrang === trangThaiThuTienBenhNhan.Huy ">
+										<strong style="color: red"> {{dataItem.TinhTrang}}</strong>
+									</td>
+									<td width="50%" *ngIf="dataItem.TinhTrang !== trangThaiThuTienBenhNhan.Huy ">
+										<strong style="color: green"> {{dataItem.TinhTrang}}</strong>
+									</td>
+								</tr>
+							</table>
+						</ng-template>
+					</app-combobox>
+					<fieldset fxFlex="100%" fxFlex.sm="100%" class="ml-3"
+						style="padding: 13px;flex: 1 1 100%;box-sizing: border-box;max-width: 100%;"
+						*ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null">
+						<div class="mt-1">
+							<ul class="inline">
+								<li>
+									Loại phiếu:
+									<strong> {{thongTinSoPhieuDaThu.LoaiPhieu}} </strong>
+								</li>
+								<li>
+									Tình trạng:
+									<strong *ngIf="thongTinSoPhieuDaThu.TinhTrang === trangThaiThuTienBenhNhan.Huy"
+										style="color: red"> {{thongTinSoPhieuDaThu.TinhTrang}} </strong>
+									<strong *ngIf="thongTinSoPhieuDaThu.TinhTrang !== trangThaiThuTienBenhNhan.Huy"
+										style="color: green"> {{thongTinSoPhieuDaThu.TinhTrang}} </strong>
+								</li>
+
+								<li *ngIf="thongTinSoPhieuDaThu.TinhTrang === trangThaiThuTienBenhNhan.Huy">
+									Người hủy:
+									<strong> {{thongTinSoPhieuDaThu.NhanVienHuyPhieu}} </strong>
+								</li>
+								<li *ngIf="thongTinSoPhieuDaThu.TinhTrang === trangThaiThuTienBenhNhan.Huy">
+									Ngày hủy:
+									<strong> {{thongTinSoPhieuDaThu.NgayHuyStr}} </strong>
+								</li>
+								<li *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null 
+                                && ((thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi)
+                                && thongTinSoPhieuDaThu.TinhTrang === trangThaiThuTienBenhNhan.Huy)">
+									<span>Thu hồi: </span>
+									<strong *ngIf="thongTinSoPhieuDaThu.DaThuHoi"> Rồi </strong>
+									<strong *ngIf="!thongTinSoPhieuDaThu.DaThuHoi">
+										Chưa
+										<mat-icon [icIcon]="icEdit" style="transform: scale(0.8)"
+											(click)="huyPhieuThu(thongTinSoPhieuDaThu ,true)"> </mat-icon>
+									</strong>
+								</li>
+
+
+								<li *ngIf="thongTinSoPhieuDaThu.DaThuHoi">
+									Người thu hồi:
+									<strong> {{thongTinSoPhieuDaThu.NguoiThuHoi}} </strong>
+								</li>
+								<li *ngIf="thongTinSoPhieuDaThu.DaThuHoi">
+									Ngày thu:
+									<strong> {{thongTinSoPhieuDaThu.NgayThuStr}} </strong>
+								</li>
+							</ul>
+						</div>
+					</fieldset>
+				</li>
+			</ul>
+		</div>
+	</fieldset>
+	<fieldset fxFlex="100%" class="mb-1">
+		<div class="mt-1 ml-1">
+			<ul class="inline" *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null && 
+            thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi">
+				<li *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null">
+					Tổng số tiền:
+					<strong style="color: red"> {{thongTinSoPhieuDaThu.TongChiPhi | number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+				<li>
+					BHYT TT:
+					<strong> {{thongTinSoPhieuDaThu.BHYTThanhToan | number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+				<li>
+					Miễm giảm:
+					<strong> {{thongTinSoPhieuDaThu.MienGiam | number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+				<li>
+					Bệnh nhân TT:
+					<strong> {{thongTinSoPhieuDaThu.BenhNhanThanhToan | number:'0.2-2':'vi-VN'}} </strong>
+					(<span>Tiền mặt: </span> <strong> {{thongTinSoPhieuDaThu.TienMat| number:'0.2-2':'vi-VN'}} </strong>
+					<span>Chuyển khoản: </span> <strong> {{thongTinSoPhieuDaThu.ChuyenKhoan| number:'0.2-2':'vi-VN'}}
+					</strong> <span>POS: </span> <strong> {{thongTinSoPhieuDaThu.Pos| number:'0.2-2':'vi-VN'}} </strong>
+					<span>Công nợ: </span> <strong> {{thongTinSoPhieuDaThu.CongNo| number:'0.2-2':'vi-VN'}} </strong>)
+				</li>
+			</ul>
+		</div>
+		<div class="mt-1 ml-1">
+			<ul class="inline" *ngIf="thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi">
+				<li *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null">
+					Số tiền:
+					<strong style="color: red"> {{thongTinSoPhieuDaThu.SoTien| number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+				<li *ngIf="thongTinSoPhieuDaThu.NgayThuStr != null">
+					Ngày thu:
+					<strong> {{thongTinSoPhieuDaThu.NgayThuStr}} </strong>
+				</li>
+				<li *ngIf="thongTinSoPhieuDaThu.NoiDungThu != null">
+					Nội dung thu:
+					<strong> {{thongTinSoPhieuDaThu.NoiDungThu}} </strong>
+				</li>
+			</ul>
+		</div>
+	</fieldset>
+
+	<fieldset fxFlex="100%" class="mb-1"
+		*ngIf="thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi">
+		<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0" fxLayoutGap.lt-sm="0">
+			<kendo-grid [data]="thongTinSoPhieuDaThu.DanhSachThuPhis" [resizable]="true"
+				[selectable]="{enabled: true, checkboxOnly: true}" class="grid-custom" id="danhSachDaThuTienGrid"
+				height="500">
+				<kendo-grid-column field="" title="" width="25" [style]="{'text-align': 'center'}"
+					[headerStyle]="{'text-align': 'center'}"> </kendo-grid-column>
+				<kendo-grid-column field="" title="#" width="15" [style]="{'text-align': 'center'}"
+					[headerStyle]="{'text-align': 'center'}">
+					<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex"> {{rowIndex + 1}}
+					</ng-template>
+				</kendo-grid-column>				
+				<kendo-grid-column field="Nhom" title="Nhóm" width="50" [hidden]="true" [style]="{'text-align': 'left'}"
+					[headerStyle]="{'text-align': 'center'}" class="k-grouping-row p">
+					<ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value"> {{value}}
+					</ng-template>
+				</kendo-grid-column>
+				<kendo-grid-column field="TenDichVu" title="Tên Dịch Vụ" width="100" [style]="{'text-align': 'left'}"
+					[headerStyle]="{'text-align': 'center'}">
+					<ng-template kendoGridCellTemplate let-dataItem="dataItem">
+						<span kendoTooltip title="{{dataItem.TenDichVu}}"> {{dataItem.TenDichVu}} </span>
+					</ng-template>
+					<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+						<div class="text-center" style="font-weight: bold;color:#000;" kendoTooltip
+							title="Tổng cộng DV đang chọn">Tổng cộng:</div>
+					</ng-template>
+				</kendo-grid-column>
+				<kendo-grid-column field="Soluong" title="Số Lượng" width="60" [style]="{'text-align': 'right'}"
+					[headerStyle]="{'text-align': 'center'}"> </kendo-grid-column>
+				<kendo-grid-column field="DonGia" title="Đơn Giá" width="90" [style]="{'text-align': 'right'}"
+					[headerStyle]="{'text-align': 'right'}">
+					<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+						<div class="float_right">{{ dataItem.DonGia | number:'0.2-2':'vi-VN'}}</div>
+					</ng-template>
+				</kendo-grid-column>
+				<kendo-grid-column field="ThanhTien" title="Thành Tiền" width="100"
+					[headerStyle]="{'text-align': 'right'}">
+					<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+						<div class="float_right">{{ dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}</div>
+					</ng-template>
+					<ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+						<div class="float_right">{{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}</div>
+					</ng-template>
+					<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex"
+						style="text-align: center">
+						<span class="float_right">{{total('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+					</ng-template>
+				</kendo-grid-column>
+				<kendo-grid-column field="BHYTThanhToan" title="BHYT TT" width="100" [style]="{'text-align': 'right'}"
+					[headerStyle]="{'text-align': 'right'}">
+					<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+						<div class="float_right">{{ dataItem.BHYTThanhToan | number:'0.2-2':'vi-VN'}}</div>
+					</ng-template>
+					<ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+						<div class="float_right">{{aggregates.BHYTThanhToan.sum | number:'0.2-2':'vi-VN'}}</div>
+					</ng-template>
+					<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex"
+						style="text-align: right">
+						<span style="float: right;">{{total('BHYTThanhToan') | number:'0.2-2':'vi-VN'}}</span>
+					</ng-template>
+				</kendo-grid-column>
+				<kendo-grid-column width="90" [style]="{'text-align': 'right'}" title="Tổng công nợ"
+					[headerStyle]="{'text-align': 'right'}">
+					<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+						<div class="float_right">{{ dataItem.TongCongNo | number:'0.2-2':'vi-VN'}}</div>
+					</ng-template>
+					<ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+						<div class="float_right">{{aggregates.TongCongNo.sum | number:'0.2-2':'vi-VN'}}</div>
+					</ng-template>
+					<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex"
+						style="text-align: center">
+						<span style="float:right;">{{total('TongCongNo') | number:'0.2-2':'vi-VN'}}</span>
+					</ng-template>
+				</kendo-grid-column>
+				<kendo-grid-column field="SoTienMG" title="Số tiền MG" width="120" [style]="{'text-align': 'right'}"
+					[headerStyle]="{'text-align': 'right'}">
+					<ng-template kendoGridCellTemplate let-dataItem="dataItem">
+						<div class="float_right">
+							<div inline="true">
+								<div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2"
+									kendoTooltip>
+									<span style="float:right;">{{ dataItem.SoTienMG | number:'0.2-2':'vi-VN'}}</span>									
+								</div>
+							</div>
+						</div>
+					</ng-template>
+					<ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+						<div class="float_right">{{aggregates.SoTienMG.sum | number:'0.2-2':'vi-VN'}}</div>
+					</ng-template>
+					<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex"
+						style="text-align: center">
+						<span style="float:right;">{{total('SoTienMG') | number:'0.2-2':'vi-VN'}}</span>
+					</ng-template>
+				</kendo-grid-column>
+				<kendo-grid-column field="DaThanhToan" title="Đã TT" width="100" [style]="{'text-align': 'right'}"
+					[headerStyle]="{'text-align': 'right'}">
+					<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+						<div class="float_right">{{ dataItem.DaThanhToan | number:'0.2-2':'vi-VN'}}</div>
+					</ng-template>
+					<ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+						<div class="float_right">{{aggregates.DaThanhToan.sum | number:'0.2-2':'vi-VN'}}</div>
+					</ng-template>
+					<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+						<span style="float: right;">{{total('DaThanhToan') | number:'0.2-2':'vi-VN'}}</span>
+					</ng-template>
+				</kendo-grid-column>
+				<kendo-grid-messages noRecords="Không có dữ liệu." pagerOf="trong số" pagerItems="dòng"
+					detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết"> </kendo-grid-messages>
+			</kendo-grid>
+
+		</div>
+	</fieldset>
+</div>
+<div *ngIf="thongTinSoPhieuDaThu.SoPhieuId != null" class="sticky-button-action py-3 text-right" kendoTooltip>
+	<button (click)="phieuIn()" color="primary" mat-raised-button class="mr-2">Phiếu in</button>
+	<button style="margin-top: 10px;"
+		*ngIf="thongTinSoPhieuDaThu.ConHanHuyPhieuThu && 
+		    ((thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi && thongTinSoPhieuDaThu.TinhTrang !== trangThaiThuTienBenhNhan.Huy))"
+		type="button" (click)="huyPhieuThu(thongTinSoPhieuDaThu, false)" color="warn" mat-raised-button>
+		Hủy phiếu thu
+	</button>
+</div>

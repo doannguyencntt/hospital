@@ -1,0 +1,19 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Xác Nhận</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<legend>
+    Bạn có chắc từ chối phê duyệt cho lần nhập kho này không?
+    <app-textarea id="ly-do-huy" [required]="true" label="Lý do hủy" maxlength="2000" minHeight="60" [(model)]="lyDoHuy"
+        [validationerror]="'LyDoHuy' | validationerror:validationErrors">
+    </app-textarea>
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+        <button mat-button mat-dialog-close>Không</button>
+        <button mat-raised-button mat-button color="primary" (click)="Huy()" 
+            cdkFocusInitial>Có</button>
+    </mat-dialog-actions>
+</legend>
+

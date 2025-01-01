@@ -1,0 +1,53 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-combobox id="HocViHocHam" fxFlex="100%" fxFlex.sm="100%" [(model)]="nhomBenhVaTenBenh.ChuongICDId" 
+        label="Tên chương bệnh(Tiếng việt - tiếng anh)" [(modelText)]="nhomBenhVaTenBenh.TextChuongICD" [required]="true"
+        url="NhomICDTheoBenhVien/GetChuongICD" [template]="hvhhTemplateData" [templateHeader]="hvhhTemplateHeader"
+        class="item-no-padding" [validationerror]="'ChuongICDId' | validationerror:validationErrors">
+        <ng-template #hvhhTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="50%">Mã chương</th>
+                    <th>Tên chương</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #hvhhTemplateData let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="30%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.DisplayName}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textbox id="Ma" fxFlex="15%" fxFlex.sm="15%" maxlength="50" [required]="true" [(model)]="nhomBenhVaTenBenh.Stt"
+        label="STT" [validationerror]="'Stt' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Ma" fxFlex="15%" fxFlex.sm="15%" maxlength="500" [required]="true" [(model)]="nhomBenhVaTenBenh.Ma"
+        label="Mã bệnh" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="TenTiengViet" fxFlex="35%" fxFlex.sm="35%" maxlength="250" [required]="true"
+        [(model)]="nhomBenhVaTenBenh.TenTiengViet" label="Tên bệnh/Nhóm bệnh(Tiếng việt)"
+        [validationerror]="'TenTiengViet' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="TenTiengAnh" fxFlex="35%" fxFlex.sm="35%" maxlength="250" [required]="true"
+        [(model)]="nhomBenhVaTenBenh.TenTiengAnh" label="Tên bệnh/Nhóm bệnh(Tiếng anh)"
+        [validationerror]="'TenTiengAnh' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-multiselect fxFlex="65%" [(model)]="nhomBenhVaTenBenh.MaICDs" [modelText]="" label="Mã ICD" [required]="true"
+        [popupSettings]="null" [autoClose]="false" url="NhomICDTheoBenhVien/GetMaTuTaoICD"  #maICDMultiselect
+        [queryInfo]="{ParameterDependencies:'{MaICD:\'' + nhomBenhVaTenBenh.MoTa +'\'}', Take: 50}"
+        [validationerror]="'MaICDs' | validationerror:validationErrors">
+    </app-multiselect>
+
+    <app-radio id="HieuLuc" fxFlex="35%" fxFlex.sm="35%" name="isHieuLuc" label="Sử dụng"
+        [items]="[{ Value: true, Text: 'Sử dụng' }, { Value: false, Text: 'Ngưng sử dụng' }]"
+        [(model)]="nhomBenhVaTenBenh.HieuLuc" [validationerror]="'HieuLuc' | validationerror:validationErrors">
+    </app-radio>
+
+</div>

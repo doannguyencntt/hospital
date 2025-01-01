@@ -1,0 +1,58 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxLayoutAlign="space-between">
+    <app-combobox fxFlex="15%" fxFlex.sm="100%" hierarchyKeyToSend="NhomXetNghiemId" id="nhom-xet-nghiem" [templateHeader]="nhomThietBiTemplateHeader" [template]="nhomThietBiTemplate" label="Nhóm Xét Nghiệm" url="ThietBiXetNghiem/GetNhomXetNghiem" [(model)]="thietBiXn.NhomXetNghiemId"
+        [modelText]="thietBiXn.NhomXetNghiemDisplay" [required]="true" [validationerror]="'NhomXetNghiemId' | validationerror:validationErrors">
+    </app-combobox>
+    <ng-template #nhomThietBiTemplateHeader let-dataItem>
+        <table width="100%" class="table-combobox">
+            <tr>
+                <th width="40%">Mã</th>
+                <th>Tên</th>
+            </tr>
+        </table>
+    </ng-template>
+    <ng-template #nhomThietBiTemplate let-dataItem>
+        <table width="100%" class="table-combobox">
+            <tr>
+                <td width="40%">{{dataItem.Ma}}</td>
+                <td>{{dataItem.Ten}}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <app-combobox fxFlex="35%" hierarchyKeyToListen="NhomXetNghiemId" fxFlex.sm="100%" id="nhom-thiet-bi" [templateHeader]="nhomXnTemplateHeader" [template]="nhomXnTemplate" label="Nhóm Thiết Bị" url="ThietBiXetNghiem/GetNhomThietBi" [(model)]="thietBiXn.NhomThietBiId"
+        bind="true" [required]="true" [validationerror]="'NhomThietBiId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <ng-template #nhomXnTemplateHeader let-dataItem>
+        <table width="100%" class="table-combobox">
+            <tr>
+                <th width="30%">Mã</th>
+                <th width="40%">Tên</th>
+                <th>NSX</th>
+            </tr>
+        </table>
+    </ng-template>
+    <ng-template #nhomXnTemplate let-dataItem>
+        <table width="100%" class="table-combobox">
+            <tr>
+                <td width="30%">{{dataItem.Ma}}</td>
+                <td width="40%">{{dataItem.Ten}}</td>
+                <td>{{dataItem.NhaSanXuat}}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <app-textbox id="ma-thiet-bi" fxFlex="10%" fxFlex.sm="100%" maxlength="25" [required]="true" [(model)]="thietBiXn.Ma" label="Mã Thiết Bị" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="ten-thiet-bi" fxFlex="40%" fxFlex.sm="100%" maxlength="100" [required]="true" [(model)]="thietBiXn.Ten" label="Tên Thiết Bị" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+
+
+    <app-textbox id="ncc" fxFlex="60%" fxFlex.sm="100%" maxlength="100" [(model)]="thietBiXn.Ncc" label="Nhà Cung Cấp">
+    </app-textbox>
+
+    <app-radio fxFlex="40%" fxFlex.sm="100%" id="su-dung" name="su-dung" [required]="true" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="thietBiXn.HieuLuc" label="Sử dụng" [validationerror]="'HieuLuc' | validationerror:validationErrors">
+    </app-radio>
+</div>

@@ -1,0 +1,12 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="Ma" fxFlex="40%" fxFlex.sm="40%" maxlength="50" [required]="true" [(model)]="duongdung.Ma"
+        label="Mã" [validationerror]="'Ma' | validationerror:validationErrors"></app-textbox>
+    <app-textbox id="Ten" fxFlex="40%" fxFlex.sm="40%" maxlength="250" [required]="true" [(model)]="duongdung.Ten"
+        label="Tên" [validationerror]="'Ten' | validationerror:validationErrors"></app-textbox>
+    <app-radio fxFlex="20%" fxFlex.sm="40%" id="IsDisabled" name="IsDisabled"
+        [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" [(model)]="duongdung.IsDisabled" label="Sử Dụng"
+        [validationerror]="'IsDisabled' | validationerror:validationErrors">
+    </app-radio>
+    <app-textarea id="MoTa" fxFlex="100%" [(model)]="duongdung.MoTa" maxlength="2000" label="Mô Tả"
+        [validationerror]="'MoTa' | validationerror:validationErrors"></app-textarea>
+</div>

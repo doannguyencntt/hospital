@@ -1,0 +1,45 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>CHI TIẾT NGƯỜI BỆNH ĐÃ SỬ DỤNG</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="flex-direction: column;display: flex;">
+    <div class="row ml-1 mb-2">
+        <fieldset fxFlex="100%">
+            <div fxFlex="100%">
+                <ul class="inline">
+                    <li>Mã: <strong>{{voucher.Ma}}</strong></li>
+                    <li>Tên voucher: <strong>{{voucher.Ten}}</strong></li>
+                    <!-- <li>Gói DV: <strong>{{benhNhanHienTai.MaTN}}</strong></li> -->
+                    <li *ngIf="voucher.LoaiChietKhau">Loại voucher: <strong>{{voucher.LoaiChietKhau == loaiChietKhau.ChietKhauTheoSoTien ? 'Số tiền' : 'Tỉ lệ'}}</strong></li>
+                    <li *ngIf="voucher.LoaiChietKhau == loaiChietKhau.ChietKhauTheoSoTien">Số tiền: <strong>{{voucher.SoTienChietKhau}}</strong></li>
+                    <li *ngIf="voucher.LoaiChietKhau == loaiChietKhau.ChietKhauTheoTiLe">Số tiền: <strong>{{voucher.TiLeChietKhau}}</strong></li>
+                    <li>Số lượng phát hành: <strong>{{soLuongPhatHanh ? soLuongPhatHanh.SoLuongDisplay : voucher.SoLuongPhatHanh}}</strong></li>
+                    <li>Số lượng NB dùng: <strong>{{tongSoBenhNhanSuDung}}</strong></li>
+                    <li *ngIf="!voucher.DenNgayDisplay">Hạn dùng: <strong>{{voucher.TuNgayDisplay}} - </strong></li>
+                    <li *ngIf="voucher.DenNgayDisplay" style="display: inline-block; width: 250px;">Hạn dùng: <strong>{{voucher.TuNgayDisplay}} - {{voucher.DenNgayDisplay}}</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="p-2 mb-6 clear-margin-bottom">
+        <app-grid #gridChiTietBenhNhanDaSuDung [height]="320"
+            [gridColumns]="gridColumns" [documentType]="documentType" [useHeaderDefault]="true"
+            [useAddDeault]="false" [useActionDefault]="false" [checkboxAble]="false"
+            [additionalSearchString]="idVoucher"
+            [urlGetData]="urlGetChiTietBenhNhanDaSuDungForGrid"
+            [urlGetTotalPage]="urlGetPagesChiTietBenhNhanDaSuDungForGrid">
+        </app-grid>
+    </div>
+</mat-dialog-content>
+
+<ng-template #sttTemplate let-rowIndex="rowIndex">
+    <strong>{{rowIndex + 1}}</strong>
+</ng-template> 
+
+<ng-template #ngayDungTemplate let-dataItem>
+    {{dataItem.NgayDungDisplay}}
+</ng-template> 

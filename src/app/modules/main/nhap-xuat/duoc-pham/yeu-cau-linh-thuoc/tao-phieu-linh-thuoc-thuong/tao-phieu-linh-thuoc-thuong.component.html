@@ -1,0 +1,37 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Dược phẩm',Path:''}
+                ,{Title:'Dự trù lĩnh',Path:''}
+                ,{Title:'Yêu cầu lĩnh dược phẩm',Path:'/nhap-xuat/duoc-pham/yeu-cau-linh-thuoc',Active:true}
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Tạo phiếu lĩnh dự trù dược phẩm</h2>
+                <b class="status-yeu-cau-linh ycl-cho-duyet" *ngIf="isCreate">Đang chờ duyệt</b>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-phieu-linh-thuoc-thuong-shared [validationErrorsLinhThuong]="validationErrors" [isCreate]="true"
+                    [trangThaiVo]="trangThaiVo">
+                </app-phieu-linh-thuoc-thuong-shared>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+
+                    <button type="button" title="Phím tắt: Esc" (click)="cancel()" mat-button
+                        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Hủy</button>
+                    <button type="button" *ngIf="!loading" (click)="luuPhieuLinhThuong()" color="primary"
+                        mat-raised-button><i class="ft-save"></i> Lưu tạm</button>
+                    <button type="button" *ngIf="!loading" (click)="guiPhieuLinhThuong()" color="primary"
+                        mat-raised-button><i class="ft-save"></i> Gửi</button>
+                    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img
+                            src="/assets/img/loader.gif" alt="Loading" /></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

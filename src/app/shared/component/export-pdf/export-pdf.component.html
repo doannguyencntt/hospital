@@ -1,0 +1,23 @@
+<ng-container [ngSwitch]="styleButton">
+    <button *ngSwitchCase="1" [disabled]="isDisable==true" class="ml-3" type="button" color="primary" mat-raised-button
+        mat-button (click)="exportPDF()">
+        <mat-icon [icIcon]="icDownload" *ngIf="showIconExport"></mat-icon> {{textButton}}
+    </button>
+    <button *ngSwitchCase="2" [disabled]="isDisable==true" mat-menu-item (click)="exportPDF()">
+        <mat-icon [icIcon]="icDownload" *ngIf="showIconExport"></mat-icon>
+        <span>{{textButton}}</span>
+    </button>
+
+
+    <button *ngSwitchDefault [disabled]="isDisable==true" class="ml-3" type="button" color="primary" mat-raised-button
+        mat-button (click)="exportPDF()">
+        <mat-icon [icIcon]="icDownload" *ngIf="showIconExport"></mat-icon> {{textButton}}
+    </button>
+</ng-container>
+
+<div style="position: absolute; left:10000px; top: 0;">
+    <kendo-pdf-export #pdfExport [paperSize]='paperSize' [scale]='scale' [margin]="margin" [repeatHeaders]="repeatHeaders" [landscape]="landscape">
+        <div #htmlContent id="htmlContent">
+        </div>
+    </kendo-pdf-export>
+</div>

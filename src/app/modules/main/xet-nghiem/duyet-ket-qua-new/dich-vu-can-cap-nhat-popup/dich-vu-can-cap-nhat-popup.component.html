@@ -1,0 +1,50 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>{{title}}</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="overflow-y: hidden;">
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-grid masterName="ketQuaXetNghiemUpdate" [documentType]="documentType" [useHeaderDefault]="false"
+            [useAddDeault]="false" [useAddDeault]="false" [useActionDefault]="false" #gridDichVu [checkboxAble]="false"
+            [gridColumns]="gridColumns" [gridDataSource]="gridDataSource" [groups]="groups" [pageable]="false"
+            maxHeight="500">
+        </app-grid>
+    </div>
+
+    <ng-template #tenTemplate let-dataItem>
+        <span
+            [ngStyle]="{'padding-left':(dataItem.Level)*20+'px','font-weight':dataItem.IdChilds.length>0?'bold':'normal'}"
+            kendoTooltip title="{{dataItem.Ten}}">{{dataItem.Ten}}</span>
+        <div *ngIf="dataItem.LaDichVuSarCovid2">
+            <app-combobox id="LoaiKitThu" fxFlex="auto" fxFlex.sm="32%" label="Loại kít thử" [popupSettings]="null"
+                url="DuyetKetQuaXetNghiem/DichVuTestSarsCovids" [(model)]="dataItem.LoaiKitThuId"
+                [modelText]="dataItem.LoaiKitThu">
+            </app-combobox>
+        </div>
+    </ng-template>
+
+    <ng-template #kqDuyetTemplate let-dataItem>
+        <app-textbox class="no-label" id="GiaTriDuyetA{{dataItem.Id}}" label=" " maxlength="100"
+            *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)"
+            [(model)]="dataItem.GiaTriDuyet">
+        </app-textbox>
+    </ng-template>
+    <ng-template #damKQTemplate let-dataItem>
+        <app-checkbox label=" " [(model)]="dataItem.ToDamGiaTri"
+            *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)" class="pl-2">
+        </app-checkbox>
+    </ng-template>
+
+    <ng-template #nhomTemplate let-value="value" let-dataItem>
+        <strong>{{value}}</strong>
+    </ng-template>
+
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" mat-stroked-button color="primary" mat-dialog-close>Hủy</button>
+    <button tabindex="-1" type="button" (click)="luu()" mat-stroked-button color="primary" class="md-primary">Cập
+        nhật</button>
+</mat-dialog-actions>

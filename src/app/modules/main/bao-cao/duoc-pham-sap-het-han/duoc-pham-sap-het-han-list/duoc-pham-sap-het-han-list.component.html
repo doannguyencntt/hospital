@@ -1,0 +1,100 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Báo Cáo',Path:''},
+                    {Title:'Dược Phẩm',Path:''},
+                    {Title:'Sắp Hết Hạn',Path:'/bao-cao/duoc-pham-sap-het-han', Active: true}]"></vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/bao-cao/duoc-pham-sap-het-han" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useAddDeault]="true" [headerTemplate]="headerTemplate"
+                [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true">
+            </app-grid>
+
+        </div>
+        <ng-template #headerTemplate>
+
+            <div class="bg-app-bar p-0 h-15 border-b sticky left-0">
+                <div fxFlex="80%">
+                    <app-combobox id="Kho" fxFlex="300px" fxFlex.sm="auto" [(model)]="searchInfo.KhoId"
+                        (modelChange)="KhoChange($event)" [modelText]="searchInfo.TenKho" label="Chọn Kho"
+                        url="TonKho/GetKhoTatCa" popupSettings="" class="mt-1 on-header" popupSettings=""
+                        [autoSelectFirstItem]="true" [bind]="true" style="margin-left: 5px;">
+                    </app-combobox>
+                    <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                        fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;margin-left: 5px;">
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-3 py-2 border-0 outline-none w-full bg-transparent"
+                            placeholder="{{searchPlaceHolder}}" type="search" name="searchString"
+                            [(ngModel)]="searchInfo.searchString" (keyup)="onKey($event)"
+                            (ngModelChange)="searchChange()" />
+
+                    </div>
+
+                </div>
+                <div class="text-right" fxFlex="20%" style="margin: 5px;">
+                    <button (click)="exportExcel()" type="button" color="primary" [disabled]="IsData==false"
+                        mat-raised-button mat-button>Xuất Excel</button>
+                    <button (click)="Gui()" type="button" color="primary" [disabled]="IsData==false" class="ml-1"
+                        mat-raised-button mat-button>Xem
+                    </button>
+                    <app-print-form textPrint="In Báo Cáo" [isDisable]="!IsData" type="PDF" [bodyComponent]="this"
+                        [showInMenuItem]="false" [showIconPrint]="false"  typeLayout="landscape" typeSize="A4" >
+                    </app-print-form>
+                </div>
+            </div>
+            <!-- <div class="bg-app-bar p-0 h-15 border-b sticky left-0">
+                <div fxFlex="80%">
+                    <app-dropdownlist id="Kho" fxFlex="300px" fxFlex.sm="auto" [(model)]="searchInfo.KhoId"
+                    (selectionChange)="KhoChange($event)" [modelText]="searchInfo.TenKho" label="Chọn Kho"
+                    url="TonKho/GetKhoTatCa" popupSettings="" class="dropdown on-header"
+                    style="margin-left: 5px;">
+                </app-dropdownlist>
+                <div class="bg-card rounded-full border px-4" style="margin-left: 20px;" fxFlex="400px"
+                fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-3 py-2 border-0 outline-none w-full bg-transparent"
+                    placeholder="{{searchPlaceHolder}}" type="search" name="searchString"
+                    [(ngModel)]="searchInfo.searchString" (keyup)="onKey($event)" />
+                    
+            </div>
+                    <button class="ml-4" style="margin-left: 20px;" fxFlex="none" fxHide.gt-xs mat-icon-button type="button"
+                    (click)="searchTonKho()">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                    </button>
+                    
+                </div>
+                  
+                
+                
+                <div class="text-right float-right" fxFlex="10%" style="margin: 5px;">
+                    <app-print-form fxFlex='40%' textPrint="In Báo Cáo" type="PDF" 
+                            [bodyComponent]="this">
+                        </app-print-form>
+                    <button type="button" (click)="Gui()" color="primary" style="margin-right: 5px;" mat-raised-button
+                        mat-button>Xem
+                    </button>
+                    
+                   
+                    
+                </div>
+            </div> -->
+        </ng-template>
+        <ng-template #tinhTrangTemplate2 let-dataItem>
+            <span style="color: orange;" class="badge badge-pill">{{dataItem.NgayHetHanHienThi}}
+            </span>
+        </ng-template>
+        <ng-template #donGiaNhapTemplate let-dataItem>
+            {{ dataItem.DonGiaNhap | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #thanhTienTemplate let-dataItem>
+            {{ dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        
+    </vex-page-layout-content>
+</vex-page-layout>

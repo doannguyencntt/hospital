@@ -1,0 +1,43 @@
+<div>
+	<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+		<div>XÁC NHẬN HỦY XUẤT THUỐC</div>
+		<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+			<mat-icon [icIcon]="icClose"></mat-icon>
+		</button>
+	</div>
+	<mat-dialog-content style="overflow: hidden"  style="height: 250px;">
+		Bạn chắc chắn muốn hủy xuất thuốc của phiếu thu phải không?
+
+		<div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+			<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+				<fieldset class="row ml-1" fxFlex="100%">
+					<table class="table table-border" width="700px">
+						<tr>
+							<td width="{{huyXuatThuocTrongNgay.ThuHoiPhieu?'13%':'30%'}}">Nếu phải:</td>
+							<td width="{{huyXuatThuocTrongNgay.ThuHoiPhieu?'25%':'100%'}}">
+								<app-radio id="thuhoiphieu" label="Thu hồi phiếu" required="true"
+								 [(model)]="huyXuatThuocTrongNgay.ThuHoiPhieu" (modelChange)="modelChangeThuHoiPhieu($event)" 
+								 [items]="[{Value:true,Text:'Rồi'},{Value:false,Text:'Chưa'}]" 
+								 [validationerror]="'ThuHoiPhieu' | validationerror:validationErrors"> </app-radio>
+							</td>
+							<td width="30%">
+								<app-combobox *ngIf="huyXuatThuocTrongNgay.ThuHoiPhieu" [popupSettings]="null" id="nguoithuhoi" label="Người thu hồi" [(model)]="huyXuatThuocTrongNgay.NguoiThuHoiId" [(modelText)]="huyXuatThuocTrongNgay.TenNguoiThuHoi" url="NhanVien/GetListLookupNhanVien" required="true" [validationerror]="'NguoiThuHoiId' | validationerror:validationErrors"> </app-combobox>
+							</td>
+							<td width="25%">
+								<app-datetimepicker *ngIf="huyXuatThuocTrongNgay.ThuHoiPhieu" [(model)]="huyXuatThuocTrongNgay.ThoiGianThuHoi" id="thuhoiluc" label="Thu hồi Lúc" required="true" [validationerror]="'ThoiGianThuHoi' | validationerror:validationErrors"> </app-datetimepicker>
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+				<fieldset class="row ml-1" fxFlex="100%">
+					<app-textarea max="4000" [minHeight]="60" [(model)]="huyXuatThuocTrongNgay.LyDo" id="ly-do" class="item-no-padding" fxFlex="100%" required="true" fxFlex.sm="100%" label="Lý do" [validationerror]="'LyDo' | validationerror:validationErrors"> </app-textarea>
+				</fieldset>
+			</div>
+		</div>
+	</mat-dialog-content>
+</div>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<button mat-button mat-dialog-close>Không</button>
+	<button mat-raised-button mat-button (click)="xacNhanThongTinHuy()" color="primary" cdkFocusInitial>Có</button>
+</mat-dialog-actions>

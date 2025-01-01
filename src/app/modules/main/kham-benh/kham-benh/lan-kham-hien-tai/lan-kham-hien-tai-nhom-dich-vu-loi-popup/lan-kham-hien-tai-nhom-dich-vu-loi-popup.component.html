@@ -1,0 +1,28 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="m-0">
+    <div>XÁC NHẬN</div>
+    <button type="button" mat-icon-button (click)="close(null)" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <p>Dịch vụ cảnh báo:</p>
+    <app-grid #grid [gridColumns]="gridColumns" [documentType]="documentType"
+        [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false" [useActionDefault]="false"
+        [gridDataSource]="gridDataSource" style="width: 1px;" [allowSortDefault]="false"
+        [checkboxAble]="false" [pageable]="false" [maxHeight]="200">
+    </app-grid>
+    <p class="mt-2">Ngoài ra tất cả các dịch vụ khác sẽ được thêm vào, bạn có chấp nhận không?</p>
+    <ng-template #sttTemplate let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+    <ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-checkbox id="khongThem{{rowIndex}}" label="Không thêm" [(model)]="dataItem.KhongThem" [disabled]="dataItem.IsDisabled">
+        </app-checkbox>
+    </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-button mat-dialog-close (click)="close(null)">Không</button>
+    <button mat-raised-button mat-button color="primary" (click)="chonDichVuKhongThem()">Có</button>
+</mat-dialog-actions>

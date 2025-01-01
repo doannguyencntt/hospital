@@ -1,0 +1,36 @@
+<vex-page-layout>
+
+  <vex-secondary-toolbar>
+    <vex-breadcrumbs [crumbs]="[
+    {Title:'Kết Quả Tìm Kiếm',Path:'', Active:true}           
+]" fxFlex="auto"></vex-breadcrumbs>
+  </vex-secondary-toolbar>
+
+  <vex-page-layout-content>
+    <div class="card relative">
+      <app-grid [gridColumns]="gridColumns" [lazyLoadPage]="true" #grid urlGetData="TimKiem/TimKiemTiepNhan"
+        urlGetTotalPage="TimKiem/TotalTimKiemTiepNhan" heightToolbar="170" [sort]="sortConfig"
+        [useHeaderDefault]="false" [useActionDefault]="false" [searchString]="searchString"
+        [headerTemplate]="headerTemplate" [checkboxAble]="false">
+      </app-grid>
+
+      <ng-template #headerTemplate>
+        <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+          <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" style="margin-top: 2px;">
+            <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+            <input class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search" name="searchString"
+              [(ngModel)]="searchString" (keyup)="onKey($event)" (ngModelChange)="searchChanges($event)"
+              placeholder="Nhập chính xác Mã NB, Mã TN, Họ tên để tìm kiếm..." />
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #maTNTemplate let-dataItem>
+        <a (click)="viewDetail(dataItem)">{{dataItem.MaTN}}</a>
+      </ng-template>
+      <ng-template #NgayTiepNhanDTTemplate let-dataItem>
+        {{dataItem.NgayTiepNhan}}
+      </ng-template>
+    </div>
+  </vex-page-layout-content>
+</vex-page-layout>

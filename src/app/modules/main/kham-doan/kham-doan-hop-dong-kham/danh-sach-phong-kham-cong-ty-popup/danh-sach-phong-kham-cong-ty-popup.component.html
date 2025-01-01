@@ -1,0 +1,38 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">{{Title}}</div>
+    <button type="button" mat-icon-button mat-dialog-close [mat-dialog-close]="null" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 300px;">
+    <div width="100%" fxLayout="row">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxFlex="100%">
+            <app-textbox maxlength="50" [(model)]="danhSachPhongTaiCongTy.Ma" class="mt-2" fxFlex="50%" fxFlex.sm="20%"
+                required="true" label="Mã phòng" [validationerror]="'Ma' | validationerror:validationErrors">
+            </app-textbox>
+            <app-textbox maxlength="250" [(model)]="danhSachPhongTaiCongTy.Ten" class="mt-2" fxFlex="50%"
+                fxFlex.sm="20%" required="true" label="Tên phòng"
+                [validationerror]="'Ten' | validationerror:validationErrors">
+            </app-textbox>
+            <app-textbox maxlength="20" [(model)]="danhSachPhongTaiCongTy.Tang" class="mt-2" fxFlex="100%"
+                fxFlex.sm="100%" label="Ghi chú" required="true"
+                [validationerror]="'Tang' | validationerror:validationErrors">
+            </app-textbox>
+            <app-multiselect id="dvkt" fxFlex="auto" popupSettings="null" hierarchyKeyToListen="NhomDichVuBenhVienId"
+                [modelText]="" label="Danh sách nhân sự" class="item-no-padding"               
+                url="KhamDoan/GetListDanhSachNhanSuMultiSelect?hopDongKhamSucKhoeId={{hopDongKhamSucKhoeId}}"
+                [(model)]="danhSachPhongTaiCongTy.DanhSachNhanSu"
+                (modelChange)="changeMultiDanhSachNhanSu($event)" [autoClose]="false"
+                (closeChange)="closeChangeDanhSachNhanSu($event)"
+                [validationerror]="'DichVuKyThuatBenhVienChiDinhs' | validationerror:validationErrors">               
+            </app-multiselect>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="mt-4 pb-5">
+    <button style="margin-left: auto;" type="button" mat-stroked-button color="primary"
+        [mat-dialog-close]="null">Hủy</button>
+    <button (click)="createOrUpdate()" mat-raised-button mat-button color="primary">Ok</button>
+</mat-dialog-actions>

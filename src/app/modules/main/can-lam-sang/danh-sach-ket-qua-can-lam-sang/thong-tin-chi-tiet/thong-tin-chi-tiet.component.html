@@ -1,0 +1,304 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Kết Quả CĐHA, TDCN'},
+            {Title:'DS Kết Quả CĐHA, TDCN',Path:'/ket-qua-cdha-tdcn' , queryParams: {holdQuery : true}},
+            {Title:'Cập Nhật Kết Quả CĐHA, TDCN',Path:'',Active:true}          
+            ]">
+            </vex-breadcrumbs>
+            <app-hot-key [keys]="[
+            {Key:'Ctrl + S', Description:'Cập nhật cận lâm sàng'},            
+            {Key:'Esc',Description:'Hủy',End:true}
+            ]"></app-hot-key>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+                            <fieldset fxFlex="100%" class="mb-3">
+                                <legend>Thông tin hành chính</legend>
+                                <div class=" mt-1">
+                                    <ul class="inline">
+                                        <li>Mã TN:
+                                            <strong>
+                                                {{thongTinBenhNhan.MaYeuCauTiepNhan}}
+                                            </strong>
+                                        </li>
+                                        <li>Mã NB:
+                                            <strong>
+                                                {{thongTinBenhNhan.MaBN}}
+                                            </strong>
+                                        </li>
+                                        <li>Họ Tên:
+                                            <strong>
+                                                {{thongTinBenhNhan.HoTen}}
+                                            </strong>
+                                        </li>
+                                        <li>Năm Sinh:
+                                            <strong>
+                                                {{thongTinBenhNhan.NamSinh}}
+                                            </strong>
+                                        </li>
+                                        <li>Giới Tính:
+                                            <strong>
+                                                {{thongTinBenhNhan.GioiTinhStr}}
+                                            </strong>
+                                        </li>
+                                        <li>Địa chỉ:
+                                            <strong>
+                                                {{thongTinBenhNhan.DiaChi}}
+                                            </strong>
+                                        </li>
+                                        <li>Số điện thoại:
+                                            <strong>
+                                                {{thongTinBenhNhan.SoDienThoai}}
+                                            </strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </fieldset>
+                            <fieldset fxFlex="100%" class="mb-3">
+                                <legend>Kết Quả</legend>
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0" *ngIf="ketQuaNhomXetNghiems !== null">
+                                    <h3 fxFlex="100%" class="sub-title">Xét Nghiệm</h3>
+                                    <div fxFlex="100%"
+                                        *ngFor="let thongTinNhomXetNghiemCanLamSang of ketQuaNhomXetNghiems , let i = index">
+                                        <blockquote
+                                            [ngClass]="thongTinNhomXetNghiemCanLamSang.CapNhatChuaThanhToan === true?'classChuaThanhToan':''"
+                                            fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid"
+                                            fxLayoutGap.lt-sm="0" class="mb-1">
+                                            <div fxFlex="100%">
+                                                <span> Nhóm:
+                                                    <strong>{{thongTinNhomXetNghiemCanLamSang.TenNhomDichVuKyhuat}}</strong>
+                                                    - Dịch vụ: </span>
+                                                <ul class="inline dich_vu">
+                                                    <li
+                                                        *ngFor="let thongTinCanLamSang of thongTinNhomXetNghiemCanLamSang.NhomDanhSachXetNghiem">
+                                                        <strong>
+                                                            {{thongTinCanLamSang.TenDichVu}}
+                                                        </strong>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                fxLayoutGap="10px grid">
+                                                <div fxFlex="30%" fxFlex.sm="30%">
+                                                    <app-upload #uploadXetNghiem id="Upload" label="Hình ảnh kèm theo"
+                                                        [allowedExtensions]="allowedExtensions"
+                                                        [(model)]="thongTinNhomXetNghiemCanLamSang.GiayKetQuaNhomCanLamSang"
+                                                        [multiple]="true" [template]="templateFileNhomXNInfo">
+                                                    </app-upload>
+                                                    <ng-template #templateFileNhomXNInfo let-files let-state="state">
+                                                        <table width="100%" kendoTooltip>
+                                                            <tr>
+                                                                <td>
+                                                                    <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"  (click)="uploadXetNghiem.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                                                                    <a *ngIf="!files[0].error" title="{{files[0].name}}"  (click)="uploadXetNghiem.viewFile(files[0])" class="green" class="custom-name green">{{files[0].name}}</a>                                                                      
+                                                                </td>
+                                                                <td style="width:25px">
+                                                                    <a type="button"
+                                                                        (click)="uploadXetNghiem.remove(files[0].uid)"                                                                      
+                                                                        mat-icon-button>
+                                                                        <mat-icon [icIcon]="icClear"></mat-icon>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </ng-template>
+                                                    <app-checkbox 
+                                                        *ngIf="thongTinNhomXetNghiemCanLamSang.GiayKetQuaNhomCanLamSang == undefined || thongTinNhomXetNghiemCanLamSang.GiayKetQuaNhomCanLamSang === null || thongTinNhomXetNghiemCanLamSang.GiayKetQuaNhomCanLamSang.length === 0 "
+                                                        id="chonfile-kq_{{i}}"
+                                                        [(model)]="thongTinNhomXetNghiemCanLamSang.KiemTraFileKetQua"
+                                                        label="Không có file kết quả"></app-checkbox>
+                                                </div>
+                                                <div fxFlex="40%" fxFlex.sm="40%">
+                                                    <app-textarea [required]="true" id="ketluan" label="Ghi Chú"
+                                                        maxlength="2000"
+                                                        [validationerror]="'thongTinNhomXetNghiemCanLamSang['+i+'].KetLuan' | validationerror: validationErrors"
+                                                        [(model)]="thongTinNhomXetNghiemCanLamSang.KetLuan"
+                                                        minHeight="20">
+                                                    </app-textarea>
+                                                </div>
+                                                <app-combobox id="NguoiDuyet" fxFlex="30%" fxFlex.sm="30%"
+                                                    [(model)]="thongTinNhomXetNghiemCanLamSang.NhanVienThucHienId"
+                                                    [modelText]="thongTinNhomXetNghiemCanLamSang.TenNhanVienThucHien"
+                                                    label="Nhân viên thực hiện" class="item-no-padding"
+                                                    [validationerror]="'ketQuaNhomXetNghiems['+i+'].NhanVienThucHienId' | validationerror: validationErrors"
+                                                    url="NhanVien/GetListLookupNhanVien">
+                                                </app-combobox>
+                                            </div>
+                                        </blockquote>
+                                        <ng-template #templateInfo let-dataItem>
+                                            <blockquote fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0" class="mb-1">
+                                                <div fxFlex="100%">
+                                                    <span>Nhóm này có thêm dịch vụ đề nghị bạn cập nhật lại kết quả:
+                                                    </span>
+                                                    <ul class="inline dich_vu"
+                                                        *ngFor="let thongTinCanLamSang of thongTinNhomXetNghiemCanLamSang.NhomDanhSachXetNghiem">
+                                                        <li *ngIf="thongTinCanLamSang.CapNhatChuaThanhToan === true">
+                                                            <strong>
+                                                                {{thongTinCanLamSang.TenDichVu}}
+                                                            </strong>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </blockquote>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0" *ngIf="chuanDoanHinhAnh===true">
+                                    <h3 fxFlex="100%" class="sub-title">Chẩn đoán hình ảnh</h3>
+                                    <div fxFlex="100%"
+                                        *ngFor="let thongTinCanLamSang of thongTinCanLamSangs, let i = index">
+                                        <blockquote *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat === 3"
+                                            fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid"
+                                            fxLayoutGap.lt-sm="0" class="mb-1">
+                                            <div fxFlex="100%" *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat === 3">
+                                                <span>Dịch vụ: </span>
+                                                <ul class="inline dich_vu">
+                                                    <li> <strong>
+                                                            {{thongTinCanLamSang.TenDichVu}}
+                                                        </strong>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                fxLayoutGap="10px grid">
+                                                <div fxFlex="30%" fxFlex.sm="30%"
+                                                    *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat === 3">
+                                                    <app-upload id="Upload" #uploadChuanDoanHA  [allowedExtensions]="allowedExtensions"
+                                                        [(model)]="thongTinCanLamSang.GiayKetQuaLamSang"
+                                                        [multiple]="true" label="Hình ảnh kèm theo"
+                                                        [template]="templateFileChuanDoanHAInfo">
+                                                    </app-upload>
+                                                    <ng-template #templateFileChuanDoanHAInfo let-files>
+                                                        <table width="100%" class="table-combobox">
+                                                            <tr>
+                                                                <td>
+                                                                    <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"  (click)="uploadChuanDoanHA.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                                                                    <a *ngIf="!files[0].error" title="{{files[0].name}}"  (click)="uploadChuanDoanHA.viewFile(files[0])" class="green" class="custom-name green">{{files[0].name}}</a>                                                                      
+                                                                </td>
+                                                                <td style="width:25px">
+                                                                    <a type="button"
+                                                                        (click)="uploadChuanDoanHA.remove(files[0].uid)"
+                                                                        mat-icon-button>
+                                                                        <mat-icon [icIcon]="icClear"></mat-icon>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </ng-template>
+                                                    <app-checkbox id="chonfile-hinh-anh_{{i}}"
+                                                        *ngIf="thongTinCanLamSang.GiayKetQuaLamSang == undefined || thongTinCanLamSang.GiayKetQuaLamSang === null || thongTinCanLamSang.GiayKetQuaLamSang.length === 0"
+                                                        [(model)]="thongTinCanLamSangs[i].KiemTraFileKetQua"
+                                                        label="Không có file kết quả"></app-checkbox>
+                                                </div>
+                                                <div fxFlex="40%" fxFlex.sm="40%"
+                                                    *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat === 3">
+                                                    <app-textarea id="ghi-chu-chuan-doan-hinh-anh" label="Ghi Chú"
+                                                        maxlength="2000" [required]="true"
+                                                        [validationerror]="'thongTinCanLamSangs['+i+'].GhiChu' | validationerror: validationErrors"
+                                                        [(model)]="thongTinCanLamSang.GhiChu" minHeight="20">
+                                                    </app-textarea>
+                                                </div>
+                                                <app-combobox id="NguoiDuyet" fxFlex="30%" fxFlex.sm="30%"
+                                                    [(model)]="thongTinCanLamSang.NhanVienThucHienId"
+                                                    [modelText]="thongTinCanLamSang.TenNhanVienThucHien"
+                                                    label="Nhân viên thực hiện" class="item-no-padding"
+                                                    [validationerror]="'thongTinCanLamSangs['+i+'].NhanVienThucHienId' | validationerror: validationErrors"
+                                                    url="NhanVien/GetListLookupNhanVien">
+                                                </app-combobox>
+                                            </div>
+                                        </blockquote>
+                                    </div>
+                                </div>
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0" *ngIf="thamDoChucNang===true">
+                                    <h3 fxFlex="100%" class="sub-title">Thăm dò chức năng</h3>
+                                    <div fxFlex="100%"
+                                    *ngFor="let thongTinCanLamSang of thongTinCanLamSangs , let i = index">
+                                        <blockquote *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat === 4"
+                                            fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid"
+                                            fxLayoutGap.lt-sm="0" class="mb-1">
+                                            <div fxFlex="100%" *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat === 4">
+                                                <span>Dịch vụ: </span>
+                                                <ul class="inline dich_vu">
+                                                    <li> <strong>
+                                                            {{thongTinCanLamSang.TenDichVu}}
+                                                        </strong>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                fxLayoutGap="10px grid">
+                                                <div fxFlex="30%" fxFlex.sm="30%"
+                                                    *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat === 4">
+                                                    <app-upload id="Upload" label="Hình ảnh kèm theo" [multiple]="true"  [allowedExtensions]="allowedExtensions"
+                                                        [(model)]="thongTinCanLamSang.GiayKetQuaLamSang" #uploadThamDoChucNang
+                                                        [template]="templateFileThamDoCNInfo">
+                                                    </app-upload>
+                                                    <ng-template #templateFileThamDoCNInfo let-files>
+                                                        <table width="100%">
+                                                            <tr>
+                                                                <td>
+                                                                    <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"  (click)="uploadThamDoChucNang.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                                                                    <a *ngIf="!files[0].error" title="{{files[0].name}}"  (click)="uploadThamDoChucNang.viewFile(files[0])" class="green" class="custom-name green">{{files[0].name}}</a>                                                                      
+                                                                </td>
+                                                                <td style="width:25px">
+                                                                    <a type="button"
+                                                                        (click)="uploadThamDoChucNang.remove(files[0].uid)"
+                                                                        mat-icon-button>
+                                                                        <mat-icon [icIcon]="icClear"></mat-icon>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </ng-template>
+                                                    <app-checkbox id="chonfile-chuc-nang_{{i}}"
+                                                        *ngIf="thongTinCanLamSang.GiayKetQuaLamSang == null || thongTinCanLamSang.GiayKetQuaLamSang === null || thongTinCanLamSang.GiayKetQuaLamSang.length === 0"
+                                                        [(model)]="thongTinCanLamSangs[i].KiemTraFileKetQua"
+                                                        label="Không có file kết quả"></app-checkbox>
+                                                </div>
+                                                <div fxFlex="40%" fxFlex.sm="40%"
+                                                    *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat === 4">
+                                                    <app-textarea id="ghi-chu-tham-do-chuc-nang" label="Ghi Chú"
+                                                        maxlength="2000" [required]="true"
+                                                        [validationerror]="'thongTinCanLamSangs['+i+'].GhiChu' | validationerror: validationErrors"
+                                                        [(model)]="thongTinCanLamSang.GhiChu" minHeight="20">
+                                                    </app-textarea>
+                                                </div>
+                                                <app-combobox id="NguoiDuyet" fxFlex="30%" fxFlex.sm="30%"
+                                                    [(model)]="thongTinCanLamSang.NhanVienThucHienId"
+                                                    [modelText]="thongTinCanLamSang.TenNhanVienThucHien"
+                                                    [validationerror]="'thongTinCanLamSangs['+i+'].NhanVienThucHienId' | validationerror: validationErrors"
+                                                    label="Nhân viên thực hiện" class="item-no-padding"
+                                                    url="NhanVien/GetListLookupNhanVien">
+                                                </app-combobox>
+                                            </div>
+                                        </blockquote>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+                            <button type="button" title="Phím tắt: ESC" mat-raised-button (click)="BackToList()">
+                                Hủy
+                            </button>
+                            <button type="button" title="Phím tắt: Ctrl+S" color="primary" mat-raised-button
+                                (click)="SaveCanLamSang()">
+                                Lưu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,173 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                        {Title:'Ngoại Trú',Path:''},
+                        {Title:'Xác Nhận BHYT',Path:''},
+                        {Title:'DS Xác Nhận BHYT',Path:'/xac-nhan-bhyt/ngoai-tru', queryParams: {holdQuery : true}, Active:true}
+                    ]">
+            </vex-breadcrumbs>
+            <app-hot-key [keys]="[
+            {Key:'Ctrl + S',Description:'Lưu'},
+            {Key:'Esc',Description:'Hủy', End:true}
+            ]"></app-hot-key>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="auto">
+                    <div class="px-6 py-4" fxLayout="column">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+                            <!-- Thông tin hành chính -->
+                            <div fxFlex="100%">
+                                <fieldset>
+                                    <legend>Thông tin hành chính</legend>
+                                    <div fxFlex="100%">
+                                        <ul class="inline">
+                                            <li>Mã TN:
+                                                <strong>
+                                                    {{thongTinHanhChinh.MaTN}}
+                                                </strong>
+                                            </li>
+                                            <li>Mã NB:
+                                                <strong>
+                                                    {{thongTinHanhChinh.MaBN}}
+                                                </strong>
+                                            </li>
+                                            <li>Họ Tên:
+                                                <strong>
+                                                    {{thongTinHanhChinh.HoTen}}
+                                                </strong>
+                                            </li>
+                                            <li>Năm Sinh:
+                                                <strong>
+                                                    {{thongTinHanhChinh.NamSinh}}
+                                                </strong>
+                                            </li>
+                                            <li>Địa chỉ:
+                                                <strong>
+                                                    {{thongTinHanhChinh.DiaChi}}
+                                                </strong>
+                                            </li>
+                                            <li>Số điện thoại:
+                                                <strong>
+                                                    {{thongTinHanhChinh.SoDienThoaiStr}}
+                                                </strong>
+                                            </li>
+                                            <li>Email:
+                                                <strong>
+                                                    {{thongTinHanhChinh.Email}}
+                                                </strong>
+                                            </li>
+                                            <li>Đối tượng ưu đãi:
+                                                <strong>
+                                                    {{thongTinHanhChinh.DoiTuongUuDai}}
+                                                </strong>
+                                            </li>
+                                            <li>Công ty ưu đãi:
+                                                <strong>
+                                                    {{thongTinHanhChinh.CongTyUuDai}}
+                                                </strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <!-- Thông tin bảo hiểm y tế -->
+                            <div fxFlex="100%">
+                                <fieldset>
+                                    <legend>Thông tin BHYT</legend>
+                                    <div fxFlex="100%">
+                                        <ul class="inline">
+                                            <li>Số thẻ:
+                                                <strong>
+                                                    {{thongTinBaoHiemXaHoi.SoThe}}
+                                                </strong>
+                                            </li>
+                                            <li>Ngày hiệu lực:
+                                                <strong>
+                                                    {{thongTinBaoHiemXaHoi.NgayHieuLucStr}}
+                                                </strong>
+                                            </li>
+                                            <li>Ngày hết hạn:
+                                                <strong>
+                                                    {{thongTinBaoHiemXaHoi.NgayHetHanStr}}
+                                                </strong>
+                                            </li>
+                                            <li>Nơi đăng ký khám BH:
+                                                <strong>
+                                                    {{thongTinBaoHiemXaHoi.NoiDangKyKhamBenh}}
+                                                </strong>
+                                            </li>
+                                            <li>Mức hưởng:
+                                                <strong>
+                                                    {{thongTinBaoHiemXaHoi.MucHuong}} %
+                                                </strong>
+                                            </li>
+                                            <li>Tuyến khám:
+                                                <strong class="color-green">
+                                                    {{thongTinBaoHiemXaHoi.TuyenKham}}
+                                                </strong>
+                                            </li>
+                                            <li>Giấy chuyển viện:
+                                                <strong *ngIf="thongTinBaoHiemXaHoi.GiayChuyenVien !== null">
+                                                    <a class="color-blue"
+                                                        (click)="viewDocument(thongTinBaoHiemXaHoi.GiayChuyenVienId, 1)">{{thongTinBaoHiemXaHoi.GiayChuyenVien}}
+                                                    </a>
+                                                </strong>
+                                            </li>
+                                            <li>Giấy miễn cùng chi trả:
+                                                <strong *ngIf="thongTinBaoHiemXaHoi.GiayMiemCungTriTra !== null">
+                                                    <a class="color-blue"
+                                                        (click)="viewDocument(thongTinBaoHiemXaHoi.GiayMienCungTriTraId, 2)">{{thongTinBaoHiemXaHoi.GiayMiemCungTriTra}}
+                                                    </a>
+                                                </strong>
+                                            </li>
+                                            <li>Nơi chuyển đi: 
+                                                <strong >
+                                                    {{thongTinBaoHiemXaHoi.NoiChuyenDi}}
+                                                </strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <!-- Thông tin xác nhận -->
+                            <div fxFlex="100%">
+                                <fieldset>
+                                    <legend>Thông tin xác nhận</legend>
+                                    <div fxFlex="100%">                                     
+                                        <app-bhyt-thong-tin-xac-nhan [bhytInfo]="thongTinBaoHiemXaHoi"                                           
+                                            [bhytHanhChinh]="thongTinHanhChinh" [validationErrors]="errors" #bhytGrid>
+                                        </app-bhyt-thong-tin-xac-nhan>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div fxFlex="100%" class="sticky-button-action py-3 text-right">
+                                <div class="py-3 text-right" kendoTooltip>
+                                    <div style="float: left;">
+                                        <button (click)="onHuy()" type="button" mat-button class="mr-2">Quay
+                                            lại</button>
+                                    </div>
+                                    <button (click)="phieuLinhThuocBenhNhanBHYT()" color="primary" mat-raised-button
+                                        class="mr-2"> Phiếu lĩnh thuốc
+                                    </button>
+                                    <button (click)="onHuyDuyet()" type="button" class="mr-2" color="warn"
+                                        mat-raised-button>Hủy
+                                        Duyệt</button>
+                                    <button (click)="onXacNhan()" type="button" color="primary" mat-raised-button
+                                        title="Phím tắt: Ctrl + S">Duyệt</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

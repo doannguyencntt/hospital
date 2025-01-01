@@ -1,0 +1,69 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                { Title: 'Thống Kê', Path:'' },
+                { Title: 'Vật Tư', Path:'' },
+                { Title: 'Đã Hết Hạn', Path:'/bao-cao/ton-kho/vat-tu/vat-tu-da-het-han', Active: true}]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+
+            <app-grid baseRoute="/bao-cao/ton-kho/vat-tu/vat-tu-da-het-han" [gridColumns]="gridColumns"
+                [useAddDeault]="false" [checkboxAble]="false" [autoHeight]="false" [lazyLoadPage]="true"
+                [useHeaderDefault]="false" urlGetData="TonKho/GetDanhSachVatTuDaHetHanForGridAsync"
+                urlGetTotalPage="TonKho/GetDanhSachVatTuDaHetHanTotalPageForGridAsync"
+                (extOnDataBound)="onDataBoundGrid($event)" [headerTemplate]="headerTemplate" [sort]="sort"
+                [useActionDefault]="false" [documentType]="documentType">
+                <ng-template #ngayHetHanTemplate let-dataItem>
+                    <span style="color: orange;" class="badge badge-pill">{{dataItem.NgayHetHanHienThi}}
+                    </span>
+                </ng-template>
+
+                <ng-template #SLTemplate let-dataItem>
+                    <span class="badge badge-pill">{{dataItem.SoLuongTonFormat}}
+                    </span>
+                </ng-template>
+            </app-grid>
+        </div>
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar px-0 h-15 border-b sticky left-0">
+                <div fxFlex="80%" fxFlex.sm="80%">
+                    <app-combobox id="KhoId" label="Chọn Kho" url="TonKho/GetKhoVatTus" fxFlex="300px"
+                        [autoSelectFirstItem]="true" (modelChange)="chonKhoVatTu($event)" popupSettings="" bind="true"
+                        class="mt-1 on-header" style="margin-left: 5px;" [(model)]="searchQuery.KhoId">
+                    </app-combobox>
+
+                    <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                        fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;margin-left: 5px;">
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-3 py-2 border-0 outline-none w-full bg-transparent"
+                            type="search" name="searchString" [(ngModel)]="searchQuery.SearchString"
+                            (keyup)="onKey($event)" placeholder="Tìm kiếm theo tên vật tư..."
+                            (ngModelChange)="searchChange()" />
+                    </div>
+                </div>
+                <div fxFlex="20%" fxFlex.sm="20%" class="text-right" style="margin: 5px;">
+                    <button [disabled]="!isDisabled" (click)="exportExcel()" type="button" color="primary"
+                        mat-raised-button mat-button>Xuất
+                        Excel</button>
+                    <button (click)="inBaoCaoVatTuDaHetHan()" [disabled]="!isDisabled" mat-flat-button color="primary"
+                        class="ml-1">Xem</button>
+                    <app-print-form [isDisable]="!isDisabled" textPrint="In Báo Cáo" type="PDF" [bodyComponent]="this"
+                        [showInMenuItem]="false" [showIconPrint]="false">
+                    </app-print-form>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #donGiaNhapTemplate let-dataItem>
+            {{ dataItem.DonGiaNhap | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #thanhTienTemplate let-dataItem>
+            {{ dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>

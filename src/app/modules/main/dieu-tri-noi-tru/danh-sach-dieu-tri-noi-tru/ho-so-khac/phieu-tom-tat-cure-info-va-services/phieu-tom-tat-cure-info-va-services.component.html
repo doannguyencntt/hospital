@@ -1,0 +1,79 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                fxLayoutGap.lt-sm="0">
+                <p>1. Chẩn đoán:
+                </p>
+                <app-textarea id="chan-doan" class="mt-4" fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" label=" "
+                    [(model)]="cureInfoAndServicesSheet.ChanDoan">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                fxLayoutGap.lt-sm="0">
+                <p>2. Dự kiến phương pháp điều trị: <i>(Phải phẫu thuật, thủ thuật thăm dò chức năng, thuốc, vv...)</i>
+                </p>
+                <app-textarea id="plan-pp-dieu-tri" class="mt-4" fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                    label=" " [(model)]="cureInfoAndServicesSheet.MethodCuringPlan">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                fxLayoutGap.lt-sm="0">
+                <p>3. Tiên lượng</p>
+                <app-textarea id="tien-luong" class="mt-4" fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" label=" "
+                    [(model)]="cureInfoAndServicesSheet.TienLuong">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                fxLayoutGap.lt-sm="0">
+                <p>4. Những điều cần lưu ý trong quá trình điều trị <i>(Nội dung tư vấn về bệnh tật của BS)</i></p>
+                <app-textarea id="luu-y" class="mt-4" fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" label=" "
+                    [(model)]="cureInfoAndServicesSheet.LuuY">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                fxLayoutGap.lt-sm="0">
+                <p>5. Người bệnh sử dụng thẻ BHYT <i>(Quyền lợi được BHYT chi trả)</i></p>
+                <app-textarea id="su-dung-bhyt" class="mt-4" fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" label=" "
+                    [(model)]="cureInfoAndServicesSheet.SuDungBhyt">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                fxLayoutGap.lt-sm="0">
+                <p>6. Thông tin về giá các dịch vụ: <i>(Giường dịch vụ theo yêu cầu, phẫu thuật theo yêu cầu, dịch vụ kỹ
+                        thuật cao, vv...)</i></p>
+                <app-textarea id="services-price-info" class="mt-4" fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                    label=" " [(model)]="cureInfoAndServicesSheet.ServicesPriceInfo">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                fxLayoutGap.lt-sm="0">
+                <app-datetimepicker id="ngay-thuc-hien" fxFlex="20%" fxFlex.md="45%" fxFlex.sm="100%"
+                    [(model)]="cureInfoAndServicesSheet.NgayThucHien" [required]="true" label="Ngày thực hiện"
+                    [validationerror]="'NgayThucHien' | validationerror:validationErrors">
+                </app-datetimepicker>
+                <app-combobox id="bac-si" [popupSettings]="null" label="BS điều trị" fxFlex="20%" fxFlex.md="45%"
+                    fxFlex.sm="100%" [(model)]="cureInfoAndServicesSheet.BsDieuTri" [required]="true" [bind]="true"
+                    url="PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=1"
+                    [validationerror]="'BsDieuTri' | validationerror:validationErrors">
+                </app-combobox>
+            </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            class="order-btn">
+            <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip
+                class="sticky-button-action py-3 text-right">
+                <button type="button" class="mr-2" mat-button color="primary" (click)="print()">In</button>
+                <button type="button" class="mr-2" mat-button color="primary" (click)="cancel()">Huỷ</button>
+                <button type="button" class="mr-2" color="primary" mat-raised-button (click)="save()">Lưu</button>
+            </div>
+        </div>
+    </div>

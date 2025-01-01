@@ -1,0 +1,6 @@
+<mat-dialog-content>
+    <div class="content-image"><img src="/assets/img/loader.gif" alt="Đang thực hiện quét mã vạch..." /></div>
+    <div class="content-description">Đang thực hiện quét mã vạch...</div>
+</mat-dialog-content>
+<input [(ngModel)]="modelInternal" (keyup)="onKey($event)" class="input-barcode" ngControl="modelInternal" #inputbarcode
+    (ngModelChange)="emit($event)" style="position: absolute; top: -1000px;" />

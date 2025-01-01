@@ -1,0 +1,20 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxLayoutAlign="space-between">
+    <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="mb-1">
+            <app-combobox id="TrieuChungCha" fxFlex="30%" fxFlex.sm="30%" [(model)]="duocPhamBenhVienPhanNhom.NhomChaId" [modelText]="duocPhamBenhVienPhanNhom.TenCha" label="Dược Phẩm Cha" [url]="url" [template]="khoaPhongTemplate" [validationerror]="'NhomChaId' | validationerror:validationErrors">
+                <ng-template #khoaPhongTemplate let-dataItem>
+                    <label [ngStyle]="{
+                    'font-weight':dataItem.CapNhom == 0 ? 'bold' : 'normal',
+                    'padding-left' :((dataItem.CapNhom)*20) + 'px'
+                 }">{{dataItem.DisplayName}}
+                    </label>
+                </ng-template>
+            </app-combobox>
+            <app-textbox id="Ten" fxFlex="70%" fxFlex.sm="70%" [required]="true" [(model)]="duocPhamBenhVienPhanNhom.Ten" label="Tên" maxlength="250" [validationerror]="'Ten' | validationerror:validationErrors">
+            </app-textbox>
+            <app-textbox id="kyHieuPhanNhom" fxFlex="30%" fxFlex.sm="30%" 
+                [(model)]="duocPhamBenhVienPhanNhom.KyHieuPhanNhom" label="Ký hiệu phân nhóm" maxlength="1">
+            </app-textbox>
+        </div>
+    </div>
+</div>

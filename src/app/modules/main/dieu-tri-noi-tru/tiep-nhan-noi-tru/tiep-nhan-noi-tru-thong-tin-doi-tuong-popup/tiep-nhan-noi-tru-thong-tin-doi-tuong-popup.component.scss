@@ -1,0 +1,46 @@
+h3{
+    text-transform: uppercase;
+    padding-bottom: 0px !important;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgb(200, 200, 200);
+}
+
+.po-h-tn{
+    margin-left: auto;
+    color: #005dab;
+    position: relative;
+    left: 5px;
+    mat-icon{
+        display: contents;
+        font-size: 35px;
+    }
+}
+
+app-datepicker{
+    &.warning-value{
+      kendo-datepicker{
+  
+          .k-picker-wrap  {
+            kendo-dateinput{
+              .k-dateinput-wrap>input{
+                color: red;
+              }
+          }
+          }
+          .k-state-disabled{
+              .k-dateinput-wrap{
+                  input{
+                      color: red;
+                  }
+              }
+          }
+      }
+    }
+  }
+
+.greenText{
+    color:green;
+}
+.redText{
+   color: red;
+}

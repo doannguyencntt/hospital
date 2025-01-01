@@ -1,0 +1,149 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <h2 class="title m-0">Chi Tiết Lịch Sử Điều Trị Nội Trú</h2>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <div *ngIf="dieuTriNoiTru.Id!=null && dieuTriNoiTru.Id>0">
+        <fieldset style="background: #e1f5fe;margin-bottom: 15px;">
+            <legend>Thông tin bệnh án</legend>
+            <div fxFlex="100%">
+                <ul class="inline">
+                    <li>Mã TN:
+                        <strong>{{dieuTriNoiTru.MaYeuCauTiepNhan}}</strong>
+                    </li>
+                    <li>Số BA:
+                        <strong class="color-blue">{{dieuTriNoiTru.SoBenhAn}}</strong>
+                    </li>
+                    <li>
+                        Loại BA:
+                        <strong>{{dieuTriNoiTru.LoaiBenhAn}}</strong>
+                    </li>
+                    <li>
+                        Đối tượng: <strong class="color-blue">{{dieuTriNoiTru.DoiTuong}}</strong>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+        <kendo-tabstrip #tabStrip tabPosition="left" class="content-has-border menu-left" style="width: 100%;">     
+                        
+            <kendo-tabstrip-tab name="1" [selected]="true">
+                <ng-template kendoTabTitle>
+                    <div>
+                        Thông tin hành chính
+                    </div>
+                </ng-template>
+                <ng-template kendoTabContent>
+                    <app-thong-tin-hanh-chinh [dieuTriNoiTruModel]="dieuTriNoiTru"></app-thong-tin-hanh-chinh>
+                </ng-template>
+            </kendo-tabstrip-tab>
+    
+            <kendo-tabstrip-tab name="2">
+                <ng-template kendoTabTitle>
+                    <div>
+                        Phòng giường, BS điều trị
+                    </div>
+                </ng-template>
+    
+                <ng-template kendoTabContent>
+                    <div fxFlex="100%">
+                        <app-phong-giuong-bs-dieu-tri [dieuTriNoiTruModel]="dieuTriNoiTru">
+                        </app-phong-giuong-bs-dieu-tri>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+    
+            <kendo-tabstrip-tab fxFlex="100%" name="3" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                <ng-template kendoTabTitle>
+                    <div>
+                        Phiếu điều trị
+                    </div>
+                </ng-template>
+    
+                <ng-template kendoTabContent>
+                    <div fxFlex="100%">
+                        <app-phieu-dieu-tri [id]="dieuTriNoiTru.Id" [dieuTriNoiTruModel]="dieuTriNoiTru"
+                            (phieuDieuTriId)="getPhieuDieuTriId($event)"
+                            (disabledInPhieuThuocVT)="disabledInPhieuThuocVT($event)" [dataBenhNhan]="dieuTriNoiTru"
+                            (ngayDieuTriHienTaiChange)="ngayDieuTriHienTaiChange($event)"
+                            (tabSelectChange)="phieuDieuTriTabChange($event)">
+                        </app-phieu-dieu-tri>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+    
+            <kendo-tabstrip-tab name="4" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                <ng-template kendoTabTitle>
+                    <div>
+                        Tai nạn thương tích
+                    </div>
+                </ng-template>
+    
+                <ng-template kendoTabContent>
+                    <app-tai-nan-thuong-tich [dieuTriNoiTruModel]="dieuTriNoiTru"></app-tai-nan-thuong-tich>
+                </ng-template>
+            </kendo-tabstrip-tab>
+    
+            <kendo-tabstrip-tab name="5" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                <ng-template kendoTabTitle>
+                    <div>
+                        Thông tin bệnh án
+                    </div>
+                </ng-template>
+                <ng-template kendoTabContent>
+                    <app-thong-tin-benh-an [dieuTriNoiTruModel]="dieuTriNoiTru"></app-thong-tin-benh-an>
+                </ng-template>
+            </kendo-tabstrip-tab>
+    
+            <kendo-tabstrip-tab name="6" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                <ng-template kendoTabTitle>
+                    <div>
+                        Tổng kết bệnh án
+                    </div>
+                </ng-template>
+    
+                <ng-template kendoTabContent>
+                    <div fxFlex="100%">
+                        <app-tong-ket-benh-an-noi-khoa [dieuTriNoiTruModel]="dieuTriNoiTru"
+                            *ngIf="dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnNoiKhoa || dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnNhiKhoa">
+                        </app-tong-ket-benh-an-noi-khoa>
+                        <app-tong-ket-benh-an-ngoai-khoa [dieuTriNoiTruModel]="dieuTriNoiTru" *ngIf="dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnPhuKhoa || dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnNgoaiKhoa 
+                                                || dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnThamMy">
+                        </app-tong-ket-benh-an-ngoai-khoa>
+                        <!-- <app-tong-ket-benh-an-san-khoa *ngIf="!(dieuTriNoiTru.LoaiBenhAnEnum == 1 || dieuTriNoiTru.LoaiBenhAnEnum == 2 
+                                                                                        || dieuTriNoiTru.LoaiBenhAnEnum == 3 || dieuTriNoiTru.LoaiBenhAnEnum == 6)"></app-tong-ket-benh-an-san-khoa> -->
+                        <app-tong-ket-benh-an-san-khoa
+                            *ngIf="dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnSanKhoaMo || dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnSanKhoaThuong"
+                            [dieuTriNoiTruModel]="dieuTriNoiTru"></app-tong-ket-benh-an-san-khoa>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+    
+            <kendo-tabstrip-tab name="7" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                <ng-template kendoTabTitle>
+                    <div>
+                        Ra viện
+                    </div>
+                </ng-template>
+    
+                <ng-template kendoTabContent>
+                    <app-ra-vien-noi-tru [dieuTriNoiTruModel]="dieuTriNoiTru"></app-ra-vien-noi-tru>
+                </ng-template>
+            </kendo-tabstrip-tab>
+    
+            <kendo-tabstrip-tab name="8" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                <ng-template kendoTabTitle>
+                    <div>
+                        Hồ sơ khác
+                    </div>
+                </ng-template>
+    
+                <ng-template kendoTabContent>
+                    <app-ho-so-khac (yeuCauTiepNhanId)="dieuTriNoiTru.Id" [dieuTriNoiTruModel]="dieuTriNoiTru"></app-ho-so-khac>
+                </ng-template>
+            </kendo-tabstrip-tab>
+    
+        </kendo-tabstrip>
+    </div>
+</mat-dialog-content>

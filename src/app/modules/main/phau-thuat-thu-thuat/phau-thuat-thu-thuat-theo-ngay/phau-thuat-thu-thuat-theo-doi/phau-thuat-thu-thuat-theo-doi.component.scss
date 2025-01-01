@@ -1,0 +1,25 @@
+.po-h {
+    color: #005dab;
+
+    mat-icon{
+        display: contents;
+    }
+}
+
+.po-h.disabled {
+    color: rgba(0, 0, 0, 0.12);
+}
+
+kendo-tabstrip.tab-strip-pttt-theo-doi-lan-kham {
+    .k-tabstrip-items {
+        #k-tabstrip-tab-0 {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+        .k-item .k-link {
+            background: #fff;
+        }
+    }
+}

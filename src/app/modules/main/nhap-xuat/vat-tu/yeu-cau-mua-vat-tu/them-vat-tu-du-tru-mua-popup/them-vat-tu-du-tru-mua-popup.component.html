@@ -1,0 +1,45 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxFlex="100%">
+        <h3 class="sub-title" style="text-transform: none;">THÊM VẬT TƯ</h3>
+    </div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="overflow: hidden;">
+    <div class="px-2 py-2" fxLayout="column">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            fxLayoutAlign="space-between">
+            <!-- (openCombobox)="openCombobox($event)"  -->
+            <app-combobox-tree id="NhomVatTuId" fxFlex="40%" label="Nhóm vật tư" (keyup)="onKey($event)"
+                url="YeuCauMuaVatTu/GetNhomVatTuTreeView" [(model)]="vatTu.NhomVatTuId" required="true"
+                [validationerror]="'NhomVatTuId' | validationerror:validationErrors">
+            </app-combobox-tree>
+
+            <app-textbox id="Ten" fxFlex="60%" [required]="true" maxlength="250" [(model)]="vatTu.Ten"
+                (keyup)="onKey($event)" label="Tên vật tư" [validationerror]="'Ten' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="DVT" fxFlex="40%" maxlength="50" [(model)]="vatTu.DVT" (keyup)="onKey($event)"
+                label="Đơn vị tính">
+            </app-textbox>
+
+            <app-textboxnumeric fxFlex="30%" id="slDuTru" label="SL dự trù" [(model)]="vatTu.SoLuongDuTru"
+                [required]="true" max="999999999" min="1" (keyup)="onKey($event)"
+                [validationerror]="'SoLuongDuTru' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-textboxnumeric fxFlex="30%" id="slDuKienTrongKy" label="D.kiến s.dụng trong kỳ" [required]="true"
+                max="999999999" min="1" (keyup)="onKey($event)" [(model)]="vatTu.SoLuongDuKienSuDung"
+                [validationerror]="'SoLuongDuKienSuDung' | validationerror:validationErrors">
+            </app-textboxnumeric>
+        </div>
+    </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" style="margin-top:10px">
+    <button mat-stroked-button color="primary" (click)="huy()" mat-dialog-close>Hủy</button>
+    <button type="button" (click)="themVatTu()" cdkFocusInitial mat-raised-button mat-button
+        color="primary">Thêm</button>
+</mat-dialog-actions>

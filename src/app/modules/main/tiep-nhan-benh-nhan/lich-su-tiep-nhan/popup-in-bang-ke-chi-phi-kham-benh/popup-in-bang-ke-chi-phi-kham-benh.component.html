@@ -1,0 +1,49 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>XEM TRƯỚC KHI IN</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+
+    <div style="overflow-y: auto;max-height: 553px;">
+
+        <table class="table table-border" width="100%">
+            <tr *ngIf="isBHYT" style="background: #005dab;color:#fff;">
+                <th>BẢNG KÊ CHI PHÍ KHÁM BỆNH CHO BẢO HIỂM Y TẾ</th>
+            </tr>
+            <tr *ngIf="isBHYT">
+                <td style="padding: 0;">
+                    <div class="container-iframe">
+                        <iframe width="100%"  
+                            [src]="srcBangKeChiPhiKhamBenhCoBHYT | safe" allowTransparency="true" background="transparent"></iframe>
+                    </div>
+                </td>
+            </tr>
+            <tr></tr>
+            <tr *ngIf="iskhongBHYT" style="background: #005dab;color:#fff;">
+                <th>BẢNG KÊ CHI PHÍ KHÁM BỆNH CHO BỆNH VIỆN</th>
+            </tr>
+            <tr *ngIf="iskhongBHYT">
+                <td style="padding: 0;">
+                    <div class="container-iframe">
+                        <iframe width="100%" 
+                            [src]="this.srcBangKeChiPhiKhamBenh | safe" allowTransparency="true" background="transparent"></iframe>
+                    </div>
+
+                </td>
+            </tr>
+            <tr *ngIf="isBHYT=== false && iskhongBHYT=== false" style="background: #005dab;color:#fff;">
+                <th>Chưa có dịch vụ</th>
+            </tr>
+            <tr></tr>
+        </table>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="mt-3" *ngIf="isBHYT !== false || iskhongBHYT !== false">
+    <app-print-form typeSize="A4" textPrint="In Phiếu Bảng Kê Chi Phí Khám Bệnh" type="PDF" [event]="19" style="text-align: right;"
+        [bodyComponent]="this">
+    </app-print-form>
+</mat-dialog-actions>

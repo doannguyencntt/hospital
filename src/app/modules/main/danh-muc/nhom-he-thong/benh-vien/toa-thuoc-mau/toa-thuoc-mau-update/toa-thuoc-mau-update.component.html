@@ -1,0 +1,22 @@
+<app-header-form
+    [crumbs]="[{Title:'Danh Mục',Path:''},{Title:'Nhóm Hệ Thống',Path:''},
+               {Title:'Bệnh Viện',Path:''},
+               {Title:'Toa Thuốc Mẫu',Path:'/danh-muc/nhom-he-thong/benh-vien/toa-thuoc-mau', Active : true}]"
+    [isicMoreVert]="false">
+</app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chỉnh Sửa Toa Thuốc Mẫu</h2>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-toa-thuoc-mau-shared></app-toa-thuoc-mau-shared>
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <app-formfooter [bodyComponent]="shared" type="update" (updated)="onUpdated()"></app-formfooter>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

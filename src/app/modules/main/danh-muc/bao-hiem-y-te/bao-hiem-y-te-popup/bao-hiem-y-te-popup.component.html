@@ -1,0 +1,60 @@
+
+    <div class="px-8 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+        <h2 class="title m-0">Nhập thông tin tài khoản để xác nhận</h2>
+    </div>
+    <div class="px-8 py-4" fxLayout="column">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            
+              
+           
+
+                    <app-textbox id="userName" fxFlex="50%" fxFlex.sm="40%" [required]="true" (keyup)="onKey($event)"
+                        [(model)]="loginInfor.userName" label="Tài khoản"
+                        [validationerror]="'userName' | validationerror:validationErrors"></app-textbox> 
+                    <app-textbox id="pass" type="password"  fxFlex="50%" fxFlex.sm="40%" [required]="true" [(model)]="loginInfor.pass" (keyup)="onKey($event)"
+                        label="Mật khẩu" [validationerror]="'pass' | validationerror:validationErrors"></app-textbox>
+                    <br />
+               
+            
+        </div>
+        <button type="button" *ngIf="loading==false" color="primary" style="margin-top:30px;" mat-raised-button (click)="Gui()"><i class="ft-save"></i>
+            Xác nhận</button>
+            <button *ngIf="loading==true" color="primary" style="margin-top:30px;" mat-raised-button type="button">
+                    <img src="/assets/img/loader.gif" alt="Loading" style="display: inline;" />
+                </button>
+    </div>
+
+    <!-- <div [formGroup]="form"  class="p-6" fxLayout="column" fxLayoutGap="16px">
+            <div fxFlex="auto" fxLayout="column">
+              <mat-form-field fxFlex="grow">
+                <mat-label>SỐ ĐIỆN THOẠI/EMAIL</mat-label>
+                <input formControlName="email" matInput required name="userName" [(ngModel)]="loginInfor.userName">
+                <mat-error *ngIf="form.get('email').hasError('required')">Số điện thoại/Email yêu cầu nhập</mat-error>
+                
+              </mat-form-field>
+              <mat-form-field fxFlex="grow">
+                <mat-label>MẬT KHẨU</mat-label>
+                <input [type]="inputType" formControlName="password" matInput required name="password" [(ngModel)]="loginInfor.pass">
+                <button (click)="toggleVisibility()" mat-icon-button matSuffix kendoTooltip title="Nhấp vào mắt để chuyển đổi cách hiển thị" type="button">
+                  <mat-icon *ngIf="visible" [icIcon]="icVisibility"></mat-icon>
+                  <mat-icon *ngIf="!visible" [icIcon]="icVisibilityOff"></mat-icon>
+                </button>
+                <mat-error *ngIf="form.get('password').hasError('required')">Mật khẩu yêu cầu nhập</mat-error>            
+              </mat-form-field>
+            </div>
+      
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <mat-checkbox class="caption" color="primary">Nhớ tôi</mat-checkbox>
+              <a [routerLink]="['/forgot-password']" class="caption">Quên mật khẩu?</a>
+            </div>
+      
+            <button *ngIf="!loading" (click)="onSubmit()" color="primary" mat-raised-button type="button">
+              ĐĂNG NHẬP
+            </button>
+            
+            <button *ngIf="loading" color="primary" mat-raised-button type="button">
+              <img src="/assets/img/loader.gif" alt="Loading" style="display: inline;"/>
+            </button>
+            <app-validationerrorother [validationerror]="'Password' | validationerror:validationErrors" (clearValidateErrorOtherCallback)="clearValidateErrorOtherCallback($event)"></app-validationerrorother>                                                                                                        
+          </div>
+     -->

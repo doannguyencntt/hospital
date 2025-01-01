@@ -1,0 +1,144 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <!-- <h1 class="title mt-0 mb-1">Kỳ Dự Trù</h1> -->
+                <vex-breadcrumbs [crumbs]="[
+                    { Title: 'Danh Mục', Path: '' },
+                    { Title: 'Nhóm Hệ Thống', Path: '' },
+                    { Title: 'Bệnh Viện', Path: '' },
+                    { Title: 'Kỳ Dự Trù', Path: '/danh-muc/nhom-he-thong/benh-vien/ky-du-tru' , Active: true }]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/nhom-he-thong/benh-vien/ky-du-tru"
+                [gridColumns]="gridColumns" [documentType]="documentType"
+                [showExportExcel]="true" (extExportExcel)="exportExcel()"
+                [useActionDefault]="false" [useHeaderDefault]="false" [headerTemplate]="headerTemplate"
+                [additionalSearchString]="firstSearchString"
+                [lazyLoadPage]="true" [checkboxAble]="false">
+            </app-grid>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<ng-template #headerTemplate>
+    <div class="bg-app-bar pl-0 h-15 border-b left-0 sticky px-6" fxLayout="row" fxLayoutAlign="start center">
+        <app-checkbox (modelChange)="checkboxChange($event, true, false)" id="DuocPham"
+            [(model)]="kyDuTruSearch.DuocPham" class="ml-2" label="Dược phẩm">
+        </app-checkbox>
+        <app-checkbox (modelChange)="checkboxChange($event, false, true)" id="VatTu"
+            [(model)]="kyDuTruSearch.VatTu" class="ml-2" label="Vật tư">
+        </app-checkbox>
+        <div class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+            fxLayout="row" fxLayoutAlign="start center">
+            <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+            <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                type="search" name="searchString" [(ngModel)]="kyDuTruSearch.SearchString"
+                (keyup)="onKey($event)" (ngModelChange)="clearSearch()" placeholder="Nhập từ khóa..." />
+        </div>
+        <app-daterangepicker style="margin-left: 5px;" id="RangeNhap" fxFlex="250px" fxFlex.sm="auto"
+            [(model)]="kyDuTruSearch.RangeApDung" label="Kỳ dự trù từ ngày - Đến ngày"
+            (keyup)="onKeyNgayApDung($event)" (modelChange)="changeNgayApDungRange($event)"
+            class="mt-1 on-header">
+        </app-daterangepicker>
+
+        <app-daterangepicker style="margin-left: 5px;" id="RangeDuyet" fxFlex="250px" fxFlex.sm="auto"
+            [(model)]="kyDuTruSearch.RangeLap" label="Lập từ ngày - Đến ngày"
+            (keyup)="onKeyNgayLap($event)" (modelChange)="changeNgayLapRange($event)"
+            class="mt-1 on-header">
+        </app-daterangepicker>
+
+        <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+            <mat-icon [icIcon]="icSearch"></mat-icon>
+        </button>
+
+        <span fxFlex></span>
+        <button [matMenuTriggerFor]="columnFilterMenu" class="ml-3" fxFlex="none" mat-icon-button
+            kendoTooltip title="Lọc cột" type="button">
+            <mat-icon [icIcon]="icFilterList"></mat-icon>
+        </button>
+        <button (click)="exportExcel()" class="ml-3" fxFlex="none" mat-icon-button kendoTooltip title="Xuất Excel"
+            type="button">
+            <mat-icon [icIcon]="icFileExcel"></mat-icon>
+        </button>
+
+        <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+            <div *ngFor="let column of filterColumns">
+                <button
+                    class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                    <mat-checkbox [disabled]="true" color="primary">
+                        {{ column.Title }}
+                    </mat-checkbox>
+                </button>
+            </div>
+        </mat-menu>
+
+        <button (click)="add()" class="ml-3" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm" type="button">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+</ng-template>
+
+<!-- <ng-template #tuNgayTemplate let-dataItem>
+    {{dataItem.TuNgayDisplay}}
+</ng-template>
+
+<ng-template #denNgayTemplate let-dataItem>
+    {{dataItem.DenNgayDisplay}}
+</ng-template> -->
+
+<ng-template #kyDuTruTemplate let-dataItem>
+    {{dataItem.DenNgayDisplay}}
+</ng-template>
+
+<ng-template #ngayTaoTemplate let-dataItem>
+    {{dataItem.NgayTaoDisplay}}
+</ng-template>
+
+<ng-template #ngayBatDauLapTemplate let-dataItem>
+    {{dataItem.NgayBatDauLapDisplay}}
+</ng-template>
+
+<ng-template #ngayKetThucLapTemplate let-dataItem>
+    {{dataItem.NgayKetThucLapDisplay}}
+</ng-template>
+
+<ng-template #nhanVienTaoTemplate let-dataItem>
+    {{dataItem.NhanVienTaoDisplay}}
+</ng-template>
+
+<ng-template #hieuLucTemplate let-dataItem>
+    <button *ngIf="dataItem.HieuLuc" (click)="updateTinhTrang(dataItem)" mat-menu-item>
+        <mat-icon [icIcon]="icdone" color="primary"></mat-icon><span>{{dataItem.HieuLucDisplay}}</span>
+    </button>
+    <button *ngIf="!dataItem.HieuLuc" (click)="updateTinhTrang(dataItem)" mat-menu-item>
+        <mat-icon [icIcon]="icclose" color="warn"></mat-icon><span>{{dataItem.HieuLucDisplay}}</span>
+    </button>
+</ng-template>
+
+<ng-template #groupTemplate let-dataItem >
+    <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu"
+        mat-icon-button type="button">
+        <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+    </button>
+    <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+        <ng-template matMenuContent>
+            <button (click)="edit(dataItem)" mat-menu-item>
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+                <span>Sửa</span>
+            </button>
+            <button (click)="delete(dataItem)" mat-menu-item>
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+                <span>Xoá</span>
+            </button>
+            <button (click)="copy(dataItem)" mat-menu-item>
+                <mat-icon [icIcon]="icCopy"></mat-icon>
+                <span>Copy</span>
+            </button>
+        </ng-template>
+    </mat-menu>
+</ng-template>

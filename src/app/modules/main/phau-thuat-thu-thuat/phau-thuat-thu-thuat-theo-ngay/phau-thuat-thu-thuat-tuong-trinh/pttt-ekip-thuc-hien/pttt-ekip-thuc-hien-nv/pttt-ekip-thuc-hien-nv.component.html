@@ -1,0 +1,56 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 class="sub-title" fxFlex="100%">EKIP
+        <button [disabled]="!canChange || IsDaTuongTrinh" class="po-h" color="primary" (click)="themNguoiThucHien()">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+
+    <section *ngIf="dataSourceNhanVien.data.length == 0">
+        <p>Chưa có thiết lập ekip</p>
+    </section>
+
+    <app-grid *ngIf="dataSourceNhanVien.data.length > 0" masterName="NhanVien" class="k-grid-border" style="width: 1px;" [gridColumns]="gridNhanVienColumns" [gridDataSource]="dataSourceNhanVien" [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+        [useActionDefault]="false" [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true" [pageable]="false" fxFlex="100%" #gridForEkips>
+    </app-grid>
+
+    <ng-template #chucDanhTemplate let-dataItem let-rowIndex="rowIndex" class="no-label item-no-padding" label=" ">
+        <!-- *ngIf="dataItem.Id == 0" -->
+        <app-dropdownlist #nhomChucDanh id="nhom-chuc-danh" [disabled]="!canChange || IsDaTuongTrinh || dataBenhNhan.IsTuongTrinhLai" class="no-label" label=" " url="PhauThuatThuThuat/GetListNhomChucDanh" [(model)]="dataItem.NhomChucDanh" [modelText]="dataItem.NhomChucDanhDisplay" [required]="true"
+            [popupSettings]="null" (selectionChange)="chonNhomChucDanh($event, dataItem)" [validationerror]="'Ekips['+rowIndex+'].NhomChucDanh' | validationerror:validationErrors">
+            <!-- test validationError -->
+        </app-dropdownlist>
+    </ng-template>
+
+    <ng-template #hoTenTemplate let-dataItem let-rowIndex="rowIndex" class="no-label item-no-padding" label=" ">
+        <!-- *ngIf="dataItem.Id == 0" -->
+        <app-combobox *ngIf="!dataItem.NhomChucDanh" id="bac-si-dieu-duong-display" class="no-label" label=" " [(model)]="dataItem.BacSiId" [modelText]="dataItem.BacSi" [required]="true" [disabled]="!dataItem.NhomChucDanh || IsDaTuongTrinh || dataBenhNhan.IsTuongTrinhLai" [popupSettings]="null"
+            [validationerror]="'Ekips['+rowIndex+'].BacSiId' | validationerror:validationErrors">
+        </app-combobox>
+        <app-combobox *ngIf="dataItem.NhomChucDanh==1" id="bac-si" class="no-label" label=" " [(model)]="dataItem.BacSiId" [modelText]="dataItem.BacSi" [required]="true" [disabled]="!dataItem.NhomChucDanh || IsDaTuongTrinh || dataBenhNhan.IsTuongTrinhLai" url="PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=1"
+            [popupSettings]="null" (selectionChange)="chonBacSiDieuDuong($event, dataItem)" [validationerror]="'Ekips['+rowIndex+'].BacSiId' | validationerror:validationErrors">
+        </app-combobox>
+        <app-combobox *ngIf="dataItem.NhomChucDanh==5" id="dieu-duong" class="no-label" label=" " [(model)]="dataItem.BacSiId" [modelText]="dataItem.BacSi" [required]="true" [disabled]="!dataItem.NhomChucDanh || IsDaTuongTrinh || dataBenhNhan.IsTuongTrinhLai" url="PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=5"
+            [popupSettings]="null" (selectionChange)="chonBacSiDieuDuong($event, dataItem)" [validationerror]="'Ekips['+rowIndex+'].BacSiId' | validationerror:validationErrors">
+        </app-combobox>
+    </ng-template>
+
+    <ng-template #vaiTroTemplate let-dataItem let-rowIndex="rowIndex" class="no-label item-no-padding" label=" ">
+        <app-dropdownlist id="bac-si-dieu-duong-vai-tro" *ngIf="!dataItem.NhomChucDanh" class="no-label" label=" " [popupSettings]="null" [disabled]="true" [required]="IsPhauThuat" [validationerror]="'Ekips['+rowIndex+'].VaiTroId' | validationerror:validationErrors">
+        </app-dropdownlist>
+        <app-dropdownlist id="bac-si-vai-tro" *ngIf="dataItem.NhomChucDanh == 1" (selectionChange)="chonVaiTro($event, dataItem)" class="no-label" label=" " url="PhauThuatThuThuat/{{dataItem.UrlVaiTro}}" [(model)]="dataItem.VaiTroId" [modelText]="dataItem.VaiTro"
+            [popupSettings]="null" [disabled]="!dataItem.NhomChucDanh || IsDaTuongTrinh || dataBenhNhan.IsTuongTrinhLai" [required]="IsPhauThuat" [validationerror]="'Ekips['+rowIndex+'].VaiTroId' | validationerror:validationErrors">
+        </app-dropdownlist>
+        <app-dropdownlist id="dieu-duong-vai-tro" *ngIf="dataItem.NhomChucDanh == 5" (selectionChange)="chonVaiTro($event, dataItem)" class="no-label" label=" " url="PhauThuatThuThuat/{{dataItem.UrlVaiTro}}" [(model)]="dataItem.VaiTroId" [modelText]="dataItem.VaiTro"
+            [popupSettings]="null" [disabled]="!dataItem.NhomChucDanh || IsDaTuongTrinh || dataBenhNhan.IsTuongTrinhLai" [required]="IsPhauThuat" [validationerror]="'Ekips['+rowIndex+'].VaiTroId' | validationerror:validationErrors">
+        </app-dropdownlist>
+    </ng-template>
+
+    <ng-template #actionNhanVienTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button [disabled]="IsDaTuongTrinh || dataBenhNhan.IsTuongTrinhLai" color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoaNhanVien(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+</div>
+<label class="red" [innerHTML]="validationMsg"></label>

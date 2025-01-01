@@ -1,0 +1,42 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <!-- <h1 class="title mt-0 mb-1">Danh Mục Nội Dung Mẫu Email, SMS, Thông Báo</h1> -->
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Nhóm Hệ Thống',Path:''}
+                    ,{Title:'Nội Dung Mẫu',Path:''}
+                    ,{Title:'Nội Dung Mẫu Email, SMS, Thông Báo',Path:'/danh-muc/nhom-he-thong/noi-dung-mau/noi-dung-mau-email-sms-thong-bao',Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/nhom-he-thong/noi-dung-mau/noi-dung-mau-email-sms-thong-bao"
+                    [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault] = "false"
+                    [useHeaderDefault]="true" [useActionDefault]="false" [checkboxAble] ="false"
+                    [showExportExcel]="true" (extExportExcel)="exportExcel()"
+                    [lazyLoadPage]="true" >
+            
+            </app-grid>
+        </div>
+    </vex-page-layout-content>
+    
+    <ng-template #actionTemplate let-dataItem>
+                        <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                            <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+                        </button>
+                        <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                            <ng-template let-customer="customer" matMenuContent>
+                                <button (click)="edit(dataItem.Id)" mat-menu-item>
+                                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                                    <span>Sửa</span>
+                                </button>
+                            </ng-template>
+                        </mat-menu>
+    </ng-template> 
+
+</vex-page-layout>

@@ -1,0 +1,38 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+	<div style="font: 500 18px/26px var(--font)">Tên dịch vụ: <strong style="color: green"> {{tenDichVu}}</strong></div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+<mat-dialog-content>
+	<div width="100%" fxLayout="row">
+		<table class="table table-border" width="100%">
+			<ng-container>
+				<tr>
+					<td>
+						<span>Đơn giá</span>
+					</td>
+					<td>
+						<app-textboxnumeric label="" class="no-label p-0" min="0" [disabled]="true"	[(model)]="capNhatDonGiaMoi.DonGia">
+						</app-textboxnumeric>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<span>Đơn giá cập nhật</span>
+					</td>
+					<td>
+						<app-textboxnumeric label=" " [required]="true"  class="no-label p-0" min="0" [(model)]="capNhatDonGiaMoi.DonGiaCapNhat" [validationerror]="'DonGiaCapNhat' | validationerror: validationErrors">
+						</app-textboxnumeric>
+					</td>
+				</tr>
+			</ng-container>
+		</table>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<button mat-button mat-dialog-close (click)="huy()">Hủy</button>
+	<div>
+		<button mat-raised-button mat-button color="primary" (click)="apDungGiaMoi()" cdkFocusInitial>Áp dụng</button>
+	</div>
+</mat-dialog-actions>

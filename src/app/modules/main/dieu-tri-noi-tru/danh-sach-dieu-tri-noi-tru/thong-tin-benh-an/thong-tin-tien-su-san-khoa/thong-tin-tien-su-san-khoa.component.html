@@ -1,0 +1,88 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <span class="item-no mt-2 mb-1"><strong>4.Tiền sử sản khoa</strong> </span>
+    <button class="po-h item-no-padding" color="primary" (click)="them()">
+        <mat-icon [icIcon]="icAddCircle"></mat-icon>
+    </button>
+</div>
+<div class="mt-1 mb-3" fxLayout="row wrap"  fxLayoutGap.lt-sm="0">
+    <app-textboxnumeric id="PARA" [(model)]="Para" (modelChange)="modelChange($event)"  format="0" [spinners]="false"
+      label="Thông tin PARA"  fxFlex="100%" fxFlex.sm="100%" url="" max="9999"> </app-textboxnumeric>
+</div>
+<div class="mt-1" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" HideCheckAll="true"
+        [gridColumns]="gridTienSuSanKhoaColumns" [documentType]="documentType" [useHeaderDefault]="false"
+        [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false" [pageable]="false" height="auto"
+        [gridDataSource]="dataSourceThongTinTienSuSanKhoas">
+    </app-grid>
+</div>
+
+<ng-template #actionSoLanCoThaiTemplate let-dataItem>
+    {{dataItem.SoLanCoThai}}
+</ng-template>
+<ng-template #namTemplate let-dataItem>
+    <app-textboxnumeric min="1" [max]="currentNam" format="0" [spinners]="false" [(model)]="dataItem.Nam"
+        class="no-label">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #deduThangTemplate let-dataItem let-i="index">
+    <app-checkbox [(model)]="dataItem.DeDuThang" class="item-no-padding" label="">
+    </app-checkbox>
+</ng-template>
+<ng-template #deThieuThangTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.DeThieuThang" class="item-no-padding" label="">
+    </app-checkbox>
+</ng-template>
+<ng-template #sayTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.Say" class="item-no-padding" label="">
+    </app-checkbox>
+</ng-template>
+<ng-template #hutTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.Hut" class="item-no-padding" label="">
+    </app-checkbox>
+</ng-template>
+<ng-template #naoTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.Nao" class="item-no-padding" label="">
+    </app-checkbox>
+</ng-template>
+<ng-template #coVacTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.CoVac" class="item-no-padding" label="">
+    </app-checkbox>
+</ng-template>
+<ng-template #chuaNgoaiTCTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.ChuaNgoaiTC" class="item-no-padding" label="">
+    </app-checkbox>
+</ng-template>
+<ng-template #chuaTrungTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.ChuaTrung" class="item-no-padding" label="">
+    </app-checkbox>
+</ng-template>
+<ng-template #thaiChetLuuTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.ThaiChetLuu" class="item-no-padding" label="">
+    </app-checkbox>
+</ng-template>
+<ng-template #conHienSongTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.ConHienSong" class="item-no-padding" label="">
+    </app-checkbox>
+</ng-template>
+<ng-template #canNangTemplate let-dataItem>
+    <app-textboxnumeric [format]="format" min="1" max="999999" format="n2" decimals="2" id="canNang"
+        [(model)]="dataItem.CanNang" class="no-label" label="">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #phuongPhapDeTemplate let-dataItem>
+    <app-textbox min="1" maxlength="200" id="phuongPhapDe" [(model)]="dataItem.PhuongPhapDe" class="no-label" label="">
+    </app-textbox>
+</ng-template>
+<ng-template #taiBienTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.TaiBien" class="no-label" label="">
+    </app-checkbox>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoa(dataItem)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>

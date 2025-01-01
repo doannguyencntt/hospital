@@ -1,0 +1,50 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Nhóm Hệ Thống',Path:''}
+                    ,{Title:'Bệnh Viện',Path:''}
+                    ,{Title:'Nhóm Dịch Vụ Thường Dùng',Path:'/danh-muc/nhom-he-thong/benh-vien/nhom-dich-vu-thuong-dung',Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/nhom-he-thong/benh-vien/nhom-dich-vu-thuong-dung" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false"
+                [urlGetData]="urlGetDataGridChild" [urlGetTotalPage]="urlGetTotalPageGridChild"
+                [showExportExcel]="true" (extExportExcel)="exportExcel()" #gridGoiDv></app-grid>
+            <ng-template #trangThaiTemplate let-dataItem>
+                <button *ngIf="dataItem.TrangThai === true"
+                    mat-menu-item (click)="updateDichVu(dataItem.Id,dataItem.TrangThai)">
+                    <mat-icon [icIcon]="icClose" color="warn"></mat-icon><span>Ngừng sử dụng</span>
+                </button>
+                <button *ngIf="dataItem.TrangThai === false" 
+                    mat-menu-item (click)="updateDichVu(dataItem.Id,dataItem.TrangThai)">
+                    <mat-icon [icIcon]="icicdone" color="primary"></mat-icon><span>Đang sử dụng</span>
+                </button>
+            </ng-template>
+            <ng-template #actionTemplate let-dataItem>
+                <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                    <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+                </button>
+                <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                    <ng-template let-customer="customer" matMenuContent>
+                        <button (click)="copy(dataItem.Id)" mat-menu-item>        
+                            <mat-icon [icIcon]="icEdit"></mat-icon>                   
+                            <span>Copy</span>
+                        </button>
+                        <button (click)="delete(dataItem.Id)" mat-menu-item>
+                            <mat-icon [icIcon]="icDelete"></mat-icon>
+                            <span>Xóa</span>
+                        </button>
+                    </ng-template>
+                </mat-menu>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

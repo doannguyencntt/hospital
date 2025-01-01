@@ -1,0 +1,90 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-grid fxFlex="100%" #gridThuoc [gridColumns]="gridToaThuocColumns" [documentType]="documentType"
+        [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+        (extOnDataBound)="onDataBound($event)" urlGetData="KhamBenh/GetDataForGridTuVanThuoc"
+        urlGetTotalPage="KhamBenh/GetTotalPageForGridTuVanThuoc" [additionalSearchString]="YeuCauTiepNhanId"
+        [checkboxAble]="false" style="width: 1px;" [pageable]="false" [lazyLoadPage]="true" [autoHeight]="true">
+        <ng-template #sangTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.SangDisplay != null && dataItem.ThoiGianDungSangDisplay != null" kendoTooltip
+                    title="{{dataItem.SangDisplay + ' ' +(dataItem.ThoiGianDungSangDisplay)}}">
+                    {{dataItem.SangDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungSangDisplay}}
+                </p>
+                <p *ngIf="dataItem.SangDisplay != null && dataItem.ThoiGianDungSangDisplay == null" kendoTooltip
+                    title="{{dataItem.SangDisplay}}">
+                    {{dataItem.SangDisplay}}
+                </p>
+                <p *ngIf="dataItem.SangDisplay == null && dataItem.ThoiGianDungSangDisplay != null" kendoTooltip
+                    title="{{dataItem.ThoiGianDungSangDisplay}}">
+                    {{dataItem.ThoiGianDungSangDisplay}}
+                </p>
+            </div>
+        </ng-template>
+
+        <ng-template #truaTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.TruaDisplay != null && dataItem.ThoiGianDungTruaDisplay != null" kendoTooltip
+                    title="{{dataItem.TruaDisplay + ' ' +(dataItem.ThoiGianDungTruaDisplay)}}">
+                    {{dataItem.TruaDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungTruaDisplay}}
+                </p>
+                <p *ngIf="dataItem.TruaDisplay != null && dataItem.ThoiGianDungTruaDisplay == null" kendoTooltip
+                    title="{{dataItem.TruaDisplay}}">
+                    {{dataItem.TruaDisplay}}
+                </p>
+                <p *ngIf="dataItem.TruaDisplay == null && dataItem.ThoiGianDungTruaDisplay != null" kendoTooltip
+                    title="{{dataItem.ThoiGianDungTruaDisplay}}">
+                    {{dataItem.ThoiGianDungTruaDisplay}}
+                </p>
+            </div>
+        </ng-template>
+
+        <ng-template #chieuTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.ChieuDisplay != null && dataItem.ThoiGianDungChieuDisplay != null" kendoTooltip
+                    title="{{dataItem.ChieuDisplay + ' ' +(dataItem.ThoiGianDungChieuDisplay)}}">
+                    {{dataItem.ChieuDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungChieuDisplay}}
+                </p>
+                <p *ngIf="dataItem.ChieuDisplay != null && dataItem.ThoiGianDungChieuDisplay == null" kendoTooltip
+                    title="{{dataItem.ChieuDisplay}}">
+                    {{dataItem.ChieuDisplay}}
+                </p>
+                <p *ngIf="dataItem.ChieuDisplay == null && dataItem.ThoiGianDungChieuDisplay != null" kendoTooltip
+                    title="{{dataItem.ThoiGianDungChieuDisplay}}">
+                    {{dataItem.ThoiGianDungChieuDisplay}}
+                </p>
+            </div>
+        </ng-template>
+
+        <ng-template #toiTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.ToiDisplay != null && dataItem.ThoiGianDungToiDisplay != null" kendoTooltip
+                    title="{{dataItem.ToiDisplay + ' ' +(dataItem.ThoiGianDungToiDisplay)}}">
+                    {{dataItem.ToiDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungToiDisplay}}
+                </p>
+                <p *ngIf="dataItem.ToiDisplay != null && dataItem.ThoiGianDungToiDisplay == null" kendoTooltip
+                    title="{{dataItem.ToiDisplay}}">
+                    {{dataItem.ToiDisplay}}
+                </p>
+                <p *ngIf="dataItem.ToiDisplay == null && dataItem.ThoiGianDungToiDisplay != null" kendoTooltip
+                    title="{{dataItem.ThoiGianDungToiDisplay}}">
+                    {{dataItem.ThoiGianDungToiDisplay}}
+                </p>
+            </div>
+        </ng-template>
+
+        <ng-template #soLuongTemplate let-dataItem>
+            {{dataItem.SoLuongDisplay}}
+        </ng-template>
+    </app-grid>
+    <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+    <div fxFlex="100%" fxLayoutAlign="end center">
+        <button [disabled]="!isDisabled" type="button" class="mr-2" color="primary" mat-raised-button
+            (click)="inPhieuTuVanThuoc()">In toa thuốc</button>
+    </div>
+</div>

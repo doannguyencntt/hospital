@@ -1,0 +1,97 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mr-4">KHÁM SÀNG LỌC CHUNG
+        <app-radio class="no-label radio-lua-chon-benh-vien" 
+            [items]="radioLuaChonBenhVien" [(model)]="thongTinBenhNhan.KhamSangLocTiemChung.ThongTinKhamSangLocTiemChungTemplateObj.NhomKhamSangLoc"
+            [disabled]="isMauSangLocReadOnly"
+            (modelChange)="evtLuaChonBenhVienChanged($event)">
+        </app-radio>
+    </h3>
+
+    <ng-container *ngIf="thongTinBenhNhan.KhamSangLocTiemChung.ThongTinKhamSangLocTiemChungTemplateObj && thongTinBenhNhan.KhamSangLocTiemChung.ThongTinKhamSangLocTiemChungTemplateObj.ComponentDynamics">
+        <ng-container *ngFor="let item of thongTinBenhNhan.KhamSangLocTiemChung.ThongTinKhamSangLocTiemChungTemplateObj.ComponentDynamics; index as i">
+            <ng-container *ngIf="item.Type == 4 && item.groupItems && item.groupItems.length > 0">
+                <p id="{{item.Id}}" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}" class="mt-4 mt-sm-0" [innerHTML]="item.Label"></p>
+
+                <ng-container *ngFor="let itemInGroup of item.groupItems">
+                    <p *ngIf="itemInGroup.Type == 4 && (!itemInGroup.requiredCheckbox || isCheckboxHasTrueValue(item, itemInGroup))" id="{{itemInGroup.Id}}" fxFlex="{{itemInGroup.fxFlex}}" fxFlex.sm="{{itemInGroup.fxFlexSm}}" class="mt-4 mt-sm-0" [innerHTML]="itemInGroup.Label"></p>
+
+                    <ng-container *ngIf="isMauSangLocReadOnly">
+                        <app-checkbox class="mt-3" *ngIf="itemInGroup.Type == 5" fxFlex="{{itemInGroup.fxFlex}}" fxFlex.sm="{{itemInGroup.fxFlexSm}}" id="{{itemInGroup.Id}}" label="{{itemInGroup.Label}}" 
+                            [(model)]="itemInGroup.Value" [disabled]="true"
+                            [validationerror]="itemInGroup.Id | validationerror: validationErrors">
+                        </app-checkbox>
+
+                        <app-textarea *ngIf="itemInGroup.Type==3 && (!itemInGroup.requiredCheckbox || isCheckboxHasTrueValue(item, itemInGroup))" [class.no-label]="!itemInGroup.Label" id="{{itemInGroup.Id}}" fxFlex="{{itemInGroup.fxFlex}}" label="{{itemInGroup.Label}}" maxlength="{{itemInGroup.maxlength}}" 
+                            [(model)]="itemInGroup.Value" [disabled]="true"
+                            [validationerror]="itemInGroup.Id | validationerror: validationErrors">
+                        </app-textarea>
+
+                        <ng-container *ngIf="itemInGroup.Type==6">
+                            <app-textboxnumeric fxFlex="{{itemInGroup.fxFlex}}" fxFlex.sm="{{itemInGroup.fxFlexSm}}" [max]="itemInGroup.max" [min]="itemInGroup.min" [spinners]="false" [format]="format" [decimals]="2" 
+                                [(model)]="itemInGroup.Value" (modelChange)="evtModelOnChange()" [disabled]="true">
+                            </app-textboxnumeric>
+                            <span class="mt-4 mt-sm-0" [innerHTML]="itemInGroup.Label"></span>
+                        </ng-container>
+
+                        <app-datepicker *ngIf="itemInGroup.Type==7 && (!itemInGroup.requiredCheckbox || isCheckboxHasTrueValue(item, itemInGroup))"
+                            [class.no-label]="!itemInGroup.Label" id="{{itemInGroup.Id}}" fxFlex="{{itemInGroup.fxFlex}}"
+                            label="{{itemInGroup.Label}}" [(model)]="itemInGroup.Value" [disabled]="true"
+                            [validationerror]="itemInGroup.Id | validationerror: validationErrors">
+                        </app-datepicker>
+                    </ng-container>
+
+                    <ng-container *ngIf="!isMauSangLocReadOnly">
+                        <app-checkbox class="mt-3" *ngIf="itemInGroup.Type == 5 && (!itemInGroup.requiredCheckbox || isCheckboxHasTrueValue(item, itemInGroup))" fxFlex="{{itemInGroup.fxFlex}}" fxFlex.sm="{{itemInGroup.fxFlexSm}}" id="{{item.Id}}{{itemInGroup.Id}}" label="{{itemInGroup.Label}}" 
+                            [(model)]="itemInGroup.Value" (modelChange)="evtCheckboxChange(item, itemInGroup, $event)">
+                        </app-checkbox>
+
+                        <app-textarea *ngIf="itemInGroup.Type==3 && (!itemInGroup.requiredCheckbox || isCheckboxHasTrueValue(item, itemInGroup))" [class.no-label]="!itemInGroup.Label" id="{{itemInGroup.Id}}" fxFlex="{{itemInGroup.fxFlex}}" label="{{itemInGroup.Label}}" maxlength="{{itemInGroup.maxlength}}" 
+                            [(model)]="itemInGroup.Value"
+                            (modelChange)="evtModelOnChange()">
+                        </app-textarea>
+
+                        <ng-container *ngIf="itemInGroup.Type==6">
+                            <ng-container *ngIf="itemInGroup.SubLabel && (!itemInGroup.requiredCheckbox || isCheckboxHasTrueValue(item, itemInGroup))">
+                                <app-textboxnumeric fxFlex="{{itemInGroup.fxFlex}}" fxFlex.sm="{{itemInGroup.fxFlexSm}}"
+                                    [label]="itemInGroup.Label" [max]="itemInGroup.max" [min]="itemInGroup.min" [spinners]="false" [format]="format" [decimals]="1"
+                                    [(model)]="itemInGroup.Value" (modelChange)="evtModelOnChange()" [required]="itemInGroup.required"
+                                    [disabled]="isMauSangLocReadOnly" [validationerror]="itemInGroup.Id | validationerror: validationErrors">
+                                </app-textboxnumeric>
+                            
+                                <span *ngIf="itemInGroup.SubLabel" fxFlex="{{itemInGroup.fxFlexSub}}" fxFlex.sm="{{itemInGroup.fxFlexSmSub}}" 
+                                    class="mt-4 mt-sm-0" [innerHTML]="itemInGroup.SubLabel"></span>
+                            </ng-container>
+
+                            <ng-container *ngIf="itemInGroup.SubLabel == undefined || itemInGroup.SubLabel == null || itemInGroup.SubLabel == ''">
+                                <app-textboxnumeric fxFlex="{{itemInGroup.fxFlex}}" fxFlex.sm="{{itemInGroup.fxFlexSm}}" [max]="itemInGroup.max"
+                                    [min]="itemInGroup.min" [spinners]="false" [format]="format" [decimals]="2" [(model)]="itemInGroup.Value"
+                                    (modelChange)="evtModelOnChange()" [required]="true">
+                                </app-textboxnumeric>
+                                <span class="mt-4 mt-sm-0" [innerHTML]="itemInGroup.Label"></span>
+                            </ng-container>
+                        </ng-container>
+
+                        <app-datepicker *ngIf="itemInGroup.Type==7 && (!itemInGroup.requiredCheckbox || isCheckboxHasTrueValue(item, itemInGroup))"
+                            [class.no-label]="!itemInGroup.Label" id="{{itemInGroup.Id}}" fxFlex="{{itemInGroup.fxFlex}}"
+                            label="{{itemInGroup.Label}}" [(model)]="itemInGroup.Value"
+                            [validationerror]="itemInGroup.Id | validationerror: validationErrors">
+                        </app-datepicker>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="!item.groupItems || item.groupItems.length == 0">
+                <p *ngIf="item.Type == 1" id="{{item.Id}}" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}" [ngClass]="{ 'light-text': item.IsLightText, 'bold-text' : item.IsBoldText }"><i>{{item.Label}}</i></p>
+
+                <app-textboxnumeric *ngIf="item.Type == 6" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}" [label]="item.Label" [max]="item.max" [min]="item.min" [spinners]="false" [format]="format" [decimals]="1" 
+                    [(model)]="item.Value" (modelChange)="evtModelOnChange()" [required]="item.required" [disabled]="isMauSangLocReadOnly"
+                    [validationerror]="item.Id | validationerror: validationErrors">
+                </app-textboxnumeric>
+
+                <div *ngIf="item.Type == 10" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}"></div>
+
+                <span *ngIf="item.SubLabel" class="mt-4 mt-sm-0" [innerHTML]="item.SubLabel"></span>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</div>

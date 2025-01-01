@@ -1,0 +1,35 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="Ma" fxFlex="25%" fxFlex.sm="25%" [(model)]="chuanDoanHinhAnh.Ma" [required]="true" label="Mã"
+        maxlength="50" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Ten" fxFlex="25%" fxFlex.sm="25%" [(model)]="chuanDoanHinhAnh.Ten" [required]="true" label="Tên"
+        maxlength="250" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="TenTiengAnh" fxFlex="25%" fxFlex.sm="25%" [(model)]="chuanDoanHinhAnh.TenTiengAnh"
+        label="Tên Tiếng Anh" maxlength="250">
+    </app-textbox>
+
+    <app-combobox id="LoaiChuanDoanHinhAnh" fxFlex="25%" fxFlex.sm="25%"
+        [(model)]="chuanDoanHinhAnh.LoaiChuanDoanHinhAnh" [required]="true"
+        [modelText]="chuanDoanHinhAnh.LoaiChuanDoanHinhAnhDisplay" label="Loại Chẩn đoán Hình Ảnh"
+        url="ChuanDoanHinhAnh/GetListLoaiChuanDoanHinhAnh"
+        [validationerror]="'LoaiChuanDoanHinhAnh' | validationerror:validationErrors">
+    </app-combobox>
+
+
+
+    <app-textarea id="MoTa" fxFlex="100%" fxFlex.sm="100%" maxlength="4000" [(model)]="chuanDoanHinhAnh.MoTa"
+        label="Mô Tả">
+    </app-textarea>
+
+
+
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="HieuLuc" fxFlex="100%" [(model)]="chuanDoanHinhAnh.HieuLuc" label="Có Hiệu Lực">
+        </app-checkbox>
+    </div>
+
+</div>

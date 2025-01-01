@@ -1,0 +1,78 @@
+<app-grid #gridVTTHThuoc fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridVTTHThuocColumns"
+    [allowSortDefault]="true" [gridDataSource]="gridDataSourceVTTHThuoc" [documentType]="documentType"
+    [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+    [lazyLoadPage]="true" [pageable]="false" [groups]="groupsGhiNhanVTHHThuoc" [showStt]="true"
+    masterName="gridVTTHThuoc" [removeGroupFooterIfIsOnlyOne]="true" reorderRowsMoveItemData="true">
+</app-grid>
+<!-- ghi nhận thuốc vật tư -->
+<div class="gripViewGoiDichViKhacTemplate">
+    <!-- <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template> -->
+
+    <ng-template #nhomGroupHeaderVTTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-template #donGiaTemplate let-dataItem>
+        <p *ngFor="let item of dataItem.ThongTinGias">
+            {{item.DonGia | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+
+    <ng-template #soLuongGhiNhanVTTHThuocTemplate let-dataItem>
+        <!-- <app-textboxnumeric [disabled]="(dataItem.PhieuLinh != null && dataItem.PhieuLinh != '') || (dataItem.PhieuXuat != null && dataItem.PhieuXuat != '')" [(model)]="dataItem.SoLuong" class="no-label" [format]="format" [decimals]="2" label=" " min="1" max="9999999"
+            (modelChange)="CapNhatGridItemGhiNhanVTTHThuoc($event, dataItem)"> 
+        </app-textboxnumeric> -->
+
+        <!-- <div *ngIf="dataItem.LoaiKho == 5">{{dataItem.SoLuong | number:'0.2'}}</div>
+        <div *ngIf="dataItem.LoaiKho != 5">{{dataItem.SoLuong | number}}</div> -->
+
+        <p *ngFor="let item of dataItem.ThongTinGias">
+            <ng-container *ngIf="dataItem.LoaiKho == 5">{{item.SoLuong | number:'0.2'}}</ng-container>
+            <ng-container *ngIf="dataItem.LoaiKho != 5">{{item.SoLuong | number}}</ng-container>
+        </p>
+
+        <!-- <app-textboxnumeric [disabled]="(dataItem.PhieuLinh != null && dataItem.PhieuLinh != '') || (dataItem.PhieuXuat != null && dataItem.PhieuXuat != '')" [(model)]="dataItem.SoLuong" class="no-label" label=" " min="1" max="9999999"
+            (blur)="CapNhatGridItemGhiNhanVTTHThuoc($event, dataItem)"> 
+        </app-textboxnumeric> -->
+    </ng-template>
+
+    <ng-template #thanhTienTemplate let-dataItem>
+        <p *ngFor="let item of dataItem.ThongTinGias">
+            {{item.ThanhTien | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+
+    <ng-template #thanhTienGhiNhanVTTHThuocFooterTemplate let-dataItem>
+        <span style="color:blue">{{totalGhiNhanVTTHThuoc('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+
+    <ng-template #thanhTienGhiNhanVTTHThuocGroupFooterTemplate let-aggregates>
+        {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #donGiaBaoHiemTemplate let-dataItem>
+        <!-- {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}} -->
+        <ng-container *ngIf="dataItem.DonGiaBaoHiem != null">
+            {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+        </ng-container>
+        <ng-container *ngIf="dataItem.DonGiaBaoHiem == null">
+            <p *ngFor="let item of dataItem.ThongTinGias">
+                {{item.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+            </p>
+        </ng-container>
+    </ng-template>
+
+    <ng-template #tinhPhiGhiNhanVHTTTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-checkbox id="tinhPhiGhiNhanVTTH{{rowIndex}}" label="" [(model)]="dataItem.TinhPhi"
+            disabled="{{true}}">
+        </app-checkbox>
+    </ng-template>
+    
+    <ng-template #duocHuongBaoHiemGhiNhanVHTTTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-checkbox id="duocHuongBaoHiem{{rowIndex}}" label="" [(model)]="dataItem.DuocHuongBaoHiem"
+            disabled="{{true}}">
+        </app-checkbox>
+    </ng-template>
+</div>

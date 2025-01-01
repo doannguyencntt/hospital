@@ -1,0 +1,71 @@
+<app-grid [gridColumns]="gridColumns" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false"
+    [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true" #gridList
+    [gridDataSource]="dataSource" style="width: 1px;" [pageable]="false" [showStt]="true">
+</app-grid>
+
+<ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+    <div kendoTooltip>
+        <a type="button" (click)="QuyetToan(dataItem)" title="Xem chi tiết" style="color: orange;">
+            <span>Xem chi tiết</span>
+        </a>
+    </div>
+</ng-template>
+
+<ng-template #trangThaiTemplate let-dataItem>
+    <ng-container *ngIf="dataItem.TrangThai === 4">
+        <strong style="color:red">{{dataItem.TrangThaiDisplayName}}</strong><br />
+    </ng-container>
+    <ng-container *ngIf="dataItem.TrangThai !== 4">
+        <strong style="color:green">{{dataItem.TrangThaiDisplayName}}</strong><br />
+    </ng-container>
+</ng-template>
+
+<ng-template #tenGoiTemplate let-dataItem>
+	<a (click)="QuyetToan(dataItem)">{{dataItem.TenGoi}}</a>
+</ng-template>
+
+<ng-template #tongSoTienCongNoTemplate let-dataItem>
+    {{dataItem.TongDVDaDung | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #giaGoiTemplate let-dataItem>
+    {{dataItem.GiaGoi | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #daThuTemplate let-dataItem>
+    {{dataItem.DaThu | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #chuaThuTemplate let-dataItem>
+    {{dataItem.ChuaThu | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #traLaiTemplate let-dataItem>
+    {{dataItem.TraLaiBN | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #ngayDangGroupFooter>
+    <strong> Tổng cộng : </strong>
+</ng-template>
+
+<ng-template #daThuGroupFooter>
+    <span> {{total('totalTongSoTienDaThu') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<ng-template #chuaThuGroupFooter>
+    <span> {{total('totalTongSoTienChuaThu') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<ng-template #tongSoTienCongNoGroupFooter let-dataItem>
+    <span> {{total('totalTongSoTienCongNo') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<ng-template #traLaiGroupFooter let-dataItem>
+    <span style="color: red;"> {{total('totalTongSoTienTraLai') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<div class="sticky-button-action py-3 text-right mt-5" kendoTooltip>
+    <div style="float: left">
+        <button (click)="BackToList()" type="button" mat-button class="mr-2" mat-raised-button>Quay lại</button>
+    </div>   
+</div>

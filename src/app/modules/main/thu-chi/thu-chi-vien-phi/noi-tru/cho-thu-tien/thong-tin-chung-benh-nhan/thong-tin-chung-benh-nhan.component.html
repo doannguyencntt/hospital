@@ -1,0 +1,82 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+	<fieldset fxFlex="100%" class="mb-3">
+		<legend>Thông tin hành chính</legend>
+		<div class="mt-1">
+			<ul class="inline">
+				<li>
+					Mã TN:
+					<strong> {{thongTinBenhNhan.MaYeuCauTiepNhan}} </strong>
+				</li>
+				<li>
+					Mã NB:
+					<strong> {{thongTinBenhNhan.MaBN}} </strong>
+				</li>
+				<li>
+					Họ Tên:
+					<strong> {{thongTinBenhNhan.HoTen}} </strong>
+				</li>
+				<li>
+					Năm Sinh:
+					<strong> {{thongTinBenhNhan.NamSinh}} </strong>
+				</li>
+				<li>
+					Địa chỉ:
+					<strong> {{thongTinBenhNhan.DiaChi}} </strong>
+				</li>
+				<li>
+					Số điện thoại:
+					<strong> {{thongTinBenhNhan.SoDienThoai}} </strong>
+				</li>
+				<li>
+					Email:
+					<strong> {{thongTinBenhNhan.Email}} </strong>
+				</li>
+			</ul>
+		</div>
+	</fieldset>
+	<fieldset fxFlex="100%" class="mb-3" *ngIf="thongTinBenhNhan.CoBHYT ===  true">
+		<legend>Thông tin BHYT</legend>
+		<div class="mt-1">
+			<ul class="inline">
+				<li>
+					Số thẻ:
+					<strong> {{thongTinBenhNhan.BHYTMaSoThe}} </strong>
+				</li>
+				<li>
+					Ngày hiệu lực:
+					<strong> {{thongTinBenhNhan.NgayHieuLucStr}} </strong>
+				</li>
+				<li>
+					Ngày hết hạn:
+					<strong> {{thongTinBenhNhan.NgayHetHanStr}} </strong>
+				</li>
+				<li>
+					Nơi đăng ký khám BH:
+					<strong> {{thongTinBenhNhan.BHYTDiaChi}} </strong>
+				</li>
+				<li>
+					Mức hưởng:
+					<strong> {{thongTinBenhNhan.BHYTMucHuong}}% </strong>
+				</li>
+				<li>
+					Tuyến khám:
+					<strong class="color-green"> {{thongTinBenhNhan.TuyenKham}} </strong>
+				</li>
+				<li>
+					Giấy chuyển viện:
+					<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien !== null">
+						<a class="color-green" (click)="xemTaiLieu(thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien)">{{thongTinBenhNhan.TenGiayChuyenVien}}</a>
+					</strong>
+					<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien === null"> Không có </strong>
+				</li>
+				<li>
+					Giấy miễn cùng chi trả:
+					<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra !== null">
+						<a (click)="xemTaiLieu(thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra)" class="color-green">{{thongTinBenhNhan.TenBHYTgiayMienCungChiTra}}</a>
+					</strong>
+					<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra === null"> Không có </strong>
+				</li>
+			</ul>
+		</div>
+	</fieldset>
+</div>

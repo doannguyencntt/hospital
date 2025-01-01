@@ -1,0 +1,57 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Nhóm dịch vụ thường dùng</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <app-grid #gridNhomGoiDichVu fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumns" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="true" 
+        [lazyLoadPage]="true" [autoHeight]="true" [headerTemplate]="headerTemplate"
+        [pageable]="false" [detailTemplate]="detailTemplate"
+        urlGetData="KhamBenh/GetNhomDichVuThuongDungDataForGrid" urlGetTotalPage="KhamBenh/GetNhomDichVuThuongDungTotalPageForGrid">
+    </app-grid>
+    <!-- [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotalPage" -->
+    <ng-template #detailTemplate let-dataItem>
+        <app-grid class="k-grid-border" [gridColumns]="gridColumnsChild" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            [autoHeight]="true" [useHeaderDefault]="false" [pageable]="true" [pageSize]="10" [groups]="groups"
+            [additionalSearchString]="dataItem.Id"
+            urlGetData="KhamBenh/GetChiTietDichVuThuongDungTrongGoiDataForGrid" urlGetTotalPage="KhamBenh/GetChiTietDichVuThuongDungTrongGoiTotalPageForGrid">
+        </app-grid>
+    </ng-template>
+
+    <ng-template #headerTemplate>
+        <div class="bg-app-bar px-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+            <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                    type="search" name="searchString" [(ngModel)]="gridNhomGoiDichVu.searchString" (keyup)="onKey($event)"
+                    (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa tìm kiếm..." />
+            </div>
+            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                <mat-icon [icIcon]="icSearch"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #nhomDichVuTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+    <ng-template #sttTemplate let-rowIndex="rowIndex">
+        <strong>{{rowIndex + 1}}</strong>
+    </ng-template> 
+    <ng-template #donGiaTemplate let-dataItem>
+        {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+    </ng-template> 
+    <ng-template #thanhTienTemplate let-dataItem>
+        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+    </ng-template> 
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Hủy</button>
+    <button mat-raised-button mat-button color="primary" (click)="chonGoiDichVu()">Chọn</button>
+</mat-dialog-actions>

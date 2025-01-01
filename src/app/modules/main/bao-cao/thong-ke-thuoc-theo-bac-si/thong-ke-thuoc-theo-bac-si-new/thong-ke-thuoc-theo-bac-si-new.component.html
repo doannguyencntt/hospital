@@ -1,0 +1,49 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống kê', Path:''},
+                    {Title:'Báo cáo', Path:''},
+                    {Title:'Dược', Path:''},
+                    {Title:'Thống Kê Thuốc Theo Bác Sĩ', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15" >
+            <div fxLayout="row wrap" fxLayout.lt-sm="column"  fxLayoutGap.lt-sm="0" style="margin: 0px -3px 3px 0px;"> 
+                <app-combobox id="KhoaId" fxFlex="15%" fxFlex.sm="15%" style="margin-left: 5px;"
+                    class="mt-1 on-header pb-0 mr-1" label="Bác sĩ" popupSettings="" bind="true"
+                    [autoSelectFirstItem]="true" url="BaoCao/GetTatCaBacSi"
+                    [(model)]="baoCaoThongKeThuocTheoBacSiSearch.BacSiId">
+                </app-combobox>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoThongKeThuocTheoBacSiSearch.TuNgay" #tiepnhantu
+                    id="TuNgay" [maxDate]="baoCaoThongKeThuocTheoBacSiSearch.DenNgay" label="Từ ngày"
+                    class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoThongKeThuocTheoBacSiSearch.DenNgay" #tiepnhanden
+                    id="DenNgay" [minDate]="baoCaoThongKeThuocTheoBacSiSearch.TuNgay" class="mt-1 on-header"
+                    label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="auto" fxFlex.sm="50%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                        (click)="xemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                        (click)="xuatBaoCao()">Xuất Excel</button>
+                </div>
+        
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0" style="overflow:auto;">
+                <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+                    <div  [innerHtml]="html" style="overflow:auto;" ></div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

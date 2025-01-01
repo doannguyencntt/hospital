@@ -1,0 +1,107 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>CHI TIẾT KHÁM/CHỮA BỆNH
+        <span style="margin-left: 10px;font-size: 12px;">
+            Mã TN: <span class="color-blue">{{maTiepNhan}}</span></span>
+    </div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <div fxLayout="column">
+        <!-- THÔNG TIN KHÁM BỆNH -->
+        <div class="row ml-1 mb-2">
+            <fieldset fxFlex="100%">
+                <div fxFlex="100%">
+                    <app-combobox id="khambenh" fxFlex="30%" fxFlex.sm="12.5%" label="Khám bệnh"
+                        style="margin:0px !important" [(model)]="danhSachKhoaKham.KeyId"
+                        [modelText]="danhSachKhoaKham.DisplayName"
+                        url="DieuTriNoiTru/GetTenDichVuKhamBenh?yeuCauTiepNhanId={{yeuCauTiepNhanId}}"
+                        popupSettings="null" class="item-no-padding" [bind]="true" [autoSelectFirstItem]="true"
+                        (modelChange)="chonkhamBenhChange($event)">
+                    </app-combobox>
+                    <div style="display: flex;flex-direction: column;">
+                        <ul class="ml-5 inline padding_top17">
+                            <li>Bác sĩ khám: <strong>{{thongTinKhamBenhTheoKhoa.BacSi}}</strong></li>
+                            <li>Phòng khám: <strong>{{thongTinKhamBenhTheoKhoa.PhongKham}}</strong></li>
+                        </ul>
+                        <ul class="ml-5">
+                            <li>Ngày khám: <strong>{{thongTinKhamBenhTheoKhoa.NgayKham}}</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div id="card" class="row ml-1 temp d-inline">
+            <kendo-tabstrip fxFlex="100%"
+                class="content-has-border">
+                <!--------------------------------------------------------------------- KHÁM BỆNH------------------------------------------------------------------------->
+                <kendo-tabstrip-tab [selected]="true">
+                    <ng-template kendoTabTitle>
+                        <div kendoTooltip>
+                            KHÁM BỆNH
+                        </div>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <div class="content-tab-popup">
+                            <div fxFlex="100%">
+                                <app-lich-su-kham-benh-noi-tru [KhamBenhId]="thongTinKhamBenhTheoKhoa.KhamBenhId"
+                                    [YeuCauTiepNhanId]="yeuCauTiepNhanId" [BenhNhanId]="benhNhanId">
+                                </app-lich-su-kham-benh-noi-tru>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+                <!--------------------------------------------------------------------- CHỈ ĐỊNH ------------------------------------------------------------------------->
+                <kendo-tabstrip-tab>
+                    <ng-template kendoTabTitle>
+                        <div kendoTooltip>
+                            CHỈ ĐỊNH
+                        </div>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <div class="content-tab-popup">
+                            <div fxFlex="100%">
+                                <app-lich-su-chi-dinh [yeuCauTiepNhanId]="yeuCauTiepNhanId"
+                                    [yeuCauKhamBenhId]="thongTinKhamBenhTheoKhoa.KhamBenhId"></app-lich-su-chi-dinh>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+                <!---------------------------------------------------------------------- KQ CLS -------------------------------------------------------------------------->
+                <kendo-tabstrip-tab>
+                    <ng-template kendoTabTitle>
+                        <div kendoTooltip>
+                            KQ CLS
+                        </div>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <div class="content-tab-popup">
+                            <div fxFlex="100%">
+                                <app-lich-su-ket-qua-cls [YeuCauTiepNhanId]="yeuCauTiepNhanId">
+                                </app-lich-su-ket-qua-cls>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+                <!--------------------------------------------------------------------- CHẨN ĐOÁN ----------------------------------------------------------------------->
+                <kendo-tabstrip-tab>
+                    <ng-template kendoTabTitle>
+                        <div kendoTooltip>
+                            CHẨN ĐOÁN
+                        </div>
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <div class="content-tab-popup">
+                            <div fxFlex="100%">
+                                <app-lich-su-chuan-doan [KhamBenhId]="thongTinKhamBenhTheoKhoa.KhamBenhId"
+                                    [YeuCauTiepNhanId]="yeuCauTiepNhanId" [BenhNhanId]="benhNhanId">
+                                </app-lich-su-chuan-doan>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+            </kendo-tabstrip>
+        </div>
+    </div>
+</mat-dialog-content>

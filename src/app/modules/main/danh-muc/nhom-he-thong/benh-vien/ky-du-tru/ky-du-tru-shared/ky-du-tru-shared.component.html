@@ -1,0 +1,47 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxLayoutAlign="space-between">
+    <app-datepicker id="TuNgay" fxFlex="25%" fxFlex.sm="100%" label="Từ ngày"
+        [(model)]="kyDuTru.TuNgay" [required]="true" [disabled]="isDaDuocSuDung"
+        [validationerror]="'TuNgay' | validationerror: validationErrors">
+    </app-datepicker>
+
+    <app-datepicker id="DenNgay" fxFlex="25%" fxFlex.sm="100%" label="Đến ngày"
+        [(model)]="kyDuTru.DenNgay" [required]="true" [disabled]="isDaDuocSuDung"
+        [validationerror]="'DenNgay' | validationerror: validationErrors">
+    </app-datepicker>
+
+    <div fxFlex="25%" fxFlex.sm="100%">
+        <div class="container-custom no-label">
+            <label>Áp dụng</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <app-checkbox fxFlex="100%" id="DuocPham" label="Dược phẩm" value="true"
+                    [(model)]="kyDuTru.MuaDuocPham" (modelChange)="apDungChange($event)" [disabled]="isDaDuocSuDungChoDuTruMuaDuocPham"
+                    [validationerror]="'MuaDuocPham' | validationerror: validationErrors">
+                </app-checkbox>
+
+                <app-checkbox fxFlex="100%" id="VatTu" label="Vật tư" value="true"
+                    [(model)]="kyDuTru.MuaVatTu"  (modelChange)="apDungChange($event)" [disabled]="isDaDuocSuDungChoDuTruMuaVatTu">
+                </app-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <app-radio id="TinhTrang" fxFlex="25%" fxFlex.sm="100%" name="isDisabled" label="Sử dụng" [required]="true"
+        [items]="radioHieuLucItems" [(model)]="kyDuTru.HieuLuc"
+        [validationerror]="'HieuLuc' | validationerror: validationErrors">
+    </app-radio>
+
+    <app-datepicker id="NgayBatDauLap" fxFlex="25%" fxFlex.sm="100%" label="Ngày bắt đầu lập"
+        [(model)]="kyDuTru.NgayBatDauLap" [required]="true"
+        [validationerror]="'NgayBatDauLap' | validationerror: validationErrors">
+    </app-datepicker>
+
+    <app-datepicker id="NgayKetThucLap" fxFlex="25%" fxFlex.sm="100%" label="Ngày kết thúc lập"
+        [(model)]="kyDuTru.NgayKetThucLap" [required]="true"
+        [validationerror]="'NgayKetThucLap' | validationerror: validationErrors">
+    </app-datepicker>
+
+    <app-textbox id="MoTa" fxFlex="50%" fxFlex.sm="100%" label="Mô tả" maxlength="1000"
+        [(model)]="kyDuTru.MoTa"
+        [validationerror]="'MoTa' | validationerror: validationErrors">
+    </app-textbox>
+</div>

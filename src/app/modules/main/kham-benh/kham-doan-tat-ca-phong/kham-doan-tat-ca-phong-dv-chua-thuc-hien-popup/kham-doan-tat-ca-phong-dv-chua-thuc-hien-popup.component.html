@@ -1,0 +1,46 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>XÁC NHẬN</div>
+    <button type="button" mat-icon-button (click)="close('No')" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="min-height: 120px;">
+    <div class="row">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="8px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="100%">
+                <b>Hiện tại có {{soDichVuChuaKham}} dịch vụ chưa khám/ chưa thực hiện: </b>
+            </div>
+            <ng-container *ngIf="data.DichVuKhamBenhs.length > 0">
+                <div>
+                    <p style="color: blue;">Các dịch vụ khám bệnh:</p>
+                </div>
+                <div fxFlex="100%" *ngFor="let item of data.DichVuKhamBenhs">
+                    &nbsp;&nbsp;+ {{item}}.
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="data.DichVuKyThuats.length > 0">
+                <div>
+                    <p style="color: blue;"> Các dịch vụ kỹ thuật:</p>
+                </div>
+                <div fxFlex="100%" *ngFor="let item of data.DichVuKyThuats">
+                    &nbsp;&nbsp;+ {{item}}.
+                </div>
+            </ng-container>
+
+            <div fxFlex="100%" style="padding-top: 40px;">
+                Nếu hoàn thành khám thì sẽ hủy những dịch vụ chưa khám/ chưa thực hiện. Bạn chắc chắn muốn hoàn thành
+                khám không?
+            </div>
+
+        </div>
+    </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" (click)="close('No')" mat-stroked-button>Không</button>
+    <button tabindex="-1" type="button" (click)="close('Yes')" mat-raised-button mat-button color="primary"
+        class="md-primary">Có</button>
+</mat-dialog-actions>

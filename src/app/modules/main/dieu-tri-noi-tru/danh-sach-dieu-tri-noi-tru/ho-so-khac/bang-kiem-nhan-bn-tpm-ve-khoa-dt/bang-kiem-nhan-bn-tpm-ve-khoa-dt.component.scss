@@ -1,0 +1,155 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+  tr:hover {background-color:#f5f5f5;}
+  ul.inline > li{
+    padding-right: 10px !important;
+    padding-bottom: 0.625em;
+    display: inline-block !important;
+}
+
+.po-h{
+    color: #005dab;
+    position: relative;
+    top: 5px;
+    left: 5px;
+    mat-icon{
+        display: contents;
+    }
+}
+fieldset {
+  display: block;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding-top: 0.35em;
+  padding-bottom: 0.625em;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  border: 1px #e0e0e0;
+  border-style: inherit;
+
+  .item_right{
+      text-align: right !important;
+      float:right;
+  }
+
+  ul>li{
+      padding-right: 15px !important;
+  }
+
+  ul.inline > li{
+      display: inline !important;
+  }
+
+  ul.three-col{
+      -webkit-column-count: 3;
+      -moz-column-count: 3;
+      column-count: 3;
+      li{
+          padding-top: 5px;
+          padding-bottom: 5px;
+      }
+  }
+}
+
+.orangeText{
+  color: orange;
+}
+.blueText{
+  color:blue;
+}
+.greenText{
+  color:green;
+}
+textarea {
+  overflow-y: scroll;
+  height: 100px;
+  resize: none; /* Remove this if you want the user to resize the textarea */
+}
+app-multiselect{
+  padding-bottom: 1.34375em;
+  // max-height: 73px;
+  .k-multiselect  {
+     border: none;
+  }
+  .k-multiselect-wrap  {
+     border: none !important;
+     .k-button{
+         margin-top: 11px;
+     }
+     .k-floatwrap{
+      margin-top: 20px;
+  }
+  }
+  kendo-multiselect{
+      //height: 42px !important;
+      .k-input{
+          margin-top: 11px;
+          font-size: 14px !important;
+          padding-left: 0 !important;
+      }
+      .k-multiselect-wrap  {
+          .k-floatwrap{
+              margin-top: 20px;
+             }
+      }
+  }
+  kendo-textbox-container{        
+      background-color: rgba(0, 0, 0, 0.04);
+      width: 100% !important;
+      border-radius: 4px 4px 0 0;
+      padding: .75em .75em 0 .75em;
+      border-bottom: 1px solid rgba(82, 63, 105, 0.42);
+      kendo-multiselect{
+          background-color: red !important;
+          &.k-multiselect-wrap  {
+             
+          }
+      }
+      >.k-label{
+          margin-left: 10px;
+          background: none !important;
+          transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+      }
+      &.k-state-empty{            
+          >.k-label{
+              transform: translate(0, 0) scale(1) !important;
+          }
+      }
+      &.k-state-focused>.k-label {
+          transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+          color:#005dab !important;
+      }
+      &:hover{ 
+        &::after {
+          opacity: 1;
+          transform: scaleX(1);
+        }
+      }
+      .k-list .k-item.k-state-focused {
+          color: #005dab;
+      }
+      
+      .k-list .k-item.k-state-selected {
+          color: #ff4081;
+      }
+  }
+}
+.item-no-padding{    
+  .k-list{
+      li{
+      padding: 0 !important;
+      }
+  }
+}

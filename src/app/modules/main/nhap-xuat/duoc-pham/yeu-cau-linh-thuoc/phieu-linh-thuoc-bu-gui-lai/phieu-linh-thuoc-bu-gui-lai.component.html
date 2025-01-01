@@ -1,0 +1,65 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Dược phẩm',Path:''}
+                ,{Title:'Dự trù lĩnh',Path:''}
+                ,{Title:'Yêu cầu lĩnh dược phẩm',Path:'/nhap-xuat/duoc-pham/yeu-cau-linh-thuoc',queryParams: {holdQuery : true },Active:true}
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Yêu cầu lĩnh bù dược phẩm</h2>
+                <b class="status-yeu-cau-linh ycl-cho-duyet"
+                    *ngIf="trangThaiVo != null && trangThaiVo.TrangThai == true"
+                    style="color:green">{{trangThaiVo.Ten}}</b>
+                <b class="status-yeu-cau-linh ycl-cho-duyet"
+                    *ngIf="trangThaiVo != null && trangThaiVo.TrangThai == false"
+                    style="color:red">{{trangThaiVo.Ten}}</b>
+                <b class="status-yeu-cau-linh ycl-cho-duyet"
+                    *ngIf="trangThaiVo != null && trangThaiVo.TrangThai == null && trangThaiVo.EnumTrangThaiPhieuLinh == 2"
+                    style="color:orange">{{trangThaiVo.Ten}}</b>
+                <b class="status-yeu-cau-linh ycl-cho-duyet"
+                    *ngIf="trangThaiVo != null && trangThaiVo.TrangThai == null && trangThaiVo.EnumTrangThaiPhieuLinh == 1"
+                    style="color:blue">{{trangThaiVo.Ten}}</b>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-phieu-linh-thuoc-bu-shared #temp *ngIf="trangThaiVo!=null" [isCreate]="trangThaiVo.TrangThai==null"
+                    (hideDuyetbtn)="anHienButtonDuyet($event)" (disabledNguoiTaoPhieu)="disableNguoiTaoPhieu($event)"
+                    [validationErrorsLinhBu]="validationErrors" [trangThaiVo]="trangThaiVo">
+
+                </app-phieu-linh-thuoc-bu-shared>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" [disabled]="!isHideDuyet" (click)="inPhieu()" *ngIf="isDisabledNguoiTaoPhieu"
+                        color="primary" mat-raised-button><i class="ft-save"></i>
+                        In phiếu lĩnh</button>
+
+                    <button type="button" title="Phím tắt: Esc" (click)="cancel()" mat-button
+                        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Hủy</button>
+
+                    <button type="button" *ngIf="isDisabledNguoiTaoPhieu && (trangThaiVo != undefined && trangThaiVo != null 
+                        && (trangThaiVo.TrangThai != true && trangThaiVo.TrangThai != false))"
+                        [disabled]="!isHideDuyet" (click)="luuPhieuLinhBu(false)" color="primary" mat-raised-button><i
+                            class="ft-save"></i>
+                        Lưu tạm</button>
+                    <button type="button" *ngIf="isDisabledNguoiTaoPhieu && ( trangThaiVo != undefined && trangThaiVo != null 
+                            && (trangThaiVo.TrangThai != true && trangThaiVo.TrangThai != false))"
+                        [disabled]="!isHideDuyet" (click)="luuPhieuLinhBu(true)" color="primary" mat-raised-button><i
+                            class="ft-save"></i>
+                        Gửi</button>
+                    <!-- <button type="button"
+                        *ngIf="!loading && trangThaiVo != undefined && trangThaiVo != null 
+                            && (trangThaiVo.TrangThai != null && trangThaiVo.TrangThai != true && trangThaiVo.TrangThai != false) "
+                        [disabled]="!isHideDuyet" (click)="luuVaGuiDuyetLai()" color="primary" mat-raised-button><i
+                            class="ft-save"></i> Lưu & Gửi
+                        duyệt lại</button> -->
+                    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img
+                            src="/assets/img/loader.gif" alt="Loading" /></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

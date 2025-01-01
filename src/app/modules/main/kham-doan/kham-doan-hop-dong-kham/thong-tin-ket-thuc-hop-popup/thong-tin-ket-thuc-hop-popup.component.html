@@ -1,0 +1,78 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">Xác Nhận</div>
+    <button type="button" mat-icon-button mat-dialog-close [mat-dialog-close]="null" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+        <fieldset *ngIf="KiemTraHopDongNhanVienChuaKham.length === 0" style="padding: 0px;width: 100%;">
+            <strong>Không có nhân viên trong hợp đồng này</strong>
+        </fieldset>
+
+        <fieldset *ngIf="KiemTraHopDongNhanVienChuaKham != null && dataChuaKham != null && dataChuaKham.length != 0"
+            style="padding: 0px;width: 100%;">
+            <legend>*Hiện tại còn {{dataChuaKham.length}} nhân viên chưa khám:*</legend>
+            <div class="mt-2" *ngFor="let item of dataChuaKham">
+                <ul class="inline">
+                    <li>
+                        + Tên nhân viên:
+                        <strong>{{item.TenNhanVien}}</strong>
+                    </li>
+                    <li>
+                        Mã NV:
+                        <strong>{{item.MaNhanVien}}</strong>
+                    </li>
+                    <li>
+                        Ngày sinh:
+                        <strong>{{item.NgaySinh}}</strong>
+                    </li>
+                    <li>
+                        Giới tính:
+                        <strong>{{item.GioiTinh}}</strong>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+
+        <div *ngIf="KiemTraHopDongNhanVienChuaKham != null && dataChuaKham != null && dataChuaKham.length != 0"
+            style="margin-top: 10px;font-size: 16px;">
+            <strong>Nếu kết thúc thì sẽ hủy khám những nhân viên này. Bạn có chắc chắn muốn kết thúc không?</strong>
+        </div>
+
+        <fieldset *ngIf="KiemTraHopDongNhanVienChuaKham != null && dataDaKham != null && dataDaKham.length != 0"
+            style="padding: 0px;width: 100%;">
+            <legend>*Hiện tại còn {{dataDaKham.length}} nhân viên đang khám:*</legend>
+            <div class="mt-2" *ngFor="let item of dataDaKham">
+                <ul class="inline">
+                    <li>
+                        + Tên nhân viên:
+                        <strong>{{item.TenNhanVien}}</strong>
+                    </li>
+                    <li>
+                        Mã NV:
+                        <strong>{{item.MaNhanVien}}</strong>
+                    </li>
+                    <li>
+                        Ngày sinh:
+                        <strong>{{item.NgaySinh}}</strong>
+                    </li>
+                    <li>
+                        Giới tính:
+                        <strong>{{item.GioiTinh}}</strong>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+
+        <div *ngIf="KiemTraHopDongNhanVienChuaKham != null && dataDaKham != null && dataDaKham.length != 0"
+            style="margin-top: 10px;font-size: 16px;">
+            <strong>Những nhân viên còn đang khám phải hoàn thành thì mới được kết thúc hợp đồng.</strong>
+        </div>
+
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<button *ngIf="dataDaKham != undefined && dataDaKham != null && dataDaKham.length === 0" mat-button mat-dialog-close>Không</button> 
+    <button  type="button" mat-stroked-button color="primary" (click)="KetThucHopDongKham()">Có</button>  
+</mat-dialog-actions>

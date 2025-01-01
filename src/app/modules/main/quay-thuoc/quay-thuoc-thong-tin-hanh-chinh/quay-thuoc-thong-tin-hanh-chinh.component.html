@@ -1,0 +1,67 @@
+<div class="row" >
+    <fieldset fxFlex="100%" *ngIf="MaBN == null">
+        <legend>THÔNG TIN HÀNH CHÍNH</legend>
+        <div fxFlex="100%">
+            <ul class="inline">
+                <li>Mã TN:
+                    <strong>{{benhnhanThongTin.MaYeuCauTiepNhan}}</strong>
+                </li>
+                <li>Mã NB:
+                    
+                    <strong>{{benhnhanThongTin.MaBN}}</strong>
+                </li>
+                <li>Họ tên:
+                    <strong>{{benhnhanThongTin.HoTen}}</strong>
+                </li>
+                <li>Giới tính:
+                    <strong>{{benhnhanThongTin.GioiTinhHienThi}}</strong>
+                </li>
+                <li>Năm sinh:
+                    <strong>{{benhnhanThongTin.NamSinh}}</strong>
+                </li>
+                <li>Địa chỉ:
+                    <strong>{{benhnhanThongTin.DiaChiDayDu}}</strong>
+                </li>
+               
+                <li>SĐT:
+                    <strong>{{benhnhanThongTin.SoDienThoai}}</strong>
+                </li>
+                <li>Email:
+                    <strong>{{benhnhanThongTin.Email}}</strong>
+                </li>
+               
+            </ul>
+        </div>
+    </fieldset>
+    <fieldset fxFlex="100%" *ngIf="MaBN != null">
+        <legend>THÔNG TIN HÀNH CHÍNH</legend>
+        <div fxFlex="100%" >
+            <ul class="inline">
+                <li>Mã NB:
+                    
+                    <strong>{{MaBN}}</strong>
+                </li>
+                <li>Họ tên:
+                    <strong>{{data.HoTen}}</strong>
+                </li>
+                <li>Giới tính:
+                    <strong>{{data.GioiTinhHienThi}}</strong>
+                </li>
+                <li>Năm sinh:
+                    <strong>{{data.NamSinh}}</strong>
+                </li>
+                <li>Địa chỉ:
+                    <strong>{{data.DiaChiDayDu}}</strong>
+                </li>
+               
+                <li>SĐT:
+                    <strong>{{data.SoDienThoai}}</strong>
+                </li>
+                <li>Email:
+                    <strong>{{data.Email}}</strong>
+                </li>
+               
+            </ul>
+        </div>
+    </fieldset>
+</div>

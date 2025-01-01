@@ -1,0 +1,34 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>THÔNG TIN NGƯỜI BỆNH TIẾP THEO</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="max-height: 86vh;">
+        <fieldset fxFlex="100%">
+            <legend>Thông tin hành chính</legend>
+            <div fxFlex="100%" *ngIf="benhNhanHienTai.YeuCauTiepNhanId">
+                <ul class="inline">
+                    <li>Mã TN: <strong>{{benhNhanHienTai.MaTN}}</strong></li>
+                    <li>Mã NB: <strong>{{benhNhanHienTai.MaBN}}</strong></li>
+                    <li>Họ tên: <strong>{{benhNhanHienTai.HoTen}}</strong></li>
+                    <li>Giới tính: <strong>{{benhNhanHienTai.GioiTinh}}</strong></li>
+                    <li>Tuổi: <strong>{{benhNhanHienTai.Tuoi}}</strong></li>
+                    <li>SĐT: <strong>{{benhNhanHienTai.SDT}}</strong></li>
+                    <li>Dân tộc: <strong>{{benhNhanHienTai.DanToc}}</strong></li>
+                    <li>Địa chỉ:<strong>{{benhNhanHienTai.DiaChi}}</strong></li>
+                    <li>Nghề nghiệp: <strong>{{benhNhanHienTai.NgheNghiep}}</strong></li>
+                    <li>Tuyến khám: <strong>{{benhNhanHienTai.TuyenKham}}</strong></li>
+                    <li>Mức hưởng: <strong>{{benhNhanHienTai.MucHuong}}%</strong></li>
+                    <li>Lí do TN: <strong>{{benhNhanHienTai.LyDoTN}}</strong></li>
+                    <li>Ngày TN: <strong>{{benhNhanHienTai.NgayTN}}</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="mt-3">
+    <button mat-button (click)="close()">Tự chọn NB </button>
+    <button mat-raised-button color="primary" (click)="confirm()">Xác nhận</button>
+</mat-dialog-actions>

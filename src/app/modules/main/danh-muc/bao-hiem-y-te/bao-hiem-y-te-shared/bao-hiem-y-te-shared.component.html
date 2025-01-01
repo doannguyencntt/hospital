@@ -1,0 +1,460 @@
+<!-- <div class="card">
+    <div class="card-header p-0 mb-2">
+        <h4 class="card-title">Nhập thông tin</h4>
+        <hr />
+    </div>
+    <div class="card-body">
+        <div class="form-row">
+            <div class="col-sm-12">
+                <app-textbox id="MaThe" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBenhNhan.MaThe" label="Mã thẻ" 
+                [validationerror]="'MaThe' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="TenBenhNhan" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBenhNhan.TenBenhNhan" label="Họ và tên" 
+                [validationerror]="'TenBenhNhan' | validationerror:validationErrors"></app-textbox>
+                <app-datepicker id="NgaySinh" fxFlex="20%" fxFlex.sm="40%" [(model)]="thongTinBenhNhan.NgaySinh" label="Ngày sinh" 
+                [validationerror]="'NgaySinh' | validationerror:validationErrors"></app-datepicker>
+            </div>
+        </div>
+    </div>
+  </div>
+<div class="card" *ngIf="check==true">
+    <div class="card-header p-0 mb-2">
+        <h4 class="card-title">Thông tin người bệnh</h4>
+        <hr />
+    </div>
+    <div class="card-body">
+            <table class="table table-bordered ml-0" kendoTooltip>
+                <thead>
+                    <tr>
+                        <th class="text-center"><label>Họ và tên</label></th>
+                        <th class="text-center"><label>Mã thẻ</label></th>
+                        <th class="text-center"><label>Ngày sinh</label></th>
+                        <th class="text-center"><label>Giới tính</label></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">
+                         <label></label>  {{thongTinBaoHiemYte.hoTen}}
+                        </td>
+                        <td class="text-center">
+                          <label></label>  {{thongTinBaoHiemYte.maThe }}
+                        </td>
+                        <td class="text-center">
+                            <label></label> {{thongTinBaoHiemYte.ngaySinh }}
+                        </td>
+                        <td class="text-center">
+                            <label ></label> {{thongTinBaoHiemYte.gioiTinh}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        
+    </div>
+
+
+    </div>
+<div class="card" *ngIf="check==true">
+    <div class="card-header p-0 mb-2">
+        <h4 class="card-title">Thông tin khác</h4>
+        <hr />
+    </div>
+    <div class="card-body">
+        <div class="form-row">
+            <div class="col-sm-12">
+                <app-textbox id="maKetQua" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.maKetQua" label="Mã kết quả" 
+                [validationerror]="'maKetQua' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="ghiChu" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.ghiChu" label="Ghi chú" 
+                [validationerror]="'ghiChu' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="diaChi" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.diaChi" label="Địa chỉ" 
+                [validationerror]="'diaChi' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="maDKBD" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.maDKBD" label="Mã đăng ký ban đầu" 
+                [validationerror]="'maDKBD' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="cqBHXH" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.cqBHXH" label="Tên cơ quan BHXH" 
+                [validationerror]="'cqBHXH' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="gtTheTu" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.gtTheTu" label="Thời gian thẻ có giá trị sử dụng" 
+                [validationerror]="'gtTheTu' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="gtTheDen" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.gtTheDen" label="Hạn thẻ" 
+                [validationerror]="'gtTheDen' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="maKV" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.maKV" label="Mã khu vực" 
+                [validationerror]="'maKV' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="ngayDu5Nam" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.ngayDu5Nam" label="Ngày đủ 5 năm liên tục" 
+                [validationerror]="'ngayDu5Nam' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="maSoBHXH" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.maSoBHXH" label="Mã số BHXH" 
+                [validationerror]="'maSoBHXH' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="maTheCu" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.maTheCu" label="Mã thẻ cũ" 
+                [validationerror]="'maTheCu' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="maTheMoi" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.maTheMoi" label="Mã thẻ mới" 
+                [validationerror]="'maTheMoi' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="gtTheTuMoi" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.gtTheTuMoi" label="Thời gian thẻ mới có giá trị sử dụng" 
+                [validationerror]="'gtTheTuMoi' | validationerror:validationErrors"></app-textbox>
+                <app-textbox id="gtTheDenMoi" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="thongTinBaoHiemYte.gtTheDenMoi" label="Hạn thẻ mới" 
+                [validationerror]="'gtTheDenMoi' | validationerror:validationErrors"></app-textbox>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="card" *ngIf="check==true">
+    <div class="card-header p-0 mb-2">
+        <h4 class="card-title">Danh sách lịch sử khám chữa bệnh</h4>
+        <hr />
+    </div>
+    <div class="card-body">
+        <div class="form-row" *ngIf="thongTinBaoHiemYte.dsLichSuKCB2018!=null">
+            <div class="col-sm-12"  *ngFor="let item of thongTinBaoHiemYte.dsLichSuKCB2018; let i = index">
+                <app-textbox id="maHoSo" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.maHoSo" label="Mã hồ sơ" 
+                [validationerror]="'maHoSo' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="maCSKCB" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.maCSKCB" label="Mã cơ sở KCB" 
+                [validationerror]="'maCSKCB' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="ngayVao" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.ngayVao" label="Ngày vào" 
+                [validationerror]="'ngayVao' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="ngayRa" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.ngayRa" label="Ngày ra" 
+                [validationerror]="'ngayRa' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="tenBenh" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.tenBenh" label="Tên bệnh" 
+                [validationerror]="'tenBenh' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="tinhTrang" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.tinhTrang" label="Tình trạng" 
+                [validationerror]="'tinhTrang' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="kqDieuTri" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.kqDieuTri" label="KQ điều trị" 
+                [validationerror]="'kqDieuTri' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="TEMP1" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.TEMP1" label="TEMP1" 
+                [validationerror]="'TEMP1' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="TEMP2" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.TEMP2" label="TEMP2" 
+                [validationerror]="'TEMP2' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="TEMP3" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.TEMP3" label="TEMP3" 
+                [validationerror]="'TEMP3' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="TEMP4" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.TEMP4" label="TEMP4" 
+                [validationerror]="'TEMP4' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="TEMP5" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.TEMP5" label="TEMP5" 
+                [validationerror]="'TEMP5' | validationerror:validationErrors"></app-textbox>        
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="card" *ngIf="check==true">
+    <div class="card-header p-0 mb-2">
+        <h4 class="card-title">Danh sách lịch sử tra cứu</h4>
+        <hr />
+    </div>
+    <div class="card-body">
+        <div class="form-row" *ngIf="thongTinBaoHiemYte.dsLichSuKT2018!=null">
+            <div class="col-sm-12"  *ngFor="let item of thongTinBaoHiemYte.dsLichSuKT2018; let i = index">
+                <app-textbox id="userKT" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.userKT" label="User tra cứu" 
+                [validationerror]="'userKT' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="thoiGianKT" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.thoiGianKT" label="Thời gian tra cứu" 
+                [validationerror]="'thoiGianKT' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="thongBao" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.thongBao" label="Thông báo" 
+                [validationerror]="'thongBao' | validationerror:validationErrors"></app-textbox> 
+                <app-textbox id="maLoi" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                [(model)]="item.maLoi" label="Mã lỗi" 
+                [validationerror]="'maLoi' | validationerror:validationErrors"></app-textbox> 
+                       
+            </div>
+        </div>
+    </div>
+  </div> -->
+
+
+
+  <section id="basic-badges">
+    <div class="row text-left">
+        <div class="col-sm-12">
+            <div class="content-header mt-1" style="margin-left:50px; font-size:larger ;">Bảo hiểm y tế</div>
+        </div>
+    </div>
+    <div class="row text-left" matchHeight="card">
+        <div class="col-12 col-sm-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                  <div class="px-3">
+                    <form class="form">
+                      <div class="form-body pt-2">
+                        <div class="card">
+                            <div class="card-header p-0 mb-2">
+                                <h4 class="card-title">Nhập thông tin</h4>
+                                <app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)"></app-barcode>
+                                <hr />
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-sm-12">
+                                        <app-textbox id="MaThe" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="thongTinBenhNhan.MaThe" label="Mã thẻ" 
+                                        [validationerror]="'MaThe' | validationerror:validationErrors"></app-textbox>
+                                        <app-textbox id="TenBenhNhan" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="thongTinBenhNhan.TenBenhNhan" label="Họ và tên"  [upperCase]="true"
+                                        [validationerror]="'TenBenhNhan' | validationerror:validationErrors"></app-textbox>
+                                        <app-datepicker id="NgaySinh" fxFlex="20%" fxFlex.sm="40%" [(model)]="thongTinBenhNhan.NgaySinh" label="Ngày sinh" 
+                                        [validationerror]="'NgaySinh' | validationerror:validationErrors"></app-datepicker>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                            <div class="card" *ngIf="check==true">
+                                    <div class="card-header p-0 mb-2">
+                                        <h4 class="card-title">Thông tin người bệnh</h4>
+                                        <hr />
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-row" >
+                                            <div class="col-sm-12"  >
+                                                    <app-textbox id="hoTen" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                    [(model)]="thongTinBaoHiemYte.hoTen" label="Họ và tên" 
+                                                    [validationerror]="'hoTen' | validationerror:validationErrors"></app-textbox>
+                                                    <app-textbox id="maThe" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                    [(model)]="thongTinBaoHiemYte.maThe" label="Mã thẻ" 
+                                                    [validationerror]="'maThe' | validationerror:validationErrors"></app-textbox>
+                                                    <app-textbox id="ngaySinh" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                    [(model)]="thongTinBaoHiemYte.ngaySinh" label="Ngày sinh" 
+                                                    [validationerror]="'ngaySinh' | validationerror:validationErrors"></app-textbox>
+                                                    <app-textbox id="gioiTinh" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                    [(model)]="thongTinBaoHiemYte.gioiTinh" label="Giới tính" 
+                                                    [validationerror]="'gioiTinh' | validationerror:validationErrors"></app-textbox>
+                                                   
+                                                       
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>    
+                         <div class="card" *ngIf="check==true">
+                            <div class="card-header p-0 mb-2">
+                                <h4 class="card-title">Ghi chú</h4>
+                                <hr />
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row" >
+                                    <div class="col-sm-12"  >
+                                            <app-textbox id="ghiChu" fxFlex="100%" fxFlex.sm="40%" [required]="true" 
+                                            [(model)]="thongTinBaoHiemYte.ghiChu" label="Ghi chú" 
+                                            [validationerror]="'ghiChu' | validationerror:validationErrors"></app-textbox>
+                                               
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="card" *ngIf="check==true">
+                                <div class="card-header p-0 mb-2">
+                                    <h4 class="card-title">Địa chỉ</h4>
+                                    <hr />
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-sm-12" >
+                                                <app-textbox id="diaChi" fxFlex="100%" fxFlex.sm="40%" [required]="true" 
+                                                [(model)]="thongTinBaoHiemYte.diaChi" label="Địa chỉ" 
+                                                [validationerror]="'diaChi' | validationerror:validationErrors"></app-textbox>
+                                                   
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="card" *ngIf="check==true">
+                                    <div class="card-header p-0 mb-2">
+                                        <h4 class="card-title">Tên cơ quan BHXH</h4>
+                                        <hr />
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-row" >
+                                            <div class="col-sm-12"  >
+                                                    <app-textbox id="cqBHXH" fxFlex="100%" fxFlex.sm="40%" [required]="true" 
+                                                    [(model)]="thongTinBaoHiemYte.cqBHXH" label="Tên cơ quan BHXH" 
+                                                    [validationerror]="'cqBHXH' | validationerror:validationErrors"></app-textbox>
+                                                       
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>            
+                        <div class="card" *ngIf="check==true">
+                            <div class="card-header p-0 mb-2">
+                                <h4 class="card-title">Thông tin khác</h4>
+                                <hr />
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div >
+                                        <app-textbox id="maKetQua" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="thongTinBaoHiemYte.maKetQua" label="Mã kết quả" 
+                                        [validationerror]="'maKetQua' | validationerror:validationErrors"></app-textbox>
+                                        
+                                       
+                                        <app-textbox id="maDKBD" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="thongTinBaoHiemYte.maDKBD" label="Mã đăng ký ban đầu" 
+                                        [validationerror]="'maDKBD' | validationerror:validationErrors"></app-textbox>
+                                       
+                                        <app-textbox id="gtTheTu" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="thongTinBaoHiemYte.gtTheTu" label="Thời gian thẻ có giá trị sử dụng" 
+                                        [validationerror]="'gtTheTu' | validationerror:validationErrors"></app-textbox>
+                                        <app-textbox id="gtTheDen" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                [(model)]="thongTinBaoHiemYte.gtTheDen" label="Hạn thẻ" 
+                                                [validationerror]="'gtTheDen' | validationerror:validationErrors"></app-textbox>
+                                                <app-textbox id="maKV" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                [(model)]="thongTinBaoHiemYte.maKV" label="Mã khu vực" 
+                                                [validationerror]="'maKV' | validationerror:validationErrors"></app-textbox>
+                                                <app-textbox id="ngayDu5Nam" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                [(model)]="thongTinBaoHiemYte.ngayDu5Nam" label="Ngày đủ 5 năm liên tục" 
+                                                [validationerror]="'ngayDu5Nam' | validationerror:validationErrors"></app-textbox>
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="card" *ngIf="check==true">
+                                <div class="card-header p-0 mb-2">
+                                    <h4 class="card-title">Thông tin khác 2</h4>
+                                    <hr />
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-sm-12" >
+                                                
+                                                <app-textbox id="maSoBHXH" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                [(model)]="thongTinBaoHiemYte.maSoBHXH" label="Mã số BHXH" 
+                                                [validationerror]="'maSoBHXH' | validationerror:validationErrors"></app-textbox>
+                                                <app-textbox id="maTheCu" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                [(model)]="thongTinBaoHiemYte.maTheCu" label="Mã thẻ cũ" 
+                                                [validationerror]="'maTheCu' | validationerror:validationErrors"></app-textbox>
+                                                <app-textbox id="maTheMoi" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                [(model)]="thongTinBaoHiemYte.maTheMoi" label="Mã thẻ mới" 
+                                                [validationerror]="'maTheMoi' | validationerror:validationErrors"></app-textbox>
+                                                <app-textbox id="gtTheTuMoi" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                [(model)]="thongTinBaoHiemYte.gtTheTuMoi" label="Thời gian thẻ mới có giá trị sử dụng" 
+                                                [validationerror]="'gtTheTuMoi' | validationerror:validationErrors"></app-textbox>
+                                                <app-textbox id="gtTheDenMoi" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                                [(model)]="thongTinBaoHiemYte.gtTheDenMoi" label="Hạn thẻ mới" 
+                                                [validationerror]="'gtTheDenMoi' | validationerror:validationErrors"></app-textbox>
+                                                   
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                          <div class="card" *ngIf="check==true">
+                            <div class="card-header p-0 mb-2">
+                                <h4 class="card-title">Danh sách lịch sử khám chữa bệnh</h4>
+                                <hr />
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row" *ngIf="thongTinBaoHiemYte.dsLichSuKCB2018!=null">
+                                    <div class="col-sm-12"  *ngFor="let item of thongTinBaoHiemYte.dsLichSuKCB2018; let i = index">
+                                        <app-textbox id="maHoSo" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.maHoSo" label="Mã hồ sơ" 
+                                        [validationerror]="'maHoSo' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="maCSKCB" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.maCSKCB" label="Mã cơ sở KCB" 
+                                        [validationerror]="'maCSKCB' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="ngayVao" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.ngayVao" label="Ngày vào" 
+                                        [validationerror]="'ngayVao' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="ngayRa" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.ngayRa" label="Ngày ra" 
+                                        [validationerror]="'ngayRa' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="tenBenh" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.tenBenh" label="Tên bệnh" 
+                                        [validationerror]="'tenBenh' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="tinhTrang" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.tinhTrang" label="Tình trạng" 
+                                        [validationerror]="'tinhTrang' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="kqDieuTri" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.kqDieuTri" label="KQ điều trị" 
+                                        [validationerror]="'kqDieuTri' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="TEMP1" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.TEMP1" label="TEMP1" 
+                                        [validationerror]="'TEMP1' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="TEMP2" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.TEMP2" label="TEMP2" 
+                                        [validationerror]="'TEMP2' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="TEMP3" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.TEMP3" label="TEMP3" 
+                                        [validationerror]="'TEMP3' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="TEMP4" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.TEMP4" label="TEMP4" 
+                                        [validationerror]="'TEMP4' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="TEMP5" fxFlex="20%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.TEMP5" label="TEMP5" 
+                                        [validationerror]="'TEMP5' | validationerror:validationErrors"></app-textbox>        
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="card" *ngIf="check==true">
+                            <div class="card-header p-0 mb-2">
+                                <h4 class="card-title">Danh sách lịch sử tra cứu</h4>
+                                <hr />
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row" *ngIf="thongTinBaoHiemYte.dsLichSuKT2018!=null">
+                                    <div class="col-sm-12"  *ngFor="let item of thongTinBaoHiemYte.dsLichSuKT2018; let i = index">
+                                        <app-textbox id="userKT" fxFlex="7%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.userKT" label="User tra cứu" 
+                                        [validationerror]="'userKT' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="thoiGianKT" fxFlex="8%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.thoiGianKT" label="Thời gian tra cứu" 
+                                        [validationerror]="'thoiGianKT' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="thongBao" fxFlex="80%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.thongBao" label="Thông báo" 
+                                        [validationerror]="'thongBao' | validationerror:validationErrors"></app-textbox> 
+                                        <app-textbox id="maLoi" fxFlex="5%" fxFlex.sm="40%" [required]="true" 
+                                        [(model)]="item.maLoi" label="Mã lỗi" 
+                                        [validationerror]="'maLoi' | validationerror:validationErrors"></app-textbox> 
+                                               
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+  
+                      <!-- <div class="form-actions right">
+                        <app-formfooter [bodyComponent]="shared" type="create"  (created)="onCreated()"></app-formfooter>
+                      </div> -->
+                      <div class="form-actions row">
+                        <!-- <app-formfooter [bodyComponent]="shared" type="create" baseRoute="quan-ly-the-xe-van-phong/danh-sach-the-xe-nhan-vien" (created)="onCreated()"></app-formfooter> -->
+                        <div class="col-sm-12">
+                          <button type="button" (click)="Quaylai()" style="height: 31px;" class="btn btn-raised btn-raised btn-secondary mb-0">
+                            <i class="ft-arrow-left"></i> Quay lại</button>
+
+                            
+                            <button type="button" (click)="DangKy()" class="btn btn-raised btn-raised btn-primary mb-0 float-right">
+                              <i class="ft-save"></i>Kiểm tra</button>  
+                             
+                        </div>
+                       </div>
+                    </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+  
+
+
+
+  <!-- z -->

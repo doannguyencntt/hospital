@@ -1,0 +1,35 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                {Title:'Danh Mục',Path:''}
+                ,{Title:'Nhóm Hệ Thống',Path:''}
+                ,{Title:'Bệnh Viện',Path:''}
+                ,{Title:'Đối tượng ưu đãi dịch vụ kỹ thuật',Path:'/danh-muc/nhom-he-thong/benh-vien/doi-tuong-uu-dai-dich-vu-ky-thuat', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid #gridParent baseRoute="/danh-muc/nhom-he-thong/benh-vien/doi-tuong-uu-dai-dich-vu-ky-thuat"
+                [gridColumns]="gridColumns" [documentType]="documentType" [useHeaderDefault]="true"
+                [useActionDefault]="true" [lazyLoadPage]="true" [checkboxAble]="false"
+                [detailTemplate]="detailTemplate" [showExportExcel]="true" (extExportExcel)="exportExcel()"></app-grid>
+            <ng-template #detailTemplate let-dataItem>
+                <app-grid baseRoute="/danh-muc/nhom-he-thong/benh-vien/doi-tuong-uu-dai-dich-vu-ky-thuat"
+                    [gridColumns]="gridChildColumns2" [documentType]="documentType" [useAddDeault]="false"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                    [urlGetData]="urlGetDataGridChild2" [urlGetTotalPage]="urlGetTotalPageGridChild2"
+                    searchString="{{dataItem.DichVuKyThuatId}}" [autoHeight]="true" [pageable]="false">
+                </app-grid>
+            </ng-template>
+        </div>
+        <!-- <ng-template #hieuLucTemplate let-dataItem>
+            <span *ngIf="dataItem.HieuLuc == 0">Không</span>
+            <span *ngIf="dataItem.HieuLuc != 0">Có</span>
+        </ng-template> -->
+    </vex-page-layout-content>
+</vex-page-layout>

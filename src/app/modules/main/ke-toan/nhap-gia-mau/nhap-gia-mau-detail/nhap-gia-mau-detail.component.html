@@ -1,0 +1,130 @@
+<app-header-form [crumbs]="[ {Title:'Kế Toán',Path:''}
+        ,{Title:'DS Nhập Giá Máu', Path: '/ke-toan/nhap-gia-mau', queryParams: {holdQuery : true}}
+        ,{Title:'Chi Tiết Phiếu Nhập Giá Máu',Path:'',Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chi Tiết Phiếu Nhập Giá Máu</h2>
+                <b *ngIf="trangThai != undefined" class="status-nhap-kho-mau {{trangThai.DuocDuyet == null ? 'nkm-cho-duyet': (trangThai.DuocDuyet == false ? 'nkm-tu-choi' : 'nkm-da-duyet')}}">{{trangThai.TenTrangThai}}</b>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+            
+                <div class="border-b" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <app-textbox [disabled]="true" id="soHoaDon" fxFlex="15%" fxFlex.sm="15%" label="Số HĐ"
+                        [(model)]="phieuNhapKhoMau.SoHoaDon" [maxlength]="50"
+                        [validationerror]="'SoHoaDon' | validationerror:validationErrors">
+                    </app-textbox>
+                    <app-datepicker id="NgayHoaDon" fxFlex="15%" fxFlex.sm="15%" label="Ngày HĐ"
+                        [(model)]="phieuNhapKhoMau.NgayHoaDon" [disabled]="true"
+                        [validationerror]="'NgayHoaDon' | validationerror:validationErrors">
+                    </app-datepicker>
+                    <app-combobox id="nhaCungCap" fxFlex="40%" fxFlex.sm="40%" label="Nhà cung cấp"
+                        url="HopDongThauDuocPham/GetListNhaThau" [disabled]="true"
+                        [(model)]="phieuNhapKhoMau.NhaThauId" [modelText]="phieuNhapKhoMau.TenNhaThau" class="item-no-padding"
+                        [required]="true" [template]="nhaCungCapTemplate" [templateHeader]="nhaCungCapTemplateHeader"
+                        [validationerror]="'NhaThauId' | validationerror:validationErrors">
+                        <ng-template #nhaCungCapTemplateHeader let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <th width="30%">Tên</th>
+                                    <th>Địa Chỉ</th>
+                                </tr>
+                            </table>
+                        </ng-template>
+                        <ng-template #nhaCungCapTemplate let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <td width="30%">{{dataItem.Ten}}</td>
+                                    <td>{{dataItem.DiaChi}}</td>
+                                </tr>
+                            </table>
+                        </ng-template>
+                    </app-combobox>
+                    <app-combobox id="nguoiNhap" fxFlex="15%" fxFlex.sm="15%" [required]="true" [disabled]="true"
+                        [(model)]="phieuNhapKhoMau.NguoiNhapId" [bind]="true" [reloadForGrid]="true"
+                        [modelText]="phieuNhapKhoMau.TenNguoiNhap" url="YeuCauLinhDuocPham/GetListNhanVien" label="Người nhập"
+                        [validationerror]="'NguoiNhapId' | validationerror:validationErrors">
+                    </app-combobox>
+                    <app-datepicker id="NgayNhap" fxFlex="15%" fxFlex.sm="15%" label="Ngày Nhập" [required]="true"
+                        [(model)]="phieuNhapKhoMau.NgayNhap" [required]="true" [disabled]="true"
+                        [validationerror]="'NgayNhap' | validationerror:validationErrors">
+                    </app-datepicker>
+                
+                    <app-radio fxFlex="25%" fxFlex.sm="25%" id="LoaiNguoiGiao" name="LoaiNguoiGiao"
+                        [items]="[{Value:1,Text:'Trong hệ thống'},{Value:2,Text:'Ngoài hệ thống'}]"
+                        [(model)]="phieuNhapKhoMau.LoaiNguoiGiao" label="Loại người giao"
+                        [disabled]="true"
+                        [validationerror]="'LoaiNguoiGiao' | validationerror:validationErrors">
+                    </app-radio>
+                    <app-combobox *ngIf="phieuNhapKhoMau.LoaiNguoiGiao == 1" id="nguoiGiao" fxFlex="25%" fxFlex.sm="25%"
+                        [(model)]="phieuNhapKhoMau.NguoiGiaoId" [bind]="true" [reloadForGrid]="true"
+                        [disabled]="true" [modelText]="phieuNhapKhoMau.TenNguoiGiao"
+                        url="YeuCauLinhDuocPham/GetListNhanVien" label="Người giao">
+                    </app-combobox>
+                    <app-textbox *ngIf="phieuNhapKhoMau.LoaiNguoiGiao == 2" id="TenLoaiNguoiGiao" fxFlex="25%" fxFlex.sm="25%"
+                        label="Người giao" [(model)]="phieuNhapKhoMau.TenNguoiGiao" [maxlength]="100"
+                        [disabled]="true">
+                    </app-textbox>
+                    <app-textarea fxFlex="50%" fxFlex.sm="50%" id="ghiChu" label="Ghi Chú" maxlength="1000"
+                        [(model)]="phieuNhapKhoMau.GhiChu" minHeight="20" [disabled]="true">
+                    </app-textarea>
+                
+                    <h3 fxFlex="100%" class="sub-title">Thông Tin Máu</h3>
+                    <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridColumns" [allowSortDefault]="true"
+                        [documentType]="documentype" [useAddDeault]="false" [showStt]="true" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500" [pageable]="false"
+                        [gridDataSource]="gridDataSource">
+                    </app-grid>
+                
+                    <ng-template #ngaySanXuatTemplate let-dataItem let-rowIndex="rowIndex">
+                        <span class="reverse-ellipsis r" kendoTooltip title="{{dataItem.NgaySanXuatDisplay}}">
+                            <p>{{dataItem.NgaySanXuatDisplay}}</p>
+                            <!-- <app-validationerrorother
+                                [validationerror]="'NhapKhoMauChiTiets['+rowIndex+'].NgaySanXuat' | validationerror:validationErrors"
+                                (clearValidateErrorOtherCallback)="clearValidateErrorOtherCallback($event)">
+                            </app-validationerrorother> -->
+                        </span>
+                    </ng-template>
+                    <ng-template #hanSuDungTemplate let-dataItem let-rowIndex="rowIndex">
+                        <span class="reverse-ellipsis r" kendoTooltip title="{{dataItem.HanSuDungDisplay}}">
+                            <p>{{dataItem.HanSuDungDisplay}}</p>
+                            <app-validationerrorother
+                                [validationerror]="'DuyetNhapKhoMauChiTiets['+rowIndex+'].HanSuDung' | validationerror:validationErrors"
+                                (clearValidateErrorOtherCallback)="clearValidateErrorOtherCallback($event)">
+                            </app-validationerrorother>
+                        </span>
+                    </ng-template>
+
+                    <ng-template #donGiaNhapTemplate let-dataItem let-rowIndex="rowIndex">
+                        <app-textboxnumeric [disabled]="phieuNhapKhoMau.DuocKeToanDuyet && dataItem.IsThanhToan" id="donGiaNhap{{rowIndex}}" [max]="99999999999" [required]="true"
+                            label=" " [decimals]="2" [format]="format" [(model)]="dataItem.DonGiaNhap" class="no-label" (modelChange)="changeDonGia($event, dataItem)"
+                            [validationerror]="'DuyetNhapKhoMauChiTiets['+rowIndex+'].DonGiaNhap' | validationerror:validationErrors">
+                        </app-textboxnumeric>
+                    </ng-template>
+                    <ng-template #donGiaBaoHiemTemplate let-dataItem let-rowIndex="rowIndex">
+                        <app-textboxnumeric [disabled]="phieuNhapKhoMau.DuocKeToanDuyet && dataItem.IsThanhToan" id="donGiaBaoHiem{{rowIndex}}" [max]="99999999999"
+                            label=" " [decimals]="2" [format]="format" [(model)]="dataItem.DonGiaBaoHiem" class="no-label" [required]="true"
+                            [validationerror]="'DuyetNhapKhoMauChiTiets['+rowIndex+'].DonGiaBaoHiem' | validationerror:validationErrors">
+                        </app-textboxnumeric>
+                    </ng-template>
+                </div>
+            
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="form-footer mt-6">
+                    <button type="button" mat-button class="mr-1 align-right-fx" (click)="huy()"><i class="ft-arrow-left"></i>
+                        Hủy</button>
+                    <button type="button" *ngIf="!loading && IsDaDuyet == null" color="primary" mat-raised-button (click)="xuLyDuyet(true)">
+                        <i class="ft-save"></i>Duyệt</button>
+                    <button type="button" *ngIf="!loading && IsDaDuyet == true" color="primary" mat-raised-button (click)="xuLyDuyet()">
+                        <i class="ft-save"></i>Lưu</button>
+                    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                            alt="Loading" /></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

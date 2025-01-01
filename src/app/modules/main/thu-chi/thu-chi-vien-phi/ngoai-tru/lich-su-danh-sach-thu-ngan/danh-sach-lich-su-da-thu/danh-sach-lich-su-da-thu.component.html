@@ -1,0 +1,152 @@
+<kendo-grid [data]="gridDataDaThu" [resizable]="true" [selectable]="{enabled: true, checkboxOnly: true}"
+     class="grid-custom" id="danhSachLichSuDaThuTienGrid" *ngIf="kiemTraData===true">
+    <kendo-grid-column field="" title="#" width="20" [style]="{'text-align': 'center'}"
+        [headerStyle]="{'text-align': 'center'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Ma" title="Mã" width="50" [style]="{'text-align': 'center'}"
+        [headerStyle]="{'text-align': 'center'}">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+                <span class="reverse-ellipsis r" title="{{dataItem.Ma}}">
+                    {{dataItem.Ma}}
+                </span>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="Nhom" title="Nhóm" width="50" [hidden]="true" [style]="{'text-align': 'left'}"
+        [headerStyle]="{'text-align': 'center'}" class="k-grouping-row p">
+        <ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
+            {{value}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="TenDichVu" title="Tên Dịch Vụ" width="100" [style]="{'text-align': 'left'}"
+        [headerStyle]="{'text-align': 'center'}">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+                <span class="reverse-ellipsis r" title="{{dataItem.TenDichVu}}">
+                    {{dataItem.TenDichVu}}
+                </span>
+            </div>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+            <div class="text-center" style="font-weight: bold;color:#000;">Tổng cộng DV đang chọn:</div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="LoaiGia" title="Loại Giá" width="80" [style]="{'text-align': 'left'}"
+        [headerStyle]="{'text-align': 'center'}">
+    </kendo-grid-column>
+    <kendo-grid-column field="Soluong" title="Số Lượng" width="40" [style]="{'text-align': 'center'}"
+        [headerStyle]="{'text-align': 'center'}">
+    </kendo-grid-column>
+    <kendo-grid-column field="DonGia" title="Đơn Giá" width="100" [style]="{'text-align': 'center'}"
+        [headerStyle]="{'text-align': 'right'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="float_right">{{ dataItem.DonGia | number:'0.2-2':'vi-VN'}}</div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="ThanhTien" title="Thành Tiền" width="100" [headerStyle]="{'text-align': 'right'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="float_right">{{ dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}</div>
+        </ng-template>
+        <ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+            <div class="float_right">{{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+            </div>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex" style="text-align: center">
+            <span class="float_right">{{total('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="BHYTThanhToan" title="BHYT TT" width="100" [headerStyle]="{'text-align': 'right'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="float_right">{{ dataItem.BHYTThanhToan | number:'0.2-2':'vi-VN'}}</div>
+        </ng-template>
+        <ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+            <div class="float_right">{{aggregates.BHYTThanhToan.sum | number:'0.2-2':'vi-VN'}}
+            </div>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex" style="text-align: center">
+            <span style="float: right;">{{total('BHYTThanhToan') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column width="100" [style]="{'text-align': 'center'}" title="Tổng công nợ"
+        [headerStyle]="{'text-align': 'right'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="float_right">{{ dataItem.SoTienCongNo | number:'0.2-2':'vi-VN'}}</div>
+        </ng-template>
+        <ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+            <div class="float_right">{{aggregates.SoTienCongNo.sum | number:'0.2-2':'vi-VN'}}
+            </div>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+            <span style="float:right;">{{total('SoTienCongNo') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+    </kendo-grid-column> 
+    
+    <!-- update số tiền miễm chi tiêt cho từng dịch vụ-->
+    <kendo-grid-column field="SoTienMG" title="Số tiền MG" width="100" [headerStyle]="{'text-align': 'right'}">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <div class="float_right">
+                <div inline="true">
+                    <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+                        <a *ngIf="dataItem.SoTienMG > 0" class="reverse-ellipsis r" title="Xem thông tin miễm giảm"
+                            (click)="ViewThongTinMG(dataItem)">{{ dataItem.SoTienMG | number:'0.2-2':'vi-VN'}}</a>
+                        <span *ngIf="dataItem.SoTienMG === 0">{{ dataItem.SoTienMG | number:'0.2-2':'vi-VN'}}</span>
+                    </div>
+                    <!-- <span *ngIf="dataItem.SoTienMG > 0"> {{ dataItem.SoTienMG | number:'0.2-2':'vi-VN'}}</span>
+                    <span *ngIf="dataItem.SoTienMG === 0" style="margin-right: 26px;">{{ dataItem.SoTienMG | number:'0.2-2':'vi-VN'}}</span>
+                    <ic-icon *ngIf="dataItem.SoTienMG > 0" [icon]="icRedEye" class="mr-3" inline="true"
+                        (click)="ViewThongTinMG(dataItem)">
+                    </ic-icon> -->
+                </div>
+            </div>
+        </ng-template>
+        <ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+            <div class="float_right">{{aggregates.SoTienMG.sum | number:'0.2-2':'vi-VN'}}
+            </div>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+            <span class="float_right">{{total('SoTienMG') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+    </kendo-grid-column>
+    <!--update số tiền miễm chi tiêt cho từng dịch vụ-->
+
+    <kendo-grid-column field="DaThanhToan" title="Thu Tiền" width="100" [headerStyle]="{'text-align': 'right'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="float_right">{{ dataItem.DaThanhToan | number:'0.2-2':'vi-VN'}}</div>
+        </ng-template>
+        <ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+            <div class="float_right">{{aggregates.DaThanhToan.sum | number:'0.2-2':'vi-VN'}}
+            </div>
+        </ng-template>
+        <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+            <span style="float: right;">{{total('DaThanhToan') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="NoiThucHien" title="Nơi thực hiện" width="80" [style]="{'text-align': 'left'}"
+        [headerStyle]="{'text-align': 'center'}">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+                <span class="reverse-ellipsis r" title="{{dataItem.NoiThucHien}}">
+                    {{dataItem.NoiThucHien}}
+                </span>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="" title="Người thu" width="150" [style]="{'text-align': 'left'}"
+        [headerStyle]="{'text-align': 'center'}">
+        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+                <span class="reverse-ellipsis r"
+                    title="{{dataItem.SoPhieu}} - {{dataItem.ThoiGianThuStr}} - {{dataItem.NguoiThu}} ">
+                    {{dataItem.SoPhieu}} - {{dataItem.ThoiGianThuStr}} - {{dataItem.NguoiThu}} <br />
+                </span>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-messages noRecords="Không có dữ liệu." pagerOf="trong số" pagerItems="dòng"
+        detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết">
+    </kendo-grid-messages>
+</kendo-grid>

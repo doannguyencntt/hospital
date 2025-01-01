@@ -1,0 +1,905 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[{Title:'Gửi H.Sơ Giám Định BHYT'},
+                {Title:'Gửi Trong Ngày',Path:'/lich-su-bao-hiem-y-te',queryParams: {holdQuery : true}},
+                {Title:'Thông tin chi tiết',Active:true}]">
+            </vex-breadcrumbs>
+            <app-hot-key [keys]="[
+            {Key:'Ctrl + D', Description:'Tải file'},
+            {Key:'Ctrl + S',Description:'Cập nhật hồ sơ'},
+            {Key:'Esc',Description:'Quay lại',End:true}
+            ]"></app-hot-key>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="auto">
+                    <div class="px-6 py-4" fxLayout="column">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                            <app-combobox id="ChonVersion" fxFlex="17%" fxFlex.sm="17%"
+                                [(model)]="thongtinbenhnhan.Version" #comboboxLanGoiBHYT
+                                url="BHYT/GetThongTinGoiBHYTVersion/{{thongtinbenhnhan.YeuCauTiepNhanId}}"
+                                label="Thông tin gửi" class="item-no-padding" [reloadForGrid]="true"
+                                (modelChange)="chonLanGuiHoSoGiamDinh($event)">
+                            </app-combobox>
+                        </div>
+                    </div>
+                    <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="20px">
+                        <div class="card" fxFlex="auto">
+                            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                                <h2 class="title m-0">Thông tin người bệnh (XML1)</h2>
+                            </div>
+                            <div class="px-6 py-4" fxLayout="column">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0">
+                                    <app-textbox id="MaLienKet" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                        maxlength="100" [(model)]="thongtinbenhnhan.MaLienKet " label="Mã liên kết"
+                                        [disabled]="true"
+                                        [validationerror]="'MaLienKet' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <app-textbox id="MaBenhNhan" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                        [disabled]="true" [(model)]="thongtinbenhnhan.MaBenhNhan " label="Mã người bệnh"
+                                        maxlength="100"
+                                        [validationerror]="'MaBenhNhan' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <app-textbox id="HoTen" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                        [upperCase]="true" [disabled]="readonly" [(model)]="thongtinbenhnhan.HoTen"
+                                        label="Họ và tên" maxlength="255"
+                                        [validationerror]="'HoTen' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <app-datepicker id="NgaySinh" fxFlex="20%" fxFlex.sm="40%" [disabled]="readonly"
+                                        [(model)]="thongtinbenhnhan.NgaySinh" [required]="true" label="Ngày sinh"
+                                        [validationerror]="'NgaySinh' | validationerror:validationErrors">
+                                    </app-datepicker>
+                                    <app-combobox id="GioiTinh" fxFlex="20%" fxFlex.sm="20%" label="Giới tính"
+                                        [disabled]="readonly" [required]="true" [data]="DataGoiTinh"
+                                        [(model)]="thongtinbenhnhan.GioiTinh"
+                                        [validationerror]="'GioiTinh' | validationerror:validationErrors"
+                                        class="item-no-padding" [template]="khoaKhamTemplate"
+                                        [templateHeader]="khoaKhamTemplateHeader">
+                                        <ng-template #khoaKhamTemplateHeader let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <th width="20%">Mã</th>
+                                                    <th>Tên</th>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                        <ng-template #khoaKhamTemplate let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <td width="20%">{{dataItem.KeyId}}</td>
+                                                    <td>{{dataItem.DisplayName}}</td>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                    </app-combobox>
+                                    <app-textbox id="DiaChi" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                        [disabled]="readonly" [(model)]="thongtinbenhnhan.DiaChi" label="Địa chỉ"
+                                        maxlength="1024"
+                                        [validationerror]="'DiaChi' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <app-textbox id="MaThe" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                        [(model)]="thongtinbenhnhan.MaThe" [disabled]="readonly" label="Mã thẻ"
+                                        maxlength="255" [validationerror]="'MaThe' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <app-textbox id="MaCoSoKCBBanDau" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                        maxlength="255" [(model)]="thongtinbenhnhan.MaCoSoKCBBanDau"
+                                        [disabled]="readonly" label="Mã CSKCB ban đầu"
+                                        [validationerror]="'MaCoSoKCBBanDau' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <app-datepicker id="GiaTriTheTu" fxFlex="20%" fxFlex.sm="40%" [disabled]="readonly"
+                                        [(model)]="thongtinbenhnhan.GiaTriTheTu" [required]="true"
+                                        label="Giá trị thẻ từ"
+                                        [validationerror]="'GiaTriTheTu' | validationerror:validationErrors">
+                                    </app-datepicker>
+                                    <app-datepicker id="GiaTriTheDen" fxFlex="20%" fxFlex.sm="40%" [disabled]="readonly"
+                                        [(model)]="thongtinbenhnhan.GiaTriTheDen" [required]="true"
+                                        label="Giá trị thẻ đến"
+                                        [validationerror]="'GiaTriTheDen' | validationerror:validationErrors">
+                                    </app-datepicker>
+                                    <app-datepicker id="MienCungChiTra" fxFlex="20%" fxFlex.sm="40%"
+                                        [disabled]="readonly" [(model)]="thongtinbenhnhan.MienCungChiTra"
+                                        label="Miễn cùng chi trả"
+                                        [validationerror]="'MienCungChiTra' | validationerror:validationErrors">
+                                    </app-datepicker>
+                                    <div fxFlex="20%" fxFlex.sm="20%">
+                                        <div fxFlex="100%" fxFlex.sm="100%" class="d-flex flex-row-reverse">
+                                            <button class="ml-1 mt-2 mr-2" color="primary" mat-mini-fab kendoTooltip
+                                                title="Thêm mã bệnh khác" type="button"
+                                                (click)="showPopupTimTenBenhKhac()" style="padding: 0px !important;"
+                                                fxFlex="none">
+                                                <mat-icon style="color: white;" [icIcon]="icEdit"></mat-icon>
+                                            </button>
+                                            <app-textarea id="TenBenh" fxFlex="100%" fxFlex.sm="100%" [required]="true"
+                                                [disabled]="readonly" [(model)]="thongtinbenhnhan.TenBenh"
+                                                label="Tên bệnh" maxlength="2000"
+                                                [validationerror]="'TenBenh' | validationerror:validationErrors">
+                                            </app-textarea>
+                                        </div>
+                                    </div>
+                                    <app-textbox id="MaBenh" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                        [disabled]="readonly" [(model)]="thongtinbenhnhan.MaBenh" label="Mã bệnh"
+                                        maxlength="8" [validationerror]="'MaBenh' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <div fxFlex="20%" fxFlex.sm="20%">
+                                        <div fxFlex="100%" fxFlex.sm="100%" class="d-flex flex-row-reverse">
+                                            <button class="ml-1 mt-2 mr-2" color="primary" mat-mini-fab kendoTooltip
+                                                title="Thêm mã bệnh khác" type="button"
+                                                (click)="showPopupTimMaBenhKhac()" style="padding: 0px !important;"
+                                                fxFlex="none">
+                                                <mat-icon style="color: white;" [icIcon]="icEdit"></mat-icon>
+                                            </button>
+                                            <app-textbox id="MaBenhKhac" fxFlex="100%" fxFlex.sm="100%" maxlength="255"
+                                                [(model)]="thongtinbenhnhan.MaBenhKhac" label="Mã bệnh khác"
+                                                [disabled]="readonly"
+                                                [validationerror]="'MaBenhKhac' | validationerror:validationErrors">
+                                            </app-textbox>
+                                        </div>
+                                    </div>
+                                    <app-combobox id="LyDoVaoVien" fxFlex="20%" fxFlex.sm="20%" label="Lý do vào viện"
+                                        [disabled]="readonly" [required]="true" [data]="LyDoRaVien"
+                                        [(model)]="thongtinbenhnhan.LyDoVaoVien"
+                                        [validationerror]="'LyDoVaoVien' | validationerror:validationErrors"
+                                        class="item-no-padding" [template]="khoaKhamTemplate"
+                                        [templateHeader]="khoaKhamTemplateHeader">
+                                        <ng-template #khoaKhamTemplateHeader let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <th width="20%">Mã</th>
+                                                    <th>Tên</th>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                        <ng-template #khoaKhamTemplate let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <td width="20%">{{dataItem.KeyId}}</td>
+                                                    <td>{{dataItem.DisplayName}}</td>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                    </app-combobox>
+                                    <app-textbox id="MaNoiChuyen" fxFlex="20%" fxFlex.sm="40%" [disabled]="readonly"
+                                        [(model)]="thongtinbenhnhan.MaNoiChuyen" label="Mã nội chuyển" maxlength="5"
+                                        [validationerror]="'MaNoiChuyen' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <app-combobox id="MaTaiNan" fxFlex="20%" fxFlex.sm="20%" label="Mã tai nạn"
+                                        [(model)]="thongtinbenhnhan.MaTaiNan" [data]="MaTaiNan" [disabled]="readonly"
+                                        [validationerror]="'MaTaiNan' | validationerror:validationErrors"
+                                        class="item-no-padding" [template]="khoaKhamTemplate"
+                                        [templateHeader]="khoaKhamTemplateHeader">
+                                        <ng-template #khoaKhamTemplateHeader let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <th width="20%">Mã</th>
+                                                    <th>Tên</th>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                        <ng-template #khoaKhamTemplate let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <td width="20%">{{dataItem.KeyId}}</td>
+                                                    <td>{{dataItem.DisplayName}}</td>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                    </app-combobox>
+                                    <app-datetimepicker id="NgayVao" fxFlex="20%" fxFlex.sm="40%" [disabled]="readonly"
+                                        [(model)]="thongtinbenhnhan.NgayVao" [required]="true" label="Ngày vào"
+                                        [validationerror]="'NgayVao' | validationerror:validationErrors">
+                                    </app-datetimepicker>
+                                    <app-datetimepicker id="NgayRa" fxFlex="20%" fxFlex.sm="40%" [disabled]="readonly"
+                                        [(model)]="thongtinbenhnhan.NgayRa" [required]="true" label="Ngày ra"
+                                        [validationerror]="'NgayRa' | validationerror:validationErrors">
+                                    </app-datetimepicker>
+                                    <app-textboxnumeric id="SoNgayDieuTri" fxFlex="20%" fxFlex.sm="40%"
+                                        [required]="true" min="1" max="366" [(model)]="thongtinbenhnhan.SoNgayDieuTri"
+                                        label="Số ngày điều trị" [disabled]="readonly"
+                                        [validationerror]="'SoNgayDieuTri' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                    <app-combobox id="KetQuaDieuTri" fxFlex="20%" fxFlex.sm="20%"
+                                        label="Kết quả điều trị" [(model)]="thongtinbenhnhan.KetQuaDieuTri"
+                                        [data]="KetQuaDieuTri" [disabled]="readonly"
+                                        [validationerror]="'KetQuaDieuTri' | validationerror:validationErrors"
+                                        class="item-no-padding" [template]="khoaKhamTemplate"
+                                        [templateHeader]="khoaKhamTemplateHeader">
+                                        <ng-template #khoaKhamTemplateHeader let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <th width="20%">Mã</th>
+                                                    <th>Tên</th>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                        <ng-template #khoaKhamTemplate let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <td width="20%">{{dataItem.KeyId}}</td>
+                                                    <td>{{dataItem.DisplayName}}</td>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                    </app-combobox>
+                                    <app-combobox id="TinhTrangRaVien" fxFlex="20%" fxFlex.sm="20%"
+                                        label="Tình trạng ra viện" [data]="TinhTrangRaVien"
+                                        [(model)]="thongtinbenhnhan.TinhTrangRaVien" [disabled]="readonly"
+                                        [validationerror]="'TinhTrangRaVien' | validationerror:validationErrors"
+                                        class="item-no-padding" [template]="khoaKhamTemplate"
+                                        [templateHeader]="khoaKhamTemplateHeader">
+                                        <ng-template #khoaKhamTemplateHeader let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <th width="20%">Mã</th>
+                                                    <th>Tên</th>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                        <ng-template #khoaKhamTemplate let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <td width="20%">{{dataItem.KeyId}}</td>
+                                                    <td>{{dataItem.DisplayName}}</td>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                    </app-combobox>
+                                    <app-datetimepicker id="NgayThanhToan" fxFlex="20%" fxFlex.sm="40%"
+                                        [disabled]="readonly" [(model)]="thongtinbenhnhan.NgayThanhToan"
+                                        label="Ngày thanh toán"
+                                        [validationerror]="'NgayThanhToan' | validationerror:validationErrors">
+                                    </app-datetimepicker>
+                                    <app-textboxnumeric id="TienThuoc" fxFlex="20%" fxFlex.sm="40%" min="0"
+                                        [disabled]="true" [(model)]="thongtinbenhnhan.TienThuoc" label="Tiền thuốc"
+                                        [decimals]="2" format="n2"
+                                        [validationerror]="'TienThuoc' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                    <app-textboxnumeric id="TienVatTuYTe" fxFlex="20%" fxFlex.sm="40%"
+                                        [(model)]="thongtinbenhnhan.TienVatTuYTe" [disabled]="true"
+                                        label="Tiền Vật tư Y tế" [decimals]="2" format="n2" min="0"
+                                        [validationerror]="'TienVatTuYTe' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                    <app-textboxnumeric id="TienTongChi" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                        [decimals]="2" format="n2" min="0" [(model)]="thongtinbenhnhan.TienTongChi"
+                                        label="Tiền tổng chi" [disabled]="true"
+                                        [validationerror]="'TienTongChi' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                    <app-textboxnumeric id="TienBenhNhanTuTra" fxFlex="20%" fxFlex.sm="40%"
+                                        [(model)]="thongtinbenhnhan.TienBenhNhanTuTra"
+                                        label="Tiền người bệnh thanh toán" [decimals]="2" format="n2" min="0"
+                                        [disabled]="readonly"
+                                        [validationerror]="'TienBenhNhanTuTra' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                    <app-textboxnumeric id="TienBenhNhanCungChiTra" fxFlex="20%" fxFlex.sm="40%"
+                                        [decimals]="2" format="n2" min="0"
+                                        [(model)]="thongtinbenhnhan.TienBenhNhanCungChiTra"
+                                        label="Tiền người bệnh cùng chi trả" [decimals]="2" [disabled]="true"
+                                        [validationerror]="'TienBenhNhanCungChiTra' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                    <app-textboxnumeric id="TienBaoHiemThanhToan" fxFlex="20%" fxFlex.sm="40%"
+                                        [required]="true" [decimals]="2" format="n2" min="0" [disabled]="true"
+                                        [(model)]="thongtinbenhnhan.TienBaoHiemThanhToan"
+                                        label="Tiền bảo hiểm thanh toán"
+                                        [validationerror]="'TienBaoHiemThanhToan' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                    <app-textboxnumeric id="TienNguonKhac" fxFlex="20%" fxFlex.sm="40%"
+                                        [(model)]="thongtinbenhnhan.TienNguonKhac" label="Tiền nguồn khác"
+                                        [decimals]="2" format="n2" min="0" [disabled]="true"
+                                        [validationerror]="'TienNguonKhac' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                    <app-textboxnumeric id="TienNgoaiDanhSach" fxFlex="20%" fxFlex.sm="40%"
+                                        [(model)]="thongtinbenhnhan.TienNgoaiDinhSuat" label="Tiền ngoài danh sách"
+                                        [decimals]="2" format="n2" min="0" [disabled]="true"
+                                        [validationerror]="'TienNgoaiDanhSach' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                    <app-textboxnumeric id="NamQuyetToan" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                        min="1900" max="2090" [(model)]="thongtinbenhnhan.NamQuyetToan"
+                                        label="Năm quyết toán" type="number" format="#" [disabled]="readonly"
+                                        [validationerror]="'NamQuyetToan' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                    <app-textboxnumeric id="ThangQuyetToan" fxFlex="20%" fxFlex.sm="40%"
+                                        [required]="true" min="1" max="12" [(model)]="thongtinbenhnhan.ThangQuyetToan"
+                                        label="Tháng quyết toán" type="number" format="#" [disabled]="readonly"
+                                        [validationerror]="'ThangQuyetToan' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                    <app-combobox id="MaLoaiKCB" fxFlex="20%" fxFlex.sm="20%" label="Mã loại KCB"
+                                        [required]="true" [(model)]="thongtinbenhnhan.MaLoaiKCB" [data]="MaLoaiKCB"
+                                        [validationerror]="'MaLoaiKCB' | validationerror:validationErrors"
+                                        [disabled]="readonly" class="item-no-padding" [template]="khoaKhamTemplate"
+                                        [templateHeader]="khoaKhamTemplateHeader">
+                                        <ng-template #khoaKhamTemplateHeader let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <th width="20%">Mã</th>
+                                                    <th>Tên</th>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                        <ng-template #khoaKhamTemplate let-dataItem>
+                                            <table width="100%" class="table-combobox">
+                                                <tr>
+                                                    <td width="20%">{{dataItem.KeyId}}</td>
+                                                    <td>{{dataItem.DisplayName}}</td>
+                                                </tr>
+                                            </table>
+                                        </ng-template>
+                                    </app-combobox>
+                                    <app-textbox id="MaKhoa" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                        [(model)]="thongtinbenhnhan.MaKhoa" [disabled]="readonly" label="Mã khoa"
+                                        maxlength="15" [validationerror]="'MaKhoa' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <app-textbox id="MaCSKCB" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                        [(model)]="thongtinbenhnhan.MaCSKCB" [disabled]="readonly" label="Mã CSKCB"
+                                        maxlength="5" [validationerror]="'MaCSKCB' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <app-textbox id="MaKhuVuc" fxFlex="20%" fxFlex.sm="40%"
+                                        [(model)]="thongtinbenhnhan.MaKhuVuc" [disabled]="readonly" label="Mã Khu vực"
+                                        [validationerror]="'MaKhuVuc' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <app-textbox id="MaPhauThuatQuocTe" fxFlex="20%" fxFlex.sm="40%" maxlength="255"
+                                        [(model)]="thongtinbenhnhan.MaPhauThuatQuocTe" [disabled]="readonly"
+                                        label="Mã PTQT"
+                                        [validationerror]="'MaPhauThuatQuocTe' | validationerror:validationErrors">
+                                    </app-textbox>
+                                    <app-textboxnumeric id="CanNang" fxFlex="20%" fxFlex.sm="40%" min="1" max="200"
+                                        [(model)]="thongtinbenhnhan.CanNang" label="Cân nặng" [decimals]="2"
+                                        format="#.##" [validationerror]="'CanNang' | validationerror:validationErrors">
+                                    </app-textboxnumeric>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" fxFlex="auto">
+                            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                                <h2 class="title m-0">Hồ sơ thuốc (XML2)</h2>
+
+                                <a (click)="clickShowPopupTimMaBS()"
+                                    style="color: blue; font-size: 21px;margin-left: 22px;">Chọn mã bác sĩ</a>
+                                <button class="ml-1 mt-1 mr-2" color="primary" mat-mini-fab kendoTooltip
+                                    title="Chọn mã bác sĩ" type="button" (click)="clickShowPopupTimMaBS()"
+                                    style="padding: 0px !important;" fxFlex="none">
+                                    <mat-icon style="color: white;" [icIcon]="icEdit"></mat-icon>
+                                </button>
+
+                                <a (click)="AddNewThuoc()" style="position: absolute; right: 68px; color:blue"><i
+                                        class="k-icon k-i-plus-outline"></i>Thêm</a>
+                            </div>
+                            <div class="px-6 py-4" fxLayout="column">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px"
+                                    fxLayoutGap.lt-sm="0"
+                                    *ngFor="let item of thongtinbenhnhan.HoSoChiTietThuoc; let i = index">
+                                    <div class="card" fxFlex="column" style="padding:22px;" fxFlex="100%">
+                                        <button class="k-icon k-i-delete"
+                                            style="margin-bottom: 5px;color:red;float: right;display: block;position: relative;"
+                                            (click)="DeleteVitri(i)"></button>
+                                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                            fxLayoutGap.lt-sm="0">
+                                            <app-textbox id="MaThuoc" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                                [(model)]="item.MaThuoc " maxlength="255" label="Mã thuốc"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].MaThuoc' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-combobox id="MaNhom" fxFlex="20%" fxFlex.sm="20%" label="Mã nhóm"
+                                                [required]="true" [(model)]="item.MaNhom" [data]="MaNhom"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].MaNhom' | validationerror:validationErrors"
+                                                class="item-no-padding" [template]="khoaKhamTemplate"
+                                                [templateHeader]="khoaKhamTemplateHeader">
+                                                <ng-template #khoaKhamTemplateHeader let-dataItem>
+                                                    <table width="100%" class="table-combobox">
+                                                        <tr>
+                                                            <th width="20%">Mã</th>
+                                                            <th>Tên</th>
+                                                        </tr>
+                                                    </table>
+                                                </ng-template>
+                                                <ng-template #khoaKhamTemplate let-dataItem>
+                                                    <table width="100%" class="table-combobox">
+                                                        <tr>
+                                                            <td width="20%">{{dataItem.KeyId}}</td>
+                                                            <td>{{dataItem.DisplayName}}</td>
+                                                        </tr>
+                                                    </table>
+                                                </ng-template>
+                                            </app-combobox>
+
+                                            <app-textbox id="TenThuoc" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                                [(model)]="item.TenThuoc" maxlength="1024" label="Tên thuốc"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].TenThuoc' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="DonViTinh" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                                maxlength="50" [(model)]="item.DonViTinh" label="Đơn vị tính"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].DonViTinh' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="HamLuong" fxFlex="20%" fxFlex.sm="40%"
+                                                [disabled]="readonly" [(model)]="item.HamLuong" maxlength="1024"
+                                                label="Hàm lượng"
+                                                [validationerror]="'HamLuong' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="DuongDung" fxFlex="20%" fxFlex.sm="40%" maxlength="4"
+                                                [(model)]="item.DuongDung" label="Đường Dùng" [disabled]="readonly"
+                                                [validationerror]="'DuongDung' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="LieuDung" fxFlex="20%" fxFlex.sm="40%"
+                                                [disabled]="readonly" [(model)]="item.LieuDung" maxlength="255"
+                                                label="Liều dùng"
+                                                [validationerror]="'LieuDung' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="SoDangKy" fxFlex="20%" fxFlex.sm="40%"
+                                                [disabled]="readonly" [(model)]="item.SoDangKy" maxlength="255"
+                                                label="Số đăng ký"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].SoDangKy' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textboxnumeric id="SoLuong" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" max="999999999999999" [(model)]="item.SoLuong"
+                                                label="Số lượng" type="number" format="#.###" [disabled]="readonly"
+                                                (modelChange)="ChangeSoLuongDichVuKyThuat($event, item)" [decimals]="2"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].SoLuong' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="DonGia" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" [decimals]="2" min="1" max="999999999999999"
+                                                [disabled]="readonly" [(model)]="item.DonGia" label="Đơn giá"
+                                                type="number" format="#.###"
+                                                (modelChange)="ChangeDonGiaDichVuKyThuat($event, item)"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].DonGia' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TyLeThanhToan" fxFlex="20%" fxFlex.sm="40%"
+                                                [disabled]="readonly" [required]="true" min="0" max="100"
+                                                [(model)]="item.TyLeThanhToan" label="Tỷ lệ thanh toán" type="number"
+                                                format="#" (modelChange)="ChangeTyLeThanhToanDichVuKyThuat($event, item)"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].TyLeThanhToan' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="ThanhTien" fxFlex="20%" fxFlex.sm="40%"
+                                                [disabled]="true" [required]="true"
+                                                (modelChange)="congThucTienBaoHiemThanhToanXML2(item)"
+                                                [(model)]="item.ThanhTien" label="Thành tiền" type="number"
+                                                [decimals]="2" format="n2" min="0"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].ThanhTien' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textbox id="MaKhoa" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                                [(model)]="item.MaKhoa" maxlength="15" label="Mã Khoa"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].MaKhoa' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="MaBacSi" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                                [(model)]="item.MaBacSi" maxlength="255" label="Mã bác sĩ"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].MaBacSi' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="MaBenh" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                                [(model)]="item.MaBenh" maxlength="255" label="Mã bệnh"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].MaBenh' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-datetimepicker id="NgayYLenh" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.NgayYLenh" [required]="true" label="Ngày Y lệnh"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].NgayYLenh' | validationerror:validationErrors">
+                                            </app-datetimepicker>
+                                            <app-textbox id="ThongTinThau" fxFlex="20%" fxFlex.sm="40%" maxlength="255"
+                                                [(model)]="item.ThongTinThau" label="Thông tin thầu"
+                                                [disabled]="readonly"
+                                                [validationerror]="'ThongTinThau' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textboxnumeric id="PhamVi" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" min="1" max="2" [(model)]="item.PhamVi"
+                                                label="Phạm vi" type="number" format="#" [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].PhamVi' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="MucHuong" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" min="0" max="100" [(model)]="item.MucHuong"
+                                                label="Mức hưởng" type="number" format="#" [disabled]="readonly"
+                                                (modelChange)="congThucTienBaoHiemThanhToanXML2(item)"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].MucHuong' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TienBenhNhanTuTra" fxFlex="20%" fxFlex.sm="40%"
+                                                min="0" [decimals]="2" [(model)]="item.TienBenhNhanTuTra"
+                                                label="Tiền người bệnh thanh toán" type="number" format="#.##"
+                                                [disabled]="readonly"
+                                                (modelChange)="congThucTienBaoHiemThanhToanXML2(item)"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].TienBenhNhanTuTra' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TienNguonKhac" fxFlex="20%" fxFlex.sm="40%"
+                                                [decimals]="2" [(model)]="item.TienNguonKhac" label="Tiền nguồn khác"
+                                                type="number" format="#.##" [disabled]="readonly"
+                                                (modelChange)="congThucTienBaoHiemThanhToanXML2(item)"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].TienNguonKhac' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TienBaoHiemThanhToan" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" [(model)]="item.TienBaoHiemThanhToan"
+                                                label="Tiền bảo hiểm thanh toán" [decimals]="2" format="n2"
+                                                [disabled]="true"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].TienBaoHiemThanhToan' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TienBenhNhanCungChiTra" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.TienBenhNhanCungChiTra" label="Tiền NB cùng chi trả"
+                                                [decimals]="2" format="n2" [disabled]="true"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].TienBenhNhanCungChiTra' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TienNgoaiDanhSach" fxFlex="20%" fxFlex.sm="40%"
+                                                [decimals]="2" [(model)]="item.TienNgoaiDinhSuat"
+                                                (modelChange)="totalTienNguoiBenhXML1()" label="Tiền ngoài danh sách"
+                                                type="number" format="#.##" [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].TienNgoaiDanhSach' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-combobox id="MaPhuongThucThanhToan" fxFlex="20%" fxFlex.sm="20%"
+                                                label="Mã Phương thức thanh toán" [required]="true"
+                                                [disabled]="readonly" [data]="MaPhuongThucThanhToan"
+                                                [(model)]="item.MaPhuongThucThanhToan"
+                                                [validationerror]="'HoSoChiTietThuoc['+i+'].MaPhuongThucThanhToan' | validationerror:validationErrors"
+                                                class="item-no-padding" [template]="khoaKhamTemplate"
+                                                [templateHeader]="khoaKhamTemplateHeader">
+                                                <ng-template #khoaKhamTemplateHeader let-dataItem>
+                                                    <table width="100%" class="table-combobox">
+                                                        <tr>
+                                                            <th width="20%">Mã</th>
+                                                            <th>Tên</th>
+                                                        </tr>
+                                                    </table>
+                                                </ng-template>
+                                                <ng-template #khoaKhamTemplate let-dataItem>
+                                                    <table width="100%" class="table-combobox">
+                                                        <tr>
+                                                            <td width="20%">{{dataItem.KeyId}}</td>
+                                                            <td>{{dataItem.DisplayName}}</td>
+                                                        </tr>
+                                                    </table>
+                                                </ng-template>
+                                            </app-combobox>
+                                            <br />
+                                        </div>
+                                    </div>
+                                    <div style="padding-top: 10px;"></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" fxFlex="auto">
+                            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                                <h2 class="title m-0">Dịch vụ kỹ thuật (XML3)</h2>
+                                <a (click)="AddDichVuKyThuat()" style="position: absolute; right: 68px; color:blue"><i
+                                        class="k-icon k-i-plus-outline"></i>Thêm</a>
+                            </div>
+                            <div class="px-6 py-4" fxLayout="column">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px"
+                                    fxLayoutGap.lt-sm="0"
+                                    *ngFor="let item of thongtinbenhnhan.HoSoChiTietDVKT; let i = index">
+                                    <div class="card" fxFlex="column" style="padding:22px;" fxFlex="100%">
+                                        <button class="k-icon k-i-delete"
+                                            style="margin-bottom: 5px;color:red;float: right;display: block;position: relative;"
+                                            (click)="DeleteVitriDVKT(i)"></button>
+                                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                            fxLayoutGap.lt-sm="0">
+                                            <app-textbox id="MaDichVu" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.MaDichVu " maxlength="255" label="Mã dịch vụ"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].MaDichVu' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="MaVatTu" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.MaVatTu" maxlength="255" label="Mã vật tư"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].MaVatTu' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-combobox id="MaNhom" fxFlex="20%" fxFlex.sm="20%" label="Mã nhóm"
+                                                [required]="true" [data]="MaNhomDVKT" [(model)]="item.MaNhom"
+                                                [modelText]="item.MaNhomText" [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].MaNhom' | validationerror:validationErrors"
+                                                class="item-no-padding" [template]="khoaKhamTemplate"
+                                                [templateHeader]="khoaKhamTemplateHeader"
+                                                (modelChange)="modelChangeMaNhomDVKT($event)">
+                                                <ng-template #khoaKhamTemplateHeader let-dataItem>
+                                                    <table width="100%" class="table-combobox">
+                                                        <tr>
+                                                            <th width="20%">Mã</th>
+                                                            <th>Tên</th>
+                                                        </tr>
+                                                    </table>
+                                                </ng-template>
+                                                <ng-template #khoaKhamTemplate let-dataItem>
+                                                    <table width="100%" class="table-combobox">
+                                                        <tr>
+                                                            <td width="20%">{{dataItem.KeyId}}</td>
+                                                            <td>{{dataItem.DisplayName}}</td>
+                                                        </tr>
+                                                    </table>
+                                                </ng-template>
+                                            </app-combobox>
+                                            <app-textbox id="GoiVatTuYTe" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.GoiVatTuYTe" label="Gói vật tư" [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].GoiVatTuYTe' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="TenVatTu" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.TenVatTu" maxlength="1024" label="Tên vật tư"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].TenVatTu' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="TenDichVu" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.TenDichVu" label="Tên dịch vụ" maxlength="1024"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].TenDichVu' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="DonViTinh" fxFlex="20%" fxFlex.sm="40%" maxlength="50"
+                                                [(model)]="item.DonViTinh" label="Đơn vị tính" [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].DonViTinh' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textboxnumeric id="PhamVi" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" min="1" max="2" [(model)]="item.PhamVi"
+                                                label="Phạm vi" type="number" format="#" [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].PhamVi' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="SoLuong" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" max="999999999999999" [(model)]="item.SoLuong"
+                                                label="Số lượng" type="number" format="#.###" [decimals]="2"
+                                                [disabled]="readonly"
+                                                (modelChange)="ChangeSoLuongHoSoThuoc($event, item)"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].SoLuong' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="DonGia" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" min="1" max="999999999999999" [(model)]="item.DonGia"
+                                                label="Đơn giá" type="number" format="#.###" [decimals]="2"
+                                                [disabled]="readonly"
+                                                (modelChange)="ChangeDonGiaHoSoThuoc($event, item)"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].DonGia' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textbox id="ThongTinThau" fxFlex="20%" fxFlex.sm="40%" maxlength="255"
+                                                [(model)]="item.ThongTinThau" label="Thông tin thầu"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].ThongTinThau' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textboxnumeric id="TyLeThanhToan" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" min="0" max="100" [(model)]="item.TyLeThanhToan"
+                                                label="Tỷ lệ thanh toán" type="number" format="#" [disabled]="readonly"
+                                                (modelChange)="ChangeTyLeThanhToanHoSoThuoc($event, item)"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].TyLeThanhToan' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="ThanhTien" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" min="0" [(model)]="item.ThanhTien" label="Thành tiền"
+                                                type="number" format="n2" [decimals]="2" [disabled]="true"
+                                                (modelChange)="congThucTienBaoHiemThanhToanXML3(item)"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].ThanhTien' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TienThanhToanToiDa" fxFlex="20%" fxFlex.sm="40%"
+                                                min="0" [(model)]="item.TienThanhToanToiDa"
+                                                label="Mức thanh toán tối đa" type="number" format="#.##" [decimals]="2"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].TienThanhToanToiDa' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="MucHuong" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" min="0" max="100" [(model)]="item.MucHuong"
+                                                label="Mức hưởng" type="number" format="#" [disabled]="readonly"
+                                                (modelChange)="congThucTienBaoHiemThanhToanXML3(item)"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].MucHuong' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TienNguonKhac" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.TienNguonKhac" label="Tiền nguồn khác" type="number"
+                                                format="#.##" [decimals]="2" [disabled]="readonly"
+                                                (modelChange)="congThucTienBaoHiemThanhToanXML3(item)"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].TienNguonKhac' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TienBenhNhanTuTra" fxFlex="20%" fxFlex.sm="40%"
+                                                min="0" [(model)]="item.TienBenhNhanTuTra"
+                                                label="Tiền người bệnh thanh toán" type="number" format="#.##"
+                                                [decimals]="2" [disabled]="readonly"
+                                                (modelChange)="congThucTienBaoHiemThanhToanXML3(item)"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].TienBenhNhanTuTra' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TienBaoHiemThanhToan" fxFlex="20%" fxFlex.sm="40%"
+                                                [required]="true" [(model)]="item.TienBaoHiemThanhToan"
+                                                label="Tiền bảo hiểm thanh toán" type="number" [decimals]="2"
+                                                format="n2" [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].TienBaoHiemThanhToan' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TienBenhNhanCungChiTra" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.TienBenhNhanCungChiTra" label="Tiền NB cùng chi trả"
+                                                type="number" [decimals]="2" format="n2" [disabled]="true"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].TienBenhNhanCungChiTra' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textboxnumeric id="TienNgoaiDanhSach" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.TienNgoaiDinhSuat" label="Tiền ngoài danh sách"
+                                                type="number" format="#.##" [disabled]="readonly"
+                                                (modelChange)="totalTienNguoiBenhXML1()"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].TienNgoaiDanhSach' | validationerror:validationErrors">
+                                            </app-textboxnumeric>
+                                            <app-textbox id="MaKhoa" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                                [(model)]="item.MaKhoa" maxlength="15" label="Mã khoa"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].MaKhoa' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="MaGiuong" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.MaGiuong" maxlength="14" label="Mã Giường"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].MaGiuong' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="MaBacSi" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                                [(model)]="item.MaBacSi" maxlength="255" label="Mã bác sĩ"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].MaBacSi' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="MaBenh" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                                [(model)]="item.MaBenh" maxlength="255" label="Mã bệnh"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].MaBenh' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-datetimepicker id="NgayYLenh" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.NgayYLenh" [required]="true" label="Ngày Y lệnh"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].NgayYLenh' | validationerror:validationErrors">
+                                            </app-datetimepicker>
+                                            <app-datetimepicker id="NgayKetQua" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.NgayKetQua" label="Ngày kết quả"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].NgayKetQua' | validationerror:validationErrors">
+                                            </app-datetimepicker>
+                                            <app-combobox id="MaPhuongThucThanhToan" fxFlex="20%" fxFlex.sm="20%"
+                                                label="Mã Phương thức thanh toán" [required]="true"
+                                                [data]="MaPhuongThucThanhToan" [(model)]="item.MaPhuongThucThanhToan"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDVKT['+i+'].MaPhuongThucThanhToan' | validationerror:validationErrors"
+                                                class="item-no-padding" [template]="khoaKhamTemplate"
+                                                [templateHeader]="khoaKhamTemplateHeader">
+                                                <ng-template #khoaKhamTemplateHeader let-dataItem>
+                                                    <table width="100%" class="table-combobox">
+                                                        <tr>
+                                                            <th width="20%">Mã</th>
+                                                            <th>Tên</th>
+                                                        </tr>
+                                                    </table>
+                                                </ng-template>
+                                                <ng-template #khoaKhamTemplate let-dataItem>
+                                                    <table width="100%" class="table-combobox">
+                                                        <tr>
+                                                            <td width="20%">{{dataItem.KeyId}}</td>
+                                                            <td>{{dataItem.DisplayName}}</td>
+                                                        </tr>
+                                                    </table>
+                                                </ng-template>
+                                            </app-combobox>
+                                            <br />
+                                        </div>
+                                    </div>
+                                    <div style="padding-top: 10px;"></div>
+                                    <div></div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" fxFlex="auto">
+                            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                                <h2 class="title m-0">Dịch vụ kỹ thuật cận lâm sàng (XML4)</h2>
+                                <a (click)="AddDichVuKyThuatCanLamSang()"
+                                    style="position: absolute; right: 68px; color:blue"><i
+                                        class="k-icon k-i-plus-outline"></i>Thêm</a>
+                            </div>
+                            <div class="px-6 py-4" fxLayout="column">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px"
+                                    fxLayoutGap.lt-sm="0"
+                                    *ngFor="let item of thongtinbenhnhan.HoSoCanLamSang; let i = index">
+                                    <div class="card" fxFlex="column" style="padding:22px;" fxFlex="100%">
+                                        <button class="k-icon k-i-delete"
+                                            style="margin-bottom: 5px;color:red;float: right;display: block;position: relative;"
+                                            (click)="DeleteVitrilamsang(i)"></button>
+                                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                            fxLayoutGap.lt-sm="0">
+                                            <app-textbox id="MaDichVu" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                                [(model)]="item.MaDichVu " maxlength="50" label="Mã dịch vụ"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoCanLamSang['+i+'].MaDichVu' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="MaChiSo" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.MaChiSo" maxlength="50" label="Mã chỉ số"
+                                                [disabled]="readonly"
+                                                [validationerror]="'MaChiSo' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="TenChiSo" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.TenChiSo" maxlength="255" label="Tên chỉ số"
+                                                [disabled]="readonly"
+                                                [validationerror]="'TenChiSo' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="GiaTri" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.GiaTri" maxlength="255" label="Giá trị"
+                                                [disabled]="readonly"
+                                                [validationerror]="'GiaTri' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="MaMay" fxFlex="20%" fxFlex.sm="40%" maxlength="50"
+                                                [(model)]="item.MaMay" label="Mã máy" [disabled]="readonly"
+                                                [validationerror]="'MaMay' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="MoTa" fxFlex="20%" fxFlex.sm="40%" [(model)]="item.MoTa"
+                                                maxlength="4000" label="Mô tả" [disabled]="readonly"
+                                                [validationerror]="'MoTa' | validationerror:validationErrors">
+                                            </app-textbox>
+
+                                            <app-textbox id="KetLuan" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.KetLuan" maxlength="4000" label="Kêt luận"
+                                                [disabled]="readonly"
+                                                [validationerror]="'KetLuan' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-datetimepicker id="NgayKQ" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.NgayKQ" label="Ngày kết quả" [required]="true"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoSoCanLamSang['+i+'].NgayKQ' | validationerror:validationErrors">
+                                            </app-datetimepicker>
+                                            <br />
+                                        </div>
+                                    </div>
+                                    <div style="padding-top: 10px;"></div>
+                                    <div></div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card" fxFlex="auto">
+                            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                                <h2 class="title m-0">Hồ sơ chi tiết diễn biến bệnh (XML5)</h2>
+                                <a (click)="AddDienBienBenh()" style="position: absolute; right: 68px; color:blue"><i
+                                        class="k-icon k-i-plus-outline"></i>Thêm</a>
+                            </div>
+                            <div class="px-6 py-4" fxLayout="column">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px"
+                                    fxLayoutGap.lt-sm="0"
+                                    *ngFor="let item of thongtinbenhnhan.HoSoChiTietDienBienBenh; let i = index">
+                                    <div class="card" fxFlex="column" style="padding:22px;" fxFlex="100%">
+                                        <button class="k-icon k-i-delete"
+                                            style="margin-bottom: 5px;color:red;float: right;display: block;position: relative;"
+                                            (click)="DeleteVitriDienBien(i)"></button>
+                                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                            fxLayoutGap.lt-sm="0">
+                                            <app-textbox id="DienBien" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.DienBien " maxlength="4000" label="Diễn biến"
+                                                [disabled]="readonly" [required]="true"
+                                                [validationerror]="'HoSoChiTietDienBienBenh['+i+'].DienBien' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="HoiChuan" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.HoiChuan" maxlength="4000" label="Hội chẩn"
+                                                [disabled]="readonly"
+                                                [validationerror]="'HoiChuan' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-textbox id="PhauThuat" fxFlex="20%" fxFlex.sm="40%" maxlength="4000"
+                                                [(model)]="item.PhauThuat" label="Phẫu thuật" [disabled]="readonly"
+                                                [validationerror]="'PhauThuat' | validationerror:validationErrors">
+                                            </app-textbox>
+                                            <app-datetimepicker id="NgayYLenh" fxFlex="20%" fxFlex.sm="40%"
+                                                [(model)]="item.NgayYLenh" label="Ngày Y lệnh" [disabled]="readonly"
+                                                [validationerror]="'HoSoChiTietDienBienBenh['+i+'].NgayYLenh' | validationerror:validationErrors">
+                                            </app-datetimepicker>
+                                            <br />
+                                        </div>
+                                    </div>
+                                    <div style="padding-top: 10px;"></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sticky-button-action py-3 text-right" kendoTooltip>
+                            <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" fxFlex="100%"
+                                style="padding: 25px !important">
+                                <ng-container>
+                                    <button type="button" mat-raised-button (click)="backToList()" title="Phím tắt: ESC">
+                                        Hủy
+                                    </button>
+                                    <button type="button" style="background-color: rgb(14, 216, 172); color: white;"
+                                            mat-button class="mr-1" mat-raised-button
+                                            (click)="downloadThongTinXMLNguoiBenh()" title="Phím tắt: Ctrl + D"><i
+                                                class="ft-save"></i><i class="k-icon k-i-download"
+                                                style="margin-right: 5px;margin-bottom: 3px;"></i>Xuất XML</button>
+                                        <button style="margin-right: 5px;margin-bottom: 3px;" type="button"
+                                            (click)="capNhatThongTinHoSoGiamDinh()" color="primary" mat-raised-button
+                                            title="Phím tắt: Ctrl + S"><i class="ft-save"></i>
+                                            Cập nhật thông tin</button>
+                                        <button style="margin-right: 5px;margin-bottom: 3px;" type="button"
+                                            (click)="goiHoSoGiamDinhNguoiBenh()" color="primary"
+                                            title="Phím tắt: Ctrl + S" mat-raised-button><i class="ft-save"></i>
+                                            Gửi trực tiếp lên Bộ Y Tế</button>
+                                </ng-container>
+                            </mat-dialog-actions>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,308 @@
+export class TongHopDuTruMuaTaiKhoaDuoc {
+    constructor(
+        public Id : number = 0,
+        public SoPhieu: string = null,
+        public Khoa: string = null,
+        public KhoaId: number = null,
+        public TenKhoa: string = null,
+        public KhoId: number = null,
+        public TenKho: string = null,
+        public NguoiYeuCauId: string = null,
+        public TenNguoiYeuCau: string = null,
+        public NgayYeuCau: Date = null,
+        public TrangThai: string = null,
+        public TrangThaiHienThi: string = null,
+        public NgayKhoaDuocDuyet: string = null,
+        public NgayGiamDocDuyet: string = null,
+        public KyDuTru : string = null,
+        public KyDuTruId : number = null,
+        public LoaiDuTru : string = null,
+        public LoaiDuTruId : number = null,
+        public GhiChu : string = null,
+        public LyDoTruongKhoaTuChoi :string = null,
+        public LoaiDuyet : boolean = null,
+        public ThongTinChiTietTongHopDuTruTuaTaiKhoaDuocList : ThongTinChiTietTongHopDuTruTuaTaiKhoaDuoc[]=[],
+        public ListDuTruMuaDuocPhamKhoDuocChiTiet :DuTruMuaDuocPhamKhoDuocChiTietList[]=[]
+
+    ) { }
+}
+export class DuTruMuaDuocPhamKhoDuocChiTietList {
+    constructor(
+        public Id : number = 0,
+        public DuTruMuaDuocPhamId : number = 0,
+        public DuTruMuaDuocPhamTheoKhoaId : number = 0,
+        public DuocPhamId : number =0,
+        public LaDuocPhamBHYT: boolean = null,
+        public SoLuongDuTru : number =null,
+        public SoLuongDuKienSuDung : number =null,
+        public  NhomDieuTriDuPhong: string =null,
+        public SoLuongDuTruTruongKhoaDuyet : number =null,
+        public SoLuongDuTruKhoDuocDuyet: number = null,
+        public DuTruMuaDuocPhamTheoKhoaChiTietId : number =null,
+        public DuTruMuaDuocPhamKhoDuocChiTietId : number =null,
+    ) { }
+}
+export class ThongTinChiTietTongHopDuTruTuaTaiKhoaDuoc {
+    constructor(
+        public Id : number = 0,
+        public STT : number =0,
+        public Loai: boolean = null,
+        public TenLoai : string =null,
+        public DuocPhamId : number = null,
+        public TenDuocPham : string =null,
+        public  HoatChat: string =null,
+        public NongDoVaHamLuong : string =null,
+        public SĐK : string =null,
+        public DuTruMuaDuocPhamTheoKhoaId : number = 0,
+        public DVT : string =null,
+        public DD : string =null,
+        public NhaSX : string =null,
+        public NuocSX : string =null,
+        public NhomDieuTriDuPhong : string =null,
+        public SLDuTru : number =null,
+        public SLDuKienSuDungTrongKho : number =null,
+        public KhoDuTruTon : number =null,
+        public HDChuaNhan : number =null,
+        public SLDuTruTKhoDuyet : number =null,
+        public SLDuTruKhoDuocDuyet : number =null,
+        public KhoTongTon : number =null,
+        public thongTinChiTietTongHopDuTruTuaTaiKhoaDuocListChild : ThongTinChiTietTongHopDuTruTuaTaiKhoaDuocChild[]=[]
+    ) { }
+}
+export class ThongTinChiTietTongHopDuTruTuaTaiKhoaDuocChild {
+    constructor(
+        public STT: number = 0,
+        public Nhom: string = null,
+        public Kho: string = null,
+        public TuNgay: string = null,
+
+        public DenNgay: string = null,
+        public SLDuTru: number=null,
+        public SLDuKienTrongKy: number =null,
+        public DuTruMuaDuocPhamTheoKhoaId: number=null,
+        public DuTruMuaDuocPhamTheoKhoaChiTietId: number=null,
+        public DuTruMuaDuocPhamId: number=null,
+        public DuTruMuaDuocPhamChiTietId: number=null,
+        public KyDuTru: string = null,
+    ) { }
+}
+export class TongHopDuTruTuaTaiKhoaDuocSearch {
+    constructor(
+        public ChoDuyet : boolean = true,
+        public ChoGoi : boolean = true,
+        public SearchString: string = null,
+
+        
+        public RangeNhap: RangeDate = new RangeDate(),
+        public RangeDuyet: RangeDate = new RangeDate()
+    ) { }
+}
+export class TongHopDuTruTuaTaiKhoaDuocSearchDaXuLy {
+    constructor(
+        public DaGoiVaDangChoDuyet: boolean = true,
+        public TuChoiDuyet: boolean = true,
+        public DaDuyet: boolean = true,
+        public SearchString: string = null,
+
+        
+        // public RangeNhap: RangeDate = new RangeDate(),
+        public RangeDuyet: RangeDate = new RangeDate()
+    ) { }
+}
+export class TongHopDuTruTuaTaiKhoaDuocSearchTuChoi {
+    constructor(
+        public SearchString: string = null,
+        public RangeNhap: RangeDate = new RangeDate(),
+        // public RangeDuyet: RangeDate = new RangeDate()
+    ) { }
+}
+export class RangeDate {
+    constructor(
+        public startDate: Date = null,
+        public endDate: Date = null,
+    ) { }
+}
+export class TrangThaiDuyet{
+    constructor(
+        public TenTrangThai: string = null,
+        public DuocDuyet: boolean = null
+    ) { }
+}
+export class DuTruMuaDuocPhamKhoDuoc{
+    constructor(
+        public Id: number = null,
+        public LyDoTruongKhoaTuChoi :string = null,
+        public LoaiDuyet : boolean = null,
+        public ListDuTruMuaDuocPhamKhoDuocChiTiet : DuTruMuaDuocPhamKhoDuocChiTiet[] = []
+    ) { }
+}
+export class DuTruMuaDuocPhamKhoDuocChiTiet{
+    constructor(
+        public DuTruMuaDuocPhamId: number = null,
+        public DuTruMuaDuocPhamTheoKhoaId: number = null,
+        public DuocPhamId: number = null,
+        public LaDuocPhamBHYT: boolean = null,
+        public SoLuongDuTru: number = null,
+        public SoLuongDuKienSuDung: number = null,
+        public SoLuongDuTruTruongKhoaDuyet: number = null,
+        public SoLuongDuTruKhoDuocDuyet: number = null,
+        public NhomDieuTriDuPhong: number = null,
+        public DuTruMuaDuocPhamTheoKhoaChiTietId: number = null,
+        public DuTruMuaDuocPhamKhoDuocChiTietId: number = null,
+    ) { }
+}
+
+ // goi
+
+export class DuTruMuaTaiKhoaDuocGoi {
+    constructor(
+        public Id : number = 0,
+        public KyDuTru: string = null,
+        public KyDuTruId: number = null,
+        public TenNguoiYeuCau : string = null,
+        public NguoiYeuCauId : number = 0,
+        public TrangThai: string = null,
+        public TrangThaiHienThi: string = null,
+        public GhiChu :string = null,
+        public TuNgay :Date = null,
+        public DenNgay :Date = null,
+        public NgayYeuCau : Date = null,
+        public LyDoTuChoi : string = null,
+        public  ListDuTruDuocPhamId  :number[]=[],
+        public  ListDuTruDuocPhamTheoKhoaId  :number [] =[],
+        
+        public thongTinChiTietTongHopDuTruTuaTaiKhoaDuocGoiList : ThongTinChiTietTongHopDuTruTuaTaiKhoaDuoc[]=[],
+    ) { }
+}
+export class ThongTinChiTietTongHopDuTruMuaTaiKhoaDuoc {
+    constructor(
+        public Id : number = 0,
+        public STT : number =0,
+        public Loai: boolean = null,
+        public TenLoai : string =null,
+        public DuocPhamId : number = null,
+        public TenDuocPham : string =null,
+        public  HoatChat: string =null,
+        public NongDoVaHamLuong : string =null,
+        public SĐK : string =null,
+        public DuTruMuaDuocPhamTheoKhoaId : number = 0,
+        public DVT : string =null,
+        public DD : string =null,
+        public NhaSX : string =null,
+        public NuocSX : string =null,
+        public NhomDieuTriDuPhong : string =null,
+        public SLDuTru : number =null,
+        public SLDuKienSuDungTrongKho : number =null,
+        public KhoDuTruTon : number =null,
+        public HDChuaNhan : number =null,
+        public SLDuTruTKhoDuyet : number =null,
+        public SLDuTruKhoDuocDuyet : number =null,
+        public KhoTongTon : number =null,
+        public ThongTinChiTietTongHopDuTruTuaTaiKhoaDuocChildList : ThongTinChiTietTongHopDuTruTuaTaiKhoaDuocChild[]=[]
+    ) { }
+}
+// phieu in 
+export class PhieuInDuTruMuaTaiKhoaDuoc {
+    constructor(
+        public DuTruMuaDuocPhamTheoKhoaId: number = 0,
+        public HostingName: string = null,
+        public Header: boolean = null      
+    ) {
+    }
+   
+}
+export  class DuTruMuaDuocPhamTaiKhoaDuoc
+{
+    constructor(
+        public Id : number = 0,
+        public SoPhieu: string = null,
+        public NhanVienYeuCauId: number = 0,
+        public NgayYeuCau : Date = null,
+        public TuNgay: Date = null  ,
+        public DenNgay: Date = null     ,
+        public GhiChu: string = null    ,
+        public GiamDocDuyet: string = null    ,
+        public GiamDocId: string = null    ,
+        public NgayGiamDocDuyet: string = null    ,
+        public LyDoGiamDocTuChoi: string = null    ,
+        public KyDuTruMuaDuocPhamVatTuId: number = 0,
+        public  ListDuTruDuocPhamId  :number[]=[],
+        public  ListDuTruDuocPhamTheoKhoaId  :number [] =[],
+        public  ListDuTruDuocPhamChiTietId  :number[]=[],
+        public  ListDuTruDuocPhamTheoKhoaChiTietId  :number [] =[],
+        public DuTruMuaDuocPhamKhoDuocChiTiet: DuTruMuaDuocPhamKhoDuocChiTiets[] = []    ,
+    ) {
+    }
+   
+}
+// view 
+export class DuTruView {
+    constructor(
+        public SoPhieu: string = null,
+        public KyDuTruDisplay: string = null,
+        public KyDuTru: string = null,
+        public NguoiYeuCau: string = null,
+        public NguoiDuyet: string = null,
+        public NgayYeuCauDisplay: string = null,
+        public Id: number = null,
+        public NgayYeuCau: any = null,
+        public NgayDuyetDisplay: string = null,
+        public LyDoGiamDocTuChoi: string = null,
+        public NgayDuyet: any = null,
+        public GhiChu: string = null,
+        public TrangThai: boolean = null, // null: chờ, true: đã duyệt, false: từ chối duyệt
+        public TrangThaiDisplay: string = null,
+        public DuTruGiamDocDetails: DuTruViewDetail[] = []
+    ) { }
+}
+
+export class DuTruViewDetail {
+    constructor(
+        public Loai: string = null,
+        public IsBhyt: boolean = null,
+        public DuocPhamId: number = null,
+        public DuocPham: string = null,
+        public HoatChat: string = null,
+        public Id: number = null,
+        public NongDo: string = null,
+        public Sdk: string = null,
+        public Dvt: string = null,
+        public DuongDung: string = null,
+        public NhaSx: string = null,
+        public NuocSx: string = null,
+        public SoLuongDuTru: number = null,
+        public SoLuongDuKienTrongKy: number = null,
+        public SoLuongDuTruTrKhoa: number = null,
+        public SoLuongDuTruKhDuoc: number = null,
+        public SoLuongDuTruDirector: number = null,
+        public KhoDuTruTon: number = null,
+        public KhoTongTon: number = null,
+        public HdChuaNhap: number = null,
+        public TongTonList: any[] = [],
+        public HdChuaNhapList: any[] = []
+    ) { }
+}
+export  class DuTruMuaDuocPhamKhoDuocChiTiets
+{
+    constructor(
+        public Id : number = 0,
+        public DuocPhamId : number = 0,
+        public DuTruMuaDuocPhamKhoDuocId:  number = 0,
+        public LaDuocPhamBHYT: boolean = null,
+        public SoLuongDuTru: number = 0  ,
+        public SoLuongDuKienSuDung:  number = 0    ,
+        public SoLuongDuTruTruongKhoaDuyet:  number = 0    ,
+        public SoLuongDuTruKhoDuocDuyet:  number = 0    ,
+        public SoLuongDuTruGiamDocDuyet:  number = 0  
+        
+    ) {
+    }
+}
+export class ListStatusSelectTabTHDTKhoa {
+    constructor(
+        public selectedTabChoXuLy: boolean = true,
+        public selectedTabDaXuLy: boolean = false,
+        public selectedTabTuChoi: boolean = false,
+    ) {
+    }
+}

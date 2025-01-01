@@ -1,0 +1,34 @@
+<!--Bengin Thông tin bệnh án nội khoa-->
+<app-thong-tin-noi-khoa *ngIf="loaiThongTinBenhAn === this.loaiBenhAn.NoiKhoa" [yeuCauTiepNhanId]="yeuCauTiepNhanId" [dieuTriNoiTruModel]="dieuTriNoiTruModel"
+[LoaiBenhAn]="loaiThongTinBenhAn">
+</app-thong-tin-noi-khoa>
+<!--End Thông tin bệnh án nội khoa-->
+<!-- ================================================================================================================================== -->
+<!--Bengin Thông tin bệnh án khoa nhi-->
+<app-thong-tin-khoa-nhi [LoaiBenhAn]="loaiThongTinBenhAn"  *ngIf="loaiThongTinBenhAn === this.loaiBenhAn.NhiKhoa" [yeuCauTiepNhanId]="yeuCauTiepNhanId" [dieuTriNoiTruModel]="dieuTriNoiTruModel">
+</app-thong-tin-khoa-nhi>
+<!--Bengin Thông tin bệnh án nội khoa nhi-->
+<!-- ================================================================================================================================== -->
+<!--Bengin Thông tin bệnh án phụ khoa-->
+<app-thong-tin-benh-an-phu-khoa [LoaiBenhAn]="loaiThongTinBenhAn" *ngIf="loaiThongTinBenhAn === this.loaiBenhAn.PhuKhoa"
+    [yeuCauTiepNhanId]="yeuCauTiepNhanId" [dieuTriNoiTruModel]="dieuTriNoiTruModel">
+</app-thong-tin-benh-an-phu-khoa>
+<!--Bengin Thông tin bệnh án phụ khoa-->
+<!-- ================================================================================================================================== -->
+<!--Bengin Thông tin bệnh án ngoại khoa và thẩm mỹ-->
+<app-thong-tin-benh-an-ngoai-khoa [LoaiBenhAn]="loaiThongTinBenhAn" *ngIf="loaiThongTinBenhAn === this.loaiBenhAn.NgoaiKhoa || 
+      loaiThongTinBenhAn === this.loaiBenhAn.ThamMy" [yeuCauTiepNhanId]="yeuCauTiepNhanId" [dieuTriNoiTruModel]="dieuTriNoiTruModel">
+</app-thong-tin-benh-an-ngoai-khoa>
+<!--Bengin Thông tin bệnh án ngoại khoa và thẩm mỹ-->
+<!-- ================================================================================================================================== -->
+<!--Bengin Thông tin bệnh án sản khoa-->
+<app-thong-tin-benh-an-san-khoa-mo-thuong [LoaiBenhAn]="loaiThongTinBenhAn"
+    *ngIf="loaiThongTinBenhAn === this.loaiBenhAn.SanKhoaMo || loaiThongTinBenhAn === this.loaiBenhAn.SanKhoaThuong"
+    [yeuCauTiepNhanId]="yeuCauTiepNhanId" [dieuTriNoiTruModel]="dieuTriNoiTruModel"></app-thong-tin-benh-an-san-khoa-mo-thuong>
+<!--Bengin Thông tin bệnh án sản khoa-->
+<!-- ================================================================================================================================== -->
+<!--Bengin Thông tin bệnh án trẻ sơ sinh-->
+<app-thong-tin-tre-em-so-sinh *ngIf="loaiThongTinBenhAn === this.loaiBenhAn.TreSoSinh" [LoaiBenhAn]="loaiThongTinBenhAn"
+    [yeuCauTiepNhanId]="yeuCauTiepNhanId" [dieuTriNoiTruModel]="dieuTriNoiTruModel"></app-thong-tin-tre-em-so-sinh>
+<!--Bengin Thông tin bệnh án trẻ sơ sinh-->
+<!-- ================================================================================================================================== -->

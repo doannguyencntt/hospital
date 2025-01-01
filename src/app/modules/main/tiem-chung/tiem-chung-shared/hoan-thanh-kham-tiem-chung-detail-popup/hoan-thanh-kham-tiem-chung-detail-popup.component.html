@@ -1,0 +1,22 @@
+
+
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>THÔNG TIN KHÁM</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="max-height: 86vh;">
+    <ng-container *ngIf="yeuCauKhamTiemChung != undefined">
+        <app-thong-tin-tiem-chung-shared [documentType]="documentType" [thongTinBenhNhan]="yeuCauKhamTiemChung"
+            [isTabKhamLocChungReadOnly]="true" [isTabThucHienTiemReadOnly]="true"
+            [isTabThucHienTiemDisplayed]="isTabThucHienTiemDisplayed"
+            [isPopupLichSuTiemChung]="true">
+        </app-thong-tin-tiem-chung-shared>
+    </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" mat-dialog-close="true">Hủy</button>
+</mat-dialog-actions>

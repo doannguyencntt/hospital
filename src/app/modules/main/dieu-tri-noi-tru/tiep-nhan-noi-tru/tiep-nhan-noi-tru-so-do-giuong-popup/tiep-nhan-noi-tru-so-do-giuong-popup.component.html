@@ -1,0 +1,183 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">
+        Sơ đồ giường bệnh tại: {{data.TenKhoa}}
+    </div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose" [mat-dialog-close]=""></mat-icon>
+    </button>
+    <!-- (click)="close()" -->
+</div>
+
+<mat-dialog-content style="overflow:hidden">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-combobox fxFlex="25%" id="phongThucHienGB" label="Phòng" url="GiuongBenh/GetListPhong" class="item-no-padding"
+            [template]="phongKhamTemplate" [templateHeader]="phongKhamTemplateHeader" [(model)]="soDoGiuongFillter.PhongBenhVienId"
+            (modelChange)="getSoDoGiuong()" popupSettings="null"
+            [queryInfo]="{ParameterDependencies:'{KhoaPhongId:' +this.data.KhoaId +'}', Take: 50}">
+            <ng-template #phongKhamTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th width="80%">Tên phòng</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #phongKhamTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td width="80%">{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <div fxFlex="35%" fxFlex.sm="35%">
+            <div class="container-custom no-label">
+                <label>Tình trạng</label>
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <app-checkbox fxFlex="50%" style="color: green;" value="true" id="giuongTrong" label="Giường trống"
+                        [(model)]="soDoGiuongFillter.GiuongTrong" (modelChange)="getSoDoGiuong()"></app-checkbox>
+                    <app-checkbox fxFlex="50%" style="color: red;" value="true" id="giuongCoBenhNhan" label="Giường đã có NB"
+                        [(model)]="soDoGiuongFillter.GiuongDaCoBenhNhan" (modelChange)="getSoDoGiuong()"></app-checkbox>
+                </div>
+            </div>
+        </div>
+
+        <div fxFlex="100%">
+            <app-grid #gridSoDoGiuong
+                [gridColumns]="gridColumns" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false"
+                [useActionDefault]="false" [checkboxAble]="false" height="400" [lazyLoadPage]="true"
+                style="width: 1px;" [pageable]="false" (extOnDataBound)="onDataBoundSoDoGiuong($event)"
+                [additionalSearchString]="additionalSearchString"
+                urlGetData="DieuTriNoiTru/GetDataForGridSoDoGiuongTiepNhanNoiTru" urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridSoDoGiuongTiepNhanNoiTru">
+            </app-grid>
+        </div>
+
+        <ng-template #baoPhongTemplate let-dataItem>
+            <app-checkbox id="baoPhong{{dataItem.Id}}" label="" [disabled]="true" [(model)]="dataItem.BaoPhong">
+            </app-checkbox>
+            <!-- <input type="checkbox" id="baoPhong{{dataItem.Id}}" [(ngModel)]="dataItem.BaoPhong"> -->
+        </ng-template>
+        <ng-template #giuongTemplate let-dataItem>
+                <ng-container *ngFor="let giuong of dataItem.GiuongBenhDisplays">
+                    <ng-template #giuongInfoTemplate let-dataItem>
+                        <ng-container *ngFor="let benhNhan of giuong.BenhNhans, let i = index">
+                            <!-- <table class="table table-border" width="100%">
+                                <tr>
+                                    <td>DV giường: <b>{{benhNhan.DichVuGiuong}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Mã giường: <b>{{benhNhan.MaGiuong}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Phòng: <b>{{benhNhan.Phong}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Tầng: <b>{{benhNhan.Tang}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Số BA: <b>{{benhNhan.SoBenhAn}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Người bệnh: <b>{{benhNhan.TenBenhNhan}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Ngày vào: <b>{{benhNhan.NgayVao}}</b></td>
+                                </tr>
+                            </table> -->
+                            <ul class="tooltip-detail" width="100%">
+                                <li>
+                                    <label>DV giường: <b>{{benhNhan.DichVuGiuong}}</b></label>
+                                </li>
+                                <li>
+                                    <label>Mã giường: <b>{{benhNhan.MaGiuong}}</b></label>
+                                </li>
+                                <li>
+                                    <label>Phòng: <b>{{benhNhan.Phong}}</b></label>
+                                </li>
+                                <li>
+                                    <label>Tầng: <b>{{benhNhan.Tang}}</b></label>
+                                </li>
+                                <li>
+                                    <label>Số BA: <b>{{benhNhan.SoBenhAn}}</b></label>
+                                </li>
+                                <li>
+                                    <label>Người bệnh: <b>{{benhNhan.TenBenhNhan}}</b></label>
+                                </li>
+                                <li>
+                                    <label>Ngày vào: <b>{{benhNhan.NgayVao}}</b></label>
+                                </li>
+                                <li>
+                                    <label>Ngày ra: <b>{{benhNhan.NgayRa}}</b></label>
+                                </li>
+                                <li>
+                                    <label>Bao phòng: <b>{{benhNhan.CoBaoPhong}}</b></label>
+                                </li>
+                            </ul>
+                            <hr *ngIf="i >= 0 && i < giuong.BenhNhans.length" style="border-top: 1px dotted">
+                        </ng-container>
+                        <ng-container *ngIf="giuong.BenhNhans.length == 0">
+                            Giường trống
+                        </ng-container>
+                    </ng-template>
+
+                    <!-- <button *ngIf="giuong.IsEmpty" type="button" style="border-color: #ccc;" mat-stroked-button [disabled]="!dataItem.CoTheBaoPhong && this.data.BaoPhong"
+                        (click)="chonGiuong(dataItem, giuong)" [ngClass]="{'select':this.dataYeuCau.GiuongId==giuong.GiuongId}"
+                        class="mr-1 btn-select" kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block"
+                        [tooltipTemplate]="giuongInfoTemplate" filter="*" position="right">{{giuong.TenGiuong + ' | ' +
+                        (giuong.SoLuongBenhNhan | number: '2.0-0')}}</button> -->
+                    <!-- <button *ngIf="giuong.IsHalf" type="button" style="border-color: #ccc;" mat-stroked-button [disabled]="!dataItem.CoTheBaoPhong && this.data.BaoPhong"
+                        (click)="chonGiuong(dataItem, giuong)"
+                        [ngClass]="{'select':this.dataYeuCau.GiuongId==giuong.GiuongId, 'orange-button' : this.dataYeuCau.GiuongId!=giuong.GiuongId}"
+                        class="mr-1 btn-select" kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block"
+                        [tooltipTemplate]="giuongInfoTemplate" filter="*" position="right">{{giuong.TenGiuong + ' | ' +
+                        (giuong.SoLuongBenhNhan | number: '2.0-0')}}</button> -->
+
+                    <label *ngIf="giuong.IsEmpty" class="d-inline-block" kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block"
+                        [tooltipTemplate]="giuongInfoTemplate" filter="*" position="right">
+                        <button type="button" style="border-color: #ccc;" mat-stroked-button
+                            [disabled]="(!dataItem.CoTheBaoPhong && this.data.BaoPhong) || dataItem.DisabledPhong" (click)="chonGiuong(dataItem, giuong)"
+                            [ngClass]="{'select':this.dataYeuCau.GiuongId==giuong.GiuongId}" 
+                            class="mr-1 btn-select">{{giuong.TenGiuong + ' | ' +
+                            (giuong.SoLuongBenhNhan | number: '2.0-0')}}</button>
+                    </label>
+
+                    <label *ngIf="giuong.IsHalf" class="d-inline-block" kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block"
+                        [tooltipTemplate]="giuongInfoTemplate" filter="*" position="right">
+                        <button type="button" style="border-color: #ccc;" mat-stroked-button
+                            [disabled]="(!dataItem.CoTheBaoPhong && this.data.BaoPhong) || dataItem.DisabledPhong" (click)="chonGiuong(dataItem, giuong)"
+                            [ngClass]="{'select':this.dataYeuCau.GiuongId==giuong.GiuongId, 'orange-button' : this.dataYeuCau.GiuongId!=giuong.GiuongId}"
+                            class="mr-1 btn-select">{{giuong.TenGiuong + ' | ' +
+                            (giuong.SoLuongBenhNhan | number: '2.0-0')}}</button>
+                    </label>
+                    
+                    <label *ngIf="giuong.IsFull" class="d-inline-block" kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block"
+                        [tooltipTemplate]="giuongInfoTemplate" filter="*" position="right">
+                        <button type="button" mat-stroked-button (click)="chonGiuong(dataItem, giuong)" [disabled]="true"
+                            [ngClass]="{'not-available-select':this.dataYeuCau.GiuongId==giuong.GiuongId}"
+                            class="mr-1 red-button">{{giuong.TenGiuong + ' | ' + (giuong.SoLuongBenhNhan | number: '2.0-0')}}</button>
+                    </label>
+                </ng-container>
+        </ng-template>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <div style="margin-left: auto !important;">
+        <ng-container *ngIf="this.dataYeuCau.TenGiuong != null && this.dataYeuCau.TenGiuong!=''">
+            <span>Giường đang chọn: 
+                Giường <strong style="color:green">{{this.dataYeuCau.TenGiuong}}</strong> 
+                - Phòng: <strong style="color:green">{{this.dataYeuCau.TenPhong}}</strong>
+                - Tầng: <strong style="color:green">{{this.dataYeuCau.Tang}}</strong>
+                - Bao Phòng: <strong style="color:green">{{this.data.BaoPhong == true ? 'Có' : 'Không'}}</strong>
+            </span>
+        </ng-container>
+        <ng-container *ngIf="this.dataYeuCau.TenGiuong == null || this.dataYeuCau.TenGiuong==''">
+            Chưa chọn giường
+        </ng-container>
+    </div>
+    <!-- [mat-dialog-close]="" -->
+    <button mat-stroked-button mat-button color="primary" (click)="close()">Hủy</button>
+    <button type="button" color="primary" mat-raised-button mat-button (click)="xuLyChonGiuong()">Xác nhận</button>
+</mat-dialog-actions>

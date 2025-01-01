@@ -1,0 +1,36 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Ngày Nghỉ Hưởng Bảo Hiểm Xã Hội</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 90px;">
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div fxLayout="row wrap" fxFlex="100%" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            style="padding-top: 16px;">
+
+            <app-datepicker fxFlex="25%" label="Từ ngày" [minDate]="dateTiepNhanMin"
+                [(model)]="thongTinNgayNghiHuongBHYT.ThoiDiemTiepNhan" required="true"
+                [validationerror]="'ThoiDiemTiepNhan' | validationerror:validationErrors">
+            </app-datepicker>
+            <app-datepicker fxFlex="25%" label="Đến ngày" [minDate]="dateTiepNhanMin"
+                [(model)]="thongTinNgayNghiHuongBHYT.DenNgay" required="true"
+                [validationerror]="'DenNgay' | validationerror:validationErrors">
+            </app-datepicker>
+
+            <app-combobox fxFlex="50%" [(model)]="thongTinNgayNghiHuongBHYT.BacSiKetLuanId" popupSettings="null"
+                [modelText]="thongTinNgayNghiHuongBHYT.HoTenBacSi" id="BacSiKetLuanId" label="Bác Sĩ Khám Bệnh"
+                [queryInfo]="queryInfo" url="DanhSachChoKham/BacSiKhamBenhTiepNhan" [autoSelectFirstItem]="true"
+                bind="true" class="item-no-padding">
+            </app-combobox>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" (click)="close()" mat-stroked-button color="primary"
+        mat-dialog-close>Hủy</button>
+    <button tabindex="-1" type="button" (click)="xemGiayHuongBHXH()" mat-stroked-button color="primary"
+        class="md-primary">Xác Nhận</button>
+</mat-dialog-actions>

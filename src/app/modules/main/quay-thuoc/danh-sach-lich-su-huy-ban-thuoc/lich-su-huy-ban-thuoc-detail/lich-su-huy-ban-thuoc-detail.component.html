@@ -1,0 +1,106 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="
+                [
+                    {Title:'Nhà Thuốc',Path:''},
+                    {Title:'Chi Tiết Lịch Sử Hủy Bán Thuốc ', Path:'/lich-su-huy-ban-thuoc', Active:true}
+                ]">
+            </vex-breadcrumbs>
+            <app-hot-key
+                [keys]="[{Key:'Ctrl + S',Description:'In phiếu thu'}, {Key:'Esc',Description:'Quay lại', End:true}]">
+            </app-hot-key>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+                            <!-- Thông tin hành chính -->
+                            <!-- class="content-has-border" -->
+                            <fieldset fxFlex="100%" class="mb-3" *ngFor="let item of data">
+                                <legend>Thông tin hành chính</legend>
+                                <div class=" mt-1">
+                                    <ul class="inline">
+                                        <li>Mã NB:
+                                            <strong>{{item.MaBN}}</strong>
+                                        </li>
+                                        <li>Họ tên:
+                                            <strong>{{item.HoTen}}</strong>
+                                        </li>
+                                        <li>Giới tính:
+                                            <strong>{{item.GioiTinhHienThi}}</strong>
+                                        </li>
+                                        <li>Năm sinh:
+                                            <strong>{{item.NamSinh}}</strong>
+                                        </li>
+                                        <li>Địa chỉ:
+                                            <strong>{{item.DiaChiDayDu}}</strong>
+                                        </li>
+
+                                        <li>SĐT:
+                                            <strong>{{item.SoDienThoai}}</strong>
+                                        </li>
+                                        <li>Email:
+                                            <strong>{{item.Email}}</strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </fieldset>
+
+                            <fieldset fxFlex="100%">
+                                <legend>THÔNG TIN LỊCH SỬ BÁN THUỐC</legend>
+                                <div fxFlex="100%" class="p-3">
+                                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                        fxLayoutGap.lt-sm="0">
+                                        <app-grid *ngIf="dataSourcedanhsachThuocKhongBHYT.data.length>0" fxFlex="100%"
+                                            [gridColumns]="gridColumns"
+                                            [gridDataSource]="dataSourcedanhsachThuocKhongBHYT" [autoHeight]="true"
+                                            [lazyLoadPage]="false" [useActionDefault]="false"
+                                            [headerTemplate]="headerTemplate1" [useAddDeault]="false"
+                                            [useHeaderDefault]="false" [allowSortDefault]="false" [pageable]="false"
+                                            useActionDefault="false" [checkboxAble]="false" [lazyLoadPage]="true">
+                                            <ng-template #headerTemplate1>
+                                                <div class="px-2 py-2" style="background: lightblue;overflow: hidden;">
+                                                    <h4 style="font-weight: bold;float: left;line-height: 36px;">THUỐC
+                                                        KHÔNG BHYT-VẬT TƯ</h4>
+                                                    <button type="button" (click)="InKeThuocKhongBhyt()"
+                                                        style="float: right;" mat-raised-button>
+                                                        In kê thuốc</button>
+                                                </div>
+                                            </ng-template>
+                                        </app-grid>
+                                        <p *ngIf="dataSourcedanhsachThuocKhongBHYT.data.length == 0 && dataSourcedanhsachThuocBHYT.data.length == 0"
+                                            class="m-0 p-0 mt-2 mr-2"><strong>Không có dược phẩm nào chờ xuất</strong>
+                                        </p>
+                                        <ng-template #donGiaTemplate let-dataItem>
+                                            <span> {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}</span>
+                                        </ng-template>
+
+                                        <ng-template #thanhTienTemplate let-dataItem>
+                                            <span> {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}</span>
+                                        </ng-template>
+                                    </div>
+                                    <br>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div fxFlex="100%" class="sticky-button-action py-3 text-right">
+                            <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" kendoTooltip>
+                                <button type="button" color="white" (click)="Close()" mat-raised-button
+                                    title="Phím tắt: ESC">
+                                    Quay lại
+                                </button>
+                                <button (click)="InPhieuThu()" type="button" color="primary" mat-raised-button
+                                    title="Phím tắt: Ctrl + S">In phiếu
+                                    thu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

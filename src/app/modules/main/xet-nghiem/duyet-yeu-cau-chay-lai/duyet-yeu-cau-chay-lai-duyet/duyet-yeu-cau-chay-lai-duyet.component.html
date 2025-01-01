@@ -1,0 +1,287 @@
+<app-header-form [crumbs]="[
+        {Title:'Xét nghiệm',Path:''},
+        {Title:'DS Duyệt Yêu Cầu Chạy Lại Xét Nghiệm',Path:'/xet-nghiem/duyet-yeu-cau-chay-lai', queryParams: {holdQuery : true}},
+        {Title:'Chi tiết Duyệt Yêu Cầu Chạy Lại Xét Nghiệm',Path:'', Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chi tiết duyệt yêu cầu chạy lại xét nghiệm</h2>
+                <b *ngIf="thongTinHanhChinhXN.TrangThai === true" class="status-yeu-cau-linh ycl-cho-duyet">Chờ
+                    xử lý</b>
+                <b *ngIf="thongTinHanhChinhXN.TrangThai === false" class="status-yeu-cau-linh ycl-da-duyet">Đã
+                    xử lý</b>
+
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+                <div class="row mb-2">
+                    <!-- style="background: #e1f5fe;" -->
+                    <fieldset class="{{(thongTinHanhChinhXN != null && thongTinHanhChinhXN.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+                        <legend>Thông tin hành chính</legend>
+                        <div fxFlex="100%">
+                            <ul class="inline">
+                                <li>Barcode:
+                                    <strong>{{thongTinHanhChinhXN.MaBarCode}}</strong>
+                                </li>
+                                <li>Mã NB:
+                                    <strong>{{thongTinHanhChinhXN.MaBN}}</strong>
+                                </li>
+                                <li>Mã TN:
+                                    <strong>{{thongTinHanhChinhXN.MaTN}}</strong>
+                                </li>
+                                <li>Họ tên:
+                                    <strong>{{thongTinHanhChinhXN.HoTen}}</strong>
+                                </li>
+                                <li>Tuổi:
+                                    <strong>{{thongTinHanhChinhXN.Tuoi}}</strong>
+                                </li>
+                                <li>
+                                    Giới tính:
+                                    <strong>{{thongTinHanhChinhXN.GioiTinh}}</strong>
+                                </li>
+                                <li>
+                                    Mã số thẻ: <strong>{{thongTinHanhChinhXN.MaBhyt}}</strong>
+                                </li>
+                                <li>
+                                    Tuyến: <strong style="color: green;">{{thongTinHanhChinhXN.DungTuyen}}</strong>
+                                </li>
+                                <li>
+                                    Mức hưởng: <strong style="color: blue;">{{thongTinHanhChinhXN.MucHuong}}%</strong>
+                                </li>
+                                <li>Dân tộc:
+                                    <strong>{{thongTinHanhChinhXN.DanToc}}</strong>
+                                </li>
+                                <li>
+                                    Địa chỉ:
+                                    <strong>{{thongTinHanhChinhXN.DiaChi}}</strong>
+                                </li>
+                                <li>
+                                    Nghề nghiệp:
+                                    <strong>{{thongTinHanhChinhXN.NgheNghiep}}</strong>
+                                </li>
+
+                                <li>
+                                    Chẩn đoán: <strong>{{thongTinHanhChinhXN.ChuanDoan}}</strong>
+                                </li>
+                                <li>
+                                    Khoa chỉ định: <strong>{{thongTinHanhChinhXN.KhoaChiDinh}}</strong>
+                                </li>
+                                <li>
+                                    Phòng: <strong>{{thongTinHanhChinhXN.PhongKham}}</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="mt-2">
+                        <legend>Chi tiết kết quả xét nghiệm</legend>
+                        <div fxFlex="100%">
+                            <!-- <div class="mb-3">
+                                <div fxFlex="60%"></div>
+                                <div fxFlex="40%" class="order-color">
+                                    <div class="set-color black"></div>
+                                    <p>Bình thường</p>
+                                    <div class="set-color blue"></div>
+                                    <p>Bất thường</p>
+                                    <div class="set-color red"></div>
+                                    <p>Nguy hiểm</p>
+                                </div>
+                            </div> -->
+                            <app-grid #gridDuyetYeuCauChayLaiXN [gridColumns]="gridNhomXetNghiemColumns" [documentType]="documentType"
+                                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [headerTemplate]="headerTemplate"
+                                [checkboxAble]="false" [lazyLoadPage]="true" [allowSortDefault]="false"
+                                [autoHeight]="true" [pageable]="true" [checkboxAble]="true"
+                                (extOnDataBound)="onDataBound($event)" [detailTemplate]="dichVuTemplate"
+                                [showStt]="true" [additionalSearchString]="phienXetNghiemId"
+                                [urlGetData]="urlGetDataGridParentAsync" [urlGetTotalPage]="urlGetTotalPageParentAsync">
+                            </app-grid>
+
+                            <ng-template #headerTemplate>
+                                <div class="div-header bg-app-bar px-6 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                                    <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                                        fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                        <!-- [(ngModel)]="searchString" -->
+                                        <input type="search" name="searchString" class="px-4 py-2 border-0 outline-none w-full bg-transparent" placeholder="Nhập từ khóa tìm kiếm"
+                                            [formControl]="searchCtrl"
+                                            (ngModelChange)="searchChanges($event)"
+                                            (keyup)="onKeySearchChanges($event)"/>
+                                    </div>
+                                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+                                        <mat-icon [icIcon]="icSearch"></mat-icon>
+                                    </button>
+                    
+                                    <div fxFlex="50%" class="order-color">
+                                        <div class="set-color black"></div>
+                                        <p>Bình thường</p>
+                                        <div class="set-color blue"></div>
+                                        <p>Bất thường</p>
+                                        <div class="set-color red"></div>
+                                        <p>Nguy hiểm</p>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <ng-template #trangThaiTemplate let-dataItem>
+                                <div style="position: relative;">
+                                    <span [ngClass]="{'orangeText': dataItem.TrangThai == 1,
+                                                'greenText': dataItem.TrangThai == 2,
+                                                'redText': dataItem.TrangThai == 3}">
+                                        {{dataItem.TenTrangThai}}
+                                    </span>
+                                </div>
+                            </ng-template>
+                            <ng-template #dichVuTemplate let-dataItem>
+                                <div style="overflow: auto;">
+                                    <table style="width: 1600px;"
+                                        class="table table-hover table-bordered table-responsive-xl table-wrapper-scroll-x" style="background-color: transparent !important;">
+                                        <thead>
+                                            <th resizable class="w-350"> TÊN </th>
+                                            <th resizable style="width: 100px;"> KQ CŨ</th>
+                                            <th resizable style="width: 100px;"> KQ TỪ MÁY </th>
+                                            <th resizable style="width: 100px;"> KQ nhập tay </th>
+                                            <th resizable style="width: 100px;"> KQ duyệt</th>
+                                            <th resizable style="width: 100px;"> Đậm KQ </th>
+                                            <th resizable style="width: 100px;"> CSBT </th>
+                                            <th resizable style="width: 100px;"> ĐVT</th>
+                                            <th resizable style="width: 200px;"> Giờ tiếp nhận mẫu </th>
+                                            <th resizable style="width: 200px;"> Giờ nhận KQ </th>
+                                            <th resizable style="width: 100px;"> Máy XN</th>
+                                            <th resizable style="width: 100px;"> Người duyệt </th>
+                                            <th resizable style="width: 200px;"> Ngày duyệt </th>
+                                        </thead>
+
+                                        <tbody>
+                                            <ng-container *ngFor="let data of dataItem.datas">
+                                                <tr [class]="data.ThoiDiemDuyetKetQua == null ? 'bg-light-red' : ''">
+                                                    <td [class]="!data.IsParent ? 'pl-5' : ''"
+                                                        [style.font-weight]="data.Items !== null && data.Items.length > 0 ? 'bold' : ''">
+                                                        <ng-container *ngIf="data.IsParent">
+                                                            <span style="cursor: pointer;"
+                                                                (click)="data.expanded = !data.expanded">
+                                                                {{!data.expanded ? '+' : '&ndash;'}}
+                                                            </span>
+                                                        </ng-container>
+                                                        {{data.Ten}}
+                                                    </td>
+                                                    <ng-container *ngIf="data.IsRoot">
+                                                        <td colspan="12"></td>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="!data.IsRoot">
+                                                        <td> {{data.GiaTriCu}} </td>
+                                                        <td> {{data.GiaTriTuMay}} </td>
+                                                        <td> {{data.GiaTriNhapTay}} </td>
+                                                        <td> {{data.GiaTriDuyet}} </td>
+                                                        <td>
+                                                            <app-checkbox id="damKetQua{{data.Id}}" label=""
+                                                                [disabled]="true" [(model)]="data.ToDamGiaTri">
+                                                            </app-checkbox>
+                                                        </td>
+                                                        <td> {{data.CSBT}} </td>
+                                                        <td> {{data.DonVi}} </td>
+                                                        <td> {{data.ThoiDiemGuiYeuCauDisplay}} </td>
+                                                        <td> {{data.ThoiDiemNhanKetQuaDisplay}} </td>
+                                                        <td> {{data.TenMayXetNghiem}} </td>
+                                                        <td> {{data.NguoiDuyet}} </td>
+                                                        <td> {{data.ThoiDiemDuyetKetQuaDisplay}} </td>
+                                                    </ng-container>
+                                                </tr>
+
+                                                <ng-container *ngIf="data.expanded">
+                                                    <ng-container *ngFor="let detail of data.Items">
+                                                        <tr
+                                                            [class]="detail.ThoiDiemDuyetKetQua == null ? 'bg-light-red' : ''">
+                                                            <td [class]="!detail.IsParent ? 'pl-12' : 'pl-12'"
+                                                                [style.font-weight]="detail.Items != null && detail.Items.length > 0 ? 'bold' : ''">
+                                                                <ng-container *ngIf="detail.IsParent">
+                                                                    <span style="cursor: pointer;"
+                                                                        (click)="detail.expanded = !detail.expanded">
+                                                                        {{!detail.expanded ? '+' : '&ndash;'}}
+                                                                    </span>
+                                                                </ng-container>
+                                                                {{detail.Ten}}
+                                                            </td>
+                                                            <td> {{detail.GiaTriCu}} </td>
+                                                            <td
+                                                                [ngStyle]="{'color': (detail.LoaiKetQuaTuMay == 1 ? 'black' : (detail.LoaiKetQuaTuMay == 2 ? 'blue' : 'red') )}">
+                                                                {{detail.GiaTriTuMay}} </td>
+                                                            <td> {{detail.GiaTriNhapTay}} </td>
+                                                            <td> {{detail.GiaTriDuyet}} </td>
+                                                            <td>
+                                                                <app-checkbox id="damKetQua{{detail.Id}}" label=""
+                                                                    [disabled]="true" [(model)]="detail.ToDamGiaTri">
+                                                                </app-checkbox>
+                                                            </td>
+                                                            <td> {{detail.CSBT}} </td>
+                                                            <td> {{detail.DonVi}} </td>
+                                                            <td> {{detail.ThoiDiemGuiYeuCauDisplay}} </td>
+                                                            <td> {{detail.ThoiDiemNhanKetQuaDisplay}} </td>
+                                                            <td> {{detail.TenMayXetNghiem}} </td>
+                                                            <td> {{detail.NguoiDuyet}} </td>
+                                                            <td> {{detail.ThoiDiemDuyetKetQuaDisplay}} </td>
+                                                        </tr>
+
+                                                        <ng-container *ngIf="detail.expanded">
+                                                            <ng-container *ngFor="let detail of detail.Items">
+                                                                <tr
+                                                                    [class]="detail.ThoiDiemDuyetKetQua == null ? 'bg-light-red' : ''">
+                                                                    <td [class]="!detail.IsParent ? 'pl-12' : 'pl-12'">
+                                                                        {{detail.Ten}}</td>
+                                                                    <td> {{detail.GiaTriCu}} </td>
+                                                                    <td> {{detail.GiaTriTuMay}} </td>
+                                                                    <td> {{detail.GiaTriNhapTay}} </td>
+                                                                    <td> {{detail.GiaTriDuyet}} </td>
+                                                                    <td>
+                                                                        <app-checkbox id="damKetQua{{detail.Id}}"
+                                                                            [disabled]="true" label=""
+                                                                            [(model)]="detail.ToDamGiaTri">
+                                                                        </app-checkbox>
+                                                                    </td>
+                                                                    <td> {{detail.CSBT}} </td>
+                                                                    <td> {{detail.DonVi}} </td>
+                                                                    <td> {{detail.ThoiDiemGuiYeuCauDisplay}} </td>
+                                                                    <td> {{detail.ThoiDiemNhanKetQuaDisplay}} </td>
+                                                                    <td> {{detail.TenMayXetNghiem}} </td>
+                                                                    <td> {{detail.NguoiDuyet}} </td>
+                                                                    <td> {{detail.ThoiDiemDuyetKetQuaDisplay}} </td>
+                                                                </tr>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                            <ng-template #sttTemplate let-rowIndex="rowIndex">
+                                {{rowIndex + 1}}
+                            </ng-template>
+                            <ng-template #damKetQuaTemplate let-dataItem>
+                                <app-checkbox id="damKetQua{{dataItem.Id}}" label="" [(model)]="dataItem.DamKetQua"
+                                    disabled="{{true}}">
+                                </app-checkbox>
+                            </ng-template>
+                        </div>
+                    </fieldset>
+
+                    <div fxLayoutAlign="start end">
+                        <button type="button" mat-button class="mr-1 mt-4" (click)="quayLai()"><i
+                                class="ft-arrow-left"></i> Quay
+                            lại</button>
+                        <button *ngIf="thongTinHanhChinhXN.TrangThai === true" type="button"
+                            style="background-color: red; color: white; margin-left: auto;" mat-raised-button
+                            (click)="xuLyTuChoi()"> Từ chối</button>
+                        <button *ngIf="thongTinHanhChinhXN.TrangThai === true" type="button" class="ml-2"
+                            color="primary" mat-raised-button (click)="xuLyDuyet()">
+                            Duyệt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

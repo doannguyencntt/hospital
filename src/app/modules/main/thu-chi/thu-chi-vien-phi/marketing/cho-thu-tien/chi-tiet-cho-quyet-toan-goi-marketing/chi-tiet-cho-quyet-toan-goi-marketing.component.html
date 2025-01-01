@@ -1,0 +1,100 @@
+<vex-page-layout>
+	<vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+		<div [class.px-gutter]="true" class="w-full flex justify-between">
+			<vex-breadcrumbs [crumbs]="[
+                        {Title:'Thu Ngân',Path:''},
+                        {Title:'Viện Phí Marketing',Path:'/danh-sach-thu-goi-marketing'},
+                        {Title:'Chi Tiết Viện Phí Gói Marketing',Path:'', Active:true}                          
+            ]"></vex-breadcrumbs>
+			<app-hot-key [keys]="[          
+									{Key:'Ctrl + F1',Description:'Di chuyễn tới và mở tab gói chưa quyết toán'},
+									{Key:'Ctrl + F2',Description:'Di chuyễn tới và mở tab gói đã quyết toán'},  
+									{Key:'Ctrl + F3',Description:'Di chuyễn tới và mở tab gói thông tin phiếu thu'}, 
+									{Key:'Esc',Description:'Quay lại',End:true}
+								]">
+			</app-hot-key>
+		</div>
+	</vex-page-layout-header>
+
+	<vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+		<div class="-mt-16">
+			<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+				<div class="card" fxFlex="100%">
+					<div class="px-6 py-4" fxLayout="column" style="position: relative">
+						<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+							<fieldset fxFlex="100%" class="mb-3">
+								<legend>Thông tin hành chính</legend>
+								<div class="mt-1">
+									<ul class="inline">
+										<li>
+											Mã TN:
+											<strong>{{thongTinBenhNhan.MaYeuCauTiepNhan}}</strong>
+										</li>
+										<li>
+											Mã NB:
+											<strong>{{thongTinBenhNhan.MaBN}}</strong>
+										</li>
+										<li>
+											Họ Tên:
+											<strong>{{thongTinBenhNhan.HoTen}}</strong>
+										</li>
+										<li>
+											Năm Sinh:
+											<strong>{{thongTinBenhNhan.NamSinh}}</strong>
+										</li>
+										<li>
+											Địa chỉ:
+											<strong>{{thongTinBenhNhan.DiaChi}}</strong>
+											<strong *ngIf="thongTinBenhNhan.DiaChi === ''">Không có</strong>
+										</li>
+										<li>
+											Số điện thoại:
+											<strong>{{thongTinBenhNhan.SoDienThoai}}</strong>
+											<strong *ngIf="thongTinBenhNhan.SoDienThoai === null">Không có</strong>
+										</li>
+										<li>
+											Email:
+											<strong>{{thongTinBenhNhan.Email}}</strong>
+											<strong *ngIf="thongTinBenhNhan.Email === null">Không có</strong>
+										</li>
+									</ul>
+								</div>
+							</fieldset>
+							<div fxFlex="100%" class="mb-3">
+								<fieldset>
+									<kendo-splitter>
+										<kendo-splitter-pane style="overflow: initial">
+											<kendo-tabstrip fxFlex="100%" class="content-has-border has-padding"
+												(tabSelect)="onTabSelect($event)" #tabDanhSachThuTien>
+												<kendo-tabstrip-tab [selected]="true"
+													[title]="'Gói chưa quyết toán'">
+													<ng-template kendoTabContent>
+														<app-goi-chua-quyet-toan [ThongTinBenhNhan]="thongTinBenhNhan"
+															[TenBenhNhan]="thongTinBenhNhan.HoTen">
+														</app-goi-chua-quyet-toan>
+													</ng-template>
+												</kendo-tabstrip-tab>
+												<kendo-tabstrip-tab [title]="'Gói đã quyết toán'">
+													<ng-template kendoTabContent>
+														<app-goi-da-quyet-toan></app-goi-da-quyet-toan>
+													</ng-template>
+												</kendo-tabstrip-tab>
+												<kendo-tabstrip-tab [title]="'Thông tin phiếu thu'">
+													<ng-template kendoTabContent>
+														<app-danh-sach-phieu-thu-marketing>
+														</app-danh-sach-phieu-thu-marketing>
+													</ng-template>
+												</kendo-tabstrip-tab>
+											</kendo-tabstrip>
+										</kendo-splitter-pane>
+									</kendo-splitter>
+								</fieldset>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ng-template #actionTemplateSubmitCongNo let-dataItem let-rowIndex="rowIndex"></ng-template>
+	</vex-page-layout-content>
+</vex-page-layout>

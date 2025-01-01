@@ -1,0 +1,36 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-grid #gridDaThu fxFlex="100%" fxFlex.sm="100%" maxHeight="500" reorderRowsMoveItemData="true"
+        [gridColumns]="gridColumns" [documentType]="documentType" [additionalSearchString]="benhNhanId"
+        [urlGetData]="urlGetDanhSachBenhNhanConNo" [urlGetTotalPage]="urlGetTotalPagesBenhNhanConNo"
+        [sort]="sortDanhSachBenhNhanConNo"
+        [allowSortDefault]="true" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+        [lazyLoadPage]="true" [pageable]="true" [checkboxAble]="false"
+        (extOnDataBound)="evtDataBoundGridBenhNhanDaThu($event)">
+    </app-grid>
+
+    <ng-template #soPhieuNoTemplate let-dataItem>
+        <a (click)="xemSoPhieuNo(dataItem.SoPhieuNoId)">{{dataItem.SoPhieuNo}}</a>
+    </ng-template>
+    
+    <ng-template #ngayTemplate let-dataItem>
+        {{dataItem.NgayDisplay}}
+    </ng-template>
+    
+    <ng-template #soTienThuTemplate let-dataItem>
+        {{dataItem.SoTienThu | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    
+    <ng-template #tongTienFooterTemplate>
+        <span style="float: right;">Tổng: </span> 
+    </ng-template>
+
+    <ng-template #tongSoTienThuFooterTemplate>
+        <span style="color: #005dab ;">{{getTongTien() | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+    
+    <ng-template #actionTemplate let-dataItem>
+        <button (click)="xemSoPhieuThu(dataItem.Id)" mat-menu-item>
+            <mat-icon [icIcon]="icPrint"></mat-icon>
+        </button>
+    </ng-template>
+</div>

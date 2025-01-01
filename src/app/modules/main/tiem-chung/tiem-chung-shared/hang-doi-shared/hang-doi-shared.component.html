@@ -1,0 +1,69 @@
+<kendo-tabstrip fxFlex="100%" class="tab-no-padding-content field-set-p" (tabSelect)="onParentTabSelect($event)">
+    <kendo-tabstrip-tab [selected]="lstParentTabStatus.tabHangDoiSelected">
+        <ng-template kendoTabTitle>
+            HÀNG ĐỢI
+        </ng-template>
+        <ng-template kendoTabContent>
+            <kendo-splitter>
+                <kendo-splitter-pane [collapsible]="true" size="25%" style="max-height: 800px;" class="sticky-panelbar">
+                    <div fxLayoutAlign="start center" fxLayout="row" class="px-2 py-3">
+                        <div>
+                            <h3 class="title m-0">HÀNG ĐỢI</h3>
+                        </div>
+                        <div class="po-right d-unset">
+                            <div class="bg-card rounded-full border px-2" fxFlex="260px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px; float: right;">
+                                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                <input class="px-1 py-2 border-0 outline-none w-full bg-transparent" placeholder="Tìm kiếm mã TN/BN" type="search" name="searchString" [(ngModel)]="searchBenhNhan" (keyup)="timKiemBenhNhan($event)" (ngModelChange)="searchChange($event)" />
+                                <button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button" class="button-barcoe-in-search" kendoTooltip title="Phím tắt: Chưa có">
+                                    <img src="assets/img/barcode.png" alt="Scan barcode" />
+                                </button>
+                            </div>
+                            <app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none;"></app-barcode>
+                        </div>
+                    </div>
+                    <div class="">
+                        <app-grid #gridHangDoiKhamSangLoc fxFlex="100%" class="k-grid-border" style="width: 1px;" [allowSortDefault]="false" [autoRefreshDataSource]="true" [documentType]="documentType" [lazyLoadPage]="true" [gridColumns]="gridHangDoiColumns" [gridDataSource]="dataSourceChuanBiKham"
+                            [useAddDeault]="false" [useActionDefault]="false" [useHeaderDefault]="false" [checkboxAble]="false" [autoHeight]="true" [pageable]="false" [showStt]="true" (extEnterChangePage)="batDauKham($event)" (extDoubleClick)="batDauKham($event)">
+                        </app-grid>
+                    </div>
+                </kendo-splitter-pane>
+
+                <kendo-splitter-pane style="overflow:initial;">
+                    <app-thong-tin-tiem-chung-shared 
+                        [documentType]="documentType" [thongTinBenhNhan]="yeuCauKhamTiemChung" [phongKhamHienTai]="phongKhamHienTai"
+                        [isTabKhamLocChungReadOnly]="isTabKhamLocChungReadOnly" 
+                        [isTabThucHienTiemReadOnly]="isTabThucHienTiemReadOnly" [isTabThucHienTiemDisplayed]="isTabThucHienTiemDisplayed" 
+                        [isTabThucHienTiemDefault]="isTabThucHienTiemDefault" [isTabTheoDoiDefault]="isTabTheoDoiDefault"
+                        (outputKhamSangLocBenhNhanTiepTheo)="evtKhamSangLocBenhNhanTiepTheo($event)"
+                        (outputKhamSangLocLuuThanhCong)="evtKhamSangLocLuuThanhCong($event)"
+                        (outputClearBenhNhanHienTai)="evtClearBenhNhanHienTai($event)">
+                    </app-thong-tin-tiem-chung-shared>
+                </kendo-splitter-pane>
+            </kendo-splitter>
+        </ng-template>
+    </kendo-tabstrip-tab>
+    <kendo-tabstrip-tab [selected]="lstParentTabStatus.tabDanhSachHoanThanhKhamSelected">
+        <ng-template kendoTabTitle>
+            DANH SÁCH HOÀN THÀNH KHÁM
+        </ng-template>
+        <ng-template kendoTabContent>
+            <app-hoan-thanh-kham-list-shared
+                [documentType]="documentType" 
+                [isReadOnly]="(loaiHangDoi != hangDoiThucHienTiem && isTabKhamLocChungReadOnly) || (loaiHangDoi == hangDoiThucHienTiem && isTabThucHienTiemReadOnly)"
+                [loaiHangDoi]="loaiHangDoi">
+            </app-hoan-thanh-kham-list-shared>
+        </ng-template>
+    </kendo-tabstrip-tab>
+</kendo-tabstrip>
+
+
+<!-- #region Template hàng đợi BN -->
+<ng-template #maTNTemplate let-dataItem>
+    <a (click)="batDauKham(dataItem)">
+        <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.MaYeuCauTiepNhan}}">{{dataItem.MaYeuCauTiepNhan}}
+        </p>
+    </a>
+</ng-template>
+<ng-template #hoTenTemplate let-dataItem>
+    <p (click)="batDauKham(dataItem)" style="position: relative;">{{dataItem.HoTen}}<img *ngIf="dataItem.CoBaoHiem" src="assets/img/logoBHXH.png" class="icon-bhyt" /></p>
+</ng-template>

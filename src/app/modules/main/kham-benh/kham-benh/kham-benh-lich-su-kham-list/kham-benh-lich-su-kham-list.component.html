@@ -1,0 +1,17 @@
+<!-- <div class="card overflow-auto mb-4 mr-4"> -->
+<h3 class="p-2" style="color: chocolate;">Lịch Sử Khám Tại Bệnh Viện</h3>
+<app-grid #gridA baseRoute="" [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault]="false"
+    [useHeaderDefault]="true" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+     [urlGetData]="urlGetDataGrid" [urlGetTotalPage]="urlGetTotalPageGrid" height="300"
+    [additionalSearchString]="BenhNhan+''" [autoHeight]="true" (extDetailExpand)="detailExpand($event)" [pageSize]="10">
+</app-grid>
+
+<h3 class="p-2" style="color: chocolate;">Lịch Sử Khám Theo BHYT</h3>
+<app-grid #gridB baseRoute="" [gridColumns]="gridColumnsBHYT" [documentType]="documentType" [useAddDeault]="false"
+    [useHeaderDefault]="true" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+     [urlGetData]="urlGetDataGridBHYT" [urlGetTotalPage]="urlGetTotalPageGridBHYT" height="300"
+    [additionalSearchString]="YeuCauTiepNhanId+''" [autoHeight]="true"  [pageSize]="10">
+</app-grid>
+<ng-template #detailTemplate let-dataItem>
+    <a (click)=" detailExpand(dataItem)">{{dataItem.ThoiDiemDangKyDisplay}}</a>
+</ng-template>

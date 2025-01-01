@@ -1,0 +1,104 @@
+<ng-container *ngIf="!laChuyenKhoaKhamNhieu">
+    <h3 class="sub-title">TIỀN SỬ BỆNH
+        <button *ngIf="!isReadOnly" class="po-h" color="primary" (click)="themTienSuBenh()">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+    <ng-container *ngIf="dataSourceTienSu.data.length == 0">
+        <p>Không có tiền sử bệnh</p>
+    </ng-container>
+    <app-grid *ngIf="dataSourceTienSu.data.length > 0" masterName="TienSuBenh" [gridColumns]="gridTienSuBenhColumns"
+        [documentType]="documentType" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false"
+        [useActionDefault]="false" [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true"
+        [gridDataSource]="dataSourceTienSu" style="width: 1px;" [pageable]="false">
+    </app-grid>
+    
+</ng-container>
+
+<ng-container *ngIf="laChuyenKhoaKhamNhieu">
+    <div fxFlex="10%">
+        <h3 class="sub-title" style="margin-top: 0px !important;">TIỀN SỬ BỆNH
+            <button *ngIf="!isReadOnly" class="po-h" color="primary" (click)="themTienSuBenh()">
+                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </h3>
+    </div>
+    <div fxFlex="90%" class="ml-2">
+        <ng-container *ngIf="dataSourceTienSu.data.length == 0">
+            <span>Không có tiền sử bệnh</span>
+        </ng-container>
+    
+        <ng-container *ngIf="dataSourceTienSu.data.length > 0">
+            <table style="width: 100%">
+                <tr>
+                    <th style="width: 20%; text-align: left;">Loại tiền sử bệnh</th>
+                    <th style="width: 75%; text-align: left;">Tên bệnh</th>
+                    <th style="width: 5%"></th>
+                </tr>
+                <tr *ngFor="let dataItem of dataSourceTienSu.data, let rowIndex = index">
+                    <td>
+                        <app-dropdownlist *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [(model)]="dataItem.LoaiTienSuBenh" class="no-label"
+                            [modelText]="dataItem.TenLoaiTienSuBenh" [popupSettings]="null" url="KhamBenh/getListLoaiTienSuBenh"
+                            [required]="true" (selectionChange)="chonLoaiTienSuBenh($event, dataItem)" [disabled]="(dataItem.Id != 0 && !dataItem.IsUpdate) || isReadOnly"
+                            [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanTienSuBenhs['+rowIndex+'].LoaiTienSuBenh' | validationerror:benhNhanHienTai.validationErrors"
+                            class="no-label item-no-padding" label=" ">
+                        </app-dropdownlist>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.TenLoaiTienSuBenh}}</p>
+                    </td>
+                    <td>
+                        <app-textbox *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" maxlength="200" [(model)]="dataItem.TenBenh" class="no-label" maxlength="200"
+                            [required]="true" [disabled]="(dataItem.Id != 0 && !dataItem.IsUpdate) || isReadOnly"
+                            [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanTienSuBenhs['+rowIndex+'].TenBenh' | validationerror:benhNhanHienTai.validationErrors"
+                            label=" ">
+                        </app-textbox>
+                        <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.TenBenh}}</p>
+                    </td>
+                    <td>
+                        <div *ngIf="!isReadOnly" class="text-center" kendoTooltip>
+                            <button *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate" color="primary" kendoTooltip title="Sửa"
+                                (click)="suaTienSuBenh(dataItem)" class="btn-blue">
+                                <mat-icon [icIcon]="icEdit"></mat-icon>
+                            </button>
+                            <button color="primary" kendoTooltip title="Xóa" class="btn-blue"
+                                (click)="xoaTienSuBenh(dataItem)">
+                                <mat-icon [icIcon]="icDelete"></mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </ng-container>
+    </div>
+</ng-container>
+
+
+<!-- template -->
+<ng-template #loaiTienSuBenhTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-dropdownlist *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [(model)]="dataItem.LoaiTienSuBenh" class="no-label"
+        [modelText]="dataItem.TenLoaiTienSuBenh" [popupSettings]="null" url="KhamBenh/getListLoaiTienSuBenh"
+        [required]="true" (selectionChange)="chonLoaiTienSuBenh($event, dataItem)"
+        [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanTienSuBenhs['+rowIndex+'].LoaiTienSuBenh' | validationerror:benhNhanHienTai.validationErrors"
+        class="no-label item-no-padding" label=" ">
+    </app-dropdownlist>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.TenLoaiTienSuBenh}}</p>
+</ng-template>
+<ng-template #tienSuBenhTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox *ngIf="dataItem.Id == 0|| dataItem.IsUpdate" maxlength="200" [(model)]="dataItem.TenBenh" class="no-label"
+        maxlength="200" [required]="true"
+        [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanTienSuBenhs['+rowIndex+'].TenBenh' | validationerror:benhNhanHienTai.validationErrors"
+        label=" ">
+    </app-textbox>
+    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.TenBenh}}</p>
+</ng-template>
+<ng-template #actionTienSuBenhTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <button *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate" color="primary" mat-icon-button kendoTooltip title="Sửa" type="button"
+            (click)="suaTienSuBenh(dataItem)">
+            <mat-icon [icIcon]="icEdit"></mat-icon>
+        </button>
+        <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button"
+            (click)="xoaTienSuBenh(dataItem)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>

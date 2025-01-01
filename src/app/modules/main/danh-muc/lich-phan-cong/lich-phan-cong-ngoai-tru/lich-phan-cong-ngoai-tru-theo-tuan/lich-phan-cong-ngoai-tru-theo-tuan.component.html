@@ -1,0 +1,612 @@
+<vex-page-layout>
+        <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+                <div [class.px-gutter]="true" class="w-full flex justify-between">
+                        <div>
+                                <vex-breadcrumbs [crumbs]="[
+                                                {Title:'Danh Mục',Path:''}
+                                                ,{Title:'Lịch Phân Công',Path:''}
+                                                ,{Title:'Ngoại Trú',Path:'/danh-muc/lich-phan-cong/ngoai-tru',Active:true}
+                                                ]">
+                                </vex-breadcrumbs>
+                        </div>
+                </div>
+        </vex-page-layout-header>
+        <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+                <div class="overflow-auto -mt-15">
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                                <div class="card" fxFlex="auto" *ngIf="IsShowGirpView">
+                                        <div class="px-6 py-4 p-0 border-b" fxLayout="row wrap"
+                                                fxLayoutAlign="start center" fxLayoutAlign="space-between">
+                                                <h2 class="title m-3">{{tenkhoaphongparams}}</h2>
+
+                                                <mat-button-toggle-group class="float-right"
+                                                        style="padding-bottom: 0em;">
+                                                        <button type="button" style="height: 36px;margin-top:7px;"
+                                                                (click)="CopyCalendarLastWeek()" color="primary"
+                                                                mat-raised-button><i class="ft-save"></i> Copy dữ liệu
+                                                                từ tuần gần nhất</button>
+                                                        <mat-button-toggle (click)="prevDateLink()">
+                                                                <mat-icon [icIcon]="icChevronLeft"></mat-icon>
+                                                        </mat-button-toggle>
+                                                        <mat-button-toggle (click)="datepicker.toggle()">
+                                                                <kendo-datepicker #datepicker [weekNumber]="true"
+                                                                        style="visibility: hidden;width: 0;height: 0;"
+                                                                        (ngModelChange)="changeDateLink($event)"
+                                                                        [(ngModel)]="dateLinkValue"
+                                                                        [value]="dateLinkValue"></kendo-datepicker>
+                                                                <span [innerHTML]="dateLinkText"></span>
+                                                        </mat-button-toggle>
+                                                        <mat-button-toggle (click)="nextDateLink()">
+                                                                <mat-icon [icIcon]="icChevronRight"></mat-icon>
+                                                        </mat-button-toggle>
+                                                </mat-button-toggle-group>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+                <div class="card" *ngIf="IsShowGirpView">
+                        <div id="container">
+                                <kendo-grid id="grid" [resizable]="true" [height]="height" [data]="gridData" scrollable="scrollable"
+                                        [group]="groups" class="header-center header-small">
+                                        <kendo-grid-column id="TenPhong" field="TenPhong" title="Phòng" [width]="200" [locked]="true"
+                                                [hidden]="true">
+                                                <ng-template kendoGridGroupHeaderTemplate let-group let-field="field"
+                                                        let-value="value">
+                                                        <strong>Phòng</strong>: {{value}}
+                                                </ng-template>
+                                        </kendo-grid-column>
+                                        <kendo-grid-column id="CaTruc" field="CaTruc" title="" [width]="200" [locked]="true">
+                                        </kendo-grid-column>
+                                        <kendo-grid-column-group title="{{thu2}} ({{showDateTime.DateTimeT2}})" [width]="240"
+                                                [locked]="false">
+                                                <kendo-grid-column field="BacSi" title="Bác sĩ" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let bs of dataItem.BacSis;let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%"
+                                                                                style="position: relative; padding: 5px;"
+                                                                                *ngIf="bs.IsBacSi && bs.Thu == 2">
+                                                                                <app-combobox (selectionChange)="onSelectionChangeNV(bs,2,dataItem.BacSis,$event)"
+                                                                                        [(model)]="bs.NhanVienId"
+                                                                                        [modelText]="bs.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        style="margin-left: -10px;"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsBacSi"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].BacSis['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!bs.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.BacSis,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.BacSis,2,true)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column field="YTa" title="Y tá/ĐD" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let yt of dataItem.YTas; let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="!yt.IsBacSi && yt.Thu == 2">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(yt,2,dataItem.BacSis,$event)"
+                                                                                        [(model)]="yt.NhanVienId"
+                                                                                        [modelText]="yt.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsYta"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].YTas['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!yt.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.YTas,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.YTas,2,false)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                        </kendo-grid-column-group>
+                                        <kendo-grid-column-group title="{{thu3}} ({{showDateTime.DateTimeT3}})" [width]="240"
+                                                [locked]="false">
+                                                <kendo-grid-column field="BacSi" title="Bác sĩ" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let bs of dataItem.BacSis;let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="bs.IsBacSi && bs.Thu == 3">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(bs,3,dataItem.BacSis,$event)"
+                                                                                        [(model)]="bs.NhanVienId"
+                                                                                        [modelText]="bs.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsBacSi"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].BacSis['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!bs.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.BacSis,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.BacSis,3,true)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column field="YTa" title="Y tá/ĐD" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let yt of dataItem.YTas; let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="!yt.IsBacSi && yt.Thu == 3">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(yt,3,dataItem.YTas,$event)"
+                                                                                        [(model)]="yt.NhanVienId"
+                                                                                        [modelText]="yt.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsYta"
+                                                                                        *ngIf="!yt.IsBacSi && yt.Thu == 3"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].YTas['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!yt.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.YTas,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.YTas,3,false)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                        </kendo-grid-column-group>
+                                        <kendo-grid-column-group title="{{thu4}} ({{showDateTime.DateTimeT4}})" [width]="240"
+                                                [locked]="false">
+                                                <kendo-grid-column field="BacSi" title="Bác sĩ" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let bs of dataItem.BacSis;let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="bs.IsBacSi && bs.Thu == 4">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(bs,4,dataItem.BacSis,$event)"
+                                                                                        [(model)]="bs.NhanVienId"
+                                                                                        [modelText]="bs.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsBacSi"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].BacSis['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!bs.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.BacSis,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.BacSis,4,true)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column field="YTa" title="Y tá/ĐD" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let yt of dataItem.YTas; let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="!yt.IsBacSi && yt.Thu == 4">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(yt,4,dataItem.YTas,$event)"
+                                                                                        [(model)]="yt.NhanVienId"
+                                                                                        [modelText]="yt.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsYta"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].YTas['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!yt.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.YTas,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.YTas,4,false)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                        </kendo-grid-column-group>
+                                        <kendo-grid-column-group title="{{thu5}} ({{showDateTime.DateTimeT5}})" [width]="240"
+                                                [locked]="false">
+                                                <kendo-grid-column field="BacSi" title="Bác sĩ" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let bs of dataItem.BacSis;let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="bs.IsBacSi && bs.Thu == 5">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(bs,5,dataItem.BacSis,$event)"
+                                                                                        [(model)]="bs.NhanVienId"
+                                                                                        [modelText]="bs.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsBacSi"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].BacSis['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!bs.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.BacSis,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.BacSis,5,true)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column field="YTa" title="Y tá/ĐD" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let yt of dataItem.YTas; let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="!yt.IsBacSi && yt.Thu == 5">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(yt,5,dataItem.YTas,$event)"
+                                                                                        [(model)]="yt.NhanVienId"
+                                                                                        [modelText]="yt.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsYta"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].YTas['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!yt.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.YTas,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.YTas,5,false)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                        </kendo-grid-column-group>
+                                        <kendo-grid-column-group title="{{thu6}} ({{showDateTime.DateTimeT6}})" [width]="240"
+                                                [locked]="false">
+                                                <kendo-grid-column field="BacSi" title="Bác sĩ" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let bs of dataItem.BacSis;let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="bs.IsBacSi && bs.Thu == 6">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(bs,6,dataItem.BacSis,$event)"
+                                                                                        [(model)]="bs.NhanVienId"
+                                                                                        [modelText]="bs.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsBacSi"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].BacSis['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!bs.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.BacSis,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.BacSis,6,true)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column field="YTa" title="Y tá/ĐD" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let yt of dataItem.YTas; let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="!yt.IsBacSi && yt.Thu == 6">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(yt,6,dataItem.YTas,$event)"
+                                                                                        [(model)]="yt.NhanVienId"
+                                                                                        [modelText]="yt.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsYta"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].YTas['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!yt.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.YTas,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.YTas,6,false)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                        </kendo-grid-column-group>
+                                        <kendo-grid-column-group title="{{thu7}} ({{showDateTime.DateTimeT7}})" [width]="240"
+                                                [locked]="false">
+                                                <kendo-grid-column field="BacSi" title="Bác sĩ" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let bs of dataItem.BacSis;let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="bs.IsBacSi && bs.Thu == 7">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(bs,7,dataItem.BacSis,$event)"
+                                                                                        [(model)]="bs.NhanVienId"
+                                                                                        [modelText]="bs.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        hierarchyKeyToListen="bs.PhongNgoaiTruId"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsBacSi"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].BacSis['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!bs.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.BacSis,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.BacSis,7,true)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column field="YTa" title="Y tá/ĐD" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let yt of dataItem.YTas; let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="!yt.IsBacSi && yt.Thu == 7">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(yt,7,dataItem.YTas,$event)"
+                                                                                        [(model)]="yt.NhanVienId"
+                                                                                        [modelText]="yt.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsYta"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].YTas['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!yt.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.YTas,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.YTas,7,false)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                        </kendo-grid-column-group>
+                                        <kendo-grid-column-group title="{{cn}} ({{showDateTime.DateTimeT8}})" [width]="240"
+                                                [locked]="false">
+                                                <kendo-grid-column field="BacSi" title="Bác sĩ" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let bs of dataItem.BacSis;let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="bs.IsBacSi && bs.Thu == 8">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(bs,8,dataItem.BacSis,$event)"
+                                                                                        [(model)]="bs.NhanVienId"
+                                                                                        [modelText]="bs.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsBacSi"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].BacSis['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!bs.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.BacSis,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.BacSis,8,true)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column field="YTa" title="Y tá/ĐD" [width]="180" [locked]="false">
+                                                        <ng-template kendoGridCellTemplate let-column
+                                                                let-columnIndex="columnIndex" let-dataItem="dataItem">
+                                                                <div fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                                        fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                                                                        *ngFor="let yt of dataItem.YTas; let i = index"
+                                                                        fxLayoutAlign="space-between">
+                                                                        <div fxFlex="90%" style="position: relative;"
+                                                                                *ngIf="!yt.IsBacSi && yt.Thu == 8">
+                                                                                <app-combobox
+                                                                                        (selectionChange)="onSelectionChangeNV(yt,8,dataItem.YTas,$event)"
+                                                                                        [(model)]="yt.NhanVienId"
+                                                                                        [modelText]="yt.TenNhanVien"
+                                                                                        popupSettings="null" class="no-label"
+                                                                                        style="margin-left: -10px;"
+                                                                                        idWhere="{{KhoaPhongId}}"
+                                                                                        url="NhanVien/GetListLookupNhanVienIsYta"
+                                                                                        [validationerror]="'Phong['+dataItem.Id+'].YTas['+i+'].TenNhanVien' | validationerror:validationErrors">
+                                                                                </app-combobox>
+                                                                                <div style="position: absolute;top: 10px;right:-13px;top: 5px;"
+                                                                                        *ngIf="!yt.IsDeleteHiden">
+                                                                                        <button (click)="RemovePosition(dataItem.YTas,i,dataItem)"
+                                                                                                style="padding: 0;min-width: 25px;"
+                                                                                                mat-stroked-button>
+                                                                                                <mat-icon [icIcon]="icClose">
+                                                                                                </mat-icon>
+                                                                                        </button>
+                                                                                </div>
+                                                                        </div>
+                                                                </div>
+                                                                <button (click)="AddPosition(dataItem.YTas,8,false)"
+                                                                        mat-stroked-button style="margin-left: 20px;">
+                                                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                                                </button>
+                                                        </ng-template>
+                                                </kendo-grid-column>
+                                        </kendo-grid-column-group>
+                                </kendo-grid>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px"> 
+                                <div fxLayoutAlign="start center" fxFlex="50%" fxFlex.sm="50%" class="ml-4">
+                                        <button [disabled]= "isCopyForWeek" (click)="CopyCalendar()" mat-raised-button color="primary">Copy lịch này cho</button>                                        
+                                        <app-textboxnumeric [disabled]= "isCopyForWeek" id="week" class="no-label p-0 m-2" style="width: 70px;"
+                                        (modelChange)="onChangecopyWeek($event)" [(model)]="copyWeek"></app-textboxnumeric>
+                                        <label>tuần tới</label>
+                                </div>
+                                <div fxLayoutAlign="end center" fxFlex="50%" fxFlex.sm="50%" class="mr-4">
+                                        <button (click)="Cancel()" mat-button class="mr-1 px-6 py-0"><i
+                                                        class="ft-arrow-left "></i>Hủy</button>
+                                        <button (click)="Save()" color="primary" mat-raised-button
+                                                class="mr-1 px-6 py-o"><i class="ft-save"></i>Lưu</button>
+                                        <button (click)="SavePrint()" color="primary" mat-raised-button
+                                                class="mr-1 px-6 py-0"><i class="ft-save"></i>Lưu & In</button>
+                                </div>
+                        </div>
+                </div>
+               
+        </vex-page-layout-content>
+</vex-page-layout>
+
+<div class="card" *ngIf="!IsShowGirpView">
+        <h1 style="text-align: center;" >{{this.strPhongNotExists}}</h1>
+</div>

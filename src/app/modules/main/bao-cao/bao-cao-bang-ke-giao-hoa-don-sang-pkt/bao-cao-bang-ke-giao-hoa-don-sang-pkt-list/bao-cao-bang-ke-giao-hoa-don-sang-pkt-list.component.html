@@ -1,0 +1,64 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'Kế Toán', Path:''},
+                    {Title:'Bảng Kê Giao Hóa Đơn Sang PKT', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <!-- <app-combobox id="KhoId" fxFlex="15%" fxFlex.sm="15%" class="mt-1 on-header" label="Kho" bind="true"
+                    url="TonKho/GetKhoTatCa" [(model)]="baoCaoSearch.KhoId"  [autoSelectFirstItem]="true">
+                </app-combobox> -->
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="55%" fxFlex.sm="55%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                    <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 mt-2" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" [ngStyle]="{'min-height': height+'px'}" class="pb-0">
+                    <app-grid fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns" [documentType]="documentType"
+                        [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                        [checkboxAble]="false" pageSize="50" [autoHeight]="true" [gridDataSource]="gridDataSource"
+                        (extOnPageChange)="pageChange($event)" [groups]="groups">
+                    </app-grid>
+
+                    <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{rowIndex + 1}}
+                    </ng-template>
+
+                    <ng-template #tenNCCGroupTemplate let-value="value">
+                        <strong>{{value}}</strong>
+                    </ng-template>
+
+                    <ng-template #tongSoGroupFooterTemplate kendoGridGroupFooterTemplate let-aggregates
+                        let-field="field">
+                        <span>{{aggregates.SoTienTT.sum}}</span>
+                    </ng-template>
+                </div>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

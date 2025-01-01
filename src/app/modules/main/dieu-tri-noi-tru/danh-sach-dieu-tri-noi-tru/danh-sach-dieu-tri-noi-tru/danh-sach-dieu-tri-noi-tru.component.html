@@ -1,0 +1,154 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="
+                    [
+                        {Title:'Nội Trú',Path:''},
+                        {Title:'Danh Sách Điều Trị Nội Trú',Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid #gridParent [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+                [lazyLoadPage]="true" [useHeaderDefault]="false" [checkboxAble]="false" [allowSortDefault]="false"
+                [urlGetData]="urlGetDataGridParentAsync" [urlGetTotalPage]="urlGetTotalPageGridParentAsync"
+                [headerTemplate]="headerTemplate" [additionalSearchString]="theFirstSearch"
+                [searchString]="dsNoiTruTimKiem.SearchString" [showStt]="true">
+            </app-grid>
+
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar px-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <app-checkbox [(model)]="dsNoiTruTimKiem.DangDieuTri" id="dangDieuTri" label="Đang điều trị"
+                        class="ml-2" (modelChange)="timKiemNangCao()">
+                    </app-checkbox>
+                    <app-checkbox [(model)]="dsNoiTruTimKiem.DaRaVien" id="daRaVien" label="Đã ra viện" class="ml-2"
+                        (modelChange)="timKiemNangCao()">
+                    </app-checkbox>
+                    <app-checkbox [(model)]="dsNoiTruTimKiem.ChuyenKhoa" id="ChuyenKhoa" label="Chuyển khoa"
+                        class="ml-2" (modelChange)="timKiemNangCao()">
+                    </app-checkbox>
+                    <app-checkbox [(model)]="dsNoiTruTimKiem.ChuyenVien" id="chuyenVien" label="Chuyển viện"
+                        class="ml-2" (modelChange)="timKiemNangCao()">
+                    </app-checkbox>
+                    <app-combobox fxFlex="300px" label="Khoa" id="KhoaPhongId" class="mt-6 ml-2 on-header"
+                        url="KhamBenh/GetListKhoaBenhVien" [(model)]="dsNoiTruTimKiem.KhoaPhongId"
+                        hierarchyKeyToSend="KhoaPhongId" (modelChange)="timKiemNangCao()" popupSettings="null"
+                       [templateHeader]="khoaTemplateHeader" [template]="khoaTemplate">
+                        <ng-template #khoaTemplateHeader let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <th width="20%">Mã</th>
+                                    <th>Dịch vụ</th>
+                                </tr>
+                            </table>
+                        </ng-template>
+                        <ng-template #khoaTemplate let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <td width="20%">{{dataItem.Ma}}</td>
+                                    <td>{{dataItem.Ten}}</td>
+                                </tr>
+                            </table>
+                        </ng-template>
+                    </app-combobox>
+
+                    <app-daterangepicker id="tuNgayDenNgay" fxFlex="300px" fxFlex.sm="auto" class="mt-1 ml-2 on-header"
+                        [(model)]="dsNoiTruTimKiem.TuNgayDenNgay" label="Từ ngày nhập viện - đến ngày nhập viện"
+                        (modelChange)="timKiemNangCao()">
+                    </app-daterangepicker>
+
+                    <app-daterangepicker id="tuNgayDenNgayRaVien" fxFlex="300px" fxFlex.sm="auto" class="mt-1 ml-2 on-header"
+                        [(model)]="dsNoiTruTimKiem.TuNgayDenNgayRaVien" label="Từ ngày ra viện - đến ngày ra viện"
+                        (modelChange)="timKiemNangCao()">
+                    </app-daterangepicker>
+                    
+                    <div class="bg-card rounded-full border px-4 ml-2" fxFlex="300px" fxFlex.lt-md="auto" fxHide.xs
+                        fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                            type="search" name="searchString" [(ngModel)]="dsNoiTruTimKiem.SearchString"
+                            (keyup)="onKey($event)" (ngModelChange)="searchChanges($event)"
+                            placeholder="Tìm kiếm theo Mã NB, Mã TN, Họ tên" />
+                    </div>
+                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button"
+                        (click)="clearSearch()">
+                        <mat-icon [icIcon]="icSearch"></mat-icon>
+                    </button>
+
+                    <button [matMenuTriggerFor]="columnFilterMenu" class="ml-auto" fxFlex="none" mat-icon-button
+                        kendoTooltip title="Lọc cột" type="button">
+                        <mat-icon [icIcon]="icFilterList"></mat-icon>
+                    </button>
+
+                    <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                        <div *ngFor="let column of _gridColumnsFilter">
+                            <button class="checkbox-item mat-menu-item" *ngIf="!column.HideFilter">
+                                <mat-checkbox [disabled]="!column.HasFilter" [(ngModel)]="_isCheckColumnFilter"
+                                    color="primary">
+                                    {{ column.Title }}
+                                </mat-checkbox>
+                            </button>
+                        </div>
+                    </mat-menu>
+
+                    <button class="ml-3 mr-6" fxFlex="none" mat-icon-button kendoTooltip title="Xuất Excel"
+                        type="button" (click)="xuLyXuatExcel()">
+                        <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                    </button>
+
+                </div>
+            </ng-template>
+
+            <ng-template #maTNTemplate let-dataItem>
+                <a *ngIf="dataItem.TrangThai !=4" (click)="xemChiTiet(dataItem.Id)">
+                    <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.MaTiepNhan}}">{{dataItem.MaTiepNhan}}
+                    </p>
+                </a>
+                <a *ngIf="dataItem.TrangThai == 4" (click)="xemChiTietChuyenKhoa(dataItem.Id)">
+                    <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.MaTiepNhan}}">{{dataItem.MaTiepNhan}}
+                    </p>
+                </a>
+            </ng-template>
+            <ng-template #trangThaiTemplate let-dataItem>
+                <div style="position: relative;">
+                    <!-- Chuyen khoa la 4 -->
+                    <span *ngIf="dataItem.TrangThai !=4"
+                        class="{{dataItem.TrangThai==1?'orange':(dataItem.TrangThai==2?'blue':'green')}}">
+                        {{dataItem.TenTrangThai}}
+                        <i *ngIf="dataItem.TrangThai==1 && dataItem.KetThucBenhAn==true && dataItem.DaQuyetToan!=true"
+                            class="red">(Chờ quyết toán)
+                        </i>
+                    </span>
+                    <span *ngIf="dataItem.TrangThai==4" class="blue">
+                        {{dataItem.TenTrangThai}}
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template #soTienConLaiTemplate let-dataItem>
+                <div style="position: relative;">
+                    <span *ngIf="dataItem.SoTienConLai < 0" class="redText">
+                        {{dataItem.SoTienConLai | number:'0.2-2':'vi-VN'}}
+                    </span>    
+                    <span *ngIf="dataItem.SoTienConLai >= 0" class="greenText">
+                        {{dataItem.SoTienConLai | number:'0.2-2':'vi-VN'}}
+                    </span>                   
+                </div>
+            </ng-template>
+            <ng-template #capCuuTemplate let-dataItem>
+                <app-checkbox id="capCuu{{dataItem.Id}}" label="" [(model)]="dataItem.CapCuu" disabled="{{true}}">
+                </app-checkbox>
+            </ng-template>
+            <ng-template #thoiGianTiepNhanTemplate let-dataItem>
+                {{dataItem.ThoiGianTiepNhanDisplay}}
+            </ng-template>
+            <ng-template #nhapVienTiepNhanTemplate let-dataItem>
+                {{dataItem.ThoiGianNhapVienDisplay}}
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

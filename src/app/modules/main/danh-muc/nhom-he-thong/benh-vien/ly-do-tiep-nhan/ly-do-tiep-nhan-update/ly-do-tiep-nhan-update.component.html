@@ -1,0 +1,26 @@
+<app-header-form current="" [crumbs]="[
+    {Title:'Danh Mục',Path:''}
+    ,{Title:'Nhóm Hệ Thống',Path:''}
+    ,{Title:'Bệnh Viện',Path:''}
+    ,{Title:'Lý Do Tiếp Nhận',Path:'/danh-muc/nhom-he-thong/benh-vien/ly-do-tiep-nhan',Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+<div class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chỉnh Sửa Lý Do Tiếp Nhận</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-ly-do-tiep-nhan-shared></app-ly-do-tiep-nhan-shared>
+
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <app-formfooter [bodyComponent]="shared" type="update" (updated)="onUpdated()"></app-formfooter>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

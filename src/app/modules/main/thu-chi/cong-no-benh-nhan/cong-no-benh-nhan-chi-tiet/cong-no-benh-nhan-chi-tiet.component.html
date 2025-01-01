@@ -1,0 +1,109 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+    { Title: 'Thu Ngân', Path: '' },
+    { Title: 'Công Nợ Người Bệnh', Path: '/thu-ngan/cong-no-benh-nhan', queryParams: {holdQuery : true} },
+    { Title: 'Chi Tiết Công Nợ Người Bệnh', Path: '', Active: true }]">
+</app-header-form>
+
+<div [@stagger]="true" class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4" fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <div fxFlex="100%">
+                        <fieldset style="background: #e1f5fe;">
+                            <legend>Thông tin hành chính</legend>
+                            <div fxFlex="100%">
+                                <ul class="inline">
+                                    <li>Mã NB: <strong>{{congNoBenhNhanThongTinHanhChinh.MaBenhNhan}}</strong></li>
+                                    <li>Họ tên: <strong>{{congNoBenhNhanThongTinHanhChinh.HoTen}}</strong></li>
+                                    <li>Năm sinh: <strong>{{congNoBenhNhanThongTinHanhChinh.NamSinh}}</strong></li>
+                                    <li>Giới tính: <strong>{{congNoBenhNhanThongTinHanhChinh.GioiTinhDisplay}}</strong></li>
+                                    <li>Điện thoại: <strong>{{congNoBenhNhanThongTinHanhChinh.SoDienThoai}}</strong></li>
+                                    <li>Địa chỉ: <strong>{{congNoBenhNhanThongTinHanhChinh.DiaChi}}</strong></li>
+                                </ul>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div *ngIf="congNoBenhNhanThongTinHanhChinh.ConNo" class="div-parent-content" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0px grid" fxLayoutGap.lt-sm="0">
+                    <kendo-tabstrip #tabStrip class="content-has-border sticky-kendotab-item-2 mt-3" (tabSelect)="changeTab($event)">
+                        <kendo-tabstrip-tab name="1" [selected]="listTabLichSuThuCongNoBenhNhan.tabChuaThuSelected">
+                            <ng-template kendoTabTitle>
+                                <div>
+                                    CHƯA THU
+                                </div>
+                            </ng-template>
+                
+                            <ng-template kendoTabContent>
+                                <app-cong-no-benh-nhan-chua-thu [benhNhanId]="benhNhanId" (outputDaThuDuTienBenhNhan)="evtDaThuDuTienBenhNhan($event)"></app-cong-no-benh-nhan-chua-thu>
+                            </ng-template>
+                        </kendo-tabstrip-tab>
+                
+                        <kendo-tabstrip-tab [selected]="listTabLichSuThuCongNoBenhNhan.tabDaThuSelected">
+                            <ng-template kendoTabTitle>
+                                <div>
+                                    ĐÃ THU
+                                </div>
+                            </ng-template>
+                
+                            <ng-template kendoTabContent>
+                                <app-cong-no-benh-nhan-da-thu [benhNhanId]="benhNhanId"></app-cong-no-benh-nhan-da-thu>
+                            </ng-template>
+                        </kendo-tabstrip-tab>
+                    </kendo-tabstrip>
+                </div>
+                
+                <ng-container *ngIf="!congNoBenhNhanThongTinHanhChinh.ConNo">
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0" class="mt-3">
+                        <div fxFlex="100%" fxFlex.sm="100%">
+                            <fieldset>
+                                <legend>THÔNG TIN THU NỢ</legend>
+                                <div fxFlex="100%">
+                                    <app-grid #gridThongTinThuNo pageSize="5"
+                                        [documentType]="documentType" [autoHeight]="true" [checkboxAble]="false" 
+                                        [useAddDeault]="false" [useActionDefault]="false" [useHeaderDefault]="false"
+                                        [gridColumns]="gridThongTinThuNoColumns" [additionalSearchString]="benhNhanId"
+                                        [urlGetData]="urlGetDanhSachThongTinThuNo" [urlGetTotalPage]="urlTotalPagesThongTinThuNo"
+                                        [sort]="sortThongTinThuNo"
+                                        (extOnDataBound)="evtDataBoundGridThongTinThuNo($event)">
+                                    </app-grid>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+            <div class="sticky-button-action px-6 py-4 text-right" kendoTooltip>
+                <button  type="button" mat-button class="mr-2" (click)="back()">Quay lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #soPhieuNoTemplate let-dataItem>
+    <a (click)="xemSoPhieuNo(dataItem.SoPhieuNoId)">{{dataItem.SoPhieuNo}}</a>
+</ng-template>
+
+<ng-template #ngayTemplate let-dataItem>
+    {{dataItem.NgayDisplay}}
+</ng-template>
+
+<ng-template #soTienThuTemplate let-dataItem>
+    {{dataItem.SoTienThu | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #tongTienFooterTemplate>
+    <span style="float: right;">Tổng: </span> 
+</ng-template>
+
+<ng-template #tongSoTienThuFooterTemplate>
+    <span style="color: #005dab ;">{{getTongTien() | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <button (click)="xemSoPhieuThu(dataItem.Id)" mat-menu-item>
+        <mat-icon [icIcon]="icPrint"></mat-icon>
+    </button>
+</ng-template>

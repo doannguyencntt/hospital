@@ -1,0 +1,16 @@
+
+
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>LỊCH SỬ KCB</div>
+    <!-- <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button> -->
+</div>
+
+<mat-dialog-content>
+    <app-grid [gridColumns]="gridColumns" [gridDataSource]="gridData"
+    [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true" 
+    [useHeaderDefault]="false" #grid [useActionDefault]="false"
+    [checkboxAble]="false" height="300">
+</app-grid>
+</mat-dialog-content>

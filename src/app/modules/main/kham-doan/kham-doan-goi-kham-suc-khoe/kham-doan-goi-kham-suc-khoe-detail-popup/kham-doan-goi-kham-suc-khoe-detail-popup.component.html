@@ -1,0 +1,403 @@
+<div>
+    <app-header-form
+        *ngIf="dataKhamDoan==null || (dataKhamDoan != undefined && dataKhamDoan!=null&&dataKhamDoan.LaHopDongKhamSucKhoe!=true)"
+        [crumbs]="[ {Title:'Khám Đoàn',Path:''} 
+        ,{Title:'DS Gói Khám Sức Khỏe', Path: '/kham-doan/goi-kham', queryParams: {holdQuery : true}}
+        ,{Title: header,Path:'',Active:true}
+    ]" [isicMoreVert]="false">
+    </app-header-form>
+    <div class="p-gutter" vexContainer
+        [ngStyle]="{'padding': (dataKhamDoan==null || (dataKhamDoan != undefined && dataKhamDoan!=null&&dataKhamDoan.LaHopDongKhamSucKhoe!=true))?'1.5rem':'0'}">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+            <div class="card" fxFlex="auto">
+                <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center"
+                    *ngIf="dataKhamDoan==null || (dataKhamDoan != undefined && dataKhamDoan!=null&&dataKhamDoan.LaHopDongKhamSucKhoe!=true)">
+                    <h2 class="title m-0">{{title}}</h2>
+                </div>
+
+                <div class="px-6 py-4" fxLayout="column">
+
+                    <div class="border-b" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                        fxLayoutGap.lt-sm="0">
+                        <ng-container *ngIf="!(IsHopDongKham == true && id != 0)">
+                            <app-combobox id="congTy" fxFlex="25%" fxFlex.sm="25%" label="Tên công ty" [required]="true"
+                                [disabled]="khamSucKhoeDoan.IsKetThucHopDong || (dataKhamDoan != undefined && dataKhamDoan != null &&  dataKhamDoan.HopDongKhamSucKhoeId != undefined && dataKhamDoan.HopDongKhamSucKhoeId != null && dataKhamDoan.HopDongKhamSucKhoeId !=0)"
+                                url="KhamDoan/GetCongTys" (openCombobox)="openCombobox($event)"
+                                [(model)]="khamSucKhoeDoan.CongTyKhamSucKhoeId" [modelText]="khamSucKhoeDoan.TenCongTy"
+                                (modelChange)="congTyChange($event)" [template]="congTyTemplate"
+                                [templateHeader]="congTyTemplateHeader" popupSettings="null"
+                                [validationerror]="'CongTyKhamSucKhoeId' | validationerror:validationErrors">
+                                <ng-template #congTyTemplateHeader let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <th width="30%">Mã</th>
+                                            <th width="70%">Tên</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template #congTyTemplate let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <td width="30%">{{dataItem.Ma}}</td>
+                                            <td width="70%">{{dataItem.Ten}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </app-combobox>
+
+                            <app-combobox id="hopDong" fxFlex="25%" fxFlex.sm="25%" label="Số hợp đồng"
+                                [required]="true"
+                                [disabled]="khamSucKhoeDoan.IsKetThucHopDong || (dataKhamDoan != undefined && dataKhamDoan != null && dataKhamDoan.HopDongKhamSucKhoeId != undefined && dataKhamDoan.HopDongKhamSucKhoeId != null && dataKhamDoan.HopDongKhamSucKhoeId !=0)"
+                                url="KhamDoan/GetHopDongKhamSucKhoes" (openCombobox)="openCombobox($event)"
+                                [(model)]="khamSucKhoeDoan.HopDongKhamSucKhoeId" [modelText]="khamSucKhoeDoan.SoHopDong"
+                                [template]="hopDongTemplate" [templateHeader]="hopDongTemplateHeader"
+                                popupSettings="null" (selectionChange)="hopDongChange($event)"
+                                [queryInfo]="{ParameterDependencies:'{CongTyId:' + khamSucKhoeDoan.CongTyKhamSucKhoeId + '}', Take: 50}"
+                                [validationerror]="'HopDongKhamSucKhoeId' | validationerror:validationErrors">
+                                <ng-template #hopDongTemplateHeader let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <th width="30%">Số hợp đồng</th>
+                                            <th width="35%">Ngày hiệu lực</th>
+                                            <th width="35%">Ngày kết thúc</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template #hopDongTemplate let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <td width="30%">{{dataItem.SoHopDong}}</td>
+                                            <td width="35%">{{dataItem.NgayHieuLucDisplay}}</td>
+                                            <td width="35%">{{dataItem.NgayKetThucDisplay}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </app-combobox>
+
+
+                            <app-datepicker id="NgayHieuLuc" fxFlex="20%" fxFlex.sm="25%" label="Ngày hiệu lực"
+                                [(model)]="khamSucKhoeDoan.NgayHieuLuc" [disabled]="true">
+                            </app-datepicker>
+                            <app-datepicker id="NgayKetThuc" fxFlex="20%" fxFlex.sm="25%" label="Ngày kết thúc"
+                                [(model)]="khamSucKhoeDoan.NgayKetThuc" [disabled]="true">
+                            </app-datepicker>
+                        </ng-container>
+
+                        <div fxFlex="10%" fxFlex.sm="10%">
+                            <div class="container-custom no-label">
+                                <label>&nbsp;</label>
+                                <div fxLayout="row" fxLayoutGap="16px">
+                                    <app-checkbox fxFlex="100%" id="GoiChung" [(model)]="khamSucKhoeDoan.GoiChung"
+                                        (modelChange)="checkGoiChung($event)" [disabled]="disabled"
+                                        label="Dịch vụ chung trong gói" value="true"></app-checkbox>
+                                </div>
+                                <div fxLayout="row" fxLayoutGap="16px">
+                                    <app-checkbox fxFlex="100%" id="GoiDichVuPhatSinh"
+                                        [(model)]="khamSucKhoeDoan.GoiDichVuPhatSinh" [disabled]="disabled"
+                                        (modelChange)="checkGoiDichVuPhatSinh($event)" label="Dịch vụ ngoài gói"
+                                        value="true"></app-checkbox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <app-textbox id="maGoiKham" fxFlex="25%" fxFlex.sm="25%" label="Mã gói khám" [required]="true"
+                            [maxlength]="50" [disabled]="khamSucKhoeDoan.IsKetThucHopDong "
+                            [(model)]="khamSucKhoeDoan.Ma" [validationerror]="'Ma' | validationerror:validationErrors">
+                        </app-textbox>
+
+                        <app-textbox id="tenGoiKham" fxFlex="75%" fxFlex.sm="75%" label="Tên gói khám" [required]="true"
+                            [maxlength]="250" [disabled]="khamSucKhoeDoan.IsKetThucHopDong"
+                            [(model)]="khamSucKhoeDoan.Ten"
+                            [validationerror]="'Ten' | validationerror:validationErrors">
+                        </app-textbox>
+
+
+
+                        <h3 style="display: flex;" fxFlex="100%" class="sub-title">
+                            Danh Sách Dịch Vụ
+                        </h3>
+                        <ng-container
+                            *ngIf="khamSucKhoeDoan.IsKetThucHopDong != true && khamSucKhoeDoan.CongTyKhamSucKhoeId != undefined && khamSucKhoeDoan.HopDongKhamSucKhoeId != undefined ">
+                            <app-combobox #comboBoxDichVu id="dichVu" fxFlex="50%" fxFlex.sm="50%" label="Dịch vụ"
+                                [required]="true"
+                                url="KhamDoan/GetDichVuKhamBenhBenhVienVaDichVuKyThuatBenhVienTaoGoiKSKs"
+                                [queryInfo]="{ParameterDependencies:'{CoGoiPhatSinh:' + khamSucKhoeDoan.GoiDichVuPhatSinh +'}', Take: 50}"
+                                (selectionChange)="loaiGiaChange($event, 'dichvu')" [disabled]="isUpdate"
+                                [(model)]="dichVuKhamSucKhoeDoan.DichVuKyThuatBenhVienId" [reloadForGrid]="true"
+                                (openCombobox)="openCombobox($event)" (keyup)="onKey($event)"
+                                [template]="dichVuTemplate" [templateHeader]="dichVuTemplateHeader" popupSettings="null"
+                                [validationerror]="'DichVuKyThuatBenhVienId' | validationerror:validationErrors">
+                                <ng-template #dichVuTemplateHeader let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <th width="30%">Mã</th>
+                                            <th width="50%">Tên</th>
+                                            <th width="20%">Loại</th>
+
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template #dichVuTemplate let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <td width="30%">{{dataItem.Ma}}</td>
+                                            <td width="50%">{{dataItem.Ten}}</td>
+                                            <td width="20%">{{dataItem.LoaiDisplay}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </app-combobox>
+                            <app-dropdownlist *ngIf="laDichVuKham == false" id="LoaiGia"
+                                [fxFlex]="laDichVuKham == false ? '10%' : '15%'" label="Loại giá"
+                                url="KhamDoan/GetLoaiGiaDichVuKyThuat" [autoSelectFirstItem]="true" [bind]="true"
+                                [(model)]="dichVuKhamSucKhoeDoan.NhomGiaDichVuKyThuatBenhVienId" [popupSettings]="null"
+                                (modelChange)="loaiGiaChange($event, 'gia')" (keyup)="onKey($event)"
+                                (openDropDownList)="openCombobox($event)">
+                            </app-dropdownlist>
+
+                            <app-dropdownlist *ngIf="laDichVuKham == true || laDichVuKham == null" id="LoaiGia"
+                                [fxFlex]="laDichVuKham == false ? '10%' : '15%'" label="Loại giá"
+                                url="KhamDoan/GetLoaiGiaDichVuKhamBenh" [autoSelectFirstItem]="true" [bind]="true"
+                                [(model)]="dichVuKhamSucKhoeDoan.NhomGiaDichVuKyThuatBenhVienId" [popupSettings]="null"
+                                (modelChange)="loaiGiaChange($event, 'gia')" (keyup)="onKey($event)"
+                                (openDropDownList)="openCombobox($event)">
+                            </app-dropdownlist>
+
+                            <app-textboxnumeric *ngIf="laDichVuKham == false" id="soLan" fxFlex="5%" fxFlex.sm="5%"
+                                [max]="9999" [(model)]="dichVuKhamSucKhoeDoan.SoLan" label="SL" [required]="true"
+                                [min]="1" [validationerror]="'SoLan' | validationerror:validationErrors">
+                            </app-textboxnumeric>
+
+                            <app-textboxnumeric id="donGiaBenhVien" [fxFlex]="laDichVuKham == false ? '10%' : '15%'"
+                                fxFlex.sm="10%" [max]="99999999999999999"
+                                [(model)]="dichVuKhamSucKhoeDoan.DonGiaBenhVien" label="ĐG BV" [decimals]="0"
+                                [disabled]="true" [required]="true"
+                                [validationerror]="'DonGiaBenhVien' | validationerror:validationErrors">
+                            </app-textboxnumeric>
+
+                            <app-textboxnumeric id="donGiaUuDai" [fxFlex]="laDichVuKham == false ? '15%' : '10%'"
+                                [max]="99999999999999999" [(model)]="dichVuKhamSucKhoeDoan.DonGiaUuDai"
+                                label="ĐG Ưu đãi" [required]="true" (keyup)="onKey($event)" [isFormatCurrenly]="true"
+                                [spinners]="false" [step]="100"
+                                [validationerror]="'DonGiaUuDai' | validationerror:validationErrors">
+                            </app-textboxnumeric>
+
+                            <!-- [validationerror]="'DonGiaChuaUuDai' | validationerror:validationErrors" -->
+                            <!-- [required]="true" -->
+                            <app-textboxnumeric id="donGiaChuaUu" fxFlex="10%" [max]="99999999999999999"
+                                [(model)]="dichVuKhamSucKhoeDoan.DonGiaChuaUuDai" label="ĐG Chưa ưu đãi"
+                                (keyup)="onKey($event)" [isFormatCurrenly]="true" [spinners]="false" [step]="100">
+                            </app-textboxnumeric>
+
+                            <app-radio fxFlex="20%" fxFlex.sm="20%" id="loaiNoiThucHien"
+                                [items]="[{Value:1,Text:'Nội viện'},{Value:2,Text:'Ngoại viện'}]"
+                                (modelChange)="changeHinhThucKhamBenh()" label="Loại nơi thực hiện"
+                                [(model)]="dichVuKhamSucKhoeDoan.HinhThucKhamBenh" (keyup)="onKey($event)">
+                            </app-radio>
+
+                            <!------------------------ NỘI VIỆN -->
+                            <app-multiselect #multiselectNoiThucHien *ngIf="dichVuKhamSucKhoeDoan.HinhThucKhamBenh == 1"
+                                id="PhongBenhVienId" idWhere="{{id}}" fxFlex="80%"
+                                [(model)]="dichVuKhamSucKhoeDoan.GoiKhamSucKhoeNoiThucHienIds" [modelText]=""
+                                label="Nơi thực hiện" class="item-no-padding"
+                                url="KhamDoan/GetKhoaPhongGoiKhams?selectedItems={{dichVuKhamSucKhoeDoan.GoiKhamSucKhoeNoiThucHienIds}}&isMulti=true"
+                                required="true" popupSettings="null" [template]="khoaPhongTemplate"
+                                [templateHeader]="khoaPhongTemplateHeader" (keyup)="onKey($event)"
+                                [queryInfo]="{ParameterDependencies:'{LaDichVuKham:' + laDichVuKham +', HinhThucKhamBenh: ' + dichVuKhamSucKhoeDoan.HinhThucKhamBenh +', DichVuStringId:' + dichVuStringId +'}', Take: 50}"
+                                [validationerror]="'GoiKhamSucKhoeNoiThucHienIds' | validationerror:validationErrors">
+
+                                <ng-template #khoaPhongTemplateHeader let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <th width="30%">Mã</th>
+                                            <th width="70%">Tên</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template #khoaPhongTemplate let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <td width="30%">{{dataItem.Ma}}</td>
+                                            <td width="70%">{{dataItem.Ten}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </app-multiselect>
+
+                            <!------------------------ NGOẠI VIỆN -->
+                            <app-multiselect #multiselectNoiThucHien *ngIf="dichVuKhamSucKhoeDoan.HinhThucKhamBenh == 2"
+                                id="PhongBenhVienId" fxFlex="80%"
+                                [(model)]="dichVuKhamSucKhoeDoan.GoiKhamSucKhoeNoiThucHienIds" [modelText]=""
+                                label="Nơi thực hiện" class="item-no-padding" 
+                                url="KhamDoan/GetKhoaPhongGoiKhams?selectedItems={{dichVuKhamSucKhoeDoan.GoiKhamSucKhoeNoiThucHienIds}}&isMulti=true"
+                                required="true" popupSettings="null" [template]="khoaPhongTemplate"
+                                [templateHeader]="khoaPhongTemplateHeader" (keyup)="onKey($event)"
+                                [queryInfo]="{ParameterDependencies:'{LaDichVuKham: '+laDichVuKham+',HinhThucKhamBenh: ' + dichVuKhamSucKhoeDoan.HinhThucKhamBenh +', HopDongKhamSucKhoeId:'+khamSucKhoeDoan.HopDongKhamSucKhoeId +', DichVuStringId:' + dichVuStringId +'}', Take: 50}"
+                                [validationerror]="'GoiKhamSucKhoeNoiThucHienIds' | validationerror:validationErrors">
+
+                                <ng-template #khoaPhongTemplateHeader let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <th width="30%">Mã</th>
+                                            <th width="70%">Tên</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template #khoaPhongTemplate let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <td width="30%">{{dataItem.Ma}}</td>
+                                            <td width="70%">{{dataItem.Ten}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </app-multiselect>
+
+                            <div fxFlex="100%">
+                                <fieldset>
+                                    <legend>Thông tin yêu cầu</legend>
+                                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                        fxLayoutGap.lt-sm="0">
+
+                                        <div fxFlex="25%" fxFlex.sm="25%">
+                                            <div class="container-custom no-label">
+                                                <label>Giới tính</label>
+                                                <div fxLayout="row">
+                                                    <app-checkbox id="gioiTinhNam" label="Nam" class="mb-1"
+                                                        [(model)]="dichVuKhamSucKhoeDoan.GioiTinhNam"
+                                                        (keyup)="onKey($event)" style="margin-top: 1px;">
+                                                    </app-checkbox>
+
+                                                    <app-checkbox id="gioiTinhNu" label="Nữ" class="ml-4 mb-1"
+                                                        [(model)]="dichVuKhamSucKhoeDoan.GioiTinhNu"
+                                                        (keyup)="onKey($event)" (modelChange)="gioiTinhNuChange($event)"
+                                                        style="margin-top: 1px;">
+                                                    </app-checkbox>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div fxFlex="25%" fxFlex.sm="25%">
+                                            <div class="container-custom no-label">
+                                                <label>Mang thai</label>
+                                                <div fxLayout="row">
+                                                    <app-checkbox id="coMangThai" label="Có" class="mb-1"
+                                                        [(model)]="dichVuKhamSucKhoeDoan.CoMangThai"
+                                                        (keyup)="onKey($event)"
+                                                        [disabled]="!dichVuKhamSucKhoeDoan.GioiTinhNu"
+                                                        (modelChange)="mangThaiChange($event,'Co')"
+                                                        style="margin-top: 1px;">
+                                                    </app-checkbox>
+
+                                                    <app-checkbox id="khongMangThai" label="Không" class="ml-4 mb-1"
+                                                        [(model)]="dichVuKhamSucKhoeDoan.KhongMangThai"
+                                                        (keyup)="onKey($event)"
+                                                        [disabled]="!dichVuKhamSucKhoeDoan.GioiTinhNu"
+                                                        (modelChange)="mangThaiChange($event,'Khong')"
+                                                        style="margin-top: 1px;">
+                                                    </app-checkbox>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div fxFlex="25%" fxFlex.sm="25%">
+                                            <div class="container-custom no-label">
+                                                <label>Tình trạng hôn nhân</label>
+                                                <div fxLayout="row">
+                                                    <app-checkbox id="chuaLapGD" label="Chưa lập gia đình" class="mb-1"
+                                                        [(model)]="dichVuKhamSucKhoeDoan.ChuaLapGiaDinh"
+                                                        (keyup)="onKey($event)"
+                                                        (modelChange)="lapGDChange($event,'Khong')"
+                                                        style="margin-top: 1px;">
+                                                    </app-checkbox>
+
+                                                    <app-checkbox id="daLapGD" label="Đã lập gia đình" class="ml-4 mb-1"
+                                                        [(model)]="dichVuKhamSucKhoeDoan.DaLapGiaDinh"
+                                                        (keyup)="onKey($event)" (modelChange)="lapGDChange($event,'Co')"
+                                                        style="margin-top: 1px;">
+                                                    </app-checkbox>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <app-textboxnumeric id="soTuoiTu" fxFlex="13%" fxFlex.sm="13%" [min]="0"
+                                            [max]="999" (keyup)="onKey($event)"
+                                            [(model)]="dichVuKhamSucKhoeDoan.SoTuoiTu" label="Số tuổi: Từ">
+                                        </app-textboxnumeric>
+                                        <app-textboxnumeric id="soTuoiDen" fxFlex="12%" fxFlex.sm="12%" [min]="0"
+                                            [max]="999" (keyup)="onKey($event)"
+                                            [(model)]="dichVuKhamSucKhoeDoan.SoTuoiDen" label="Số tuổi: Đến"
+                                            [validationerror]="'SoTuoiDen' | validationerror:validationErrors">
+                                        </app-textboxnumeric>
+
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+                                <button type="button" color="primary" mat-stroked-button mat-button
+                                    (click)="huyDichVu()" class="mr-1">Hủy</button>
+                                <button *ngIf="!isUpdate" type="button" color="primary" mat-raised-button mat-button
+                                    (click)="themDichVu()" class="mr-1">Thêm</button>
+                                <button *ngIf="isUpdate" type="button" color="primary" mat-raised-button mat-button
+                                    (click)="capNhatDichVu()" class="mr-1">Cập nhật</button>
+                            </div>
+                        </ng-container>
+
+                        <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridDataSource]="gridDataSource"
+                            #gridDichVu masterName="gridDichVu" [gridColumns]="gridColumns" [allowSortDefault]="true"
+                            [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+                            [useActionDefault]="false" [showStt]="true" [checkboxAble]="false" [lazyLoadPage]="true"
+                            [groups]="groups" maxHeight="500" [pageable]="false">
+                        </app-grid>
+
+                        <ng-template #tenDichVuTemplate let-dataItem let-rowIndex="rowIndex">
+                            <a *ngIf="!khamSucKhoeDoan.IsKetThucHopDong" (click)="getDichVuGrid(dataItem)">
+                                <p kendoTooltip title="{{dataItem.TenDichVuKyThuatBenhVien}}">
+                                    {{dataItem.TenDichVuKyThuatBenhVien}}</p>
+                            </a>
+                            <label *ngIf="khamSucKhoeDoan.IsKetThucHopDong">
+                                {{dataItem.TenDichVuKyThuatBenhVien}}
+                            </label>
+                        </ng-template>
+
+                        <ng-template #donGiaBenhVienTemplate let-dataItem>
+                            {{dataItem.DonGiaBenhVien | number:'0.2-2':'vi-VN'}}
+                        </ng-template>
+                        <ng-template #donGiaUuDaiTemplate let-dataItem>
+                            {{dataItem.DonGiaUuDai | number:'0.2-2':'vi-VN'}}
+                        </ng-template>
+                        <ng-template #donGiaChuaUuDaiTemplate let-dataItem>
+                            {{dataItem.DonGiaChuaUuDai | number:'0.2-2':'vi-VN'}}
+                        </ng-template>
+
+                        <ng-template #nhomGroupHeaderTemplate let-value="value">
+                            <strong>{{value}}</strong>
+                        </ng-template>
+
+                        <ng-template #soLanTemplate let-dataItem>
+                            <label *ngIf="!dataItem.LaDichVuKham">
+                                {{dataItem.SoLan}}
+                            </label>
+                        </ng-template>
+
+                        <ng-template #actionTemplate let-dataItem>
+                            <div *ngIf="khamSucKhoeDoan.IsKetThucHopDong != true && !isUpdate" class="text-center"
+                                kendoTooltip>
+                                <button style="color: red;" mat-icon-button kendoTooltip title="Xóa"
+                                    (click)="xoaDichVu(dataItem)" type="button">
+                                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                                </button>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="form-footer mt-6">
+                        <button style="margin-left: auto;" type="button" mat-stroked-button color="primary"
+                            (click)="quayLai()">Hủy</button>
+                        <button *ngIf="khamSucKhoeDoan.IsKetThucHopDong != true" mat-raised-button mat-button
+                            color="primary" (click)="Luu()">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

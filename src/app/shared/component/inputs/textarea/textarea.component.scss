@@ -1,0 +1,104 @@
+app-textarea{
+    textarea{
+        resize: vertical !important; 
+        font-size: 14px !important;            
+    }
+    .mat-form-field-underline {
+        bottom: 0 !important;
+        height: 0 !important;
+    }
+    .mat-form-field-infix{
+        border-top: 0.59375em solid transparent;
+    }
+    mat-form-field{
+
+        .voice{
+            position: absolute;
+            right: 5px;
+            cursor: pointer;
+            &:hover{
+                color:#005dab;
+            }
+        }
+
+        .mat-form-field-wrapper{        
+            background-color: rgba(0, 0, 0, 0.04);
+            width: 100% !important;
+            border-radius: 4px 4px 0 0;
+            padding: .75em .75em 0 .75em !important;
+            border-bottom: 1px solid rgba(82, 63, 105, 0.42);
+            >.k-label{
+                margin-left: 10px;
+                margin-top: 7px;
+                background: none !important;
+            }
+            &.k-state-focused>.k-label {
+                color:#005dab !important;
+            }
+            &::after {
+                display: block;
+                z-index: 2;
+                content: "";
+                position: absolute;
+                bottom: -1px;
+                left: 0;
+                right: 0;
+                height: 2px;
+                margin: auto;
+                opacity: 0;
+                transform: scaleX(0.5);
+                transition: transform .3s;
+                background-color: #005dab;
+            }
+            &:hover{ 
+              &::after {
+                opacity: 1;
+                transform: scaleX(1);
+              }
+            }
+            .mat-input-element,.mat-form-field-label{
+                &:disabled{
+                    color: rgba(0, 0, 0, 1);
+                }
+            }
+        }
+        &.mat-focused{            
+            .mat-form-field-wrapper{  
+                &::after {
+                    opacity: 1;
+                    transform: scaleX(1);
+                }                
+            }
+        }
+    }
+    &.no-label{  
+        .mat-form-field-wrapper{
+            padding-top: 0 !important;
+        } 
+        .mat-form-field-infix{                
+            padding-top: 0;
+            border-top: 0.54375em solid transparent;
+        } 
+    }
+    .voice{
+        position: absolute;
+        right: 5px;
+        cursor: pointer;
+        &:hover{
+            color:#005dab;
+        }
+    }
+
+    .btn-clear{
+        position: absolute;
+        right: 5px;
+        &.has-voice{
+            top: -15px;
+        }
+        font-size: 25px;
+        cursor: pointer;
+        &:hover{
+            color:#005dab;
+        }
+    }
+}

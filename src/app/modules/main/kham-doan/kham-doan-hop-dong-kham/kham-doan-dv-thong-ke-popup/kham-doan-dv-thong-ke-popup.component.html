@@ -1,0 +1,76 @@
+<vex-page-layout>
+
+    <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+        <div>BẢNG KÊ DỊCH VỤ CỦA KHÁCH HÀNG KHÁM ĐOÀN</div>
+        <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+    <mat-dialog-content>
+        <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-grid #gridDichVuKhamDoan masterName="gridDichVuKhamDoan" fxFlex="100%" style="width: 1px;"
+                    [gridColumns]="gridDichVuKhamDoanColumns" [documentType]="documentType" [useHeaderDefault]="false"
+                    [useActionDefault]="false" [removeGroupFooterIfIsOnlyOne]="true"
+                    (extOnDataBound)="onDataBoundChild($event)" [checkboxAble]="false" class="k-grid-border"
+                    [additionalSearchString]="hopDongKhamSucKhoeId" [sort]="sort" [showStt]="true" [lazyLoadPage]="true"
+                    [pageable]="true" heightToolbar="400" urlGetData="KhamDoan/GetDataForGridAsyncBangKeDichVuKhamDoan"
+                    urlGetTotalPage="KhamDoan/GetTotalPageForGridAsyncBangKeDichVuKhamDoan">
+                </app-grid>
+
+                <ng-template #tongChiFooterTemplate>
+                    <span style="float:right">Tổng :</span>
+                </ng-template>
+                <ng-template #tongChiTrongGoiTemplate let-dataItem>
+                    <div kendoTooltip>
+                        <a (click)="chiTietTrongGoi(dataItem.GoiKhamSucKhoeIds, dataItem.YeuCauTiepNhanId, dataItem.BenhNhanId)">
+                            <p kendoTooltip>
+                                {{dataItem.TongChiPhiTrongGoi | number:'0.2-2':'vi-VN'}}
+                            </p>
+                        </a>
+                    </div>
+                </ng-template>
+
+                <ng-template #tongChiNgoaiGoiTemplate let-dataItem>
+                    <div kendoTooltip>
+                        <a *ngIf="dataItem.TongChiPhiNgoaiGoi != 0"
+                            (click)="chiTietNgoaiGoi(dataItem.YeuCauTiepNhanId, dataItem.BenhNhanId)">
+                            <p kendoTooltip>
+                                {{dataItem.TongChiPhiNgoaiGoi | number:'0.2-2':'vi-VN'}}
+                            </p>
+                        </a>
+                        <p *ngIf="dataItem.TongChiPhiNgoaiGoi == 0">{{dataItem.TongChiPhiNgoaiGoi |
+                            number:'0.2-2':'vi-VN'}}
+                        </p>
+                    </div>
+                </ng-template>
+
+                <ng-template #tongChiTrongGoiFooterTemplate let-dataItem>
+                    <p style="color: blue; font-weight: bold;">
+                        <span>{{totalTongChiPhi('TongChiPhiTrongGoi') | number:'0.2-2':'vi-VN'}}</span>
+                </ng-template>
+                <ng-template #tongChiTrongGoiGroupFooterTemplate let-aggregates>
+                    {{aggregates.TongChiPhiTrongGoi.sum | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #tongChiNgoaiGoiFooterTemplate let-dataItem>
+                    <p style="color: red; font-weight: bold;">
+                        <span>{{totalTongChiPhi('TongChiPhiNgoaiGoi') | number:'0.2-2':'vi-VN'}}</span>
+                </ng-template>
+                <ng-template #tongChiNgoaiGoiGroupFooterTemplate let-aggregates>
+                    {{aggregates.TongChiPhiNgoaiGoi.sum | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+            </div>
+        </vex-page-layout-content>
+    </mat-dialog-content>
+
+    <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+        <button tabindex="-1" type="button" class="mr-2" color="primary" mat-raised-button
+            (click)="xuatExcel(true)">Xuất
+            file excel trong gói</button>
+
+        <button [disabled]="!disabled" tabindex="-1" type="button" class="mr-2" color="primary" mat-raised-button
+            (click)="xuatExcel(false)">Xuất
+            file excel ngoài gói</button>
+    </mat-dialog-actions>
+</vex-page-layout>

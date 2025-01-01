@@ -1,0 +1,84 @@
+.ten-dich-vu-label {
+    display: inline;
+    text-overflow: ellipsis;
+}
+
+.button-them-goi{
+    width: 20px;
+    height: 20px;
+    margin-top: 5px;
+}
+
+.mat-icon-them-goi{
+    margin-top: -20px;
+    margin-left: -2px;
+}
+
+.xac-nhan-ng-template {
+    display: inherit;
+    white-space: nowrap;
+}
+
+.danh-sach-goi{
+    color: orange;
+    text-decoration: underline;
+}
+
+.div-danh-sach-goi{
+    padding-top: 5px !important;
+}
+
+.info {
+    margin-bottom: -8px;
+    margin-top: 0px;
+    //color: #00bcd4;
+}
+
+.header-grid{
+    width: 100%;
+    height: auto;
+    background: #ffe0b2;
+    padding: 10px 10px 10px 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.header-span-grid{
+    width: 80%;
+    padding: 10px 10px 10px 10px;
+    font-weight: bold;
+    color: #005dab;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.thong-tin-tai-khoan-benh-nhan{
+    float: right;
+    font-weight: normal;
+}
+.styleTinhTong {
+    border: 1px solid #ccc;
+    padding: 15px;
+    background: #e3f2fd;
+    text-align: right;
+    margin: 10px -17px -17px -17px;
+}
+.so-tuoi{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.div-voucher{
+    padding: 0 !important;
+}
+
+
+.icon-info-status-grid
+{
+    position: absolute;
+    right: 0; 
+    background-color: white; 
+    height: 15px; 
+    top: 2px;
+}

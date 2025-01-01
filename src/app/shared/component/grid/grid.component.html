@@ -1,0 +1,172 @@
+<div style="position: relative;">    
+<kendo-grid [hideHeader]="HideHeader" id="{{masterName}}" [data]="_gridDataSource" #grid [height]="_height" [pageSize]="_pageSize" [skip]="_skip" [pageable]="_pageable" (pageChange)="pageChange($event)" [sortable]="{ allowUnsort: true,mode:'single'}"
+[sort]="sort" [resizable]="true" (sortChange)="sortChange($event)" [filter]="_filter" [filterable]="filterable" (filterChange)="filterChange($event)" [selectable]="{enabled: checkboxAble, checkboxOnly: true }" [kendoGridSelectBy]="keySelectBy" [selectedKeys]="mySelection"
+(selectedKeysChange)="onSelectedKeysChange($event)" [group]="groups" [navigable]="true" (cellClick)="cellClick($event)" (dblclick)="onDblClick($event)" (detailExpand)="detailExpand($event)" (detailCollapse)="detailCollapse($event)" (groupExpand)="groupExpand($event)"
+[rowClass]="rowCallback" (keydown)="onKeydownGrid(grid, $event)">
+
+<ng-template kendoGridToolbarTemplate *ngIf="_headerTemplate!=null && !_useHeaderDefault">
+    <ng-container *ngTemplateOutlet="_headerTemplate"></ng-container>
+</ng-template>
+<ng-template kendoGridToolbarTemplate *ngIf="_headerTemplate==null && _useHeaderDefault">
+    <div class="bg-app-bar px-6 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+        <ng-container *ngIf="!hideDetailSelectedCheckbox">
+            <h2 class="title my-0 ltr:pr-4 rtl:pl-4 ltr:mr-4 rtl:ml-4 ltr:border-r rtl:border-l" fxFlex="none" fxHide.xs *ngIf="mySelection.length!=null && mySelection.length>0">
+                <span>{{ mySelection.length }} dòng được chọn</span>
+            </h2>
+
+            <div *ngIf="mySelection.length!=null && mySelection.length>0" class="mr-4 pr-4 border-r" fxFlex="none">
+                <button (click)="deletes()" color="primary" mat-icon-button kendoTooltip title="Xóa những dòng đang chọn" type="button">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-container>
+
+        <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+            <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+            <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent" placeholder="{{searchPlaceHolder}}" type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)" (ngModelChange)="searchChange($event)"
+            />
+        </div>
+        <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+            <mat-icon [icIcon]="icSearch"></mat-icon>
+        </button>
+
+        <span fxFlex></span>
+
+        <button [matMenuTriggerFor]="columnFilterMenu" class="ml-3" fxFlex="none" mat-icon-button kendoTooltip title="Lọc cột" type="button" *ngIf="showColumnVisibility">
+            <mat-icon [icIcon]="icFilterList"></mat-icon>
+        </button>
+
+        <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+            <div *ngFor="let column of _gridColumnsFilter">
+                <button class="checkbox-item mat-menu-item" *ngIf="!column.HideFilter">
+                    <mat-checkbox (click)="toggleColumnVisibility(column, $event)" [disabled]="!column.HasFilter" [(ngModel)]="column.Visible"
+                        color="primary">
+                        {{ column.Title }}
+                    </mat-checkbox>
+                </button>
+            </div>
+        </mat-menu>
+
+        <button (click)="exportExcel()" *ngIf="showExportExcel" class="ml-3" fxFlex="none" mat-icon-button kendoTooltip title="Xuất Excel" type="button">
+            <mat-icon [icIcon]="icFileExcel"></mat-icon>
+        </button>
+        <button (click)="add()" *ngIf="_useAddDeault" class="ml-3" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm" type="button">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+</ng-template>
+<kendo-grid-checkbox-column width="{{groups!=null?25:30}}" *ngIf="checkboxAble" [headerStyle]="{'text-overflow':'initial'}">
+    <ng-template kendoGridHeaderTemplate>
+        <input *ngIf="!HideCheckAll" class="k-checkbox" id="{{_masterName}}selectAllCheckboxId" kendoGridSelectAllCheckbox [state]="selectAllState" (selectAllChange)="onSelectAllChange($event)">
+        <label *ngIf="!HideCheckAll" class="k-checkbox-label" for="{{_masterName}}selectAllCheckboxId"></label>
+    </ng-template>
+
+    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <div *ngIf="!dataItem.HideCheckbox">
+            <input class="k-checkbox" id="{{_masterName}}selectCheckboxId{{dataItem[keySelectBy]}}" [kendoGridSelectionCheckbox]="rowIndex" (change)="onSelectChangeCheckbox($event,dataItem[keySelectBy])">
+            <label class="k-checkbox-label" for="{{_masterName}}selectCheckboxId{{dataItem[keySelectBy]}}"></label>
+        </div>
+    </ng-template>
+</kendo-grid-checkbox-column>
+<kendo-grid-column title="{{titleColumnSTT}}" *ngIf="showStt" [width]="widthColumnSTT" sortable="false">
+    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        {{rowIndex+1}}
+    </ng-template>
+</kendo-grid-column>
+<kendo-grid-column [field]="col.Field" [title]="col.Title" [hidden]="hiddenColumns.indexOf(col.Field) > -1 || col.Hidden==true" [width]="getCellWidthAuto(col.Width,col.MinWidth)" [sortable]="col.Sortable" *ngFor="let col of _gridColumns" [locked]="col.LockColumn">
+    <ng-template kendoGridCellTemplate let-dataItem="dataItem" *ngIf="col.Template==null && col.TemplateEdit==null">
+        <p kendoTooltip position="left" *ngIf="col.LinkDetail!=true &&col.ReverseEllipsis" class="reverse-ellipsis l" title="{{dataItem[col.Field]}}">{{dataItem[col.Field]}} </p>
+        <span *ngIf="col.LinkDetail!=true &&!col.ReverseEllipsis && !col.ShowTooltip">{{dataItem[col.Field]}} </span>
+        <span kendoTooltip position="left" title="{{dataItem[col.Field]}}" *ngIf="col.LinkDetail!=true &&!col.ReverseEllipsis && col.ShowTooltip">{{dataItem[col.Field]}} </span>
+        <a *ngIf="col.LinkDetail==true" (click)="edit(dataItem.Id)">
+            <p kendoTooltip position="left" *ngIf="col.ReverseEllipsis" class="reverse-ellipsis l" title="{{dataItem[col.Field]}}">{{dataItem[col.Field]}} </p>
+            <span *ngIf="!col.ReverseEllipsis && !col.ShowTooltip">{{dataItem[col.Field]}} </span>
+            <span kendoTooltip position="left" title="{{dataItem[col.Field]}}" *ngIf="!col.ReverseEllipsis && col.ShowTooltip">{{dataItem[col.Field]}} </span>
+        </a>
+    </ng-template>
+
+    <ng-template kendoGridEditTemplate let-dataItem="dataItem" *ngIf="col.TemplateEdit != null">
+        <ng-container *ngTemplateOutlet="col.TemplateEdit; context:{$implicit: dataItem}"></ng-container>
+    </ng-template>
+
+    <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex" *ngIf="col.Template!=null">
+        <ng-container *ngTemplateOutlet="col.Template; context:{$implicit: dataItem, rowIndex: rowIndex}"></ng-container>
+    </ng-template>
+    <ng-template kendoGridFilterCellTemplate *ngIf="col.FilterTemplate!=null && col.HideFilter!=true">
+        <ng-container *ngTemplateOutlet="col.FilterTemplate"></ng-container>
+    </ng-template>
+    <ng-template kendoGridFilterCellTemplate *ngIf="col.HideFilter==true">
+    </ng-template>
+    <ng-template kendoGridFilterCellTemplate *ngIf="col.FilterTemplate==null && col.HideFilter!=true">
+        <div class="input-group m-0">
+            <input type="text" class="form-control" placeholder="Nhập từ khóa..." aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <span class="input-group-btn" id="button-addon2">
+                    <button class="btn btn-raised btn-secondary" type="button" (click)="filterChange($event)"
+                        style="border-radius: 0 0.25rem 0.25rem 0;height: 31px;"><i class="ft-search"></i></button>
+                </span>
+            </div>
+        </div>
+
+    </ng-template>
+    <ng-template kendoGridHeaderTemplate *ngIf="col.TemplateHeader!=null" let-column="column" let-columnIndex="columnIndex">
+        <ng-container *ngTemplateOutlet="col.TemplateHeader; context:{$implicit: _masterName,column:column,columnIndex:columnIndex,dataItemParent:dataItemParent}"></ng-container>
+    </ng-template>
+    <ng-template kendoGridGroupFooterTemplate *ngIf="col.TemplateGroupFooter!=null"  let-group let-field="field" let-value="value" let-aggregates="aggregates">
+        <ng-container *ngTemplateOutlet="col.TemplateGroupFooter; context:{$implicit: group,field:field,value:value,aggregates:aggregates}"></ng-container>
+    </ng-template>
+    <ng-template kendoGridFooterTemplate *ngIf="col.TemplateFooter!=null" let-column="column" let-columnIndex="columnIndex">
+        <ng-container *ngTemplateOutlet="col.TemplateFooter; context:{$implicit: _masterName,column:column,columnIndex:columnIndex,dataItemParent:dataItemParent}"></ng-container>
+    </ng-template>
+    <ng-template kendoGridGroupHeaderTemplate *ngIf="col.TemplateGroupHeader!=null" let-group let-field="field" let-value="value" let-aggregates="aggregates">
+        <ng-container *ngTemplateOutlet="col.TemplateGroupHeader; context:{$implicit: group,field:field,value:value,aggregates:aggregates,dataItemParent:dataItemParent}"></ng-container>
+    </ng-template>
+    <ng-template kendoGridGroupHeaderColumnTemplate *ngIf="col.TemplateGroupHeaderColumn!=null" let-group let-field="field" let-value="value" let-aggregates="aggregates">
+        <ng-container *ngTemplateOutlet="col.TemplateGroupHeaderColumn; context:{$implicit: group,field:field,value:value,aggregates:aggregates,dataItemParent:dataItemParent}"></ng-container>
+    </ng-template>
+</kendo-grid-column>
+<kendo-grid-column [title]="" [width]="50" *ngIf="_useActionDefault">
+    <ng-template kendoGridCellTemplate let-dataItem>
+
+        <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+            <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+        </button>
+        <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+            <ng-template let-customer="customer" matMenuContent>
+                <button (click)="edit(dataItem.Id)" mat-menu-item>
+                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                    <span>Sửa</span>
+                </button>
+                <button (click)="delete(dataItem.Id)" mat-menu-item>
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                    <span>Xóa</span>
+                </button>
+            </ng-template>
+        </mat-menu>
+    </ng-template>
+</kendo-grid-column>
+<ng-template kendoGridNoRecordsTemplate>
+    <span *ngIf="_isLoading">Đang tải dữ liệu...</span>
+    <span *ngIf="!_isLoading">Không có dữ liệu</span>
+</ng-template>
+<ng-template kendoGridDetailTemplate let-dataItem="dataItem" *ngIf="detailTemplate!=null">
+    <ng-container *ngTemplateOutlet="detailTemplate; context:{$implicit: dataItem}"></ng-container>
+</ng-template>
+<kendo-grid-messages noRecords="Không có dữ liệu" pagerOf="/" pagerItems="dòng" detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết" loading="Đang tải dữ liệu...">
+</kendo-grid-messages>
+<ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+    <div style="justify-content: center;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-between" fxFlex="100%" *ngIf="_showDefaultPagerTemplate">
+        <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+        <kendo-pager-numeric-buttons [buttonCount]="buttonCount" class="d-none d-sm-none d-md-block">
+        </kendo-pager-numeric-buttons>
+        <button *ngIf="_isLoadingTotalPage" kendoButton class="btn btn-raised btn-default btn-min-width mb-0">
+        <img src="/assets/img/loader_circle.gif" alt="Đang tính..." style="height: 20px;" />
+    </button>
+        <kendo-pager-next-buttons></kendo-pager-next-buttons>
+        <kendo-pager-info></kendo-pager-info>
+        <div kendoTooltip class="k-icon k-i-refresh" style="order: 10;cursor: pointer; align-self: center;" title="Làm mới" (click)="search()"></div>
+    </div>
+</ng-template>
+</kendo-grid>
+<div *ngIf="_isLoading" class="grid-loading k-i-loading"></div>
+</div>

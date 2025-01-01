@@ -1,0 +1,92 @@
+<kendo-textbox-container floatingLabel="{{label}}" [ngClass]="{'required':required}">
+    <kendo-datepicker [ngClass]="validationerror!=''?'has-error':''" id="{{id}}"
+    [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+    ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}" [format]="formatDate" (blur)="onBlur()"
+    (focus)="onFocus()" (open)="onOpen()" (close)="onClose()" [min]="minDate" [max]="maxDate" (paste)="onPaste($event)"
+        >
+        <kendo-datepicker-messages
+            today="Hôm nay"
+            toggle="Chọn ngày"
+        ></kendo-datepicker-messages>
+      </kendo-datepicker> 
+      <ic-icon [icIcon]="icClear" size="15px" class="clear" (click)="clear()" *ngIf="model!=null && !disabled"></ic-icon>
+      <kendo-timepicker (ngModelChange)="emit($event)"
+        ngControl="model" [(ngModel)]="model" [format]="formatTime"  (blur)="onBlur()"
+        [disabled]="disabled" 
+        (focus)="onFocus()" (open)="onOpen()" (close)="onClose()" [min]="minDate" [max]="maxDate">
+        <kendo-timepicker-messages
+          now="Hiện tại"
+          nowLabel="Hiện tại"
+            toggle="Chọn giờ"
+            cancel="Hủy"
+            cancelLabel="Hủy"
+            accept="Chọn"
+            acceptLabel="Chọn"
+        ></kendo-timepicker-messages>
+       </kendo-timepicker>
+<label class="red" [innerHTML]="validationerror"></label> 
+</kendo-textbox-container>
+<!-- <div class="form-row" kendoTooltip>
+  <div class="form-group {{moreClass}} col-sm-12" *ngIf="!horizontalForm">
+      <label for="{{id}}" *ngIf="label!=null && label!=''">{{label}}<span class="text-danger" *ngIf="required">*</span></label>
+      <kendo-datepicker class="form-control" [ngClass]="validationerror!=''?'has-error':''" id="{{id}}"
+      [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+      ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}" [format]="formatDate" (blur)="onBlur()"
+      (focus)="onFocus()" (open)="onOpen()" (close)="onClose()"
+          >
+          <kendo-datepicker-messages
+              today="Hôm nay"
+              toggle="Chọn ngày"
+          ></kendo-datepicker-messages>
+        </kendo-datepicker> <kendo-timepicker  (ngModelChange)="emit($event)"
+          ngControl="model" [(ngModel)]="model" [format]="formatTime"  (blur)="onBlur()"
+          (focus)="onFocus()" (open)="onOpen()" (close)="onClose()">
+          <kendo-timepicker-messages
+            now="Hiện tại"
+            nowLabel="Hiện tại"
+              toggle="Chọn giờ"
+              cancel="Hủy"
+              cancelLabel="Hủy"
+              accept="Chọn"
+              acceptLabel="Chọn"
+          ></kendo-timepicker-messages>
+         </kendo-timepicker>
+  </div>
+
+  <div class="{{moreClass}}" *ngIf="horizontalForm">
+      <label for="{{id}}" class="{{classLabel}} col-form-label" *ngIf="label!=null && label!=''">{{label}} <span
+              class="text-danger" *ngIf="required">*</span></label>
+      <div class="{{classField}}">
+          <kendo-datepicker class="form-control" [ngClass]="validationerror!=''?'has-error':''" id="{{id}}"
+      [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+      ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}" [format]="formatDate" (blur)="onBlur()"
+      (focus)="onFocus()" (open)="onOpen()" (close)="onClose()"
+          >
+          <kendo-datepicker-messages
+              today="Hôm nay"
+              toggle="Chọn ngày"
+          ></kendo-datepicker-messages>
+        </kendo-datepicker> <kendo-timepicker  (ngModelChange)="emit($event)"
+          ngControl="model" [(ngModel)]="model" [format]="formatTime"  (blur)="onBlur()"
+          (focus)="onFocus()" (open)="onOpen()" (close)="onClose()"> 
+          <kendo-timepicker-messages
+          now="Hiện tại"
+          nowLabel="Hiện tại"
+            toggle="Chọn giờ"
+            cancel="Hủy"
+            cancelLabel="Hủy"
+            accept="Chọn"
+            acceptLabel="Chọn"
+          ></kendo-timepicker-messages>
+        </kendo-timepicker>
+      </div>
+  </div>
+  <div class="col-sm-12">
+      <div class="alert alert-danger alert-dismissible fade show mt-n-15" role="alert" *ngIf="validationerror!=''">
+          <div [innerHTML]="validationerror"></div>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="validationerror=''">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+  </div>
+</div> -->

@@ -1,0 +1,51 @@
+ul {
+    margin: 0;
+  }
+  ul.dashed {
+    list-style-type: none;
+  }
+  ul.dashed > li {
+    text-indent: -5px;
+    padding: 1px 0px 1px 0px;
+  }
+  ul.dashed > li:before {
+    content: "- ";
+    text-indent: -5px;
+  }
+
+.title-grid-parent{
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+input[type=checkbox] {
+  transform: scale(1.5);
+}
+
+.span-1-goi-marketing{
+  margin-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 40%;
+    width: 40%;
+}
+
+.span-trang-thai{
+  width: 57%; 
+  text-align: right;
+}
+
+// style="list-style: circle inside;"
+
+.text-right-td{
+  text-align: right;
+}
+
+.text-left-td{
+  text-align: left;
+}
+
+.text-red{
+  color: red;
+}

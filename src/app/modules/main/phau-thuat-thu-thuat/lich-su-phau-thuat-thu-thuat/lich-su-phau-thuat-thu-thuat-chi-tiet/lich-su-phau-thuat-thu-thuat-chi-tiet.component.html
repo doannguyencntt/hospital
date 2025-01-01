@@ -1,0 +1,141 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                    { Title: 'Phẫu Thuật Thủ Thuật', Path: '' },
+                    { Title: 'Lịch Sử Phẫu Thuật Thủ Thuật', Path: '/lich-su-phau-thuat-thu-thuat' , queryParams: {holdQuery : true} },
+                    { Title: 'Lịch Sử Phẫu Thuật Thủ Thuật Chi Tiết', Path: '', Active: true }]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <div class="row mb-3">
+                            <fieldset fxFlex="100%">
+                                <legend class="sub-title">Thông tin hành chính</legend>
+                                <div fxFlex="100%">
+                                    <ul class="inline">
+                                        <li>Mã TN:
+                                            <strong>{{thongTinBenhNhan.MaYeuCauTiepNhan}}</strong>
+                                        </li>
+                                        <li>Mã NB:
+                                            <strong>{{thongTinBenhNhan.MaBN}}</strong>
+                                        </li>
+                                        <li>Họ tên:
+                                            <strong>{{thongTinBenhNhan.HoTen}}</strong>
+                                        </li>
+                                        <li>Giới tính:
+                                            <strong>{{thongTinBenhNhan.TenGioiTinh}}</strong>
+                                        </li>
+                                        <li>Tuổi:
+                                            <strong>{{thongTinBenhNhan.TuoiThoiDiemHienTai}}</strong>
+                                        </li>
+                                        <li>SĐT:
+                                            <strong>{{thongTinBenhNhan.SoDienThoai}}</strong>
+                                        </li>
+                                        <li>Dân tộc:
+                                            <strong>{{thongTinBenhNhan.DanToc}}</strong>
+                                        </li>
+                                        <li>Địa chỉ:
+                                            <strong>{{thongTinBenhNhan.DiaChi}}</strong>
+                                        </li>
+                                    </ul><br>
+                                    <ul class="inline">
+                                        <li>Nghề nghiệp:
+                                            <strong>{{thongTinBenhNhan.NgheNghiep}}</strong>
+                                        </li>
+                                        <li>Tuyến khám:
+                                            <strong style="color: green;">{{thongTinBenhNhan.TuyenKham}}</strong>
+                                        </li>
+                                        <li>Số BHYT:
+                                            <strong>{{thongTinBenhNhan.SoBHYT}}</strong>
+                                        </li>
+                                        <li>Mức hưởng:
+                                            <strong *ngIf="thongTinBenhNhan.BHYTMucHuong != null"
+                                                style="color: blue;">{{thongTinBenhNhan.BHYTMucHuong}}%</strong>
+                                        </li>
+                                        <li>Ngày hiệu lực:
+                                            <strong [style.color]="thongTinBenhNhan.IsBHYTHetHan ? 'red' : ''">
+                                                {{thongTinBenhNhan.BHYTThoiGianHieuLucDisplay}}</strong>
+                                        </li>
+                                        <li>Lý do TN:
+                                            <strong>{{thongTinBenhNhan.TenLyDoTiepNhan}}</strong>
+                                        </li>
+                                        <li>Thời điểm TN:
+                                            <strong>{{thongTinBenhNhan.ThoiDiemTiepNhanDisplay}}</strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="row">
+                            <div fxFlex="100%">
+                                <kendo-tabstrip fxFlex="100%" class="content-has-border tabstrip-pad tabstrip-on-popup">
+                                    <!-- ({{dichVuKyThuatHoanThanh.DichVuKyThuatDaHoanThanh}}/{{dichVuKyThuatHoanThanh.TongDichVuKyThuat}}) -->
+                                    <kendo-tabstrip-tab [selected]="true">
+                                        <ng-template kendoTabTitle>
+                                            <div kendoTooltip *ngIf="dichVuKyThuatHoanThanh != null">
+                                                CẬN LÂM SÀNG
+                                                ({{dichVuKyThuatHoanThanh.DichVuKyThuatDaHoanThanh}}/{{dichVuKyThuatHoanThanh.TongDichVuKyThuat}})
+                                            </div>
+                                        </ng-template>
+                                        <ng-template kendoTabContent>
+                                            <app-lich-su-pttt-cls
+                                                [yeuCauTiepNhanId]="thongTinBenhNhan.YeuCauTiepNhanId">
+                                            </app-lich-su-pttt-cls>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+                                    <kendo-tabstrip-tab>
+                                        <ng-template kendoTabTitle>
+                                            <div kendoTooltip *ngIf="dichVuKyThuatTuongTrinh != null">
+                                                TƯỜNG TRÌNH PT/TT
+                                                ({{dichVuKyThuatTuongTrinh.DichVuKyThuatDaTuongTrinh}}/{{dichVuKyThuatTuongTrinh.TongDichVuKyThuat}})
+                                            </div>
+                                        </ng-template>
+                                        <ng-template kendoTabContent>
+                                            <app-lich-su-pttt-tuong-trinh-pttt
+                                                [lanThucHien]="thongTinBenhNhan.LanThucThien"
+                                                [yeuCauTiepNhanId]="thongTinBenhNhan.YeuCauTiepNhanId"
+                                                [laKhongThucHien]="laKhongThucHien">
+                                            </app-lich-su-pttt-tuong-trinh-pttt>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+
+                                    <kendo-tabstrip-tab [title]="'KẾT LUẬN'"
+                                        *ngIf="thongTinBenhNhan.TheoDoiSauPhauThuatThuThuatId != null && thongTinBenhNhan.CoPhauThuat">
+                                        <ng-template kendoTabContent>
+                                            <app-lich-su-pttt-ket-luan [yeuCauDichVuKyThuatId]="yeuCauDichVuKyThuatId">
+                                            </app-lich-su-pttt-ket-luan>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+
+                                    <kendo-tabstrip-tab [title]="'THEO DÕI'"
+                                        *ngIf="thongTinBenhNhan.TheoDoiSauPhauThuatThuThuatId != null && thongTinBenhNhan.ThongTinKhamKhacChiTiet.length > 0">
+                                        <ng-template kendoTabContent>
+                                            <app-lich-su-pttt-hoi-tinh
+                                                [yeuCauTiepNhanId]="thongTinBenhNhan.YeuCauTiepNhanId"
+                                                [thongTinKhamKhacPTTT]="thongTinBenhNhan.ThongTinKhamKhacChiTiet">
+                                            </app-lich-su-pttt-hoi-tinh>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+                                </kendo-tabstrip>
+                            </div>
+                        </div>
+
+                        <div class="row pt-4">
+                            <button type="button" color="default" class="float-right" mat-raised-button mat-button
+                                title="Phím tắt: Esc" (click)="quayLai()">Quay lại</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+
+</vex-page-layout>

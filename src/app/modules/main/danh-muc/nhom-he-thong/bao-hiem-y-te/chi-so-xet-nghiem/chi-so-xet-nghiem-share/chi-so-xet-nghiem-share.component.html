@@ -1,0 +1,43 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="Ma" fxFlex="20%" fxFlex.sm="20%" [required]="true" 
+        [(model)]="modelFE.Ma" label="Mã" maxlength="50"
+        [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Ten" fxFlex="20%" fxFlex.sm="20%" [required]="true" 
+        [(model)]="modelFE.Ten" label="Tên" maxlength="250"
+        [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="TenTiengAnh" fxFlex="20%" fxFlex.sm="20%"
+        [(model)]="modelFE.TenTiengAnh" label="Tên tiếng anh" maxlength="250"
+        [validationerror]="'TenTiengAnh' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="ChiSoBinhThuongNam" fxFlex="20%" fxFlex.sm="20%"  
+        [(model)]="modelFE.ChiSoBinhThuongNam" label="Chỉ số xét nghiệm nam" maxlength="50"
+        [validationerror]="'ChiSoBinhThuongNam' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="ChiSoBinhThuongNu" fxFlex="20%" fxFlex.sm="20%" 
+        [(model)]="modelFE.ChiSoBinhThuongNu" label="Chỉ số xét nghiệm nữ" maxlength="50"
+        [validationerror]="'ChiSoBinhThuongNu' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-combobox id="LoaiXetNghiem" fxFlex="20%" fxFlex.sm="20%" [(model)]="modelFE.LoaiXetNghiem" [modelText]="modelFE.TenLoaiXetNghiem" 
+        label="Loại xét nghiệm" [required]="true" 
+        url="ChiSoXetNghiem/GetListXetNghiem" [validationerror]="'LoaiXetNghiem' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-radio fxFlex="20%" fxFlex.sm="20%" id="HieuLuc" name="IsOfficial"
+        [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="modelFE.HieuLuc" label="Sử dụng"
+        [validationerror]="'HieuLuc' | validationerror:validationErrors">
+    </app-radio>
+    
+    <app-textbox id="Mota" fxFlex="60%" fxFlex.sm="60%" maxlength="4000"
+        [(model)]="modelFE.MoTa" label="Mô tả" [validationerror]="'MoTa' | validationerror:validationErrors">
+    </app-textbox>
+
+    
+</div>

@@ -1,0 +1,26 @@
+<app-header-form [crumbs]="[{Title:'Danh Mục',Path:''},
+{Title:'Danh Mục',Path:''}
+,{Title:'Nhóm Hệ Thống',Path:''}
+,{Title:'Bảo Hiểm Y Tế',Path:''}
+,{Title:'Dịch Vụ Kỹ Thuật',Path:'/danh-muc/nhom-he-thong/bao-hiem-y-te/dich-vu-ky-thuat',Active:true}]"
+    [isicMoreVert]="false">
+</app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chỉnh Sửa Dịch Vụ Kỹ Thuật</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+                <app-dich-vu-ky-thuat-shared></app-dich-vu-ky-thuat-shared>
+
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <app-formfooter [bodyComponent]="shared" type="update" (updated)="onUpdated()"></app-formfooter>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

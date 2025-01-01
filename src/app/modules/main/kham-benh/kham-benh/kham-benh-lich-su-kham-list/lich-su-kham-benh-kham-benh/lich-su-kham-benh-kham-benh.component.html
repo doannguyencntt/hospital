@@ -1,0 +1,28 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            *ngFor="let item of gridKhamBenhColumns">
+            <p fxFlex="100%">Triệu chứng khám: <strong>{{item.LyDoKham}}</strong></p>
+            <p fxFlex="100%">Triệu chứng lâm sàng : <strong *ngFor="let item of trieuChungLamSangs">{{item}} </strong></p>
+            <p fxFlex="100%">Ghi chú triệu chứng lâm sàng : <strong>{{item.GhiChuTrieuChungLamSang}}</strong></p>
+            <p fxFlex="100%">Chẩn đoán ban đầu : <strong *ngFor="let item of chuanDoanBanDaus">{{item}} </strong></p>
+
+            <ng-container
+            *ngIf="templateKhoaPhongObj!=null && templateKhoaPhongObj.ComponentDynamics!=null && templateKhoaPhongObj.ComponentDynamics.length>0">
+            <h3 fxFlex="100%" class="sub-title">{{tenKhoaPhong}}</h3>
+            <ng-container *ngFor="let item of templateKhoaPhongObj.ComponentDynamics">
+                <app-textbox *ngIf="item.Type==1" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}"
+                    id="{{item.Id}}" label="{{item.Label}}" [(model)]="item.Value" 
+                    maxlength="1000">
+                </app-textbox>
+                <app-textarea *ngIf="item.Type==2" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}"
+                    id="{{item.Id}}" label="{{item.Label}}" [(model)]="item.Value" 
+                    maxlength="1000">
+                </app-textarea>
+            </ng-container>
+        </ng-container>
+
+
+        </div>
+    </div>
+</div>

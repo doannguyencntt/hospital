@@ -1,0 +1,69 @@
+<h3 class="sub-title">KHÁM KHÁC
+    <button *ngIf="isReadonly" [disabled]="true" class="po-h disabled" color="primary">
+        <mat-icon [icIcon]="icAddCircle"></mat-icon>
+    </button>
+    <button *ngIf="!isReadonly" class="po-h" color="primary" (click)="themKhamKhac()">
+        <mat-icon [icIcon]="icAddCircle"></mat-icon>
+    </button>
+</h3>
+
+<ng-container *ngIf="dataSourceKhamKhac.data.length === 0">
+    <p>Không có khám khác</p>
+</ng-container>
+
+<app-grid *ngIf="dataSourceKhamKhac.data.length > 0" masterName="TienSuBenh" class="k-grid-border" style="width: 1px;"
+    [documentType]="documentType"
+    [gridColumns]="gridKhamKhacColumns" [gridDataSource]="dataSourceKhamKhac"
+    [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+    [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true" [pageable]="false">
+</app-grid>
+
+<ng-template #boPhanTemplate let-dataItem let-rowIndex="rowIndex">
+    <ng-container *ngIf="isReadonly">
+        <app-textbox *ngIf="dataItem.Id === 0" [disabled]="true" maxlength="250" [(model)]="dataItem.Ten" class="no-label" label=" " required="true"
+            [validationerror]="'KhamTheoDoiBoPhanKhacs['+rowIndex+'].Ten' | validationerror: validationErrors">
+        </app-textbox>
+        <p class="ml-1" *ngIf="dataItem.Id !== 0">{{dataItem.Ten}}</p>
+    </ng-container>
+
+    <ng-container *ngIf="!isReadonly">
+        <app-textbox *ngIf="dataItem.Id === 0" maxlength="250" [(model)]="dataItem.Ten" class="no-label" label=" " required="true"
+            [validationerror]="'KhamTheoDoiBoPhanKhacs['+rowIndex+'].Ten' | validationerror: validationErrors">
+        </app-textbox>
+        <p class="ml-1" *ngIf="dataItem.Id !== 0">{{dataItem.Ten}}</p>
+    </ng-container>
+</ng-template>
+
+<ng-template #moTaTemplate let-dataItem let-rowIndex="rowIndex">
+    <ng-container *ngIf="isReadonly">
+        <app-textarea *ngIf="dataItem.Id === 0" [disabled]="true" maxlength="4000" [(model)]="dataItem.NoiDung" class="no-label" label=" " required="true" minHeight="20"
+            [validationerror]="'KhamTheoDoiBoPhanKhacs['+rowIndex+'].NoiDung' | validationerror: validationErrors">
+        </app-textarea>
+        <p class="ml-1" *ngIf="dataItem.Id !== 0">{{dataItem.NoiDung}}</p>
+    </ng-container>
+
+    <ng-container *ngIf="!isReadonly">
+        <app-textarea *ngIf="dataItem.Id === 0" maxlength="4000" [(model)]="dataItem.NoiDung" class="no-label" label=" " required="true" minHeight="20"
+            [validationerror]="'KhamTheoDoiBoPhanKhacs['+rowIndex+'].NoiDung' | validationerror: validationErrors">
+        </app-textarea>
+        <p class="ml-1" *ngIf="dataItem.Id !== 0">{{dataItem.NoiDung}}</p>
+    </ng-container>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <ng-container *ngIf="isReadonly">
+        <div class="text-center" kendoTooltip>
+            <button [disabled]="true" class="po-h disabled" color="primary" mat-icon-button kendoTooltip title="Xóa" type="button">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-container>
+    
+    <ng-container *ngIf="!isReadonly">
+        <div class="text-center" kendoTooltip>
+            <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoa(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-container>
+</ng-template>

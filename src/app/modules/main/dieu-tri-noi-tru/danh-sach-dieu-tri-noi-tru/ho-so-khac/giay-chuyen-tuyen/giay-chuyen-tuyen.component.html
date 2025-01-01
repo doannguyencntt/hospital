@@ -1,0 +1,147 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="100%" fxFlex.sm="100%"></div>
+
+            <app-textbox id="so-ho-so" fxFlex="25%" fxFlex.sm="100%" maxlength="1000" label="Số hồ sơ"
+                [(model)]="thongTinGiayChuyenTuyen.SoHoSo"
+                [validationerror]="'SoHoSo' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="vao-so-chuyen-tuyen-so" fxFlex="25%" fxFlex.sm="100%" maxlength="1000" label="Vào sổ chuyển tuyến số"
+                [(model)]="thongTinGiayChuyenTuyen.SoChuyenTuyenSo"
+                [validationerror]="'SoChuyenTuyenSo' | validationerror:validationErrors">
+            </app-textbox>
+
+            <div fxFlex="50%" fxHide.sm></div>
+
+            <app-textbox id="kinh-gui" fxFlex="100%" fxFlex.sm="100%" maxlength="1000" label="Kính gửi"
+                [(model)]="thongTinGiayChuyenTuyen.NguoiNhan"
+                [validationerror]="'NguoiNhan' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="dau-hieu-lam-sang" fxFlex="50%" fxFlex.sm="100%" maxlength="1000" label="Dấu hiệu lâm sàng"
+                [(model)]="thongTinGiayChuyenTuyen.DauHieuLamSan"
+                [validationerror]="'DauHieuLamSan' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="ket-qua-xn-cls" fxFlex="50%" fxFlex.sm="100%" maxlength="1000" label="Kết quả XN, CLS"
+                [(model)]="thongTinGiayChuyenTuyen.KetQuaXetNghiemCLS"
+                [validationerror]="'KetQuaXetNghiemCLS' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="chan-doan" fxFlex="50%" fxFlex.sm="100%" maxlength="1000" label="Chẩn đoán"
+                [(model)]="thongTinGiayChuyenTuyen.ChanDoan"
+                [validationerror]="'ChanDoan' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="phuong-phap-thu-thuat" fxFlex="50%" fxFlex.sm="100%" maxlength="1000" label="Phương pháp, thủ thuật, kỹ thuật, thuốc đã sử dụng trong điều trị"
+                [(model)]="thongTinGiayChuyenTuyen.PhuongPhapSuDungTrongDieuTri"
+                [validationerror]="'PhuongPhapSuDungTrongDieuTri' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="tinh-trang-nguoi-benh" fxFlex="50%" fxFlex.sm="100%" maxlength="1000" label="Tình trạng người bệnh lúc chuyển tuyến"
+                [(model)]="thongTinGiayChuyenTuyen.TinhTrangNguoiBenh"
+                [validationerror]="'TinhTrangNguoiBenh' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textbox id="huong-dieu-tri" fxFlex="50%" fxFlex.sm="100%" maxlength="1000" label="Hướng điều trị"
+                [(model)]="thongTinGiayChuyenTuyen.HuongDieuTri"
+                [validationerror]="'HuongDieuTri' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-radio id="ly-do-chuyen-tuyen" class="mt-6 mt-md-0 mt-sm-0" fxFlex="100%" fxFlex.sm="100%" label="Lý do chuyển tuyến"
+                [items]="radioLyDoChuyenTuyen"
+                [(model)]="thongTinGiayChuyenTuyen.LyDoChuyenTuyen"
+                [validationerror]="'LyDoChuyenTuyen' | validationerror:validationErrors">
+            </app-radio>
+
+            <app-datetimepicker id="chuyen-tuyen-hoi" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Chuyển tuyến hồi"
+                [formatDate]="'dd/MM/yyyy HH:mm'"
+                [(model)]="thongTinGiayChuyenTuyen.ChuyenTuyenHoi"
+                [validationerror]="'ChuyenTuyenHoi' | validationerror: validationErrors">
+            </app-datetimepicker>
+
+            <app-textbox id="phuong-tien-van-chuyen" fxFlex="25%" fxFlex.sm="100%" maxlength="1000" label="Phương tiện vận chuyển"
+                [(model)]="thongTinGiayChuyenTuyen.PhuongTienVanChuyen"
+                [validationerror]="'PhuongTienVanChuyen' | validationerror:validationErrors">
+            </app-textbox>
+
+            <div fxFlex="50%" fxHide.sm></div>
+
+            <p fxFlex="100%" class="mt-3">Người hộ tống</p>
+
+            <app-autocomplete popupSettings="null" id="ho-ten" fxFlex="25%" fxFlex.sm="100%" label="Họ tên" url="DieuTriNoiTru/GetListNhanVienAutoComplete" maxlength="120"
+                [(model)]="thongTinGiayChuyenTuyen.HoTenNguoiHoTong"
+                [validationerror]="'HoTenNguoiHoTong' | validationerror: validationErrors">
+            </app-autocomplete>
+
+            <app-autocomplete popupSettings="null" id="chuc-danh" fxFlex="25%" fxFlex.sm="100%" label="Chức danh" url="DieuTriNoiTru/GetListChucDanhAutoComplete" maxlength="120"
+                [(model)]="thongTinGiayChuyenTuyen.ChucDanhNguoiHoTong"
+                [validationerror]="'ChucDanhNguoiHoTong' | validationerror: validationErrors">
+            </app-autocomplete>
+
+            <app-autocomplete popupSettings="null" id="trinh-do-chuyen-mon" fxFlex="25%" fxFlex.sm="100%" label="Trình độ chuyên môn" url="DieuTriNoiTru/GetListVanBangChuyenMonAutoComplete" maxlength="120"
+                [(model)]="thongTinGiayChuyenTuyen.TrinhDoChuyenMonNguoiHoTong"
+                [validationerror]="'TrinhDoChuyenMonNguoiHoTong' | validationerror: validationErrors">
+            </app-autocomplete>
+
+            <div fxFlex="25%" fxHide.sm></div>
+
+            <app-datepicker id="ngay-thuc-hien" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Ngày thực hiện"
+                [required]="true"
+                [(model)]="thongTinGiayChuyenTuyen.NgayThucHien"
+                [validationerror]="'NgayThucHien' | validationerror: validationErrors">
+            </app-datepicker>
+
+            <app-combobox id="nguoi-co-tham-quyen" fxFlex="25%" fxFlex.sm="100%" label="Người có thẩm quyền c.tuyến"
+                [popupSettings]="null" [url]="'PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=' + nhomChucDanh.BacSi"
+                [(model)]="thongTinGiayChuyenTuyen.NguoiCoThamQuyenId" [modelText]="thongTinGiayChuyenTuyen.NguoiCoThamQuyenDisplay"
+                (selectionChange)="evtNguoiCoThamQuyenChanged($event)"
+                [validationerror]="'NguoiCoThamQuyenId' | validationerror: validationErrors">
+            </app-combobox>
+
+            <app-combobox id="y-bs-kham-dieu-tri" fxFlex="25%" fxFlex.sm="100%" label="Y, BS khám, điều trị"
+                [popupSettings]="null" [url]="'PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=' + nhomChucDanh.BacSi"
+                [(model)]="thongTinGiayChuyenTuyen.YBacSiKhamDieuTriId" [modelText]="thongTinGiayChuyenTuyen.YBacSiKhamDieuTriDisplay"
+                (selectionChange)="evtYBacSiKhamDieuTriChanged($event)"
+                [validationerror]="'YBacSiKhamDieuTriId' | validationerror: validationErrors">
+            </app-combobox>
+
+            <div fxFlex="25%" fxHide.sm></div>
+
+            <!-- <app-upload id="upload" #chuKyPhieuSangLocDinhDuong [allowedExtensions]="allowedExtensions" fxFlex="50%" fxFlex.sm="100%"
+                [(model)]="noiTruHoSoKhac.FilesChuKy" [multiple]="true" label="File chữ ký"
+                [template]="templateFileChuanDoanHAInfo">
+            </app-upload>            
+            <ng-template #templateFileChuanDoanHAInfo let-files>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td>
+                            <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                                (click)="chuKyPhieuSangLocDinhDuong.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                            <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="chuKyPhieuSangLocDinhDuong.viewFile(files[0])"
+                                class="green" class="custom-name green">{{files[0].name}}</a>
+                        </td>
+                        <td style="width:25px">
+                            <a type="button" (click)="chuKyPhieuSangLocDinhDuong.remove(files[0].uid)" mat-icon-button>
+                                <mat-icon [icIcon]="icClear"></mat-icon>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </ng-template> -->
+        </div>
+
+        <p fxFlex="70%" fxFlex.md="70%" fxFlex.sm="100%">
+            Người thực hiện: <b>{{noiTruHoSoKhac.NhanVienThucHienDisplay}}</b> 
+            Ngày thực hiện: <b>{{noiTruHoSoKhac.ThoiDiemThucHienDisplay}}</b>
+        </p>
+
+        <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+            <button type="button" class="mr-2" mat-button color="primary" style="pointer-events: all;" (click)="in()">In</button>
+            <button type="button" class="mr-2" mat-button color="primary" (click)="huy()">Huỷ</button>
+            <button *ngIf="!kiemTraKetThucBenhAn" type="button" class="mr-2" color="primary" mat-raised-button (click)="luuThongTinGiayChuyenTuyen()">Lưu</button>
+        </div>
+    </div>
+</div>

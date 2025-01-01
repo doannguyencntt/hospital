@@ -1,0 +1,43 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Dược phẩm',Path:''}
+                ,{Title:'Xuất khác',Path:'/nhap-xuat/duoc-pham/xuat-kho-khac',queryParams: {holdQuery : true},Active:true}
+                ]">
+</app-header-form>
+
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chi tiết yêu cầu xuất khác</h2>
+                <b class="status-yeu-cau-linh ycl-cho-duyet" *ngIf="tinhTrang ==1"
+                    style="color:green">Đã duyệt xuất</b>
+                <b class="status-yeu-cau-linh ycl-cho-duyet" *ngIf="tinhTrang ==0"
+                    style="color:orange">Chờ duyệt</b>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-xuat-kho-khac-shared #temp [isCreate]="false" [trangThaiVo]="trangThaiVo"
+                    [validationErrors]="validationErrors">
+                </app-xuat-kho-khac-shared>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <!-- <button type="button" (click)="inPhieu()" color="primary" mat-raised-button><i
+                            class="ft-arrow-left"></i> In Phiếu</button> -->
+                    <button type="button" title="Phím tắt: Esc" (click)="cancel()" mat-button
+                        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Quay lại</button>
+
+                    <button *ngIf="trangThaiVo != null && trangThaiVo.TrangThai== null" type="button"
+                        (click)="duyetXuat()" color="primary" mat-raised-button><i class="ft-save"></i>
+                        Duyệt Xuất</button>
+
+                    <button *ngIf="trangThaiVo != null && trangThaiVo.TrangThai== null" type="button" (click)="update()"
+                        color="primary" mat-raised-button><i class="ft-save"></i>
+                        Lưu</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

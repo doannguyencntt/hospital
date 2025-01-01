@@ -1,0 +1,124 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>DỊCH VỤ KHUYẾN MẠI KÈM THEO GÓI</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="min-height: 200px;">
+    <app-grid #gridNhomGoiDichVu fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumns" [useAddDeault]="false"
+        [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotalData" [HideHeader]="true" [sort]="sort"
+        [additionalSearchString]="benhNhanId + ';' + isCapGiuong" [useHeaderDefault]="false" [useActionDefault]="false"
+        [checkboxAble]="false" [documentType]="documentType" [lazyLoadPage]="true" [autoHeight]="true"
+        [detailTemplate]="detailTemplate" [pageable]="false" (extOnDataBound)="onDataBoundGridParent($event)">
+    </app-grid>
+
+    <ng-template #detailTemplate let-dataItem>
+        <app-grid class="k-grid-border" [gridColumns]="gridColumnsDetail" [useAddDeault]="false"
+            [useActionDefault]="false" [useHeaderDefault]="true" [documentType]="documentType" [showStt]="false"
+            [urlGetData]="urlGetDataChild" [urlGetTotalPage]="urlGetTotalDataChild"
+            [additionalSearchString]="dataItem.Id + ';' + strDichVuDaChon + ';' + isPTTT+ ';' + isCapGiuong + ';' + isNoiTru + ';' + isVacxin" [checkboxAble]="false"
+            [groups]="groups" [lazyLoadPage]="true" [autoHeight]="true" style="width: 1px;" [pageable]="false"
+            [dataItemParent]="dataItem" (extOnDataBound)="onDataBoundGridChild($event)">
+        </app-grid>
+    </ng-template>
+
+    <ng-template #tenGoiTemplate let-dataItem>
+        <span class="green title-grid-parent">{{dataItem.Ten}}</span>
+    </ng-template>
+
+    <ng-template #nhomGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-template #donGiaTemplate let-dataItem>
+        {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #donGiaKhuyenMaiTemplate let-dataItem>
+        {{dataItem.DonGiaKhuyenMai | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #donGiaCKTemplate let-dataItem>
+        {{dataItem.DonGiaKhuyenMai | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #thanhTienTemplate let-dataItem>
+        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #nhomDichVuTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-template #sttTemplate let-rowIndex="rowIndex">
+        <strong>{{rowIndex + 1}}</strong>
+    </ng-template> 
+
+    <ng-template #hanSuDungTemplate let-dataItem>
+        <p [style.color]="dataItem.IsHetHanSuDung ? 'red': ''">{{dataItem.HanSuDungDisplay}}</p>
+    </ng-template>
+
+    <ng-template #checkBoxHeaderTemplate let-dataItemParent="dataItemParent">
+        <input type="checkbox" id="ckbHeader-{{dataItemParent.Id}}" [(ngModel)]="dataItemParent.IsChecked" (ngModelChange)="chonTatCaDichVuTrongGoi($event, dataItemParent.Id)">
+    </ng-template>
+    <ng-template #checkBoxTemplate let-dataItem>
+        <input *ngIf="dataItem.IsActive" id="{{dataItem.Id}}" type="checkbox" [attr.name]="'ckbItem-' + dataItem.YeuCauGoiDichVuId"
+            [(ngModel)]="dataItem.IsChecked" (ngModelChange)="chonDichVu($event, dataItem)">
+    </ng-template>
+    <ng-template #soLuongTemplate let-dataItem>
+        <app-textboxnumeric id="abc-{{dataItem.Id}}" [disabled]="!dataItem.IsActive || !dataItem.IsChecked || isVacxin" [(model)]="dataItem.SoLuongDungLanNay"
+            class="no-label" label=" " [min]="(!dataItem.IsActive || !dataItem.IsChecked || dataItem.SoLuongConLai == 0) ? 0 : 1" [max]="dataItem.NhomGoiDichVu == 1 ? 1 : dataItem.SoLuongConLai"
+            (modelChange)="changeSoLuongDichVu($event, dataItem)"> 
+        </app-textboxnumeric>
+    </ng-template>
+
+    <ng-template #viTriTiemTemplate let-dataItem>
+        <app-dropdownlist label=" " id="ViTriTiem" class="item-no-padding no-label" url="TiemChung/GetViTriTiems" required="true" popupSettings="null"
+            [disabled]="!dataItem.IsActive || !dataItem.IsChecked"
+            [(model)]="dataItem.ViTriTiem"
+            (selectionChange)="evtViTriTiemChange($event, dataItem)">
+        </app-dropdownlist>
+    </ng-template>
+    <ng-template #muiSoTemplate let-dataItem>
+        <app-textboxnumeric label=" " class="no-label" [min]="1" [required]="true" 
+            [disabled]="!dataItem.IsActive || !dataItem.IsChecked"
+            [(model)]="dataItem.MuiSo"
+            (modelChange)="evtMuiSoChange($event, dataItem)">
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #noiThucHienTemplate let-dataItem>
+        <app-combobox id="NoiDangKyId" label=" " url="KhamBenh/GetPhongThucHienChiDinhKhamOrDichVuKyThuat" class="item-no-padding no-label" [disabled]="!dataItem.DichVuBenhVienId || !dataItem.IsActive || !dataItem.IsChecked" required="true" popupSettings="null"
+            (selectionChange)="evtNoiThucHienChange($event, dataItem)" [(model)]="dataItem.NoiThucHienId" 
+            [templateHeader]="noiThucHienTiemChungTemplateHeader"
+            [template]="noiThucHienTiemChungTemplate" [queryInfo]="{ParameterDependencies:'{DichVuId:' + dataItem.DichVuBenhVienId +'}', Take: 50}">
+            <ng-template #noiThucHienTiemChungTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th width="80%">Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #noiThucHienTiemChungTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td width="80%">{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+    </ng-template>
+    <ng-template #lieuLuongTemplate let-dataItem>
+        <app-textbox id="lieu-luong" maxlength="500" label=" " class="no-label"
+            [disabled]="!dataItem.IsActive || !dataItem.IsChecked"
+            [(model)]="dataItem.LieuLuong"
+            (modelChange)="evtLieuLuongChange($event, dataItem)">
+        </app-textbox>
+    </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions *ngIf="!isCapGiuong" fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Hủy</button>
+    <button mat-raised-button mat-button color="primary" (click)="luuDichVuChiDinh()">Áp dụng</button>
+</mat-dialog-actions>

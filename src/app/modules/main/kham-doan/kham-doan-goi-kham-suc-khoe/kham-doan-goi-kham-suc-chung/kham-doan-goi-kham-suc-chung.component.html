@@ -1,0 +1,81 @@
+<div>
+    <div class="p-gutter" vexContainer>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+            <div class="card" fxFlex="auto">
+                <div fxLayout="column">
+                    <div class="border-b" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0px grid"
+                        fxLayoutGap.lt-sm="0">
+                        <ng-container>
+                            <app-combobox id="goikham" fxFlex="50%" fxFlex.sm="50%" label="Gói khám chung"
+                                [required]="true" url="KhamDoan/GetGoiKhamChungs" 
+                                [(model)]="goiKhamChungViewModel.KeyId" [modelText]="goiKhamChungViewModel.DisplayName"
+                                (modelChange)="goiKhamChungChange($event)" [template]="congTyTemplate"
+                                [templateHeader]="congTyTemplateHeader" popupSettings="null"
+                                [validationerror]="'Ten' | validationerror:validationErrors">
+                                <ng-template #congTyTemplateHeader let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <th width="30%">Mã</th>
+                                            <th>Tên</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template #congTyTemplate let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <td width="30%">{{dataItem.Ma}}</td>
+                                            <td>{{dataItem.DisplayName}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </app-combobox>
+                        </ng-container>
+
+                        <h3 style="display: flex;" fxFlex="100%" class="sub-title">
+                            Danh Sách Dịch Vụ
+                        </h3>
+
+                        <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridDataSource]="gridDataSource"
+                            #gridDichVu [gridColumns]="gridColumns" [allowSortDefault]="true"
+                            [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+                            [useActionDefault]="false" [showStt]="true" [checkboxAble]="false" [lazyLoadPage]="true"
+                            [groups]="groups" maxHeight="500" [pageable]="false">
+                        </app-grid>
+
+                        <ng-template #tenDichVuTemplate let-dataItem let-rowIndex="rowIndex">                          
+                            <label>
+                                {{dataItem.TenDichVuKyThuatBenhVien}}
+                            </label>
+                        </ng-template>
+
+                        <ng-template #donGiaBenhVienTemplate let-dataItem>
+                            {{dataItem.DonGiaBenhVien | number:'0.2-2':'vi-VN'}}
+                        </ng-template>
+                        <ng-template #donGiaUuDaiTemplate let-dataItem>
+                            {{dataItem.DonGiaUuDai | number:'0.2-2':'vi-VN'}}
+                        </ng-template>
+                        <ng-template #donGiaChuaUuDaiTemplate let-dataItem>
+                            {{dataItem.DonGiaChuaUuDai | number:'0.2-2':'vi-VN'}}
+                        </ng-template>
+
+                        <ng-template #nhomGroupHeaderTemplate let-value="value">
+                            <strong>{{value}}</strong>
+                        </ng-template>
+
+                        <ng-template #soLanTemplate let-dataItem>
+                            <label *ngIf="!dataItem.LaDichVuKham">
+                                {{dataItem.SoLan}}
+                            </label>
+                        </ng-template>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="form-footer mt-6">
+                        <button style="margin-left: auto;" type="button" mat-stroked-button color="primary"
+                            (click)="quayLai()">Hủy</button>
+                        <button mat-raised-button mat-button color="primary" *ngIf="gridDataSource != undefined && gridDataSource != null && gridDataSource.data.length > 0"
+                        (click)="Luu()">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

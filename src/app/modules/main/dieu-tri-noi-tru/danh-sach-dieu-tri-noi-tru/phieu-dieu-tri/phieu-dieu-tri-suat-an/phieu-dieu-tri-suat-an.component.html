@@ -1,0 +1,62 @@
+<div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-md="column">
+    <div fxFlex="100%" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px"
+        *ngIf="!dieuTriNoiTruModel.KetThucBenhAn && laKhoaKhamBenhChiDinh">
+        <app-combobox #isFocus id="Ten" fxFlex="30%" fxFlex.sm="30%" label="Tên" url="DieuTriNoiTru/GetSuatAn"
+            [required]="true" popupSettings="" [(model)]="suatAn.DichVuKyThuatBenhVienId" (keyup)="onKey($event)"
+            (openCombobox)="openCombobox($event)" [isAutoFocus]="true"
+            [validationerror]="'DichVuKyThuatBenhVienId' | validationerror:validationErrors">
+        </app-combobox>
+
+        <app-combobox id="BuaAn" fxFlex="30%" fxFlex.sm="30%" label="Bữa ăn" url="DieuTriNoiTru/GetBuaAn" popupSettings=""
+            [(model)]="suatAn.BuaAn">
+        </app-combobox>
+
+        <app-textboxnumeric fxFlex="10%" fxFlex.sm="10%" min=1 max=99999 id="SL" label="SL" [(model)]="suatAn.SoLan"
+            [required]="true" (keyup)="onKey($event)" [validationerror]="'SoLan' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-dropdownlist id="DoiTuong" fxFlex="30%" fxFlex.sm="30%" label="Đối tượng"
+            url="DieuTriNoiTru/GetDoiTuongSuatAn" [required]="true" popupSettings="" [(model)]="suatAn.DoiTuongSuDung"
+            (openDropDownList)="openDropDownList($event)" (keyup)="onKey($event)"
+            [validationerror]="'DoiTuongSuDung' | validationerror:validationErrors">
+        </app-dropdownlist>
+
+        <div class="div-button" fxFlex="30%" fxFlex.sm="30%" fxLayout="row" fxLayout.lt-md="column">
+            <button (click)="huy()" type="button" mat-button class="mr-2">Hủy</button>
+            <button (click)="them()" type="button" class="mr-2" color="primary" mat-raised-button>Thêm</button>
+        </div>
+    </div>
+
+    <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="grid"
+        fxLayout.lt-md="column">
+        <app-grid fxFlex="100%" [gridColumns]="gridSuatAnColumns" [documentType]="documentType"
+            [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="false" [pageable]="false"
+            height="auto" #gridSuatAn [checkboxAble]="false" class="k-grid-border"
+            urlGetData="DieuTriNoiTru/GetDataForGridAsyncSuatAn" [showStt]="true"
+            urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridAsyncSuatAn" [additionalSearchString]="additionString">
+        </app-grid>
+    </div>
+</div>
+
+<ng-template #actionTemplate let-value="value" let-dataItem>
+    <div class="text-right" kendoTooltip
+        *ngIf="dieuTriNoiTruModel.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true">
+        <button color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaYeuCauTM(dataItem)" type="button">
+            <mat-icon [icIcon]="icEdit"></mat-icon>
+        </button>
+        <button color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaYeuCauTM(dataItem)" type="button">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #tenNhomGroupHeaderTemplate let-value="value" let-dataItem>
+    <strong>{{value}}</strong>
+</ng-template>
+
+<ng-template #donGiaTemplate let-dataItem>
+    {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #thanhTienTemplate let-dataItem>
+    {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+</ng-template>

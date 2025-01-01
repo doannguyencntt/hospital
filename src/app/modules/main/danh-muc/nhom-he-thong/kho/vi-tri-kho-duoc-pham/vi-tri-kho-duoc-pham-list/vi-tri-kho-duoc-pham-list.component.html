@@ -1,0 +1,28 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Nhóm Hệ Thống',Path:''}
+                    ,{Title:'Kho ',Path:''}
+                    ,{Title:'Vị Trí Để DP/VT',Path:'/danh-muc/nhom-he-thong/Kho/vi-tri-kho-duoc-pham-vat-tu-y-te',Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/nhom-he-thong/Kho/vi-tri-kho-duoc-pham-vat-tu-y-te" [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="true" [showExportExcel]="true" (extExportExcel)="exportExcel()" [lazyLoadPage]="true"></app-grid>
+        </div>
+        <ng-template #trangThaiTemplate let-dataItem>
+            <button *ngIf="dataItem.IsDisabled == 1" (click)="updateViTriKhoDuocPham(dataItem.Id,dataItem.IsDisabled)" mat-menu-item>
+              <mat-icon [icIcon]="icicclose" color="warn"></mat-icon><span>Ngừng sử dụng</span>
+            </button>
+            <button *ngIf="dataItem.IsDisabled != 1" (click)="updateViTriKhoDuocPham(dataItem.Id,dataItem.IsDisabled)" mat-menu-item>
+              <mat-icon [icIcon]="icicdone" color="primary"></mat-icon><span>Đang sử dụng</span>
+            </button>
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>

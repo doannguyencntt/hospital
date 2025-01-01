@@ -1,0 +1,131 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" *ngIf="!showGridTrangThai && isCreate">
+        <h4 style="color: red;">Lý do: {{lyDoKhongDuyet}}</h4>
+    </div>
+    <app-combobox id="linhTuKho" fxFlex="25%" fxFlex.sm="25%" [required]="true" *ngIf="!isCreate" [disabled]="true"
+        [(model)]="phieuLinhTrucTiep.KeyId" [modelText]="phieuLinhTrucTiep.DisplayName" bind="true"
+        url="YeuCauLinhVatTu/GetTatCakhoLinhTuCuaNhanVienLoginLinhTrucTiep" label="Lĩnh từ kho"
+        [validationerror]="'KhoXuatId' | validationerror:validationErrorsLinhTT"
+        (selectionChange)="ChonKhoLinhChange($event)">
+    </app-combobox>
+    <app-combobox id="linhTuKho" fxFlex="25%" fxFlex.sm="25%" [required]="true" *ngIf="isCreate" [disabled]="true"
+        [(model)]="phieuLinhTrucTiep.KeyId" [modelText]="phieuLinhTrucTiep.DisplayName"
+        url="YeuCauLinhVatTu/GetTatCakhoLinhTuCuaNhanVienLoginLinhTrucTiep" label="Lĩnh từ kho"
+        [validationerror]="'KhoXuatId' | validationerror:validationErrorsLinhTT"
+        (selectionChange)="ChonKhoLinhChange($event)">
+
+    </app-combobox>
+    <app-textbox id="LinhVePhong" maxlength="250" label="Lĩnh về khoa" disabled={{true}} [(model)]="linhVeKhoa"
+        [required]="true" [validationerror]="'KhoNhapId' | validationerror:validationErrorsLinhTT">
+    </app-textbox>
+
+    <app-textbox id="nguoiYeuCau" [fxFlex]="isDaTao  ? '15%' : '25%'" [fxFlex.sm]="isDaTao ? '15%' : '25%'"
+        maxlength="250" label="Người yêu cầu" disabled={{true}} [(model)]="nguoiYeuCau" [required]="true"
+        [validationerror]="'NguoiYeuCau' | validationerror:validationErrors">
+    </app-textbox>
+    <app-datepicker id="ngayYeuCau" [fxFlex]="isDaTao ? '10%' : '25%'" [fxFlex.sm]="isDaTao ? '10%' : '25%'"
+        [required]="true" label="Ngày yêu cầu" disabled={{true}} [(model)]="ngayYeuCau"
+        [validationerror]="'NgayYeuCau' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <ng-container *ngIf="isShowDuyet">
+        <app-textbox id="nguoiDuyet" fxFlex="15" fxFlex.sm="15" maxlength="250" label="Người phê duyệt"
+            *ngIf="trangThaiShowDuyet != true" disabled={{true}} [(model)]="daDuyet.NguoiDuyet" [required]="true"
+            [validationerror]="'NguoiDuyet' | validationerror:validationErrors">
+        </app-textbox>
+        <app-datepicker id="ngayDuyet" fxFlex="10" fxFlex.sm="10" [required]="true" label="Ngày duyệt" disabled={{true}}
+            *ngIf="trangThaiShowDuyet != true" [(model)]="daDuyet.NgayDuyet"
+            [validationerror]="'NgayDuyet' | validationerror:validationErrors">
+        </app-datepicker>
+        <app-textbox id="nguoiDuyet" fxFlex="15" fxFlex.sm="15" maxlength="250" label="Người từ chối duyệt"
+            *ngIf="trangThaiShowDuyet == true" disabled={{true}} [(model)]="daDuyet.NguoiDuyet" [required]="true"
+            [validationerror]="'NguoiDuyet' | validationerror:validationErrors">
+        </app-textbox>
+        <app-datepicker id="ngayDuyet" fxFlex="10" fxFlex.sm="10" [required]="true" label="Ngày từ chối duyệt"
+            disabled={{true}} *ngIf="trangThaiShowDuyet == true" [(model)]="daDuyet.NgayDuyet"
+            [validationerror]="'NgayDuyet' | validationerror:validationErrors">
+        </app-datepicker>
+    </ng-container>
+    <app-textarea id="ghiChu" fxFlex="100" fxFlex.sm="100" maxlength="1000" *ngIf="!isShowDuyet" [(model)]="ghiChu"
+        [disabled]="!quyenUpdatePhieu" label="Ghi chú" minHeight="20"
+        [validationerror]="'GhiChu' | validationerror:validationErrors">
+    </app-textarea>
+    <app-textarea id="ghiChu" fxFlex="100" fxFlex.sm="100" maxlength="1000" *ngIf="isShowDuyet && !ishowTrangThaiDuyet "
+        disabled={{true}} [(model)]="ghiChu" label="Ghi chú" minHeight="20"
+        [validationerror]="'GhiChu' | validationerror:validationErrors">
+    </app-textarea>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin vật tư</h3>
+    <!-- <app-daterangepicker *ngIf="!isCreate" style="margin-left: 5px;" id="range-ngay-yeu-cau" fxFlex="350px" fxFlex.sm="auto"
+        [(model)]="searchDanhSachThongVatTu.RangeFromDate"  label="Yêu cầu từ ngày điều trị - đến ngày điều trị"
+        (modelChange)="changeNgayBatDauRange($event)" (blur)="blur()" class="mt-1 on-header">
+    </app-daterangepicker> -->
+    <div fxFlex="100%" fxFlex.sm="100%" fxLayoutAlign="start center" *ngIf="!isCreate">
+        <app-datetimepicker id="TuNgay" fxFlex="18%" fxFlex.sm="100%" [(model)]="searchDanhSachThongVatTu.TuNgay"
+            label="Từ :ngày điều trị" (modelChange)="changeTuNgay($event)" class="mt-1 on-header">
+        </app-datetimepicker>
+        <span fxFlex="2%" fxFlex.sm="100%"></span>
+        <app-datetimepicker id="DenNgay" fxFlex="18%" fxFlex.sm="100%" [(model)]="searchDanhSachThongVatTu.DenNgay"
+            label="đến :ngày điều trị" (modelChange)="changeDenNgay($event)" class="mt-1 on-header">
+        </app-datetimepicker>
+    </div>
+
+    <div fxFlex="100%" fxLayoutAlign="end center" *ngIf="showGridTrangThai">
+        <app-grid #gridCha fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridChildColumns"
+            [allowSortDefault]="true" [gridDataSource]="gridDataSource" [documentType]="documentType"
+            [useAddDeault]="false" #gridCreate [useHeaderDefault]="false" [useActionDefault]="false"
+            [masterName]='linhTrucTiepMasterName' [checkboxAble]="KiemTraCheckGrid" [lazyLoadPage]="true"
+            maxHeight="500" [pageable]="false" (extCheckboxSelection)="extCheckboxSelections($event)"
+            [detailTemplate]="detailTemplate">
+        </app-grid>
+    </div>
+    <div fxFlex="100%" fxLayoutAlign="end center" *ngIf="!showGridTrangThai">
+        <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridColumnTuChois" #gridCreate
+            [allowSortDefault]="true" [gridDataSource]="gridDataSource" [documentType]="documentType"
+            [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+            [lazyLoadPage]="true" maxHeight="500" [pageable]="false" >
+        </app-grid>
+    </div>
+    <ng-template #detailTemplate let-dataItem>
+        <app-grid *ngIf="!isCreate" baseRoute="" [gridColumns]="gridColumns" [documentType]="documentType"
+            [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+            [lazyLoadPage]="true"  [showStt]="true"
+            [gridDataSource]="getDataSourceChild(dataItem.ListYeuCauVatTuBenhViens)" [autoHeight]="true"
+            [pageable]="false">
+        </app-grid>
+        <app-grid baseRoute="" *ngIf="isCreate && !isShowDuyet" [gridColumns]="gridColumns" [documentType]="documentType"
+            [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+            [lazyLoadPage]="true"  [showStt]="true" [urlGetData]="urlGetDataDaTaoChild"
+            [additionalSearchString]="dataItem.YeuCauTiepNhanId + '-' + dataItem.LoaiThuoc + '-' + phonglamViecId + '-' + yeuCauLinhVatTuId + '-' + dataItem.KhoLinhId"
+            [autoHeight]="true" [pageable]="false" (extOnDataBound)="OnDataBound($event)">
+        </app-grid>
+        <app-grid baseRoute="" *ngIf="isCreate && isShowDuyet" [gridColumns]="gridColumnsDaDuyet" [documentType]="documentType"
+            [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+            [lazyLoadPage]="true"  [showStt]="true" [urlGetData]="urlGetDataDaTaoChild"
+            [additionalSearchString]="dataItem.YeuCauTiepNhanId + '-' + dataItem.LoaiThuoc + '-' + phonglamViecId + '-' + yeuCauLinhVatTuId + '-' + dataItem.KhoLinhId"
+            [autoHeight]="true" [pageable]="false" (extOnDataBound)="OnDataBound($event)">
+        </app-grid>
+    </ng-template>
+    <ng-template #slYeuCauTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="isCreate" [decimals]="1" class="no-label" [max]="9999">
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #tenNhomGroupHeaderTemplate let-value="value" let-dataItem>
+        <strong>{{value}}</strong>
+    </ng-template>
+    <div class="gripViewGoiDichViKhacTemplate">
+
+        <ng-template #checkBoxChildTemplate let-dataItem>
+            <span *ngIf="dataItem.SoLuongTon >= dataItem.SLYeuCau">
+                <input type="checkbox" id="vehicle1" [(ngModel)]="dataItem.IsCheckRowItem" name="vehicle1" 
+                    (ngModelChange)="checkboxGridChild($event,dataItem)">
+            </span>
+            <span *ngIf="dataItem.SLYeuCau  > dataItem.SoLuongTon">
+                <input type="checkbox" id="vehicle1" [(ngModel)]="dataItem.IsCheckRowItem" name="vehicle1" disabled
+                    (ngModelChange)="checkboxGridChild($event,dataItem)">
+            </span>
+        </ng-template>
+
+
+    </div>
+</div>

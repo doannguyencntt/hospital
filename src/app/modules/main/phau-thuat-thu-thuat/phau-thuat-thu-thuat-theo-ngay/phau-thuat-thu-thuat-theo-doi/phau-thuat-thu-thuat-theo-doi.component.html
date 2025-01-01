@@ -1,0 +1,104 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="100%">
+                <div class="p-2">
+                    <!-- <app-pttt-sinh-ton [thongTinBenhNhan]="thongTinBenhNhan">
+                    </app-pttt-sinh-ton> -->
+                    <app-pttt-theo-doi-sinh-ton fxFlex="100%" [thongTinBenhNhan]="thongTinBenhNhan" (displayBtnForSton)="displayButtonOnChiSoSinhTon($event)" #ptttTheoDoiSt>
+                    </app-pttt-theo-doi-sinh-ton>
+                </div>
+                <div class="wrapBtnLuu">
+                    <button *ngIf="logicDisplayCsst.IsDisplayReset" class="btnHuy" (click)="ResetSinhTon()">Hủy</button>
+                    <button *ngIf="logicDisplayCsst.IsDisplaySave" class="btnLuu" (click)="SaveSinhTon()">Lưu</button>
+                </div>
+            </div>
+            <!-- <app-pttt-theo-doi-sinh-ton fxFlex="100%"
+                [thongTinBenhNhan]="thongTinBenhNhan"
+                [dataChiSoSinhTon]="thongTinBenhNhan.KetQuaSinhHieus">
+            </app-pttt-theo-doi-sinh-ton> -->
+
+            <div fxFlex="100%">
+                <kendo-tabstrip fxFlex="100%" class="content-has-border tabstrip-pad sticky-kendotab-item tab-strip-pttt-theo-doi-lan-kham" (tabSelect)="onTabSelect($event)">
+                    <kendo-tabstrip-tab [disabled]="true" *ngIf="khamTheoDois.length >= 1 && !khamTheoDois[0].ThoiDiemHoanThanhKham">
+                        <ng-template kendoTabTitle>
+                            <button class="po-h disabled">
+                                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+                            </button>
+                        </ng-template>
+                    </kendo-tabstrip-tab>
+
+                    <kendo-tabstrip-tab *ngIf="khamTheoDois.length >= 1 && khamTheoDois[0].ThoiDiemHoanThanhKham" [disabled]="thongTinBenhNhan.IsTuongTrinhLai">
+                        <ng-template kendoTabTitle>
+                            <button class="po-h">
+                                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+                            </button>
+                        </ng-template>
+                    </kendo-tabstrip-tab>
+
+                    <ng-container *ngFor="let item of khamTheoDois; index as i">
+                        <kendo-tabstrip-tab [selected]="i === 0">
+                            <ng-template kendoTabTitle>
+                                <div kendoTooltip title="Phím tắt: Chưa có">
+                                    LẦN KHÁM {{khamTheoDois.length - i}}
+                                </div>
+                            </ng-template>
+                            <ng-template kendoTabContent>
+                                <div class="p-2">
+                                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                                        <div fxFlex="100%">
+                                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                                                <app-textbox *ngIf="i === 0" id="khoa_phong" fxFlex="100%" label="Khám toàn thân" maxlength="4000" [disabled]="thongTinBenhNhan.IsTuongTrinhLai"
+                                                    [(model)]="item.KhamToanThan" (modelChange)="onDataChange($event)">
+                                                </app-textbox>
+                                                <app-textbox *ngIf="i !== 0" [disabled]="true" id="khoa_phong" fxFlex="100%" label="Khám toàn thân" maxlength="4000"
+                                                    [(model)]="item.KhamToanThan">
+                                                </app-textbox>
+        
+                                                <app-pttt-theo-doi-co-quan fxFlex="100%" *ngIf="i === 0"
+                                                    [isReadonly]="thongTinBenhNhan.IsTuongTrinhLai"
+                                                    [thongTinBenhNhan]="thongTinBenhNhan" [phongKhamId]="phongKhamHienTai.KeyId"
+                                                    [thongTinKhamTheoDoiTemplateObj]="item.ThongTinKhamTheoDoiTemplateObj"
+                                                    [isChangeData]="isChangeData" (outputPTTTTheoDoiCoQuanDataChanged)="onDataChange($event)">
+                                                </app-pttt-theo-doi-co-quan>
+                                                <app-pttt-theo-doi-co-quan fxFlex="100%" *ngIf="i !== 0"
+                                                    [isReadonly]="true"
+                                                    [thongTinBenhNhan]="thongTinBenhNhan" [phongKhamId]="phongKhamHienTai.KeyId"
+                                                    [thongTinKhamTheoDoiTemplateObj]="item.ThongTinKhamTheoDoiTemplateObj">
+                                                </app-pttt-theo-doi-co-quan>
+
+                                                <app-pttt-theo-doi-bo-phan-khac *ngIf="i === 0" fxFlex="100%" 
+                                                    [isReadonly]="thongTinBenhNhan.IsTuongTrinhLai"
+                                                    [data]="thongTinBenhNhan" [(dataKhamBoPhanKhac)]="item.KhamTheoDoiBoPhanKhacs"
+                                                    [isChangeData]="isChangeData" (outputPTTTTheoDoiBoPhanKhacDataChanged)="onDataChange($event)"
+                                                    [validationErrors]="validationErrors">
+                                                </app-pttt-theo-doi-bo-phan-khac>
+                                                <app-pttt-theo-doi-bo-phan-khac *ngIf="i !== 0" fxFlex="100%" 
+                                                    [data]="thongTinBenhNhan" [(dataKhamBoPhanKhac)]="item.KhamTheoDoiBoPhanKhacs"
+                                                    [isReadonly]="true" [validationErrors]="validationErrors">
+                                                </app-pttt-theo-doi-bo-phan-khac>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                    <div kendoTooltip class="sticky-button-action py-3 text-right">
+                                        <ng-container *ngIf="i === 0 && isChangeData">
+                                            <button type="button" color="primary" mat-button class="mr-2" title="Phím tắt: Esc" (click)="huyLanKham()">Huỷ</button>
+                                            <button type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Crtl + S" (click)="luuLanKham()">Lưu</button>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="i !== 0 && isChangeData">
+                                            <button [disabled]="true" type="button" color="primary" mat-button class="mr-2" title="Phím tắt: Chưa có">Huỷ</button>
+                                            <button [disabled]="true" type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Chưa có">Lưu</button>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </kendo-tabstrip-tab>
+                    </ng-container>
+                </kendo-tabstrip>
+            </div>
+            
+        </div>
+    </div>
+</div>

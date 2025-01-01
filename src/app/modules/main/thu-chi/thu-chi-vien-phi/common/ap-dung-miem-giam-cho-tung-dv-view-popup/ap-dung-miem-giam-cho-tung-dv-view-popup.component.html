@@ -1,0 +1,124 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+	<div style="font: 500 18px/26px var(--font)">Miễn giảm dịch vụ: <strong
+			style="color: green">{{tenDichVu}}</strong></div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+<mat-dialog-content>
+	<div width="100%" fxLayout="row">
+		<table class="table table-border" width="100%">
+			<!-- <tr>
+				<td colspan="2" align="right">Số tiền trước miễn giảm :</td>
+				<td><strong style="color: blue">{{tongTienTungDichVu | number:'0.2-2':'vi-VN'}}</strong></td>
+			</tr> -->
+			<ng-container *ngFor="let item of danhSachChiPhiKhamChuaBenh.DanhSachMienGiamVos; let i = index">
+				<tr *ngIf="item.LoaiMienGiam === 1">
+					<td colspan="3" class="no-border-bottom pb-0">Đối tượng: <strong>{{item.DoiTuongUuDai}}</strong>
+					</td>
+				</tr>
+				<tr *ngIf="item.LoaiMienGiam === 1">
+					<td width="140px" style="width: 31%">
+						<app-radio class="no-format-css p-0" [disabled]="true" [model]="item.LoaiChietKhau"
+							[items]="[{Value:2,Text:'Tiền'},{Value:1,Text:'%'}]"></app-radio>
+					</td>
+					<td>
+						<app-textboxnumeric label=" " class="no-label p-0" max="100" min="0" [disabled]="true"
+							[model]="item.TiLe"> </app-textboxnumeric>
+					</td>
+					<td>= <strong>{{ item.TongTienMiemGiam | number:'0.2-2':'vi-VN'}}</strong></td>
+				</tr>
+			</ng-container>
+			<ng-container *ngFor="let item of danhSachChiPhiKhamChuaBenh.DanhSachMienGiamVos; let i = index">
+				<tr *ngIf="item.LoaiMienGiam === 2">
+					<td colspan="3" class="no-border-bottom pb-0">Voucher: <strong>{{item.MaTheVoucher}}</strong></td>
+				</tr>
+				<tr *ngIf="item.LoaiMienGiam === 2">
+					<td class="no-border-bottom pb-0" style="width: 31%">
+						<app-radio class="no-format-css p-0" [disabled]="true" [model]="item.LoaiChietKhau"
+							[items]="[{Value:2,Text:'Tiền'},{Value:1,Text:'%'}]"></app-radio>
+					</td>
+					<td *ngIf="item.LoaiMienGiam === 2 && item.LoaiChietKhau === 1" class="no-border-bottom pb-0">
+						<app-textboxnumeric label=" " class="no-label p-0" max="100" min="0" [disabled]="true"
+							[model]="item.TiLe"> </app-textboxnumeric>
+					</td>
+					<td *ngIf="item.LoaiMienGiam === 2 && item.LoaiChietKhau === 2" class="no-border-bottom pb-0">
+						<app-textboxnumeric label=" " class="no-label p-0" max="999999" min="0" [disabled]="true"
+							[model]="item.SoTien"> </app-textboxnumeric>
+					</td>
+					<td class="no-border-bottom pb-0">= <strong>{{ item.TongTienMiemGiam |
+							number:'0.2-2':'vi-VN'}}</strong></td>
+				</tr>
+			</ng-container>
+			<tr>
+				<td colspan="3" class="no-border-bottom pb-0">MG thêm:</td>
+			</tr>
+			<ng-container *ngFor="let item of danhSachChiPhiKhamChuaBenh.DanhSachMienGiamVos; let i = index">
+				<tr *ngIf="item.LoaiMienGiam === 3  && item.LoaiChietKhau === 1">
+					<td class="no-border-bottom">
+						<app-checkbox id="phan-tram" value="1" fxFlex="40%" label="%" [(model)]="disableInputPhanTram"
+							[disabled]="true"> </app-checkbox>
+					</td>
+					<td class="no-border-bottom" style="width: 1200px">
+						<app-textboxnumeric style="width: 1200px" max="100" class="no-label p-0" label=" " min="0"
+							[(model)]="item.TiLe" [disabled]="true" (modelChange)="changePhanTram($event, item)"
+							[validationerror]="'TiLe' | validationerror: validationErrors"> </app-textboxnumeric>
+					</td>
+					<td class="no-border-bottom">= <strong>{{ item.TongTienMiemGiam | number:'0.2-2':'vi-VN'}}</strong>
+					</td>
+				</tr>
+				<tr *ngIf="item.LoaiMienGiam === 3  && item.LoaiChietKhau === 2">
+					<td class="no-border-bottom pb-0">
+						<app-checkbox id="so-tien" value="1" fxFlex="40%" label="Tiền" [(model)]="disableInputSoTien"
+							[disabled]="true"> </app-checkbox>
+					</td>
+					<td class="no-border-bottom pb-0" style="width: 1200px">
+						<app-textboxnumeric label="" style="width: 1200px" class="no-label p-0" [(model)]="item.SoTien"
+							min="0" max="99999999" [disabled]="true" (modelChange)="changeSoTien($event, item)"
+							[validationerror]="'SoTien' | validationerror: validationErrors"> </app-textboxnumeric>
+					</td>
+					<td class="no-border-bottom pb-0" style="width: 500px">= <strong>{{ item.TongTienMiemGiam |
+							number:'0.2-2':'vi-VN'}}</strong></td>
+				</tr>
+			</ng-container>
+			<tr>
+				<td align="left">Lý do miễm giảm<label class="red">(*)</label></td>
+				<td class="no-border-bottom pb-0" style="width: 1200px" colspan="3">
+					<div class="d-flex flex-row-reverse">
+						<!-- <button class="ml-1 mt-2" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm"
+							type="button" (click)="showPopupGhiChuMiemGiam()">
+							<mat-icon style="color: white;" [icIcon]="icAdd"></mat-icon>
+						</button> -->
+						<app-combobox id="ketQuaMau" fxFlex="100%" fxFlex.sm="100%"
+							url="NoiDungGhiChuMiemGiam/GetListNoiDungMau" popupSettings="null" label="Miễm giảm"
+							class="item-no-padding mr-2" style="padding-bottom: 0px;" [template]="ketQuaTemplate"
+							bind="true" [(model)]="data.dataItem.NoiDungGhiChuMiemGiamId" [disabled]="true"
+							[(modelText)]="data.dataItem.GhiChuMienGiamThem" [templateHeader]="ketQuaTemplateHeader">
+							<ng-template #ketQuaTemplateHeader let-dataItem>
+								<table width="100%" class="table-combobox">
+									<tr>
+										<th width="20%">Mã</th>
+										<th>Tên</th>
+									</tr>
+								</table>
+							</ng-template>
+							<ng-template #ketQuaTemplate let-dataItem>
+								<table width="100%" class="table-combobox">
+									<tr>
+										<td width="20%">{{dataItem.Ma}}</td>
+										<td>{{dataItem.Ten}}</td>
+									</tr>
+								</table>
+							</ng-template>
+						</app-combobox>
+					</div>
+				</td>
+			</tr>
+			<!-- <tr>
+				<td colspan="3">
+					<app-textarea label="Ghi chú" maxlength="2000" minHeight="60" [disabled]="true" [(model)]="data.dataItem.GhiChuMienGiamThem"> </app-textarea>
+				</td>
+			</tr> -->
+		</table>
+	</div>
+</mat-dialog-content>

@@ -1,0 +1,350 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="Ma" fxFlex="10%" fxFlex.sm="100%" [required]="true" [(model)]="voucher.Ma" label="Mã"
+        maxlength="5" [validationerror]="'Ma' | validationerror: validationErrors"
+        (modelChange)="maVoucherChange($event)"
+        [disabled]="tongSoBenhNhanSuDung > 0">
+    </app-textbox>
+
+    <app-textbox id="Ten" fxFlex="40%" fxFlex.sm="100%" [required]="true" [(model)]="voucher.Ten" label="Tên voucher"
+        maxlength="250" [validationerror]="'Ten' | validationerror: validationErrors"
+        [disabled]="tongSoBenhNhanSuDung > 0">
+    </app-textbox>
+
+    <app-textboxnumeric fxFlex="10%" fxFlex.sm="100%" label="SL phát hành" required="true" [min]="0" [max]="9999999" id="SoLuongPhatHanh"
+        [(model)]="voucher.SoLuongPhatHanh"
+        [validationerror]="'SoLuongPhatHanh' | validationerror: validationErrors"
+        (modelChange)="soLuongPhatHanhChange($event)"
+        [disabled]="tongSoBenhNhanSuDung > 0"
+        [isFormatCurrenly]="true">
+    </app-textboxnumeric>
+
+    <app-textbox id="MaSoTu" fxFlex="10%" fxFlex.sm="100%" [disabled]="true" label="Mã số từ" 
+        [(model)]="voucher.MaSoTu"
+        [disabled]="true" [validationerror]="'MaSoTu' | validationerror: validationErrors">
+    </app-textbox>
+
+    <app-textbox id="MaSoDen" fxFlex="10%" fxFlex.sm="100%" [disabled]="true" label="Mã số đến"
+        [(model)]="voucher.MaSoDen"
+        [disabled]="true"  [validationerror]="'MaSoDen' | validationerror: validationErrors">
+    </app-textbox>
+
+    <app-datepicker id="TuNgay" fxFlex="10%" fxFlex.sm="100%" label="Ngày bắt đầu"
+        [(model)]="voucher.TuNgay" [required]="true"
+        [validationerror]="'TuNgay' | validationerror:validationErrors"
+        [disabled]="tongSoBenhNhanSuDung > 0">
+    </app-datepicker>
+
+    <app-datepicker id="DenNgay" fxFlex="10%" fxFlex.sm="100%" label="Ngày kết thúc"
+        [(model)]="voucher.DenNgay"
+        [validationerror]="'DenNgay' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <h3 fxFlex="100%" fxFlex.sm="100%" class="sub-title mr-4">DỊCH VỤ</h3>
+
+    <app-radio id="IsDisabled" fxFlex="30%" fxFlex.sm="30%" name="isDisabled" label="Sử dụng"
+        [items]="radioDichVuItems"
+        [(model)]="voucher.LoaiDichVuVoucherMarketing"
+        [validationerror]="'HieuLuc' | validationerror: validationErrors"
+        [disabled]="tongSoBenhNhanSuDung > 0"
+        (modelChange)="loaiDichVuVoucherMarketingChange($event)">
+    </app-radio>
+
+    <!-- Dịch vụ -->
+    <ng-container *ngIf="voucher.LoaiDichVuVoucherMarketing == loaiDichVuVoucherMarketing.DichVu">
+        <app-combobox #dichVu popupSettings="null" id="TenDichVu" fxFlex="20%" fxFlex.sm="100%" label="Tên DV" class="item-no-padding" url="Voucher/GetListDichVuChoVoucher"
+            [required]="true" (selectionChange)="tenDichVuChange($event)"
+            [(model)]="dichVuVoucher.DichVuId" [modelText]="dichVuVoucher.DichVuDisplay"
+            [template]="dichVuTemplate" [templateHeader]="dichVuTemplateHeader"
+            [validationerror]="'DichVuId' | validationerror:validationErrors"
+            [disabled]="tongSoBenhNhanSuDung > 0" [popupSettings]="{width: 500,popupClass:'item-no-padding'}"
+            (keyup)="keyUpDichVu($event)" (openCombobox)="openComboboxDichVu($event)"  (modelChange)="loaiGiaChange($event)">
+            <ng-template #dichVuTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th>Tên dịch vụ</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #dichVuTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.DisplayName}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <app-dropdownlist popupSettings="null" id="LoaiGia" fxFlex="10%" fxFlex.sm="100%" label="Loại giá" class="item-no-padding"
+            [required]="true" [url]="'Voucher/GetListTatCaLoaiGiaChoDichVu?loaiDichVu=' + (this.dichVuVoucher.LoaiDichVuBenhVien ? this.dichVuVoucher.LoaiDichVuBenhVien : loaiDichVuBenhVien.KyThuat)" [(model)]="dichVuVoucher.LoaiGiaId" (modelChange)="loaiGiaChange($event)"
+            [autoSelectFirstItem]="true" [bind]="true"
+            [validationerror]="'LoaiGiaId' | validationerror:validationErrors"
+            [disabled]="tongSoBenhNhanSuDung > 0"
+            (keyup)="keyUpDichVu($event)">
+        </app-dropdownlist>
+
+        <!-- <app-combobox popupSettings="null" id="LoaiGia" fxFlex="10%" fxFlex.sm="100%" label="Loại giá" class="item-no-padding"
+            [required]="true" [data]="loaiGia" [(model)]="dichVuVoucher.LoaiGiaId" (modelChange)="loaiGiaChange($event)"
+            [autoSelectFirstItem]="true" [bind]="true"
+            [validationerror]="'LoaiGiaId' | validationerror:validationErrors"
+            [disabled]="tongSoBenhNhanSuDung > 0"
+            (keyup)="keyUpDichVu($event)">
+        </app-combobox> -->
+
+        <app-textboxnumeric id="DonGia" fxFlex="10%" fxFlex.sm="100%" min="0"
+            [(model)]="dichVuVoucher.DonGia" label="Đơn giá" disabled="true"
+            [validationerror]="'DonGia' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <div fxFlex="20%" fxFlex.sm="100%" class="radio-numeric">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+                <app-radio fxFlex="100%" fxFlex.sm="100%" id="ChietKhau" name="ChietKhau"
+                    [items]="radioChietKhauItems" [(model)]="dichVuVoucher.LoaiChietKhau" label=" "
+                    (modelChange)="loaiChietKhauChange($event)"
+                    [validationerror]="'ChietKhau' | validationerror:validationErrors" class="no-label"
+                    [disabled]="tongSoBenhNhanSuDung > 0">
+                </app-radio>        
+                <app-textboxnumeric id="ChietKhauSoTien" fxFlex="100%" fxFlex.sm="100%" maxlength="250" [(model)]="dichVuVoucher.SoTienChietKhau"
+                    label=" " [validationerror]="'SoTienChietKhau' | validationerror:validationErrors" class="no-label"
+                    min="0" step="1000" max="{{dichVuVoucher.DonGia && dichVuVoucher.DonGia > 0 ? dichVuVoucher.DonGia : 0}}" *ngIf="dichVuVoucher.LoaiChietKhau == loaiChietKhau.ChietKhauTheoSoTien"
+                    (modelChange)="chietKhauChange($event)"
+                    [disabled]="tongSoBenhNhanSuDung > 0"
+                    (keyup)="keyUpDichVu($event)"
+                    [isFormatCurrenly]="true">
+                </app-textboxnumeric>
+                <app-textboxnumeric id="ChietKhauPhamTram" fxFlex="100%" fxFlex.sm="100%" maxlength="250" [(model)]="dichVuVoucher.TiLeChietKhau"
+                    label=" " [validationerror]="'TiLeChietKhau' | validationerror:validationErrors" class="no-label" 
+                    min="0" max="{{dichVuVoucher.DonGia && dichVuVoucher.DonGia > 0 ? 100 : 0}}" step="1" *ngIf="dichVuVoucher.LoaiChietKhau == loaiChietKhau.ChietKhauTheoTiLe"
+                    (modelChange)="chietKhauChange($event)"
+                    [disabled]="tongSoBenhNhanSuDung > 0"
+                    (keyup)="keyUpDichVu($event)"
+                    [isFormatCurrenly]="true">
+                </app-textboxnumeric>
+            </div>
+        </div>
+
+        <app-textboxnumeric id="DonGiaSauChietKhau" fxFlex="10%" fxFlex.sm="100%" min="0"
+            [(model)]="dichVuVoucher.DonGiaSauChietKhau" label="Đơn giá sau CK" disabled="true"
+            [validationerror]="'DonGiaSauChietKhau' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-textbox id="GhiChu" fxFlex="100%" fxFlex.sm="100%" label="Ghi chú" maxlength="1000" minHeight="25"
+            [(model)]="dichVuVoucher.GhiChu"
+            [disabled]="tongSoBenhNhanSuDung > 0"
+            (keyup)="keyUpDichVu($event)">
+        </app-textbox>
+
+        <div fxFlex="100%">
+            <!-- <app-formfooter [bodyComponent]="shared" type="update" (updated)="onUpdated()"></app-formfooter> -->
+            <div kendoTooltip class="sticky-button-action py-3 text-right">
+                <button type="button" mat-button color="primary" (click)="huy()" [disabled]="tongSoBenhNhanSuDung > 0">Hủy</button>
+                <button type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Enter" (click)="themDichVuChoVoucher()" [disabled]="tongSoBenhNhanSuDung > 0">Thêm</button>
+            </div>
+        </div>
+    </ng-container>
+
+    <!-- Nhóm dịch vụ -->
+    <ng-container *ngIf="voucher.LoaiDichVuVoucherMarketing == loaiDichVuVoucherMarketing.NhomDichVu">
+        <app-combobox-tree popupSettings="null" fxFlex="20%" label="Nhóm DV" id="NhomDichVu" required="true"
+            url="Voucher/GetListNhomDichVuChoVoucher" hierarchyKeyToSend="NhomDichVuBenhVienId"
+            [(model)]="dichVuVoucher.NhomDichVuId" [modelText]="dichVuVoucher.NhomDichVuDisplay"
+            (selectionChange)="nhomDichVuChange($event)"
+            [validationerror]="'NhomDichVuId' | validationerror:validationErrors"
+            [disabled]="tongSoBenhNhanSuDung > 0" [popupSettings]="{width: 500}"
+            (keyup)="keyUpNhomDichVu($event)">
+        </app-combobox-tree>
+
+        <div fxFlex="20%" fxFlex.sm="100%" class="radio-numeric">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+                <app-radio fxFlex="100%" fxFlex.sm="100%" id="ChietKhauNhomDichVu" name="ChietKhauNhomDichVu"
+                    [items]="radioChietKhauItems" [(model)]="dichVuVoucher.LoaiChietKhau" label=" "
+                    [validationerror]="'ChietKhauNhomDichVu' | validationerror:validationErrors" class="no-label"
+                    [disabled]="tongSoBenhNhanSuDung > 0"
+                    (modelChange)="loaiChietKhauChange($event)">
+                </app-radio>        
+                <app-textboxnumeric id="ChietKhauSoTienNhomDichVu" fxFlex="100%" fxFlex.sm="100%" maxlength="250" [(model)]="dichVuVoucher.SoTienChietKhau"
+                    label=" " [validationerror]="'SoTienChietKhauNhomDichVu' | validationerror:validationErrors" class="no-label"
+                    min="0" step="1000" *ngIf="dichVuVoucher.LoaiChietKhau == loaiChietKhau.ChietKhauTheoSoTien"
+                    [disabled]="tongSoBenhNhanSuDung > 0"
+                    (keyup)="keyUpNhomDichVu($event)"
+                    [isFormatCurrenly]="true">
+                </app-textboxnumeric>
+                <app-textboxnumeric id="ChietKhauPhamTramNhomDichVu" fxFlex="100%" fxFlex.sm="100%" maxlength="250" [(model)]="dichVuVoucher.TiLeChietKhau"
+                    label=" " [validationerror]="'TiLeChietKhauNhomDichVu' | validationerror:validationErrors" class="no-label" 
+                    min="0" max="100" step="1" *ngIf="dichVuVoucher.LoaiChietKhau == loaiChietKhau.ChietKhauTheoTiLe"
+                    [disabled]="tongSoBenhNhanSuDung > 0"
+                    (keyup)="keyUpNhomDichVu($event)"
+                    [isFormatCurrenly]="true">
+                </app-textboxnumeric>
+            </div>
+        </div>
+
+        <app-textbox id="GhiChuNhomDichVu" fxFlex="30%" fxFlex.sm="100%" label="Ghi chú" maxlength="1000" minHeight="25"
+            [(model)]="dichVuVoucher.GhiChu"
+            [disabled]="tongSoBenhNhanSuDung > 0"
+            (keyup)="keyUpNhomDichVu($event)">
+        </app-textbox>
+
+        <div fxFlex="100%">
+            <div kendoTooltip class="sticky-button-action py-3 text-right">
+                <button type="button" mat-button color="primary" (click)="huy()" [disabled]="tongSoBenhNhanSuDung > 0">Hủy</button>
+                <button type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Enter" (click)="themNhomDichVuChoVoucher()" [disabled]="tongSoBenhNhanSuDung > 0">Thêm</button>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="voucher.LoaiDichVuVoucherMarketing != loaiDichVuVoucherMarketing.TatCaDichVu">
+        <h3 fxFlex="100%" class="sub-title mt-0">Dịch vụ</h3>
+        <app-grid #gridDanhSachDichVu fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumns" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [HideHeader]="false" [documentType]="documentType"
+            [lazyLoadPage]="true" [autoHeight]="true" [urlGetData]="urlGetListDichVuForGrid" [urlGetTotalPage]="urlGetPagesListDichVuForGrid"
+            [pageable]="false" [showStt]="true"
+            (extOnDataBound)="onDataBoundGridDichVuDonLe($event)">
+        </app-grid>
+
+        <h3 fxFlex="100%" class="sub-title mt-0">Nhóm dịch vụ</h3>
+        <app-grid #gridDanhSachNhomDichVu fxFlex="100%" class="k-grid-border" [gridColumns]="gridNhomDichVuColumns" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [HideHeader]="false" [documentType]="documentType"
+            [lazyLoadPage]="true" [autoHeight]="true" [urlGetData]="urlGetListNhomDichVuForGrid" [urlGetTotalPage]="urlGetPagesListNhomDichVuForGrid"
+            [pageable]="false" [showStt]="true"
+            (extOnDataBound)="onDataBoundGridNhomDichVu($event)">
+        </app-grid>
+    </ng-container>
+
+    <!-- Tất cả dịch vụ -->
+    <ng-container *ngIf="voucher.LoaiDichVuVoucherMarketing == loaiDichVuVoucherMarketing.TatCaDichVu">
+        <div fxFlex="20%" fxFlex.sm="100%" class="radio-numeric">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+                <app-radio fxFlex="100%" fxFlex.sm="100%" id="ChietKhauTatCaDichVu" name="ChietKhauTatCaDichVu"
+                    [items]="radioChietKhauItems" [(model)]="voucher.LoaiChietKhau" label=" "
+                    [validationerror]="'ChietKhauTatCaDichVu' | validationerror:validationErrors" class="no-label"
+                    [disabled]="tongSoBenhNhanSuDung > 0">
+                </app-radio>        
+                <app-textboxnumeric id="ChietKhauSoTienTatCaDichVu" fxFlex="100%" fxFlex.sm="100%" maxlength="250" [(model)]="voucher.SoTienChietKhau"
+                    label=" " [validationerror]="'SoTienChietKhauTatCaDichVu' | validationerror:validationErrors" class="no-label"
+                    min="0" step="1000" *ngIf="voucher.LoaiChietKhau == loaiChietKhau.ChietKhauTheoSoTien"
+                    [disabled]="tongSoBenhNhanSuDung > 0"
+                    [isFormatCurrenly]="true">
+                </app-textboxnumeric>
+                <app-textboxnumeric id="ChietKhauPhamTramTatCaDichVu" fxFlex="100%" fxFlex.sm="100%" maxlength="250" [(model)]="voucher.TiLeChietKhau"
+                    label=" " [validationerror]="'TiLeChietKhauTatCaDichVu' | validationerror:validationErrors" class="no-label" 
+                    min="0" max="100" step="1" *ngIf="voucher.LoaiChietKhau == loaiChietKhau.ChietKhauTheoTiLe"
+                    [disabled]="tongSoBenhNhanSuDung > 0"
+                    [isFormatCurrenly]="true">
+                </app-textboxnumeric>
+            </div>
+        </div>
+
+        <app-textbox id="GhiChuTatCaDichVu" fxFlex="50%" fxFlex.sm="100%" label="Ghi chú" maxlength="1000"
+            [(model)]="voucher.GhiChu" minHeight="25"
+            [disabled]="tongSoBenhNhanSuDung > 0">
+        </app-textbox>
+    </ng-container>
+</div>
+
+<ng-template #nhomDichVuTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+
+<ng-template #loaiGiaTemplate let-dataItem>
+    <app-combobox popupSettings="null" label=" "  class="no-label p-0"
+        [required]="true" [url]="'Voucher/GetListTatCaLoaiGiaChoDichVu?loaiDichVu=' + dataItem.LoaiDichVuBenhVien"
+        [(model)]="dataItem.LoaiGiaId"  [modelText]="dataItem.LoaiGiaDisplay"
+        [autoSelectFirstItem]="true" [bind]="true"
+        (modelChange)="loaiGiaDichVuChange($event, dataItem)"
+        [validationerror]="'dataItem[' + voucher.lstVoucherChiTietMienGiam.indexOf(dataItem) + '].LoaiGia' | validationerror:validationErrors"
+        [disabled]="tongSoBenhNhanSuDung > 0">
+    </app-combobox>
+</ng-template>
+
+<ng-template #donGiaTemplate let-dataItem>
+    {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #chietKhauTemplate let-dataItem let-rowIndex="rowIndex">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+        <app-radio fxFlex="50%" fxFlex.sm="100%" name="ChietKhauChiTiet"
+            [items]="radioChietKhauChiTietItems" [(model)]="dataItem.LoaiChietKhau" label=" "  class="no-label p-0"
+            [disabled]="tongSoBenhNhanSuDung > 0"
+            (modelChange)="loaiChietKhauChiTietDichVuChange($event, dataItem)">
+        </app-radio>   
+        <app-textboxnumeric fxFlex="50%" fxFlex.sm="100%" maxlength="250" [(model)]="dataItem.SoTienChietKhau"
+            id="{{rowIndex + 1}}SoTienChietKhau"
+            *ngIf="dataItem.LoaiChietKhau == loaiChietKhau.ChietKhauTheoSoTien" label=" " class="no-label p-0 text-height-42"
+            min="0" step="1000" max="{{dataItem.DonGia && dataItem.DonGia > 0 ? dataItem.DonGia : 999999999999}}"
+            (modelChange)="chietKhauDichVuChange($event, dataItem)"
+            [validationerror]="'dataItem[' + voucher.lstVoucherChiTietMienGiam.indexOf(dataItem) + '].SoTienChietKhau' | validationerror:validationErrors"
+            [disabled]="tongSoBenhNhanSuDung > 0"
+            [isFormatCurrenly]="true">
+        </app-textboxnumeric>
+        <app-textboxnumeric fxFlex="50%" fxFlex.sm="100%" maxlength="250" [(model)]="dataItem.TiLeChietKhau" label=" " class="no-label p-0 text-height-42"
+            id="{{rowIndex + 1}}TiLeChietKhau"
+            min="0" max="{{dataItem.DonGia && dataItem.DonGia > 0 ? 100 : 0}}" step="1" *ngIf="dataItem.LoaiChietKhau == loaiChietKhau.ChietKhauTheoTiLe"
+            (modelChange)="chietKhauDichVuChange($event, dataItem)"
+            [validationerror]="'dataItem[' + voucher.lstVoucherChiTietMienGiam.indexOf(dataItem) + '].TiLeChietKhau' | validationerror:validationErrors"
+            [disabled]="tongSoBenhNhanSuDung > 0"
+            [isFormatCurrenly]="true">
+        </app-textboxnumeric>
+    </div>
+</ng-template>
+
+<ng-template #chietKhauNhomDichVuTemplate let-dataItem let-rowIndex="rowIndex">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+        <app-radio fxFlex="50%" fxFlex.sm="100%" name="ChietKhauChiTiet"
+            [items]="radioChietKhauChiTietItems" [(model)]="dataItem.LoaiChietKhau" label=" " class="no-label p-0"
+            [disabled]="tongSoBenhNhanSuDung > 0"
+            (modelChange)="loaiChietKhauChiTietNhomDichVuChange($event, dataItem)">
+        </app-radio>     
+        <app-textboxnumeric fxFlex="50%" fxFlex.sm="100%" maxlength="250" [(model)]="dataItem.SoTienChietKhau"
+            id="{{rowIndex + 1}}SoTienChietKhauNhomDichVu"
+            *ngIf="dataItem.LoaiChietKhau == loaiChietKhau.ChietKhauTheoSoTien" label=" " class="no-label p-0 text-height-42"
+            min="0" step="1000" max="{{dataItem.DonGia && dataItem.DonGia > 0 ? dataItem.DonGia : 999999999999}}"
+            [validationerror]="'dataItem[' + voucher.lstVoucherChiTietMienGiamNhomDichVu.indexOf(dataItem) + '].SoTienChietKhauNhomDichVu' | validationerror:validationErrors"
+            [disabled]="tongSoBenhNhanSuDung > 0"
+            [isFormatCurrenly]="true">
+        </app-textboxnumeric>
+        <app-textboxnumeric fxFlex="50%" fxFlex.sm="100%" maxlength="250" [(model)]="dataItem.TiLeChietKhau" label=" " class="no-label p-0 text-height-42"
+            id="{{rowIndex + 1}}TiLeChietKhauNhomDichVu"
+            min="0" max="100" step="1" *ngIf="dataItem.LoaiChietKhau == loaiChietKhau.ChietKhauTheoTiLe"
+            [validationerror]="'dataItem[' + voucher.lstVoucherChiTietMienGiamNhomDichVu.indexOf(dataItem) + '].TiLeChietKhauNhomDichVu' | validationerror:validationErrors"
+            [disabled]="tongSoBenhNhanSuDung > 0"
+            [isFormatCurrenly]="true">
+        </app-textboxnumeric>
+    </div>
+</ng-template>
+
+<ng-template #donGiaSauChietKhauTemplate let-dataItem>
+    <ng-container *ngIf="dataItem.LoaiChietKhau == loaiChietKhau.ChietKhauTheoSoTien">
+        {{(dataItem.DonGia > 0 ? dataItem.DonGia - dataItem.SoTienChietKhau : 0) | number:'0.2-2':'vi-VN'}}
+    </ng-container>
+
+    <ng-container *ngIf="dataItem.LoaiChietKhau == loaiChietKhau.ChietKhauTheoTiLe">
+        {{(dataItem.DonGia > 0 ? (dataItem.DonGia * (100 - dataItem.TiLeChietKhau))/100 : 0) | number:'0.2-2':'vi-VN'}}
+    </ng-container>
+</ng-template>
+
+<ng-template #ghiChuTemplate let-dataItem>
+    <app-textbox id="GhiChuDichVu" fxFlex="100%" fxFlex.sm="100%" label=" " maxlength="1000" minHeight="25" class="no-label p-0"
+        [(model)]="dataItem.GhiChu"
+        [disabled]="tongSoBenhNhanSuDung > 0">
+    </app-textbox>
+</ng-template>
+
+<ng-template #ghiChuNhomDichVuTemplate let-dataItem>
+    <app-textbox id="GhiChuNhomDichVu" fxFlex="100%" fxFlex.sm="100%" label=" " maxlength="1000" minHeight="25" class="no-label p-0"
+        [(model)]="dataItem.GhiChu"
+        [disabled]="tongSoBenhNhanSuDung > 0">
+    </app-textbox>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <button *ngIf="dataItem.DichVuId && dataItem.DichVuId > 0" style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoaDichVuChoVoucher(dataItem)" [disabled]="tongSoBenhNhanSuDung > 0">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+        <button *ngIf="dataItem.NhomDichVuId && dataItem.NhomDichVuId > 0" style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoaNhomDichVuChoVoucher(dataItem)" [disabled]="tongSoBenhNhanSuDung > 0">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>

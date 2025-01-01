@@ -1,0 +1,57 @@
+<!-- <vex-page-layout> -->
+    <!-- <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+           
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Nhập xuất',Path:''}
+            ,{Title:'Dược phẩm',Path:''}
+            ,{Title:'Xuất kho',Path:'/nhap-xuat/duoc-pham/xuat-kho'}
+            
+                ]">
+            </vex-breadcrumbs>
+        </div>
+        
+
+    </vex-page-layout-header> -->
+    <app-header-form [crumbs]="[
+        {Title:'Nhập xuất',Path:''}
+        ,{Title:'Dược phẩm',Path:''}
+        ,{Title:'Xuất kho',Path:'/nhap-xuat/duoc-pham/xuat-kho', queryParams: {holdQuery : true}, Active: true}
+        
+            ]" [isicMoreVert]="false">
+        </app-header-form>
+
+    <!-- <vex-page-layout-content [class.px-gutter]="true" class="-mt-6"> -->
+        <div class="p-gutter" vexContainer>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="auto">
+                    <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                        <h2 style="margin-right: 15px !important;" class="title m-0">Xuất Kho Dược Phẩm</h2>
+                    
+                        <!-- (modelChange)="lyDoVaoVienChange($event)" -->
+                        <!-- <app-radio id="IsXuatKhac" class="no-label" [(model)]="IsXuatKhac"
+                             [items]="[{Value:false,Text:'Xuất qua kho khác'},{Value:true,Text:'Xuất khác'}]">
+                        </app-radio> -->
+                    
+                    </div>
+
+                    <div class="px-6 py-4" fxLayout="column">
+
+                        <app-xuat-kho-shared [(xuatKhac)]="IsXuatKhac">
+                        </app-xuat-kho-shared>
+
+                        <div class="form-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                            <!-- <app-formfooter [bodyComponent]="shared" type="create" (created)="onCreated()">
+                                                                            </app-formfooter> -->
+                            <button type="button" (click)="cancel()" mat-button class="mr-1"><i class="ft-arrow-left"></i> Hủy</button>
+                            <button *ngIf="!loading" type="button" (click)="create()" color="primary" mat-raised-button><i class="ft-save"></i> Lưu</button>
+                            <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                                    alt="Loading" /></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- 
+    </vex-page-layout-content>
+</vex-page-layout> -->

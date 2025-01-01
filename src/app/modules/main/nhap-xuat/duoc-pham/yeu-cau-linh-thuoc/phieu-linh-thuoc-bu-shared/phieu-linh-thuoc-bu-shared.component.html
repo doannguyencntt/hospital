@@ -1,0 +1,175 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between">
+
+    <div fxFlex="100%" *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai == false">
+        <h4 style="color: red;">Lý do: {{yeuCauLinhBuDuocPham.LyDoKhongDuyet}}</h4>
+    </div>
+    <!-- [disabled]="!isCreate && trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false) || yeuCauLinhBuDuocPham.LaNguoiTaoPhieu == false" -->
+    <app-combobox *ngIf="yeuCauLinhBuDuocPham.LaNguoiTaoPhieu == false" id="linhTuKho" fxFlex="25%" fxFlex.sm="25%"
+        [required]="true" [(model)]="yeuCauLinhBuDuocPham.KhoXuatId" [modelText]="yeuCauLinhBuDuocPham.TenKhoXuat"
+        label="Lĩnh từ kho" url="YeuCauLinhDuocPham/GetKhoLinh" [disabled]="true" class="item-no-padding"
+        (modelChange)="linhTuKhoChange($event)" [bind]="true">
+
+    </app-combobox>
+
+    <app-combobox *ngIf="yeuCauLinhBuDuocPham.LaNguoiTaoPhieu == false" id="linhVeKho" fxFlex="25%" fxFlex.sm="25%"
+        [required]="true" [(model)]="yeuCauLinhBuDuocPham.KhoNhapId" [modelText]="yeuCauLinhBuDuocPham.TenKhoNhap"
+        [disabled]="true" label="Lĩnh về kho" (modelChange)="linhVeKhoChange($event)" class="item-no-padding">
+
+    </app-combobox>
+    <!-- [disabled]="!isCreate && trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false)" -->
+
+    <app-combobox *ngIf="yeuCauLinhBuDuocPham.LaNguoiTaoPhieu == null || yeuCauLinhBuDuocPham.LaNguoiTaoPhieu == true"
+        id="linhTuKho" fxFlex="25%" fxFlex.sm="25%" [required]="true" url="YeuCauLinhDuocPham/GetKhoLinh"
+        [(model)]="yeuCauLinhBuDuocPham.KhoXuatId" [modelText]="yeuCauLinhBuDuocPham.TenKhoXuat" label="Lĩnh từ kho"
+        [queryInfo]="{ParameterDependencies:'{KhoId:' + linhTuKhoId +'}', Take: 50}" class="item-no-padding"
+        (modelChange)="linhTuKhoChange($event)" [bind]="true" [disabled]="true"
+        [validationerror]="'KhoXuatId' | validationerror:validationErrorsLinhBu">
+    </app-combobox>
+
+    <app-combobox *ngIf="yeuCauLinhBuDuocPham.LaNguoiTaoPhieu == null || yeuCauLinhBuDuocPham.LaNguoiTaoPhieu == true"
+        id="linhVeKho" fxFlex="25%" fxFlex.sm="25%" [required]="true" [bind]="true" [disabled]="true"
+        [(model)]="yeuCauLinhBuDuocPham.KhoNhapId" [modelText]="yeuCauLinhBuDuocPham.TenKhoNhap"
+        [queryInfo]="{ParameterDependencies:'{KhoId:' + linhVeKhoId +'}', Take: 50}"
+        url="YeuCauLinhDuocPham/GetKhoCurrentUserLinhBu" label="Lĩnh về kho" (modelChange)="linhVeKhoChange($event)"
+        class="item-no-padding" [validationerror]="'KhoNhapId' | validationerror:validationErrorsLinhBu">
+    </app-combobox>
+    <app-textbox id="nguoiYeuCau"
+        [fxFlex]="!isCreate && trangThaiVo != null && (trangThaiVo.TrangThai == false || trangThaiVo.TrangThai == true) ? '13%' : '25%'"
+        [fxFlex.sm]="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai != null ? '13%' : '25%'"
+        [required]="true" [(model)]="yeuCauLinhBuDuocPham.HoTenNguoiYeuCau" maxlength="250" label="Người yêu cầu"
+        disabled={{true}}>
+    </app-textbox>
+
+    <app-datepicker id="ngayYeuCau"
+        [fxFlex]="!isCreate && trangThaiVo != null && (trangThaiVo.TrangThai == false || trangThaiVo.TrangThai == true) ? '12%' : '25%'"
+        [fxFlex.sm]="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai != null ? '12%' : '25%'"
+        [(model)]="yeuCauLinhBuDuocPham.NgayYeuCau" disabled={{true}} [required]="true" label="Ngày yêu cầu">
+    </app-datepicker>
+
+    <app-textbox
+        *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai != false && trangThaiVo.TrangThai != null"
+        id="nguoiPheDuyet" fxFlex="13" fxFlex.sm="13" maxlength="250" label="Người phê duyệt"
+        [(model)]="yeuCauLinhBuDuocPham.TenNhanVienDuyet" disabled={{true}} [required]="true">
+    </app-textbox>
+
+    <app-datepicker
+        *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai != false && trangThaiVo.TrangThai != null"
+        id="ngayDuyet" fxFlex="12" fxFlex.sm="12" [required]="true" label="Ngày duyệt"
+        [(model)]="yeuCauLinhBuDuocPham.NgayDuyet" disabled={{true}}>
+    </app-datepicker>
+
+    <app-textbox *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai == false" id="nguoiPheDuyet"
+        fxFlex="13" fxFlex.sm="13" maxlength="250" label="Người phê duyệt"
+        [(model)]="yeuCauLinhBuDuocPham.TenNhanVienDuyet" disabled={{true}} [required]="true">
+    </app-textbox>
+
+    <app-datepicker *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai == false" id="ngayDuyet"
+        fxFlex="12" fxFlex.sm="12" [required]="true" label="Ngày duyệt" [(model)]="yeuCauLinhBuDuocPham.NgayDuyet"
+        disabled={{true}}>
+    </app-datepicker>
+
+
+    <app-textarea id="ghiChu" fxFlex="100" fxFlex.sm="100" maxlength="4000" label="Ghi chú" minHeight="20"
+        [disabled]="!isCreate && trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false) || yeuCauLinhBuDuocPham.LaNguoiTaoPhieu == false"
+        [(model)]="yeuCauLinhBuDuocPham.GhiChu">
+    </app-textarea>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin dược phẩm</h3>
+
+    <ng-container *ngIf="isCreate">
+        <app-datetimepicker fxFlex="15%" [(model)]="yeuCauLinhBuDuocPhamSearch.ThoiDiemChiDinhTuFormat" #tiepnhantu
+            id="ThoiDiemChiDinhTuFormat" (modelChange)="thoiDiemTNChange()" label="Từ ngày chỉ định" class="on-header">
+        </app-datetimepicker>
+        <app-datetimepicker fxFlex="15%" [(model)]="yeuCauLinhBuDuocPhamSearch.ThoiDiemChiDinhDenFormat" #tiepnhanden
+            id="ThoiDiemChiDinhDenFormat" (modelChange)="thoiDiemTNChange()" label="đến ngày chỉ định"
+            class="on-header">
+        </app-datetimepicker>
+        <div fxFlex="70%" fxHide.sm></div>
+    </ng-container>
+
+    <div fxFlex="100%" fxLayoutAlign="end center"
+        [style.display]="(trangThaiVo != undefined && trangThaiVo != null  && (trangThaiVo.TrangThai == null || trangThaiVo.TrangThai == true) || isCreate) ? 'block' : 'none'">
+        <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridColumns"
+            [allowSortDefault]="true" [documentType]="documentType" [useAddDeault]="false" #gridDuocPham
+            [showStt]="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == true ? true : false"
+            (extOnDataBound)="onDataBoundGrid($event)" [urlGetData]="urlGetDataGrid"
+            [urlGetTotalPage]="urlGetTotalPageGrid" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500" [pageable]="false"
+            [detailTemplate]="detailTemplate" [additionalSearchString]="dieuKienLoadGridDuocPham">
+        </app-grid>
+        <ng-template #detailTemplate let-dataItem>
+            <app-grid style="width: 1px;" [gridColumns]="gridChildColumns" [allowSortDefault]="true"
+                [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+                [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500"
+                [pageable]="true" [pageSize]="10" [urlGetData]="urlGetDataGridChild" [showStt]="true"
+                [urlGetTotalPage]="urlGetTotalPageGridChild" [sort]="sortChild" [additionalSearchString]="phieuLinhId + ';' 
+                                                      + dataItem.DuocPhamBenhVienId + ';' 
+                                                      + dataItem.LaBHYT + ';' 
+                                                      + isCreate + ';' 
+                                                      + yeuCauLinhBuDuocPham.KhoNhapId + ';' 
+                                                      + (trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai) + ';'
+                                                      + dataItem.SoLuongTon + ';'
+                                                      + yeuCauLinhBuDuocPhamSearch.ThoiDiemChiDinhTu + ';'
+                                                      + yeuCauLinhBuDuocPhamSearch.ThoiDiemChiDinhDen + ';'
+                                                      ">
+            </app-grid>
+        </ng-template>
+    </div>
+
+    <div fxFlex="100%" fxLayoutAlign="end center"
+        [style.display]="(trangThaiVo != undefined && trangThaiVo != null  && trangThaiVo.TrangThai == false ) ? 'block' : 'none'">
+        <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridColumns"
+            [allowSortDefault]="true" [documentType]="documentType" [useAddDeault]="false" #gridDuocPhamTuChoi
+            (extOnDataBound)="onDataBoundGrid($event)" [urlGetData]="urlGetDataGrid" [showStt]="true"
+            [urlGetTotalPage]="urlGetTotalPageGrid" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500" [pageable]="false"
+            [additionalSearchString]="dieuKienLoadGridDuocPham">
+        </app-grid>
+    </div>
+
+    <ng-template #nhomGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+    <ng-template #slYeuCauTemplate let-dataItem let-rowIndex="rowIndex">
+        <div>
+            <span fxFlex="70%">
+                {{dataItem.SoLuongTon}}
+            </span>
+            <mat-icon class="icon-war-status-grid"
+                *ngIf="dataItem.SoLuongTon != null && yeuCauLinhBuDuocPham.KhoXuatId != null && dataItem.SoLuongCanBu > dataItem.SoLuongTon"
+                fxFlex="30%" [icIcon]="icWarning" kendoTooltip title="Số lượng tồn ít hơn số lượng bù">
+            </mat-icon>
+        </div>
+    </ng-template>
+
+    <ng-template #slYeuCauLinhThucTeTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-textboxnumeric
+            *ngIf="(trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai == null) || trangThaiVo == undefined"
+            [fxFlex]="dataItem.SLYeuCauLinhThucTe > 0 ? '100%' : '70%'" [(model)]="dataItem.SLYeuCauLinhThucTe"
+            [required]="true" min="0" label=" " (modelChange)="ganSLThucTeChange($event, dataItem.DuocPhamBenhVienId)"
+            [validationerror]="'YeuCauDuocPhamBenhViens['+rowIndex+'].SLYeuCauLinhThucTe' | validationerror:validationErrorsLinhBu">
+            <!-- [max]="dataItem.SLYeuCauLinhThucTeMax" -->
+        </app-textboxnumeric>
+        <mat-icon class="icon-war-status-grid" *ngIf="dataItem.SLYeuCauLinhThucTe == 0" fxFlex="30%"
+            [icIcon]="icWarning" kendoTooltip title="Sẽ không tạo lĩnh bù cho dược phẩm này.">
+        </mat-icon>
+        <div *ngIf="trangThaiVo != undefined && trangThaiVo != null && trangThaiVo.TrangThai != null">
+            {{dataItem.SLYeuCauLinhThucTe}}
+        </div>
+    </ng-template>
+
+    <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex"> {{rowIndex + 1}}
+    </ng-template>
+    <ng-template #checkBoxTemplate let-dataItem>
+        <app-checkbox id="vehicle1-{{dataItem.DuocPhamBenhVienId}}" value="true" [(model)]="dataItem.CheckBox"
+            (modelChange)="checkBoxDichVu(dataItem, $event)" label=" " class="pl-2">
+        </app-checkbox>
+    </ng-template>
+
+    <ng-template #checkBoxHeaderTemplate let-dataItem>
+        <app-checkbox id="vehicle1" name="vehicle1" value="true" [(model)]="checkAll"
+            (modelChange)="checkBoxAllChange($event)" label=" " class="pl-2">
+        </app-checkbox>
+    </ng-template>
+</div>

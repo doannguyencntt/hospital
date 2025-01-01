@@ -1,0 +1,112 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+              {Title:'Marketing',Path:''}
+              ,{Title:'Chương Trình Marketing',Path:''}
+              ,{Title:'Theo Gói Dịch Vụ',Path:'/marketing/ct-marketing/goi-dv', Active: true}
+            ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/marketing/ct-marketing/goi-dv" [searchString]="search.SearchString" [gridColumns]="gridColumns" [additionalSearchString]="additionalSearchString" [documentType]="documentType" [useHeaderDefault]="false" [headerTemplate]="headerTemplate"
+                [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false" [showExportExcel]="true" (extExportExcel)="exportExcel()" [showStt]="true" #gridGoiDv>
+            </app-grid>
+            <ng-template #tinhTrangTemplate let-dataItem>
+                <button *ngIf="dataItem.TamNgung == 1" (click)="updateDichVu(dataItem.Id,dataItem.TamNgung)" mat-menu-item>
+                    <mat-icon [icIcon]="icClose" color="warn"></mat-icon><span>Ngừng sử dụng</span>
+                </button>
+                <button *ngIf="dataItem.TamNgung != 1" (click)="updateDichVu(dataItem.Id,dataItem.TamNgung)" mat-menu-item>
+                    <mat-icon [icIcon]="icicdone" color="primary"></mat-icon><span>Đang sử dụng</span>
+                </button>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+<ng-template #actionTemplate let-dataItem>
+    <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+        <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+    </button>
+    <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+        <ng-template let-customer="customer" matMenuContent>
+            <button (click)="copy(dataItem.Id)" mat-menu-item>
+                <mat-icon [icIcon]="icCopy"></mat-icon>
+                <span>Copy</span>
+            </button>
+            <button (click)="delete(dataItem.Id)" mat-menu-item>
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+                <span>Xóa</span>
+            </button>
+            <button (click)="detail(dataItem.Id)" mat-menu-item>
+                <mat-icon [icIcon]="icDetail"></mat-icon>
+                <span>Chi tiết sử dụng</span>
+            </button>
+        </ng-template>
+    </mat-menu>
+</ng-template>
+<ng-template #orderTemplate let-i="rowIndex">
+    {{i + 1}}
+</ng-template>
+<ng-template #giaTruocChietKhauTemplate let-dataItem>
+    {{ dataItem.GiaTruocChietKhau | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #giaSauChietKhauTemplate let-dataItem>
+    {{ dataItem.GiaSauChietKhau | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #tuNgayTemplate let-dataItem>
+    <span>{{dataItem.TuNgayDisplay}}</span>
+</ng-template>
+<ng-template #denNgayTemplate let-dataItem>
+    <span>{{dataItem.DenNgayDisplay}}</span>
+</ng-template>
+<ng-template #tiLeChietKhauTemplate let-dataItem>
+    {{ dataItem.TiLeChietKhau }}%
+</ng-template>
+
+<ng-template #headerTemplate>
+    <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+        <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+            <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+            <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search" name="searchString" [(ngModel)]="search.SearchString" (keyup)="onKey($event)" (ngModelChange)="clearSearch()" placeholder="Nhập từ khóa..." />
+        </div>
+
+        <app-daterangepicker style="margin-left: 5px;" id="range-ngay-bat-dau" fxFlex="250px" fxFlex.sm="auto" [(model)]="search.RangeFromDate" label="Ngày bắt đầu: từ ngày - đến ngày" (keyup)="onKeyNgayBatDau($event)" (modelChange)="changeNgayBatDauRange()"
+            (blur)="blur()" class="mt-1 on-header">
+        </app-daterangepicker>
+
+        <app-daterangepicker style="margin-left: 5px;" id="range-ngay-ket-thuc" fxFlex="250px" fxFlex.sm="auto" (blur)="blur()" [(model)]="search.RangeToDate" label="Ngày kết thúc: từ ngày - đến ngày" (keyup)="onKeyNgayKetThuc($event)" (modelChange)="changeNgayKetThucRange()"
+            class="mt-1 on-header">
+        </app-daterangepicker>
+
+        <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+            <mat-icon [icIcon]="icSearch"></mat-icon>
+        </button>
+
+        <span fxFlex></span>
+        <button [matMenuTriggerFor]="columnFilterMenu" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip title="Lọc cột" type="button">
+            <mat-icon [icIcon]="icFilterList"></mat-icon>
+        </button>
+        <button (click)="exportExcel()" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip title="Xuất Excel" type="button">
+            <mat-icon [icIcon]="icFileExcel"></mat-icon>
+        </button>
+
+        <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+            <div *ngFor="let column of gridColumns">
+                <button *ngIf="!column.HideFilter" class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                    <mat-checkbox [disabled]="true" color="primary">
+                        {{ column.Title }}
+                    </mat-checkbox>
+                </button>
+            </div>
+        </mat-menu>
+
+        <button (click)="them()" class="mr-6" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm" type="button">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+
+    </div>
+</ng-template>

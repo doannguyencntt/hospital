@@ -1,0 +1,29 @@
+<kendo-textbox-container floatingLabel="{{label}}" [ngClass]="{'k-state-initial':model!=null,'required':required}">
+    <div class="form-control plus-texbox">
+        <input #anchor style="float: left; width: 100%" kendoTextBox type="text" ngControl="model" [readonly]="readonly"
+            [disabled]="disabled" id="{{id}}" name="{{id}}" (ngModelChange)="filterChange($event)" [(ngModel)]="modelText" />
+
+        <a class="ic-clear" (click)="clearSearch()" *ngIf="modelText!=null && !disabled">
+            <span class="k-icon k-i-close"></span>
+        </a>
+        <a class="ns-minus" (click)="onToggle()" style="right: 0px;" [style.pointer-events]="disabled == true ? 'none' : ''">
+            <span class="k-icon k-i-arrow-s"></span>
+        </a>
+
+        <kendo-popup #popupTree fxFlex="100%" [anchor]="anchor" [hidden]="!this._show">
+            <kendo-treeview [nodes]="_data" textField="DisplayName" kendoTreeViewExpandable kendoTreeViewSelectable
+                kendoTreeViewHierarchyBinding childrenField="Items" [selectBy]="'KeyId'" [isExpanded]="isExpanded"
+                (open)="open()" (close)="close()" (focus)="focus()" (blur)="blur()"
+                (ngModelChange)="emit($event)" [(selectedKeys)]="selectedKeys" (collapse)="handleCollapse($event)" (nodeClick)="handleSelection($event)"
+                (expand)="handleExpand($event)">
+            </kendo-treeview>
+            
+            <!-- [isDisabled]="isDisabled" -->
+            <!-- (selectionChange)="handleSelection($event)"  -->
+            <div style="padding: 15px;" [hidden]="!(_data == undefined || _data == null || _data.length == 0)">
+                Không có dữ liệu
+            </div>
+        </kendo-popup>
+    </div>
+    <label class="red" [innerHTML]="validationerror"></label>
+</kendo-textbox-container>

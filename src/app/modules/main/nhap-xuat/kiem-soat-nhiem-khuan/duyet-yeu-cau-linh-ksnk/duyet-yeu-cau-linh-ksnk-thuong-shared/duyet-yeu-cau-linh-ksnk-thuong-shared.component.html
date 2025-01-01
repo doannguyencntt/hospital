@@ -1,0 +1,103 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <label *ngIf="yeuCauLinh.DuocDuyet == false" fxFlex="100" class="status-yeu-cau-linh ycl-tu-choi">Lý do: {{yeuCauLinh.LyDoKhongDuyet}}</label>
+
+    <app-textbox id="loai" fxFlex="10" fxFlex.sm="10" 
+        maxlength="250" label="Loại" disabled={{true}} [(model)]="yeuCauLinh.TenLoaiPhieuLinh"
+        [required]="true" [validationerror]="'NguoiYeuCau' | validationerror:validationErrors">
+    </app-textbox>
+    <app-combobox id="linhTuKho" fxFlex="20%" fxFlex.sm="20%" [required]="true"
+        [(model)]="yeuCauLinh.KhoXuatId" [modelText]="yeuCauLinh.TenKhoXuat"
+        url="DonViTinh/GetDanhSachDonViTinh" disabled={{true}}
+        label="Lĩnh từ kho"
+        [validationerror]="'LinhTuKho' | validationerror:validationErrors">
+    </app-combobox>
+    <app-combobox id="linhVeKho" fxFlex="20%" fxFlex.sm="20%" [required]="true"
+        [(model)]="yeuCauLinh.KhoNhapId" [modelText]="yeuCauLinh.TenKhoNhap"
+        url="DonViTinh/GetDanhSachDonViTinh" disabled={{true}}
+        label="Lĩnh về kho"
+        [validationerror]="'LinhVeKho' | validationerror:validationErrors">
+    </app-combobox>
+    
+    <app-combobox id="nguoiYeuCau"
+        [fxFlex]="yeuCauLinh.DuocDuyet == null ? '30%' : '15%'"
+        [fxFlex.sm]="yeuCauLinh.DuocDuyet == null ? '30%' : '15%'"
+        [(model)]="yeuCauLinh.NhanVienYeuCauId" [modelText]="yeuCauLinh.TenNhanVienYeuCau"
+        url="YeuCauLinhVatTu/GetListNhanVien" label="Người yêu cầu" disabled={{true}}
+        [required]="true" [validationerror]="'NguoiYeuCau' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-datepicker id="ngayYeuCau"  disabled={{true}}
+        [fxFlex]="yeuCauLinh.DuocDuyet == null ? '20%' : '10%'"
+        [fxFlex.sm]="yeuCauLinh.DuocDuyet == null ? '20%' : '10%'"
+        [(model)]="yeuCauLinh.NgayYeuCau"
+        [required]="true" label="Ngày yêu cầu"
+        [validationerror]="'NgayYeuCau' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <ng-container *ngIf="yeuCauLinh.DuocDuyet != null">
+        <app-combobox id="nguoiPheDuyet" fxFlex="15%" fxFlex.sm="15%" maxlength="250" [label]="yeuCauLinh.DuocDuyet == true ? 'Người phê duyệt' : 'Người từ chối duyệt'"
+            disabled={{true}} [(model)]="yeuCauLinh.NhanVienDuyetId" [modelText]="yeuCauLinh.TenNhanVienDuyet"
+            url="YeuCauLinhVatTu/GetListNhanVien" [required]="true"
+            [validationerror]="'NguoiPheDuyet' | validationerror:validationErrors">
+        </app-combobox>
+        <app-datepicker id="ngayDuyet" fxFlex="10%" fxFlex.sm="10%" [required]="true" [label]="yeuCauLinh.DuocDuyet == true ? 'Ngày duyệt' : 'Ngày từ chối duyệt'" disabled={{true}}
+            [(model)]="yeuCauLinh.NgayDuyet" [validationerror]="'NgayDuyet' | validationerror:validationErrors">
+        </app-datepicker>
+    </ng-container>
+
+    <app-textarea id="ghiChu" fxFlex="100" fxFlex.sm="100" maxlength="4000"
+        [(model)]="yeuCauLinh.GhiChu" disabled={{true}}
+        label="Ghi chú" minHeight="20" 
+        [validationerror]="'GhiChu' | validationerror:validationErrors">
+        <!-- [disabled]="yeuCauLinh.DuocDuyet != null" -->
+    </app-textarea>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Danh sách KSNK</h3>
+
+    <app-grid *ngIf="yeuCauLinh.Id != null" #gridKSNK fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridColumns"
+        [allowSortDefault]="true" [gridDataSource]="gridDataSource" [documentType]="documentType" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500"
+        [pageable]="false" [groups]="groups">
+    </app-grid>
+
+    <ng-template #actionTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button color="primary" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate" mat-icon-button kendoTooltip title="Sửa" type="button">
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+            </button>
+            <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+    <ng-template #slXuatTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-textboxnumeric *ngIf="!dataItem.isTuChoi" class="no-label" [min]="1" [max]="dataItem.SoLuong" [disabled]="yeuCauLinh.DuocDuyet != null"
+            class="no-label" label=" " [(model)]="dataItem.SoLuongCoTheXuat" required="true" label=" "
+            (modelChange)="changeSoLuongCoTheXuat($event, dataItem)"
+            [validationerror]="'DuyetYeuCauLinhVatTuChiTiets['+rowIndex+'].SoLuongCoTheXuat' | validationerror:validationErrors">
+        </app-textboxnumeric>
+        <ng-container *ngIf="dataItem.isTuChoi">{{dataItem.SoLuongCoTheXuat}}</ng-container>
+    </ng-template>
+
+    <ng-template #sttTemplate let-rowIndex="rowIndex">
+        <strong>{{rowIndex + 1}}</strong>
+    </ng-template>
+    <ng-template #nhomGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-container *ngIf="yeuCauLinh.Id != null &&  yeuCauLinh.DuocDuyet != false">
+        <app-combobox id="nguoiXuat" fxFlex="25%" fxFlex.sm="25%" [required]="true"
+            [disabled]="yeuCauLinh.DuocDuyet != null" [(model)]="yeuCauLinh.NguoiXuatKhoId"
+            [modelText]="yeuCauLinh.TenNguoiXuatKho" [idWhere]="yeuCauLinh.NguoiXuatKhoId"
+            url="YeuCauLinhVatTu/GetListNhanVien" label="Người xuất"
+            [validationerror]="'NguoiXuatKhoId' | validationerror:validationErrors">
+        </app-combobox>
+        <app-combobox id="nguoiNhan" fxFlex="25%" fxFlex.sm="25%" [required]="true"
+            [disabled]="yeuCauLinh.DuocDuyet != null" [(model)]="yeuCauLinh.NguoiNhapKhoId"
+            [modelText]="yeuCauLinh.TenNguoiNhapKho" [idWhere]="yeuCauLinh.NguoiNhapKhoId"
+            url="YeuCauLinhVatTu/GetListNhanVien" label="Người nhận"
+            [validationerror]="'NguoiNhapKhoId' | validationerror:validationErrors">
+        </app-combobox>
+    </ng-container>
+</div>

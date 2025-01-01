@@ -1,0 +1,54 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="m-0">
+    <div>TÌM KIẾM NGƯỜI BỆNH</div>
+    <button type="button" mat-icon-button (click)="close(null)" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true"
+        [useHeaderDefault]="false" #grid [useActionDefault]="false" [checkboxAble]="false" height="511"
+        [sort]="sort"
+        [headerTemplate]="headerTemplate" [urlGetData]="urlGetDataGrid" [urlGetTotalPage]="urlGetTotalPageGrid"
+        [additionalSearchString]="queryStrings">
+    </app-grid>
+</mat-dialog-content>
+
+<ng-template #actionTemplate let-dataItem>
+    <button class="button-chon" (click)="chonBenhNhan(dataItem)" color="primary" mat-raised-button>
+        Chọn
+    </button>
+</ng-template>
+
+<ng-template #headerTemplate>
+    <div style="padding: 10px;border-bottom: 1px solid #ccc;">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-textbox fxFlex="10%" [(model)]="timKiemBenhNhanSearch.MaBenhNhan" id="MaBenhNhan" label="Mã NB"
+                (keyup)="onKey($event)">
+            </app-textbox>
+            <app-textbox fxFlex="12%" [(model)]="timKiemBenhNhanSearch.MaBHYT" id="MaBHYT" label="Mã BHYT"
+                (keyup)="onKey($event)">
+            </app-textbox>
+            <app-textbox fxFlex="15%" [(model)]="timKiemBenhNhanSearch.HoTen" id="HoTen" label="Họ và tên"  [upperCase]="true"
+                (keyup)="onKey($event)">
+            </app-textbox>
+            <app-datepicker fxFlex="11%" [(model)]="timKiemBenhNhanSearch.NgaySinhFormat" id="NgaySinhFormat"
+                label="Ngày sinh" (keyup)="onKey($event)">
+            </app-datepicker>
+            <app-textbox fxFlex="12%" [(model)]="timKiemBenhNhanSearch.CMND" id="CMND" label="CMND"
+                (keyup)="onKey($event)">
+            </app-textbox>
+            <app-textboxmask fxFlex="10%" [(model)]="timKiemBenhNhanSearch.DienThoai" id="DienThoai" label="Điện thoại"
+                (keyup)="onKey($event)" mask="000 000 0000">
+            </app-textboxmask>
+            <app-textbox fxFlex="20%" [(model)]="timKiemBenhNhanSearch.DiaChi" id="DiaChi" label="Địa chỉ"
+                (keyup)="onKey($event)">
+            </app-textbox>
+            <div fxFlex="5%">
+                <button type="button" color="primary" (keyup)="onKey($event)" (click)="TimKiem()" mat-raised-button
+                    class="mt-5">
+                    Tìm</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

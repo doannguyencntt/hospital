@@ -1,0 +1,171 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <span><b>Dịch vụ</b></span>
+    <app-grid *ngIf="gridDataNotChietKhau!=null" fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns"
+        [gridDataSource]="gridDataNotChietKhau" [documentType]="documentType" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+        [autoHeight]="true" masterName="gridLichSuChiDinh{{yeuCauKhamBenhId}}" [pageable]="false" [groups]="groups"
+        [removeGroupFooterIfIsOnlyOne]="true">
+    </app-grid>
+
+    <span><b>Dược phẩm</b></span>
+    <app-grid #gridVTTHThuoc fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridVTTHColumns"
+        [allowSortDefault]="true" [gridDataSource]="gridDataSourceVTTHThuoc" [documentType]="documentType"
+        [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+        [lazyLoadPage]="true" maxHeight="500" [pageable]="false" [groups]="groupsGhiNhanVTHHThuoc"
+        masterName="gridVTTHThuoc" [removeGroupFooterIfIsOnlyOne]="true" >
+    </app-grid>
+
+    <!-- chỉnh vật tư sau -->
+    <span><b>Vật tư</b></span>
+    <app-grid #gridVTTH fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridThuocColumns"
+        [allowSortDefault]="true" [gridDataSource]="gridDataSourceVTTH" [documentType]="documentType"
+        [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+        [lazyLoadPage]="true" maxHeight="500" [pageable]="false" [groups]="groupsGhiNhanVTHHThuoc"
+        masterName="gridVTTH" [removeGroupFooterIfIsOnlyOne]="true" >
+    </app-grid>
+
+</div>
+
+<!-- DonGiaTemplateKCK -->
+<ng-template #DonGiaTemplateKCK let-dataItem>
+    {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #ThanhTienTemplateKCK let-dataItem>
+    {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #BHYTThanhToanTemplateKCK let-dataItem>
+    {{dataItem.BHYTThanhToan | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<!-- BNThanhToanTemplateKCK -->
+<ng-template #BNThanhToanTemplateKCK let-dataItem>
+    {{dataItem.BNThanhToan | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #nhomDichVuTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+<ng-template #tenDichVuTemplate let-dataItem>
+    <div>
+        <mat-icon fxFlex="30px" *ngIf="dataItem.YeuCauGoiDichVuId !== null" [icIcon]="icInfo" kendoTooltip
+            title="{{dataItem.TenGoiDichVu}}">
+        </mat-icon>
+        <span fxFlex="auto" class="reverse-ellipsis r" kendoTooltip
+            title="{{dataItem.TenDichVu}}">{{dataItem.TenDichVu}} </span>
+    </div>
+</ng-template>
+<!-- Templatefooter gck -->
+<ng-template #tkChietKhauFooter let-dataItem>
+    <span style="float: right;">Giá gói:</span>
+</ng-template>
+<ng-template #TongCongThanhTienaFooter let-dataItem>
+    <!-- <span style="color:blue">{{tongthanhtien | number:'0.2-2':'vi-VN'}}</span> -->
+    <span style="color:blue">{{tongthanhtien | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+<ng-template #TongCongthanhTienFooter let-dataItem>
+    <!-- <span style="color:red">{{thanhTienTrongGoi | number:'0.2-2':'vi-VN'}}</span> -->
+    <span style="color:red">{{tongThanhTienGoiChietKhau | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+<!-- bhytThanhToanTemplate -->
+<ng-template #bhytThanhToanTemplate let-dataItem let-rowIndex="rowIndex">
+    <div class="float_right">{{ dataItem.BHYTThanhToan | number:'0.2-2':'vi-VN'}}
+        <ic-icon *ngIf="dataItem.KiemTraBHYTXacNhan===true" [icon]="icCheck" class="size-icon mr-3" inline="true">
+        </ic-icon>
+    </div>
+</ng-template>
+<!-- KCK -->
+<!-- TongCongThanhTienKCKGroupFooter -->
+<ng-template #TongCongThanhTienKCKGroupFooter let-aggregates>
+    {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<!-- TongCongBHTTThanhToanGroupFooter -->
+<ng-template #TongCongBHTTThanhToanGroupFooter let-dataItem>
+    <span>{{dataItem.BHYTThanhToan.sum | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+<!-- TongCongBNTTGroupFooter -->
+<ng-template #TongCongBNTTGroupFooter let-dataItem>
+    {{dataItem.BNThanhToan.sum | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<!-- Footer -->
+<!-- congTienGroupFooterTemplate -->
+<ng-template #congTienGroupFooterTemplate let-dataItem>
+    <span>Cộng:</span>
+</ng-template>
+<!-- TongCongKCKFooter -->
+<ng-template #TongCongKCKFooter let-dataItem>
+    <span>Tổng cộng:</span>
+</ng-template>
+<!-- TongCongThanhTienKCKFooter -->
+<ng-template #TongCongThanhTienKCKFooter let-dataItem>
+    <span style="color:blue">{{totalNotChietKhau('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+<!-- TongCongBHTTThanhToanFooter -->
+<ng-template #TongCongBHTTThanhToanFooter let-dataItem>
+    <span>{{totalNotChietKhau('BHYTThanhToan') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+<!-- TongCongBNTTFooter -->
+<ng-template #TongCongBNTTFooter let-dataItem>
+    <span style="color:red">{{totalNotChietKhau('BNThanhToan') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+<ng-template #donGiaBaoHiemTemplate let-dataItem>
+    {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #duocHuongBaoHiemTemplate let-dataItem>
+    <app-checkbox id="duocHuongBaoHiem{{dataItem.Id}}" label="" [(model)]="dataItem.DuocHuongBaoHiem"
+        disabled="{{true}}">
+    </app-checkbox>
+</ng-template>
+<!-- noiThucHienTemplate -->
+<ng-template #noiThucHienTemplate let-dataItem>
+    <span style="color:red;">
+        {{dataItem.NoiThucHien}}
+    </span>
+</ng-template>
+<ng-template #trangThaiTemplate let-dataItem>
+    <div style="position: relative;" [ngSwitch]="dataItem.NhomId">
+        <span *ngSwitchCase="1" [ngClass]="{'blackText': dataItem.TrangThaiDichVuId == trangThaiYCKB.ChuaKham, 
+                                            'orangeText': (dataItem.TrangThaiDichVuId == trangThaiYCKB.DangKham 
+                                                            || dataItem.TrangThaiDichVuId == trangThaiYCKB.DangLamChiDinh
+                                                            || dataItem.TrangThaiDichVuId == trangThaiYCKB.DangDoiKetLuan),
+                                            'greenText': dataItem.TrangThaiDichVuId == trangThaiYCKB.DaKham}">
+            {{dataItem.TrangThaiDichVu}}
+        </span>
+
+        <span [style.white-space]="dataItem.KhongThucHien ? 'normal' : 'none'" *ngSwitchDefault [ngClass]="{'blackText': dataItem.TrangThaiDichVuId == trangThaiYCDVKT.ChuaThucHien, 
+                                            'orangeText': dataItem.TrangThaiDichVuId == trangThaiYCDVKT.DangThucHien,
+                                            'greenText': dataItem.TrangThaiDichVuId == trangThaiYCDVKT.DaThucHien }">
+            {{dataItem.TrangThaiDichVu}}
+
+        </span>
+    </div>
+
+</ng-template>
+<!-- vat tu -->
+<ng-template #donGiaTemplate let-dataItem>
+    {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #soLuongGhiNhanVTTHThuocTemplate let-dataItem>
+    <span>{{dataItem.SoLuong}}</span>
+</ng-template>
+<ng-template #thanhTienGhiNhanVTTHThuocGroupFooterTemplate let-aggregates>
+    {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #thanhTienGhiNhanVTTHThuocFooterTemplate let-dataItem>
+    <span style="color:blue">{{totalGhiNhanVTTHThuoc('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+<ng-template #thanhTienTemplate let-dataItem>
+    {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<!-- <ng-template #donGiaBaoHiemTemplate let-dataItem>
+    {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+</ng-template> -->
+<ng-template #duocHuongBaoHiemGhiNhanVHTTTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-checkbox id="duocHuongBaoHiem{{rowIndex}}" label="" [(model)]="dataItem.DuocHuongBaoHiem" disabled="{{true}}">
+    </app-checkbox>
+</ng-template>
+<ng-template #nhomGroupHeaderTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+<ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+    {{rowIndex + 1}}
+</ng-template>

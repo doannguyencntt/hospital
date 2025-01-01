@@ -1,0 +1,101 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống kê', Path:''},
+                    {Title:'Báo cáo', Path:''},
+                    {Title:'Dược', Path:''},
+                    {Title:'Thống Kê Bác Sĩ Kê Đơn Theo Thuốc', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid [gridColumns]="gridColumns" [gridDataSource]="gridDataSource" [documentType]="documentType"
+                [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                [headerTemplate]="headerTemplate" [checkboxAble]="false" [showStt]="true">
+            </app-grid>
+
+        </div>
+
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar p-0 h-15 border-b sticky left-0">
+                <app-combobox id="KhoaId" fxFlex="15%" fxFlex.sm="15%" style="margin-left: 5px;"
+                    class="mt-1 on-header pb-0 mr-1" label="Bác sĩ" popupSettings="" bind="true"
+                    [autoSelectFirstItem]="true" url="BaoCao/GetTatCaBacSiKeDonTheoThuoc"
+                    [(model)]="baoCaoSearch.BacSiId">
+                </app-combobox>
+
+                <app-combobox id="ThuocId" fxFlex="30%" fxFlex.sm="30%" style="margin-left: 5px;"
+                    class="mt-1 on-header pb-0 mr-1" label="Thuốc" popupSettings="" bind="true"
+                    [autoSelectFirstItem]="true" url="BaoCao/GetTatCaThuocBenhVien"
+                    [(model)]="baoCaoSearch.ThuocId"
+                    [template]="dpTemplate" [templateHeader]="dpTemplateHeader">
+                    <ng-template #dpTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="50%">Tên Thuốc</th>
+                                <th width="50%">Hàm lượng </th>
+                        </table>
+                    </ng-template>
+                    <ng-template #dpTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="50%" >{{dataItem.DisplayName}}</td>                              
+                                <td width="50%">{{dataItem.HamLuong}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+
+                <app-datetimepicker fxFlex="12%" [(model)]="baoCaoSearch.TuNgay" #tiepnhantu
+                    id="TuNgay" [maxDate]="baoCaoSearch.DenNgay" label="Từ ngày"
+                    class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="12%" [(model)]="baoCaoSearch.DenNgay" #tiepnhanden
+                    id="DenNgay" [minDate]="baoCaoSearch.TuNgay" class="mt-1 on-header  ml-2"
+                    label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="35%" fxFlex.sm="35%" class="pb-0 ml-2">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                        (click)="xemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                        (click)="xuatBaoCao()">Xuất Excel</button>
+                </div>
+
+            </div>
+        </ng-template>
+
+        <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem>
+            <strong>{{value}}</strong>
+        </ng-template>
+
+        <ng-template #tongCongFooterTemplate let-dataItem>
+            <span style="float: right;">Tổng cộng: {{ total('TongCong')}} khoản</span>
+        </ng-template>
+
+        <ng-template #soLuongDonTemplate let-dataItem>
+            {{dataItem.SoLuongDon | number:'0.2-2':'vi-VN' }}
+        </ng-template>     
+
+        <ng-template #soLuongDonFooterTemplate let-dataItem>
+            <span>{{total('SoLuongDon') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+
+        <ng-template #soLuongDaKeTemplate let-dataItem>
+            {{dataItem.SoLuongDaKe | number:'0.2-2':'vi-VN' }}
+        </ng-template>
+
+        <ng-template #soLuongDaKeFooterTemplate let-dataItem>
+            <span>{{total('SoLuongDaKe') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+
+    </vex-page-layout-content>
+
+</vex-page-layout>

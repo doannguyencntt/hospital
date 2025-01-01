@@ -1,0 +1,114 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <ng-container *ngIf="!dieuTriNoiTruModel.KetThucBenhAn">
+    <p fxFlex="100%" fxFlex.sm="100%">Khoa chuyển đi: <b>{{currentKhoaChuyenDen.DisplayName}}</b></p>
+
+    <app-combobox id="khoa-chuyen-den" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Khoa chuyển đến"
+        [required]="true" [popupSettings]="null" [url]="urlGetKhoas"
+        [(model)]="chuyenKhoaPhongGiuongBs.KhoaPhongChuyenDenId" [modelText]="chuyenKhoaPhongGiuongBs.KhoaPhongChuyenDenDisplay"
+        (openCombobox)="evtComboboxKhoaChuyenDenOpened($event)"
+        [validationerror]="'KhoaPhongChuyenDenId' | validationerror: validationErrors">
+    </app-combobox>
+
+    <app-datetimepicker id="thoi-gian-vao-khoa" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Thời gian vào khoa"
+        [formatDate]="'dd/MM/yyyy HH:mm'" [required]="true" [disabled]="isEditingFirstData"
+        [(model)]="chuyenKhoaPhongGiuongBs.ThoiDiemVaoKhoa"
+        [validationerror]="'ThoiDiemVaoKhoa' | validationerror: validationErrors">
+    </app-datetimepicker>
+
+    <app-datetimepicker id="thoi-gian-ra-khoa" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Thời gian ra khoa"
+        [formatDate]="'dd/MM/yyyy HH:mm'" [disabled]="true"
+        [(model)]="chuyenKhoaPhongGiuongBs.ThoiDiemRaKhoa"
+        [validationerror]="'ThoiDiemRaKhoa' | validationerror: validationErrors">
+    </app-datetimepicker>
+
+    <app-combobox id="ma-icd" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Mã ICD" url=""
+        [popupSettings]="null" [url]="urlGetICDs"
+        [(model)]="chuyenKhoaPhongGiuongBs.ChanDoanVaoKhoaICDId" [modelText]="chuyenKhoaPhongGiuongBs.ChanDoanVaoKhoaICDDisplay"
+        [templateHeader]="ICDTemplateHeader" [template]="ICDTemplate"
+        (selectionChange)="ICDChanged($event)" (openCombobox)="evtComboboxMaICDOpened($event)"
+        [validationerror]="'ChanDoanVaoKhoaICDId' | validationerror: validationErrors">
+
+        <ng-template #ICDTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Dịch vụ</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #ICDTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.TenTiengViet}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textbox id="chan-doan" class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Chẩn đoán"
+        [(model)]="chuyenKhoaPhongGiuongBs.ChanDoanVaoKhoaGhiChu"
+        [maxlength]="4000"
+        [validationerror]="'ChanDoanVaoKhoaGhiChu' | validationerror: validationErrors">
+    </app-textbox>
+
+    <app-textbox id="ly-do-chuyen-khoa" class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Lý do chuyển khoa"
+        [(model)]="chuyenKhoaPhongGiuongBs.LyDoChuyenKhoa"
+        [maxlength]="1000"
+        [validationerror]="'LyDoChuyenKhoa' | validationerror: validationErrors">
+    </app-textbox>
+
+    <div fxFlex="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+        <button type="button" class="mr-2" mat-button color="primary" (click)="huy()">Huỷ</button>
+        <button *ngIf="!isEditing" type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Enter" [disabled]="!dieuTriNoiTruModel.DaChiDinhGiuongVaBacSi && !IsBenhAnSoSinh" (click)="themChuyenKhoa()">Thêm</button>
+        <button *ngIf="isEditing" type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Ctrl + S" (click)="luuChuyenKhoa()">Lưu</button>
+    </div>
+</ng-container>
+    <div fxFlex="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-grid #gridChuyenKhoa  fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" masterName="gridChuyenKhoa" maxHeight="500" reorderRowsMoveItemData="true"
+                [gridColumns]="gridColumns" [documentType]="documentType"
+                [urlGetData]="urlGetDanhSachChuyenKhoaForGrid" [urlGetTotalPage]="urlGetTotalPagesDanhSachChuyenKhoaForGrid"
+                [additionalSearchString]="yeuCauTiepNhanId" [sort]="sortDanhSachChuyenKhoa"
+                [allowSortDefault]="true" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+                [lazyLoadPage]="true" [pageable]="false" [checkboxAble]="false"
+                [showStt]="true">
+            </app-grid>
+
+            <ng-template #tuKhoaTemplate let-dataItem>
+                {{dataItem.KhoaPhongChuyenDiDisplay}}
+            </ng-template>
+
+            <!-- <ng-template #icdTemplate let-dataItem>
+                {{dataItem.ChanDoanVaoKhoaICDDisplay}}
+            </ng-template> -->
+
+            <ng-template #denKhoaTemplate let-dataItem>
+                {{dataItem.KhoaPhongChuyenDenDisplay}}
+            </ng-template>
+
+            <ng-template #thoiGianBatDauTemplate let-dataItem>
+                {{dataItem.ThoiDiemVaoKhoaDisplay}}
+            </ng-template>
+
+            <ng-template #thoiGianKetThucTemplate let-dataItem>
+                {{dataItem.ThoiDiemRaKhoaDisplay}}
+            </ng-template>
+
+            <ng-template #bacSiDieuTriTemplate let-dataItem>
+                {{dataItem.BacSiDieuTriDisplay}}
+            </ng-template>
+
+            <ng-template #actionTemplate let-dataItem>
+                <div class="text-center" kendoTooltip *ngIf="!dieuTriNoiTruModel.KetThucBenhAn">
+                    <button mat-icon-button kendoTooltip title="Chỉnh sửa" type="button" (click)="chinhsua(dataItem)">
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                    </button>
+                    <button [disabled]="dataItem.IsFirstData" [ngClass]="!dataItem.IsFirstData ? 'red-color' : 'grey-color'" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoa(dataItem)">
+                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

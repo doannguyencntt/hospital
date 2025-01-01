@@ -1,0 +1,39 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Nhóm Hệ Thống',Path:''}
+                    ,{Title:'Bảo Hiểm Y Tế',Path:''}
+                    ,{Title:'Nhóm Vật Tư',Path:'/danh-muc/nhom-he-thong/bao-hiem-y-te/nhom-vat-tu',Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <div class="bg-app-bar px-6 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                    fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        placeholder="{{searchPlaceHolder}}" type="search" name="searchString" [(ngModel)]="searchString"
+                        (keyup)="onKey($event)" (ngModelChange)="searchChanges()"/>
+                </div>
+            </div>
+            <div class="p-4">
+                <kendo-treeview [nodes]=data textField="field" kendoTreeViewExpandable kendoTreeViewHierarchyBinding
+                    childrenField="ListNhomVatTuChildren">
+
+                    <ng-template kendoTreeViewNodeTemplate let-dataItem>
+                        <span [ngClass]="iconClass(dataItem)"></span>
+                        {{dataItem.Ten}}
+                    </ng-template>
+
+                </kendo-treeview>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

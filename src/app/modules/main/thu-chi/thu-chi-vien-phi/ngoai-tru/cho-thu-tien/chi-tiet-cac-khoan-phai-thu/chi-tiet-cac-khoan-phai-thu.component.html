@@ -1,0 +1,674 @@
+<vex-page-layout>
+	<vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+		<div [class.px-gutter]="true" class="w-full flex justify-between">
+			<vex-breadcrumbs [crumbs]="[
+            {Title:'Thu Ngân',Path:''},
+            {Title:'Viện phí ngoại trú',Path:''},
+            {Title:'DS Thu Dịch Vụ',Path:'/danh-sach-thu-dich-vu', queryParams: {loaiThanhToan : typeThanhToan}, Active:true}
+            ]">
+			</vex-breadcrumbs>
+			<!-- {Key:'Ctrl + F3',Description:'Di chuyễn tới và check trả lại Bn'},
+            {Key:'Ctrl + F5',Description:'Di chuyễn tới và check trả nợ'}, -->
+			<app-hot-key [keys]="[
+            {Key:'Ctrl + F1',Description:'Di chuyễn tới và check thu tiền'},
+            {Key:'Ctrl + F2',Description:'Di chuyễn tới và check thu tạm ứng'},
+            {Key:'Ctrl + F6',Description:'Di chuyễn tới và mở tab chưa thu'},
+            {Key:'Ctrl + F7',Description:'Di chuyễn tới và mở tab đã thu'},
+            {Key:'Ctrl + F8',Description:'Cập nhật thanh toán'},
+            {Key:'Ctrl + F9',Description:'Hủy thanh toán'},
+            {Key:'Ctrl + S', Description:'Thu hoặc chi tiền'},
+            {Key:'Esc',Description:'Quay lại',End:true}
+            ]"></app-hot-key>
+		</div>
+	</vex-page-layout-header>
+
+	<vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+		<div class="-mt-16">
+			<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+				<div class="card" fxFlex="100%">
+					<div class="px-6 py-4" fxLayout="column" style="position: relative">
+						<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+							<!-- Thông tin hành chính -->
+							<!-- class="content-has-border" -->
+							<fieldset fxFlex="49.5%" class="mb-3">
+								<legend>Thông tin hành chính <strong *ngIf="thongTinBenhNhan.DangDieuTriNoiTru === true" class="red">BỆNH NHÂN ĐANG ĐIỀU TRỊ NỘI TRÚ</strong></legend>
+								<div class="mt-1">
+									<ul class="inline">
+										<li>
+											Mã TN:
+											<strong> {{thongTinBenhNhan.MaYeuCauTiepNhan}} </strong>
+										</li>
+										<li>
+											Mã NB:
+											<strong> {{thongTinBenhNhan.MaBN}} </strong>
+										</li>
+										<li>
+											Họ Tên:
+											<strong> {{thongTinBenhNhan.HoTen}} </strong>
+										</li>
+										<li>
+											Năm Sinh:
+											<strong> {{thongTinBenhNhan.NamSinh}} </strong>
+										</li>
+										<li>
+											Địa chỉ:
+											<strong> {{thongTinBenhNhan.DiaChi}} </strong>
+											<strong *ngIf="thongTinBenhNhan.DiaChi === ''"> Không có </strong>
+										</li>
+										<li>
+											Số điện thoại:
+											<strong> {{thongTinBenhNhan.SoDienThoai}} </strong>
+											<strong *ngIf="thongTinBenhNhan.SoDienThoai === null"> Không có </strong>
+										</li>
+										<li>
+											Email:
+											<strong> {{thongTinBenhNhan.Email}} </strong>
+											<strong *ngIf="thongTinBenhNhan.Email === null"> Không có </strong>
+										</li>
+									</ul>
+								</div>
+							</fieldset>
+
+							<fieldset fxFlex="49.5%" class="mb-3">
+								<legend>Thông tin bảo hiểm y tế</legend>
+								<div class="mt-1">
+									<!-- Thông tin bảo hiểm y tế -->
+									<ul class="inline" *ngIf="thongTinBenhNhan.CoBHYT ===  true">
+										<li>
+											Số thẻ:
+											<strong> {{thongTinBenhNhan.BHYTMaSoThe}} </strong>
+										</li>
+										<li>
+											Ngày hiệu lực:
+											<strong> {{thongTinBenhNhan.NgayHieuLucStr}} </strong>
+										</li>
+										<li>
+											Ngày hết hạn:
+											<strong> {{thongTinBenhNhan.NgayHetHanStr}} </strong>
+										</li>
+										<li>
+											Nơi đăng ký khám BH:
+											<strong> {{thongTinBenhNhan.BHYTDiaChi}} </strong>
+										</li>
+										<li>
+											Mức hưởng:
+											<strong> {{thongTinBenhNhan.BHYTMucHuong}}% </strong>
+										</li>
+										<li>
+											Tuyến khám:
+											<strong class="color-green"> {{thongTinBenhNhan.TuyenKham}} </strong>
+										</li>
+										<li>
+											Giấy chuyển viện:
+											<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien !== null">
+												<a class="color-green"
+													(click)="xemTaiLieu(thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien)">{{thongTinBenhNhan.TenGiayChuyenVien}}</a>
+											</strong>
+											<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien === null">
+												Không có </strong>
+										</li>
+										<li>
+											Giấy miễn cùng chi trả:
+											<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra !== null">
+												<a (click)="xemTaiLieu(thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra)"
+													class="color-green">{{thongTinBenhNhan.TenBHYTgiayMienCungChiTra}}</a>
+											</strong>
+											<strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra === null">
+												Không có </strong>
+										</li>
+									</ul>
+									<p *ngIf="!(thongTinBenhNhan.CoBHYT ===  true)">(Không có)</p>
+								</div>
+							</fieldset>
+							<fieldset fxFlex="49.5%" class="mb-3">
+								<legend>Thông tin bảo hiểm tư nhân</legend>
+								<div class="mt-1">
+									<app-grid [gridColumns]="gridBaoHiemTNs" [useAddDeault]="false"
+										class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+										[checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true"
+										[gridDataSource]="dataSourceDanhSachBHTN" style="width: 1px" [pageable]="false"
+										*ngIf="kiemTraThongTinBaoHiemTN === true"> </app-grid>
+									<p *ngIf="kiemTraThongTinBaoHiemTN === false">(Không có)</p>
+								</div>
+							</fieldset>
+							<fieldset fxFlex="49.5%" class="mb-3">
+								<legend>Thông tin miễn giảm</legend>
+								<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid"
+									fxLayoutGap.lt-sm="0">
+									<div *ngIf="flagShowDoiTuongUuDai==true" fxFlex="100%">
+										<ul
+											style="background: rgba(0, 0, 0, 0.04); padding: 7px 10px; border-bottom: 1px solid rgba(0, 0, 0, 0.4)">
+											<li>
+												Đối tượng ưu đãi:
+												<strong
+													*ngIf="thongTinMienGiamTheoDoiTuongUuDai.DoiTuongUuDai !== null">
+													{{thongTinMienGiamTheoDoiTuongUuDai.DoiTuongUuDai}} </strong>
+												<strong
+													*ngIf="thongTinMienGiamTheoDoiTuongUuDai.DoiTuongUuDai === null">
+													Không có </strong>
+											</li>
+											<li>
+												Công ty ưu đãi:
+												<strong *ngIf="thongTinMienGiamTheoDoiTuongUuDai.CongTyUudai !== null">
+													{{thongTinMienGiamTheoDoiTuongUuDai.CongTyUudai}} </strong>
+												<strong *ngIf="thongTinMienGiamTheoDoiTuongUuDai.CongTyUudai === null">
+													Không có </strong>
+											</li>
+										</ul>
+									</div>
+									<div fxFlex="40%">
+										<table width="100%">
+											<tr>
+												<td style="background: rgba(0, 0, 0, 0.04); padding: 5px">
+													<span>Voucher</span>
+												</td>
+											</tr>
+											<tr>
+												<td style="background: rgba(0, 0, 0, 0.04)">
+													<div style="margin-top: -9px; position: relative"
+														fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+														fxLayoutAlign="start center" kendoTooltip>
+														<kendo-multiselect #multiselect [data]="listVoucherItem"
+															[(ngModel)]="value" (open)="open()" [filterable]="true"
+															[disabled]="loaiThanhToan===false"
+															(removeTag)="removeTag($event)" (blur)="blur()"
+															(filterChange)="filterChange($event)"> </kendo-multiselect>
+														<button (click)="QuetMaQRCodeClick()" color="primary"
+															style="position: absolute; right: 3px; top: -10px"
+															mat-mini-fab type="button"
+															[disabled]="loaiThanhToan===false"
+															class="button-barcoe-in-search" kendoTooltip
+															title="Quét mã vạch thẻ" title="Phím tắt: Ctrl + Q">
+															<img src="assets/img/barcode.png" alt="Scan barcode" />
+														</button>
+														<app-barcode [(model)]="modelQRCode"
+															(modelChange)="changeQR($event)" style="display: none">
+														</app-barcode>
+													</div>
+												</td>
+											</tr>
+											<tr *ngIf="ktKhuyenMaiDichVu">
+												<td style="background: rgba(0, 0, 0, 0.04); padding: 5px">
+													<a style="color: blue;" (click)="dichVuKhuyenMai()"><strong>Dịch
+															vụ khuyến mại</strong></a>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div fxFlex="auto">
+										<app-upload id="Upload" label="Giấy miễn giảm đính kèm (nếu có)"
+											[model]="thongTinBenhNhan.TaiLieuDinhKemGiayMiemGiam"
+											(uploadFileDone)="uploadFileDone($event)"
+											[allowedExtensions]="allowedExtensions" (removeEvent)="removeEvent($event)"
+											[validationerror]="'GiayMiemGiam' | validationerror:thuNganValidationErrors">
+										</app-upload>
+									</div>
+								</div>
+							</fieldset>
+
+							<div fxFlex="100%" class="mb-3" *ngIf="loaiThanhToan === true">
+								<fieldset>
+									<legend>
+										Thông tin thu chi
+									</legend>
+									<a *ngIf="ktSuDungGoi != undefined && ktSuDungGoi != null"
+										(click)="chiTietGoiMarketing()"
+										style="z-index: 9999;margin-left: 13px; text-decoration: underline; color: blue">Chi
+										tiết gói
+										marketing</a>
+									<kendo-splitter>
+										<kendo-splitter-pane
+											*ngIf="titleActive=== 'Chưa thu' || titleActive ==='Đã thu'"
+											[collapsible]="true" size="22%" class="sticky-panelbar" style="top: 0;">
+
+											<strong
+												*ngIf="kiemTraPhieuThuBHYT && tenPhieuThu != undefined && tenPhieuThu != null "
+												style="color: red; font-weight: 800">Vui lòng hủy phiếu :</strong>
+											<a *ngIf="kiemTraPhieuThuBHYT" style="font-size: 13px; color: green"
+												(click)="tabDaThuHuyPhieu($event,1)"> {{tenPhieuThu}} </a>
+
+											<div fxLayoutAlign="start center" fxLayout="row" class="px-2 py-3"
+												style="overflow: hidden">
+												<div class="po-right d-unset" style="width: 100%"
+													[ngClass]="{'disableDiv': kiemTraPhieuThuBHYT}">
+													<div class="container-custom">
+														<div fxLayout="row" fxLayoutGap="18px" kendoTooltip>
+															<mat-radio-button name="thu-phi" [checked]="radioThuTien"
+																title="Phím tắt: Ctrl+F1"
+																(change)="changeValue('thutien')" value="thutien"> Thu
+																tiền </mat-radio-button>
+															<mat-radio-button name="thu-phi" [checked]="radioThuTamUng"
+																title="Phím tắt: Ctrl+F2"
+																(change)="changeValue('thutamung')" value="thutamung">
+																Thu tạm ứng </mat-radio-button>
+														</div>
+													</div>
+													<div class="container-custom"
+														*ngIf="selectedValueThuPhi === 'thutien'">
+														<div>
+															<div id="test" fxLayout="row wrap" fxLayout.lt-sm="column"
+																fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+																<span fxFlex="100%" class="sub-title mt-0 text-left">
+																	<strong>Bệnh nhân cần TT: </strong>
+																	<strong class="color-red">{{tongTienBNThanhToan
+																		|number:'0.2-2':'vi-VN'}}</strong>
+																</span>
+
+																<app-textboxnumeric [max]="tongTienBNThanhToan"
+																	id="cong-no-benh-nhan"
+																	[(model)]="thuTien.SoTienCongNo"
+																	[isFormatCurrenly]="true"
+																	[(selectMoney)]="selectMoneyTienMat"
+																	(modelChange)="modelChangeTienCongNo($event)"
+																	[spinners]="false" [step]="100" fxFlex="100%"
+																	fxFlex.sm="100%" label="Công nợ NB ">
+																</app-textboxnumeric>
+
+																<app-textbox id="ghi-chu" fxFlex="100%" fxFlex.sm="100%"
+																	*ngIf="thuTien.SoTienCongNo > 0" label="Ghi chú"
+																	[(model)]="thuTien.NoiDungCongNo"> </app-textbox>
+
+																<!-- Áp dụng công nợ mới cho phân thu tiền -->
+																<div class="px-6 py-4" fxLayout="column"
+																	style="position: relative">
+																	<div fxLayout="row wrap" fxLayout.lt-sm="column"
+																		fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+																		<fieldset *ngIf="!isTienBNTraOrTraBN"
+																			class="mb-3"
+																			style="text-align: left !important">
+																			<legend>Số Tiền phải trả bệnh nhân
+																			</legend>
+																			<ul class="inline">
+																				<li
+																					*ngIf="soTienQuyBHYTTTTrongGoi === 0">
+																					<strong> Tạm ứng - (BN cần TT -
+																						Công nợ NB
+																						)={{soDuTaiKhoanBenhNhan|number:'0.2-2':'vi-VN'}}
+																						-
+																						({{tongTienBNThanhToan|number:'0.2-2':'vi-VN'}}
+																						-
+																						{{thuTien.SoTienCongNo|number:'0.2-2':'vi-VN'}})=
+																					</strong>
+																					<strong
+																						class="text-font-size-tra-bn">
+																						{{soDuTaiKhoanBenhNhan -
+																						(tongTienBNThanhToan -
+																						thuTien.SoTienCongNo)
+																						|number:'0.2-2':'vi-VN'}}
+																					</strong>
+																				</li>
+																				<li
+																					*ngIf="soTienQuyBHYTTTTrongGoi !== 0">
+																					<strong> (Tạm ứng + Hoàn ứng trong
+																						gói) - (BN cần TT -
+																						Công nợ NB
+																						)={{soDuTaiKhoanBenhNhan|number:'0.2-2':'vi-VN'}}
+																						-
+																						({{tongTienBNThanhToan|number:'0.2-2':'vi-VN'}}
+																						-
+																						{{thuTien.SoTienCongNo|number:'0.2-2':'vi-VN'}})=
+																					</strong>
+																					<strong
+																						class="text-font-size-tra-bn">
+																						{{(soDuTaiKhoanBenhNhan +
+																						soTienQuyBHYTTTTrongGoi) -
+																						(tongTienBNThanhToan -
+																						thuTien.SoTienCongNo)
+																						|number:'0.2-2':'vi-VN'}}
+																					</strong>
+																				</li>
+																			</ul>
+																		</fieldset>
+																		<fieldset *ngIf="isTienBNTraOrTraBN"
+																			class="mb-3"
+																			style="text-align: left !important">
+																			<legend>Số Tiền phải thu bệnh nhân
+																			</legend>
+																			<div class="mt-2">
+																				<ul class="inline">
+																					<li
+																						*ngIf="soTienQuyBHYTTTTrongGoi === 0">
+																						<strong> (BN cần TT - Công nợ
+																							NB ) - Tạm ứng =
+																							({{tongTienBNThanhToan
+																							|number:'0.2-2':'vi-VN'}} -
+																							{{thuTien.SoTienCongNo|number:'0.2-2':'vi-VN'}})
+																							-
+																							{{soDuTaiKhoanBenhNhan|number:'0.2-2':'vi-VN'}}=
+																						</strong>
+																						<strong
+																							class="text-font-size-thu-tien-bn">
+																							{{ tienPhaiTraBenhNhan
+																							|number:'0.2-2':'vi-VN'}}
+																						</strong>
+																					</li>
+																					<li
+																						*ngIf="soTienQuyBHYTTTTrongGoi !== 0">
+																						<strong> (BN cần TT - Công nợ
+																							NB ) - Tạm ứng - Hoàn ứng
+																							trong gói =
+																							({{tongTienBNThanhToan
+																							|number:'0.2-2':'vi-VN'}} -
+																							{{thuTien.SoTienCongNo|number:'0.2-2':'vi-VN'}})
+																							-
+																							{{soDuTaiKhoanBenhNhan|number:'0.2-2':'vi-VN'}}
+																							-
+																							{{soTienQuyBHYTTTTrongGoi|number:'0.2-2':'vi-VN'}}=
+																						</strong>
+																						<strong
+																							class="text-font-size-thu-tien-bn">
+																							{{ tienPhaiTraBenhNhan
+																							|number:'0.2-2':'vi-VN'}}
+																						</strong>
+																					</li>
+																				</ul>
+																			</div>
+																		</fieldset>
+																	</div>
+																</div>
+																<!-- Áp dụng công nợ mới cho phân thu tiền -->
+
+																<!-- hình thức thanh toán nếu nó ở thu tiền show 3 giá trị tương ứng -->
+																<app-multiselect
+																	*ngIf="isTienBNTraOrTraBN && tienPhaiTraBenhNhan !== 0"
+																	[(model)]="setDefeautTienMat"
+																	[modelText]="hinhThucThanhToan.DisplayName"
+																	fxFlex="100%"
+																	[style.display]="tongTienBNThanhToan < 0 ? 'none' : 'block'"
+																	fxFlex.sm="100%" label="Hình thức thanh toán"
+																	[required]="true"
+																	(valueChange)="selectionChangeHinhThucThanhToan($event)"
+																	[data]="hinhThucThanhToan"
+																	[validationerror]="'HinhThucThanhToan' | validationerror:validationErrors">
+																</app-multiselect>
+																<!-- hình thức thanh toán -->
+
+																<!-- 3 hình thức tương ứng nếu chọn bên hình thức thanh toán tương ứng ta cho nhâp số tiền -->
+																<app-textboxnumeric
+																	*ngIf="isTienBNTraOrTraBN && flagCheckSeletedTienMat && tienPhaiTraBenhNhan !== 0"
+																	[readonly]="checkSeletedTienMat" id="so-tien"
+																	[(model)]="thuTien.TienMat"
+																	[isFormatCurrenly]="true"
+																	[(selectMoney)]="selectMoneyTienMat"
+																	(modelChange)="modelChangeTienMat($event , 1)"
+																	[spinners]="false" [step]="100" fxFlex="100%"
+																	fxFlex.sm="100%" label="Tiền mặt"
+																	[validationerror]="'TienMat' | validationerror:validationErrors"
+																	[required]="true"> </app-textboxnumeric>
+																<app-textboxnumeric
+																	*ngIf="isTienBNTraOrTraBN && flagCheckSeletedChuyenKhoan && tienPhaiTraBenhNhan !== 0"
+																	[readonly]="checkSeletedChuyenKhoan"
+																	id="chuyen-khoan" [step]="100"
+																	[(selectMoney)]="selectMoneyTienChuyenKhoan"
+																	[isFormatCurrenly]="true"
+																	(modelChange)="modelChangeChuyenKhoan($event , 2)"
+																	[spinners]="false" [(model)]="thuTien.ChuyenKhoan"
+																	fxFlex="100%" fxFlex.sm="100%" label="Chuyển khoản"
+																	[validationerror]="'ChuyenKhoan' | validationerror:validationErrors"
+																	[required]="true"> </app-textboxnumeric>
+
+																<app-textboxnumeric
+																	*ngIf="isTienBNTraOrTraBN && flagCheckSeletedPos && tienPhaiTraBenhNhan !== 0"
+																	id="pos" [readonly]="checkSeletedPos" fxFlex="100%"
+																	fxFlex.sm="100%" label="POS"
+																	[(selectMoney)]="selectMoneyTienPos"
+																	(modelChange)="modelChangePos($event , 3)"
+																	[spinners]="false" [isFormatCurrenly]="true"
+																	[step]="100"
+																	[validationerror]="'POS' | validationerror:validationErrors"
+																	[(model)]="thuTien.POS" [required]="true">
+																</app-textboxnumeric>
+
+																<!-- <app-textboxnumeric
+                                                                    *ngIf="isTienBNTraOrTraBN && flagCheckSeletedCongNo"
+                                                                    [readonly]="checkSeletedCongNo"
+                                                                    [readonly]="checkSeletedPos"
+                                                                    (modelChange)="modelChangeCongNo($event , 4)"
+                                                                    id="cong-no" fxFlex="100%" fxFlex.sm="100%"
+                                                                    [spinners]="false" [(model)]="thuTien.SoTienCongNo"
+                                                                    [isFormatCurrenly]="true" label="Công nợ">
+                                                                </app-textboxnumeric> -->
+
+																<p style="margin-top: -6px ;"
+																	*ngIf="showCanhBaoSoTienNhap" class="color-red">Số
+																	tiền nhập không đúng số tiền thu.</p>
+																<!-------------------------------------------------------------------------------------->
+																<app-textboxnumeric
+																	*ngIf="isTienBNTraOrTraBN && flagCheckSeletedTienMat && tienPhaiTraBenhNhan !== 0"
+																	[style.display]="tongTienBNThanhToan < 0 ? 'none' : 'block'"
+																	id="benh-nhan-dua" fxFlex="100%" fxFlex.sm="100%"
+																	[(model)]="thuTien.TienBenhNhanDua"
+																	[spinners]="false" [step]="100"
+																	(modelChange)="modelChangeTienBNDua($event)"
+																	[(selectMoney)]="selectMoneyTienBNDua"
+																	[isFormatCurrenly]="true" [min]="0"
+																	(keyup)="changeValueTienBenhNhanDua($event)"
+																	label="Người bệnh đưa"> </app-textboxnumeric>
+
+																<app-textboxnumeric
+																	*ngIf="isTienBNTraOrTraBN && flagCheckSeletedTienMat && tienPhaiTraBenhNhan !== 0"
+																	[style.display]="tongTienBNThanhToan < 0 ? 'none' : 'block'"
+																	id="tra-lai" fxFlex="100%" fxFlex.sm="100%"
+																	[spinners]="false"
+																	[(model)]="thuTien.TienTraLaiBenhNhan"
+																	[readonly]="true" [isFormatCurrenly]="true"
+																	label="Trả lại"> </app-textboxnumeric>
+
+																<app-datepicker id="ngay-thu" fxFlex="100%"
+																	fxFlex.sm="100%" label="Ngày thu" [readonly]="true"
+																	[(model)]="thuTien.NgayThu"
+																	[validationerror]="'NgayThu' | validationerror:validationErrors"
+																	[required]="true" [required]="true">
+																</app-datepicker>
+																<app-textbox id="noi-dung-thu" fxFlex="100%"
+																	fxFlex.sm="100%" label="Nội dung thu"
+																	[(model)]="thuTien.NoiDungThu"
+																	[validationerror]="'NoiDungThu' | validationerror:validationErrors"
+																	maxlength="10000" [required]="true"> </app-textbox>
+
+																<div fxFlex="100%" fxLayout="row"
+																	fxLayoutAlign="end center" fxLayoutGap="9px"
+																	class="padding-thu-tien" kendoTooltip>
+																	<!-- <button *ngIf="ktQTBHYTTheoGoi" type="button"
+																		(click)="thuKemDichVuTrongGoi()"
+																		title="Thu kèm Dv Trong Gói" color="primary"
+																		mat-raised-button>
+																		<span>Thu kèm Dv Trong Gói</span>
+																	</button> -->
+																	<button type="button" mat-raised-button
+																		(click)="xemBangKeNgoaiTruChoThu()"
+																		title="Bảng kê ngoại trú chờ thu"
+																		color="primary" class="mr-2">Bảng kê ngoại trú
+																		chờ thu</button>
+
+																	<button type="button"
+																		(click)="thanhToanKemDichVuTrongGoi()"
+																		title="Phím tắt: Ctrl+S" color="primary"
+																		mat-raised-button>
+																		<span *ngIf="tongTienBNThanhToan >= 0"> Thu
+																			tiền</span>
+																		<span *ngIf="tongTienBNThanhToan < 0"> Thanh
+																			toán</span>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="container-custom"
+														*ngIf="selectedValueThuPhi === 'thutamung'">
+														<div>
+															<app-chi-tiet-thu-tien-tam-ung
+																(afterChanged)="dataSourceChangedTamUng=false"
+																[dataSourceChangedTamUng]="dataSourceChangedTamUng"
+																[SoTienThanhToanDV]="tongTienBNThanhToan"
+																[HoTenBenhNhan]="thongTinBenhNhan.HoTen"
+																(tienTrongTaiKhoan)="tienTrongTaiKhoan($event)">
+															</app-chi-tiet-thu-tien-tam-ung>
+														</div>
+													</div>
+												</div>
+											</div>
+										</kendo-splitter-pane>
+
+										<kendo-splitter-pane *ngIf="titleActive=== 'Quyết toán gói marketing'"
+											[collapsible]="true" size="25%" class="sticky-panelbar" style="top: 0;">
+											<strong
+												*ngIf="kiemTraPhieuThuGoiBHYT && tenPhieuThuGoi != undefined && tenPhieuThuGoi != null "
+												style="color: red; font-weight: 800">Vui lòng hủy phiếu thu gói
+												:</strong>
+											<a *ngIf="kiemTraPhieuThuGoiBHYT" style="font-size: 13px; color: green"
+												(click)="tabDaThuHuyPhieu($event , 2)"> {{tenPhieuThuGoi}} </a>
+											<div fxLayoutAlign="start center" fxLayout="row" class="px-2 py-3"
+												style="overflow: hidden">
+												<div class="po-right d-unset" style="width: 100%"
+													[ngClass]="{'disableDiv': kiemTraPhieuThuGoiBHYT}">
+													<div class="container-custom"
+														*ngIf="selectedValueThuPhi === 'thutien'">
+														<div>
+															<div id="test" fxLayout="row wrap" fxLayout.lt-sm="column"
+																fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+																<span fxFlex="100%" class="sub-title mt-0 text-left">
+																	<strong>Số tiền: </strong><strong
+																		class="color-red">{{tongTienBNThanhToan
+																		|number:'0.2-2':'vi-VN'}}</strong>
+																</span>
+																<app-datepicker id="ngay-thu" fxFlex="100%"
+																	fxFlex.sm="100%" label="Ngày quyết toán"
+																	[readonly]="true"
+																	[(model)]="chiTienQuyetToan.NgayThu"
+																	[validationerror]="'NgayThu' | validationerror:validationErrors"
+																	[required]="true" [required]="true">
+																</app-datepicker>
+																<app-textbox id="noi-dung-thu" fxFlex="100%"
+																	fxFlex.sm="100%" label="Nội dung thu quyết toán"
+																	[(model)]="chiTienQuyetToan.NoiDungThu"
+																	[validationerror]="'NoiDungThu' | validationerror:validationErrors"
+																	maxlength="10000" [required]="true"> </app-textbox>
+																<div fxFlex="100%" fxLayout="row"
+																	fxLayoutAlign="end center" fxLayoutGap="9px"
+																	class="padding-thu-tien" kendoTooltip>
+																	<button type="button" mat-raised-button
+																		(click)="xemBangKeNgoaiTruTrongGoiChoThu()"
+																		title="Bảng kê ngoại trú chờ thu"
+																		color="primary" class="mr-2">Bảng kê ngoại trú
+																		chờ thu</button>
+																	<button type="button"
+																		(click)="quyetToanDichVuTrongGoiCoBHYT()"
+																		title="Quyết toán" color="primary"
+																		mat-raised-button>
+																		<span>Quyết toán</span>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</kendo-splitter-pane>
+
+										<!-- Danh sách thu thu tiền -->
+										<kendo-splitter-pane style="overflow: initial">
+											<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px"
+												style="position: absolute; right:0;width: 75%;font-size: 15px;vertical-align: middle;">
+												<strong class="color-red" *ngIf="ktCoPhieuThuCongNo">Người bệnh có phiếu thu công nợ</strong>
+											</div>
+											<div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px"
+												style="position: absolute; right:0;width: 100%;vertical-align: middle;">
+												<button *ngIf="chuyenVaoNoiTru" type="button"
+													(click)="ChuyenVaoNoiTru()" style="z-index: 9999"
+													title="Chuyển BN vào nội trú" color="warn" mat-raised-button>
+													<span>Chuyển BN vào nội trú</span>
+												</button>
+												<strong *ngIf="soTienQuyBHYTTTTrongGoi > 0">
+													Hoàn ứng trong gói:
+													<span class="color-green">{{soTienQuyBHYTTTTrongGoi
+														|number:'0.2-2':'vi-VN'}}</span>
+												</strong>
+												<strong> Tạm ứng: </strong> <strong
+													class="color-green">{{soDuTaiKhoanBenhNhan |
+													number:'0.2-2':'vi-VN'}} </strong>
+											</div>
+											<kendo-tabstrip fxFlex="100%" class="content-has-border has-padding"
+												(tabSelect)="onTabSelect($event)" #tabDanhSachThuTien>
+												<!-- tab đã thu  -->
+												<kendo-tabstrip-tab [title]="'Chưa thu'" [selected]="tabActive===1"
+													*ngIf="dsCoDichVuCanThu && loaiThanhToan === true">
+													<ng-template kendoTabTitle>
+														<div kendoTooltip title="Phím tắt: Ctrl + F6"></div>
+													</ng-template>
+													<ng-template kendoTabContent>
+														<app-ds-chua-thu-tien (afterChanged)="dataSourceChanged=false"
+															(afterChangedCongNo)="apDungCongNo=false"
+															(afterapDungMiemGiam)="apDungMiemGiam=false"
+															(kiemTraDSCongNo)="kiemTraDSCongNo($event)"
+															[dataSourceChanged]="dataSourceChanged"
+															[apDungCongNo]="apDungCongNo" [position]="position"
+															[thongTinCongTyBaoHiemTuNhans]="thongTinBenhNhantam"
+															(afterapDungCNTT)="apCapNhatThanhToan=false"
+															[apCapNhatThanhToan]="apCapNhatThanhToan"
+															[apDungMiemGiam]="apDungMiemGiam"
+															(loadingCTThanhCong)="loadingCTThanhCong($event)"
+															(afterApDungHuyThanhCong)="afterApDungHuyThanhCong($event)"
+															[thongTinMienGiamVos]="thongTinMienGiamVo"
+															(danhSachChuaThanhToan)="danhSachChuaThanhToan($event)"
+															(kiemTraDanhSachXNBHYT)="kiemTraDanhSachXNBHYT($event)">
+														</app-ds-chua-thu-tien>
+													</ng-template>
+												</kendo-tabstrip-tab>
+												<!-- Quyết toán gói marketing -->
+												<kendo-tabstrip-tab [title]="'Quyết toán gói marketing'"
+													[selected]="tabActive===2"
+													*ngIf="loaiThanhToan === true && ktQTBHYTTheoGoi === true"
+													kendoTooltip>
+													<ng-template kendoTabTitle>
+														<div kendoTooltip title="Quyết toán gói marketing"></div>
+													</ng-template>
+													<ng-template kendoTabContent>
+														<app-danh-sach-goi-bhyt-chua-quyet-toan
+															(afterChanged)="dataSourceChangedTrongGoi=false"
+															(afterChangedCongNo)="apDungCongNoTrongGoi=false"
+															[dataSourceChanged]="dataSourceChangedTrongGoi"
+															[apDungCongNo]="apDungCongNoTrongGoi" [position]="position"
+															[thongTinCongTyBaoHiemTuNhans]="thongTinBenhNhantam"
+															[yeuCauTiepNhanId]="idYeuCauTiepNhan"
+															(luuTamChiPhiThanhCongTrongGoi)="luuTamChiPhiThanhCongTrongGoi($event)"
+															(danhSachGoiCoBHYT)="danhSachGoiCoBHYT($event)">
+														</app-danh-sach-goi-bhyt-chua-quyet-toan>
+													</ng-template>
+												</kendo-tabstrip-tab>
+												<!-- tab đã thu  -->
+												<kendo-tabstrip-tab [title]="'Đã thu'" [selected]="tabActive===3"
+													*ngIf="loaiThanhToan === true" kendoTooltip>
+													<ng-template kendoTabTitle>
+														<div kendoTooltip title="Phím tắt: Ctrl + F7"></div>
+													</ng-template>
+													<ng-template kendoTabContent>
+														<app-thong-tin-phieu-thu-ngoai-tru [phieuThuId]="xemPhieuThuId"
+															(huyThanhCong)="huyThanhCong($event)">
+														</app-thong-tin-phieu-thu-ngoai-tru>
+													</ng-template>
+												</kendo-tabstrip-tab>
+											</kendo-tabstrip>
+										</kendo-splitter-pane>
+									</kendo-splitter>
+								</fieldset>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ng-template #actionTemplateSTCongNo let-dataItem let-rowIndex="rowIndex">
+			<div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="2px">
+				<app-textboxnumeric class="no-label p-0" label=" " [step]="100" fxFlex="50%"
+					[disabled]="loaiThanhToan === false && kiemTraThongTinBaoHiemTN === true"
+					[(model)]="dataItem.SoTienCongNo" (keyup)="onKeyCongNo($event, dataItem.SoTienCongNo, dataItem.Id)"
+					decimals="2" [format]="format" min="0.00"> </app-textboxnumeric>
+				<button color="primary" fxFlex="auto" mat-raised-button mat-button
+					[disabled]="loaiThanhToan === false &&  kiemTraThongTinBaoHiemTN === true"
+					(click)="apDungCongNoCongTyBHTN(dataItem.SoTienCongNo,dataItem.Id)" cdkFocusInitial>Áp dụng</button>
+			</div>
+		</ng-template>
+		<ng-template #actionTemplateSubmitCongNo let-dataItem let-rowIndex="rowIndex"> </ng-template>
+	</vex-page-layout-content>
+</vex-page-layout>

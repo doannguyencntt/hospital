@@ -1,0 +1,18 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="Ma" fxFlex="20%" fxFlex.sm="40%%" [required]="true" 
+        [(model)]="modelFE.Ma" label="Mã" maxlength="50"
+        [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Ten" fxFlex="20%" fxFlex.sm="40%%" [required]="true" 
+        [(model)]="modelFE.Ten" label="Tên" maxlength="250"
+        [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+ 
+    <app-textbox id="Mota" fxFlex="60%" fxFlex.sm="60%%" maxlength="2000"
+        [(model)]="modelFE.MoTa" label="Mô tả" [validationerror]="'MoTa' | validationerror:validationErrors">
+    </app-textbox>
+
+    
+</div>

@@ -1,0 +1,52 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục', Path:''}
+                    ,{Title:'Nhóm Hệ Thống', Path:''}
+                    ,{Title:'Thuốc', Path:''}
+                    ,{Title:'Thuốc Hoặc Hoạt Chất', Path:'/danh-muc/nhom-he-thong/thuoc/thuoc-hoac-hoat-chat', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/nhom-he-thong/thuoc/thuoc-hoac-hoat-chat" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useActionDefault]="true" [lazyLoadPage]="true" [showExportExcel]="true"
+                (extExportExcel)="exportExcel()"></app-grid>
+        </div>
+    </vex-page-layout-content>
+    <ng-template #hoiChanTemplate let-dataItem>
+        <span *ngIf="dataItem.HoiChan == 1">Có</span>
+        <span *ngIf="dataItem.HoiChan == 0">Không</span>
+        <span></span>
+    </ng-template>
+    <ng-template #dieuKienThanhToanTemplate let-dataItem>
+        <span *ngIf="dataItem.CoDieuKienThanhToan == 1">Có</span>
+        <span *ngIf="dataItem.CoDieuKienThanhToan == 0">Không</span>
+        <span></span>
+    </ng-template>
+    <ng-template #benhVienHang1Template let-dataItem>
+        <span *ngIf="dataItem.BenhVienHang1 == 1">Có</span>
+        <span *ngIf="dataItem.BenhVienHang1 == 0">Không</span>
+        <span></span>
+    </ng-template>
+    <ng-template #benhVienHang2Template let-dataItem>
+        <span *ngIf="dataItem.BenhVienHang2 == 1">Có</span>
+        <span *ngIf="dataItem.BenhVienHang2 == 0">Không</span>
+        <span></span>
+    </ng-template>
+    <ng-template #benhVienHang3Template let-dataItem>
+        <span *ngIf="dataItem.BenhVienHang3 == 1">Có</span>
+        <span *ngIf="dataItem.BenhVienHang3 == 0">Không</span>
+        <span></span>
+    </ng-template>
+    <ng-template #benhVienHang4Template let-dataItem>
+        <span *ngIf="dataItem.BenhVienHang4 == 1">Có</span>
+        <span *ngIf="dataItem.BenhVienHang4 == 0">Không</span>
+        <span></span>
+    </ng-template>
+</vex-page-layout>

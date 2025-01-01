@@ -1,0 +1,238 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê',Path:''}
+                    ,{Title:'Dược Phẩm',Path:''}
+                    ,{Title:'Tồn Kho',Path:'/bao-cao/ton-kho/duoc-pham',Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <kendo-tabstrip fxFlex="100%" class=" card -mt-15" (tabSelect)="onTabSelect($event)">
+            <kendo-tabstrip-tab [title]="'Cảnh Báo Tồn Kho'" [selected]="tabCanhBaoTonKhoEnabled" >
+                <ng-template kendoTabContent>
+                    <div>
+                        <app-grid #canhBaoTonKhoGrid [showStt]="true" baseRoute="/danh-muc/bao-cao/ton-kho/duoc-pham"
+                            [gridColumns]="gridColumnsCanhBaoTonKho" [documentType]="documentType" [useAddDeault]="true"
+                            [headerTemplate]="headerTemplate" [useHeaderDefault]="false" [useActionDefault]="false"
+                            [checkboxAble]="false" heightToolbar="190" [lazyLoadPage]="true"
+                            [additionalSearchString]="defaultAdditionalSearchStringCanhBaoTonKho"
+                            [searchString]="searchInfo.searchString" (extOnDataBound)="onDataBound($event)">
+                        </app-grid>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+            <kendo-tabstrip-tab [title]="" [selected]="tabTongHopTonKhoEnabled" >
+                <ng-template kendoTabContent>
+                    <div>
+                        <app-grid #tongHopTonKhoGrid [showStt]="true"  baseRoute="/danh-muc/bao-cao/ton-kho/duoc-pham"
+                            [gridColumns]="gridColumnsTongHopTonKho" [documentType]="documentType" [useAddDeault]="true"
+                            [headerTemplate]="headerTemplate1" urlGetData="TonKho/GetDataForGridTatCaAsync"
+                            (extOnDataBound)="onDataBound($event)"
+                            [additionalSearchString]="defaultAdditionalSearchStringTongHopTonKho"
+                            urlGetTotalPage="TonKho/GetTotalPageForGridTatCaAsync" [useHeaderDefault]="false"
+                            [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" heightToolbar="190">
+                        </app-grid>
+                    </div>
+                   
+                </ng-template>
+                <ng-template kendoTabTitle>
+                    <span style="white-space: nowrap;">
+                        Tổng hợp tồn kho <span style="color:red;font-weight: bold;text-align: center;">Khả dụng</span>
+                    </span>
+                </ng-template>
+            </kendo-tabstrip-tab>
+
+            <kendo-tabstrip-tab [title]="'Nhập xuất tồn kho'" [selected]="tabNhapXuatTonKhoEnabled">
+                <ng-template kendoTabContent>
+                    <div>
+                        <app-grid #nhapXuatTonKhoGrid [showStt]="true" baseRoute="/danh-muc/bao-cao/ton-kho/duoc-pham" 
+                            [gridColumns]="gridColumnsTonKhoDuocPham" [documentType]="documentType"
+                            [useAddDeault]="true" [headerTemplate]="headerNhapXuatTonTemplate" [groups]="groups"
+                            urlGetData="TonKho/GetDataForGridNhapXuatTonAsync" (extOnDataBound)="onDataBound($event)"
+                            [additionalSearchString]="defaultAdditionalSearchStringNhapXuatTonKho"
+                            urlGetTotalPage="TonKho/GetTotalPageForGridNhapXuatTonAsync" [useHeaderDefault]="false"
+                            [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" heightToolbar="190">
+                        </app-grid>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+        </kendo-tabstrip>
+
+    </vex-page-layout-content>
+</vex-page-layout>
+<ng-template #tinhTrangCanhBaoTemplate let-dataItem>
+    <span style="color: #f44336;" *ngIf="dataItem.CanhBao=='Hết tồn kho'"
+        class="badge badge-pill badge-{{dataItem.MauCanhBao}}">{{dataItem.CanhBao}}
+    </span>
+    <span style="color: #673ab7;" *ngIf="dataItem.CanhBao=='Tồn kho quá nhiều'"
+        class="badge badge-pill badge-{{dataItem.MauCanhBao}}">{{dataItem.CanhBao}}
+    </span>
+    <span style="color: #ff9800;" *ngIf="dataItem.CanhBao=='Sắp hết tồn kho'"
+        class="badge badge-pill badge-{{dataItem.MauCanhBao}}">{{dataItem.CanhBao}}
+    </span>
+</ng-template>
+
+<ng-template #theKhoTemplate let-dataItem>
+    <button (click)="xem(dataItem.Id)" type="button" color="primary" style="text-align: center;" mat-raised-button
+        mat-button>Xem
+    </button>
+</ng-template>
+
+
+<ng-template #actionTongHopTonKhoTemplate let-dataItem>
+    <button *ngIf="searchInfo2.KhoId!=null&&searchInfo2.KhoId>0" (click)="suaTonKho(dataItem)" type="button"
+        color="primary" style="text-align: center;" mat-raised-button mat-button>Chi tiết tồn kho
+    </button>
+</ng-template>
+<ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem>
+    <strong>{{value}}</strong>
+</ng-template>
+
+<ng-template #nxTonDauKyTemplate let-dataItem>
+    {{dataItem.TonDauKy | number:'1.0':'vi-VN' }}
+</ng-template>
+
+<ng-template #nxNhapTrongKyTemplate let-dataItem>
+    {{dataItem.NhapTrongKy | number:'1.0':'vi-VN' }}
+</ng-template>
+
+<ng-template #nxXuatTrongKyTemplate let-dataItem>
+    {{dataItem.XuatTrongKy | number:'1.0':'vi-VN' }}
+</ng-template>
+
+<ng-template #nxTonCuoiKyTemplate let-dataItem>
+    {{dataItem.TonCuoiKy | number:'1.0':'vi-VN' }}
+</ng-template>
+
+<ng-template #headerTemplate>
+    <div class="bg-app-bar p-0 h-15 border-b sticky left-0">
+        <div fxFlex="80%">
+            <app-combobox id="Kho" fxFlex="300px" fxFlex.sm="auto" [(model)]="searchInfo.KhoId"
+                (modelChange)="KhoCanhBaoChange($event)" [modelText]="searchInfo.TenKho"
+                label="Chọn Kho" url="TonKho/GetKhoTatCa" popupSettings="" class="mt-1 on-header"
+                style="margin-left: 5px;" [autoSelectFirstItem]="true" [bind]="true" (selectionChange)="KhoChange($event)">
+            </app-combobox>
+            <app-combobox id="CanhBao" fxFlex="300px" fxFlex.sm="auto"
+                [(model)]="searchInfo.CanhBaoId" (selectionChange)="CanhBaoChange($event)"
+                [modelText]="searchInfo.LoaiCanhBao" label="Cảnh báo" url="TonKho/GetCanhBao"
+                popupSettings="" class="mt-1 on-header" style="margin-left: 5px;" [autoSelectFirstItem]="true" [bind]="true">
+            </app-combobox>
+            <div class="bg-card rounded-full border px-4" style="margin-left: 20px;" fxFlex="400px"
+                fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center"
+                style="margin-top: 2px; margin-left: 5px;">
+                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl"
+                    class="px-3 py-2 border-0 outline-none w-full bg-transparent"
+                    placeholder="{{searchPlaceHolder}}" type="search" name="searchString"
+                    [(ngModel)]="searchInfo.searchString" (keyup)="onKey($event)"
+                    (ngModelChange)="searchChangeCanhBaoTonKho()" />
+            </div>
+            <button class="ml-4" style="margin-left: 20px;" fxFlex="none" fxHide.gt-xs
+                mat-icon-button type="button" (click)="searchCanhBaoTonKho()">
+                <mat-icon [icIcon]="icSearch"></mat-icon>
+            </button>
+        </div>
+        <div class="text-right" fxFlex="20%" style="margin: 5px;">
+            <button (click)="exportExcelCanhBaoTonKho()" type="button" color="primary"
+                [disabled]="IsData==false" mat-raised-button mat-button>Xuất Excel
+            </button>
+            <button (click)="showPopupBaoCaoTonKho()" type="button" color="primary"
+                [disabled]="IsData==false" class="ml-1" mat-raised-button mat-button>Xem
+            </button>
+            <app-print-form textPrint="In" [isDisable]="!IsData" type="PDF"
+                [showInMenuItem]="false" [showIconPrint]="false" [bodyComponent]="this">
+            </app-print-form>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #headerTemplate1>
+    <div class="bg-app-bar p-0 h-15 border-b sticky left-0">
+        <div fxFlex="80%">
+            <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row"
+                fxLayoutAlign="start center">
+                <app-combobox id="Kho" fxFlex="300px" fxFlex.sm="auto" [(model)]="searchInfo2.KhoId"
+                (modelChange)="KhoTonKhoChange($event)" (selectionChange)="KhoChange2($event)" [modelText]="searchInfo2.TenKho"
+                    label="Chọn Kho" url="TonKho/GetKhoTatCa"  popupSettings="" [autoSelectFirstItem]="true" [bind]="true"
+                    class="mt-1 on-header" style="margin-top: 21px;margin-left: 5px;" >
+                </app-combobox>
+                <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto"
+                    fxHide.xs fxLayout="row" fxLayoutAlign="start center"
+                    style="margin-top: 2px;margin-left: 5px;">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl"
+                        class="px-3 py-2 border-0 outline-none w-full bg-transparent"
+                        placeholder="{{searchPlaceHolder}}" type="search" name="searchString"
+                        [(ngModel)]="searchInfo2.searchString" (keyup)="onKey2($event)"
+                        (ngModelChange)="searchChangeTongHopTonKho()" />
+                </div>
+                <button class="ml-4" style="margin-left: 20px;" fxFlex="none" fxHide.gt-xs
+                    mat-icon-button type="button" (click)="searchTonKho2()">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="text-right" fxFlex="20%" style="margin: 5px;">
+            <button (click)="exportExcelTongHopTonKho()" type="button" color="primary"
+                [disabled]="IsData==false" mat-raised-button mat-button>Xuất Excel
+            </button>
+            <button (click)="showPopupTongHopTonKho()" type="button" color="primary" class="ml-1"
+                [disabled]="IsData==false" mat-raised-button mat-button>Xem
+            </button>
+            <app-print-form textPrint="In " [isDisable]="!IsData" type="PDF"
+                [showInMenuItem]="false" [showIconPrint]="false" [bodyComponent]="this">
+            </app-print-form>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #headerNhapXuatTonTemplate>
+    <div class="bg-app-bar p-0 h-15 border-b sticky left-0">
+        <div fxFlex="80%">
+            <app-combobox id="Kho" fxFlex="300px" fxFlex.sm="auto" [(model)]="searchInfo3.KhoId"
+                (modelChange)="KhoChange3($event)" [modelText]="searchInfo3.TenKho" label="Chọn Kho"
+                url="TonKho/GetKhoTatCa"  popupSettings="" [autoSelectFirstItem]="true" [bind]="true" class="mt-1 on-header"
+                style="margin-left: 5px;">
+            </app-combobox>
+            <app-daterangepicker style="margin-left: 5px;" id="Daterange" fxFlex="300px"
+                fxFlex.sm="auto" [(model)]="searchInfo3.RangeDate" label="Từ ngày - Đến ngày"
+                (keyup)="onKey3($event)" [required]="true" (modelChange)="changRange($event)"
+                class="mt-1 on-header">
+            </app-daterangepicker>
+            <div class="bg-card rounded-full border px-4" style="margin-left: 20px;" fxFlex="400px"
+                fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center"
+                style="margin-top: 2px; margin-left: 5px;">
+                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl"
+                    class="px-3 py-2 border-0 outline-none w-full bg-transparent"
+                    placeholder="{{searchPlaceHolder}}" type="search" name="Description"
+                    [(ngModel)]="searchInfo3.Description" (keyup)="onKey3($event)"
+                    (ngModelChange)="searchChange()" />
+            </div>
+            <button class="ml-4" style="margin-left: 20px;" fxFlex="none" fxHide.gt-xs
+                mat-icon-button type="button" (click)="searchTonKho3()">
+                <mat-icon [icIcon]="icSearch"></mat-icon>
+            </button>
+        </div>
+        <div class="text-right" fxFlex="20%" style="margin: 5px;">
+            <button (click)="exportExcelNhapXuatTonKho()" type="button" color="primary"
+                mat-raised-button mat-button>Xuất Excel
+            </button>
+            <button (click)="showPopup3()" type="button" color="primary" class="ml-1"
+                mat-raised-button mat-button>Xem
+            </button>
+            <app-print-form textPrint="In " type="PDF" [showInMenuItem]="false"
+                [showIconPrint]="false" [bodyComponent]="this">
+            </app-print-form>
+        </div>
+    </div>
+</ng-template>
+<ng-template #templateHeaderTemplate let-column="column" let-columnIndex="columnIndex">
+    SỐ LƯỢNG TỒN <span style="color: red;"> KHẢ DỤNG</span>
+</ng-template>

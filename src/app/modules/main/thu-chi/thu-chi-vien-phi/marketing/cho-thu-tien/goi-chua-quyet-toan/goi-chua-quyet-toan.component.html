@@ -1,0 +1,70 @@
+<app-grid [gridColumns]="gridColumns" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false"
+    [useActionDefault]="false" [checkboxAble]="true" [autoHeight]="true" [lazyLoadPage]="true" #gridList
+    [triggerSelectAll]="true" [masterName]='marketing' [gridDataSource]="dataSource"
+    (extCheckboxSelection)="extCheckboxSelection($event)" style="width: 1px;" [pageable]="false" [showStt]="true">
+</app-grid>
+
+<ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+    <button type="button" (click)="QuyetToan(dataItem)" class="mr-2" title="Quyết toán" color="warn"
+        mat-raised-button>
+        <span>Quyết toán</span>
+    </button>
+    <button *ngIf="!dataItem.NgungSuDung" type="button" (click)="chuyenGoi(dataItem)" title="Chuyển gói" color="primary" mat-raised-button>
+        <span>Chuyển gói</span>
+    </button>
+</ng-template>
+
+<ng-template #tenGoiTemplate let-dataItem>
+    <a (click)="QuyetToan(dataItem)">{{dataItem.TenGoi}}</a>
+</ng-template>
+
+<ng-template #tongSoTienCongNoTemplate let-dataItem>
+    {{dataItem.TongDVDaDung | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #giaGoiTemplate let-dataItem>
+    {{dataItem.GiaGoi | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #daThuTemplate let-dataItem>
+    {{dataItem.DaThu | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #chuaThuTemplate let-dataItem>
+    {{dataItem.ChuaThu | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #ngayDangGroupFooter>
+    <strong> Tổng nợ : </strong>
+</ng-template>
+
+<ng-template #tongSoTienDaThuGroupFooter>
+    <span> {{totalTongSoTienCongNo('DaThu') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<ng-template #tongSoTienChuaThuGroupFooter>
+    <span style="color: red;"> {{totalTongSoTienCongNo('ChuaThu') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<ng-template #ngungSuDungTemplate let-dataItem>
+    <div kendoTooltip *ngIf="dataItem.NgungSuDung">
+        <app-checkbox value="true" [disabled]="true" [model]="dataItem.NgungSuDung" class="pl-2">
+        </app-checkbox>
+    </div>
+</ng-template>
+
+<ng-template #tongSoTienCongNoGroupFooter>
+    <span style="color: green;"> {{totalTongSoTienCongNo('totalTongSoTienCongNo') | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<div class="sticky-button-action py-3 text-right mt-5" kendoTooltip>
+    <div style="float: left">
+        <button (click)="BackToList()" type="button" mat-button class="mr-2" mat-raised-button>Quay lại</button>
+    </div>
+    <div *ngIf="dataSource.data !== undefined && dataSource.data != null && dataSource.data.length > 0"
+        class="sticky-button-action text-right mt-3" kendoTooltip>
+        <button type="button" (click)="ThuTien()" title="Thu Tiền" color="primary" mat-raised-button>
+            <span>Thu tiền</span>
+        </button>
+    </div>
+</div>

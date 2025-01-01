@@ -1,0 +1,110 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0" class="order-form">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}" style="padding-top: 13px;">
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textbox id="ho-ten" fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" [(model)]="giayKhamChuaBenhTheoYc.NguoiNhan" label="Kính gửi" maxlength="60">
+                </app-textbox>
+            </div>
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-radio fxFlex="100%" fxFlex.md="50%" fxFlex.sm="100%" id="tao-la-ai" [items]="[{Value:0,Text:'Người bệnh'},{Value:1,Text:'Người nhà'}]" [(model)]="giayKhamChuaBenhTheoYc.TaoLaAi" label="Tôi là">
+                </app-radio>
+            </div>
+            <div *ngIf="giayKhamChuaBenhTheoYc.TaoLaAi==1" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textbox id="ho-ten" fxFlex="20%" fxFlex.md="100%" fxFlex.sm="100%" [(model)]="giayKhamChuaBenhTheoYc.HoTenNguoiThan" label="Họ tên" maxlength="60" [required]="true" [validationerror]="'HoTen' | validationerror:validationErrors">
+                </app-textbox>
+
+                <app-textboxnumeric id="nam-sinh" [(model)]="giayKhamChuaBenhTheoYc.NamSinhNguoiThan" fxFlex="10%" fxFlex.md="50%" fxFlex.sm="100%" label="Năm sinh" format="0" min="1" max="9999" [required]="true" [validationerror]="'NamSinhNguoiThan' | validationerror:validationErrors">
+                </app-textboxnumeric>
+
+                <app-radio fxFlex="15%" fxFlex.md="50%" fxFlex.sm="100%" id="gioi-tinh" [items]="[{Value:1,Text:'Nam'},{Value:2,Text:'Nữ'}]" [(model)]="giayKhamChuaBenhTheoYc.GioiTinhNguoiThan" label="Giới tính" [required]="true" [validationerror]="'GioiTinhNguoiThan' | validationerror:validationErrors">
+                </app-radio>
+
+                <app-textbox id="cmnd" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="giayKhamChuaBenhTheoYc.CmndNguoiThan" label="CMND/HC/HK số" maxlength="30">
+                </app-textbox>
+
+                <app-textbox id="noi-cap" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="giayKhamChuaBenhTheoYc.NoiCapCmndNguoiThan" label="Nơi cấp" maxlength="30">
+                </app-textbox>
+
+                <app-combobox bind="true" id="DanToc" fxFlex="15%" fxFlex.md="50%" fxFlex.sm="100%" label="Dân tộc" url="TiepNhanBenhNhan/GetDanToc" [(model)]="giayKhamChuaBenhTheoYc.DanTocNguoiThan">
+                </app-combobox>
+            </div>
+
+            <div *ngIf="giayKhamChuaBenhTheoYc.TaoLaAi==1" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-combobox id="ngoai-kieu" popupSettings="null" fxFlex="15%" fxFlex.md="50%" fxFlex.sm="100%" label="Ngoại kiều" url="TiepNhanBenhNhan/GetQuocTich" [(model)]="giayKhamChuaBenhTheoYc.NgoaiKieuNguoiThan" bind="true">
+                </app-combobox>
+
+                <app-combobox id="nghe-nghiep" popupSettings="null" fxFlex="15%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="giayKhamChuaBenhTheoYc.NgheNghiepNguoiThan" bind="true" label="Nghề nghiệp" url="TiepNhanBenhNhan/GetNgheNghiep" [validationerror]="'NgheNghiepId' | validationerror:validationErrors"></app-combobox>
+
+                <app-textbox id="noi-lam-viec" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="giayKhamChuaBenhTheoYc.NoiLamViecNguoiThan" label="Nơi làm việc" maxlength="40">
+                </app-textbox>
+
+                <app-textbox id="dia-chi" fxFlex="50%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="giayKhamChuaBenhTheoYc.DiaChiNguoiThan" label="Địa chỉ" maxlength="60" required="true">
+                </app-textbox>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textbox id="khi-can-bao-tin" fxFlex="30%" fxFlex.md="100%" fxFlex.sm="100%" [(model)]="giayKhamChuaBenhTheoYc.KhiCanBaoTin" label="Khi cần báo tin" maxlength="60">
+                </app-textbox>
+
+                <app-autocomplete popupSettings="null" id="bs-cham-soc" fxFlex="30%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="giayKhamChuaBenhTheoYc.BacSiChamSoc" url="PhauThuatThuThuat/GetListPhauThuatAutoComplete" label="Bác sĩ khám/ chữa bệnh/ phãu thuật/ đỡ đẻ/ chăm sóc" maxlength="120">
+                </app-autocomplete>
+
+                <app-textbox popupSettings="null" id="khi-can-bao-tin" fxFlex="40%" fxFlex.md="100%" fxFlex.sm="100%" [(model)]="giayKhamChuaBenhTheoYc.LoaiChuaTri" label="Nằm chữa bệnh tại buồng loại" maxlength="60">
+                </app-textbox>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <!-- {{tongTien | number:'0.2-2':'vi-VN':'symbol':'0.0'}} -->
+                <app-textboxnumeric id="so-tien" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [format]="" [spinners]="false" [(model)]="giayKhamChuaBenhTheoYc.SoTien" label="Số tiền ứng trước theo quy định của BV"  (modelChange)="changeNumberToLiteral($event)">
+                </app-textboxnumeric>
+
+                <div fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" class="order-so-tien-chu">
+                    {{giayKhamChuaBenhTheoYc.SoTienChu}}
+                </div>
+
+                <app-datepicker id="ngay-thuc-hien" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Ngày thực hiện" [(model)]="giayKhamChuaBenhTheoYc.NgayThucHien" [required]="true" [validationerror]="'NgayThucHien' | validationerror:validationErrors">
+                </app-datepicker>
+
+                <app-autocomplete id="bs-dieu-tri" popupSettings="null" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="giayKhamChuaBenhTheoYc.BsDieuTri" url="PhauThuatThuThuat/GetListBacSiAutoComplete" label="BS điều trị" maxlength="120">
+                </app-autocomplete>
+            </div>
+
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-upload id="Upload" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" #upload15NgayDieuTri [allowedExtensions]="allowedExtensions" [(model)]="giayKhamChuaBenhTheoYc.FileChuKy" [multiple]="true" label="File chữ ký" [template]="templateFileChuanDoanHAInfo">
+                </app-upload>
+            </div>
+
+
+            <ng-template #templateFileChuanDoanHAInfo let-files>
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                            <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="green" class="custom-name green">{{files[0].name}}</a>
+                        </td>
+                        <td style="width:25px">
+                            <a type="button" (click)="upload15NgayDieuTri.remove(files[0].uid)" mat-icon-button>
+                                <mat-icon [icIcon]="icClear"></mat-icon>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </ng-template>
+        </div>
+
+        <div style="justify-content: space-between;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="order-btn">
+            <div style="display: flex;align-items: center;">
+                <p>Người thực hiện:&nbsp;</p>
+                <strong>{{giayKhamChuaBenhTheoYc.NguoiThucHienReadonly}}&nbsp;</strong>
+                <p>Ngày thực hiện:&nbsp;</p>
+                <strong>{{giayKhamChuaBenhTheoYc.NgayThucHienReadonly}}&nbsp;</strong>
+            </div>
+            <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+                <button type="button" class="mr-2" mat-button color="primary" (click)="print()">In</button>
+                <button type="button" class="mr-2" mat-button color="primary" (click)="cancel()">Huỷ</button>
+                <button type="button" class="mr-2" color="primary" mat-raised-button (click)="save()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>

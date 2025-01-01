@@ -1,0 +1,24 @@
+.order-form {
+    flex-direction: column !important;
+}
+
+.order-btn {
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.order-thong-tin {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+.order-info-area {
+    flex-direction: column !important;
+}
+
+.order-so-tien-chu {
+    display: flex;
+    align-items: center;
+}

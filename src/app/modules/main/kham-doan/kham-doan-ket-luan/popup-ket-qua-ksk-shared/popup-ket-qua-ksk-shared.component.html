@@ -1,0 +1,85 @@
+<!-- <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Chỉnh sửa kết quả Chuyên khoa</div>
+    <button type="button" mat-icon-button (click)="close('No')" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="min-height: 120px;">
+    <div class="row">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="8px grid" fxLayoutGap.lt-sm="0">
+            <app-textarea *ngIf="data.Type == 1" [(model)]="ketQuaKhamChuyenKhoaNoi.TuanHoan" class="item-no-padding"
+                fxFlex="100%" fxFlex.sm="100%" label="Tuần hoàn" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 1" [(model)]="ketQuaKhamChuyenKhoaNoi.HoHap" class="item-no-padding"
+                fxFlex="100%" fxFlex.sm="100%" label="Hô hấp" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 1" [(model)]="ketQuaKhamChuyenKhoaNoi.TieuHoa" class="item-no-padding"
+                fxFlex="100%" fxFlex.sm="100%" label="Tiêu hóa" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 1" [(model)]="ketQuaKhamChuyenKhoaNoi.ThanTietNieu"
+                class="item-no-padding" fxFlex="100%" fxFlex.sm="100%" label="Thận - tiết niệu" maxlength="4000">
+            </app-textarea>
+            <app-textarea *ngIf="data.Type == 1" [(model)]="ketQuaKhamChuyenKhoaNoi.NoiTiet" class="item-no-padding"
+            fxFlex="100%" fxFlex.sm="100%" label="Nội tiết" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 1" [(model)]="ketQuaKhamChuyenKhoaNoi.CoXuongKhop" class="item-no-padding"
+                fxFlex="100%" fxFlex.sm="100%" label="Cơ - xương - khớp" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 1" [(model)]="ketQuaKhamChuyenKhoaNoi.ThanKinh" class="item-no-padding"
+                fxFlex="100%" fxFlex.sm="100%" label="Thần kinh" maxlength="4000"> </app-textarea>
+            
+            <app-textarea *ngIf="data.Type == 1" [(model)]="ketQuaKhamChuyenKhoaNoi.TamThan" class="item-no-padding"
+                fxFlex="100%" fxFlex.sm="100%" label="Khác" maxlength="4000"> </app-textarea>
+
+            <app-textarea *ngIf="data.Type == 5" [(model)]="ketQuaNgoaiDaLieuSanPhuKhoa.value" class="item-no-padding"
+                fxFlex="100%" fxFlex.sm="100%" label="Sản phụ Khoa" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 6" [(model)]="ketQuaNgoaiDaLieuSanPhuKhoa.value" class="item-no-padding"
+                fxFlex="100%" fxFlex.sm="100%" label="Da liễu" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 7" [(model)]="ketQuaNgoaiDaLieuSanPhuKhoa.value" class="item-no-padding"
+                fxFlex="100%" fxFlex.sm="100%" label="Ngoại khoa" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 8" [(model)]="ketQuaNgoaiDaLieuSanPhuKhoa.value" class="item-no-padding"
+                fxFlex="100%" fxFlex.sm="100%" label="Kết quả dịch vụ kỹ thuật" maxlength="4000"> </app-textarea>
+
+            <div fxFlex="50%" *ngIf="data.Type == 2" style="font-weight: bold;">Tai phải</div>
+            <div fxFlex="50%" *ngIf="data.Type == 2" style="font-weight: bold;">Tai trái</div>
+            <app-textarea *ngIf="data.Type == 2" [(model)]="KetQuaKhamChuyenKhoaTaiMuiHong.TaiPhaiNoiThuong"
+                class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Nói thường" maxlength="4000">
+            </app-textarea>
+            <app-textarea *ngIf="data.Type == 2" [(model)]="KetQuaKhamChuyenKhoaTaiMuiHong.TaiPhaiNoiTham"
+                class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Nói thầm" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 2" [(model)]="KetQuaKhamChuyenKhoaTaiMuiHong.TaiTraiNoiThuong"
+                class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Nói thường" maxlength="4000">
+            </app-textarea>
+            <app-textarea *ngIf="data.Type == 2" [(model)]="KetQuaKhamChuyenKhoaTaiMuiHong.TaiTraiNoiTham"
+                class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Nói thầm" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 2" [(model)]="KetQuaKhamChuyenKhoaTaiMuiHong.CacBenhTaiMuiHong"
+                class="item-no-padding" fxFlex="100%" fxFlex.sm="100%" label="Các bệnh tai mũi họng(nếu có)"
+                maxlength="4000"> </app-textarea>
+
+            <app-textarea *ngIf="data.Type == 3" [(model)]="ketQuaKhamChuyenKhoaNoiRangHamMat.HamTren"
+                class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Hàm trên" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 3" [(model)]="ketQuaKhamChuyenKhoaNoiRangHamMat.HamDuoi"
+                class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Hàm dưới" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 3" [(model)]="ketQuaKhamChuyenKhoaNoiRangHamMat.CacBenhRangHamMat"
+                class="item-no-padding" fxFlex="100%" fxFlex.sm="100%" label="Các bệnh về răng hàm mặt(nếu có)"
+                maxlength="4000"> </app-textarea>
+
+
+
+            <div fxFlex="50%" *ngIf="data.Type == 4" style="font-weight: bold;">Không kính</div>
+            <div fxFlex="50%" *ngIf="data.Type == 4" style="font-weight: bold;">Có kính</div>
+            <app-textarea *ngIf="data.Type == 4" [(model)]="ketQuaKhamChuyenKhoaMat.KhongKinhMatPhai"
+                class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Mắt phải" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 4" [(model)]="ketQuaKhamChuyenKhoaMat.KhongKinhMatTrai"
+                class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Mắt trái" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 4" [(model)]="ketQuaKhamChuyenKhoaMat.CoKinhMatPhai"
+                class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Mắt phải " maxlength="4000">
+            </app-textarea>
+            <app-textarea *ngIf="data.Type == 4" [(model)]="ketQuaKhamChuyenKhoaMat.CoKinhMatTrai"
+                class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Mắt trái" maxlength="4000"> </app-textarea>
+            <app-textarea *ngIf="data.Type == 4" [(model)]="ketQuaKhamChuyenKhoaMat.CacBenhVeMat"
+                class="item-no-padding" fxFlex="100%" fxFlex.sm="100%" label="Các bệnh về mắt(nếu có)" maxlength="4000">
+            </app-textarea>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" (click)="close('Yes')" mat-raised-button mat-button color="primary"
+        class="md-primary">cập nhật</button>
+</mat-dialog-actions> -->

@@ -1,0 +1,255 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">Lịch sử</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <blockquote class="blockquote pl-2 pt-2 mb-2 audit break-line-audit">
+        <div *ngFor="let item of historys" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid"
+            fxLayoutGap.lt-sm="0">
+            <ng-container *ngIf="item.Action == actionAdd">
+                <div fxFlex="20%">{{item.ThoiGianThucHienDisplay}}</div>
+                <blockquote fxFlex="80%" class="blockquote add-item pl-2 pt-0 mb-1">
+                    <div class="title-item">
+                        <strong>Thêm mới:</strong>
+                        <p style="margin-left: auto;">{{item.TenNhanVienThucHien}}</p>
+                    </div>
+                    <div *ngIf="item.NewValue.SoChungTu != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Số chứng từ</i></u>: <strong>{{item.NewValue.SoChungTu}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.NgayChungTu != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Ngày chứng từ</i></u>: <strong>{{item.NewValue.NgayChungTuDisplay}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.LoaiChungTu != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Loại chứng từ</i></u>: <strong>{{item.NewValue.TenLoaiChungTu}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.KyKeToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Kỳ kế toán</i></u>: <strong>{{item.NewValue.KyKeToan}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TrangThai != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Trạng thái</i></u>: <strong>{{item.NewValue.TenTrangThai}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.LoaiTienTe != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Loại tiền</i></u>: <strong>{{item.NewValue.TenLoaiTienTe}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TyGia != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tỷ giá</i></u>: <strong>{{item.NewValue.TyGia | number:'0.2-2':'vi-VN'}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.NgayThucThu != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Ngày thực thu</i></u>: <strong>{{item.NewValue.NgayThucThuDisplay}}</strong>
+                    </div>
+
+                    <div *ngIf="item.NewValue.LoaiDoiTuong != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Loại đối tượng</i></u>: <strong>{{item.NewValue.TenLoaiDoiTuong}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.MaDoiTuong != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Mã đối tượng</i></u>: <strong>{{item.NewValue.MaDoiTuong}}</strong>
+                    </div>
+
+                    <div *ngIf="item.NewValue.TaiKhoan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tài khoản</i></u>: <strong>{{item.NewValue.TaiKhoan}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.NguoiNop != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Người nộp</i></u>: <strong>{{item.NewValue.NguoiNop}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.ChungTuGoc != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Chứng từ gốc</i></u>: <strong>{{item.NewValue.ChungTuGoc}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.DienGiaiChung != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Diễn giải chung</i></u>: <strong>{{item.NewValue.DienGiaiChung}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.SoTaiKhoanNganHang != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Số TK NH</i></u>: <strong>{{item.NewValue.SoTaiKhoanNganHang}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.NguyenTe != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Nguyên tệ</i></u>: <strong>{{item.NewValue.NguyenTe}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.ThueNguyenTe != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Thuế nguyên tệ</i></u>: <strong>{{item.NewValue.ThueNguyenTe}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TongNguyenTe != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tổng nguyên tệ</i></u>: <strong>{{item.NewValue.TongNguyenTe}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.HachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Hạch toán</i></u>: <strong>{{item.NewValue.HachToan}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.ThueHachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Thuế hạch toán</i></u>: <strong>{{item.NewValue.ThueHachToan}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TongHachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tổng hạch toán</i></u>: <strong>{{item.NewValue.TongHachToan}}</strong>
+                    </div>
+
+                    <div *ngIf="item.NewValue.LoaiThuChi != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Loại T/C</i></u>: <strong>{{item.NewValue.LoaiThuChi}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.VAT != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>VAT(%)</i></u>: <strong>{{item.NewValue.VAT}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TienHachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tiền HT({{item.NewValue.TienTeDisplay}})</i></u>: 
+                        <!-- <strong>{{item.NewValue.TienHachToan | number:'0.2-2':'vi-VN'}}</strong> -->
+                        <strong>{{item.NewValue.LoaiTienTeDisplay == loaiTienTeUSD ? (item.NewValue.TienHachToan | currency:'USD': '$') : (item.NewValue.TienHachToan | number:'0.2-2':'vi-VN')}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TienThueHachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tiền thuế HT({{item.NewValue.TienTeDisplay}})</i></u>: 
+                        <!-- <strong>{{item.NewValue.TienThueHachToan | number:'0.2-2':'vi-VN'}}</strong> -->
+                        <strong>{{item.NewValue.LoaiTienTeDisplay == loaiTienTeUSD ? (item.NewValue.TienThueHachToan | currency:'USD': '$') : (item.NewValue.TienThueHachToan | number:'0.2-2':'vi-VN')}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TongTienHachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tổng tiền HT(VNĐ)</i></u>: <strong>{{item.NewValue.TongTienHachToan | number:'0.2-2':'vi-VN'}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.KhoanMucPhi != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Khoản mục phí</i></u>: <strong>{{item.NewValue.KhoanMucPhi}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.SoHoaDon != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Số HĐ</i></u>: <strong>{{item.NewValue.SoHoaDon}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.NgayHoaDon != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Ngày HĐ</i></u>: <strong>{{item.NewValue.NgayHoaDonDisplay}}</strong>
+                    </div>
+                </blockquote>
+            </ng-container>
+    
+            <ng-container *ngIf="item.Action == actionUpdate">
+                <div fxFlex="20%">{{item.ThoiGianThucHienDisplay}}</div>
+                <blockquote fxFlex="80%" class="blockquote update-item pl-2 pt-0 mb-1">
+                    <div class="title-item">
+                        <strong>Cập nhật:</strong>
+                        <p style="margin-left: auto;">{{item.TenNhanVienThucHien}}</p>
+                    </div>
+                    <div *ngIf="item.NewValue.SoChungTu != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Số chứng từ</i></u>: <strong>{{item.OldValue.SoChungTu}}</strong> =>
+                        <strong>{{item.NewValue.SoChungTu}}</strong>
+                    </div>
+
+                    <div *ngIf="item.NewValue.NgayChungTu != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Ngày chứng từ</i></u>: <strong>{{item.OldValue.NgayChungTuDisplay}}</strong> =>
+                        <strong>{{item.NewValue.NgayChungTuDisplay}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.LoaiChungTu != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Loại chứng từ</i></u>: <strong>{{item.OldValue.TenLoaiChungTu}}</strong> =>
+                        <strong>{{item.NewValue.TenLoaiChungTu}}</strong>
+                    </div>
+
+                    <div *ngIf="item.NewValue.KyKeToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Kỳ kế toán</i></u>: <strong>{{item.OldValue.KyKeToan}}</strong> => 
+                        <strong>{{item.NewValue.KyKeToan}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TrangThai != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Trạng thái</i></u>: <strong>{{item.OldValue.TenTrangThai}}</strong> =>
+                        <strong>{{item.NewValue.TenTrangThai}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.LoaiTienTe != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Loại tiền</i></u>: <strong>{{item.OldValue.TenLoaiTienTe}}</strong> =>
+                        <strong>{{item.NewValue.TenLoaiTienTe}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TyGia != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tỷ giá</i></u>: <strong>{{item.OldValue.TyGia | number:'0.2-2':'vi-VN'}}</strong> => 
+                        <strong>{{item.NewValue.TyGia | number:'0.2-2':'vi-VN'}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.NgayThucThu != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Ngày thực thu</i></u>: <strong>{{item.OldValue.NgayThucThuDisplay}}</strong> =>
+                        <strong>{{item.NewValue.NgayThucThuDisplay}}</strong>
+                    </div>
+
+                    <div *ngIf="item.NewValue.LoaiDoiTuong != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Loại đối tượng</i></u>: <strong>{{item.OldValue.TenLoaiDoiTuong}}</strong> => 
+                        <strong>{{item.NewValue.TenLoaiDoiTuong}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.MaDoiTuong != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Mã đối tượng</i></u>: <strong>{{item.OldValue.MaDoiTuong}}</strong> => 
+                        <strong>{{item.NewValue.MaDoiTuong}}</strong>
+                    </div>
+
+                    <div *ngIf="item.NewValue.TaiKhoan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tài khoản</i></u>: <strong>{{item.OldValue.TaiKhoan}}</strong> => 
+                        <strong>{{item.NewValue.TaiKhoan}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.NguoiNop != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Người nộp</i></u>: <strong>{{item.OldValue.NguoiNop}}</strong> => 
+                        <strong>{{item.NewValue.NguoiNop}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.ChungTuGoc != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Chứng từ gốc</i></u>: <strong>{{item.OldValue.ChungTuGoc}}</strong> => 
+                        <strong>{{item.NewValue.ChungTuGoc}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.DienGiaiChung != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Diễn giải chung</i></u>: <strong>{{item.OldValue.DienGiaiChung}}</strong> =>
+                        <strong>{{item.NewValue.DienGiaiChung}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.SoTaiKhoanNganHang != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Số TK NH</i></u>: <strong>{{item.OldValue.SoTaiKhoanNganHang}}</strong> => 
+                        <strong>{{item.NewValue.SoTaiKhoanNganHang}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.NguyenTe != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Nguyên tệ</i></u>: <strong>{{item.OldValue.NguyenTe}}</strong> => 
+                        <strong>{{item.NewValue.NguyenTe}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.ThueNguyenTe != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Thuế nguyên tệ</i></u>: <strong>{{item.OldValue.ThueNguyenTe}}</strong> => 
+                        <strong>{{item.NewValue.ThueNguyenTe}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TongNguyenTe != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tổng nguyên tệ</i></u>: <strong>{{item.OldValue.TongNguyenTe}}</strong> => 
+                        <strong>{{item.NewValue.TongNguyenTe}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.HachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Hạch toán</i></u>: <strong>{{item.OldValue.HachToan}}</strong> => 
+                        <strong>{{item.NewValue.HachToan}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.ThueHachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Thuế hạch toán</i></u>: <strong>{{item.OldValue.ThueHachToan}}</strong> => 
+                        <strong>{{item.NewValue.ThueHachToan}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TongHachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tổng hạch toán</i></u>: <strong>{{item.OldValue.TongHachToan}}</strong> => 
+                        <strong>{{item.NewValue.TongHachToan}}</strong>
+                    </div>
+
+                    <div *ngIf="item.NewValue.LoaiThuChi != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Loại T/C</i></u>: <strong>{{item.OldValue.LoaiThuChi}}</strong> => 
+                        <strong>{{item.NewValue.LoaiThuChi}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.VAT != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>VAT(%)</i></u>: <strong>{{item.OldValue.VAT}}</strong> => 
+                        <strong>{{item.NewValue.VAT}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TienHachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tiền HT({{item.NewValue.TienTeDisplay}})</i></u>: 
+                        <strong>{{item.OldValue.LoaiTienTeDisplay == loaiTienTeUSD ? (item.OldValue.TienHachToan | currency:'USD': '$') : (item.OldValue.TienHachToan | number:'0.2-2':'vi-VN')}}</strong> =>
+                        <strong>{{item.NewValue.LoaiTienTeDisplay == loaiTienTeUSD ? (item.NewValue.TienHachToan | currency:'USD': '$') : (item.NewValue.TienHachToan | number:'0.2-2':'vi-VN')}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TienThueHachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tiền thuế HT({{item.NewValue.TienTeDisplay}})</i></u>: 
+                        <strong>{{item.OldValue.LoaiTienTeDisplay == loaiTienTeUSD ? (item.OldValue.TienThueHachToan | currency:'USD': '$') : (item.OldValue.TienThueHachToan | number:'0.2-2':'vi-VN')}}</strong> => 
+                        <strong>{{item.OldValue.LoaiTienTeDisplay == loaiTienTeUSD ? (item.NewValue.TienThueHachToan | currency:'USD': '$') : (item.NewValue.TienThueHachToan | number:'0.2-2':'vi-VN')}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.TongTienHachToan != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Tổng tiền HT(VNĐ)</i></u>: 
+                        <strong>{{item.OldValue.LoaiTienTeDisplay == loaiTienTeUSD ? (item.OldValue.TongTienHachToan | currency:'USD': '$') : (item.OldValue.TongTienHachToan | number:'0.2-2':'vi-VN')}}</strong> => 
+                        <strong>{{item.OldValue.LoaiTienTeDisplay == loaiTienTeUSD ? (item.NewValue.TongTienHachToan | currency:'USD': '$') : (item.NewValue.TongTienHachToan | number:'0.2-2':'vi-VN')}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.KhoanMucPhi != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Khoản mục phí</i></u>: <strong>{{item.OldValue.KhoanMucPhi}}</strong> => 
+                        <strong>{{item.NewValue.KhoanMucPhi}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.SoHoaDon != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Số HĐ</i></u>: <strong>{{item.OldValue.SoHoaDon}}</strong> => 
+                        <strong>{{item.NewValue.SoHoaDon}}</strong>
+                    </div>
+                    <div *ngIf="item.NewValue.NgayHoaDon != null">
+                        &nbsp; <i class="ft-chevron-right"></i><u><i>Ngày HĐ</i></u>: <strong>{{item.OldValue.NgayHoaDonDisplay}}</strong> => 
+                        <strong>{{item.NewValue.NgayHoaDonDisplay}}</strong>
+                    </div>
+                </blockquote>
+            </ng-container>
+        </div>
+    </blockquote>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Đóng</button>
+</mat-dialog-actions>

@@ -1,0 +1,99 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[                   
+                        {Title:'Thống Kê', Path:''},
+                        {Title:'Báo Cáo', Path:''},
+                        {Title:'Kế Toán', Path:''},
+                        {Title:'Tình Hình Nhập Từ Nhà Cung Cấp', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+
+                <app-combobox id="KhoId" popupSettings="" fxFlex="15%" fxFlex.sm="15%" class="mt-1 on-header"
+                    label="Kho" bind="true" url="BaoCao/GetKhoBaoCaoTinhHinhNhapTuNCCLookupAsync"
+                    [(model)]="baoCaoSearch.KhoId" [autoSelectFirstItem]="true">
+                </app-combobox>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="55%" fxFlex.sm="55%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                    <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 mt-2" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+                    <app-grid fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns" [documentType]="documentType"
+                        [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                        [checkboxAble]="false" pageSize="50" [autoHeight]="true" [gridDataSource]="gridDataSource"
+                        (extOnPageChange)="pageChange($event)" [groups]="groups" [showStt]="true">
+                    </app-grid>
+
+                    <ng-template #vtytTemplate let-dataItem let-field="field">
+                        <span>{{dataItem.VTYT | number:'0.2'}}</span>
+                    </ng-template>
+                    <ng-template #thueVATTemplate let-dataItem let-field="field">
+                        <span>{{dataItem.ThueVAT | number:'0.2'}}</span>
+                    </ng-template>
+                    <ng-template #thanhTienTemplate let-dataItem let-field="field">
+                        <span>{{dataItem.ThanhTien | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #thuocTemplate let-dataItem let-field="field">
+                        <span>{{dataItem.Thuoc | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #hoaChatTemplate let-dataItem let-field="field">
+                        <span>{{dataItem.HoaChat | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #sumThuocGroupFooterTemplate kendoGridGroupFooterTemplate let-aggregates
+                        let-field="field">
+                        <span>{{aggregates.Thuoc.sum | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #sumVTYTGroupFooterTemplate kendoGridGroupFooterTemplate let-aggregates
+                        let-field="field">
+                        <span>{{aggregates.VTYT.sum | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #sumHoaChatGroupFooterTemplate kendoGridGroupFooterTemplate let-aggregates
+                        let-field="field">
+                        <span>{{aggregates.HoaChat.sum | number:'0.2'}}</span>
+                    </ng-template>
+                    <ng-template #sumThueVATGroupFooterTemplate kendoGridGroupFooterTemplate let-aggregates
+                        let-field="field">
+                        <span>{{aggregates.ThueVAT.sum | number:'0.2'}}</span>
+                    </ng-template>
+                    <ng-template #tongGhiChuGroupFooterTemplate kendoGridGroupFooterTemplate let-aggregates
+                        let-field="field">
+                        <span>{{aggregates.ThanhTien.sum | number:'0.2'}}</span>
+                    </ng-template>
+
+                    <ng-template #tenNhaCungCapGroupTemplate let-value="value">
+                        <strong>{{value}}</strong>
+                    </ng-template>
+
+                </div>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

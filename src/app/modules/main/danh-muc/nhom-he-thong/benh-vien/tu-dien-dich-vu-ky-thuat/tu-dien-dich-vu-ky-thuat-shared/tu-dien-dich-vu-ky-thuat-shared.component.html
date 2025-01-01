@@ -1,0 +1,21 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" style="margin-left: 5px;" fxLayoutGap.lt-sm="0">
+    <app-textbox id="TenCha" fxFlex="100%" fxFlex.sm="40%" maxlength="250" disabled={{true}}
+        [(model)]="dichVuKyThuatChiTiet.TenCha" label="Nhóm"></app-textbox>
+    <app-textbox id="TenDichVuKyThuat" fxFlex="100%" fxFlex.sm="40%" maxlength="250" disabled={{true}}
+        [(model)]="dichVuKyThuatChiTiet.TenDichVuKyThuat" label="Dịch vụ kỹ thuật">
+    </app-textbox>
+    <app-textbox id="TenMauKQ" fxFlex="100%" fxFlex.sm="100%" [(model)]="dichVuKyThuatChiTiet.TenKetQuaMau"
+        label="Tên mẫu kết quả"></app-textbox>
+    <app-textbox id="MaSo" fxFlex="50%" fxFlex.sm="100%" maxlength="999" [(model)]="dichVuKyThuatChiTiet.MaSo"
+        label="Mã số"></app-textbox>
+    <app-textbox id="NguoiNhap" fxFlex="50%" fxFlex.sm="100%" maxlength="30"
+        [(model)]="dichVuKyThuatChiTiet.TenUserLogin" label="Người nhập"></app-textbox>
+    <app-editor id="ketQua" fxFlex="100%" label="Kết quả" [(model)]="dichVuKyThuatChiTiet.KetQua"
+        [hideLinkButton]="true" [hideFileButton]="true" [hideImageButton]="true" [showToolbar]="false"
+        [validationerror]="'ChiTietKetQuaObj.KetQua' | validationerror:validationErrors">
+    </app-editor>
+    <app-editor id="ketLuan" fxFlex="100%" label="Kết luận" [(model)]="dichVuKyThuatChiTiet.KetLuan"
+        [hideLinkButton]="true" [hideFileButton]="true" [hideImageButton]="true"  [showToolbar]="false"
+        [validationerror]="'ChiTietKetQuaObj.KetLuan' | validationerror:validationErrors">
+    </app-editor>
+</div>

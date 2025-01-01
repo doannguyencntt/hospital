@@ -1,0 +1,43 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>DỊCH VỤ KHUYẾN MẠI KÈM THEO GÓI</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="min-height: 200px;">
+    <app-grid fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumns" [useAddDeault]="false"
+        [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotalData" [HideHeader]="true" [sort]="sort"
+        [additionalSearchString]="additionalSearchString" [useHeaderDefault]="false" [useActionDefault]="false"
+        [checkboxAble]="false" [documentType]="documentType" [lazyLoadPage]="true" [autoHeight]="true"
+        [detailTemplate]="detailTemplate" [pageable]="false">
+    </app-grid>
+
+    <ng-template #detailTemplate let-dataItem>
+        <app-grid class="k-grid-border" [gridColumns]="gridColumnsDetail" [useAddDeault]="false" [sort]="sortChild"
+            [useActionDefault]="false" [useHeaderDefault]="false" [documentType]="documentType" [showStt]="true"
+            [urlGetData]="urlGetDataChild" [urlGetTotalPage]="urlGetTotalDataChild"
+            [additionalSearchString]="dataItem.Id" [checkboxAble]="false"
+            [groups]="groups" [lazyLoadPage]="true" [autoHeight]="true" style="width: 1px;" [pageable]="false">
+        </app-grid>
+    </ng-template>
+
+    <ng-template #tenGoiTemplate let-dataItem>
+        <span class="green title-grid-parent">{{dataItem.Ten}}</span>
+    </ng-template>
+
+    <ng-template #nhomGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-template #donGiaTemplate let-dataItem>
+        {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #donGiaCKTemplate let-dataItem>
+        {{dataItem.DonGiaKhuyenMai | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #thanhTienTemplate let-dataItem>
+        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+</mat-dialog-content>

@@ -1,0 +1,149 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+        [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <app-textbox id="ChanDoanBenh" fxFlex="100%" label="Chẩn đoán bệnh"
+            [(model)]="bienBanHoiChanPhauThuatThuocCoDau.ChanDoanBenh" [isWhiteBackground]="true">
+        </app-textbox>
+        <app-textbox id="TomTatTinhTrangBenhNhanKhiHoiChan" fxFlex="100%"
+            label="Tóm tắt tình trạng bệnh nhân sau khi hội chẩn"
+            [(model)]="bienBanHoiChanPhauThuatThuocCoDau.TomTatTinhTrangBenhNhanKhiHoiChan" [isWhiteBackground]="true">
+        </app-textbox>
+        <app-multiselect #noiThucHien id="ThuocDaDieuTris" fxFlex="100%" fxFlex.sm="100%"  [queryInfo]="queryNoiThucHien"
+            [(model)]="bienBanHoiChanPhauThuatThuocCoDau.ThuocDaDieuTris"  
+            label="Thuốc đã điều trị"   [autoClose]="false" (modelChange)="change($event)"
+            url="DieuTriNoiTru/GetThuocPhieuDieuTriCuaBN?yeuCauTiepNhanId={{yeuCauTiepNhanId}}" [model]="bienBanHoiChanPhauThuatThuocCoDau.ListThemThuocCoDau"
+            [templateHeader]="thuocDieuTriTemplateHeader" [template]="thuocDieuTriTemplate" [popupSettings]="null"> 
+            <ng-template #thuocDieuTriTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="10%">
+                        </th>
+                        <th width="23%">Tên Thuốc</th>
+                        <th width="15%">Hoạt chất</th>
+                        <th width="15%">Hàm lượng</th>
+                        <th width="7%">Đơn vị tính</th>
+                        <th width="15%">Đường dùng</th>
+                        <th width="15%">NSX</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #thuocDieuTriTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="10%">
+                            <input type="checkbox" class="k-checkbox" [checked]="isItemSelected(dataItem,1)">
+                            <label  class="k-checkbox-label"></label>
+                        </th>
+                        <th width="23%">{{dataItem.DisplayName}}</th>
+                        <th width="15%">{{dataItem.HoatChat}}</th>
+                        <th width="15%">{{dataItem.HamLuong}}</th>
+                        <th width="7%">{{dataItem.DVT}}</th>
+                        <th width="15%">{{dataItem.DuongDung}}</th>
+                        <th width="15%">{{dataItem.NhaSanXuat}}</th>
+                    </tr>
+                </table>
+            </ng-template>
+            
+        </app-multiselect>
+        <app-textbox id="ChanDoanBenhSauHoiChan" fxFlex="100%"
+            label="Chẩn đoán bệnh sau hội chẩn"
+            [(model)]="bienBanHoiChanPhauThuatThuocCoDau.ChanDoanBenhSauHoiChan" [isWhiteBackground]="true">
+        </app-textbox>
+        <div fxFlex="100%">
+            <h4>Chỉ định thuốc dấu (*)</h4>
+        </div>
+        <app-textarea id="LyDo" fxFlex="50%" (modelChange)="changeLyDo($event)" maxlength="1000" [(model)]="bienBanHoiChanPhauThuatThuocCoDau.LyDo" minHeight="20" label="Lý do">
+        </app-textarea>
+        <app-multiselect fxFlex="50%" [(model)]="bienBanHoiChanPhauThuatThuocCoDau.ThuocCoDaus" 
+            [modelText]="" label="Tên thuốc" [template]="duocPhamCoDauTemplate" [autoClose]="false"
+            required="true" [templateHeader]="duocPhamCoDauTemplateHeader"
+            url="DieuTriNoiTru/GetDuocPhamCoDau" [validationerror]="'ThuocCoDaus' | validationerror:validationErrors"> 
+            <ng-template #duocPhamCoDauTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="10%">
+                        </th>
+                        <th width="23%">Tên Thuốc</th>
+                        <th width="15%">Hoạt chất</th>
+                        <th width="15%">Hàm lượng</th>
+                        <th width="7%">Đơn vị tính</th>
+                        <th width="15%">Đường dùng</th>
+                        <th width="15%">NSX</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #duocPhamCoDauTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="10%">
+                            <input type="checkbox" class="k-checkbox" [checked]="isItemSelected(dataItem,2)">
+                            <label  class="k-checkbox-label"></label>
+                        </th>
+                        <th width="23%">{{dataItem.DisplayName}}</th>
+                        <th width="15%">{{dataItem.HoatChat}}</th>
+                        <th width="15%">{{dataItem.HamLuong}}</th>
+                        <th width="7%">{{dataItem.DVT}}</th>
+                        <th width="15%">{{dataItem.DuongDung}}</th>
+                        <th width="15%">{{dataItem.NhaSanXuat}}</th>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-multiselect>
+        <div fxFlex="100%" style="padding-bottom: 50px;text-align: right;">
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                (click)="clear()">Hủy</button>
+            <button type="button" color="primary" mat-raised-button mat-button (click)="add()">
+                Thêm
+            </button>
+        </div>
+        <div fxFlex="100%" style="padding: 15px;">
+            <app-grid #GridSoKet fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns" [allowSortDefault]="true"
+                [gridDataSource]="gridDataSource" [documentType]="documentType" [useAddDeault]="false"
+                [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                maxHeight="500" [pageable]="false" masterName="GridSoKet" >
+            </app-grid>
+            <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+                {{rowIndex + 1}}
+            </ng-template>
+        </div>
+        
+        <app-datetimepicker fxFlex="20%" [(model)]="bienBanHoiChanPhauThuatThuocCoDau.HoiChanLuc" #hoiChanLuc
+            id="HoiChanLucTuFormat" 
+            label="Hội chẩn lúc" required="true"
+            [validationerror]="'HoiChanLuc' | validationerror:validationErrors">
+        </app-datetimepicker>
+        <app-combobox id="bac-si" [popupSettings]="null" label="Lãnh đạo" fxFlex="20%" fxFlex.md="45%"
+            fxFlex.sm="100%" [(model)]="bienBanHoiChanPhauThuatThuocCoDau.LanhDao" [required]="true" [bind]="true"
+            url="PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=1"
+            [validationerror]="'LanhDao' | validationerror:validationErrors">
+        </app-combobox>
+        <app-combobox id="bac-si" [popupSettings]="null" label="BS điều trị" fxFlex="20%" fxFlex.md="45%"
+            fxFlex.sm="100%" [(model)]="bienBanHoiChanPhauThuatThuocCoDau.BsDieuTri" [required]="true" [bind]="true"
+            url="PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=1"
+            [validationerror]="'BsDieuTri' | validationerror:validationErrors">
+        </app-combobox>
+        <div fxFlex="100%" style="padding-bottom: 50px;text-align: right;">
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="In()"
+                style="pointer-events: all;">In</button>
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                (click)="Huy()">Hủy</button>
+            <button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+                Lưu
+            </button>
+        </div>
+    </div>
+    <ng-template #actionToaThuocTemplate let-dataItem let-rowIndex="rowIndex">
+        <div class="text-right" kendoTooltip>
+            <ng-container>
+                <button color="primary" #btnEdit mat-icon-button kendoTooltip title="Sửa" (click)="suaKeToa(dataItem)"
+                    type="button">
+                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                </button>
+                <button color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaKeToa(dataItem)"
+                    type="button">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </ng-container>
+        </div>
+    </ng-template>
+  

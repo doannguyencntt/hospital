@@ -1,0 +1,17 @@
+<ng-container>
+    <div *ngIf="khamDoanKetQuaMaus.length == 0">
+        Hiện không có kết quả mẫu nào.
+    </div>
+    <div *ngIf="khamDoanKetQuaMaus.length > 0">
+        <div *ngFor="let item of khamDoanKetQuaMaus">
+            <app-checkbox [(model)]="item.IsCheck" label="{{item.Value}}" class="pb-0">
+            </app-checkbox>
+        </div>
+    </div>
+
+
+</ng-container>
+<hr style=" border: 1px solid black; margin-top: 15px;">
+<div style="float: right;">
+    <button type="button" mat-raised-button mat-button class="mr-1 mt-2" color="primary" (click)="ok()">OK</button>
+</div>

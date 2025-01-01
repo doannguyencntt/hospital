@@ -1,0 +1,105 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <div fxFlex="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-grid *ngIf="yeuCauTiepNhanId != null" #dichVuKyThuat fxFlex="100%" fxFlex.sm="100%" style="width: 1px;"
+                [gridColumns]="gridColumns" urlGetData="PhauThuatThuThuat/GetDataForGridAsyncLichSuCLS"
+                urlGetTotalPage="PhauThuatThuThuat/GetTotalPageForGridAsyncLichSuCLS"
+                [additionalSearchString]="yeuCauTiepNhanId" [allowSortDefault]="true" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" maxHeight="500" [pageable]="false" [groups]="groups"
+                (extOnDataBound)="onDataBoundChild($event)" masterName="gridDichVuKyThuat"
+                [removeGroupFooterIfIsOnlyOne]="true">
+            </app-grid>
+
+            <div class="gripViewGoiDichViKhacTemplate">
+                <ng-template #donGiaTemplate let-dataItem>
+                    {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #thanhTienTemplate let-dataItem>
+                    {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #thanhTienGroupFooterTemplate let-aggregates>
+                    {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #thanhTienFooterTemplate let-dataItem>
+                    <p style="color: blue; font-weight: bold;">
+                        <span>{{totalThanhTien('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+                </ng-template>
+
+                <ng-template #donGiaBaoHiemTemplate let-dataItem>
+                    {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+                </ng-template>
+
+                <ng-template #congTienGroupFooterTemplate let-dataItem>
+                    <span>Cộng:</span>
+                </ng-template>
+
+                <ng-template #duocHuongBaoHiemTemplate let-dataItem>
+                    <app-checkbox id="duocHuongBaoHiem{{dataItem.Id}}" label="" [(model)]="dataItem.DHBH"
+                        disabled="{{true}}">
+                    </app-checkbox>
+                </ng-template>
+
+                <ng-template #sTTTemplate let-rowIndex="rowIndex">
+                    {{rowIndex + 1}}
+                </ng-template>
+
+                <ng-template #noiThucHienTemplate let-dataItem>
+                    <span style="color:red;">
+                        {{dataItem.NoiThucHien}}
+                    </span>
+                </ng-template>
+                <ng-template #trangThaiTemplate let-dataItem>
+                    <ng-container [ngSwitch]="dataItem.NhomId">
+                        <span *ngSwitchCase="1" [ngClass]="{
+                                'blackText': dataItem.TrangThaiDichVuId == trangThaiDichVuKyThuat.ChuaThucHien, 
+                                'orangeText': dataItem.TrangThaiDichVuId == trangThaiDichVuKyThuat.DangThucHien,
+                                'greenText': dataItem.TrangThaiDichVuId == trangThaiDichVuKyThuat.DaThucHien,
+                                'redText': dataItem.TrangThaiDichVuId == trangThaiDichVuKyThuat.DaHuy}">
+                            {{dataItem.TrangThai}}
+                        </span>
+
+                        <span *ngSwitchDefault [ngClass]="{
+                                    'blackText': dataItem.TrangThaiDichVuId == trangThaiDichVuKyThuat.ChuaThucHien, 
+                                    'orangeText': dataItem.TrangThaiDichVuId == trangThaiDichVuKyThuat.DangThucHien,
+                                    'greenText': dataItem.TrangThaiDichVuId == trangThaiDichVuKyThuat.DaThucHien }">
+                            {{dataItem.TrangThai}}
+                        </span>
+                    </ng-container>
+                </ng-template>
+
+                <ng-template #tongTienFooterTemplate let-dataItem>
+                    <span>Tổng cộng:</span>
+                </ng-template>
+
+                <ng-template #nhomGroupHeaderTemplate let-value="value" let-aggregates>
+                    <strong fxFlex="89%">
+                        {{value}}
+                    </strong>
+
+                    <div fxFlex="11%">                      
+                        <button *ngIf="kiemTraCoKetQuaCLSXetNghiem(aggregates.items)" fileName="KetQuaXetNghiem"
+                        (click)="InPhieuXn()" color="primary" mat-raised-button>Xem và tải
+                        về</button>
+                    </div>
+                </ng-template>
+                <ng-template #xemKQTemplate let-dataItem>
+                    <div kendoTooltip
+                        *ngIf="dataItem.TrangThai !== 3 && dataItem.LoaiDichVuKyThuat !== 2">
+                        <div class="text-center">
+                            <button type="button" (click)="xemKetQuaCLS(dataItem) " color="primary" mat-raised-button
+                                class="mr-2">Xem</button>
+                        </div>
+
+                        <!-- <button type="button" (click)="downloadFile(dataItem)" color="primary" mat-raised-button>Tải
+                            về</button> -->
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>

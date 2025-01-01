@@ -1,0 +1,22 @@
+<h3 class="sub-title">KHÁM KHÁC
+</h3>
+<ng-container *ngIf="dataSourceKhamKhac.data.length == 0">
+    <p>Không có khám khác</p>
+</ng-container>
+<app-grid *ngIf="dataSourceKhamKhac.data.length > 0" masterName="TienSuBenh" [gridColumns]="gridKhamKhacColumns"
+    [documentType]="documentType" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false"
+    [useActionDefault]="false" [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true" 
+    [gridDataSource]="dataSourceKhamKhac" style="width: 1px;" [pageable]="false">
+</app-grid>
+
+<ng-template #boPhanTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox *ngIf="dataItem.Id == 0" maxlength="250" [(model)]="dataItem.Ten" class="no-label" label=" " required="true"
+    >
+    </app-textbox>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.Ten}}</p>
+</ng-template>
+<ng-template #moTaTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox *ngIf="dataItem.Id == 0" maxlength="4000" [(model)]="dataItem.NoiDung" class="no-label" label=" " required="true">
+    </app-textbox>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.NoiDUng}}</p>
+</ng-template>

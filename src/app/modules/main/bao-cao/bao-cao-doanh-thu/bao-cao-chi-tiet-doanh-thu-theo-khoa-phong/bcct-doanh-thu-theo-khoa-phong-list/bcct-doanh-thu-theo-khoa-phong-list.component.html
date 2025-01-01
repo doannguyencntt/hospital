@@ -1,0 +1,337 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Báo Cáo', Path:''}
+                    ,{Title:'Báo Cáo Doanh Thu', Path:''}
+                    ,{Title:'Báo Cáo Chi Tiết Doanh Thu Theo Khoa/Phòng', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6 pb-1">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-datetimepicker id="TuNgaythang" fxFlex="20%" fxFlex.sm="20%"
+                    [(model)]="search.RangeDateTimeFilter.DateStart" (modelChange)="changeValueStart($event)"
+                    label="Tháng:Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+                <app-datetimepicker id="DenNgay" fxFlex="20%" fxFlex.sm="20%"
+                    [(model)]="search.RangeDateTimeFilter.DateEnd" label="Đến ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+                <app-datetimepicker id="TuNgayky" fxFlex="20%" fxFlex.sm="20%"
+                    [(model)]="search.RangeDateTimeSoSanh.DateStart" (modelChange)="changeValueStart($event)"
+                    label="Kỳ so sánh :Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+                <app-datetimepicker id="DenNgay" fxFlex="20%" fxFlex.sm="20%"
+                    [(model)]="search.RangeDateTimeSoSanh.DateEnd" label="Đến ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+                <div fxFlex="20%" fxFlex.sm="20%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XuatBaoCao()" style="float: right;" *ngIf="ishowView == true">Xuất Excel</button>
+                </div>
+                <div fxFlex="100%" fxFlex.sm="100%" [ngStyle]="{'min-height': height+'px'}" class="pb-0">
+                    <kendo-grid [data]="gridView" class="k-grid1 shared-header grid-bao-cao" [pageable]="true"
+                        [resizable]="true" [height]="height" [hidden]="ishowView != true" [pageSize]="pageSize"
+                        [skip]="skip" (pageChange)="pageChange($event)" (detailExpand)="detailExpand($event)"
+                        id="baoCaoChiTietDoanhthuTheoKhoaPhongGrid" #baoCaoChiTietDoanhthuTheoKhoaPhongGrid
+                        (columnResize)="columnResize($event)">
+
+                        <kendo-grid-column field="{{getFieldColumn(0)}}" title="{{getTitleColumn(0)}}"
+                            width="{{getWidthColumn(0)}}" [headerStyle]="{'text-align': 'center'}">
+                        </kendo-grid-column>
+                        <kendo-grid-column field="{{getFieldColumn(1)}}" title="{{getTitleColumn(1)}}"
+                            width="{{getWidthColumn(1)}}" [headerStyle]="{'text-align': 'center'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <div style="text-align: left;">{{ dataItem.KhoaPhong}}</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(2)}}" title="{{getTitleColumn(2)}}"
+                            width="{{getWidthColumn(2)}}" [style]="{'text-align': 'center'}"
+                            [headerStyle]="{'text-align': 'center'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column-group title="Product Info">
+                            <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                <div class="text-center">Tháng : Từ ngày: {{DateStart}} - Đến ngày: {{DateEnd}}</div>
+                            </ng-template>
+                            <kendo-grid-column field="{{getFieldColumn(3)}}" title="{{getTitleColumn(3)}}"
+                                width="{{getWidthColumn(3)}}" [style]="{'text-align': 'center'}"
+                                [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                                    <div style="text-align: right;">{{totalDoanhThuThang | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div style="text-align: right;">
+                                        {{ dataItem.ToTalDoanhThuTheoThang | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                            </kendo-grid-column>
+
+                            <kendo-grid-column field="{{getFieldColumn(4)}}" title="{{getTitleColumn(4)}}"
+                                width="{{getWidthColumn(4)}}" [style]="{'text-align': 'center'}"
+                                [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    <table style="width:100%;" class="tableingroup">
+                                        <tr>
+                                            <th colspan="2">{{getTitleColumn(4)}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="border-right-width: 1px;">Miễn Giảm</th>
+                                            <th>Khác</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <table style="width:100%;" class="tableingroup">
+                                        <tr>
+                                            <td style="text-align: right;">
+                                                {{ dataItem.ToTalMienGiamTheoThang | number:'0.2-2':'vi-VN'}}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ dataItem.ToTalChiPhiKhacTheoThang | number:'0.2-2':'vi-VN'}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <!-- <ng-template kendoGridGroupFooterTemplate let-aggregates let-field="field">
+                                    <table style="width:100%;">
+                                        <tr>
+                                            <td style="text-align: right;">
+                                                {{aggregates.MienGiamKhac.sum | number:'0.2-2':'vi-VN'}}</td>
+                                            <td style="text-align: right;">{{aggregates.KhacThang.sum | number:'0.2-2':'vi-VN'}}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ng-template> -->
+                                <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                                    <table style="width:100%;" class="tableingroup">
+                                        <tr>
+                                            <td style="text-align: right;">{{ totalMienGiamThang | number:'0.2-2':'vi-VN'}}</td>
+                                            <td style="text-align: right;">{{ totalKhacThang | number:'0.2-2':'vi-VN'}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(5)}}" title="{{getTitleColumn(5)}}"
+                                width="{{getWidthColumn(5)}}" [style]="{'text-align': 'center'}"
+                                [headerStyle]="{'text-align': 'center'}" [hidden]="hidden">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(6)}}" title="{{getTitleColumn(6)}}"
+                                width="{{getWidthColumn(6)}}" [style]="{'text-align': 'center'}"
+                                [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                                    <div style="text-align: right;">{{totalBHYTThang | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div style="text-align: right;">{{ dataItem.ToTalBhytTheoThang | number:'0.2-2':'vi-VN'}}
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(7)}}" title="{{getTitleColumn(7)}}"
+                                width="{{getWidthColumn(7)}}" [style]="{'text-align': 'center'}"
+                                [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                                    <div style="text-align: right;">{{totalDoanhThuThuanThang | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div style="text-align: right;">
+                                        {{ dataItem.ToTalDoanhThuThuanTheoThang | number:'0.2-2':'vi-VN'}}
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid-column-group>
+                        <kendo-grid-column-group title="Product Info">
+                            <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                <div class="text-center">Kỳ So Sánh : Từ ngày: {{DateStartKy}} - Đến ngày: {{DateEndKy}}
+                                </div>
+                            </ng-template>
+                            <kendo-grid-column field="{{getFieldColumn(8)}}" title="{{getTitleColumn(8)}}"
+                                width="{{getWidthColumn(8)}}" [style]="{'text-align': 'center'}"
+                                [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                                    <div style="text-align: right;">{{totalDoanhThuKy | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div style="text-align: right;">
+                                        {{ dataItem.ToTalDoanhThuTheoKySoSanh | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(9)}}" title="{{getTitleColumn(9)}}"
+                                width="{{getWidthColumn(9)}}" [style]="{'text-align': 'center'}"
+                                [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    <table style="width:100%;" class="tableingroup">
+                                        <tr>
+                                            <th colspan="2">{{getTitleColumn(8)}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="border-right-width: 1px;">Miễn Giảm</th>
+                                            <th>Khác</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <table style="width:100%;" class="tableingroup">
+                                        <tr>
+                                            <td style="text-align: right;">
+                                                {{ dataItem.ToTalMienGiamTheoKySoSanh | number:'0.2-2':'vi-VN'}}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ dataItem.ToTalChiPhiKhacTheoKySoSanh | number:'0.2-2':'vi-VN'}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <!-- <ng-template kendoGridGroupHeaderColumnTemplate let-group="group"
+                                    let-aggregates="aggregates">
+                                    <table style="width:100%;">
+                                        <tr>
+                                            <td style="text-align: right;">
+                                                {{aggregates.MienGiamKy.sum | number:'0.2-2':'vi-VN'}}</td>
+                                            <td style="text-align: right;">{{aggregates.KhacKy.sum | number:'0.2-2':'vi-VN'}}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </ng-template> -->
+                                <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                                    <table style="width:100%;" class="tableingroup">
+                                        <tr>
+                                            <td style="text-align: right;">{{ totalMienGiamKy | number:'0.2-2':'vi-VN'}}</td>
+                                            <td style="text-align: right;">{{ totalKhacKy | number:'0.2-2':'vi-VN'}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(10)}}" title="{{getTitleColumn(10)}}"
+                                width="{{getWidthColumn(10)}}" [style]="{'text-align': 'center'}"
+                                [headerStyle]="{'text-align': 'center'}" [hidden]="hidden">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(11)}}" title="{{getTitleColumn(11)}}"
+                                width="{{getWidthColumn(11)}}" [style]="{'text-align': 'center'}"
+                                [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                                    <div style="text-align: right;">{{totalBHYTKy | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div style="text-align: right;">{{ dataItem.ToTalBhytTheoKySoSanh | number:'0.2-2':'vi-VN'}}
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(12)}}" title="{{getTitleColumn(12)}}"
+                                width="{{getWidthColumn(12)}}" [style]="{'text-align': 'center'}"
+                                [headerStyle]="{'text-align': 'center'}">
+                                <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                                    <div style="text-align: right;">{{totalDoanhThuThuanKy | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div style="text-align: right;">
+                                        {{ dataItem.ToTalDoanhThuThuanTheoKySoSanh | number:'0.2-2':'vi-VN'}}</div>
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid-column-group>
+                        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+                            <div style="justify-content: center;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-between"
+                                fxFlex="100%" *ngIf="_showDefaultPagerTemplate">
+                                <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                                <kendo-pager-numeric-buttons [buttonCount]="5" class="d-none d-sm-none d-md-block">
+                                </kendo-pager-numeric-buttons>
+                                <button *ngIf="_isLoadingTotalPage" kendoButton class="btn btn-raised btn-default btn-min-width mb-0">
+                                    <img src="/assets/img/loader_circle.gif" alt="Đang tính..." style="height: 20px;" />
+                                </button>
+                                <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                                <kendo-pager-info></kendo-pager-info>
+                                <div kendoTooltip class="k-icon k-i-refresh" style="order: 10;cursor: pointer; align-self: center;"
+                                    title="Làm mới" (click)="searchRefresh()"></div>
+                                <div *ngIf="_isLoading" class="grid-loading k-i-loading"></div>
+                            </div>
+                        </ng-template>
+
+                        <ng-template kendoGridDetailTemplate let-dataItem="dataItem">
+                            <app-grid [useHeaderDefault]="false" [urlGetData]="urlGetDataGridChild" class="k-grid-crollbar"
+                                [urlGetTotalPage]="urlGetPageDataGridChild" [gridColumns]="gridColumns"
+                                [useAddDeault]="false" [lazyLoadPage]="true" [checkboxAble]="false" [autoHeight]="true"
+                                [useActionDefault]="false">
+                            </app-grid>
+                        </ng-template>
+                        
+                        <kendo-grid-messages noRecords="Không có dữ liệu." pagerOf="trong số" pagerItems="dòng"
+                            detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết">
+                        </kendo-grid-messages>
+                    </kendo-grid>
+                    <ng-template #DoanhThuThang let-dataItem>
+                        <div style="text-align: right;" *ngIf="dataItem.DoanhThuTheoThang != null">
+                            {{ dataItem.DoanhThuTheoThang | number:'0.2-2':'vi-VN'}}</div>
+                        <div style="text-align: right;" *ngIf="dataItem.DoanhThuTheoThang == null">
+                            {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                    </ng-template>
+                    <ng-template #MienGiamTheoThang let-dataItem>
+                        <table style="width:100%;" class="tableingroup">
+                            <tr>
+                                <td style="text-align: right;"> {{ dataItem.MienGiamTheoThang | number:'0.2-2':'vi-VN'}}
+                                </td>
+                                <td style="text-align: right;"> {{ dataItem.ChiPhiKhacTheoThang | number:'0.2-2':'vi-VN'}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #BHYTThang let-dataItem>
+                        <div style="text-align: right;" *ngIf="dataItem.BhytTheoThang != null">
+                            {{ dataItem.BhytTheoThang | number:'0.2-2':'vi-VN'}}</div>
+                        <div style="text-align: right;" *ngIf="dataItem.BhytTheoThang == null">
+                            {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                    </ng-template>
+                    <ng-template #DoanhThuThuanTheoThang let-dataItem>
+                        <div style="text-align: right;" *ngIf="dataItem.DoanhThuThuanTheoThang != null">
+                            {{ dataItem.DoanhThuThuanTheoThang | number:'0.2-2':'vi-VN'}}</div>
+                        <div style="text-align: right;" *ngIf="dataItem.DoanhThuThuanTheoThang == null">
+                            {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                    </ng-template>
+                    <ng-template #DoanhThuTheoKySoSanh let-dataItem>
+                        <div style="text-align: right;" *ngIf="dataItem.DoanhThuTheoKySoSanh != null">
+                            {{ dataItem.DoanhThuTheoKySoSanh | number:'0.2-2':'vi-VN'}}</div>
+                        <div style="text-align: right;" *ngIf="dataItem.DoanhThuTheoKySoSanh == null">
+                            {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                    </ng-template>
+                    <ng-template #mienGiamTheoKySoSanh let-dataItem>
+                        <table style="width:100%;" class="tableingroup">
+                            <tr>
+                                <td style="text-align: right;"> 
+                                    <div style="text-align: right;" *ngIf="dataItem.MienGiamTheoKySoSanh != null">
+                                        {{ dataItem.MienGiamTheoKySoSanh | number:'0.2-2':'vi-VN'}}</div>
+                                    <div style="text-align: right;" *ngIf="dataItem.MienGiamTheoKySoSanh == null">
+                                        {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                                </td>
+                                <td style="text-align: right;"> 
+                                    <div style="text-align: right;" *ngIf="dataItem.ChiPhiKhacTheoKySoSanh != null">
+                                        {{ dataItem.ChiPhiKhacTheoKySoSanh | number:'0.2-2':'vi-VN'}}</div>
+                                    <div style="text-align: right;" *ngIf="dataItem.ChiPhiKhacTheoKySoSanh == null">
+                                        {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    
+                    <ng-template #BhytTheoKySoSanh let-dataItem>
+                        <div style="text-align: right;" *ngIf="dataItem.BhytTheoKySoSanh != null">
+                            {{ dataItem.BhytTheoKySoSanh | number:'0.2-2':'vi-VN'}}</div>
+                        <div style="text-align: right;" *ngIf="dataItem.BhytTheoKySoSanh == null">
+                            {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                    </ng-template>
+                    <ng-template #DoanhThuThuanTheoKySoSanh let-dataItem>
+                        <div style="text-align: right;" *ngIf="dataItem.DoanhThuThuanTheoKySoSanh != null">
+                            {{ dataItem.DoanhThuThuanTheoKySoSanh | number:'0.2-2':'vi-VN'}}</div>
+                        <div style="text-align: right;" *ngIf="dataItem.DoanhThuThuanTheoKySoSanh == null">
+                            {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                    </ng-template>
+
+                </div>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

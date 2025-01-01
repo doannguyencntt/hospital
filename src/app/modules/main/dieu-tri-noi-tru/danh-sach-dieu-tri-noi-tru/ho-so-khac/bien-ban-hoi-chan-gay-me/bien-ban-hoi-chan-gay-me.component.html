@@ -1,0 +1,124 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    style="padding-top: 13px;padding-bottom: 10px;" [ngClass]="{'disableDiv':IsKetThucBenhAn}">
+
+    <app-grid #gridQHTN masterName="gridQHTN" fxFlex="100%" fxFlex.sm="100%" style="width: 1px;"
+        [gridColumns]="gridColumns" [autoHeight]="true" [gridDataSource]="gridDataSource" [documentType]="documentType"
+        [allowSortDefault]="false" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+        [lazyLoadPage]="false" [pageable]="false" [checkboxAble]="false">
+    </app-grid>
+
+    <ng-template #hoTenTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-textbox *ngIf="dataItem.Id == 0" id="hoTen" maxlength="200" label=" " [required]="true"
+            [(model)]="dataItem.HoTen" class="no-label" (modelChange)="isDataChange()"
+            [validationerror]="'ThongTinQuanHeThanNhans['+rowIndex+'].HoTen' | validationerror: validationErrors">
+        </app-textbox>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.HoTen}}</p>
+    </ng-template>
+
+    <ng-template #cMNDTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-textbox *ngIf="dataItem.Id == 0" (modelChange)="isDataChange()" [(model)]="dataItem.CMND" onlynumber="true"
+            maxlength="12" label=" " class="no-label">
+        </app-textbox>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.CMND}}</p>
+
+    </ng-template>
+
+
+    <ng-template #namSinhTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-textboxnumeric *ngIf="dataItem.Id == 0" (modelChange)="isDataChange()" [(model)]="dataItem.NamSinh"
+            label=" " min="1" format="0" [max]="9999" class="no-label">
+        </app-textboxnumeric>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.NamSinh}}</p>
+
+    </ng-template>
+
+    <ng-template #quanHeTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-combobox *ngIf="dataItem.Id == 0" id="thanNhan" (modelChange)="isDataChange()" [popupSettings]="null"
+            label="" [(model)]="dataItem.QuanHeThanNhanId" class="no-label" [modelText]="dataItem.TenQuanHeThanNhan"
+            url="TiepNhanBenhNhan/GetQuanHe">
+        </app-combobox>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.TenQuanHeThanNhan}}</p>
+    </ng-template>
+
+    <ng-template #diaChiTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-textbox *ngIf="dataItem.Id == 0" id="diaChi" (modelChange)="isDataChange()" maxlength="1000" label=" "
+            class="no-label" [(model)]="dataItem.DiaChi">
+        </app-textbox>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.DiaChi}}</p>
+    </ng-template>
+
+    <ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+        <div class="text-center" kendoTooltip>
+            <button mat-icon-button kendoTooltip style="color: red" title="Xóa" type="button" (click)="xoa(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #footerTemplate>
+        <div class="text-center" kendoTooltip>
+            <button (click)="themNguoiLienHe()" color="primary" mat-mini-fab kendoTooltip title="Thêm" type="button">
+                <mat-icon [icIcon]="icAdd"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <app-combobox id="NhanVienGiaiThichId" fxFlex="33%" [(model)]="bienBanGayMeGayTe.NhanVienGiaiThichId"
+        url="ToaThuocMau/BacSiKeToa" [modelText]="bienBanGayMeGayTe.TenNhanVienGiaiThich" required="true"
+        (modelChange)="isDataChange()" label="BS giải thích" popupSettings="null"
+        [validationerror]="'NhanVienGiaiThichId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-datetimepicker id="ThoiDiemThucHien" fxFlex="33%" [(model)]="bienBanGayMeGayTe.ThoiDiemThucHien"
+        required="true" label="Ngày Thực Hiện" (modelChange)="isDataChange()"
+        [validationerror]="'ThoiDiemThucHien' | validationerror:validationErrors">
+    </app-datetimepicker>
+
+    <app-combobox id="NhanVienThucHienId" fxFlex="auto" [(model)]="bienBanGayMeGayTe.NhanVienThucHienId"
+        [modelText]="bienBanGayMeGayTe.TenNhanVienThucHien" url="ToaThuocMau/BacSiKeToa" required="true"
+        (modelChange)="isDataChange()" label="BS Thực Hiện" popupSettings="null"
+        [validationerror]="'NhanVienThucHienId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-upload id="Upload" #uploadFile [allowedExtensions]="allowedExtensions" fxFlex="66%"
+        [(model)]="bienBanGayMeGayTe.NoiTruHoSoKhacFileDinhKems" [multiple]="true" label="File chữ ký"
+        (modelChange)="isDataChange()" [template]="templateFile">
+    </app-upload>
+    <ng-template #templateFile let-files let-rowIndex="rowIndex">
+        <table width="100%">
+            <tr>
+                <td>
+                    <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+ files[0].error}}"
+                        (click)="uploadFile.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                    <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="uploadFile.viewFile(files[0])"
+                        class="green" class="custom-name green">{{files[0].name}}</a>
+                </td>
+                <td style="width:25px">
+                    <a type="button" (click)="uploadFile.remove(files[0].uid)" mat-icon-button>
+                        <mat-icon [icIcon]="icClear"></mat-icon>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </ng-template>
+    <label fxFlex="80%">
+        Người thực hiện: <strong>{{bienBanGayMeGayTe.NhanVienDangNhap}}</strong> - Ngày thực hiện:
+        <strong>{{bienBanGayMeGayTe.ThoiDiemThucHienDisplay}}</strong>
+    </label>
+    <div fxFlex="20%">
+        <div style="padding-top: 11px !important;float: right">
+            <button type="button" style="margin-right: 10px; pointer-events: all;" mat-raised-button mat-button
+                (click)="inBienBan()">
+                In
+            </button>
+            <button *ngIf="bienBanGayMeGayTe.IsDataChange" type="button" style="margin-right: 10px;" mat-raised-button
+                mat-button (click)="huy()">
+                Hủy
+            </button>
+            <button type="button" color="primary" mat-raised-button mat-button (click)="luuBienBan()">
+                Lưu
+            </button>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,68 @@
+    
+<button mat-raised-button type="button" *ngIf="!showToolbar" (click)="toggleToolbar()" class="show-toolbar"><mat-icon color="warn" [icIcon]="keyboardArrowDown"></mat-icon> Hiển thị công cụ</button>
+<button mat-raised-button type="button" *ngIf="showToolbar" (click)="toggleToolbar()" class="show-toolbar"><mat-icon color="warn" [icIcon]="keyboardArrowUp"></mat-icon>Ẩn công cụ</button>
+<kendo-textbox-container floatingLabel="{{label}}" [ngClass]="{'required':required}">
+    <kendo-editor  class="form-control" [ngClass]="validationerror!=''?'has-error':''"
+          id="{{id}}" (ngModelChange)="emit($event)" [disabled]="disabled" [iframe]="iframe" maxlength="{{maxlength}}"
+          ngControl="model"  [(ngModel)]="model" title="{{title}}" [ngStyle]="{'height':iframe?height+'px':'auto','min-height':minHeight+'px'}">
+          <kendo-toolbar>
+              <kendo-toolbar-buttongroup>
+                <kendo-toolbar-button kendoEditorUndoButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorRedoButton></kendo-toolbar-button>
+              </kendo-toolbar-buttongroup>
+              <kendo-toolbar-buttongroup>
+                <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorStrikethroughButton></kendo-toolbar-button>
+              </kendo-toolbar-buttongroup>
+              <kendo-toolbar-buttongroup>
+                <kendo-toolbar-button kendoEditorSubscriptButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorSuperscriptButton></kendo-toolbar-button>
+              </kendo-toolbar-buttongroup>
+              <kendo-toolbar-buttongroup>
+                <kendo-toolbar-button kendoEditorAlignLeftButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorAlignCenterButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorAlignRightButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorAlignJustifyButton></kendo-toolbar-button>
+              </kendo-toolbar-buttongroup>
+              <kendo-toolbar-dropdownlist kendoEditorFormat></kendo-toolbar-dropdownlist>
+              <kendo-toolbar-dropdownlist kendoEditorFontSize></kendo-toolbar-dropdownlist>
+              <kendo-toolbar-dropdownlist kendoEditorFontFamily></kendo-toolbar-dropdownlist>
+              <kendo-toolbar-colorpicker kendoEditorForeColor></kendo-toolbar-colorpicker>
+              <kendo-toolbar-colorpicker kendoEditorBackColor></kendo-toolbar-colorpicker>
+              <kendo-toolbar-buttongroup>
+                <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorInsertOrderedListButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorIndentButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorOutdentButton></kendo-toolbar-button>
+              </kendo-toolbar-buttongroup>
+              <kendo-toolbar-buttongroup *ngIf="!hideLinkButton">
+                <kendo-toolbar-button kendoEditorCreateLinkButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorUnlinkButton></kendo-toolbar-button>
+              </kendo-toolbar-buttongroup>
+              <kendo-toolbar-button *ngIf="!hideFileButton" kendoEditorInsertFileButton></kendo-toolbar-button>
+              <kendo-toolbar-button *ngIf="!hideImageButton" kendoEditorInsertImageButton></kendo-toolbar-button>
+
+              <kendo-editor-insert-table-button></kendo-editor-insert-table-button>
+              <ng-container>
+                <kendo-toolbar-button kendoEditorAddColumnBeforeButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorAddColumnAfterButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorAddRowBeforeButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorAddRowAfterButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorDeleteColumnButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorDeleteRowButton></kendo-toolbar-button>
+                <kendo-toolbar-button kendoEditorDeleteTableButton></kendo-toolbar-button>
+              </ng-container>
+              <kendo-toolbar-button kendoEditorViewSourceButton></kendo-toolbar-button>
+          </kendo-toolbar>
+          <!-- <kendo-editor-messages
+            undo=""
+            redo=""          
+            bold="This tool bolds the text"
+            italic="This tool makes the text italic"
+            underline="This tool underlines the text">
+          </kendo-editor-messages> -->
+        </kendo-editor>
+<label class="red" [innerHTML]="validationerror" style="padding-left: 0.75em;"></label> 
+</kendo-textbox-container>

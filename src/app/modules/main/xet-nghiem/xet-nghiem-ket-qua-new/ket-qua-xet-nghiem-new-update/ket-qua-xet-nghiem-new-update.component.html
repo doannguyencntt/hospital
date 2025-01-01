@@ -1,0 +1,50 @@
+<app-header-form [crumbs]="[
+        {Title:'Xét Nghiệm',Path:''}
+        ,{Title:'Kết Quả Xét Nghiệm',Path:'/xet-nghiem/ket-qua-new', queryParams: {holdQuery : true}, Active: true}
+        
+            ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 border-b" fxLayout="row" fxLayoutAlign="start center" style="padding-top: 0.5rem;">
+                <h2 style="margin-right: 15px !important; width: 40%;" class="title m-0">Chi Tiết Kết Quả Xét Nghiệm
+                </h2>
+                <div class="bg-app-bar px-3 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                        fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                            type="search" name="searchStringBarCode" [(ngModel)]="search.SearchStringBarCode"
+                            (keyup)="onKey($event)" maxlength="10" (ngModelChange)="searchChangesNangCao($event)"
+                            placeholder="Nhập barcode..." />
+                        <button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button" kendoTooltip
+                            title="Quét mã vạch thẻ" class="button-barcoe-in-search">
+                            <img src="assets/img/barcode.png" alt="Scan barcode" />
+                        </button>
+                    </div>
+
+                    <app-datetimepicker fxFlex="245px" [(model)]="search.ThoiDiemGoiDuyetTuFormat" #tiepnhantu
+                        id="ThoiDiemGoiDuyetTuFormat" label="Từ ngày" class="ml-2 on-header" (keyup)="onKey($event)">
+                    </app-datetimepicker>
+
+                    <app-datetimepicker fxFlex="245px" [(model)]="search.ThoiDiemGoiDuyetDenFormat" #tiepnhanden
+                        id="ThoiDiemGoiDuyetDenFormat" label="Đến ngày" class="ml-2 on-header" (keyup)="onKey($event)">
+                    </app-datetimepicker>
+                </div>
+                <span style="text-align: right; width: 60%;"
+                    [ngStyle]="{'color': (titleString == ChoKQChayLai ? 'red' : (titleString == ChoKQ ? 'orange' : (titleString == ChoDuyetKQ ? 'blue' : 'green') ) )}">
+                    <b>{{titleString}}</b>
+                </span>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column" style="padding-top: 0.1rem;">
+                <app-ket-qua-xet-nghiem-new-shared (trangThaiIn)="getTrangThaiIn($event)">
+                </app-ket-qua-xet-nghiem-new-shared>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none;"></app-barcode>

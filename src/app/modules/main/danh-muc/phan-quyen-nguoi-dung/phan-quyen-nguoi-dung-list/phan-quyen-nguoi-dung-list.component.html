@@ -1,0 +1,44 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                  {Title:'Danh Mục', Path:''}
+                  ,{Title:'Phân Quyền Người Dùng', Path:'/danh-muc/phan-quyen-nguoi-dung', Active:true}
+                  ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/phan-quyen-nguoi-dung" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                #gridPhanQuyenNguoiDung [showExportExcel]="true" (extExportExcel)="exportExcel()">
+            </app-grid>
+            <ng-template #trangThaiTemplate let-dataItem>
+                <span *ngIf="dataItem.Quyen == 1">Phải</span>
+                <span *ngIf="dataItem.Quyen != 1">Không</span>
+            </ng-template>
+            <ng-template #actionTemplate let-dataItem>
+                <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu"
+                    mat-icon-button type="button">
+                    <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+                </button>
+                <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                    <ng-template let-customer="customer" matMenuContent>
+                        <button (click)="edit(dataItem.Id)" mat-menu-item>
+                            <mat-icon [icIcon]="icEdit" *ngIf="dataItem.Quyen != 1"></mat-icon>
+                            <mat-icon [icIcon]="icEye" *ngIf="dataItem.Quyen == 1"></mat-icon>
+                            <span>{{dataItem.Quyen != 1?"Sửa":"Xem"}}</span>
+                        </button>
+                        <button *ngIf="dataItem.Quyen != 1" (click)="delete(dataItem.Id)" mat-menu-item>
+                            <mat-icon [icIcon]="icDelete"></mat-icon>
+                            <span>Xóa</span>
+                        </button>
+                    </ng-template>
+                </mat-menu>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

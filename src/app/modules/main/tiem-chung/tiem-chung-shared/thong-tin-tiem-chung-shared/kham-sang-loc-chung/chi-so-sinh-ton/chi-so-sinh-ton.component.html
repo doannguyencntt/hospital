@@ -1,0 +1,112 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mr-4">CHỈ SỐ SINH TỒN
+        <button *ngIf="!isChiSoSinhTonReadOnly" class="po-h" color="primary" (click)="themChiSoSinhTon()">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+
+    <ng-container *ngIf="dataSourceChiSoSinhTon.data.length == 0">
+        <p>Không có chỉ số sinh tồn</p>
+    </ng-container>
+
+    <app-grid *ngIf="dataSourceChiSoSinhTon.data.length > 0" fxFlex="100%" class="k-grid-border"
+        [maxHeight]="200"
+        [documentType]="documentType" [useAddDeault]="false"  [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [pageable]="false"
+        [gridColumns]="chiSoSinhTonColumns" [gridDataSource]="dataSourceChiSoSinhTon"
+        [lazyLoadPage]="true">
+    </app-grid>
+
+    <ng-template #nhipTimTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="!isChiSoSinhTonReadOnly && dataItem.IsEditable" [max]="9999" [spinners]="false" 
+            [(model)]="dataItem.NhipTim" class="no-label" (modelChange)="evtOnChangeNhipTim(dataItem, $event)">
+        </app-textboxnumeric>
+
+        <p *ngIf="isChiSoSinhTonReadOnly || !dataItem.IsEditable">{{dataItem.NhipTim}}</p>
+    </ng-template>
+
+    <ng-template #huyetApTemplate let-dataItem>
+        <table *ngIf="!isChiSoSinhTonReadOnly && dataItem.IsEditable" width="100%">
+            <tr>
+                <td style="width:calc(50% - 3px);padding:0">
+                    <app-textboxnumeric id="tam-thu-text" [spinners]="false" [(model)]="dataItem.HuyetApTamThu" class="no-label" [max]="9999" (modelChange)="evtOnChangeHuyetApTamThu($event, dataItem)">
+                    </app-textboxnumeric>
+                </td>
+                <td style="width:6px;padding:0">/</td>
+                <td style="width:calc(50% - 3px);padding:0">
+                    <app-textboxnumeric id="tam-truong-text" [spinners]="false" [(model)]="dataItem.HuyetApTamTruong" class="no-label" [max]="9999" (modelChange)="evtOnChangeHuyetApTamTruong($event, dataItem)">
+                    </app-textboxnumeric>
+                </td>
+            </tr>
+        </table>
+
+        <p *ngIf="isChiSoSinhTonReadOnly || !dataItem.IsEditable">{{dataItem.HuyetAp}}</p>
+    </ng-template>
+
+    <ng-template #thanNhietTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="!isChiSoSinhTonReadOnly && dataItem.IsEditable" [format]="format" [max]="9999" [spinners]="false" [decimals]="1" 
+            [(model)]="dataItem.ThanNhiet" class="no-label"
+            (modelChange)="evtOnChangeThanNhiet($event)">
+        </app-textboxnumeric>
+
+        <p *ngIf="isChiSoSinhTonReadOnly || !dataItem.IsEditable">{{dataItem.ThanNhiet | number}}</p>
+    </ng-template>
+
+    <ng-template #nhipThoTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="!isChiSoSinhTonReadOnly && dataItem.IsEditable" [max]="9999" [spinners]="false" 
+            [(model)]="dataItem.NhipTho" class="no-label" (modelChange)="evtOnChangeNhipTho($event, dataItem)">
+        </app-textboxnumeric>
+
+        <p *ngIf="isChiSoSinhTonReadOnly || !dataItem.IsEditable">{{dataItem.NhipTho}}</p>
+    </ng-template>
+    
+    <ng-template #canNangTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="!isChiSoSinhTonReadOnly && dataItem.IsEditable" [format]="format" [spinners]="false" 
+            [(model)]="dataItem.CanNang" class="no-label" [max]="9999" [decimals]="1" (modelChange)="evtOnChangeCanNang(dataItem)">
+        </app-textboxnumeric>
+
+        <p *ngIf="isChiSoSinhTonReadOnly || !dataItem.IsEditable">{{dataItem.CanNang | number}}</p>
+    </ng-template>
+
+    <ng-template #chieuCaoTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="!isChiSoSinhTonReadOnly && dataItem.IsEditable" [format]="format" [spinners]="false" 
+            [(model)]="dataItem.ChieuCao" [decimals]="1" class="no-label" [max]="9999" (modelChange)="evtOnChangeChieuCao(dataItem)">
+        </app-textboxnumeric>
+
+        <p *ngIf="isChiSoSinhTonReadOnly || !dataItem.IsEditable">{{dataItem.ChieuCao | number}}</p>
+    </ng-template>
+
+    <ng-template #BMITemplate let-dataItem>
+        <p class="ml-1">{{dataItem.Bmi | number: '1.2-2'}}</p>
+    </ng-template>
+
+    <ng-template #glassgowTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="!isChiSoSinhTonReadOnly && dataItem.IsEditable" (modelChange)="evtModelOnChange()" [max]="9999" [format]="format" [spinners]="false" 
+            [(model)]="dataItem.Glassgow" [decimals]="1" class="no-label">
+        </app-textboxnumeric>
+
+        <p *ngIf="isChiSoSinhTonReadOnly || !dataItem.IsEditable">{{dataItem.Glassgow | number}}</p>
+    </ng-template>
+
+    <ng-template #sp02Template let-dataItem>
+        <app-textboxnumeric *ngIf="!isChiSoSinhTonReadOnly && dataItem.IsEditable" (modelChange)="evtModelOnChange()" [max]="9999" [format]="format" [spinners]="false" 
+            [(model)]="dataItem.SpO2" [decimals]="1" class="no-label">
+        </app-textboxnumeric>
+
+        <p *ngIf="isChiSoSinhTonReadOnly || !dataItem.IsEditable">{{dataItem.SpO2 | number}}</p>
+    </ng-template>
+
+    <ng-template #thoiDiemThucHienTemplate let-dataItem>
+        <p>{{dataItem.ThoiDiemThucHienDisplay}}</p>
+    </ng-template>
+
+    <ng-template #actionSinhTonTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button *ngIf="!dataItem.IsEditable && !isChiSoSinhTonReadOnly" color="primary" mat-icon-button kendoTooltip title="Sửa" type="button" (click)="suaChiSoSinhTon(dataItem)">
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+            </button>
+            <button *ngIf="!isChiSoSinhTonReadOnly" color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoaChiSoSinhTon(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+</div>

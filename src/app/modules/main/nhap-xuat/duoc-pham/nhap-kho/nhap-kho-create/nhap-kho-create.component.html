@@ -1,0 +1,31 @@
+<app-header-form [crumbs]="[
+            {Title:'Nhập Xuất',Path:''},
+            {Title:'Dược Phẩm',Path:''},
+            {Title:'Nhập Kho',Path:'/nhap-xuat/duoc-pham/nhap-kho', queryParams: {holdQuery : true}, Active: true}
+        ]" [isicMoreVert]="false">
+</app-header-form>
+
+<!-- <app-nhap-kho-share [isUpdate]="false"></app-nhap-kho-share> -->
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Nhập Kho Dược Phẩm</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-nhap-kho-share [isUpdate]="false" [validationErrors]="validationErrors"></app-nhap-kho-share>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" (click)="cancel()" mat-button class="mr-1 align-right-fx"><i
+                            class="ft-arrow-left"></i> Hủy</button>
+                    <button type="button" (click)="create()" color="primary" mat-raised-button><i
+                            class="ft-save"></i> Lưu</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

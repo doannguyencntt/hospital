@@ -1,0 +1,63 @@
+app-timepicker{
+    padding-bottom: 1.34375em;
+    .k-picker-wrap{
+        border:none !important;
+    }
+    kendo-timepicker{   
+        opacity: 1 !important;
+        border: none !important;
+        .k-state-disabled{
+            .k-dateinput-wrap{
+                input{
+                    background-color: #ECEFF1;
+                    opacity: 1;
+                }
+            }
+        }
+        height: 42px !important;
+        .k-input{
+            margin-top: 5px;
+            font-size: 14px !important;
+            padding-left: 0 !important;
+        }
+        .k-picker-wrap  {
+           border: none !important;
+        }
+    }
+    kendo-textbox-container{        
+        background-color: rgba(0, 0, 0, 0.04);
+        width: 100% !important;
+        border-radius: 4px 4px 0 0;
+        padding: .75em .75em 0 .75em;
+        border-bottom: 1px solid rgba(82, 63, 105, 0.42);
+        >.k-label{
+            margin-left: 10px;
+            background: none !important;
+            transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+        }
+        &.k-state-empty{            
+            >.k-label{
+                transform: translate(0, 0) scale(1) !important;
+            }
+        }
+        &.k-state-focused>.k-label {
+            transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+            color:#005dab !important;
+        }
+        &:hover{ 
+          &::after {
+            opacity: 1;
+            transform: scaleX(1);
+          }
+        }
+    }
+    &.no-label{    
+        kendo-textbox-container{  
+            padding-top: 0;
+            .k-clear-value{
+                top: 14px;
+            }
+            
+        }
+    }
+}

@@ -1,0 +1,27 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+	<div></div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+<mat-dialog-content>
+	<div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+		<fieldset class="row ml-1" fxFlex="100%" *ngIf="dataKhiRemove.length != 0">
+			<table class="table table-border" width="100%" *ngFor="let item of dataKhiRemove">
+				<tr>
+					<td width="100%">
+						<app-checkbox fxFlex="100%" label="{{item.KetQuaCLS}}" [(model)]="item.IsCheck"> </app-checkbox>
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+		<div *ngIf="dataKhiRemove.length == 0">
+			Hiện không có kết quả mẫu nào.
+		</div>
+	</div>
+	<hr style=" border: 1px solid black; margin-top: 15px;">
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<!-- <button mat-button mat-dialog-close color="primary" (click)="Ok()">Ok</button> -->
+	<button type="button" color="primary" mat-raised-button mat-button (click)="Ok()">Ok</button>
+</mat-dialog-actions>

@@ -1,0 +1,18 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-grid #gridBenhNhanConNo fxFlex="100%" fxFlex.sm="100%"  reorderRowsMoveItemData="true"
+        [gridColumns]="gridColumns" [documentType]="documentType"
+        [urlGetData]="urlGetDanhSachBenhNhanConNo" [urlGetTotalPage]="urlGetTotalPagesBenhNhanConNo"
+        [sort]="sortDanhSachBenhNhanConNo"
+        [allowSortDefault]="true" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+        [lazyLoadPage]="true" [pageable]="true" [checkboxAble]="false"
+        [showStt]="true" heightToolbar="294">
+    </app-grid>
+
+    <ng-template #maBenhNhanTemplate let-dataItem>
+        <a (click)="evtMaBenhNhanClicked(dataItem.Id)">{{dataItem.MaBenhNhan}}</a>
+    </ng-template>
+
+    <ng-template #gioiTinhTemplate let-dataItem>
+        {{dataItem.GioiTinhDisplay}}
+    </ng-template>
+</div>

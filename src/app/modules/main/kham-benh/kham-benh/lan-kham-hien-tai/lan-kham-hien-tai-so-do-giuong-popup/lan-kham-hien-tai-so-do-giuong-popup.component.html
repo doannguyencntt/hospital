@@ -1,0 +1,115 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Sơ đồ giường</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="overflow:hidden">
+    <!-- idWhere="{{dataYeuCau.DichVuGiuongBenhVienId}}" -->
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-combobox fxFlex="50%" id="phongThucHienGB" label="Phòng" url="KhamBenh/GetAllPhongBenhVienDangHoatDong" class="item-no-padding"
+            [template]="phongKhamTemplate" [templateHeader]="phongKhamTemplateHeader" [(model)]="soDoGiuongFillter.PhongBenhVienId" [popupSettings]=""
+            (modelChange)="getSoDoGiuong()"
+            [queryInfo]="{ParameterDependencies:'{DichVuId:' +dataYeuCau.DichVuGiuongBenhVienId +'}', Take: 50}">
+            <ng-template #phongKhamTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th width="80%">Tên phòng</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #phongKhamTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.MaPhong}}</td>
+                        <td width="80%">{{dataItem.TenPhong}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <div fxFlex="25%" fxFlex.sm="25%">
+            <div class="container-custom no-label">
+                <label>&nbsp;</label>
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <app-checkbox fxFlex="100%" style="color: green;" value="true" id="giuongTrong" label="Giường trống" 
+                        [(model)]="soDoGiuongFillter.GiuongTrong" (modelChange)="getSoDoGiuong()"></app-checkbox>
+                </div>
+            </div>
+        </div>
+        <div fxFlex="25%" fxFlex.sm="25%">
+            <div class="container-custom no-label">
+                <label>&nbsp;</label>
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <app-checkbox fxFlex="100%" style="color: red;" value="true" id="giuongCoBenhNhan" label="Giường đã có người bệnh"
+                        [(model)]="soDoGiuongFillter.GiuongDangSuDung" (modelChange)="getSoDoGiuong()"></app-checkbox>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div style="overflow-x: auto; max-height: 240px;">
+            <table *ngIf="soDoGiuong != undefined && soDoGiuong != null && soDoGiuong.length > 0" width="100%"
+                class="table table-border mr-4">
+                <tbody style="max-height: 250px;">
+                    <tr *ngFor="let phong of soDoGiuong">
+                        <td width="20%" class="head-table">
+                            Phòng {{phong.DisplayName}}
+                        </td>
+                        <td>
+                            <div style="display: flex">
+                                <ng-container *ngFor="let giuong of phong.GiuongBenhs">
+                                    <button *ngIf="giuong.IsAvailable" type="button" style="background-color: green;"
+                                        color="primary" mat-raised-button (click)="chonGiuong(phong, giuong)"
+                                        class="mr-1 btn-select">{{giuong.TenGiuong + ' | ' + (giuong.SoNguoiHienTai | number: '2.0-0')}}</button>
+                                    <button *ngIf="!giuong.IsAvailable" type="button" mat-button mat-raised-button color="warn"
+                                        (click)="chonGiuong(phong, giuong)"
+                                        class="mr-1 btn-select">{{giuong.TenGiuong + ' | ' + (giuong.SoNguoiHienTai | number: '2.0-0')}}</button>
+                                </ng-container>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div fxFlex="100%" *ngIf="soDoGiuong == undefined || soDoGiuong == null || soDoGiuong.length == 0">
+            Không có dữ liệu
+        </div> -->
+
+        <div fxFlex="100%">
+            <app-grid #gridSoDoGiuong *ngIf="dataSource != undefined && dataSource != null && dataSource.data.length > 0"
+                [gridColumns]="gridColumns" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false"
+                [useActionDefault]="false" [checkboxAble]="false" height="400" [lazyLoadPage]="true"
+                [gridDataSource]="dataSource" style="width: 1px;" [pageable]="false">
+            </app-grid>
+        </div>
+        <div fxFlex="100%" *ngIf="dataSource == undefined || dataSource == null || dataSource.data.length == 0">
+            Không có dữ liệu
+        </div>
+        
+        <ng-template #giuongTemplate let-dataItem>
+                <ng-container *ngFor="let giuong of dataItem.GiuongBenhs">
+                    <button *ngIf="giuong.IsAvailable" type="button" style="border-color: #ccc;"
+                        mat-stroked-button (click)="chonGiuong(dataItem, giuong)" [ngClass]="{'select':this.dataYeuCau.GiuongBenhId==giuong.GiuongBenhId}"
+                        class="mr-1 btn-select">{{giuong.TenGiuong + ' | ' + (giuong.SoNguoiHienTai | number: '2.0-0')}}</button>
+                    <button *ngIf="!giuong.IsAvailable" type="button" mat-button mat-raised-button color="warn"
+                        (click)="chonGiuong(dataItem, giuong)" [ngClass]="{'not-available-select':this.dataYeuCau.GiuongBenhId==giuong.GiuongBenhId}"
+                        class="mr-1 btn-select">{{giuong.TenGiuong + ' | ' + (giuong.SoNguoiHienTai | number: '2.0-0')}}</button>
+                </ng-container>
+        </ng-template>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <div style="margin-left: auto !important;">
+        <ng-container *ngIf="this.dataYeuCau.TenGiuongBenh != null && this.dataYeuCau.TenGiuongBenh!=''">
+            <span>Đang chọn Phòng: <strong style="color:green">{{this.dataYeuCau.TenNoiThucHien}}</strong> - Giường: <strong style="color:green">{{this.dataYeuCau.TenGiuongBenh}}</strong></span>
+        </ng-container>
+        <ng-container *ngIf="this.dataYeuCau.TenGiuongBenh == null || this.dataYeuCau.TenGiuongBenh==''">
+            Chưa chọn phòng
+        </ng-container>
+    </div>
+    <button mat-stroked-button mat-button color="primary" [mat-dialog-close]="">Hủy</button>
+    <button type="button" color="primary" mat-raised-button mat-button [mat-dialog-close]="dataYeuCau">Xác nhận</button>
+</mat-dialog-actions>

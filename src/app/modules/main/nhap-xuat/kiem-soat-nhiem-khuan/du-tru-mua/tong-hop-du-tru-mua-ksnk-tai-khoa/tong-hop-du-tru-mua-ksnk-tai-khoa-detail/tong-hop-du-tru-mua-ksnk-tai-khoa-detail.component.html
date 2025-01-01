@@ -1,0 +1,37 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Hành chính - KSNK',Path:''}
+                ,{Title:'Dự Trù Mua',Path:''}
+                ,{Title:'THDT Mua Tại Khoa',Path:'/nhap-xuat/ksnk/tong-hop-mua-ksnk-tai-khoa' , queryParams: {holdQuery : true}}                
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chi tiết duyệt dự trù mua kiểm soát nhiễm khuẩn</h2>
+                <b class="status-yeu-cau-linh ycl-cho-duyet"
+                    *ngIf="trangThaiVo != null && trangThaiVo.TrangThai == true"
+                    style="color:green">{{trangThaiVo.Ten}}</b>
+                <b class="status-yeu-cau-linh ycl-cho-duyet"
+                    *ngIf="trangThaiVo != null && trangThaiVo.TrangThai == false"
+                    style="color:red">{{trangThaiVo.Ten}}</b>
+                <b class="status-yeu-cau-linh ycl-cho-duyet"
+                    *ngIf="trangThaiVo != null && trangThaiVo.TrangThai == null"
+                    style="color:orange">{{trangThaiVo.Ten}}</b>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-du-tru-mua-ksnk-tai-khoa-xem-chi-tiet-shared [trangThaiVo]="trangThaiVo">
+                </app-du-tru-mua-ksnk-tai-khoa-xem-chi-tiet-shared>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" (click)="inPhieu()" color="primary" mat-raised-button><i class="ft-save"></i>
+                        In phiếu dự trù</button>
+                    <button type="button" title="Phím tắt: Esc" (click)="cancel()" mat-button
+                        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Quay lại</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

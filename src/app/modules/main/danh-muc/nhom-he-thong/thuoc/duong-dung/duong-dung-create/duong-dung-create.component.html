@@ -1,0 +1,19 @@
+<app-header-form
+    [crumbs]="[{Title:'Danh Mục',Path:''},{Title:'Nhóm Hệ Thống',Path:''},{Title:'Thuốc',Path:''},
+    {Title:'Đường Dùng',Path:'/danh-muc/nhom-he-thong/thuoc/duong-dung', Active : true}]" [isicMoreVert]="false">
+</app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Thêm Đường Dùng</h2>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-duong-dung-shared></app-duong-dung-shared>
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <app-formfooter [bodyComponent]="shared" type="create" (created)="onCreated()"></app-formfooter>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

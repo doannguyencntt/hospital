@@ -1,0 +1,29 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-combobox id="ICD" fxFlex="100%" fxFlex.sm="100%" [(model)]="loiDan.IcdId" [required]="true"
+        [modelText]="loiDan.ICD" label="ICD" url="LoiDan/GetICD"
+        [validationerror]="'IcdId' | validationerror:validationErrors" class="item-no-padding" [template]="ICDTemplate"
+        [disabled]="!isCreate" [templateHeader]="ICDTemplateHeader">
+        <ng-template #ICDTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #ICDTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textarea id="LoiDanCuaBacSi" fxFlex="100%" fxFlex.sm="100%" maxlength="5000" [(model)]="loiDan.LoiDanCuaBacSi"
+        label="Lời dặn của bác sỹ" [required]="true" minHeight="400"
+        [validationerror]="'LoiDanCuaBacSi' | validationerror:validationErrors">
+    </app-textarea>
+</div>

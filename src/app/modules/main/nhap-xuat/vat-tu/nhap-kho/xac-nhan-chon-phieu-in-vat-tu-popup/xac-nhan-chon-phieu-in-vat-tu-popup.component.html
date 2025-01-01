@@ -1,0 +1,25 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Xác Nhận</div>
+</div>
+
+<ng-container>
+    <p class="mb-3"> Thực hiện in phiếu : </p>
+
+    <div>
+        <app-checkbox id="inPhieuNhapKhoVatTu.CoTheoBenhVien" [(model)]="inPhieuNhapKhoVatTu.CoTheoBenhVien"
+            label="In phiếu nhập vật tư bệnh viện" class="pb-0"></app-checkbox>
+    </div>
+
+    <div>
+        <app-checkbox id="inPhieuNhapKhoVatTu.CoTheoThongTu" [(model)]="inPhieuNhapKhoVatTu.CoTheoThongTu"
+            label="In phiếu nhập vật tư theo thông tư" class="pb-0">
+        </app-checkbox>
+    </div>
+
+    <div style="float: right;">
+        <button type="button" style="margin-right: 10px" mat-raised-button mat-button class="mr-1 mt-2"
+            (click)="close()">Không</button>
+        <button [disabled]="!inPhieuNhapKhoVatTu.CoTheoBenhVien && !inPhieuNhapKhoVatTu.CoTheoThongTu" type="button"
+            color="primary" mat-raised-button mat-button class="mr-1 mt-2" (click)="inPhieu()">In phiếu</button>
+    </div>
+</ng-container>

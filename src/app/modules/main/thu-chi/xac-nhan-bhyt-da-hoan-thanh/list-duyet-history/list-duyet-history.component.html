@@ -1,0 +1,44 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="title">
+    <h3>Lịch sử đã xác nhận</h3>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div fxLayoutAlign="start center" fxLayout="row" class="py-1 content">
+        <fieldset class="row ml-1" fxFlex="100%">
+            <legend>Dịch vụ: <span>{{tenDichVu}}</span></legend>
+            <app-grid [gridColumns]="gridHistory" [useAddDeault]="false" class="k-grid-border" #gridHuongBhyt [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true" style="width: 1px;" [pageable]="false" [gridDataSource]="dataSourceDanhSachLichSuXacNhan"
+                masterName="huongBhyt" [removeGroupFooterIfIsOnlyOne]="true">
+            </app-grid>
+        </fieldset>
+    </div>
+</mat-dialog-content>
+
+<ng-template #orderTemplate let-i="rowIndex">
+    {{i + 1}}
+</ng-template>
+
+<ng-template #dgbhTemplate let-dataItem>
+    {{dataItem.DgBh | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #ttbhTemplate let-dataItem>
+    {{dataItem.TtBh | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #tlDvTemplate let-dataItem>
+    <span>{{dataItem.TiLeDv}}%</span>
+</ng-template>
+
+<ng-template #mucHuongTemplate let-dataItem>
+    <span>{{dataItem.MucHuong}}%</span>
+</ng-template>
+
+<ng-template #dgbhChiTraTemplate let-dataItem>
+    {{dataItem.DgBhChiTra | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #ttbhChiTraTemplate let-dataItem>
+    {{dataItem.TtBhChiTra | number:'0.2-2':'vi-VN'}}
+</ng-template>

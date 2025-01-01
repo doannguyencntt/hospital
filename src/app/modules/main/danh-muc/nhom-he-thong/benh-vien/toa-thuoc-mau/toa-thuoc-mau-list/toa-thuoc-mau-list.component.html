@@ -1,0 +1,52 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[{Title:'Danh Mục',Path:''},{Title:'Nhóm Hệ Thống',Path:''},{Title:'Bệnh Viện',Path:''},
+          {Title:'Toa Thuốc Mẫu',Path:'/danh-muc/nhom-he-thong/benh-vien/toa-thuoc-mau', Active: true}]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="danh-muc/nhom-he-thong/benh-vien/toa-thuoc-mau" [gridColumns]="gridColumns"
+                [detailTemplate]="detailTemplate" [documentType]="documentType" [useActionDefault]="true"
+                [showExportExcel]="true" (extExportExcel)="exportExcel()" [checkboxAble]="false" [lazyLoadPage]="true"></app-grid>
+        </div>
+        <ng-template #detailTemplate let-dataItem>
+            <app-grid baseRoute="danh-muc/nhom-he-thong/benh-vien/toa-thuoc-mau" [gridColumns]="gridChildColumns"
+                [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+                [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                [urlGetData]="urlGetDataGridChild" [urlGetTotalPage]="urlGetTotalPageGridChild"
+                searchString="{{dataItem.Id}}" [autoHeight]="true" [pageable]="false">
+            </app-grid>
+        </ng-template>
+        <ng-template #sangTemplate let-dataItem>
+            {{dataItem.DungSangDisplay}}&nbsp;&nbsp;
+            {{dataItem.ThoiGianDungSangDisplay}}
+        </ng-template>
+        <ng-template #truaTemplate let-dataItem>
+            {{dataItem.DungTruaDisplay}}&nbsp;&nbsp;
+            {{dataItem.ThoiGianDungTruaDisplay}}
+        </ng-template>
+        <ng-template #chieuTemplate let-dataItem>
+            {{dataItem.DungChieuDisplay}}&nbsp;&nbsp;
+            {{dataItem.ThoiGianDungChieuDisplay}}
+        </ng-template>
+        <ng-template #toiTemplate let-dataItem>
+            {{dataItem.DungToiDisplay}}&nbsp;&nbsp;
+            {{dataItem.ThoiGianDungToiDisplay}}
+        </ng-template>
+        <ng-template #trangThaiTemplate let-dataItem>
+            <button *ngIf="dataItem.IsDisabled == 1" (click)="updateTrangThaiToaThuoc(dataItem.Id,dataItem.IsDisabled)"
+                mat-menu-item>
+                <mat-icon [icIcon]="icicclose" color="warn"></mat-icon><span>Ngừng sử dụng</span>
+            </button>
+            <button *ngIf="dataItem.IsDisabled != 1" (click)="updateTrangThaiToaThuoc(dataItem.Id,dataItem.IsDisabled)"
+                mat-menu-item>
+                <mat-icon [icIcon]="icicdone" color="primary"></mat-icon><span>Đang sử dụng</span>
+            </button>
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>

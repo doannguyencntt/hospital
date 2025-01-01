@@ -1,0 +1,83 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0" class="order-form" style="padding-top: 15px;">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-radio fxFlex="100%" fxFlex.md="50%" fxFlex.sm="100%" id="tao-la-ai" [items]="[{Value:0,Text:'Người bệnh'},{Value:1,Text:'Người nhà'}]" [(model)]="giayCamKetKyThuatMoiHS.TaoLaAi" label="Tôi là" (modelChange)="changeTaoLaAi($event)">
+                </app-radio>
+            </div>
+            <div *ngIf="giayCamKetKyThuatMoiHS.TaoLaAi==1" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textbox id="ho-ten" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="giayCamKetKyThuatMoiHS.HoTen" label="Họ tên" maxlength="60" [required]="true" [validationerror]="'HoTen' | validationerror:validationErrors">
+                </app-textbox>
+
+                <app-textbox id="quan-he" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="giayCamKetKyThuatMoiHS.QuanHe" label="Quan hệ với người bệnh" maxlength="30">
+                </app-textbox>
+
+                <app-textboxnumeric id="nam-sinh" [(model)]="giayCamKetKyThuatMoiHS.NamSinh" fxFlex="10%" fxFlex.md="50%" fxFlex.sm="100%" label="Năm sinh" format="format2" min="1" max="9999"  [validationerror]="'NamSinh' | validationerror:validationErrors">
+                </app-textboxnumeric>
+
+                <app-radio fxFlex="15%" fxFlex.md="50%" fxFlex.sm="100%" id="gioi-tinh" [items]="[{Value:1,Text:'Nam'},{Value:2,Text:'Nữ'}]" [(model)]="giayCamKetKyThuatMoiHS.GioiTinh" label="Giới tính">
+                </app-radio>
+
+                <app-textbox id="dia-chi" fxFlex="35%" fxFlex.md="100%" fxFlex.sm="100%" [(model)]="giayCamKetKyThuatMoiHS.DiaChi" label="Địa chỉ" maxlength="40">
+                </app-textbox>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textarea id="chan-doan" fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="100" label="Chẩn đoán" [(model)]="giayCamKetKyThuatMoiHS.ChanDoan">
+                </app-textarea>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textboxnumeric id="so-tien" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [spinners]="false" [(model)]="giayCamKetKyThuatMoiHS.SoTien" label="Số tiền của DV (không hưởng BHYT)" [decimals]="1" (modelChange)="changeNumberToLiteral($event)">
+                </app-textboxnumeric>
+
+                <div fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" class="order-so-tien-chu">
+                    {{giayCamKetKyThuatMoiHS.SoTienChu}}
+                </div>
+
+                <app-datepicker id="ngay-thuc-hien" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Ngày thực hiện" [(model)]="giayCamKetKyThuatMoiHS.NgayThucHien" [required]="true" [validationerror]="'NgayThucHien' | validationerror:validationErrors">
+                </app-datepicker>
+
+                <app-autocomplete popupSettings="null" id="bs-gmhs" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="giayCamKetKyThuatMoiHS.BacSyThucHien" url="PhauThuatThuThuat/GetListBacSiAutoComplete" label="BS điều trị" maxlength="120">
+                </app-autocomplete>
+            </div>
+
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-upload id="Upload" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" #upload15NgayDieuTri [allowedExtensions]="allowedExtensions" [(model)]="giayCamKetKyThuatMoiHS.FileChuKy" [multiple]="true" label="File chữ ký" [template]="templateFileChuanDoanHAInfo">
+                </app-upload>
+            </div>
+
+
+            <ng-template #templateFileChuanDoanHAInfo let-files>
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                            <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="green" class="custom-name green">{{files[0].name}}</a>
+                        </td>
+                        <td style="width:25px">
+                            <a type="button" (click)="upload15NgayDieuTri.remove(files[0].uid)" mat-icon-button>
+                                <mat-icon [icIcon]="icClear"></mat-icon>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </ng-template>
+        </div>
+
+        <div style="justify-content: space-between;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="order-btn">
+            <div style="display: flex;align-items: center;">
+                <p>Người thực hiện:&nbsp;</p>
+                <strong>{{giayCamKetKyThuatMoiHS.NguoiThucHienReadonly}}&nbsp;</strong>
+                <p>Ngày thực hiện:&nbsp;</p>
+                <strong>{{giayCamKetKyThuatMoiHS.NgayThucHienReadonly}}&nbsp;</strong>
+            </div>
+            <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+                <button type="button" class="mr-2" mat-button color="primary" (click)="print()">In</button>
+                <button type="button" class="mr-2" mat-button color="primary" (click)="cancel()">Huỷ</button>
+                <button type="button" class="mr-2" color="primary" mat-raised-button (click)="save()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>

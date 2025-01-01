@@ -1,0 +1,75 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Xét Nghiệm',Path:''}
+                    ,{Title:'Chỉ Số Xét Nghiệm',Path:'/xet-nghiem/chi-so-xet-nghiem',Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <div class="bg-app-bar px-6 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                    fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        placeholder="{{searchPlaceHolder}}" type="search" name="searchString"
+                        [(ngModel)]="chiSoXN.SearchString" (keyup)="onKey($event)"
+                        (ngModelChange)="searchChanges($event)" />
+                </div>
+                <div fxFlex="100%"></div>
+                <div style="float: right;">
+                    <button class="ml-4 right" style="right: 20px; float: right;" type="button" mat-icon-button
+                        (click)="XuatExcel()" kendoTooltip title="Xuất Excel" fxFlex="none">
+                        <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="csxn-content">
+                <kendo-splitter [ngStyle]="{'width':isShow?'100%':'calc(100% - 8px)'}">
+                    <kendo-splitter-pane size="{{isShow?'45%':'100%'}}">
+                        <kendo-treeview #treeview [nodes]="data" textField="Ten" [hasChildren]="hasChildren"
+                            [children]="fetchChildren" kendoTreeViewExpandable [expandBy]="'IdCap'"
+                            [(expandedKeys)]="expandedKeys" childrenField="items">
+                            <ng-template kendoTreeViewNodeTemplate let-dataItem>
+                                <span [ngClass]="iconClass(dataItem)" (click)="onLeftClick($event, dataItem)"
+                                    (contextmenu)="onRightClick($event, dataItem)"></span>
+
+                                <a (click)="onLeftClick($event, dataItem)" id="node{{dataItem.Id}}"
+                                    (contextmenu)="onRightClick($event, dataItem)">
+                                    {{dataItem.Ten}}</a>
+                            </ng-template>
+                        </kendo-treeview>
+                    </kendo-splitter-pane>
+
+                    <kendo-splitter-pane style="overflow:initial;" [hidden]="!isShow">
+                        <div fxFlex="100%" class="p-1 form-content">
+                            <app-chi-so-xet-nghiem-shared *ngIf="isShow" #temp [validationErrors]="validationErrors"
+                                [isCreate]="isCreate" [isCreateChild]="isCreateChild" [capDichVu]="capDichVu"
+                                [data]="chiSoXNChiTiet">
+                            </app-chi-so-xet-nghiem-shared>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                            <button type="button" (click)="cancel()" mat-button class="mr-1 align-right-fx"><i
+                                    class="ft-arrow-left"></i> Hủy</button>
+
+                            <button *ngIf="isUpdate" type="button" (click)="luuChiSoXNChiTiet()" class="mr-1"
+                                color="primary" mat-raised-button><i class="ft-save"></i>
+                                Lưu</button>
+
+                            <button *ngIf="isCreate" type="button" (click)="themChiSoXNChiTiet()" class="mr-1"
+                                color="primary" mat-raised-button><i class="ft-save"></i>
+                                Thêm</button>
+                        </div>
+                    </kendo-splitter-pane>
+                </kendo-splitter>
+            </div>
+        </div>
+        <kendo-contextmenu #treemenu [items]="items" (select)="onSelect($event)">
+        </kendo-contextmenu>
+    </vex-page-layout-content>
+</vex-page-layout>

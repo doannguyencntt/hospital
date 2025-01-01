@@ -1,0 +1,11 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="Description" fxFlex="100%" fxFlex.sm="100%%" [required]="true" 
+        [(model)]="template.Description" label="Mô tả" 
+        [validationerror]="'Description' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-editor id="Body" fxFlex="100%" [(model)]="template.Body" label="Nội dung" height="500"
+    [validationerror]="'Body' | validationerror:validationErrors"></app-editor>
+
+</div>

@@ -1,0 +1,119 @@
+<kendo-grid [data]="gridData" [resizable]="true"  [selectable]="{enabled: true, checkboxOnly: true}" class="grid-custom" id="danhSachGoiDVGrid"  height="541">
+	<kendo-grid-column field="" title="" width="25" [style]="{'text-align': 'center'}" [headerStyle]="{'text-align': 'center'}"> </kendo-grid-column>	
+	<kendo-grid-column field="" title="#" width="15" [style]="{'text-align': 'center'}" [headerStyle]="{'text-align': 'center'}">
+		<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex"> {{rowIndex + 1}} </ng-template>
+	</kendo-grid-column>
+	<kendo-grid-column field="Ma" title="Mã" width="50" [style]="{'text-align': 'center'}" [headerStyle]="{'text-align': 'center'}">
+		<ng-template kendoGridCellTemplate let-dataItem="dataItem">
+			<div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+				<span class="reverse-ellipsis r" title="{{dataItem.Ma}}"> {{dataItem.Ma}} </span>
+			</div>
+		</ng-template>
+	</kendo-grid-column>
+	<kendo-grid-column field="Nhom" title="Nhóm" width="60" [hidden]="true" [style]="{'text-align': 'center'}" [headerStyle]="{'text-align': 'center'}" class="k-grouping-row p">
+		<ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
+			{{value}}
+		</ng-template>
+	</kendo-grid-column>
+	<kendo-grid-column field="TenDichVu" title="Tên Dịch Vụ" width="100" [style]="{'text-align': 'left'}" [headerStyle]="{'text-align': 'center'}">
+		<ng-template kendoGridCellTemplate let-dataItem="dataItem">
+			<div fxLayout="row" fxLayoutAlign="center end" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+				<p class="reverse-ellipsis r" title="{{dataItem.TenDichVu}}">{{dataItem.TenDichVu}}</p>
+			</div>
+		</ng-template>
+		<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+			<div class="text-center" style="font-weight: bold;color:#000;" kendoTooltip title="Tổng cộng DV đang chọn">Tổng cộng:</div>
+		</ng-template>
+	</kendo-grid-column>
+	<kendo-grid-column field="LoaiGia" title="Loại Giá" width="60" [style]="{'text-align': 'left'}" [headerStyle]="{'text-align': 'left'}"> </kendo-grid-column>
+	<kendo-grid-column field="Soluong" title="Số Lượng" width="50" [style]="{'text-align': 'right'}" [headerStyle]="{'text-align': 'center'}"> </kendo-grid-column>
+	<kendo-grid-column field="DonGia" title="Đơn Giá" width="100" [style]="{'text-align': 'center'}" [headerStyle]="{'text-align': 'center'}">
+		<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+			<div class="float_right">{{ dataItem.DonGia | number:'0.2-2':'vi-VN'}}</div>
+		</ng-template>
+	</kendo-grid-column>
+	<kendo-grid-column field="ThanhTien" title="Thành Tiền" width="90" [headerStyle]="{'text-align': 'center'}">
+		<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+			<div class="float_right">{{ dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}</div>
+		</ng-template>
+		<ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+			<div class="float_right">{{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}</div>
+		</ng-template>
+		<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex" style="text-align: center">
+			<span style="float: right;">{{total('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+		</ng-template>
+	</kendo-grid-column>
+	<kendo-grid-column field="BHYTThanhToan" title="BHYT" width="100" [headerStyle]="{'text-align': 'center'}">
+		<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+			<div class="float_right">
+                <div *ngIf="dataItem.DuocHuongBHYT !== true">{{ dataItem.BHYTThanhToan | number:'0.2-2':'vi-VN'}}</div>
+                <div *ngIf="dataItem.DuocHuongBHYT === true">
+                    {{ dataItem.BHYTThanhToan | number:'0.2-2':'vi-VN'}}
+                    <ic-icon *ngIf="dataItem.KiemTraBHYTXacNhan===true" [icon]="icCheck" class="size-icon-duoc-bhyt mr-3"
+                        inline="true"> </ic-icon>
+                    <ic-icon *ngIf="dataItem.KiemTraBHYTXacNhan !==true" [icon]="icCheck" class="size-icon-khong-bhyt mr-3"
+                        inline="true"> </ic-icon>
+                </div>
+			</div>
+		</ng-template>
+		<ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+			<div class="float_right">{{aggregates.BHYTThanhToan.sum | number:'0.2-2':'vi-VN'}}</div>
+		</ng-template>	
+        <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex" style="text-align: center">
+			<span style="float: right;">{{total('BHYTThanhToan') | number:'0.2-2':'vi-VN'}}</span>
+		</ng-template>
+	</kendo-grid-column>
+
+	<kendo-grid-column-group [style]="{'text-align': 'center'}" *ngFor="let col of danhSachCongNoChoThus" [headerStyle]="{'text-align': 'center'}">
+		<div>
+			<ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+				<div class="text-center">Công nợ</div>
+			</ng-template>
+		</div>
+		<kendo-grid-column *ngFor="let col1 of col.CongNoChoThus" width="100" [style]="{'text-align': 'center'}" title="{{col1.TenCongTy}}" [headerStyle]="{'text-align': 'center'}">
+			<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+				<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0" fxLayoutAlign="space-between" 
+                      *ngIf="dataItem.DanhSachCongNoChoThus[col1.ViTri].SoTienCongNoChoThu!=undefined">
+					  <app-textboxnumeric class="no-label" [step]="100" decimals="2" [format]="format" min="0.00"
+					  [(model)]="dataItem.DanhSachCongNoChoThus[col1.ViTri].SoTienCongNoChoThu"
+					  (modelChange)="modelChangeCongNo($event , dataItem ,col1.ViTri)">
+				  </app-textboxnumeric>
+				</div>
+			</ng-template>
+			<ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+				<div class="float_right">{{totalCongno( col1.CongTyBaoHiemTuNhanId ,group) | number:'0.2-2':'vi-VN'}}</div>
+			</ng-template>
+			<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex" style="text-align: center">
+				<span class="float_right">{{totalCongnoFooter( col1.CongTyBaoHiemTuNhanId) | number:'0.2-2':'vi-VN'}}</span>
+			</ng-template>
+		</kendo-grid-column>
+	</kendo-grid-column-group>
+
+    <kendo-grid-column field="SoTienQuyetToan" title="Số Tiền quyết toán" width="90" [headerStyle]="{'text-align': 'center'}">
+		<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+			<div class="float_right">{{ dataItem.SoTienQuyetToan | number:'0.2-2':'vi-VN'}}</div>
+		</ng-template>
+		<ng-template kendoGridGroupFooterTemplate let-group="group" let-aggregates="aggregates">
+			<div class="float_right">{{aggregates.SoTienQuyetToan.sum | number:'0.2-2':'vi-VN'}}</div>
+		</ng-template>
+		<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex" style="text-align: center">
+			<span style="float: right;">{{total('SoTienQuyetToan') | number:'0.2-2':'vi-VN'}}</span>
+		</ng-template>
+	</kendo-grid-column>
+
+    <kendo-grid-column field="NoiThucHien" title="Nơi thực hiện" width="80" [style]="{'text-align': 'left'}" [headerStyle]="{'text-align': 'center'}">
+		<ng-template kendoGridCellTemplate let-dataItem="dataItem">
+			<div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+				<span class="reverse-ellipsis r" title="{{dataItem.NoiThucHien}}"> {{dataItem.NoiThucHien}} </span>
+			</div>
+		</ng-template>
+	</kendo-grid-column>
+	<kendo-grid-messages noRecords="Không có dữ liệu." pagerOf="trong số" pagerItems="dòng" detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết"> </kendo-grid-messages>
+</kendo-grid>
+
+<div class="sticky-button-action py-3 text-right" kendoTooltip>
+	<div style="float: left;">
+        <button (click)="BackToList()" type="button" mat-button class="mr-2">Quay lại</button>
+	</div>
+	<button type="button" *ngIf="gridData != undefined && gridData != null && gridData.data.length > 0" mat-raised-button (click)="luuTamChiPhiTrongGoiNgoaiTru()" title="Lưu tạm chi phí trong gói" color="primary">Lưu tạm chi phí trong gói</button>
+</div>

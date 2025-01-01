@@ -1,0 +1,68 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="
+                    [
+                        {Title:'Gửi H.Sơ Giám Định BHYT'},
+                        {Title:'Xuất excel chứng từ', Active:true}           
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/bao-hiem-y-te" urlGetData="BHYT/GetDataDanhSachXuatChungTuExcelForGridAsync"
+                [gridColumns]="gridDanhSachBHYTColumns"
+                [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                [headerTemplate]="headerTemplate" [documentType]="documentType" [showStt]="true"
+                [searchString]="timKiemDSBaoHiemYTe.SearchString" [triggerSelectAll]="true"
+                (extOnDataBound)="onDataBoundGrid($event)"
+                (extCheckboxSelection)="extCheckboxSelection($event)" [checkboxAble]="true" [sort]="sort">
+            </app-grid>
+            <ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+                <div class="text-center" *ngIf="timKiemDSBaoHiemYTe.LoaiChungTu != null">
+                    <a (click)="view(dataItem.YeuCauTiepNhanNoiTruId ,dataItem.YeuCauTiepNhanNgoaiTruId )" >
+                        <p class="reverse-ellipsis l" title="Xem chứng từ">Xem chứng từ</p>
+                    </a>
+                </div>               
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+    <ng-template #headerTemplate>
+
+        <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+            <app-combobox id="loaiChungTu" fxFlex="30%" fxFlex.sm="30%" style="margin-left: 5px;"
+                class="mt-1 on-header pb-0 mr-1" label="Chọn loại chứng từ" popupSettings="" bind="true"
+                [autoSelectFirstItem]="true " url="BHYT/GetLoaiChungTuXuatExcels" required="true"                
+                [(model)]="timKiemDSBaoHiemYTe.LoaiChungTu" (modelChange)="changeLoaiChungTu($event)">
+            </app-combobox>
+
+            <app-datetimepicker fxFlex="225px" [(model)]="timKiemDSBaoHiemYTe.TuNgay" #tiepnhantu id="TuFormat"
+                label="Từ ngày" class="ml-2 on-header" (keyup)="onKey($event)">
+            </app-datetimepicker>
+
+            <app-datetimepicker fxFlex="225px" [(model)]="timKiemDSBaoHiemYTe.DenNgay" #tiepnhanden id="DenFormat"
+                label="Đến ngày" class="ml-2 on-header" (keyup)="onKey($event)">
+            </app-datetimepicker>
+
+            <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                fxLayoutAlign="start center" style="margin-top: 2px;">
+                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                    type="search" name="searchString" [(ngModel)]="timKiemDSBaoHiemYTe.SearchString"
+                    (keyup)="onKey($event)" placeholder="Tìm kiếm theo Mã NB, Mã TN , Họ Tên" />
+            </div>
+
+            <button type="button" style="background-color: green; color: #fff;" (click)="taiChungTuNguoiBenh()"
+                class="ml-2" mat-raised-button>
+                Xuất excel
+            </button>
+
+            <button type="button" color="primary" (click)="timKiemNangCao()" class="ml-2" mat-raised-button>Tìm
+                Kiếm</button>
+
+        </div>
+    </ng-template>
+</vex-page-layout>

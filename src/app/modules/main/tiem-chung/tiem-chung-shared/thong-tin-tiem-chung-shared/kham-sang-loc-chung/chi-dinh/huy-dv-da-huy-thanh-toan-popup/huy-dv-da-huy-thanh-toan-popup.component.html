@@ -1,0 +1,22 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>XÁC NHẬN</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 110px;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div fxFlex="100" fxFlex.sm="100">Bạn có chắc chắn muốn hủy dịch vụ này không?</div>
+
+        <app-textarea id="lyDo" [(model)]="lyDoHuy" fxFlex="100" fxFlex.sm="100" maxlength="1000" label="Lý do" [required]="true"
+            minHeight="20" [validationerror]="'LyDoHuy' | validationerror:validationErrors">
+        </app-textarea>
+    </div>
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end" class="mt-3">
+    <button mat-button (click)="close()">Không</button>
+    <button mat-button color="primary" (click)="Huy()">Có</button>
+</mat-dialog-actions>

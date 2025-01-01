@@ -1,0 +1,82 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-grid #gridVTTHThuoc fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridVTTHThuocColumns"
+        [allowSortDefault]="true" [gridDataSource]="gridDataSourceVTTHThuoc" [documentType]="documentType"
+        [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+        [lazyLoadPage]="true" maxHeight="500" [pageable]="false" [groups]="groupsGhiNhanVTHHThuoc"
+        masterName="gridVTTHThuoc" [removeGroupFooterIfIsOnlyOne]="true" reorderRowsMoveItemData="true">
+    </app-grid>
+
+    <div class="gripViewGoiDichViKhacTemplate">
+        <ng-template #donGiaTemplate let-dataItem>
+            <!-- {{dataItem.DonGia | number:'0.2-2':'vi-VN'}} -->
+            <p *ngFor="let item of dataItem.ThongTinGias">
+                {{item.DonGia | number:'0.2-2':'vi-VN'}}
+            </p>
+        </ng-template>
+    
+        <ng-template #thanhTienTemplate let-dataItem>
+            <!-- {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}} -->
+            <p *ngFor="let item of dataItem.ThongTinGias">
+                {{item.ThanhTien | number:'0.2-2':'vi-VN'}}
+            </p>
+        </ng-template>
+    
+        <ng-template #thanhTienGhiNhanVTTHThuocGroupFooterTemplate let-aggregates>
+            {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+    
+        <ng-template #thanhTienGhiNhanVTTHThuocFooterTemplate let-dataItem>
+            <span style="color:blue">{{totalGhiNhanVTTHThuoc('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+    
+        <ng-template #donGiaBaoHiemTemplate let-dataItem>
+            <!-- {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}} -->
+            <ng-container *ngIf="dataItem.DonGiaBaoHiem != null">
+                {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+            </ng-container>
+            <ng-container *ngIf="dataItem.DonGiaBaoHiem == null">
+                <p *ngFor="let item of dataItem.ThongTinGias">
+                    {{item.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+                </p>
+            </ng-container>
+        </ng-template>
+    
+        <ng-template #duocHuongBaoHiemGhiNhanVHTTTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-checkbox id="duocHuongBaoHiem{{rowIndex}}" label="" [(model)]="dataItem.DuocHuongBaoHiem"
+                disabled="{{true}}">
+            </app-checkbox>
+        </ng-template>
+        <ng-template #tinhPhiGhiNhanVHTTTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-checkbox id="tinhPhiGhiNhanVTTH{{rowIndex}}" label="" [(model)]="dataItem.TinhPhi" [disabled]="true">
+            </app-checkbox>
+        </ng-template>
+    
+        <ng-template #soLuongGhiNhanVTTHThuocTemplate let-dataItem>
+            <!-- <div *ngIf="dataItem.LoaiKho == 5">{{dataItem.SoLuong | number:'0.2'}}</div>
+            <div *ngIf="dataItem.LoaiKho != 5">{{dataItem.SoLuong | number}}</div> -->
+            <p *ngFor="let item of dataItem.ThongTinGias">
+                <ng-container *ngIf="dataItem.LoaiKho == 5">{{item.SoLuong | number:'0.2'}}</ng-container>
+                <ng-container *ngIf="dataItem.LoaiKho != 5">{{item.SoLuong | number}}</ng-container>
+            </p>
+        </ng-template>
+    
+        <ng-template #actionVTTHThuocTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <button
+                    *ngIf="!(dataItem.PhieuLinh != null && dataItem.PhieuLinh != '') && !dataItem.IsCoYeuCauTraVatTuThuocTuBenhNhanChiTiet"
+                    style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                    (click)="XoaGhiNhanVTTHThuoc(dataItem)">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+    
+        <ng-template #nhomGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+    
+        <ng-template #stttTemplate let-dataItem let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,433 @@
+<app-header-form [crumbs]="[
+{Title:'Nội Trú',Path:''}
+,{Title:'Tạo Bệnh Án Sơ Sinh',Path:'',Active:true}
+]">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+	<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+		<div class="card" fxFlex="100%">
+			<div class="px-6 py-4" fxLayout="column" style="position: relative">
+				<div class="mt-1" fxFlex="100%" fxFlex.sm="100%">
+					<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+						fxFlex="100%">
+						<app-combobox id="chon-benh-an-me" fxFlex="40%" fxFlex.sm="100%" label="Chọn Bệnh Án Mẹ"
+							url="DieuTriNoiTru/ChonBenhAnMe" [(model)]="thongTinBenhAnMe.KeyId"
+							[modelText]="thongTinBenhAnMe.DisplayName" #comboboxChonBA
+							(selectionChange)="selectionChangeBenhAnMe($event)" [template]="benhAnMeTemplate"
+							[templateHeader]="benhAnMeTemplateHeader"
+							[popupSettings]="{width: 600,popupClass:'item-no-padding'}" 
+							[validationerror]="'YeuCauTiepNhanMeId' | validationerror:validationErrors">
+							<ng-template #benhAnMeTemplateHeader let-dataItem>
+								<table width="100%" class="table-combobox">
+									<tr>
+										<th width="25%">Mã BA</th>
+										<th width="25%">Mã TN</th>
+										<th width="25%">Mã BN</th>
+										<th width="25%">Họ Tên</th>
+										<th width="25%">Năm Sinh</th>
+									</tr>
+								</table>
+							</ng-template>
+							<ng-template #benhAnMeTemplate let-dataItem>
+								<table width="100%" class="table-combobox">
+									<tr>
+										<td width="25%">{{dataItem.MaBA}}</td>
+										<td width="25%">{{dataItem.MaTN}}</td>
+										<td width="25%">{{dataItem.MaBN}}</td>
+										<td width="25%">{{dataItem.HoTen}}</td>
+										<td width="25%">{{dataItem.NamSinh}}</td>
+									</tr>
+								</table>
+							</ng-template>
+						</app-combobox>
+						<app-combobox id="KhoaChuyenVe" fxFlex="20%" fxFlex.sm="100%"
+							[(model)]="tiepNhanBenhNhan.KhoaChuyenBenhAnSoSinhVeId" [autoSelectFirstItem]="true"
+							[bind]="true" [modelText]="currentKhoaPhongChuyenVe.DisplayName"
+							[data]="dataKhoaPhongChuyenVe" required="true" label="Khoa Chuyển bệnh án sơ sinh về"
+							(selectionChange)="selectionChangeKhoaPhongChuyenVe($event)"
+							[validationerror]="'BenhAnSoSinhChiTietViewModel.KhoaChuyenBenhAnSoSinhVeId' | validationerror:validationErrors">
+						</app-combobox>
+					</div>
+				</div>
+				<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+					<div fxFlex="100%" class="mt-4">
+						<!-- style="background: #e1f5fe;"  -->
+						<fieldset fxFlex="auto" class="{{(dieuTriNoiTru != null && dieuTriNoiTru.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+							<legend>Thông tin bệnh án mẹ</legend>
+							<div fxFlex="100%">
+								<ul class="inline">
+									<li>Mã TN:
+										<strong>{{dieuTriNoiTru.MaYeuCauTiepNhan}}</strong>
+									</li>
+									<li>Mã BN:
+										<strong>{{dieuTriNoiTru.MaBenhNhan}}</strong>
+									</li>
+									<li>Họ tên:
+										<strong>{{dieuTriNoiTru.HoTen}}
+											<ng-container
+												*ngIf="dieuTriNoiTru.BenhAnCons!=null &&dieuTriNoiTru.BenhAnCons.length>0">
+												<a *ngFor="let benhAnCon of dieuTriNoiTru.BenhAnCons" kendoTooltip
+													title="Xem BA Con: {{benhAnCon.SoBenhAn}}"><img
+														src="assets/img/baby.png" alt="Con" width="21"
+														style="display:inline;margin-right:5px;" /></a>
+											</ng-container>
+											<a *ngIf="dieuTriNoiTru.BenhAnMe!=null" kendoTooltip
+												title="Xem BA Mẹ: {{dieuTriNoiTru.BenhAnMe.SoBenhAn}}"><img
+													src="assets/img/mom.png" alt="Mẹ" width="20"
+													style="display:inline;margin-right:5px;" /></a>
+											<a *ngIf="dieuTriNoiTru.CoBHYT==true" kendoTooltip title="Có BHYT"><img
+													src="assets/img/logoBHXH.png" alt="BHYT" width="20"
+													style="display:inline;" /></a>
+										</strong>
+									</li>
+									<li>Tuổi:
+										<strong>{{dieuTriNoiTru.Tuoi}}</strong>
+									</li>
+									<li>
+										Giới tính:
+										<strong>{{dieuTriNoiTru.GioiTinh}}</strong>
+									</li>
+									<li>
+										Địa chỉ: <strong>{{dieuTriNoiTru.DiaChi}}</strong>
+									</li>
+									<li>
+										Nghề nghiệp: <strong>{{dieuTriNoiTru.NgheNghiep}}</strong>
+									</li>
+									<li>Số BA:
+										<strong class="color-blue">{{dieuTriNoiTru.SoBenhAn}}</strong>
+									</li>
+									<li>
+										Loại BA:
+										<strong>{{dieuTriNoiTru.LoaiBenhAn}}</strong>
+									</li>
+									<li>
+										Khoa: <strong>{{dieuTriNoiTru.Khoa}}</strong>
+									</li>
+									<li>
+										BS điều trị: <strong>{{dieuTriNoiTru.BacSiDieuTri}}</strong>
+									</li>
+									<li>
+										Phòng: <strong>{{dieuTriNoiTru.Phong}}</strong>
+									</li>
+									<li>
+										Giường: <strong>{{dieuTriNoiTru.Giuong}}</strong>
+									</li>
+									<li>
+										Đối tượng: <strong class="color-blue">{{dieuTriNoiTru.DoiTuong}}</strong>
+									</li>
+								</ul>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+
+				<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+					<div fxFlex="100%" class="mt-4">
+						<fieldset fxFlex="auto">
+							<legend>Đặc điểm sơ sinh </legend>
+							<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+								fxLayoutGap.lt-sm="0" fxFlex="100%">
+								<app-datetimepicker id="ngay" [(model)]="dacDiemTreSoSinh.DeLuc" fxFlex="15%"
+									fxFlex.sm="100%" label="Đẻ lúc" (modelChange)="modelChangeDeLuc($event)">
+								</app-datetimepicker>
+								<app-combobox id="gioi-tinh" [(model)]="dacDiemTreSoSinh.GioiTinhId"
+									[popupSettings]="null" url="DieuTriNoiTru/GetGioiTinh" fxFlex="10%" fxFlex.sm="100%"
+									[modelText]="dacDiemTreSoSinh.GioiTinh" label="Giới tính"
+									(modelChange)="modelChangeGioiTinh($event)">
+								</app-combobox>
+								<app-combobox id="trang-thai" [(model)]="dacDiemTreSoSinh.TinhTrangId"
+									[popupSettings]="null" url="DieuTriNoiTru/GetTrangThai" fxFlex="10%"
+									fxFlex.sm="100%" [modelText]="dacDiemTreSoSinh.TenTinhTrang" label="Tình trạng">
+								</app-combobox>
+								<app-textbox [(model)]="dacDiemTreSoSinh.DiTat" label="Dị tật" maxlength="500"
+									fxFlex="20%" fxFlex.sm="100%">
+								</app-textbox>
+								<app-textboxnumeric [(model)]="dacDiemTreSoSinh.CanNang" label="Cân nặng" min="1"
+									fxFlex="10%" fxFlex.sm="100%" max="999999" format="n2" decimals="2">
+								</app-textboxnumeric>
+
+								<app-textboxnumeric [(model)]="dacDiemTreSoSinh.Cao" label="Chiều Cao" fxFlex="10%"
+									fxFlex.sm="100%" max="999999" format="n2" decimals="2">
+								</app-textboxnumeric>
+								<app-textboxnumeric [(model)]="dacDiemTreSoSinh.VongDau" label="Vòng đầu" fxFlex="10%"
+									fxFlex.sm="100%" max="999">
+								</app-textboxnumeric>
+
+								<app-checkbox [(model)]="dacDiemTreSoSinh.CoHauMon" class="mt-4" label="Có hậu môn"
+									fxFlex="15%" fxFlex.sm="100%">
+								</app-checkbox>
+
+
+								<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxFlex="100%"
+									fxLayoutGap.lt-sm="0">
+									<div fxFlex="55%">
+										<fieldset fxFlex="auto">
+											<legend>ApGar</legend>
+											<app-dropdownlist fxFlex="25%" fxFlex.sm="100%" class="mr-2"
+												[(model)]="dacDiemTreSoSinh.ApGar" [data]="apGarSelectItems"
+												[popupSettings]="null">
+											</app-dropdownlist>
+											<app-textboxnumeric min="1" max="999999" class="mr-2"
+												[(model)]="dacDiemTreSoSinh.ChiSoApGar" label="" fxFlex="25%"
+												fxFlex.sm="100%">
+											</app-textboxnumeric>
+
+											<!-- 5 phút -->
+											<app-dropdownlist fxFlex="25%" fxFlex.sm="100%" class="mr-2"
+												[(model)]="dacDiemTreSoSinh.ApGar5" [data]="apGarSelectItems"
+												[popupSettings]="null">
+											</app-dropdownlist>
+											<app-textboxnumeric min="1" max="999999" class="mr-2"
+												[(model)]="dacDiemTreSoSinh.ChiSoApGar5" label="" fxFlex="25%"
+												fxFlex.sm="100%">
+											</app-textboxnumeric>
+
+											<!-- 10 phút -->
+											<app-dropdownlist fxFlex="25%" fxFlex.sm="100%" class="mr-2"
+												[(model)]="dacDiemTreSoSinh.ApGar10" [data]="apGarSelectItems"
+												[popupSettings]="null">
+											</app-dropdownlist>
+											<app-textboxnumeric min="1" max="999999" class="mr-2"
+												[(model)]="dacDiemTreSoSinh.ChiSoApGar10" label="" fxFlex="25%"
+												fxFlex.sm="100%">
+											</app-textboxnumeric>
+										</fieldset>
+									</div>
+
+									<app-textarea [(model)]="dacDiemTreSoSinh.TinhTrang" fxFlex="20%" fxFlex.sm="100%"
+										label="Tình trạng" maxlength="1000">
+									</app-textarea>
+									<app-textarea [(model)]="dacDiemTreSoSinh.KetQuaXuLy" fxFlex="25%" fxFlex.sm="100%"
+										label="Kết quả xử lý" maxlength="1000">
+									</app-textarea>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+
+				<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+					<h3 fxFlex="100%" class="mt-3 text-transform-uppercase">Thông tin hành chính</h3>
+					<app-textbox class="text-transform" #HoVaTenTextbox id="HoTen" fxFlex="20%"
+						fxFlex.sm="20%" label="Tên ban đầu" maxlength="100" [required]="true" [isAutoFocus]="true"
+						[(model)]="tiepNhanBenhNhan.TenBanDau" [upperCase]="true"
+						[validationerror]="'BenhAnSoSinhChiTietViewModel.TenBanDau' | validationerror:validationErrors">
+					</app-textbox>
+					<app-datetimepicker id="NgaySinh" fxFlex="20%" fxFlex.sm="20%" label="Ngày giờ sinh"
+						[required]="true" [(model)]="tiepNhanBenhNhan.NgayThangNamSinh"
+						(modelChange)="modelChangeNgaySinh($event)"
+						[validationerror]="'BenhAnSoSinhChiTietViewModel.NgayThangNamSinh' | validationerror:validationErrors">
+					</app-datetimepicker>
+					<app-textboxmask id="SoDienThoai" onlynumber="true" fxFlex="20%" fxFlex.sm="20%"
+						label="Số điện thoại" maxlength="10" [(model)]="tiepNhanBenhNhan.SoDienThoai"
+						mask="000 000 0000" [required]="true"
+						[validationerror]="'BenhAnSoSinhChiTietViewModel.SoDienThoai' | validationerror:validationErrors">
+					</app-textboxmask>
+					<app-dropdownlist id="gioiTinh" fxFlex="20%" fxFlex.sm="20%" label="Giới tính" [required]="true"
+						url="TiepNhanBenhNhan/GetGioiTinh" [(model)]="tiepNhanBenhNhan.GioiTinh" [bind]="true"
+						(modelChange)="modelChangeGioiTinhTiepNhan($event)"
+						[validationerror]="'BenhAnSoSinhChiTietViewModel.GioiTinh' | validationerror:validationErrors">
+					</app-dropdownlist>
+					<app-combobox id="NgheNghiep" fxFlex="20%" fxFlex.sm="20%" label="Nghề Nghiệp" [bind]="true"
+						url="TiepNhanBenhNhan/GetNgheNghiep" popupSettings="null"
+						[(model)]="tiepNhanBenhNhan.NgheNghiepId">
+					</app-combobox>
+
+					<app-combobox id="GetQuocTich" fxFlex="20%" fxFlex.sm="20%" label="Quốc tịch" bind="true"
+						popupSettings="null" url="TiepNhanBenhNhan/GetQuocTich" [(model)]="tiepNhanBenhNhan.QuocTichId">
+					</app-combobox>
+					<app-combobox id="TinhThanhPho" fxFlex="20%" fxFlex.sm="20%" [bind]="true" popupSettings="null"
+						label="Tỉnh/Thành Phố" class="item-no-padding" [template]="tinhThanhTemplate"
+						[templateHeader]="tinhThanhTemplateHeader" [(model)]="tiepNhanBenhNhan.TinhThanhId"
+						url="TiepNhanBenhNhan/GetTinhThanh/?quanHuyenId={{tiepNhanBenhNhan.QuanHuyenId}}"
+						hierarchyKeyToSend="tinhThanh" (modelChange)="TinhThanhPhoChange($event)">
+						<ng-template #tinhThanhTemplateHeader let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<th width="20%">Mã</th>
+									<th>Tên</th>
+								</tr>
+							</table>
+						</ng-template>
+						<ng-template #tinhThanhTemplate let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<td width="20%">{{dataItem.Ma}}</td>
+									<td>{{dataItem.Ten}}</td>
+								</tr>
+							</table>
+						</ng-template>
+					</app-combobox>
+					<app-combobox #comboboxQuanHuyen id="QuanHuyen" fxFlex="20%" fxFlex.sm="20%" label="Quận/Huyện"
+						[bind]="true" popupSettings="null" class="item-no-padding" [template]="quanHuyenTemplate"
+						[templateHeader]="quanHuyenTemplateHeader" [(model)]="tiepNhanBenhNhan.QuanHuyenId"
+						(modelChange)="QuanHuyenChange($event)"
+						url="TiepNhanBenhNhan/GetQuanHuyen/?phuongXaId={{tiepNhanBenhNhan.PhuongXaId}}"
+						hierarchyKeyToListen="tinhThanh" hierarchyKeyToSend="quanHuyen">
+						<ng-template #quanHuyenTemplateHeader let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<th width="20%">Mã</th>
+									<th>Tên</th>
+								</tr>
+							</table>
+						</ng-template>
+						<ng-template #quanHuyenTemplate let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<td width="20%">{{dataItem.Ma}}</td>
+									<td>{{dataItem.Ten}}</td>
+								</tr>
+							</table>
+						</ng-template>
+					</app-combobox>
+					<app-combobox id="PhuongXa" fxFlex="20%" fxFlex.sm="20%" label="Phường/Xã" class="item-no-padding"
+						popupSettings="null" #comboboxPhuongXa url="TiepNhanBenhNhan/GetPhuongXa"
+						hierarchyKeyToListen="quanHuyen" [bind]="true" [template]="phuongXaTemplate"
+						[templateHeader]="phuongXaTemplateHeader" [(model)]="tiepNhanBenhNhan.PhuongXaId"
+						(modelChange)="PhuongXaChange($event)">
+						<ng-template #phuongXaTemplateHeader let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<th width="20%">Mã</th>
+									<th>Tên</th>
+								</tr>
+							</table>
+						</ng-template>
+						<ng-template #phuongXaTemplate let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<td width="20%">{{dataItem.Ma}}</td>
+									<td>{{dataItem.Ten}}</td>
+								</tr>
+							</table>
+						</ng-template>
+					</app-combobox>
+					<app-textbox class="text-transform-capitalize" id="SoNhaDuongPho" fxFlex="20%" fxFlex.sm="20%"
+						maxlength="200" label="Số nhà/Đường phố" [(model)]="tiepNhanBenhNhan.DiaChi">
+					</app-textbox>
+
+					<app-textbox id="tenKhaiSinh" fxFlex="20%" fxFlex.sm="20%" maxlength="300" label="Tên khai sinh"
+						[upperCase]="true" [(model)]="tiepNhanBenhNhan.TenKhaiSinh">
+					</app-textbox>
+					<app-combobox fxFlex="20%" label="Dân tộc" id="danToc" url="TiepNhanBenhNhan/GetDanToc"
+						popupSettings="null" [bind]="true" [(model)]="tiepNhanBenhNhan.DanTocId">
+					</app-combobox>
+					<app-textbox id="maBenhAnMe" fxFlex="20%" fxFlex.sm="20%" label="Mã BA mẹ" [disabled]="true"
+						[(model)]="tiepNhanBenhNhan.MaBenhAnMe">
+					</app-textbox>
+					<app-textbox id="Email" fxFlex="20%" fxFlex.sm="20%" label="Email" maxlength="200"
+						[(model)]="tiepNhanBenhNhan.Email">
+					</app-textbox>
+					<app-textbox id="NoiLamViec" fxFlex="20%" fxFlex.sm="20%" maxlength="300" label="Nơi làm việc"
+						[(model)]="tiepNhanBenhNhan.NoiLamViec">
+					</app-textbox>
+
+					<app-combobox fxFlex="20%" label="Gói dịch vụ" id="yeuCauGoiDichVuId"
+						url="DieuTriNoiTru/GetYeuCauGoiDichVuSoSinhCuaMe" popupSettings="null" [bind]="true"
+						[(model)]="tiepNhanBenhNhan.YeuCauGoiDichVuId"
+						[queryInfo]="{ParameterDependencies:'{YeuCauTiepNhanMeId:' + thongTinBenhAnMe.KeyId +'}', Take: 50}"
+						[validationerror]="'YeuCauGoiDichVuId' | validationerror:validationErrors">
+					</app-combobox>
+
+					<!-- thông tin người giám hộ -->
+					<h3 fxFlex="100%" class="mt-0 text-transform-uppercase">Thông tin người giám hộ/đi cùng</h3>
+					<app-textbox id="hoTenNguoiGiamHo" fxFlex="25%" fxFlex.sm="25%" label="Họ và tên" maxlength="100"
+						[upperCase]="true" [(model)]="tiepNhanBenhNhan.NguoiLienHeHoTen">
+					</app-textbox>
+					<app-combobox fxFlex="25%" label="Quan hệ" id="quanHe" url="TiepNhanBenhNhan/GetQuanHe"
+						popupSettings="null" [bind]="true" [(model)]="tiepNhanBenhNhan.NguoiLienHeQuanHeNhanThanId">
+					</app-combobox>
+					<app-textboxmask id="NguoiLienHeSoDienThoai" fxFlex="25%" fxFlex.sm="25%" label="Điện thoại"
+						maxlength="10" [(model)]="tiepNhanBenhNhan.NguoiLienHeSoDienThoai" mask="000 000 0000">
+					</app-textboxmask>
+					<app-textbox id="EmailNguoiGiamHo" fxFlex="25%" fxFlex.sm="25%" label="Email" maxlength="200"
+						[(model)]="tiepNhanBenhNhan.NguoiLienHeEmail">
+					</app-textbox>
+
+					<app-combobox id="TinhThanhPhoNguoiLienHe" fxFlex="25%" fxFlex.sm="25%" popupSettings="null"
+						[bind]="true" label="Tỉnh/Thành Phố" class="item-no-padding" [template]="tinhThanhTemplate"
+						[templateHeader]="tinhThanhTemplateHeader" [(model)]="tiepNhanBenhNhan.NguoiLienHeTinhThanhId"
+						hierarchyKeyToSend="tinhThanhLienHe"
+						url="TiepNhanBenhNhan/GetTinhThanh?quanHuyenId={{tiepNhanBenhNhan.NguoiLienHeQuanHuyenId}}"
+						(modelChange)="TinhThanhPhoNguoiLienHeChange($event)">
+						<ng-template #tinhThanhTemplateHeader let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<th width="20%">Mã</th>
+									<th>Tên</th>
+								</tr>
+							</table>
+						</ng-template>
+						<ng-template #tinhThanhTemplate let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<td width="20%">{{dataItem.Ma}}</td>
+									<td>{{dataItem.Ten}}</td>
+								</tr>
+							</table>
+						</ng-template>
+					</app-combobox>
+
+					<app-combobox #cboQuanHuyenNguoiLienHe id="QuanHuyenNguoiLienHe" fxFlex="25%" fxFlex.sm="25%"
+						label="Quận/Huyện" popupSettings="null" class="item-no-padding" [template]="quanHuyenTemplate"
+						[templateHeader]="quanHuyenTemplateHeader" [(model)]="tiepNhanBenhNhan.NguoiLienHeQuanHuyenId"
+						(modelChange)="QuanHuyenNguoiLienHeChange($event)"
+						url="TiepNhanBenhNhan/GetQuanHuyen?phuongXaId={{tiepNhanBenhNhan.NguoiLienHePhuongXaId}}"
+						hierarchyKeyToListen="tinhThanhLienHe" hierarchyKeyToSend="quanHuyenLienHe">
+						<ng-template #quanHuyenTemplateHeader let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<th width="20%">Mã</th>
+									<th>Tên</th>
+								</tr>
+							</table>
+						</ng-template>
+						<ng-template #quanHuyenTemplate let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<td width="20%">{{dataItem.Ma}}</td>
+									<td>{{dataItem.Ten}}</td>
+								</tr>
+							</table>
+						</ng-template>
+					</app-combobox>
+
+					<app-combobox id="PhuongXaNguoiLienHe" fxFlex="25%" fxFlex.sm="25%" label="Phường/Xã"
+						class="item-no-padding" [template]="phuongXaTemplate" [templateHeader]="phuongXaTemplateHeader"
+						popupSettings="null" [(model)]="tiepNhanBenhNhan.NguoiLienHePhuongXaId"
+						url="TiepNhanBenhNhan/GetPhuongXa" hierarchyKeyToListen="quanHuyenLienHe"
+						(modelChange)="PhuongXaNguoiLienHeChange($event)">
+						<ng-template #phuongXaTemplateHeader let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<th width="20%">Mã</th>
+									<th>Tên</th>
+								</tr>
+							</table>
+						</ng-template>
+						<ng-template #phuongXaTemplate let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<td width="20%">{{dataItem.Ma}}</td>
+									<td>{{dataItem.Ten}}</td>
+								</tr>
+							</table>
+						</ng-template>
+					</app-combobox>
+					<app-textbox class="text-transform-capitalize" id="SoNhaDuongPhoNguoiGiamHo" fxFlex="25%"
+						fxFlex.sm="25%" maxlength="200" label="Số nhà/Đường phố"
+						[(model)]="tiepNhanBenhNhan.NguoiLienHeDiaChi">
+					</app-textbox>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="sticky-button-action py-3 text-right" kendoTooltip>
+		<button style="margin-left: auto;" type="button" mat-stroked-button color="primary" (click)="huy()">Hủy</button>
+		<button mat-raised-button mat-button color="primary" (click)="xuLyTaoBenhAnSoSinh()">Lưu và tạo bệnh án sơ
+			sinh</button>
+	</div>
+
+</div>

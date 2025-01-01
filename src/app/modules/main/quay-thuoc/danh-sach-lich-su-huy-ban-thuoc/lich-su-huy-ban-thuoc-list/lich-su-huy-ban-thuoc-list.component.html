@@ -1,0 +1,94 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                        {Title:'Nhà Thuốc',Path:''},
+                        {Title:'Lịch Sử Hủy Bán Thuốc',Path:'/lich-su-huy-ban-thuoc', Active:true}                  
+                        ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid [gridColumns]="gridChildColumns2" [documentType]="documentType" [useAddDeault]="false"
+                [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                [urlGetData]="urlGetDataGridChild" [urlGetTotalPage]="urlGetTotalPageGridChild"
+                [headerTemplate]="headerTemplate" [showExportExcel]="true" (extExportExcel)="exportExcel()"
+                [sort]="sort" #gridDichVuGiuongCha>
+            </app-grid>
+
+        </div>
+
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                    fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)"
+                        placeholder="Nhập từ khóa(Số đơn,Mã TN,Mã NB,Tên Người Bệnh,Ngày thu)..."
+                        (ngModelChange)="searchChanges()" />
+                </div>
+                <app-datetimepicker fxFlex="225px" [(model)]="quayThuocXuatThuocSearch.ThoiDiemTiepNhanTuFormat"
+                    #tiepnhantu id="ThoiDiemTiepNhanTuFormat" (modelChange)="thoiDiemTNChange()" label="Ngày thu từ"
+                    class="ml-2 on-header" (keyup)="onKey($event)">
+                </app-datetimepicker>
+                <app-datetimepicker fxFlex="225px" [(model)]="quayThuocXuatThuocSearch.ThoiDiemTiepNhanDenFormat"
+                    #tiepnhanden id="ThoiDiemTiepNhanDenFormat" (modelChange)="thoiDiemTNChange()" label="Ngày thu đến"
+                    class="ml-2 on-header" (keyup)="onKey($event)">
+                </app-datetimepicker>
+                <button type="button" color="primary" (click)="TimkiemNangCao()" class="ml-2"
+                    mat-raised-button>Tìm</button>
+                <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                </button>
+                <button [matMenuTriggerFor]="columnFilterMenu" style="margin-left: auto;" fxFlex="none" class="mr-2"
+                    mat-icon-button kendoTooltip title="Lọc cột" type="button">
+                    <mat-icon [icIcon]="icFilterList"></mat-icon>
+                </button>
+
+                <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                    <div *ngFor="let column of gridChildColumns2">
+                        <button *ngIf="column.Title != ''"
+                            class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                            <mat-checkbox [disabled]="true" color="primary">
+                                {{ column.Title }}
+                            </mat-checkbox>
+                        </button>
+                    </div>
+                </mat-menu>
+                <!-- <button (click)="exportExcel()" fxFlex="2%" mat-icon-button kendoTooltip title="Xuất Excel"
+                    type="button">
+                    <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                </button> -->
+            </div>
+        </ng-template>
+        <ng-template #actionTemplate let-dataItem>
+            <div kendoTooltip>
+                <a (click)="Xem(dataItem)">
+                    {{dataItem.SoDon}}
+                </a>
+            </div>
+        </ng-template>
+        <ng-template #loaiDonThuocTemplate let-dataItem>
+            <span style="color:red;"> {{dataItem.LoaiDonThuoc}}</span>
+        </ng-template>
+        <ng-template #soTienThuTemplate let-dataItem>
+            <span style="color:red;font-size: 15px;"> {{dataItem.SoTienThu | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+        <ng-template #templateTextTienMat let-dataItem>
+            <strong style="color:red;font-size: 15px;"> {{dataItem.TienMat | number:'0.2-2':'vi-VN'}}</strong>
+        </ng-template>
+        <ng-template #templateTextChuyenKhoan let-dataItem>
+            <strong style="color:red;font-size: 15px;"> {{dataItem.ChuyenKhoan | number:'0.2-2':'vi-VN'}}</strong>
+        </ng-template>
+        <ng-template #templateTextPos let-dataItem>
+            <strong style="color:red;font-size: 15px;"> {{dataItem.Pos | number:'0.2-2':'vi-VN'}}</strong>
+        </ng-template>
+        <ng-template #ngayHuyTemplate let-dataItem>
+            <strong> {{dataItem.NgayHuyDisplay}}</strong>
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>

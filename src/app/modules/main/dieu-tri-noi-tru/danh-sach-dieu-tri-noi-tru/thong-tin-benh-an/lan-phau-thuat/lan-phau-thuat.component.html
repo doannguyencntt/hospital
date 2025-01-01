@@ -1,0 +1,51 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <span class="item-no mt-2 mb-1">1. Lần phẫu thuật</span>
+    <button class="po-h item-no-padding" color="primary" (click)="them()">
+        <mat-icon [icIcon]="icAddCircle"></mat-icon>
+    </button>
+</div>
+<div class="mt-1" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-grid #grid fxFlex="100%" fxFlex.sm="100%" HideCheckAll="true" [gridColumns]="gridColumnLanPhauThuats"
+        [documentType]="documentType" [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true"
+        [checkboxAble]="false" [pageable]="false" height="auto" [gridDataSource]="dataSourceLanPhauThuats">
+    </app-grid>
+</div>
+
+<ng-template #ngayGioTemplate let-dataItem>
+    <app-datetimepicker id="ngay" [(model)]="dataItem.NgayGio" class="item-no-padding" label="">
+    </app-datetimepicker>
+</ng-template>
+<ng-template #phuongPhapPPVoCamTemplate let-dataItem>
+    <app-textbox [(model)]="dataItem.PhuongPhapPhauThuat" class="item-no-padding">
+    </app-textbox>
+</ng-template>
+<ng-template #phauThuatVienTemplate let-dataItem let-i="index">
+    <app-combobox [(model)]="dataItem.PhauThuatVienId" (selectionChange)="selectionPhauThatVien($event , dataItem)"
+        [popupSettings]="null" url="NhanVien/GetListLookupNhanVien" [modelText]="dataItem.TenPhauThuatVien"
+        class="item-no-padding">
+    </app-combobox>
+</ng-template>
+<ng-template #bacSyGMTemplate let-dataItem>
+    <app-combobox [(model)]="dataItem.BacSiGayMeId" (selectionChange)="selectionBS($event , dataItem)"
+        [popupSettings]="null" url="NhanVien/GetListLookupNhanVien" [modelText]="dataItem.TenBacSiGayMe"
+        class="item-no-padding">
+    </app-combobox>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoa(dataItem)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #phuongPhapTemplate let-value="value" let-dataItem>
+    <app-textbox id="PTTTPhuongPhap{{dataItem.IdView}}" [(model)]="dataItem.PTTT" class="no-label" maxlength="500">
+    </app-textbox>
+</ng-template>
+
+<ng-template #voCamTemplate let-value="value" let-dataItem>
+    <app-textbox id="VoCam{{dataItem.IdView}}" [(model)]="dataItem.VoCam" class="no-label" maxlength="500">
+    </app-textbox>
+</ng-template>

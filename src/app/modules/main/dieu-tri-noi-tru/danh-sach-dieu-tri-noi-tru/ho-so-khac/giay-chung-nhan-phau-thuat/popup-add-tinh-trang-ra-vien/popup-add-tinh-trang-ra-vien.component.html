@@ -1,0 +1,22 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Thêm tình trạng viện</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="overflow:hidden">
+    <div class="container-iframe">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-textbox  fxFlex="auto" label="Tình trạng ra viện" maxlength="200"
+                [required]="true" [(model)]="themTinhTrangRaVien.Text" required="true">
+            </app-textbox>
+        </div>
+    </div>
+ 
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div fxFlex="100%" style="text-align: right;" >
+        <button tabindex="-1" type="button" color="primary" mat-raised-button mat-button class="mr-1"
+            (click)="Ok()">Thêm</button>
+    </div>
+</mat-dialog-actions>

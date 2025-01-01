@@ -1,0 +1,94 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'KHTH', Path:''},
+                    {Title:'Hoạt Động Khám Bệnh Theo Dịch Vụ', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-checkbox [(model)]="baoCaoSearch.DangKham" id="dangKham" label="Đang khám" class="ml-2 mt-2">
+                </app-checkbox>
+                <app-checkbox [(model)]="baoCaoSearch.DaHoanThanh" id="daHoanThanh" label="Đã hoàn thành" class="ml-2 mr-2 mt-2">
+                </app-checkbox>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="auto" fxFlex.sm="auto" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+                    <app-grid [gridColumns]="gridColumns" [useAddDeault]="false"
+                        [checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [documentType]="documentType" [pageable]="false"
+                        urlGetData="BaoCao/GetDataBaoCaoHoatDongKhamBenhTheoDichVuForGrid" urlGetTotalPage="BaoCao/GetTotalPageBaoCaoHoatDongKhamBenhTheoDichVuForGrid">
+                    </app-grid>
+
+                    <ng-template #sttTemplate let-dataItem>
+                        <div [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.STT}}</div>
+                    </ng-template>
+                    <ng-template #noiDungTemplate let-dataItem>
+                        <div [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.NoiDung}}</div>
+                    </ng-template>
+                    <ng-template #tongSoTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.TongSo | number}}</div>
+                    </ng-template>
+                    <ng-template #capCuuTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.KhamCapCuu | number}}</div>
+                    </ng-template>
+                    <ng-template #khamNoiTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.KhamNoi | number}}</div>
+                    </ng-template>
+                    <ng-template #khamNhiTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.KhamNhi | number}}</div>
+                    </ng-template>
+                    <ng-template #khamTaiMuiHongTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.KhamTaiMuiHong | number}}</div>
+                    </ng-template>
+                    <ng-template #khamRangHamMatTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.KhamRangHamMat | number}}</div>
+                    </ng-template>
+                    <ng-template #khamMatTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.KhamMat | number}}</div>
+                    </ng-template>
+                    <ng-template #khamNgoaiTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.KhamNgoai | number}}</div>
+                    </ng-template>
+                    <ng-template #khamDaLieuTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.KhamDaLieu | number}}</div>
+                    </ng-template>
+                    <ng-template #khamPhuSanTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.KhamPhuSan | number}}</div>
+                    </ng-template>
+                    <ng-template #khamThamMyTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.KhamThamMy | number}}</div>
+                    </ng-template>
+                    <ng-template #khamTiemChungTemplate let-dataItem>
+                        <div *ngIf="!dataItem.LaItemTieuDe" [style.fontWeight]="dataItem.InDamNoiDung ? 'bold' : ''">{{dataItem.KhamTiemChung | number}}</div>
+                    </ng-template>
+                    
+                </div>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

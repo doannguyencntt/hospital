@@ -1,0 +1,20 @@
+@media print {
+  :not(.printMe) {
+    display: none !important;
+  }
+}
+@media print {
+  .footer,
+  #non-printable {
+      display: none !important;
+  }
+  #printable {
+      display: block;
+  }
+}
+
+p {
+  font-family: Lato;
+}
+
+

@@ -1,0 +1,30 @@
+<app-header-form current="" [crumbs]="
+[{Title:'Danh Mục',Path:''},
+{Title:'Nhóm hệ thống',Path:''},
+{Title:'Hành Chính',Path:''},
+{Title:'Chức Danh',Path:'/danh-muc/nhom-he-thong/hanh-chinh/chuc-danh/',Active:true}
+]" [isicMoreVert]="false"></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chỉnh Sửa Chức Danh</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+                <app-chuc-danh-shared></app-chuc-danh-shared>
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" *ngIf="!chucDanh.IsDefault">
+                    <app-formfooter [bodyComponent]="shared" type="update" (updated)="onUpdated()"></app-formfooter>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" *ngIf="chucDanh.IsDefault">
+                    <div class="form-footer">
+                        <button type="button" (click)="cancel()" mat-button class="mt-5"><i class="ft-arrow-left"></i>
+                            Hủy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

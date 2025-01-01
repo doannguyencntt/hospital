@@ -1,0 +1,54 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập Xuất',Path:''}
+                ,{Title:'Vật Tư',Path:''}
+                ,{Title:'Dự Trù Mua',Path:''},
+                {Title:'THDT Mua Tại Khoa',Path:'/nhap-xuat/vat-tu/tong-hop-mua-vat-tu-tai-khoa', queryParams: {holdQuery : true},Active:true}
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b render-text" fxLayout="row" fxLayoutAlign="start center">
+                <h2 *ngIf="tabDaXuLy== 'DaXuLy'"  class="title m-0" >Chi Tiết Tổng Hợp Dự Trù Mua Vật Tư</h2>
+                <h2 *ngIf="tabDaXuLy!= 'DaXuLy'"  class="title m-0" >Duyệt Tổng Hợp Dự Trù Mua Vật Tư</h2>
+                <!-- <label *ngIf="tabDaXuLy== 'DaXuLy' && danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang == 0"  style="color: blue;">
+                    <span>Đã gửi & Chờ duyệt</span>
+                </label>
+                <label *ngIf="tabDaXuLy== 'DaXuLy' && danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang == 1" class="green">
+                    <span>Đã duyệt</span>
+                </label>
+                <label *ngIf="tabDaXuLy== 'DaXuLy' && danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang == 2" class="red">
+                    <span>Từ chối</span>
+                </label> -->
+
+                <!-- Đã gửi -->
+                <label *ngIf="tabDaXuLy== 'DaXuLy' && danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang == 0"
+                    style="color: blue;">
+                    <span>Đã gửi & Chờ duyệt</span>
+                </label>
+                <label *ngIf="tabDaXuLy== 'DaXuLy' && danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang == 1" class="green">
+                    <span>Đã duyệt</span>
+                </label>
+                <label *ngIf="tabDaXuLy== 'DaXuLy' && danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang == 2" class="red">
+                    <span>Từ chối</span>
+                </label>
+
+                <!-- chờ gửi -->
+                <label *ngIf="tabDaXuLy!= 'DaXuLy' && danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang == 1"
+                    style="color: sandybrown;">
+                    <span>Chờ duyệt</span>
+                </label>
+                <label *ngIf="tabDaXuLy!= 'DaXuLy' && danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang == 0"
+                    style="color: #afb42b;">
+                    <span>Chờ gửi</span>
+                </label>
+                
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-tong-hop-du-tru-mua-vat-tu-tai-khoa-shared [tabSelected]="tabDaXuLy"
+                    [validationErrorsVatTu]="validationErrors" [isCreate]="true">
+                </app-tong-hop-du-tru-mua-vat-tu-tai-khoa-shared>
+            </div>
+        </div>
+    </div>
+</div>

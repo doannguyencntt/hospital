@@ -1,0 +1,38 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase">{{title}}</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="min-height: 150px;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <ng-container *ngIf="laThucHienDichVu == true">
+            <div fxFlex="100" fxFlex.sm="100">Bạn có chắc chắn muốn chuyển trạng thái đã thực hiện cho dịch vụ này không?</div>
+            <div fxFlex="100" fxFlex.sm="100">Nếu có hãy nhập thông tin sau: </div>
+            <app-combobox id="nguoiThucHien" fxFlex="50%" fxFlex.sm="50%" label="Người thực hiên" bind="true"
+                [(model)]="yeuCauDichVuKyThuat.NhanVienThucHienId"  [required]="true" [reloadForGrid]="true"
+                url="YeuCauLinhDuocPham/GetListNhanVien" popupSettings="null"
+                [validationerror]="'NhanVienThucHienId' | validationerror:validationErrors">
+            </app-combobox>
+            <app-datetimepicker id="thoiDiemThucHien" fxFlex="50%" fxFlex.sm="50%" label="Thời điểm thực hiện" [required]="true"
+                [(model)]="yeuCauDichVuKyThuat.ThoiDiemThucHien"
+                [validationerror]="'ThoiDiemThucHien' | validationerror:validationErrors">
+            </app-datetimepicker>
+        </ng-container>
+        <ng-container *ngIf="laThucHienDichVu == false">
+            <div fxFlex="100" fxFlex.sm="100">Bạn có chắc chắn muốn chuyển trạng thái chưa thực hiện cho dịch vụ này không?</div>
+        
+            <app-textarea id="lyDo" fxFlex="100%" fxFlex.sm="100%" maxlength="1000" label="Lý do" minHeight="20"
+                [(model)]="yeuCauDichVuKyThuat.LyDoHuyTrangThaiDaThucHien" [required]="true"
+                [validationerror]="'LyDoHuyTrangThaiDaThucHien' | validationerror:validationErrors">
+            </app-textarea>
+        </ng-container>
+        
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Hủy</button>
+    <button mat-raised-button mat-button color="primary" (click)="xuLyCapNhatThongTinThucHienDichVu()">Lưu</button>
+</mat-dialog-actions>

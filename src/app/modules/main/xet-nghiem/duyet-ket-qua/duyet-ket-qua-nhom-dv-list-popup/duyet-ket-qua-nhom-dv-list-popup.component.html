@@ -1,0 +1,21 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Xác Nhận</div>
+</div>
+<ng-container>
+    <ng-container>
+        <div *ngFor="let item of nhomDichVuDuyets">
+            <app-checkbox [(model)]="item.IsCheck" label="{{item.TenNhomDichVu}}" (modelChange)="isCheck()" class="pb-0">
+            </app-checkbox>
+        </div>
+
+    </ng-container>
+    <hr style=" border: 1px solid black; margin-top: 15px;">
+</ng-container>
+
+<ng-container>
+    <div style="float: right; padding-top: 10px;">
+        <button tabindex="-1" type="button" (click)="close()" mat-stroked-button class="mr-1 mt-2">Đóng</button>
+        <button [disabled]="!disabled" tabindex="-1" type="button" (click)="okPrint()" mat-raised-button mat-button color="primary"
+            class="md-primary mr-1 mt-2">OK</button>
+    </div>
+</ng-container>

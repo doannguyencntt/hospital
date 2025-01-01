@@ -1,0 +1,73 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-combobox fxFlex="25%" [(model)]="adr.ThuocHoacHoatChat1Id" [required]="true"
+        [validationerror]="'ThuocHoacHoatChat1Id' | validationerror:validationErrors" id="ThuocHoacHoatChat1Id"
+        [modelText]="adr.MaTenHoatChat1" label="Tên Hoạt Chất 1" url="ADR/GetMaThuocHoaChat"
+        [templateHeader]="hoatChat1TemplateHeader" [template]="hoatChat1Template" class="item-no-padding">
+        <ng-template #hoatChat1TemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #hoatChat1Template let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox fxFlex="25%" [(model)]="adr.ThuocHoacHoatChat2Id" [required]="true"
+        [validationerror]="'ThuocHoacHoatChat2Id' | validationerror:validationErrors"
+        [modelText]="adr.MaTenHoatChat2" id="ThuocHoacHoatChat2Id" label="Tên Hoạt Chất 2"
+        url="ADR/GetMaThuocHoaChat" [templateHeader]="hoatChat2TemplateHeader" [template]="hoatChat2Template" class="item-no-padding">
+        <ng-template #hoatChat2TemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #hoatChat2Template let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+    <app-dropdownlist fxFlex="25%" [(model)]="adr.MucDoChuYKhiChiDinh" [modelText]="adr.MucDoChuYKhiChiDinhDisplay"
+        label="Mức Độ Chú Ý Khi Chỉ Định" url="ADR/GetChuYKhiChiDinh">
+    </app-dropdownlist>
+    <app-dropdownlist fxFlex="25%" [(model)]="adr.MucDoTuongTac" [modelText]="adr.MucDoTuongTacDisplay"
+        label="Mức Độ Tương Tác" url="ADR/GetTuongTac">
+    </app-dropdownlist>
+    <app-radio fxFlex="25%" fxFlex.sm="40%" id="DuocDongHoc" name="DuocDongHoc"
+        [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="adr.DuocDongHoc" label="Dược Động Học">
+    </app-radio>
+    <app-radio fxFlex="25%" fxFlex.sm="40%" id="DuocLucHoc" name="DuocLucHoc"
+        [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="adr.DuocLucHoc" label="Dược Lực Học">
+    </app-radio>
+    <app-radio fxFlex="25%" fxFlex.sm="40%" id="ThuocThucAn" name="ThuocThucAn"
+        [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="adr.ThuocThucAn" label="Thuốc Thức Ăn">
+    </app-radio>
+    <app-radio fxFlex="25%" fxFlex.sm="40%" id="QuyTac" name="QuyTac"
+        [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="adr.QuyTac" label="Quy Tắc">
+    </app-radio>
+    <app-textbox id="TuongTacHauQua" fxFlex="100%" [required]="true"
+        [validationerror]="'TuongTacHauQua' | validationerror:validationErrors" [(model)]="adr.TuongTacHauQua"
+        maxlength="1000" label="Tương Tác Hậu Quả">
+    </app-textbox>
+    <app-textarea id="GhiChu" fxFlex="100%" [(model)]="adr.GhiChu"
+        [validationerror]="'GhiChu' | validationerror:validationErrors" maxlength="1000" label="Ghi Chú">
+    </app-textarea>
+    <app-textarea id="CachXuLy" fxFlex="100%" [(model)]="adr.CachXuLy"
+        [validationerror]="'CachXuLy' | validationerror:validationErrors" maxlength="1000" label="Cách Xử Lý">
+    </app-textarea>
+</div>

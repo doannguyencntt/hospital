@@ -1,0 +1,33 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Vật tư',Path:''}
+                ,{Title:'Dự trù mua',Path:''}
+                ,{Title:'Yêu cầu dự trù mua vật tư',Path:'/nhap-xuat/vat-tu/yeu-cau-mua-vat-tu' , queryParams: {holdQuery : true}}
+                ,{Title:'Tạo phiếu mua vật tư dự trù',Path:'',Active:true}
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Lập dự trù mua vật tư</h2>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-lap-phieu-mua-vat-tu-shared [trangThaiVo]="trangThaiVo"
+                    [validationErrorsVatTu]="validationErrors" [isCreate]="true">
+                </app-lap-phieu-mua-vat-tu-shared>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+
+                    <button type="button" title="Phím tắt: Esc" (click)="cancel()" mat-button
+                        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Hủy</button>
+                    <button type="button" (click)="guiPhieuMuaVatTu()" color="primary" mat-raised-button><i
+                            class="ft-save"></i> Gửi</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,13 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Kết thúc PT/TT</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="height: 10vh;flex-direction: column;display: flex;overflow: hidden;">
+    <p style="margin-top: 10px;">{{messageShowInPopup}}</p>
+    <div style="flex-direction: row;justify-content: flex-end;align-items: flex-end;display: flex;margin: 0;" fxFlex="100%">
+        <button type="button" color="primary" mat-stroked-button mat-button class="mr-1 mt-2" (click)="close()">Không</button>
+        <button type="button" style="background: #005dab; color: white;" mat-raised-button mat-button class="mr-1 mt-2" (click)="ketThuc()">Có</button>
+    </div>
+</mat-dialog-content>

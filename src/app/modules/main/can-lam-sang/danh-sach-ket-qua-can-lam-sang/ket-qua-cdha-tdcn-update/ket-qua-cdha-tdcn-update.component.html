@@ -1,0 +1,76 @@
+<app-header-form [crumbs]="[
+    {Title:'Kết Quả CĐHA, TDCN',Path:''},
+    {Title:'DS Kết Quả CĐHA, TDCN',Path:'/ket-qua-cdha-tdcn', queryParams: {holdQuery : true}},
+    {Title:'Chi Tiết Kết Quả CĐHA, TDCN',Path:'', Active : true}]" [isicMoreVert]="false">
+</app-header-form>
+
+<div [@stagger]="true" class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <!-- <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chi tiết kết quả CĐHA, TDCN</h2>
+            </div> -->
+            <div class="px-6 py-4" fxLayout="column">
+                <app-ket-qua-cdha-tdcn-shared (trangThaiDichVuDuocChon)="trangThaiDichVuDuocChon($event)"
+                    (trangThaiYeuCauTiepNhan)="trangThaiYeuCauTiepNhan($event)"
+                    [nhanVienThucHienLai]="nhanVienThucHienLai" (nhanVienThucHienKQ)="nhanVienThucHienKQ($event)"
+                    (tenNguoiSuaSauCung)="tenNguoiSuaSauCungCDHA($event)"
+                    (thoiGianSuaSauCung)="thoiGianSuaSauCungCDHA($event)" [validationErrors]="validationErrors">
+                </app-ket-qua-cdha-tdcn-shared>
+                <!-- <div fxFlex="100%" style="display: flex;" class="mt-4">
+                    <button class="mr-2" type="button" mat-stroked-button color="primary" (click)="quayLai()">Quay
+                        lại</button>
+                    <button class="mr-2" type="button" mat-raised-button mat-button color="primary"
+                        (click)="inKetQua()">In KQ</button>
+                    <button class="mr-2" *ngIf="ktTrangThaiDaThucHien && ktNhanVienThucHien" type="button"
+                        mat-raised-button mat-button color="warn" (click)="HuyKetQua()">
+                        Hủy kết quả</button>
+                    <button *ngIf="!ktTrangThaiDaThucHien || !nhanVienThucHienLai" style="margin-left: auto;"
+                        type="button" mat-stroked-button color="primary" class="mr-2" (click)="clearData()">Hủy</button>
+                    <button class="mr-2" *ngIf="ktTrangThaiDaThucHien && ktNhanVienThucHien && nhanVienThucHienLai"
+                        type="button"
+                        [ngStyle]="{'margin-left': !ktTrangThaiDaThucHien || !nhanVienThucHienLai? '':'auto'}"
+                        mat-raised-button mat-button color="warn" (click)="suaKetQua()">Sửa</button>
+                    <button *ngIf="!ktTrangThaiDaThucHien || !nhanVienThucHienLai" mat-raised-button mat-button
+                        color="primary" (click)="luu()">Lưu</button>
+                </div> -->
+            </div>
+            <div class="sticky-button-action py-3 text-right" kendoTooltip>
+                <button style="padding: 0 !important;" fxFlex="8%" class="mr-2 float-left" type="button"
+                    mat-stroked-button color="primary" (click)="quayLai()">Quay lại</button>
+                <ng-container>
+                    <app-print-form class="no-label p-0" fxFlex="8%" textPrint="In KQ" type="PDF" [bodyComponent]="this"
+                      style="color:#005dab;"  typeSize="A4">
+                    </app-print-form>
+                </ng-container>
+                <ng-container>
+                    <button style="padding: 0 !important;" fxFlex="8%" class="mr-2 float-left no-label p-0"
+                        type="button" mat-raised-button mat-button color="primary" (click)="inKetQua()">Xem Phiếu In
+                    </button>
+                    <button style="padding: 0 !important;" fxFlex="8%" class="mr-2 float-left no-label p-0"
+                        *ngIf="ktTrangThaiDaThucHien && ktNhanVienThucHien" type="button" mat-raised-button mat-button
+                        color="warn" (click)="HuyKetQua()">
+                        Hủy kết quả</button>
+                </ng-container>
+
+                <mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" fxFlex="100%"  style="margin-top: -20px;">
+                    <ng-container>
+                        <button *ngIf="!ktTrangThaiDaThucHien || !nhanVienThucHienLai" type="button" mat-stroked-button
+                            color="primary" class="mr-2" (click)="clearData()">Hủy</button>
+                        <button class="mr-2" *ngIf="ktTrangThaiDaThucHien && ktNhanVienThucHien && nhanVienThucHienLai"
+                            type="button" mat-raised-button mat-button color="warn" (click)="suaKetQua()">Sửa</button>
+                        <button *ngIf="!ktTrangThaiDaThucHien || !nhanVienThucHienLai" mat-raised-button mat-button
+                            class="mr-2" color="primary" (click)="luu()">Lưu</button>
+                        <div *ngIf="ktTrangThaiDaThucHien && !ktNhanVienThucHien"
+                            style="float: right;margin-right: 37px; height: 38px; padding: 10px;">
+                            <div fxFlex="100%">
+                                Người lưu:<strong style="color: red;">{{tenNguoiSuaSauCung}}</strong>
+                                Lưu ngày:<strong style="color: red;">{{thoiGianSuaSauCung}}</strong>
+                            </div>
+                        </div>
+                    </ng-container>
+                </mat-dialog-actions>
+            </div>
+        </div>
+    </div>
+</div>

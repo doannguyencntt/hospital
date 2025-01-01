@@ -1,0 +1,46 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>DANH SÁCH VTYT</div>
+    <button type="button" mat-icon-button (click)="close('NoAnswer')" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="min-height: 290px;">
+    <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+        fxLayout.lt-md="column">
+        <ng-container *ngIf="dataToaVTYTLe.total > 0">
+            <h3 fxFlex="100%" class="sub-title  mr-4 mt-0">TỦ TRỰC</h3>
+            <app-grid fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumnVTYTs" [useAddDeault]="false"
+                [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                [groups]="groups" heightToolbar="235" [gridDataSource]="dataToaVTYTLe" style="width: 1px;" pageSize="10"
+                [pageable]="true">
+            </app-grid>
+        </ng-container>
+
+        <ng-container *ngIf="dataToaVTYTTong.total > 0">
+            <h3 fxFlex="100%" class="sub-title  mr-4 mt-0">KHO TỔNG</h3>
+            <app-grid fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumnVTYTs" [useAddDeault]="false"
+                [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                [groups]="groups" heightToolbar="235" [gridDataSource]="dataToaVTYTTong" style="width: 1px;"
+                pageSize="10" [pageable]="true">
+            </app-grid>
+        </ng-container>
+        <div style="color: red;">
+            <h3><b><i>{{canhBao}}</i></b></h3>
+        </div>
+    </div>
+
+    <ng-template #slTemplate let-dataItem>
+        {{dataItem.SoLuong | number:'1.0-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem>
+        <strong>{{value}}</strong>
+    </ng-template>
+
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-raised-button mat-dialog-close color="warn">Không áp dụng</button>
+    <button mat-raised-button mat-button color="primary" (click)="apDung()">Áp dụng</button>
+</mat-dialog-actions>

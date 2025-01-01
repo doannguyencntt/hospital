@@ -1,0 +1,146 @@
+<ng-container *ngIf="thongTinBenhNhan.Id === 0">
+    <p class="ml-4 mt-2">Bạn chưa chọn người bệnh</p>
+</ng-container>
+<ng-container *ngIf="thongTinBenhNhan.Id !== 0">
+    <div class="row ml-1 mb-2">
+        <!-- style="background: #e1f5fe;" -->
+        <fieldset fxFlex="100%" class="{{(thongTinBenhNhan.YeuCauTiepNhan != null && thongTinBenhNhan.YeuCauTiepNhan.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+            <legend>Thông tin hành chính</legend>
+            <div fxFlex="100%" *ngIf="thongTinBenhNhan.YeuCauTiepNhanId">
+                <ul class="inline">
+                    <li>Mã TN: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.MaYeuCauTiepNhan}}</strong></li>
+                    <li>Mã BN: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.BenhNhan.MaBN}}</strong></li>
+                    <li>Họ tên: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.HoTen}}</strong></li>
+                    <li>Giới tính: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.TenGioiTinh}}</strong></li>
+                    <li *ngIf="!thongTinBenhNhan.IsDuoi6Tuoi">Tuổi:
+                        <strong>{{thongTinBenhNhan.YeuCauTiepNhan.Tuoi}}</strong>
+                    </li>
+                    <li *ngIf="thongTinBenhNhan.IsDuoi6Tuoi">Tuổi:
+                        <strong>{{thongTinBenhNhan.Duoi6TuoiDisplay}}</strong>
+                    </li>
+                    <li>SĐT: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.SoDienThoaiDisplay}}</strong></li>
+                    <li>Dân tộc:
+                        <strong>{{thongTinBenhNhan.YeuCauTiepNhan.DanToc == null ? null : thongTinBenhNhan.YeuCauTiepNhan.DanToc.Ten}}</strong>
+                    </li>
+                    <li>Địa chỉ:<strong>{{thongTinBenhNhan.YeuCauTiepNhan.DiaChiDisplay}}</strong></li>
+                    <li>Nghề nghiệp:
+                        <strong>{{thongTinBenhNhan.YeuCauTiepNhan.NgheNghiep == null ? null : thongTinBenhNhan.YeuCauTiepNhan.NgheNghiep.Ten}}</strong>
+                    </li>
+                    <li>Tuyến khám: <strong style="color: green;">{{thongTinBenhNhan.YeuCauTiepNhan.TenLyDoVaoVien}}</strong>
+                    </li>
+                    <li>Số BHYT: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.BHYTMaSoThe}}</strong>
+                    </li>
+                    <li>Mức hưởng: <strong style="color: blue;">{{thongTinBenhNhan.YeuCauTiepNhan.BHYTMucHuong}}%</strong>
+                    </li>
+                    <li>Ngày hiệu lực: <strong [style.color]="thongTinBenhNhan.YeuCauTiepNhan.IsBHYTHetHan ? 'red' : ''">{{thongTinBenhNhan.YeuCauTiepNhan.BHYTThoiGianHieuLucDisplay}}</strong>
+                    </li>
+
+                    <li>Lý do TN:
+                        <strong>{{thongTinBenhNhan.YeuCauTiepNhan.TenLyDoTiepNhan}}</strong>
+                    </li>
+                    <li>Ngày TN:
+                        <strong>{{thongTinBenhNhan.YeuCauTiepNhan.ThoiDiemTiepNhanDisplay}}</strong>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div class="row ml-1 temp d-inline">
+        <kendo-tabstrip id="card" fxFlex="100%" class="content-has-border tabstrip-pad sticky-kendotab-item p-unset" [ngClass]="{ 'p-unset': isPopupLichSuTiemChung }" [keepTabContent]="true" (tabSelect)="changeTab('card', $event)">
+            <kendo-tabstrip-tab [selected]="lstTabStatus.tabKhamSangLocChungSelected">
+                <ng-template kendoTabTitle>
+                    <div kendoTooltip title="Phím tắt: Chưa có">
+                        KHÁM SÀNG LỌC CHUNG
+                    </div>
+                </ng-template>
+                <ng-template kendoTabContent>
+                    <div class="p-2">
+                        <app-kham-sang-loc-chung [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan" [isTabKhamLocChungReadOnly]="isTabKhamLocChungReadOnly"></app-kham-sang-loc-chung>
+
+                        <div *ngIf="!isTabKhamLocChungReadOnly" kendoTooltip class="sticky-button-action py-3 text-right">
+                            <button *ngIf="this.thongTinBenhNhan.KhamSangLocTiemChung.Id" type="button" color="primary" mat-raised-button (click)="xuLyQuayLaiChuaKham()" class="float-left">Quay lại chưa khám</button>
+                            <button *ngIf="this.thongTinBenhNhan.isDataKhamSangLocChungChange || this.thongTinBenhNhan.KhamSangLocTiemChung.Id == 0" type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Ctrl + S" (click)="luuKhamSangLoc()">
+                                Lưu
+                            </button>
+                            <button type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Ctrl + H" (click)="luuVaHoanThanhKhamSangLoc()">
+                                Lưu và hoàn thành khám
+                            </button>
+                            <button type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Chưa có" (click)="inPhieuKhamSangLoc()">
+                                In phiếu khám
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+
+            <kendo-tabstrip-tab [selected]="lstTabStatus.tabLichSuTiemSelected">
+                <ng-template kendoTabTitle>
+                    <div kendoTooltip title="Phím tắt: Chưa có">
+                        LỊCH SỬ TIÊM
+                    </div>
+                </ng-template>
+                <ng-template kendoTabContent>
+                    <div class="p-2">
+                        <app-lich-su-tiem [thongTinBenhNhan]="thongTinBenhNhan"></app-lich-su-tiem>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+
+            <kendo-tabstrip-tab *ngIf="isTabThucHienTiemDisplayed && !thongTinBenhNhan.IsKhongTiemChung" [selected]="lstTabStatus.tabThucHienTiemSelected">
+                <ng-template kendoTabTitle>
+                    <div kendoTooltip title="Phím tắt: Chưa có">
+                        THỰC HIỆN TIÊM
+                    </div>
+                </ng-template>
+                <ng-template kendoTabContent>
+                    <div class="p-2">
+                        <app-thuc-hien-tiem-chung 
+                            [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan" 
+                            [isTabThucHienTiemReadOnly]="isTabThucHienTiemReadOnly" 
+                            [isLichSuTiemChung]="isLichSuTiemChung"
+                            [validationErrors]="validationErrors">
+                        </app-thuc-hien-tiem-chung>
+
+                        <div *ngIf="!isTabThucHienTiemReadOnly" kendoTooltip class="sticky-button-action py-3 text-right">
+                            <!-- <button type="button" mat-button mat-raised-button color="warn" class="float-left" (click)="moLaiKhamSangLoc()">
+                                Mở lại khám sàng lọc
+                            </button> -->
+                            <button *ngIf="this.thongTinBenhNhan.CoVacxinChuaTiem" type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Ctrl + S" (click)="luuThucHienTiem()">Lưu
+                            </button>
+                            <button *ngIf="!this.thongTinBenhNhan.CoVacxinChuaTiem" type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Ctrl + H" (click)="luuThucHienTiem(true)">Lưu và hoàn thành tiêm
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+
+            <kendo-tabstrip-tab *ngIf="isTabTheoDoiDisplayed && !thongTinBenhNhan.IsKhongTiemChung" [selected]="lstTabStatus.tabTheoDoiSelected">
+                <ng-template kendoTabTitle>
+                    <div kendoTooltip title="Phím tắt: Chưa có">
+                        THEO DÕI
+                    </div>
+                </ng-template>
+                <ng-template kendoTabContent>
+                    <app-theo-doi-sau-tiem 
+                        [thongTinBenhNhan]="thongTinBenhNhan"
+                        [isPopupLichSuTiemChung]="isPopupLichSuTiemChung">
+                    </app-theo-doi-sau-tiem>
+
+                    <div kendoTooltip class="sticky-button-action py-3 text-right">
+                        <button *ngIf="!isPopupLichSuTiemChung" type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Ctrl + S" (click)="luuTheoDoiSauTiem()">
+                            Lưu
+                        </button>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+
+            <kendo-tabstrip-tab *ngIf="!isLichSuTiemChung && !isPopupLichSuTiemChung" [disabled]="true" cssClass="tab-right-po">
+                <ng-template kendoTabTitle>
+                    Tạm ứng: <b class="so-du-tai-khoan">{{thongTinBenhNhan.YeuCauTiepNhan.SoDuTaiKhoanDisplay}}</b> - Còn lại: <b class="so-du-uoc-luong-con-lai">{{thongTinBenhNhan.YeuCauTiepNhan.SoDuTaiKhoanConLaiDisplay}}</b>
+                </ng-template>
+                <ng-template kendoTabContent>
+                </ng-template>
+            </kendo-tabstrip-tab>
+        </kendo-tabstrip>
+    </div>
+</ng-container>

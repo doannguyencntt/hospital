@@ -1,0 +1,86 @@
+
+<kendo-textbox-container  floatingLabel="{{label}}" [ngClass]="{'required':required}" >
+        <kendo-upload #myUpload="kendoUpload" class="form-control" [ngClass]="(multiple==false) && singleOnRow?'single-on-row':''" id="{{id}}" [disabled]="disabled" name="{{id}}"
+                [(ngModel)]="model" [multiple]="multiple==true?true:false" [batch]="batch" [autoUpload]="autoUpload" [saveUrl]="uploadSaveUrl"
+                [removeUrl]="uploadRemoveUrl" (ngModelChange)="emit($event)" ngControl="model" saveField="multipart/form-data"
+                [restrictions]="uploadRestrictions" (select)="selectEventHandler($event)" (clear)="clearEventHandler($event)"
+                (remove)="removeEventHandler($event)" (upload)="uploadEventHandler($event)" (success)="successEventHandler($event)"
+                (complete)="completeEventHandler($event)" (error)="errorEventHandler($event)" title="{{title}}" style="height:auto;">
+
+
+                <ng-template kendoUploadFileTemplate let-files let-state="state" *ngIf="template && !((multiple==false) && singleOnRow)">
+                    <ng-container *ngTemplateOutlet="template; context:{$implicit: files}"></ng-container>
+                </ng-template>
+                <ng-template kendoUploadFileTemplate let-files let-state="state" *ngIf="(multiple==false) && singleOnRow">
+                    <a kendoTooltip *ngIf="files[0].error" title="{{showButton(state)?files[0].name:'Tải file bị lỗi: '+files[0].error}}"  (click)="viewFile(files[0])" [ngClass]="showButton(state)?'green':'red'" class="custom-name">{{files[0].name}}</a>
+                    <a kendoTooltip *ngIf="!files[0].error" title="{{showButton(state)?files[0].name:'Tải file bị lỗi'}}"  (click)="viewFile(files[0])" [ngClass]="showButton(state)?'green':'red'" class="custom-name">{{files[0].name}}</a>  
+                    <i title="Xóa" class="k-icon k-delete k-i-x" (click)="remove(files[0].uid)" style="margin-top: 3px;cursor: pointer;"></i>                    
+                 </ng-template>
+                <kendo-upload-messages [invalidFiles]="invalidFilesMess" [invalidFileExtension]="invalidFileExtensionMess"
+                [invalidMaxFileSize]="invalidMaxFileSizeMess" [invalidMinFileSize]="invalidMinFileSizeMess"
+                [select]="selectText" headerStatusUploaded="{{(multiple==false) && singleOnRow?'':'Xong'}}" headerStatusUploading="{{(multiple==false) &&singleOnRow?'':'Đang tải lên'}}"></kendo-upload-messages>
+            </kendo-upload>
+<label class="red" [innerHTML]="validationerror"></label> 
+</kendo-textbox-container>
+<!-- <div class="form-row" kendoTooltip>
+    <div class="form-group {{moreClass}} col-sm-12" *ngIf="!horizontalForm">
+        <label for="{{id}}" *ngIf="label!=null && label!=''">{{label}}<span class="text-danger" *ngIf="required">*</span></label>
+
+
+        <div [ngClass]="validationerror!='' && validationerror!=null ?'has-error':''">
+            <kendo-upload #myUpload="kendoUpload" class="form-control" [ngClass]="(multiple=='false' || multiple==false) && singleOnRow?'single-on-row':''" id="{{id}}" [disabled]="disabled" name="{{id}}"
+                [(ngModel)]="model" [multiple]="multiple=='true'?true:false" [batch]="batch" [autoUpload]="autoUpload" [saveUrl]="uploadSaveUrl"
+                [removeUrl]="uploadRemoveUrl" (ngModelChange)="emit($event)" ngControl="model" [saveField]="multipart/form-data"
+                [restrictions]="uploadRestrictions" (select)="selectEventHandler($event)" (clear)="clearEventHandler($event)"
+                (remove)="removeEventHandler($event)" (upload)="uploadEventHandler($event)" (success)="successEventHandler($event)"
+                (error)="errorEventHandler($event)" title="{{title}}" style="height:auto;">
+
+
+                <ng-template kendoUploadFileTemplate let-files let-state="state" *ngIf="template && !((multiple=='false' || multiple==false) && singleOnRow)">
+                    <ng-container *ngTemplateOutlet="template"></ng-container>
+                </ng-template>
+                <ng-template kendoUploadFileTemplate let-files let-state="state" *ngIf="(multiple=='false' || multiple==false) && singleOnRow">
+                    <a *ngIf="files[0].error" title="{{showButton(state)?files[0].name:'Tải file bị lỗi: '+files[0].error}}"  (click)="viewFile(files[0])" [ngClass]="showButton(state)?'green':'red'" class="custom-name">{{files[0].name}}</a>
+                    <a *ngIf="!files[0].error" title="{{showButton(state)?files[0].name:'Tải file bị lỗi'}}"  (click)="viewFile(files[0])" [ngClass]="showButton(state)?'green':'red'" class="custom-name">{{files[0].name}}</a>  
+                    <i title="Xóa" class="k-icon k-delete k-i-x" (click)="remove(myUpload, files[0].uid)" style="margin-top: 3px;cursor: pointer;"></i>                    
+                 </ng-template>
+                <kendo-upload-messages [invalidFiles]="invalidFilesMess" [invalidFileExtension]="invalidFileExtensionMess"
+                [invalidMaxFileSize]="invalidMaxFileSizeMess" [invalidMinFileSize]="invalidMinFileSizeMess"
+                [select]="selectText" headerStatusUploaded="{{(multiple=='false' || multiple==false) && singleOnRow?'':'Xong'}}" headerStatusUploading="{{(multiple=='false' || multiple==false) &&singleOnRow?'':'Đang tải lên'}}"></kendo-upload-messages>
+            </kendo-upload>
+        </div>
+    </div>
+
+    <div class="{{moreClass}}" *ngIf="horizontalForm">
+        <label for="{{id}}" *ngIf="label!=null && label!=''" class="{{classLabel}} col-form-label">{{label}}<span class="text-danger" *ngIf="required">*</span></label>
+        <div class="{{classField}}" [ngClass]="validationerror!='' && validationerror!=null ?'has-error':''">
+            <kendo-upload #myUpload="kendoUpload" class="form-control"  [ngClass]="(multiple=='false' || multiple==false) && singleOnRow?'single-on-row':''" id="{{id}}" [disabled]="disabled" name="{{id}}"
+                [(ngModel)]="model" [multiple]="multiple=='true'?true:false" [batch]="batch" [autoUpload]="autoUpload" [saveUrl]="uploadSaveUrl"
+                [removeUrl]="uploadRemoveUrl" (ngModelChange)="emit($event)" ngControl="model" [saveField]="multipart/form-data"
+                [restrictions]="uploadRestrictions" (select)="selectEventHandler($event)" (clear)="clearEventHandler($event)"
+                (remove)="removeEventHandler($event)" (upload)="uploadEventHandler($event)" (success)="successEventHandler($event)"
+                (error)="errorEventHandler($event)" title="{{title}}">
+                <ng-template kendoUploadFileTemplate let-files let-state="state" *ngIf="template && !((multiple=='false' || multiple==false) && singleOnRow)">
+                    <ng-container *ngTemplateOutlet="template"></ng-container>
+                </ng-template>
+                <ng-template kendoUploadFileTemplate let-files="file" let-state="state" *ngIf="(multiple=='false' || multiple==false) && singleOnRow">                        
+                    <a *ngIf="files[0].error" title="{{showButton(state)?files[0].name:'Tải file bị lỗi: '+files[0].error}}"  (click)="viewFile(files[0])" [ngClass]="showButton(state)?'green':'red'" class="custom-name">{{files[0].name}}</a>
+                    <a *ngIf="!files[0].error" title="{{showButton(state)?files[0].name:'Tải file bị lỗi'}}"  (click)="viewFile(files[0])" [ngClass]="showButton(state)?'green':'red'" class="custom-name">{{files[0].name}}</a>  
+                    <i title="Xóa" class="k-icon k-delete k-i-x" (click)="remove(myUpload, files[0].uid)" style="margin-top: 3px;cursor: pointer;"></i>                    
+                 </ng-template>
+                <kendo-upload-messages [invalidFiles]="invalidFilesMess" [invalidFileExtension]="invalidFileExtensionMess"
+                [invalidMaxFileSize]="invalidMaxFileSizeMess" [invalidMinFileSize]="invalidMinFileSizeMess"
+                [select]="selectText" headerStatusUploaded="{{(multiple=='false' || multiple==false) &&singleOnRow?'':'Xong'}}" headerStatusUploading="{{(multiple=='false' || multiple==false) &&singleOnRow?'':'Đang tải lên'}}"></kendo-upload-messages>
+            </kendo-upload>
+            
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="alert alert-danger alert-dismissible fade show mt-n-15" role="alert" *ngIf="validationerror!='' && validationerror!=null">
+            <div [innerHTML]="validationerror"></div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="validationerror='' && validationerror!=null">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+</div> -->

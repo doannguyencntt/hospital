@@ -1,0 +1,63 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between">
+    <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="mb-1">
+
+            <app-combobox id="DanhMucChuanDoan" fxFlex="25%" fxFlex.sm="50%" label="Nhóm Chẩn đoán"
+                url="ChuanDoan/GetDanhMucChuanDoan" [(model)]="chuanDoan.DanhMucChuanDoanId"
+                [modelText]="chuanDoan.DanhMucChuanDoanName" class="item-no-padding" [template]="nhomChuanDoanTemplate"
+                [templateHeader]="nhomChuanDoanTemplateHeader" [required]="true"
+                [validationerror]="'DanhMucChuanDoanId' | validationerror:validationErrors">
+                <ng-template #nhomChuanDoanTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="50%">Tên Tiếng Việt</th>
+                            <th width="50%">Tên Tiếng Anh</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #nhomChuanDoanTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="50%">{{dataItem.TenTiengViet}}</td>
+                            <td width="50%">{{dataItem.TenTiengAnh}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+            <app-textbox id="Ma" fxFlex="25%" fxFlex.sm="70%" [required]="true" [(model)]="chuanDoan.Ma" label="Mã" maxlength="20"
+                 [validationerror]="'Ma' | validationerror:validationErrors">
+            </app-textbox>
+            <app-textbox id="TenTiengViet" fxFlex="25%" fxFlex.sm="70%" [required]="true" maxlength="250"
+                [(model)]="chuanDoan.TenTiengViet" label="Tên Tiếng Việt" maxlength="200"
+                [validationerror]="'TenTiengViet' | validationerror:validationErrors">
+            </app-textbox>
+            <app-textbox id="TenTiengAnh" fxFlex="25%" fxFlex.sm="70%" [required]="true" maxlength="250"
+                [(model)]="chuanDoan.TenTiengAnh" label="Tên Tiếng Anh" maxlength="200" 
+                [validationerror]="'TenTiengAnh' | validationerror:validationErrors">
+            </app-textbox>
+            
+            <app-multiselect id="ChuanDoanLienKetICD" fxFlex="100%" fxFlex.sm="100%"  [(model)]="chuanDoan.ChuanDoanLienKetICDIds"
+                [modelText]="" label="Chẩn đoán Liên Kết ICD" class="item-no-padding" [template]="chuyenKhoaTemplate"
+                [templateHeader]="chuyenKhoaTemplateHeader" url="ChuanDoan/GetChuanDoanLienKetICD"
+                [validationerror]="'Id' | validationerror:validationErrors">
+                <ng-template #chuyenKhoaTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="20%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #chuyenKhoaTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="20%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.TenTiengViet}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-multiselect>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>XEM TRƯỚC KHI IN</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <div style="overflow-y: auto;max-height: 553px;">
+        <!-- PHIẾU THU -->
+        <table class="table table-border" width="100%">
+            <tr style="background: #005dab;color:#fff;">
+                <th>PHIẾU KẾT QUẢ XÉT NGHIỆM</th>
+            </tr>
+            <tr *ngFor="let item of srcData; let i = index">
+                <td style="padding: 0;">
+                    <div class="container-iframe">
+                        <iframe width="100%" [src]="item|safe" allowTransparency="true"
+                            background="transparent"></iframe>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <app-print-form textPrint="IN PHIẾU KẾT QUẢ XÉT NGHIỆM" type="PDF" [event]="19" typeSize="A4" typeLayout="landscape"
+        (click)="InPhieu('InPhieuThuBenhNhanTraTien')" [bodyComponent]="this">
+    </app-print-form>
+</mat-dialog-actions>

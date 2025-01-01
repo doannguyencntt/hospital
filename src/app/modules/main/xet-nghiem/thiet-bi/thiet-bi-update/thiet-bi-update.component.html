@@ -1,0 +1,26 @@
+<app-header-form [crumbs]="[
+    {Title:'Xét Nghiệm',Path:''}
+    ,{Title:'Thiết Bị Xét Nghiệm',Path:'/xet-nghiem/thiet-bi', queryParams: {holdQuery : true},Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chỉnh Sửa Thiết Bị Xét Nghiệm</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-thiet-bi-shared>
+                </app-thiet-bi-shared>
+
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <app-formfooter [bodyComponent]="shared" type="update" (updated)="onUpdated()" (validateClient)="onValidate($event)">
+                    </app-formfooter>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-radio *ngIf="thongTinBenhNhan.TrangThaiPhauThuatThuThuat !== enumTrangThaiPhauThuatThuThuat.TheoDoi" fxFlex="100%" fxFlex.sm="100%" id="ket-luan" name="ketLuan" label="Tình trạng"
+        [items]="radioKetLuan" [(model)]="theoDoiSauPhauThuatThuThuat.TrangThaiPhauThuatThuThuat" (modelChange)="onDataChange($event)" [disabled]="thongTinBenhNhan.IsTuongTrinhLai">
+    </app-radio>
+    <app-radio *ngIf="thongTinBenhNhan.TrangThaiPhauThuatThuThuat === enumTrangThaiPhauThuatThuThuat.TheoDoi" [disabled]="true" fxFlex="100%" fxFlex.sm="100%" id="ket-luan" name="ketLuan" label="Tình trạng"
+        [items]="radioKetLuan" [(model)]="theoDoiSauPhauThuatThuThuat.TrangThaiPhauThuatThuThuat">
+    </app-radio>
+
+    <ng-container *ngIf="theoDoiSauPhauThuatThuThuat.TrangThaiPhauThuatThuThuat === enumTheoDoi.TheoDoi">
+        <app-combobox id="bac-si-phu-trach" class="item-no-padding" fxFlex="25%" label="Bác sĩ phụ trách" url="PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh={{enumBacSiPhuTrach}}"
+            [(model)]="theoDoiSauPhauThuatThuThuat.BacSiPhuTrachTheoDoiId" [modelText]="theoDoiSauPhauThuatThuThuat.BacSiPhuTrachTheoDoiDisplay" (modelChange)="onDataChange($event)"
+            [required]="true" [popupSettings]="null" [disabled]="thongTinBenhNhan.IsTuongTrinhLai"
+            [validationerror]="'BacSiPhuTrachTheoDoiId' | validationerror: validationErrors">
+        </app-combobox>
+
+        <app-combobox id="dieu-duong-phu-trach" class="item-no-padding" fxFlex="25%" label="Điều dưỡng phụ trách" url="PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh={{enumDieuDuongPhuTrach}}"
+            [(model)]="theoDoiSauPhauThuatThuThuat.DieuDuongPhuTrachTheoDoiId" [modelText]="theoDoiSauPhauThuatThuThuat.DieuDuongPhuTrachTheoDoiDisplay" (modelChange)="onDataChange($event)"
+            [required]="true" [popupSettings]="null" [disabled]="thongTinBenhNhan.IsTuongTrinhLai"
+            [validationerror]="'DieuDuongPhuTrachTheoDoiId' | validationerror: validationErrors">
+        </app-combobox>
+
+        <app-datetimepicker id="thoi-gian-theo-doi" class="item-no-padding" fxFlex="25%" label="Thời gian theo dõi từ"
+            [formatDate]="'dd/MM/yyyy HH:mm'" [required]="true" [disabled]="thongTinBenhNhan.IsTuongTrinhLai"
+            [(model)]="theoDoiSauPhauThuatThuThuat.ThoiDiemBatDauTheoDoi" (modelChange)="onDataChange($event)"
+            [validationerror]="'ThoiDiemBatDauTheoDoi' | validationerror: validationErrors">
+        </app-datetimepicker>
+
+        <app-datetimepicker id="thoi-gian-theo-doi" class="item-no-padding" fxFlex="25%" label="Thời gian theo dõi đến"
+            [formatDate]="'dd/MM/yyyy HH:mm'" [required]="true" [disabled]="thongTinBenhNhan.IsTuongTrinhLai"
+            [(model)]="theoDoiSauPhauThuatThuThuat.ThoiDiemKetThucTheoDoi" (modelChange)="onDataChange($event)"
+            [validationerror]="'ThoiDiemKetThucTheoDoi' | validationerror: validationErrors">
+        </app-datetimepicker>
+    </ng-container>
+
+    <app-textarea id="trinh-tu-pttt" fxFlex="100%" fxFlex.sm="100%" maxlength="4000" label="Ghi chú"
+        [(model)]="theoDoiSauPhauThuatThuThuat.GhiChuTheoDoi" (modelChange)="onDataChange($event)"
+        [disabled]="thongTinBenhNhan.IsTuongTrinhLai"
+        [validationerror]="'GhiChuTheoDoi' | validationerror: validationErrors">
+    </app-textarea>
+    <!-- <app-textarea id="trinh-tu-pttt" fxFlex="100%" fxFlex.sm="100%" maxlength="5000" label="Ghi chú"
+        [useVoice]="true" [(model)]="theoDoiSauPhauThuatThuThuat.GhiChuTheoDoi" (modelChange)="onDataChange($event)">
+    </app-textarea> -->
+</div>

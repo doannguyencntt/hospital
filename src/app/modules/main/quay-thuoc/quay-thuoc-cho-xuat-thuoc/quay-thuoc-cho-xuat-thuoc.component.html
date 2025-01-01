@@ -1,0 +1,42 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-grid *ngIf="dataSourcedanhsachThuocBHYT.data.length>0" fxFlex="100%" [gridColumns]="gridColumns"
+        [gridDataSource]="dataSourcedanhsachThuocBHYT" [autoHeight]="true" [lazyLoadPage]="false"
+        [useActionDefault]="false" [useAddDeault]="false" [useHeaderDefault]="false" [allowSortDefault]="false"
+        [pageable]="false" [headerTemplate]="headerTemplate" useActionDefault="false" [checkboxAble]="false"
+        [lazyLoadPage]="true">
+        <ng-template #headerTemplate>
+            <div class="px-2 py-2" style="background: burlywood;overflow: hidden;">
+                <h4 style="font-weight: bold;float: left;line-height: 36px;">THUỐC BHYT- VẬT TƯ</h4>
+                <button type="button" (click)="KeThuoc()" style="float: right;" mat-raised-button>
+                    In kê thuốc</button>
+            </div>
+        </ng-template>
+    </app-grid>
+    <app-grid *ngIf="dataSourcedanhsachThuocKhongBHYT.data.length>0" fxFlex="100%" [gridColumns]="gridColumns"
+        [gridDataSource]="dataSourcedanhsachThuocKhongBHYT" [autoHeight]="true" [lazyLoadPage]="false"
+        [useActionDefault]="false" [headerTemplate]="headerTemplate1" [useAddDeault]="false" [useHeaderDefault]="false"
+        [allowSortDefault]="false" [pageable]="false" useActionDefault="false" [checkboxAble]="false"
+        [lazyLoadPage]="true">
+        <ng-template #headerTemplate1>
+            <div class="px-2 py-2" style="background: lightblue;">
+                <h4 style="font-weight: bold;">THUỐC KHÔNG BHYT-VẬT TƯ</h4>
+
+            </div>
+        </ng-template>
+    </app-grid>
+    <p *ngIf="dataSourcedanhsachThuocKhongBHYT.data.length == 0 && dataSourcedanhsachThuocBHYT.data.length == 0"
+        class="m-0 p-0"><strong>Không có dược phẩm nào chờ xuất</strong></p>
+    <ng-template #donGiaTemplate let-dataItem>
+        <span> {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+
+    <ng-template #thanhTienTemplate let-dataItem>
+        <span> {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+
+</div>
+<br>
+<div *ngIf="dataSourcedanhsachThuocBHYT.data.length>0 || dataSourcedanhsachThuocKhongBHYT.data.length>0">
+    <button type="button" color="primary" (click)="GuiData()" class="mr-1 float-right" mat-raised-button>
+        Xuất thuốc</button>
+</div>

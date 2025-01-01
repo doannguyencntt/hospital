@@ -1,0 +1,32 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Nhóm Hệ Thống',Path:''}
+                    ,{Title:'Bệnh Viện',Path:''}
+                    ,{Title:'Chẩn đoán',Path:'/danh-muc/nhom-he-thong/benh-vien/chuan-doan',Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/nhom-he-thong/benh-vien/chuan-doan" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useAddDeault]="true" [useHeaderDefault]="true" [useActionDefault]="true"
+                [checkboxAble]="false" [detailTemplate]="detailTemplate" [lazyLoadPage]="true" [showExportExcel]="true"
+                (extExportExcel)="exportExcel()" #chanDoanGridCha>
+            </app-grid>
+            <ng-template #detailTemplate let-dataItem>
+                <app-grid baseRoute="danh-muc/nhom-he-thong/benh-vien/chuan-doan" [gridColumns]="gridChildColumns"
+                    [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+                    [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                    [urlGetData]="urlGetDataGridChild" [urlGetTotalPage]="urlGetTotalPageGridChild"
+                    searchString="{{dataItem.Id}}" [autoHeight]="true" [pageable]="false">
+                </app-grid>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

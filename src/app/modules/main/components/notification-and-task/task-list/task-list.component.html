@@ -1,0 +1,29 @@
+<section id="basic-badges">
+    <div class="row text-left">
+        <div class="col-sm-12">
+            <span class="content-header mt-1">Danh sách công việc</span>
+        </div>
+    </div>
+    <div class="row text-left" matchHeight="card">
+        <div class="col-12 col-sm-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <app-grid baseRoute="quan-ly-thong-bao-va-cong-viec" [gridColumns]="gridColumns" [documentType]="documentType" [gridDataSource]=" "
+                        [lazyLoadPage]="true" [useActionDefault]="false" [useAddDeault]="false">
+                    </app-grid>
+                    
+                    
+                    <ng-template #actionTemplate let-dataItem>
+                        <div class="text-center" kendoTooltip >
+                            <button (click)="xemCongViec(dataItem.Id, dataItem.Link, dataItem.IsRead)" title="Xem chi tiết"
+                            class="btn btn-raised btn-primary btn-min-width mr-1 mb-0"><i class="ft-list"></i></button>
+                        </div>
+                    </ng-template>
+                    <ng-template #dateTemplate let-dataItem>
+                      {{dataItem.CreatedOnFormat}}
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>

@@ -1,0 +1,44 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Báo Cáo', Path:''}
+                    ,{Title:'Báo Cáo Kết Quả Khám Chữa Bệnh', Path:''}
+                    ,{Title:'Kết Quả Khám Chữa Bệnh', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-datetimepicker id="tuNgay" fxFlex="15%" fxFlex.sm="15%" [(model)]="timKiemNangCaoObj.TuNgayDenNgay.startDate"
+                    label="Từ ngày" class="mt-1 on-header"
+                    [validationerror]="'TuNgay' | validationerror:validationErrors">
+                </app-datetimepicker>
+                <app-datetimepicker id="denNgay" fxFlex="15%" fxFlex.sm="15%" label="Đến ngày" class="mt-1 on-header"
+                    [(model)]="timKiemNangCaoObj.TuNgayDenNgay.endDate"
+                    [validationerror]="'DenNgay' | validationerror:validationErrors">
+                </app-datetimepicker>
+                <div fxFlex="70%" fxFlex.sm="70%" class="pb-0">
+                    <!-- <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button> -->
+                    <!-- <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="InbaoCao()" style="float: right;" *ngIf="showPrintExport">In Báo cáo</button> -->
+                        <!-- *ngIf="showPrintExport" -->
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XuatBaoCao()" style="float: right;" >Xuất Excel</button>
+                </div>
+                <div fxFlex="100%">
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0"
+                        *ngFor="let item of columnsTitleTable">
+                        <div [innerHTML]="item.Html"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

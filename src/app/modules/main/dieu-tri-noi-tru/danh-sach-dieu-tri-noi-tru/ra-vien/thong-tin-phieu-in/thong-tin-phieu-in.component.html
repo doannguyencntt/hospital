@@ -1,0 +1,30 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>XEM TRƯỚC KHI IN</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div style="overflow-y: auto;">
+        <table class="table table-border" width="100%">
+            <tr style="background: #005dab;color:#fff;">
+                <th>TỔNG KẾT BỆNH ÁN</th>
+            </tr>
+            <tr>
+                <td style="padding: 0;">
+                    <div class="container-iframe">
+                        <iframe width="100%" [src]="srcPhieuInBA|safe" allowTransparency="true"
+                            background="transparent"></iframe>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <app-print-form textPrint="IN PHIẾU BỆNH ÁN" type="PDF" [event]="19" typeSize="A4"
+        [bodyComponent]="this">
+    </app-print-form>
+</mat-dialog-actions>

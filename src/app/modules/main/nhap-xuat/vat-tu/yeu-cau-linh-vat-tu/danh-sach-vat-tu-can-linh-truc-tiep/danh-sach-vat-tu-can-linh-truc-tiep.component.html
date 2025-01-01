@@ -1,0 +1,88 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs  [crumbs]="[
+            {Title:'Nhập xuất',Path:''}
+            ,{Title:'Vật tư',Path:''}
+            ,{Title:'Yêu cầu lĩnh vật tư',Path:'/nhap-xuat/vat-tu/yeu-cau-linh-vat-tu'}
+            ,{Title:'Vật tư cần lĩnh trực tiếp',Path:'',Active:true}
+            ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15" style="overflow: hidden;">
+            <app-grid baseRoute="" #grid [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+                [lazyLoadPage]="false" [useHeaderDefault]="false" [headerTemplate]="headerTemplate" heightToolbar="150"
+                [checkboxAble]="false" [pageable]="false"  [detailTemplate]="detailChildTemplate" [groups]="groups"
+                [urlGetData]="urlGetDataGrid" [additionalSearchString]="additionalSearchString" (extOnDataBound)="extOnDataBound($event)">
+            </app-grid>
+      
+            <!-- <ng-template #detailTemplate let-dataItem>                
+                <app-grid [gridColumns]="gridChildLevel2Columns" [documentType]="documentType" [useAddDeault]="false"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" pageSize="5" 
+                    [urlGetData]="urlGetDataGridChildLevel1" [urlGetTotalPage]="urlGetTotalPageGridChildLevel1"
+                    additionalSearchString="{'KhoLinhId':{{dataItem.KhoLinhId}},'PhongLinhVeId':{{dataItem.PhongLinhVeId}}}" 
+                    [lazyLoadPage]="true" [autoHeight]="true" [detailTemplate]="detailChildTemplate">
+                </app-grid>
+            </ng-template> -->
+            <ng-template #detailChildTemplate let-dataItem1>
+                <app-grid [gridColumns]="gridChildLevel1Columns" [documentType]="documentType" [useAddDeault]="false"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" pageSize="5"
+                    [urlGetData]="urlGetDataGridChildLevel2" [urlGetTotalPage]="urlGetTotalPageGridChildLevel2"
+                    additionalSearchString="{'KhoLinhId':{{dataItem1.KhoLinhId}},'YeuCauTiepNhanId':{{dataItem1.YeuCauTiepNhanId}}}"
+                    [lazyLoadPage]="true" [autoHeight]="true" >
+                </app-grid>
+            </ng-template>
+        <ng-template #headerTemplate>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">            
+               
+                <app-combobox id="linhTuKho" fxFlex="15%" fxFlex.sm="25%" url="YeuCauLinhVatTu/GetTatCakhoLinhTuCuaNhanVienLoginLinhTrucTiep"
+                    [(model)]="vatTuCanLinhTrucTiepSearch.KhoLinhId" label="Lĩnh từ kho" class="mt-1 on-header"
+                    (modelChange)="search($event)">
+                </app-combobox>
+                <!-- <app-combobox id="linhVeKho" fxFlex="15%" fxFlex.sm="25%" class="mt-1 on-header"
+                    [(model)]="vatTuCanLinhTrucTiepSearch.PhongLinhVeId" url="YeuCauLinhVatTu/GetTatCaPhongLinhVeCuaNhanVienLoginLinhTrucTiep" label="Lĩnh về phòng"
+                    (modelChange)="search($event)">
+                </app-combobox> -->
+                
+                <!-- <button (click)="exportExcel()" style="margin-left: auto;" mat-icon-button
+                    kendoTooltip title="Xuất Excel" type="button">
+                    <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                </button>       -->
+            </div>
+        </ng-template>   
+        
+        <ng-template #actionTemplate  let-dataItem>
+            <button *ngIf="dataItem.KhoLinhId>0" (click)="taoPhieuLinh(dataItem)" color="primary"  mat-raised-button  type="button">
+                    Tạo phiếu lĩnh
+                </button> 
+        </ng-template> 
+        <ng-template #slTonTemplate  let-dataItem>
+            {{dataItem.SoLuongTon| number}}
+         </ng-template> 
+         <ng-template #slYCTonTemplate  let-dataItem>
+             {{dataItem.SoLuongYeuCau| number}}
+          </ng-template> 
+          <ng-template #sLTemplate  let-dataItem>
+             {{dataItem.SoLuong| number}}
+          </ng-template> 
+        <ng-template #STTTemplate let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+        <ng-template #tinhTrangTonTemplate  let-dataItem>
+           <p class="red" *ngIf="dataItem.TinhTrangTon==false">Không đủ tồn</p>
+           <p class="green" *ngIf="dataItem.TinhTrangTon==true">Đủ tồn</p>
+        </ng-template> 
+        
+    <ng-template #khoLinhGroupHeaderTemplate let-value="value">
+        <div style="position: relative;width:100%"> <strong style="line-height: 35px;">{{value}}</strong><button *ngIf="value!='---Không có kho tồn---'"  type="button" color="primary" class="float-right" (click)="taoPhieuLinh(value)"  mat-raised-button>Tạo phiếu lĩnh</button></div>
+    </ng-template>
+    
+    <ng-template #nhomGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+    
+    </div>
+    </vex-page-layout-content>
+</vex-page-layout>

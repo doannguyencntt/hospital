@@ -1,0 +1,306 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    *ngFor="let item of yeuCauKhamBenh">
+    <!-- <h3 fxFlex="100%"></h3>
+    <div fxFlex="100%"></div>
+    <h3 fxFlex="100%"></h3> -->
+    <label fxFlex="100%" *ngIf="item.TenDichVu != null " ><span style="font-weight: bold;">Tên dịch vụ </span>:{{item.TenDichVu}}</label>
+    <label fxFlex="100%" *ngIf="item.TrieuChungTiepNhan != null" ><span style="font-weight: bold;">Lý do vào viện </span>:{{item.TrieuChungTiepNhan}}</label>
+    <label fxFlex="100%" *ngIf="item.BenhSu != null"><span style="font-weight: bold;">Bệnh sử</span> :{{item.BenhSu}}</label>
+    <label fxFlex="100%" *ngIf="item.NoiGioiThieu != null && !isKhamDoan"><span style="font-weight: bold;">Chẩn đoán của nơi giới thiệu </span>:{{item.NoiGioiThieu}}</label>
+
+
+    <!-- tiền sử bệnh -->
+    <app-lich-su-kham-benh-tien-su-benh fxFlex="100%" [BenhNhan]="BenhNhan">
+    </app-lich-su-kham-benh-tien-su-benh>
+
+    <!-- dị ứng thuốc -->
+    <app-lich-su-kham-benh-di-ung-thuoc fxFlex="100%" [BenhNhan]="BenhNhan">
+    </app-lich-su-kham-benh-di-ung-thuoc>
+
+    <!-- chỉ số sinh tồn -->
+    <app-lich-su-kham-benh-chi-so-sinh-ton [BenhNhan]="BenhNhan" [maTiepNhanBNId]="maTiepNhanBNId">
+    </app-lich-su-kham-benh-chi-so-sinh-ton>
+
+    <!-- khám toàn thân -->
+    <h3 fxFlex="100%" class="sub-title mt-0" *ngIf="!isKhamDoan">Khám toàn thân</h3>
+    <label   *ngIf="thongTinKhamToanThan != null && !isKhamDoan" >Khám toàn thân : {{thongTinKhamToanThan}}</label>
+    <label   *ngIf="thongTinKhamToanThan == null && !isKhamDoan" >Không có khám toàn thân</label>
+
+    <!-- phân loại thể lực -->
+    <ng-container *ngIf="isKhamDoan">
+        <h3 fxFlex="100%" class="sub-title mt-0">Phân loại thể lực</h3>
+        <h3 fxFlex="100%" *ngIf="item.KSKPhanLoaiTheLucString != 'null'" class="sub-title mt-0">{{item.KSKPhanLoaiTheLucString}}</h3>
+    </ng-container>
+
+    <!-- khám các cơ quan -->
+    <h3 fxFlex="100%" class="sub-title mt-0">Khám các cơ quan</h3>
+    <ng-container
+        *ngIf="yeuCauKhamBenh.ThongTinKhamTheoDichVuTemplateObj==null && !isKhamDoan">
+        <label fxFlex="100%" 
+        class="font-weight-bold">Không có khám cơ quan khác</label>
+    </ng-container>
+    <ng-container
+        *ngIf="yeuCauKhamBenh.ThongTinKhamTheoDichVuTemplateObj!=null && yeuCauKhamBenh.ThongTinKhamTheoDichVuTemplateObj.ComponentDynamics!=null && yeuCauKhamBenh.ThongTinKhamTheoDichVuTemplateObj.ComponentDynamics.length>0 && !isKhamDoan">
+        <ng-container *ngFor="let item of yeuCauKhamBenh.ThongTinKhamTheoDichVuTemplateObj.ComponentDynamics">
+            <ng-container *ngIf="item.Type == 4 && item.groupItems != undefined && item.groupItems.length > 0">
+                <div fxFlex="100%" class="row ml-1 mb-2">
+                    <fieldset fxFlex="100%">
+                        <legend>{{item.Label}}</legend>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                            <ng-container *ngFor="let itemInGroup of item.groupItems">
+                                <h3 *ngIf="itemInGroup.Type==1" fxFlex="20%" class="sub-title">{{itemInGroup.Label}}
+                                </h3>
+                                <label fxFlex="100%" *ngIf="itemInGroup.Type==2"><span style="font-weight: bold;">{{itemInGroup.Label}} </span>:
+                                    {{itemInGroup.Value}}</label>
+                                <label fxFlex="100%" *ngIf="itemInGroup.Type==3"><span style="font-weight: bold;">{{itemInGroup.Label}}</span> :
+                                    {{itemInGroup.Value}}</label>
+                            </ng-container>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-container>
+            <ng-container
+                *ngIf="item.groupItems == undefined || item.groupItems == null || item.groupItems.length == 0">
+                <h3 *ngIf="item.Type==1" fxFlex="20%" class="sub-title">{{item.Label}}</h3>
+                <label fxFlex="100%" *ngIf="item.Type==2"><span style="font-weight: bold;">{{item.Label}} :</span> {{item.Value}}</label>
+                <label fxFlex="100%" *ngIf="item.Type==3"><span style="font-weight: bold;">{{item.Label}} :</span> {{item.Value}}</label>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="dataKhamDoanChuyenKhoa != null && dataKhamDoanChuyenKhoa.ListNoiKhoa.length != 0 && isKhamDoan">
+        <label style="font-weight: bold;font-size: 18px;text-transform: uppercase;"> Nội Khoa</label>
+        <ng-container *ngFor="let item of dataKhamDoanChuyenKhoa.ListNoiKhoa">
+            <div fxFlex="100%" class="row ml-1 mb-2">
+             <label><span style="font-weight: bold;">{{item.TenTemplate}}</span> &nbsp;&nbsp;{{item.Ten}}</label>
+            </div>
+        </ng-container>
+    </ng-container>
+    
+    <ng-container *ngIf="dataKhamDoanChuyenKhoa != null && dataKhamDoanChuyenKhoa.ListNoiKhoa.length == 0 && isKhamDoan">
+        <label style="font-weight: bold;font-size: 18px;text-transform: uppercase;">  Nội Khoa</label>
+        <ng-container>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Tuần hoàn:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Phân loại:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Hô hấp:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Phân loại:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Tiêu hóa:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Phân loại:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Thận-tiết niệu:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Phân loại:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Nội tiết:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Phân loại:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Cơ-Xương-Khớp:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Phân loại:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Thần kinh:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Phân loại:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Tâm thần:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Phân loại:</span> &nbsp;&nbsp;</label>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="dataKhamDoanChuyenKhoa != null && dataKhamDoanChuyenKhoa.ListNgoaiKhoa.length == 0 && isKhamDoan">
+        <label style="font-weight: bold;font-size: 18px;text-transform: uppercase;"> Ngoại khoa</label>
+        <ng-container>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+             <label><span style="font-weight: bold;">Ngoại Khoa:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Phân loại:</span> &nbsp;&nbsp;</label>
+            </div>
+        </ng-container>
+    </ng-container>
+
+
+    <ng-container *ngIf="dataKhamDoanChuyenKhoa != null && dataKhamDoanChuyenKhoa.ListNgoaiKhoa.length != 0 && isKhamDoan">
+        <label style="font-weight: bold;font-size: 18px;text-transform: uppercase;"> Ngoại khoa</label>
+        <ng-container *ngFor="let item of dataKhamDoanChuyenKhoa.ListNgoaiKhoa">
+            <div fxFlex="100%" class="row ml-1 mb-2">
+             <label><span style="font-weight: bold;">{{item.TenTemplate}}</span> &nbsp;&nbsp;{{item.Ten}}</label>
+            </div>
+        </ng-container>
+    </ng-container>
+
+
+    <ng-container *ngIf="dataKhamDoanChuyenKhoa != null && dataKhamDoanChuyenKhoa.ListSanPhuKhoa.length != 0 && isKhamDoan">
+        <label style="font-weight: bold;font-size: 18px;text-transform: uppercase;"> Sản phụ khoa</label>
+        <ng-container *ngFor="let item of dataKhamDoanChuyenKhoa.ListSanPhuKhoa">
+            <div fxFlex="100%" class="row ml-1 mb-2">
+             <label><span style="font-weight: bold;">{{item.TenTemplate}}</span> &nbsp;&nbsp;{{item.Ten}}</label>
+            </div>
+            
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="dataKhamDoanChuyenKhoa != null && dataKhamDoanChuyenKhoa.ListSanPhuKhoa.length == 0 && isKhamDoan">
+        <label style="font-weight: bold;font-size: 18px;text-transform: uppercase;"> Sản phụ khoa</label>
+        <ng-container>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+             <label><span style="font-weight: bold;">Sản phụ khoa:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Phân loại:</span> &nbsp;&nbsp;</label>
+            </div>
+        </ng-container>
+    </ng-container>
+
+
+    <ng-container *ngIf="dataKhamDoanChuyenKhoa != null && dataKhamDoanChuyenKhoa.ListDaLieu.length != 0 && isKhamDoan">
+        <label style="font-weight: bold;font-size: 18px;text-transform: uppercase;"> Da liễu</label>
+        <ng-container *ngFor="let item of dataKhamDoanChuyenKhoa.ListDaLieu">
+            <div fxFlex="100%" class="row ml-1 mb-2">
+             <label><span style="font-weight: bold;">{{item.TenTemplate}}</span> &nbsp;&nbsp;{{item.Ten}}</label>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="dataKhamDoanChuyenKhoa != null && dataKhamDoanChuyenKhoa.ListDaLieu.length == 0 && isKhamDoan">
+        <label style="font-weight: bold;font-size: 18px;text-transform: uppercase;"> Da liễu</label>
+        <ng-container >
+            <div fxFlex="100%" class="row ml-1 mb-2">
+             <label><span style="font-weight: bold;">Da liễu:</span> &nbsp;&nbsp;</label>
+            </div>
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;">Phân loại:</span> &nbsp;&nbsp;</label>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="dataKhamDoanChuyenKhoa != null && dataKhamDoanChuyenKhoa.Mat != null  && isKhamDoan">
+        <label style="font-weight: bold;font-size: 18px;text-transform: uppercase;"> Mắt</label>
+        <ng-container >
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;" fxFlex="50%">Không kính</span> &nbsp;&nbsp;</label>
+                <label><span style="font-weight: bold;" fxFlex="25%">Mắt phải:</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.Mat.KhongKinhMatPhai}}</label>
+                <label><span style="font-weight: bold;" fxFlex="25%">Mắt trái</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.Mat.KhongKinhMatTrai}}</label>
+                <label><span style="font-weight: bold;" fxFlex="100%"></span> &nbsp;&nbsp;</label>
+                <label><span style="font-weight: bold;" fxFlex="50%">Có kính</span> &nbsp;&nbsp;</label>
+                <label><span style="font-weight: bold;" fxFlex="25%">Mắt phải:</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.Mat.CoKinhMatPhai}}</label>
+                <label><span style="font-weight: bold;" fxFlex="25%">Mắt trái</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.Mat.CoKinhMatTrai}}</label>
+           </div>
+           <div fxFlex="100%" class="row ml-1 mb-2">
+            <label><span style="font-weight: bold;" fxFlex="50%">Các bệnh về mắt(nếu có):</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.Mat.CacBenhVeMat}}</label>
+            <label><span style="font-weight: bold;" fxFlex="50%">Phân loại:</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.Mat.PhanLoai}}</label>
+           </div>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="dataKhamDoanChuyenKhoa != null && dataKhamDoanChuyenKhoa.TaiMuiHong != null  && isKhamDoan">
+        <label style="font-weight: bold;font-size: 18px;text-transform: uppercase;"> Tai mũi họng</label>
+        <ng-container >
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;"  fxFlex="50%">Tai phải</span> &nbsp;&nbsp;</label>
+                <label><span style="font-weight: bold;" fxFlex="50%">Nói thường:</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.TaiMuiHong.TaiPhaiNoiThuong}}</label>
+                <label><span style="font-weight: bold;" fxFlex="50%">Nói thường</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.TaiMuiHong.TaiTraiNoiThuong}}</label>
+                <label><span style="font-weight: bold;" fxFlex="50%"></span> &nbsp;&nbsp;</label>
+                <label><span style="font-weight: bold;" fxFlex="50%">Tai trái</span> &nbsp;&nbsp;</label>
+                <label><span style="font-weight: bold;" fxFlex="50%">Nói thầm:</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.TaiMuiHong.TaiPhaiNoiTham}}</label>
+                <label><span style="font-weight: bold;" fxFlex="50%">Nói thầm</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.TaiMuiHong.TaiTraiNoiTham}}</label>
+           </div>
+           <div fxFlex="100%" class="row ml-1 mb-2">
+            <label><span style="font-weight: bold;" fxFlex="50%">Các bệnh về tai mũi họng(nếu có):</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.TaiMuiHong.CacBenhTaiMuiHong}}</label>
+            <label><span style="font-weight: bold;" fxFlex="50%">Phân loại:</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.TaiMuiHong.PhanLoai}}</label>
+           </div>
+        </ng-container>
+    </ng-container>
+    
+
+    <ng-container *ngIf="dataKhamDoanChuyenKhoa != null && dataKhamDoanChuyenKhoa.RangHamMat != null  && isKhamDoan">
+        <label style="font-weight: bold;font-size: 18px;text-transform: uppercase;"> Răng hàm mặt</label>
+        <ng-container >
+            <div fxFlex="100%" class="row ml-1 mb-2">
+                <label><span style="font-weight: bold;"  fxFlex="50%">Hàm trên</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.RangHamMat.HamTren}}</label>
+                <label><span style="font-weight: bold;" fxFlex="50%">Hàm dưới:</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.RangHamMat.HamDuoi}}</label>
+           </div>
+           <div fxFlex="100%" class="row ml-1 mb-2">
+            <label><span style="font-weight: bold;"  fxFlex="50%">Các bệnh răng hàm mặt(nếu có):</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.RangHamMat.CacBenhRangHamMat}}</label>
+            <label><span style="font-weight: bold;"  fxFlex="50%">Phân loại:</span> &nbsp;&nbsp;{{dataKhamDoanChuyenKhoa.RangHamMat.PhanLoai}}</label>
+           </div>
+        </ng-container>
+    </ng-container>
+    <!-- <ng-container
+        *ngIf="yeuCauKhamBenh.ThongTinKhamTheoDichVuTemplateObj!=null && yeuCauKhamBenh.ThongTinKhamTheoDichVuTemplateObj.ComponentDynamics!=null && yeuCauKhamBenh.ThongTinKhamTheoDichVuTemplateObj.ComponentDynamics.length>0 && isKhamDoan">
+        <ng-container *ngFor="let item of yeuCauKhamBenh.ThongTinKhamTheoDichVuTemplateObj.ComponentDynamics">
+            <ng-container *ngIf="item.Type == 4 && item.groupItems != undefined && item.groupItems.length > 0">
+                <div fxFlex="100%" class="row ml-1 mb-2">
+                    <fieldset fxFlex="100%">
+                        <legend>{{item.Label}}</legend>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                            <ng-container *ngFor="let itemInGroup of item.groupItems">
+                                <h3 *ngIf="itemInGroup.Type==1" fxFlex="20%" class="sub-title">{{itemInGroup.Label}}
+                                </h3>
+                                <label fxFlex="100%" *ngIf="itemInGroup.Type==2"><span
+                                        style="font-weight: bold;">{{itemInGroup.Label}} </span>:
+                                    {{itemInGroup.Value}}</label>
+                                <label fxFlex="100%" *ngIf="itemInGroup.Type==3"><span
+                                        style="font-weight: bold;">{{itemInGroup.Label}}</span> :
+                                    {{itemInGroup.Value}}</label>
+                                <label fxFlex="100%" *ngIf="itemInGroup.Type==5"><span
+                                        style="font-weight: bold;">{{itemInGroup.Label}}</span> :
+                                    {{itemInGroup.Value}}</label>
+                            </ng-container>
+                        </div>
+                    </fieldset>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="item.groupItems == undefined || item.groupItems == null || item.groupItems.length == 0">
+                <h3 *ngIf="item.Type==1" fxFlex="20%" class="sub-title">{{item.Label}}</h3>
+                <label fxFlex="100%" *ngIf="item.Type==2"><span style="font-weight: bold;">{{item.Label}} :</span>
+                    {{item.Value}}</label>
+                <label fxFlex="100%" *ngIf="item.Type==3"><span style="font-weight: bold;">{{item.Label}} :</span>
+                    {{item.Value}}</label>
+                <label fxFlex="100%" *ngIf="item.Type==5"><span style="font-weight: bold;">{{item.Label}} :</span>
+                    {{item.Value}}</label>
+            </ng-container>
+        </ng-container>
+    </ng-container> -->
+    <!-- khám khác -->
+    <app-lich-su-kham-benh-kham-khac [yeuCauKhamBenhId]="yeuCauKhamBenhId" *ngIf="!isKhamDoan"></app-lich-su-kham-benh-kham-khac>
+    <h3 fxFlex="100%" class="sub-title mt-0"></h3>
+     <!-- Bộ phận tổn thương -->
+    <app-lich-su-kham-benh-bo-phan-ton-thuong [yeuCauKhamBenhId]="yeuCauKhamBenhId" *ngIf="!isKhamDoan"></app-lich-su-kham-benh-bo-phan-ton-thuong>
+
+    <!-- chuẩn đoán sơ bộ -->
+    <h3 fxFlex="100%" class="sub-title mt-0" *ngIf="!isKhamDoan">Chẩn đoán sơ bộ</h3>
+    <label fxFlex="100%" *ngIf="item.ChanDoanSoBoICDId == null && item.ChanDoanSoBoGhiChu == null && !isKhamDoan"
+        class="font-weight-bold">Không có chẩn đoán sơ bộ</label>
+    <label fxFlex="100%" *ngIf="item.ChanDoanSoBoICDId != null && !isKhamDoan">ICD :{{item.ChanDoanSoBoICDId}}</label>
+    <label fxFlex="100%" *ngIf="item.ChanDoanSoBoGhiChu != null && !isKhamDoan">Chẩn đoán :{{item.ChanDoanSoBoGhiChu}}</label>
+
+    <!-- chuẩn đoán phân biệt -->
+    <app-lich-su-kham-benh-chan-doan-phan-biet [yeuCauKhamBenhId]="yeuCauKhamBenhId" *ngIf="!isKhamDoan">
+    </app-lich-su-kham-benh-chan-doan-phan-biet>
+    
+</div>

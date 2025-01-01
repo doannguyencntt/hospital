@@ -1,0 +1,117 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0"
+    class="div-parent-contentThuoc">
+
+    <ng-container *ngIf="!this.dataBenhNhan.KetThucBenhAn && laKhoaKhamBenhChiDinh">
+        <app-combobox #isFocus id="MauVaChePhamId" fxFlex="auto" fxFlex.sm="auto" label="Tên" [isAutoFocus]="true"
+            url="DieuTriNoiTru/GetMauVaChePham" [(model)]="keMauVaCPNew.MauVaChePhamId" [required]="true"
+            [template]="mauChePhamTemplate" popupSettings="null" (selectionChange)="chonMauVaChePham($event)"
+            (keyup)="onKey($event)" [templateHeader]="mauChePhamTemplateHeader"
+            [validationerror]="'Ten' | validationerror:validationErrors">
+            <ng-template #mauChePhamTemplateHeader let-dataItem>
+                <table width="100%" class="table-comboboxNoTextAlign">
+                    <tr>
+                        <th style="text-align: center;" width="15%">Mã</th>
+                        <th style="padding-left: 50px" width="65%">Tên</th>
+                        <th style="text-align: center;" width="20%">Thể tích</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #mauChePhamTemplate let-dataItem>
+                <table width="100%" class="table-comboboxNoTextAlign">
+                    <tr>
+                        <td width="15%">{{dataItem.Ma}}</td>
+                        <td width="65%">{{dataItem.Ten}}</td>
+                        <td style="text-align: right; right: 10px;" width="20%">{{dataItem.TheTich}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <app-combobox id="NhomMau" fxFlex="15%" fxFlex.sm="15%" label="Nhóm máu" url="DieuTriNoiTru/GetNhomMauRH"
+            (openCombobox)="openCombobox($event)" [required]="true" [(model)]="keMauVaCPNew.NhomMauRH"
+            popupSettings="null" (modelChange)="nhomMauRHChange($event)" (keyup)="onKey($event)"
+            [validationerror]="'NhomMau' | validationerror:validationErrors">
+        </app-combobox>
+
+        <app-textboxnumeric id="TheTich" fxFlex="10%" fxFlex.sm="10%" label="Thành tiền" disabled={{true}} format="n2"
+            decimals="2" [(model)]="keMauVaCPNew.ThanhTien">
+        </app-textboxnumeric>
+
+        <app-timepicker id="ThoiGianBatDauTruyen" fxFlex="15%" fxFlex.sm="15%" label="Giờ bắt đầu"
+            (keyup)="onKey($event)" [(model)]="keMauVaCPNew.ThoiGianBatDauTruyen" [modelIsNumber]="true"
+            moreClass="pl-0">
+            <!-- required="true"
+            [validationerror]="'ThoiGianBatDauTruyen' | validationerror:validationErrors" -->
+        </app-timepicker>
+
+        <div fxFlex="15%">
+            <div style="padding-top: 11px !important;">
+                <button type="button" style="margin-right: 10px;" mat-raised-button mat-button (click)="huy()">
+                    Hủy
+                </button>
+                <button type="button" color="primary" mat-raised-button mat-button (click)="themYeuCauTM()">
+                    Thêm
+                </button>
+            </div>
+        </div>
+
+    </ng-container>
+
+
+    <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="grid"
+        fxLayout.lt-md="column">
+        <app-grid #gridTruyenMau fxFlex="100%" style="width: 1px;" [gridColumns]="gridTruyenMauColumns"
+            [documentType]="documentType" [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="false"
+            [checkboxAble]="false" class="k-grid-border" urlGetData="DieuTriNoiTru/GetDataForGridAsyncTruyenMau"
+            (extOnDataBound)="onDataBoundChild($event)" [showStt]="true"
+            urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridAsyncTruyenMau" [additionalSearchString]="additionString"
+            [pageable]="false" [autoHeight]="true">
+        </app-grid>
+        <ng-template #STTTemplate let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+    </div>
+    <ng-template #trangThaiTemplate let-dataItem>
+
+        <div kendoTooltip>
+            <label *ngIf="dataItem.TrangThai == 1" kendoTooltip title="{{dataItem.TrangThaiDisplay}}">
+                <span>{{dataItem.TrangThaiDisplay}}</span>
+            </label>
+            <label *ngIf="dataItem.TrangThai == 2" kendoTooltip title="{{dataItem.TrangThaiDisplay}}" class="green">
+                <span>{{dataItem.TrangThaiDisplay}}</span>
+            </label>
+        </div>
+    </ng-template>
+
+    <ng-template #nhomMauRHTemplate let-dataItem>
+        <div kendoTooltip>
+            <label>
+                {{dataItem.NhomMauDisplay}}
+            </label>
+        </div>
+    </ng-template>
+
+
+    <ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+        <div class="text-right" kendoTooltip *ngIf="dataItem.TrangThai == 1">
+            <button color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaYeuCauTM(dataItem)"
+                type="button">
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+            </button>
+            <button *ngIf="!dataItem.DaNhapKhoMauChiTiet" color="primary" mat-icon-button kendoTooltip title="Xóa"
+                style="color: red" (click)="xoaYeuCauTM(dataItem)" type="button">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #thanhTienTemplate let-dataItem>
+        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #donGiaDVTemplate let-dataItem>
+        {{dataItem.DonGiaBan | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #donGiaBHTemplate let-dataItem>
+        {{dataItem.DonGiaBaoHiem | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+</div>

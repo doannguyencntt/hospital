@@ -1,0 +1,88 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <ng-container *ngIf="!dieuTriNoiTruModel.KetThucBenhAn">
+    <app-combobox id="bac-si-dieu-tri" class="item-no-padding" fxFlex="20%" fxFlex.sm="100%" label="BS điều trị" url=""
+        [required]="true" [popupSettings]="null" [url]="'PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=' + nhomChucDanh.BacSi"
+        [(model)]="ekipDieuTriPhongGiuongBs.BacSiId" [modelText]="ekipDieuTriPhongGiuongBs.BacSiDisplay"
+        (openCombobox)="evtComboboxBacSiOpened($event)"
+        [validationerror]="'BacSiId' | validationerror: validationErrors">
+    </app-combobox>
+
+    <app-combobox id="dieu-duong" class="item-no-padding" fxFlex="20%" fxFlex.sm="100%" label="Điều dưỡng" url=""
+        [required]="true" [popupSettings]="null" [url]="'PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=' + nhomChucDanh.DieuDuong"
+        [(model)]="ekipDieuTriPhongGiuongBs.DieuDuongId" [modelText]="ekipDieuTriPhongGiuongBs.DieuDuongDisplay"
+        (openCombobox)="evtComboboxDieuDuongOpened($event)"
+        [validationerror]="'DieuDuongId' | validationerror: validationErrors">
+    </app-combobox>
+
+    <app-datetimepicker id="tu-ngay" class="item-no-padding" fxFlex="20%" fxFlex.sm="100%" label="Từ ngày"
+        [formatDate]="'dd/MM/yyyy HH:mm'" [required]="true" [disabled]="!isDaChiDinhBacSi || isEditingFirstData"
+        [(model)]="ekipDieuTriPhongGiuongBs.TuNgay"
+        [validationerror]="'TuNgay' | validationerror: validationErrors">
+    </app-datetimepicker>
+
+    <app-datetimepicker id="den-ngay" class="item-no-padding" fxFlex="20%" fxFlex.sm="100%" label="Đến ngày"
+        [formatDate]="'dd/MM/yyyy HH:mm'" [disabled]="true"
+        [(model)]="ekipDieuTriPhongGiuongBs.DenNgay"
+        [validationerror]="'DenNgay' | validationerror: validationErrors">
+    </app-datetimepicker>
+
+    <app-textbox id="nguoi-lap" fxFlex="20%" fxFlex.sm="100%" maxlength="4000" label="Người lập"
+        [disabled]="true" [required]="true"
+        [(model)]="ekipDieuTriPhongGiuongBs.NhanVienLapDisplay"
+        [validationerror]="'NhanVienLapId' | validationerror: validationErrors">
+    </app-textbox>
+
+    <div fxFlex="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+        <button type="button" class="mr-2" mat-button color="primary" (click)="huy()">Huỷ</button>
+        <button *ngIf="!isEditing" type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Enter" (click)="themEkipDieuTri()">Thêm</button>
+        <button *ngIf="isEditing" type="button" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Ctrl + S" (click)="luuEkipDieuTri()">Lưu</button>
+    </div>
+</ng-container>
+    <div fxFlex="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-grid #gridEkipDieuTri fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" maxHeight="500" reorderRowsMoveItemData="true"
+                [gridColumns]="gridColumns" [documentType]="documentType"
+                [urlGetData]="urlGetDanhSachEkipDieuTriForGrid" [urlGetTotalPage]="urlGetTotalPagesDanhSachEkipDieuTriForGrid"
+                [additionalSearchString]="yeuCauTiepNhanId" [sort]="sortDanhSachEkipDieuTri"
+                [allowSortDefault]="true" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+                [lazyLoadPage]="true" [pageable]="false" [checkboxAble]="false"
+                [showStt]="true">
+            </app-grid>
+
+            <ng-template #khoaTemplate let-dataItem>
+                {{dataItem.KhoaPhongDieuTriDisplay}}
+            </ng-template>
+
+            <ng-template #bacSiTemplate let-dataItem>
+                {{dataItem.BacSiDisplay}}
+            </ng-template>
+
+            <ng-template #dieuDuongTemplate let-dataItem>
+                {{dataItem.DieuDuongDisplay}}
+            </ng-template>
+
+            <ng-template #tuNgayTemplate let-dataItem>
+                {{dataItem.TuNgayDisplay}}
+            </ng-template>
+
+            <ng-template #denNgayTemplate let-dataItem>
+                {{dataItem.DenNgayDisplay}}
+            </ng-template>
+
+            <ng-template #nguoiLapTemplate let-dataItem>
+                {{dataItem.NhanVienLapDisplay}}
+            </ng-template>
+
+            <ng-template #actionTemplate let-dataItem>
+                <div class="text-center" kendoTooltip *ngIf="!dieuTriNoiTruModel.KetThucBenhAn">
+                    <button mat-icon-button kendoTooltip title="Chỉnh sửa" type="button" (click)="chinhsua(dataItem)">
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                    </button>
+                    <button [disabled]="dataItem.IsFirstData" [ngClass]="!dataItem.IsFirstData ? 'red-color' : 'grey-color'" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoa(dataItem)">
+                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

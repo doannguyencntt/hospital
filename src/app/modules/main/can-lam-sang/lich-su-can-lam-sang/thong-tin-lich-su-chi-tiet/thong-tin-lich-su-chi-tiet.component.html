@@ -1,0 +1,207 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Kết Quả CĐHA, TDCN',Path:''},
+            {Title:'DS Lịch Sử Kết Quả CĐHA, TDCN',Path:'/lich-su-ket-qua-cdha-tdcn', queryParams: {holdQuery : true}},
+            {Title:'Chi tiết Kết Quả CĐHA, TDCN',Path:'',Active:true}          
+            ]">
+            </vex-breadcrumbs>
+            <app-hot-key [keys]="[           
+            {Key:'Esc',Description:'Quay lại',End:true}
+            ]"></app-hot-key>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+                            <fieldset fxFlex="100%" class="mb-3" class="{{(thongTinBenhNhan != null && thongTinBenhNhan.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+                                <legend>Thông tin hành chính</legend>
+                                <div class=" mt-1">
+                                    <ul class="inline">
+                                        <li>Mã TN:
+                                            <strong>
+                                                {{thongTinBenhNhan.MaYeuCauTiepNhan}}
+                                            </strong>
+                                        </li>
+                                        <li>Mã NB:
+                                            <strong>
+                                                {{thongTinBenhNhan.MaBN}}
+                                            </strong>
+                                        </li>
+                                        <li>Họ Tên:
+                                            <strong>
+                                                {{thongTinBenhNhan.HoTen}}
+                                            </strong>
+                                        </li>
+
+                                        <li >Tuổi:
+                                            <strong *ngIf="!isDuoi6Tuoi">{{thongTinBenhNhan.Tuoi}}</strong>
+                                            <strong *ngIf="isDuoi6Tuoi">{{Duoi6TuoiDisplay}}</strong>
+                                        </li>
+                                        <li>Giới Tính:
+                                            <strong>
+                                                {{thongTinBenhNhan.GioiTinhStr}}
+                                            </strong>
+                                        </li>
+                                        <li>Địa chỉ:
+                                            <strong>
+                                                {{thongTinBenhNhan.DiaChi}}
+                                            </strong>
+                                        </li>
+                                        <li>Đối tượng:
+                                            <strong style="color: blue;">
+                                                {{thongTinBenhNhan.DoiTuong}}
+                                            </strong>
+                                        </li>
+                                        <li>Số BA:
+                                            <strong style="color: blue;">
+                                                {{thongTinBenhNhan.SoBenhAn}}
+                                            </strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </fieldset>
+                            <fieldset fxFlex="100%" class="mb-3">
+                                <legend>Thông tin dịch vụ</legend>
+                                <app-grid [gridColumns]="gridColumns" [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                                    [documentType]="documentType" [checkboxAble]="false" [additionalSearchString]="idYeuCauTiepNhan" [height]="500" [pageSize]="20"
+                                    urlGetData="CanLamSang/GetDataChiTietLichSuCanLamSangForGrid"
+                                    urlGetTotalPage="CanLamSang/GetTotalChiTietLichSuCanLamSangPageForGrid">
+                                </app-grid>
+                                <ng-template #ngayChiDinhTemplate let-dataItem>
+                                   {{dataItem.NgayChiDinhDisplay}}
+                                </ng-template>
+                                <ng-template #ngayThucHienTemplate let-dataItem>
+                                    {{dataItem.NgayThucHienDisplay}}
+                                </ng-template>
+
+                                <ng-template #fileChuKyTemplate let-dataItem>
+                                    <a (click)="taiFileChuKy(dataItem)">
+                                        <p class="reverse-ellipsis r" title="{{dataItem.FileChuKy}}">{{dataItem.FileChuKy}}</p>
+                                    </a>
+                                </ng-template>
+                                <ng-template #actionTemplate let-dataItem>
+                                    <div class="text-center" kendoTooltip>                                                                          
+                                        <button (click)="xemKetQua(dataItem)" color="primary" mat-flat-button kendoTooltip type="button">
+                                            Xem kết quả
+                                        </button>
+                                    </div>
+                                </ng-template>
+                            </fieldset>
+                            <!-- <fieldset fxFlex="100%" class="mb-3">
+                                <legend>Kết Quả</legend>
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0" *ngIf="ketQuaNhomXetNghiems !== null">
+                                    <h3 fxFlex="100%" class="sub-title">Xét Nghiệm</h3>
+                                    <div fxFlex="100%">
+                                        <div *ngFor="let thongTinNhomXetNghiemCanLamSang of ketQuaNhomXetNghiems"
+                                            fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid"
+                                            fxLayoutGap.lt-sm="0" class="mb-0">
+                                            <div fxFlex="50%" class="mb-3">
+                                                <span> Nhóm:
+                                                    <strong>{{thongTinNhomXetNghiemCanLamSang.TenNhomDichVuKyhuat}}
+
+                                                    </strong>
+                                                </span>
+                                                <span>
+                                                    - Dịch vụ: </span>
+                                                <ul class="inline dich_vu">
+                                                    <li
+                                                        *ngFor="let thongTinCanLamSang of thongTinNhomXetNghiemCanLamSang.NhomDanhSachXetNghiem">
+                                                        <strong>
+                                                            {{thongTinCanLamSang.TenDichVu}}
+                                                        </strong>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div fxFlex="40%">
+                                                Ghi Chú: <strong>{{thongTinNhomXetNghiemCanLamSang.KetLuan}}</strong>
+                                            </div>
+                                            <div fxFlex="10%">
+                                                <button type="button" mat-icon-button tabindex="-1"
+                                                    *ngIf="thongTinNhomXetNghiemCanLamSang.GiayKetQuaNhomCanLamSang != null && thongTinNhomXetNghiemCanLamSang.GiayKetQuaNhomCanLamSang.length !== 0"
+                                                    matTooltip="Xem kết quả xét nghiệm cận lâm sàng"
+                                                    (click)="ViewImagePDF(thongTinNhomXetNghiemCanLamSang.GiayKetQuaNhomCanLamSang)">
+                                                    <mat-icon [icIcon]="icRedEye" style="width: 150px;">
+                                                    </mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    style="border-top: 1px solid rgba(0, 0, 0, 0.12);" fxLayoutGap.lt-sm="0"
+                                    *ngIf="chuanDoanHinhAnh===true">
+                                    <h3 fxFlex="100%" class="sub-title">Chẩn đoán hình ảnh</h3>
+                                    <div fxFlex="100%">
+                                        <table class="table table-border" width="100%">
+                                            <tr *ngFor="let thongTinCanLamSang of thongTinCanLamSangs">
+                                                <td *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat===3 && thongTinCanLamSang.GiayKetQuaLamSang !== null"
+                                                    width="50%">
+                                                    Dịch Vụ: <strong>{{thongTinCanLamSang.TenDichVu}} </strong>
+                                                    <a (click)="xemTaiLieu(thongTinCanLamSang.GiayKetQuaLamSang)"
+                                                        class="link">{{thongTinCanLamSang.GiayKetQuaLamSang.Ten}}</a>
+                                                </td>
+                                                <td width="40%"
+                                                    *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat===3 && thongTinCanLamSang.GiayKetQuaLamSang !== null">
+                                                    Ghi Chú: <strong>{{thongTinCanLamSang.GhiChu}}</strong></td>
+
+                                                <td *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat===3 && thongTinCanLamSang.GiayKetQuaLamSang === null"
+                                                    width="30%"> <strong>Cập nhật kết quả</strong></td>
+                                                <td width="10%" *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat===3">
+                                                    <button type="button" mat-icon-button tabindex="-1" *ngIf="thongTinCanLamSang.GiayKetQuaLamSang !== null && thongTinCanLamSang.GiayKetQuaLamSang.length !== 0"
+                                                        matTooltip="Xem kết quả chuẩn đoán hình ảnh cận lâm sàng"
+                                                        (click)="ViewImagePDF(thongTinCanLamSang.GiayKetQuaLamSang)">
+                                                        <mat-icon [icIcon]="icRedEye" style="width: 150px;"></mat-icon>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0" *ngIf="thamDoChucNang===true">
+                                    <h3 fxFlex="100%" class="sub-title">Thăm dò chức năng</h3>
+                                    <div fxFlex="100%">
+                                        <table class="table table-border" width="100%">
+                                            <tr *ngFor="let thongTinCanLamSang of thongTinCanLamSangs">
+                                                <td *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat===4 && thongTinCanLamSang.GiayKetQuaLamSang !== null"
+                                                    width="50%">
+                                                    Dịch Vụ: <strong>{{thongTinCanLamSang.TenDichVu}} </strong>
+                                                    <a (click)="xemTaiLieu(thongTinCanLamSang.GiayKetQuaLamSang)"
+                                                        class="link">{{thongTinCanLamSang.GiayKetQuaLamSang.Ten}}</a>
+                                                </td>
+                                                <td width="40%"
+                                                    *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat===4 && thongTinCanLamSang.GiayKetQuaLamSang !== null">
+                                                    Ghi Chú: <strong>{{thongTinCanLamSang.GhiChu}}</strong></td>
+                                                <td *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat===4 && thongTinCanLamSang.GiayKetQuaLamSang === null"
+                                                    width="30%"> <strong>Cập nhật kết quả</strong></td>
+                                                <td width="10%" *ngIf="thongTinCanLamSang.LoaiYeuCauKyThuat===4">
+                                                    <button type="button" mat-icon-button tabindex="-1" *ngIf="thongTinCanLamSang.GiayKetQuaLamSang !== null && thongTinCanLamSang.GiayKetQuaLamSang.length !== 0"
+                                                        matTooltip="Xem kết quả thăm dò chức năng cận lâm sàng"
+                                                        (click)="ViewImagePDF(thongTinCanLamSang.GiayKetQuaLamSang)">
+                                                        <mat-icon [icIcon]="icRedEye" style="width: 150px;"></mat-icon>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </fieldset> -->
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+                            <button type="button" mat-raised-button (click)="BackToList()" title="Phím tắt: ESC">
+                                Quay lại
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

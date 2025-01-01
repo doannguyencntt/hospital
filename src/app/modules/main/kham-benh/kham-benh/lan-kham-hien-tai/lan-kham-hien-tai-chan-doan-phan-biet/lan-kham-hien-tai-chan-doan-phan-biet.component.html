@@ -1,0 +1,124 @@
+<ng-container *ngIf="!laChuyenKhoaKhamNhieu">
+    <h3 class="sub-title">Chẩn đoán phân biệt
+        <button class="po-h" color="primary" (click)="themChanDoanPhanBiet()">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+    <ng-container *ngIf="dataSourceChanDoanPhamBiet.data.length == 0">
+        <p>Không có chẩn đoán phân biệt</p>
+    </ng-container>
+    <app-grid *ngIf="dataSourceChanDoanPhamBiet.data.length > 0" masterName="TienSuBenh"
+        [gridColumns]="gridChanDoanPhanBietColumns" [documentType]="documentType" [useAddDeault]="false"
+        class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+        [maxHeight]="200" [lazyLoadPage]="true" [gridDataSource]="dataSourceChanDoanPhamBiet" style="width: 1px;"
+        [pageable]="false">
+    </app-grid>
+    
+</ng-container>
+
+<ng-container *ngIf="laChuyenKhoaKhamNhieu">
+    <div [fxFlex]="dataSourceChanDoanPhamBiet.data.length == 0 ? '20%' : '15%'">
+        <h3 class="sub-title">Chẩn đoán phân biệt
+            <button class="po-h mt-0" color="primary" (click)="themChanDoanPhanBiet()">
+                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </h3>
+    </div>
+    <div [fxFlex]="dataSourceChanDoanPhamBiet.data.length == 0 ? '80%' : '85%'" class="ml-2">
+        <ng-container *ngIf="dataSourceChanDoanPhamBiet.data.length == 0">
+            <span>Không có chẩn đoán phân biệt</span>
+        </ng-container>
+
+        <ng-container *ngIf="dataSourceChanDoanPhamBiet.data.length > 0">
+            <table id="tbl-chan-doan-pb" style="width: 100%">
+                <tr>
+                    <th style="width: 30%; text-align: left;">ICD</th>
+                    <th style="width: 65%; text-align: left;">Chẩn đoán</th>
+                    <th style="width: 5%"></th>
+                </tr>
+                <tr *ngFor="let dataItem of dataSourceChanDoanPhamBiet.data, let rowIndex = index">
+                    <td>
+                        <app-combobox [(model)]="dataItem.ICDId" (selectionChange)="chonICD($event, dataItem)" [disabled]="dataItem.Id != 0"
+                            [modelText]="dataItem.TenICD" popupSettings="null" url="KhamBenh/GetListICDBaoGomItemDaChon" [required]="true"
+                            [validationerror]="'YeuCauKhamBenh.YeuCauKhamBenhChanDoanPhanBiets['+rowIndex+'].ICDId' | validationerror:benhNhanHienTai.validationErrors"
+                            class="no-label item-no-padding" label=" " [templateHeader]="chanDoanPhanbietTemplateHeader"
+                            [template]="chanDoanPhanBietTemplate" title="{{dataItem.TenICD}}" kendoTooltip>
+                            <ng-template #chanDoanPhanbietTemplateHeader let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <th width="20%">Mã</th>
+                                        <th>Dịch vụ</th>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                            <ng-template #chanDoanPhanBietTemplate let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <td width="20%">{{dataItem.Ma}}</td>
+                                        <td>{{dataItem.Ten}}</td>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                        </app-combobox>
+                        <!-- <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.TenICD}}</p> -->
+                    </td>
+                    <td>
+                        <app-textarea maxlength="4000" [(model)]="dataItem.GhiChu" class="no-label" label=""
+                            minHeight="20" [disabled]="dataItem.Id != 0">
+                        </app-textarea>
+                        <!-- <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.GhiChu}}</p> -->
+                    </td>
+                    <td>
+                        <div class="text-center" kendoTooltip>
+                            <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoa(dataItem)">
+                                <mat-icon [icIcon]="icDelete"></mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </ng-container>
+    </div>
+</ng-container>
+
+<!-- template -->
+<ng-template #icdTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-combobox *ngIf="dataItem.Id == 0" [(model)]="dataItem.ICDId" (selectionChange)="chonICD($event, dataItem)"
+        [modelText]="dataItem.TenICD" popupSettings="null" url="KhamBenh/GetListICDBaoGomItemDaChon"
+        [required]="true"
+        [validationerror]="'YeuCauKhamBenh.YeuCauKhamBenhChanDoanPhanBiets['+rowIndex+'].ICDId' | validationerror:benhNhanHienTai.validationErrors"
+        class="no-label item-no-padding" label=" " [templateHeader]="chanDoanPhanbietTemplateHeader"
+        [template]="chanDoanPhanBietTemplate">
+        <!-- url="ChuanDoan/GetChuanDoanLienKetICD" -->
+        <ng-template #chanDoanPhanbietTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Dịch vụ</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #chanDoanPhanBietTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.TenICD}}</p>
+</ng-template>
+<ng-template #ghiChuTemplate let-dataItem>
+    <app-textarea *ngIf="dataItem.Id == 0" maxlength="4000" [(model)]="dataItem.GhiChu" class="no-label" label=""
+        minHeight="20">
+    </app-textarea>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.GhiChu}}</p>
+</ng-template>
+<ng-template #actionTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoa(dataItem)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>

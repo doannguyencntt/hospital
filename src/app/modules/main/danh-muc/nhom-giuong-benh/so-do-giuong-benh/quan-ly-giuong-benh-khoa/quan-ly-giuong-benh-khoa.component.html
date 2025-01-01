@@ -1,0 +1,107 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                {Title:'Danh Mục',Path:''}
+                ,{Title:'Nhóm Giường Bệnh',Path:''}
+                ,{Title:'Tình Trạng Giường Bệnh',Path:'/danh-muc/nhom-giuong-benh/so-do-giuong-benh/', Active: true}
+                ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+
+        <div class="card overflow-auto -mt-15">            
+
+            <app-grid baseRoute="danh-muc/nhom-giuong-benh/so-do-giuong-benh" [headerTemplate]="headerTemplate"
+                [useHeaderDefault]="false" [lazyLoadPage]="true" [gridColumns]="gridColumns" (getDataSource)="getDataSource($event)"
+                [documentType]="documentType" [checkboxAble]="false" [useActionDefault]="false" [lazyLoadPage]="true">
+            </app-grid>
+
+
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <app-combobox id="KhoaId" fxFlex="300px" hierarchyKeyToSend="khoa" class="on-header item-no-padding"
+                        popupSettings="null" [templateHeader]="khoaTemplateHeader" [template]="khoaTemplate" label="Khoa"
+                        url="GiuongBenh/GetListKhoaPhong" bind="true" [(model)]="soDoGiuongBenhSearch.PhongId"
+                        (modelChange)="khoaChange($event)"
+                        style="margin-left: 5px;margin-top: 20px;">
+                    </app-combobox>
+                    <ng-template #khoaTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="20%">Mã</th>
+                                <th>Tên</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #khoaTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="20%">{{dataItem.Ma}}</td>
+                                <td>{{dataItem.Ten}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+
+                    <div class="button-export">
+                    
+                        <button [matMenuTriggerFor]="columnFilterMenu" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip
+                            title="Lọc cột" type="button">
+                            <mat-icon [icIcon]="icFilterList"></mat-icon>
+                        </button>
+
+                        <button (click)="exportExcel()" class="mr-6" fxFlex="none" mat-icon-button kendoTooltip title="Xuất Excel"
+                            type="button">
+                            <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                        </button>
+                    
+                    
+                    
+                        <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                            <div *ngFor="let column of gridColumns">
+                                <button
+                                    class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                                    <mat-checkbox [disabled]="true" color="primary">
+                                        {{ column.Title }}
+                                    </mat-checkbox>
+                                </button>
+                            </div>
+                        </mat-menu>
+                    
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template #soDoGiuongTemplate let-dataItem>
+                <div style="width: 100; text-align: center;">
+                    <button (click)="Xem(dataItem)" mat-raised-button color="primary" type="button">
+                        Xem
+                    </button>
+                </div>
+            </ng-template>
+
+
+            <ng-template #khoaFooterTemplate let-dataItem>
+                <span style="float:right">Tổng:</span>
+            </ng-template>
+
+            <ng-template #giuongTrongFooteremplate let-aggregates>
+                {{totalGiuongTrong}}
+            </ng-template>
+
+            <ng-template #giuongCoBenhNhanFooteremplate let-aggregates>
+                {{totalGiuongCoBenhNhan}}
+            </ng-template>
+
+            <ng-template #giuongBenhCuaKhoaFooteremplate let-aggregates>
+                {{totalTongGiuongBenhCuaKhoa}}
+            </ng-template>
+
+        </div>
+
+
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,23 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+  <div>CHUYỂN VỀ PHÒNG CHÍNH</div>
+  <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+    <mat-icon [icIcon]="icClose"></mat-icon>
+  </button>
+</div>
+<mat-dialog-content style="overflow:hidden">
+  <div [formGroup]="form" fxLayout="column" fxLayoutGap="16px">
+    <fieldset fxFlex="100%">
+      <legend>PHÒNG CHÍNH LÀM VIỆC CỦA BẠN:</legend>
+      <div fxFlex="100%">
+        <ul class="inline">
+          <li *ngIf="currentUserInfoPhongKham !== null">Phòng: <strong>{{currentUserInfoPhongKham}}</strong></li>
+          <li *ngIf="currentUserInfoPhongKham === null"> <strong>Nhân viên chưa có chọn phòng chính.</strong></li>
+        </ul>
+      </div>
+    </fieldset>
+    <button *ngIf="currentUserInfoPhongKham !== null" color="primary" mat-raised-button type="button"
+      (click)="ChuyenVePhongChinh()" fxFlex="100%">
+      Chuyển phòng
+    </button>
+  </div>
+</mat-dialog-content>

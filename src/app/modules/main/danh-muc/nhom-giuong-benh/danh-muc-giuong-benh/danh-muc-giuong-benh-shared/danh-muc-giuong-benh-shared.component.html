@@ -1,0 +1,69 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="Ten" fxFlex="15%" fxFlex.sm="25%" [(model)]="giuongBenh.Ma" label="Mã" maxlength="50"
+        [required]="true" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Ten" fxFlex="25%" fxFlex.sm="25%" [(model)]="giuongBenh.Ten" label="Tên giường" maxlength="100"
+        [required]="true" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-checkbox fxFlex="10%" fxFlex.sm="10%" id="LaGiuongNoi" class="mt-4 on-header" [(model)]="giuongBenh.LaGiuongNoi"
+        label="Giường nôi">
+    </app-checkbox>
+
+    <app-combobox id="KhoaId" fxFlex="25%" fxFlex.sm="25%" hierarchyKeyToSend="khoa" class="item-no-padding"
+        [templateHeader]="khoaTemplateHeader" [template]="khoaTemplate" label="Khoa" url="GiuongBenh/GetListKhoaPhong"
+        bind="true" [(model)]="giuongBenh.KhoaId" [required]="true"
+        [validationerror]="'KhoaId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <ng-template #khoaTemplateHeader let-dataItem>
+        <table width="100%" class="table-combobox">
+            <tr>
+                <th width="20%">Mã</th>
+                <th>Tên</th>
+            </tr>
+        </table>
+    </ng-template>
+    <ng-template #khoaTemplate let-dataItem>
+        <table width="100%" class="table-combobox">
+            <tr>
+                <td width="20%">{{dataItem.Ma}}</td>
+                <td>{{dataItem.Ten}}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <app-combobox id="PhongBenhVienId" fxFlex="25%" fxFlex.sm="25%" hierarchyKeyToListen="khoa" class="item-no-padding"
+        label="Phòng" [templateHeader]="phongTemplateHeader" [template]="phongTemplate"
+        url="GiuongBenh/GetListPhongSharedView" bind="true" [(model)]="giuongBenh.PhongBenhVienId" [required]="true"
+        [validationerror]="'PhongBenhVienId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <ng-template #phongTemplateHeader let-dataItem>
+        <table width="100%" class="table-combobox">
+            <tr>
+                <th width="20%">Mã</th>
+                <th>Tên</th>
+            </tr>
+        </table>
+    </ng-template>
+    <ng-template #phongTemplate let-dataItem>
+        <table width="100%" class="table-combobox">
+            <tr>
+                <td width="20%">{{dataItem.Ma}}</td>
+                <td>{{dataItem.Ten}}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+</div>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    style="padding-top: 17px;">
+    <app-textarea fxFlex="100%" fxFlex.sm="100%" id="MoTa" label="Mô tả" [(model)]="giuongBenh.MoTa" maxlength="1000">
+    </app-textarea>
+    <app-checkbox id="CoHieuLuc" fxFlex="100%" [(model)]="giuongBenh.CoHieuLuc" label="Có Hiệu Lực">
+    </app-checkbox>
+</div>

@@ -1,0 +1,315 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0" class="order-form">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}" style="padding-top: 13px;">
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="order-info-area">
+                <table style="width:100%">
+                    <tr>
+                        <th colspan="3">TRƯỚC KHI GÂY MÊ GÂY TÊ</th>
+                        <th colspan="3">TRƯỚC KHI RẠCH DA</th>
+                        <th colspan="3">TRƯỚC KHI KẾT THÚC MỔ</th>
+                    </tr>
+                    <tr>
+                        <td>Điều dưỡng và Bác sĩ gây mê</td>
+                        <td>Có</td>
+                        <td>Ko</td>
+                        <td>Phẫu thuật viên, BS gây mê, Điều dưỡng dụng cụ, Điều dưỡng gây mê
+                        </td>
+                        <td>Có</td>
+                        <td>Ko</td>
+                        <td>Phẫu thuật viên, BS gây mê, Điều dưỡng dụng cụ, Điều dưỡng gây mê
+                        </td>
+                        <td>Có</td>
+                        <td>Ko</td>
+                    </tr>
+                    <tr>
+                        <td class="bold-font">Xác nhận họ tên, tuổi, giới tính và mã người bệnh</td>
+                        <td>
+                            <app-radio id="bs-ho-ten" name="BsHoTen" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.BsCheckHoTen" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="bs-ho-ten" name="BsHoTen" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.BsCheckHoTen" label=" ">
+                            </app-radio>
+                        </td>
+                        <td rowspan="2" class="bold-font">Xác nhận các thành viên trong kíp đã giới thiệu tên và nhiệm vụ
+                        </td>
+                        <td rowspan="2">
+                            <app-radio id="gioi-thieu-ekip" name="GioiThieuEkip" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.CheckGioiThieuEkip" label=" ">
+                            </app-radio>
+                        </td>
+                        <td rowspan="2">
+                            <app-radio id="gioi-thieu-ekip" name="GioiThieuEkip" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.CheckGioiThieuEkip" label=" ">
+                            </app-radio>
+                        </td>
+                        <td rowspan="2" class="bold-font">Điều dưỡng xác nhận hoàn thành đếm kim, gạc, dụng cụ</td>
+                        <td rowspan="2">
+                            <app-radio id="dieu-duong-dem-dung-cu" name="DdDemDungCu" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.DdDemDungCu" label=" ">
+                            </app-radio>
+                        </td>
+                        <td rowspan="2">
+                            <app-radio id="dieu-duong-dem-dung-cu" name="DdDemDungCu" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.DdDemDungCu" label=" ">
+                            </app-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold-font">Xác nhận phương pháp mổ?</td>
+                        <td>
+                            <app-radio id="xn-mo" name="XnMo" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.XnMo" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="xn-mo" name="XnMo" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.XnMo" label=" ">
+                            </app-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold-font">Cam kết mổ?</td>
+                        <td>
+                            <app-radio id="cam-ket-mo" name="CamKetMo" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.CamKetMo" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="cam-ket-mo" name="CamKetMo" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.CamKetMo" label=" ">
+                            </app-radio>
+                        </td>
+                        <td class="bold-font">Xác nhận lại họ tên, tuổi, giới tính và mã người bệnh?</td>
+                        <td>
+                            <app-radio id="dd-ho-ten" name="DdCheckHoTen" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.DdCheckHoTen" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="dd-ho-ten" name="DdCheckHoTen" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.DdCheckHoTen" label=" ">
+                            </app-radio>
+                        </td>
+                        <td class="bold-font">Xác nhận dán nhãn hiệu bệnh phẩm?</td>
+                        <td>
+                            <app-radio id="xn-nhan-dan" name="XnNhanDan" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.XnNhanDan" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="xn-nhan-dan" name="XnNhanDan" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.XnNhanDan" label=" ">
+                            </app-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold-font" colspan="3">Vùng mổ có được đánh dấu không?
+                            <app-radio class="normal-font-weight" id="danh-dau-vung-mo" name="DanhDauVungMo" [items]="[{Value:1,Text:'Có'},{Value:0,Text:'Không'},{Value:2,Text:'Không áp dụng'}]" [(model)]="bangKiemAnToanPhauThuat.DanhDauVungMo" label=" ">
+                            </app-radio>
+                        </td>
+                        <td class="bold-font">Kháng sinh dự phòng</td>
+                        <td>
+                            <app-radio id="xn-khang-sinh-du-phong" name="XnKhangSinhDuPhong" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.XnKhangSinhDuPhong" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="xn-khang-sinh-du-phong" name="XnKhangSinhDuPhong" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.XnKhangSinhDuPhong" label=" ">
+                            </app-radio>
+                        </td>
+                        <td class="bold-font" rowspan="2">Xác nhận điều cần chú ý về hồi tỉnh và chăm sóc sau mổ</td>
+                        <td rowspan="2">
+                            <app-radio id="xn-chu-y-cham-soc-sau-mo" name="XnChamSocSauMo" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.XnChamSocSauMo" label=" ">
+                            </app-radio>
+                        </td>
+                        <td rowspan="2">
+                            <app-radio id="xn-chu-y-cham-soc-sau-mo" name="XnChamSocSauMo" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.XnChamSocSauMo" label=" ">
+                            </app-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold-font">Xác nhận thuốc và trang thiết bị gây mê đầy đủ không?
+
+                        </td>
+                        <td>
+                            <app-radio id="xn-du" name="XnDu" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.XnDu" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="xn-du" name="XnDu" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.XnDu" label=" ">
+                            </app-radio>
+                        </td>
+                        <td class="bold-font">Xác nhận lại vị trí rạch da?</td>
+                        <td>
+                            <app-radio id="xn-vi-tri-rach" name="XnVtRachDa" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.XnVtRachDa" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="xn-vi-tri-rach" name="XnVtRachDa" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.XnVtRachDa" label=" ">
+                            </app-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold-font">Xác nhận monitor hoạt động bình thường không?
+                        </td>
+                        <td>
+                            <app-radio id="xn-monitor" name="XnMonitor" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.XnMonitor" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="xn-monitor" name="XnMonitor" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.XnMonitor" label=" ">
+                            </app-radio>
+                        </td>
+                        <td class="bold-font">Đối chiếu hình ảnh chẩn đoán</td>
+                        <td>
+                            <app-radio id="xn-doi-chieu-hinh-anh" name="XnDoiChieuHa" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.XnDoiChieuHa" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="xn-doi-chieu-hinh-anh" name="XnDoiChieuHa" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.XnDoiChieuHa" label=" ">
+                            </app-radio>
+                        </td>
+                        <td class="bold-font" colspan="3" rowspan="4">Chú thích:
+                            <app-textarea id="chu-thich" minHeight="20" maxlength="800" label=" " [(model)]="bangKiemAnToanPhauThuat.ChuThich">
+                            </app-textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold-font">Người bệnh có tiền sử dị ứng không?
+                        </td>
+                        <td>
+                            <app-radio id="xn-tien-su-di-ung" name="XnTienSuDiUng" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.XnTienSuDiUng" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="xn-tien-su-di-ung" name="XnTienSuDiUng" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.XnTienSuDiUng" label=" ">
+                            </app-radio>
+                        </td>
+                        <td class="bold-font">Đối với Phẫu thuật viên xác nhận điều cần chú ý trong mổ?</td>
+                        <td>
+                            <app-radio id="ptv-xn-chu-y" name="PtvXnChuY" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.PtvXnChuY" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="ptv-xn-chu-y" name="PtvXnChuY" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.PtvXnChuY" label=" ">
+                            </app-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold-font">Người bệnh có khó thở hoặc có nguy cơ trào ngược?
+                        </td>
+                        <td>
+                            <app-radio id="xn-kho-tho" name="XnKhoTho" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.XnKhoTho" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="xn-kho-tho" name="XnKhoTho" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.XnKhoTho" label=" ">
+                            </app-radio>
+                        </td>
+                        <td class="bold-font">Đối với Bác sĩ gây mê xác nhận điều cần chú ý trong gây mê?</td>
+                        <td>
+                            <app-radio id="bs-xn-chu-y" name="BsXnChuY" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.BsXnChuY" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="bs-xn-chu-y" name="BsXnChuY" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.BsXnChuY" label=" ">
+                            </app-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bold-font">Xác nhận nguy cơ mất máu > 500ml (7ml/kg ở trẻ em)?
+                        </td>
+                        <td>
+                            <app-radio id="xn-mat-mau" name="XnMatMau" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.XnMatMau" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="xn-mat-mau" name="XnMatMau" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.XnMatMau" label=" ">
+                            </app-radio>
+                        </td>
+                        <td class="bold-font">Đối với Điều dưỡng xác nhận điều cần chú ý về dụng cụ, trang thiết bị</td>
+                        <td>
+                            <app-radio id="dd-xn-chu-y" name="DdXnChuY" [items]="[{Value:true}]" [(model)]="bangKiemAnToanPhauThuat.DdXnChuY" label=" ">
+                            </app-radio>
+                        </td>
+                        <td>
+                            <app-radio id="dd-xn-chu-y" name="DdXnChuY" [items]="[{Value:false}]" [(model)]="bangKiemAnToanPhauThuat.DdXnChuY" label=" ">
+                            </app-radio>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" style="padding-top: 10px;">
+                <app-textarea id="chan-doan" fxFlex="70%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="1000" label="Chẩn đoán" [(model)]="bangKiemAnToanPhauThuat.ChanDoan">
+                </app-textarea>
+                <app-textbox id="phong-mo" maxlength="120" fxFlex="30%" fxFlex.md="100%" fxFlex.sm="100%" [(model)]="bangKiemAnToanPhauThuat.PhongMo" label="Phòng mổ">
+                </app-textbox>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-datepicker id="thoi-gian-kiem" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangKiemAnToanPhauThuat.NgayKiem" label="Ngày kiểm" [required]="true"  (modelChange)="ngayKiemChange($event)" [validationerror]="'NgayKiem' | validationerror:validationErrors">
+                </app-datepicker>
+
+                <app-autocomplete popupSettings="null" id="dd-chay-ngoai" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangKiemAnToanPhauThuat.DdChayNgoai" url="PhauThuatThuThuat/GetListDieuDuongAutoComplete" label="ĐD chạy ngoài" maxlength="120">
+                </app-autocomplete>
+
+                <app-autocomplete popupSettings="null" id="dd-dung-cu" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangKiemAnToanPhauThuat.DdDungCu" url="PhauThuatThuThuat/GetListDieuDuongAutoComplete" label="ĐD dụng cụ" maxlength="120">
+                </app-autocomplete>
+
+                <app-autocomplete popupSettings="null" id="dd-gay-me" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangKiemAnToanPhauThuat.DdGayMe" url="PhauThuatThuThuat/GetListDieuDuongAutoComplete" label="ĐD gây mê" maxlength="120">
+                </app-autocomplete>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-autocomplete popupSettings="null" id="bs-gay-me" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangKiemAnToanPhauThuat.BsGayMe" url="PhauThuatThuThuat/GetListBacSiAutoComplete" label="BS gây mê" maxlength="120">
+                </app-autocomplete>
+
+                <app-autocomplete popupSettings="null" id="phau-thuat-vien" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangKiemAnToanPhauThuat.PhauThuatVien" url="PhauThuatThuThuat/GetListPhauThuatAutoComplete" label="Phẫu thuật viên" maxlength="120">
+                </app-autocomplete>
+
+                <app-upload id="Upload" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" #upload15NgayDieuTri [allowedExtensions]="allowedExtensions" [(model)]="bangKiemAnToanPhauThuat.FileChuKy" [multiple]="true" label="File chữ ký" [template]="templateFileChuanDoanHAInfo">
+                </app-upload>
+            </div>
+
+
+            <ng-template #templateFileChuanDoanHAInfo let-files>
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                            <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="green" class="custom-name green">{{files[0].name}}</a>
+                        </td>
+                        <td style="width:25px">
+                            <a type="button" (click)="upload15NgayDieuTri.remove(files[0].uid)" mat-icon-button>
+                                <mat-icon [icIcon]="icClear"></mat-icon>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </ng-template>
+        </div>
+
+        <div style="justify-content: space-between;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="order-btn">
+            <div style="display: flex;align-items: center;">
+                <p>Người thực hiện:&nbsp;</p>
+                <strong>{{bangKiemAnToanPhauThuat.NguoiThucHienReadonly}}&nbsp;</strong>
+                <p>Ngày thực hiện:&nbsp;</p>
+                <strong>{{bangKiemAnToanPhauThuat.NgayThucHienReadonly}}&nbsp;</strong>
+            </div>
+            <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+                <button type="button" class="mr-2" mat-button color="primary" (click)="print()">In</button>
+                <button type="button" class="mr-2" mat-button color="primary" (click)="cancel()">Huỷ</button>
+                <button type="button" class="mr-2" color="primary" mat-raised-button (click)="save()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #hoTenTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox maxlength="120" [(model)]="dataItem.HoTen" class="no-label" label=" ">
+    </app-textbox>
+</ng-template>
+<ng-template #namSinhTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textboxnumeric [min]="1900" [max]="9999" [format]="'0'" [spinners]="false" [(model)]="dataItem.NamSinh" [decimals]="1" class="no-label">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #cmndTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox maxlength="150" [(model)]="dataItem.Cmnd" class="no-label" label=" ">
+    </app-textbox>
+</ng-template>
+<ng-template #quanHeTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-combobox popupSettings="null" class="no-label" label=" " [(model)]="dataItem.QuanHe" [bind]="true" url="TiepNhanBenhNhan/GetQuanHe">
+    </app-combobox>
+</ng-template>
+<ng-template #diaChiTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox maxlength="150" [(model)]="dataItem.DiaChi" class="no-label" label=" ">
+    </app-textbox>
+</ng-template>

@@ -1,0 +1,35 @@
+
+<kendo-textbox-container floatingLabel="{{label}}" [ngClass]="{'required':required}" >
+        <kendo-maskedtextbox  [maskValidation]="maskValidation" [includeLiterals]="includeLiterals" (blur)="handleBlur()" [(ngModel)]="model" 
+        (ngModelChange)="emit($event)" ngControl="model"
+            [mask]="mask"  id="{{id}}" [readonly]="readonly" [disabled]="disabled" name="{{id}}" title="{{title}}"></kendo-maskedtextbox>                     
+            
+<label class="red" [innerHTML]="validationerror"></label> 
+</kendo-textbox-container>
+ 
+<!-- 
+<div class="form-row" kendoTooltip>
+        <div class="form-group {{moreClass}} col-sm-12" *ngIf="!horizontalForm">
+            <label for="{{id}}" *ngIf="label!=null && label!=''">{{label}}<span class="text-danger" *ngIf="required">*</span></label>
+            <div [ngClass]="validationerror!=''?'has-error':''">
+                
+            </div>
+        </div>
+    
+        <div class="{{moreClass}}" *ngIf="horizontalForm">
+            <label for="{{id}}" *ngIf="label!=null && label!=''" class="{{classLabel}} col-form-label">{{label}}<span class="text-danger" *ngIf="required">*</span></label>
+            <div class="{{classField}}" [ngClass]="validationerror!=''?'has-error':''">            
+                <kendo-maskedtextbox  class="form-control" [maskValidation]="maskValidation" [includeLiterals]="includeLiterals" (blur)="handleBlur()" [(ngModel)]="model"
+                (ngModelChange)="emit($event)" ngControl="model"
+                 [mask]="mask"  id="{{id}}" [readonly]="readonly" [disabled]="disabled" name="{{id}}" title="{{title}}"></kendo-maskedtextbox>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="alert alert-danger alert-dismissible fade show mt-n-15" role="alert" *ngIf="validationerror!=''">
+                <div [innerHTML]="validationerror"></div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="validationerror=''">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+        </div>
+    </div> -->

@@ -1,0 +1,289 @@
+<app-header-form [crumbs]="[
+        {Title:'Khám Đoàn', Path: '/kham-doan'}
+        ,{Title:'Đo Chỉ Số Sinh Tồn',Path:'',Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4" fxLayout="column">
+                <div class="csxn-content">
+                    <kendo-splitter id="splitter" style="border: none;">
+                        <kendo-splitter-pane size="65%" style="overflow-x: hidden;">
+                            <fieldset fxFlex="100%" class="mb-3">
+                                <legend>Thông tin đoàn đo chỉ số sinh tồn </legend>
+                                <div class="mt-1">
+                                    <div class="border-b" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                        fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                                        <app-combobox id="congTy" fxFlex="49.8%" fxFlex.sm="100%" label="Tên công ty"
+                                            [required]="true" url="KhamDoan/GetCongTys"
+                                            [(model)]="thongTinHopDong.CongTyId" (modelChange)="changeCongTy($event)"
+                                            [reloadForGrid]="true"
+                                            [validationerror]="'CongTyId' | validationerror:validationErrors">
+                                        </app-combobox>
+                                        <app-combobox id="hopDong" fxFlex="50%" fxFlex.sm="100%" label="Số hợp đồng"
+                                            url="KhamDoan/GetHopDongKhamSucKhoes" [required]="true"
+                                            [(model)]="thongTinHopDong.HopDongId" (modelChange)="changeHopDong($event)"
+                                            [reloadForGrid]="true" [autoSelectFirstItem]="true" [bind]="true"
+                                            (dataForLookupChange)="changeLookupHopDong($event)"
+                                            [queryInfo]="{ParameterDependencies:'{CongTyId:' + thongTinHopDong.CongTyId +'}', Take: 50}"
+                                            [validationerror]="'HopDongId' | validationerror:validationErrors">
+                                        </app-combobox>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset fxFlex="100%" class="mb-3">
+                                <legend>Danh sách nhân viên chưa đo </legend>
+                                <app-grid #gridNhanVien fxFlex="100%" fxFlex.sm="100%" style="width: 1px;"
+                                    [gridColumns]="gridColumns" [allowSortDefault]="false" [documentType]="documentType"
+                                    [useAddDeault]="false" [showStt]="true" [useHeaderDefault]="false"
+                                    [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                                    maxHeight="500" [pageable]="true" [headerTemplate]="headerTemplate"
+                                    urlGetData="KhamDoan/GetDataNhanVienTheoHopDongForGrid"
+                                    urlGetTotalPage="KhamDoan/GetTotalNhanVienTheoHopDongForGrid">
+                                </app-grid>
+
+                                <ng-template #headerTemplate>
+                                    <div fxFlex="100%">
+                                        <div class="bg-app-bar px-0 h-15 border-b sticky left-0" fxLayout="row"
+                                            fxLayoutAlign="start center">
+                                            <div class="bg-card rounded-full border px-4 ml-2" fxFlex="400px"
+                                                fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                                                fxLayoutAlign="start center" style="margin-top: 2px;">
+                                                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                                <input [formControl]="searchCtrl"
+                                                    class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                                                    type="search" name="searchString"
+                                                    [(ngModel)]="timKiemObj.SearchString" (keyup)="onKey($event)"
+                                                    placeholder="Nhập từ khóa..." />
+                                            </div>
+                                            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button
+                                                type="button" (click)="clearSearch()">
+                                                <mat-icon [icIcon]="icSearch"></mat-icon>
+                                            </button>
+                                            <button type="button" mat-raised-button (click)="timKiemNangNhanChuaDo()"
+                                                title="Tìm kiếm" class="ml-1" color="primary">Tìm kiếm</button>
+                                        </div>
+                                    </div>
+                                </ng-template>
+
+                                <ng-template #maNhanVienTemplate let-dataItem>
+                                    <a (click)="showPopupChiTietNhanVien(dataItem.Id,dataItem.YeuCauTiepNhanId)">
+                                        <p kendoTooltip title="{{dataItem.MaNhanVien}}">
+                                            {{dataItem.MaNhanVien}}</p>
+                                    </a>
+                                </ng-template>
+
+                                <ng-template #tenNhanVienTemplate let-dataItem>
+                                    <a (click)="showPopupChiTietNhanVien(dataItem.Id,dataItem.YeuCauTiepNhanId)">
+                                        <p kendoTooltip title="{{dataItem.TenNhanVien}}">
+                                            {{dataItem.TenNhanVien}}</p>
+                                    </a>
+                                </ng-template>
+                                <ng-template #tinhTrangTemplate let-dataItem>
+                                    <div style="position: relative;">
+                                        <span [ngClass]="{'green': dataItem.TinhTrangSoDoCSST == 'Đã đo',
+                                                'red': dataItem.TinhTrangSoDoCSST == 'Chưa đo'}">
+                                            {{dataItem.TinhTrangSoDoCSST}}
+                                        </span>
+                                    </div>
+                                </ng-template>
+                            </fieldset>
+                            <fieldset fxFlex="100%" class="mb-3">
+                                <legend>Danh sách nhân viên đã đo </legend>
+                                <ng-template #headerTemplateDaDo>
+                                    <div fxFlex="100%">
+                                        <div class="bg-app-bar px-0 h-15 border-b sticky left-0" fxLayout="row"
+                                            fxLayoutAlign="start center">
+                                            <div class="bg-card rounded-full border px-4 ml-2" fxFlex="400px"
+                                                fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                                                fxLayoutAlign="start center" style="margin-top: 2px;">
+                                                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                                <input [formControl]="searchCtrl"
+                                                    class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                                                    type="search" name="searchString"
+                                                    [(ngModel)]="timKiemObj.SearchDaDoString"
+                                                    (keyup)="onKeyDaDo($event)" placeholder="Nhập từ khóa..." />
+                                            </div>
+                                            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button
+                                                type="button" (click)="clearSearchDaDo()">
+                                                <mat-icon [icIcon]="icSearch"></mat-icon>
+                                            </button>
+                                            <button type="button" mat-raised-button (click)="timKiemNangNhanDaDo()"
+                                                title="Tìm kiếm" class="ml-1" color="primary">Tìm kiếm</button>
+                                        </div>
+                                    </div>
+                                </ng-template>
+
+                                <app-grid #gridNhanVienDaDo fxFlex="100%" fxFlex.sm="100%" style="width: 1px;"
+                                    [gridColumns]="gridColumns" [allowSortDefault]="false" [documentType]="documentType"
+                                    [useAddDeault]="false" [showStt]="true" [useHeaderDefault]="false"
+                                    [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                                    maxHeight="500" [pageable]="true" [headerTemplate]="headerTemplateDaDo"
+                                    urlGetData="KhamDoan/GetDataNhanVienTheoHopDongForGrid"
+                                    urlGetTotalPage="KhamDoan/GetTotalNhanVienTheoHopDongForGrid">
+                                </app-grid>
+
+                                <ng-template #maNhanVienTemplate let-dataItem>
+                                    <a (click)="showPopupChiTietNhanVien(dataItem.Id,dataItem.YeuCauTiepNhanId)">
+                                        <p kendoTooltip title="{{dataItem.MaNhanVien}}">
+                                            {{dataItem.MaNhanVien}}</p>
+                                    </a>
+                                </ng-template>
+
+                                <ng-template #tenNhanVienTemplate let-dataItem>
+                                    <a (click)="showPopupChiTietNhanVien(dataItem.Id,dataItem.YeuCauTiepNhanId)">
+                                        <p kendoTooltip title="{{dataItem.TenNhanVien}}">
+                                            {{dataItem.TenNhanVien}}</p>
+                                    </a>
+                                </ng-template>
+                                <ng-template #tinhTrangTemplate let-dataItem>
+                                    <div style="position: relative;">
+                                        <span [ngClass]="{'green': dataItem.TinhTrangSoDoCSST == 'Đã đo',
+                                                'red': dataItem.TinhTrangSoDoCSST == 'Chưa đo'}">
+                                            {{dataItem.TinhTrangSoDoCSST}}
+                                        </span>
+                                    </div>
+                                </ng-template>
+                            </fieldset>
+
+                        </kendo-splitter-pane>
+
+                        <kendo-splitter-pane>
+                            <fieldset fxFlex="100%">
+                                <legend>Đo chỉ số sinh tồn</legend>
+                                <div class="mt-1">
+                                    <fieldset style="background: #e1f5fe;width:100%"
+                                        *ngIf="yeuCauTiepNhanId != undefined && yeuCauTiepNhanId != null">
+                                        <legend>Thông tin hành chính</legend>
+                                        <div fxFlex="100%">
+                                            <ul class="inline">
+                                                <li>Mã TN:
+                                                    <strong>{{thongTinHanhChinh.MaYeuCauTiepNhan}}</strong>
+                                                </li>
+                                                <li>Mã NB:
+                                                    <strong>{{thongTinHanhChinh.MaBenhNhan}}</strong>
+                                                </li>
+                                                <li>Họ tên:
+                                                    <strong>{{thongTinHanhChinh.HoTen}}</strong>
+                                                </li>
+                                                <li>Giới tính:
+                                                    <strong>{{thongTinHanhChinh.TenGioiTinh}}</strong>
+                                                </li>
+                                                <li>Năm sinh:
+                                                    <strong>{{thongTinHanhChinh.NamSinh}}</strong>
+
+                                                <li>SĐT:
+                                                    <strong>{{thongTinHanhChinh.SoDienThoaiDisplay}}</strong>
+                                                </li>
+                                                <li>Dân tộc:
+                                                    <strong>{{thongTinHanhChinh.TenDanToc}}</strong>
+                                                </li>
+                                                <li>Địa chỉ:
+                                                    <strong>{{thongTinHanhChinh.DiaChiDisplay}}</strong>
+                                                </li>
+                                                <li>Nghề nghiệp:
+                                                    <strong>{{thongTinHanhChinh.TenNgheNghiep}}</strong>
+                                                </li>
+                                                <!-- <li>Công ty:
+                                                    <strong style="color: red;">{{thongTinHanhChinh.TenCongTy}}</strong>
+                                                </li> -->
+                                            </ul>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset style="width:100%;margin-top:15px;"
+                                        *ngIf="yeuCauTiepNhanId != undefined && yeuCauTiepNhanId != null">
+                                        <div class="mt-1">
+                                            <div class="border-b" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                                fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+                                                <app-textboxnumeric fxFlex="50%" fxFlex.sm="100%" [max]="9999"
+                                                    label="Chiều cao" [(model)]="ketQuaSinhHieu.ChieuCao" [decimals]="1"
+                                                    [max]="9999" (modelChange)="onChangeChieuCao(ketQuaSinhHieu)">
+                                                </app-textboxnumeric>
+
+                                                <app-textboxnumeric fxFlex="50%" fxFlex.sm="100%" [format]="format"
+                                                    [spinners]="false" [(model)]="ketQuaSinhHieu.CanNang"
+                                                    label="Cân nặng" [max]="9999" [decimals]="1"
+                                                    (modelChange)="onChangeCanNang(ketQuaSinhHieu)">
+                                                </app-textboxnumeric>
+
+                                                <app-textboxnumeric fxFlex="50%" fxFlex.sm="100%" [max]="9999"
+                                                    [spinners]="false" [(model)]="ketQuaSinhHieu.NhipTim" label="Mạch"
+                                                    (modelChange)="onChangeNhipTim(ketQuaSinhHieu, $event)">
+                                                </app-textboxnumeric>
+
+                                                <table fxFlex="50%" fxFlex.sm="100%">
+                                                    <tr>
+                                                        <td style="width:calc(50% - 3px);padding:0">
+                                                            <app-textboxnumeric [spinners]="false" label="Huyết áp"
+                                                                [(model)]="ketQuaSinhHieu.HuyetApTamThu" [max]="9999"
+                                                                (modelChange)="onChangeHuyetApTamThu($event, ketQuaSinhHieu)">
+                                                            </app-textboxnumeric>
+                                                        </td>
+                                                        <td style="width:6px;padding:0">/</td>
+                                                        <td style="width:calc(50% - 3px);padding:0">
+                                                            <app-textboxnumeric [spinners]="false"
+                                                                [(model)]="ketQuaSinhHieu.HuyetApTamTruong" [max]="9999"
+                                                                (modelChange)="onChangeHuyetApTamTruong($event, ketQuaSinhHieu)">
+                                                            </app-textboxnumeric>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+
+                                                <app-textboxnumeric fxFlex="50%" fxFlex.sm="100%" [format]="format"
+                                                    [spinners]="false" [(model)]="ketQuaSinhHieu.BMI" label="BMI"
+                                                    [max]="9999" [decimals]="1" [disabled]="true">
+                                                </app-textboxnumeric>
+
+                                                <app-textboxnumeric [format]="format" [max]="9999" [spinners]="false"
+                                                    fxFlex="50%" fxFlex.sm="100%" [decimals]="1" label="nhiệt độ"
+                                                    [(model)]="ketQuaSinhHieu.ThanNhiet">
+                                                </app-textboxnumeric>
+
+                                                <app-textboxnumeric fxFlex="50%" fxFlex.sm="100%" [max]="9999"
+                                                    [spinners]="false" [(model)]="ketQuaSinhHieu.NhipTho"
+                                                    label="Nhịp thở"
+                                                    (modelChange)="onChangeNhipTho($event, ketQuaSinhHieu)">
+                                                </app-textboxnumeric>
+
+                                                <app-textboxnumeric fxFlex="50%" fxFlex.sm="100%" [max]="9999"
+                                                    [format]="format" [spinners]="false"
+                                                    [(model)]="ketQuaSinhHieu.Glassgow" [decimals]="1" label="Glassgow">
+                                                </app-textboxnumeric>
+
+                                                <app-textboxnumeric fxFlex="50%" fxFlex.sm="100%" [max]="9999"
+                                                    [format]="format" [spinners]="false" [(model)]="ketQuaSinhHieu.SpO2"
+                                                    [decimals]="1" label="SpO2(%)">
+                                                </app-textboxnumeric>
+
+                                                <app-textbox fxFlex="50%" fxFlex.sm="100%"
+                                                    [(model)]="ketQuaSinhHieu.NgayThucHien" id="NgayThucHien"
+                                                    bind="true" label="Ngày thực hiện" [disabled]="true">
+                                                </app-textbox>
+                                                <app-combobox id="KSKPhanLoaiTheLuc" fxFlex="100%" fxFlex.sm="100%"
+                                                    label="Phân loại thể lực" url="KhamDoan/GetPhanLoaiSucKhoes"
+                                                    [(model)]="ketQuaSinhHieu.KSKPhanLoaiTheLuc" popupSettings="null" [bind]="true">
+                                                </app-combobox>
+                                            </div>
+                                            <div class=" sticky-button-action py-3 text-right" kendoTooltip>
+                                                <button type="button" mat-raised-button (click)="huy()" title="Nhập lại"
+                                                    class="mr-2">Nhập lại</button>
+                                                <button type="button" mat-raised-button (click)="submit()" title="Lưu"
+                                                    color="primary">Lưu</button>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <ng-container *ngIf="yeuCauTiepNhanId == undefined && yeuCauTiepNhanId == null">
+                                        <p>Chưa chọn nhân viên</p>
+                                    </ng-container>
+                                </div>
+                            </fieldset>
+                        </kendo-splitter-pane>
+                    </kendo-splitter>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

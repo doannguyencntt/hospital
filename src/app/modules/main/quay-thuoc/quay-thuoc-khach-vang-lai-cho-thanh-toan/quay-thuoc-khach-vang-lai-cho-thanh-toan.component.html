@@ -1,0 +1,187 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" class="mt-3">
+        <span style="float: left;">Số tiền <strong  style="color:red">{{tongTien | number:'0.2-2':'vi-VN'}}</strong></span>
+    </div>
+    <div fxFlex="100%">
+        <kendo-splitter>
+            <kendo-splitter-pane [collapsible]="true" size="18%" class="sticky-panelbar" style="overflow-x: hidden;">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                    class="px-2 py-3" style="overflow:hidden;">
+                    <app-multiselect [style.display]="tongTien < 0 ? 'none' : 'block'" fxFlex="100%" fxFlex.sm="100%"
+                        label="Hình thức thanh toán" [(model)]="setDefeautTienMat"
+                        (valueChange)="ChangeHinhThucThanhToan($event)" [data]="hinhThucThanhToan"
+                        [validationerror]="'HinhThucThanhToan' | validationerror:validationErrors"
+                        required="true">
+                    </app-multiselect>
+                    <app-textboxnumeric *ngIf="flagCheckSeletedTienMat"
+                        [style.display]="tongTien < 0 ? 'none' : 'block'" id="so-tien" fxFlex="100%" fxFlex.sm="100%"
+                        label="Tiền mặt" [step]="100" [(model)]="thongtinDonThuoc.TienMat"
+                        [(selectMoney)]="selectMoneyTienMat" (modelChange)="modelChangeTienMat($event , 1)" min="0"
+                        [isFormatCurrenly]="true"
+                        [validationerror]="'TienMat' | validationerror:validationErrors">
+                    </app-textboxnumeric>
+                    <app-textboxnumeric *ngIf="flagCheckSeletedChuyenKhoan"
+                        [style.display]="tongTien < 0 ? 'none' : 'block'" id="chuyen-khoan" fxFlex="100%"
+                        fxFlex.sm="100%" label="Chuyển khoản" [step]="100" [(model)]="thongtinDonThuoc.ChuyenKhoan"
+                        [(selectMoney)]="selectMoneyTienChuyenKhoan" (modelChange)="modelChangeChuyenKhoan($event , 2)"
+                        [isFormatCurrenly]="true"
+                        [validationerror]="'ChuyenKhoan' | validationerror:validationErrors">
+                    </app-textboxnumeric>
+                    <app-textboxnumeric *ngIf="flagCheckSeletedPos" [style.display]="tongTien < 0 ? 'none' : 'block'"
+                        id="pos" fxFlex="100%" [(selectMoney)]="selectMoneyTienPos"
+                        (modelChange)="modelChangePos($event , 3)" fxFlex.sm="100%" label="POS" [step]="100"
+                        [(model)]="thongtinDonThuoc.POS" [isFormatCurrenly]="true"
+                        [validationerror]="'POS' | validationerror:validationErrors">
+                    </app-textboxnumeric>
+                    <app-textboxnumeric *ngIf="flagCheckSeletedSoTienCongNo"
+                        [style.display]="tongTien < 0 ? 'none' : 'block'" id="pos" fxFlex="100%"
+                        [(selectMoney)]="selectMoneySoTienCongNo" (modelChange)="modelChangeSoTienCongNo($event , 4)"
+                        fxFlex.sm="100%" label="Công nợ" [step]="100" [(model)]="thongtinDonThuoc.SoTienCongNo"
+                        [isFormatCurrenly]="true"
+                        [validationerror]="'SoTienCongNo' | validationerror:validationErrors">
+                    </app-textboxnumeric>
+                    <!-- <p style="margin-top:-20px;" *ngIf="showCanhBaoSoTienNhap" class="color-red">
+                        Số tiền nhập không đúng số tiền thu.</p> -->
+                    <app-textboxnumeric *ngIf="flagCheckSeletedTienMat"
+                        [style.display]="tongTien < 0 ? 'none' : 'block'" id="benh-nhan-dua" fxFlex="100%"
+                        fxFlex.sm="100%" label="Người bệnh đưa" [step]="100" [spinners]="false"
+                        [(selectMoney)]="selectMoneyTienBNDua" (modelChange)="modelChangeTienBNDua($event)"
+                        [(model)]="thongtinDonThuoc.BenhNhanDua" (keyup)="onChangeBenhNhanDua()" min="0"
+                        [isFormatCurrenly]="true"
+                        [validationerror]="'BenhNhanDua' | validationerror:validationErrors">
+                    </app-textboxnumeric>
+                    <app-textboxnumeric *ngIf="flagCheckSeletedTienMat"
+                        [style.display]="tongTien < 0 ? 'none' : 'block'" id="tra-lai" fxFlex="100%" fxFlex.sm="100%"
+                        label="Trả lại" [(model)]="thongtinDonThuoc.TienTraLai" [readonly]="true" [spinners]="false"
+                        [isFormatCurrenly]="true">
+                    </app-textboxnumeric>
+                    <app-datepicker id="ngay-thu" fxFlex="100%" fxFlex.sm="100%" label="Ngày thu"
+                        [(model)]="thongtinDonThuoc.NgayThu" [readonly]="true"
+                        [validationerror]="'NgayThu' | validationerror:validationErrors">
+                    </app-datepicker>
+                    <app-textbox id="noi-dung-thu" fxFlex="100%" fxFlex.sm="100%" label="Nội dung thu" maxlength="1000"
+                        [(model)]="thongtinDonThuoc.NoiDungThu"
+                        [validationerror]="'NoiDungThu' | validationerror:validationErrors" required="true">
+                    </app-textbox>
+                    <div fxFlex="100%" fxLayout="row" style="margin-right:10px;margin-top:15px;"
+                        fxLayoutAlign="end center" fxLayoutGap="8px" class="padding-thu-tien" kendoTooltip>
+                        <button type="button" color="primary" mat-raised-button (click)="ThuTienVaXuatThuoc()"
+                            title="Phím tắt: Thu tiền và xuất thuốc">Thu tiền và xuất thuốc</button>
+                        <button type="button" color="primary" mat-raised-button (click)="ThuTien()"
+                            title="Phím tắt: Ctrl + S">Thu
+                            tiền</button>
+                    </div>
+                </div>
+            </kendo-splitter-pane>
+            <kendo-splitter-pane style="overflow:hidden;">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px " fxLayoutGap.lt-sm="0">
+                    <app-grid #gridDanhSachMuaThuoc masterName="MuaThuoc" [documentType]="documentType" fxFlex="100%"
+                        [gridColumns]="gridColumns" [gridDataSource]="dataSourcedanhsachThuoc" [autoHeight]="true"
+                        [lazyLoadPage]="false" [useActionDefault]="false" [useAddDeault]="false"
+                        [headerTemplate]="headerTemplate" [useHeaderDefault]="false" [allowSortDefault]="false"
+                        [pageable]="false" useActionDefault="false" [checkboxAble]="false" [lazyLoadPage]="true">
+                    </app-grid>
+                    <ng-template #donGiaTemplate let-dataItem>
+                        <span *ngIf="dataItem.DonGia != null">{{dataItem.DonGia | number:'0.2-2':'vi-VN'}}</span>
+                        <span *ngIf="dataItem.DonGia == null">{{0| number:'0.2-2':'vi-VN'}}</span>
+                    </ng-template>
+                    <ng-template #thanhTienTemplate let-dataItem>
+                        <span>{{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}</span>
+                    </ng-template>
+                    <ng-template #footerTemplateDonGia let-dataItem> <span style="float: right;">Tổng:</span>
+                    </ng-template>
+                    <ng-template #footerTemplateTongTienDonThuoc let-dataItem>
+                        <span style="color:red">{{tongTienHienThi | number:'0.2-2':'vi-VN'}}</span>
+                    </ng-template>
+                    <ng-template #soLuonTemplate let-dataItem>
+                        <!-- <span >{{dataItem.SoLuongMua | number}}</span> -->
+                        <app-textboxnumeric class="no-label numeric-in-grid"
+                        [disabled]="!dataItem.CheckedDefault"
+                        (modelChange)="modelChangeSoLuongMua($event , dataItem)"
+                        [(model)]="dataItem.SoLuongMua">
+                    </app-textboxnumeric>
+                    </ng-template>
+                    <ng-template #headerTemplate>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            class="px-2 py-3">
+                            <app-combobox #duocphamCombobox id="DuocPham" fxFlex="55%" fxFlex.sm="55%"
+                                [(model)]="themDuocPham.DuocPhamId" [required]="true"
+                                (selectionChange)="onSelectDuocPham($event)" [modelText]="themDuocPham.DuocPhamText"
+                                label="Dược phẩm" class="item-no-padding" [template]="dichVuGiuongTemplate"
+                                [templateHeader]="dichVuGiuongTemplateHeader" url="QuayThuoc/GetDuocPham"
+                                [popupSettings]="{width: 900,popupClass:'item-no-padding'}"
+                                [validationerror]="'DuocPhamId' | validationerror:validationThuocErrors"
+                                (keyup)="onKeyEnterAddItem($event)" (openCombobox)="openCombobox($event)">
+                                <ng-template #dichVuGiuongTemplateHeader let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <th width="10%" style="text-align: left;">Loại</th>
+                                            <th width="20%" style="text-align: left;">Tên</th>
+                                            <th width="10%">Hàm lượng</th>
+                                            <th width="10%" style="text-align: left;">Hoạt chất</th>
+                                            <th width="10%" style="text-align: left;">ĐVT</th>
+                                            <th width="10%" style="text-align: left;">Đường dùng</th>
+                                            <th>NSX</th>
+                                            <th width="10%" style="text-align: left;">Tồn</th>
+                                            <th width="10%" style="text-align: left;">HSD</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template #dichVuGiuongTemplate let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <td width="10%">{{dataItem.Loai}}</td>
+                                            <td width="20%">{{dataItem.Ten}}</td>
+                                            <td width="10%">{{dataItem.HamLuong}}</td>
+                                            <td width="10%">{{dataItem.HoatChat}}</td>
+                                            <td width="10%">{{dataItem.DonViTinh}}</td>
+                                            <td width="10%">{{dataItem.DuongDung}}</td>
+                                            <td>{{dataItem.NhaSanXuat}}</td>
+                                            <td width="10%" style="text-align: center;">
+                                                {{dataItem.SoLuongTon | number }}</td>
+                                            <td width="10%" style="text-align: left;">{{dataItem.HanSuDung}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </app-combobox>
+
+                            <app-textboxnumeric label="Số lượng tồn" fxFlex="15%" [(model)]="themDuocPham.SoLuongTon"
+                                disabled="true" moreClass="text-green bold">
+                            </app-textboxnumeric>
+                            <app-textboxnumeric fxFlex="15%" label="Số lượng" [(model)]="themDuocPham.SoLuong"
+                                [required]="true" [validationerror]="'SoLuong' | validationerror:validationThuocErrors"
+                                (keyup)="onKey($event)">
+                            </app-textboxnumeric>
+                            <div fxFlex="10%" class="mt-5">
+                                <button type="button" color="primary" class="mr-1" (click)="them1()"
+                                    mat-raised-button>Thêm</button>
+                            </div>
+
+                        </div>
+                    </ng-template>
+                    <ng-template #actionTemplate let-dataItem>
+                        <div class="text-center" *ngIf="dataItem.LoaiDonThuoc === 1">
+                            <p style="color: red">
+                                <mat-icon [icIcon]="icInfo" class="mt-4" kendoTooltip
+                                    title="Thuốc bảo hiểm y tế không có trong kho.">
+                                </mat-icon>
+                            </p>
+                        </div>
+                        <div class="text-center" *ngIf="dataItem.ThuocTrongKhoExit == true">
+                            <p style="color: red">
+                                <mat-icon [icIcon]="icInfo" class="mt-4" kendoTooltip title="Thuốc trong kho đã hết.">
+                                </mat-icon>
+                            </p>
+                        </div>
+                        <div class="text-center" kendoTooltip *ngIf="dataItem.isNew==true">
+                            <button type="button" mat-icon-button (click)="delete(dataItem)">
+                                <mat-icon [icIcon]="icDelete"></mat-icon>
+                            </button>
+                        </div>
+                    </ng-template>
+
+                </div>
+            </kendo-splitter-pane>
+        </kendo-splitter>
+    </div>
+</div>

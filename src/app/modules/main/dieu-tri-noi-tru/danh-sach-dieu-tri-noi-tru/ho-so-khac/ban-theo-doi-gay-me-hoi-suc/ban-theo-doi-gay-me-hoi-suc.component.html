@@ -1,0 +1,135 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <div fxFlex="100%" fxFlex.sm="100%"></div>
+
+        <app-textbox id="chan-doan" fxFlex="25%" fxFlex.sm="100%" maxlength="1000" label="Chẩn đoán"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.ChanDoan"
+            [validationerror]="'ChanDoan' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-textbox id="tien-me" fxFlex="25%" fxFlex.sm="100%" maxlength="1000" label="Tiền mê"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.TienMe"
+            [validationerror]="'TienMe' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-textbox id="tac-dung" fxFlex="25%" fxFlex.sm="100%" maxlength="1000" label="Tác dụng"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.TacDung"
+            [validationerror]="'TacDung' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-textbox id="loai-mo" fxFlex="25%" fxFlex.sm="100%" maxlength="1000" label="Loại mổ"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.LoaiMo"
+            [validationerror]="'LoaiMo' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-textbox id="tu-the-mo" fxFlex="25%" fxFlex.sm="100%" maxlength="1000" label="Tư thế mổ"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.TuTheMo"
+            [validationerror]="'TuTheMo' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-autocomplete id="nguoi-gay-me" fxFlex="25%" fxFlex.sm="100%" label="Người gây mê" url="DieuTriNoiTru/GetListNhanVienAutoComplete" maxlength="120"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.NguoiGayMe" popupSettings="null"
+            [validationerror]="'NguoiGayMeId' | validationerror: validationErrors">
+        </app-autocomplete>
+
+        <app-autocomplete id="nguoi-mo" fxFlex="25%" fxFlex.sm="100%" label="Người mổ" url="DieuTriNoiTru/GetListNhanVienAutoComplete" maxlength="120" 
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.NguoiMo" popupSettings="null"
+            [validationerror]="'NguoiGayMeId' | validationerror: validationErrors">
+        </app-autocomplete>
+
+        <app-textbox id="phuong-phap-vo-cam" fxFlex="25%" fxFlex.sm="100%" maxlength="1000" label="Phương pháp vô cảm"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.PhuongPhapVoCam"
+            [validationerror]="'PhuongPhapVoCam' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-textbox id="nguoi-thu-cheo" fxFlex="25%" fxFlex.sm="100%" maxlength="1000" label="Người thử chéo"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.NguoiThuCheo"
+            [validationerror]="'NguoiThuCheo' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-datepicker id="ngay-thuc-hien" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Ngày thực hiện"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.NgayThucHien" [required]="true"
+            [validationerror]="'NgayThucHien' | validationerror: validationErrors">
+        </app-datepicker>
+
+        <app-textboxnumeric id="nang" fxFlex="12.5%" fxFlex.sm="100%" min="1" max="200" label="Nặng (kg)"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.Nang"
+            [validationerror]="'Nang' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-textboxnumeric id="chieu-cao-mang-thai" fxFlex="12.5%" fxFlex.sm="100%" min="1" max="300" label="Cao (cm)"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.Cao"
+            [validationerror]="'Cao' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-textbox id="ket-luan" fxFlex="25%" fxFlex.sm="100%" maxlength="1000" label="Kết luận"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.KetLuan"
+            [validationerror]="'KetLuan' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-textbox id="ma-so-tt-vien-phi" fxFlex="50%" fxFlex.sm="100%" maxlength="1000" label="Mã số TT V.Phí"
+            [(model)]="thongTinBangTheoDoiGayMeHoiSuc.MaSoThongTinVienPhi"
+            [validationerror]="'MaSoThongTinVienPhi' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-upload id="upload" #chuKyPhieuSangLocDinhDuong fxFlex="50%" fxFlex.sm="100%"
+            [allowedExtensions]="allowedExtensions"
+            [(model)]="noiTruHoSoKhac.FilesChuKy" [multiple]="true" label="File chữ ký"
+            [template]="templateFileChuanDoanHAInfo">
+        </app-upload>
+        <ng-template #templateFileChuanDoanHAInfo let-files>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td>
+                        <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                            (click)="chuKyPhieuSangLocDinhDuong.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                        <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="chuKyPhieuSangLocDinhDuong.viewFile(files[0])"
+                            class="green" class="custom-name green">{{files[0].name}}</a>
+                    </td>
+                    <td style="width:25px">
+                        <a type="button" (click)="chuKyPhieuSangLocDinhDuong.remove(files[0].uid)" mat-icon-button>
+                            <mat-icon [icIcon]="icClear"></mat-icon>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </ng-template>
+
+        <p fxFlex="70%" fxFlex.md="70%" fxFlex.sm="100%">
+            Người thực hiện: <b>{{noiTruHoSoKhac.NhanVienThucHienDisplay}}</b> 
+            Ngày thực hiện: <b>{{noiTruHoSoKhac.ThoiDiemThucHienDisplay}}</b>
+        </p>
+
+        <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+            <button type="button" class="mr-2" mat-button color="primary" (click)="themBangTheoDoi()" *ngIf="!noiTruHoSoKhac || noiTruHoSoKhac.Id !== 0">Thêm Bảng theo dõi mới</button>
+            <button type="button" class="mr-2" mat-button color="primary" style="pointer-events: all;" (click)="in()">In</button>
+            <button type="button" class="mr-2" mat-button color="primary" (click)="huy()">Huỷ</button>
+            <button type="button" class="mr-2" color="primary" mat-raised-button (click)="luuBangTheoDoiGayMeHoiSuc()">Lưu</button>
+        </div>
+
+        <fieldset *ngIf="gridDataSource && gridDataSource.total > 0" fxFlex="100%">
+            <legend>Danh sách bảng theo dõi</legend>
+            <div fxFlex="100%" style="padding: 15px;">
+                <app-grid #gridBangTheoDoiGayMeHoiSuc fxFlex="100%" masterName="gridBangTheoDoiGayMeHoiSuc" maxHeight="500"
+                    [documentType]="documentType" [additionalSearchString]="yeuCauTiepNhanId"
+                    [gridColumns]="gridColumns" [gridDataSource]="gridDataSource"
+                    [allowSortDefault]="true"   [useAddDeault]="false"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                    [pageable]="false" [showStt]="true">
+                </app-grid>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<ng-template #ngayThucHienTemplate let-dataItem>
+    <a (click)="viewBangTheoDoi(dataItem)">
+        {{dataItem.NgayThucHienDisplay}}
+    </a>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <button (click)="deleteBangTheoDoi(dataItem)" mat-icon-button kendoTooltip style="color: red" title="Xóa">
+        <mat-icon [icIcon]="icDelete"></mat-icon>
+    </button>
+</ng-template>

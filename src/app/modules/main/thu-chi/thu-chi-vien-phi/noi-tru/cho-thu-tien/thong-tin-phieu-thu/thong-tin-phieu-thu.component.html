@@ -1,0 +1,253 @@
+<div id="phieu-thu" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+	<fieldset fxFlex="100%" style="padding: 0 !important">
+		<div class="mt-1" fxFlex="100%">
+			<ul fxFlex="100%">
+				<li>
+					<app-combobox id="ten-pttt" fxFlex="60%" fxFlex.sm="60%" [data]="dataSoPhieus" label="Số phiếu"
+						(selectionChange)="selectionChangeSoPhieu($event)" [autoSelectFirstItem]="true" [bind]="true"
+						[(model)]="thongTinSoPhieuDaThu.SoPhieuId" [modelText]="thongTinSoPhieuDaThu.TenSoPhieu"
+						[template]="soPhieuTemplate" [templateHeader]="soPhieuTemplateHeader">
+						<ng-template #soPhieuTemplateHeader let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<th width="15%" class="text-center">Số phiếu</th>
+									<th width="15%" class="text-center">Tình trạng</th>
+									<th width="10%" class="text-center">Ngoại trú</th>
+									<th width="10%" class="text-center">Trong gói </th>
+									<th width="15%" class="text-center">Loại tạm ứng</th>
+									<th width="15%" class="text-center">Ngày phát sinh</th>
+									<th width="20%" class="text-center">Người tạo</th>
+								</tr>
+							</table>
+						</ng-template>
+						<ng-template #soPhieuTemplate let-dataItem>
+							<table width="100%" class="table-combobox">
+								<tr>
+									<td width="15%" class="text-center">{{dataItem.DisplayName}}</td>
+									<td width="15%" class="text-center"
+										*ngIf="dataItem.TinhTrang === trangThaiThuTienBenhNhan.Huy ">
+										<strong style="color: red"> {{dataItem.TinhTrang}}</strong>
+									</td>
+									<td width="15%" class="text-center"
+										*ngIf="dataItem.TinhTrang !== trangThaiThuTienBenhNhan.Huy ">
+										<strong style="color: green"> {{dataItem.TinhTrang}}</strong>
+									</td>
+									<td class="text-center" width="10%">
+										<app-checkbox *ngIf="dataItem.NgoaiTru" value="true" [disabled]="true"
+											[model]="dataItem.NgoaiTru">
+										</app-checkbox>
+									</td>
+									<td class="text-center" width="10%">
+										<app-checkbox *ngIf="dataItem.TrongGoi" value="true" [disabled]="true"
+											[model]="dataItem.TrongGoi">
+										</app-checkbox>
+									</td>
+									<td width="15%" class="text-center">{{dataItem.LoaiPhieu}}</td>
+									<td width="15%" class="text-center">{{dataItem.NgayLapStr}}</td>
+									<td width="20%" class="text-center">{{dataItem.NguoiLap}}</td>
+								</tr>
+							</table>
+						</ng-template>
+					</app-combobox>
+					<fieldset fxFlex="100%" fxFlex.sm="100%" class="ml-3" style="padding-top: 43px"
+						*ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null">
+						<div class="mt-1">
+							<ul class="inline">
+								<li>
+									Loại phiếu:
+									<strong> {{thongTinSoPhieuDaThu.LoaiPhieu}} </strong>
+								</li>
+								<li>
+									Tình trạng:
+									<strong *ngIf="thongTinSoPhieuDaThu.TinhTrang === trangThaiThuTienBenhNhan.Huy"
+										style="color: red"> {{thongTinSoPhieuDaThu.TinhTrang}} </strong>
+									<strong *ngIf="thongTinSoPhieuDaThu.TinhTrang !== trangThaiThuTienBenhNhan.Huy"
+										style="color: green"> {{thongTinSoPhieuDaThu.TinhTrang}} </strong>
+								</li>
+								<li *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null && 
+                                    (thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTamUng)">
+									<span>Đã hoàn ứng: </span>
+									<strong *ngIf="thongTinSoPhieuDaThu.DaHoanUng"> Rồi </strong>
+									<span *ngIf="thongTinSoPhieuDaThu.DaHoanUng">Phiếu hoàn ứng: </span>
+									<strong *ngIf="thongTinSoPhieuDaThu.DaHoanUng">
+										{{thongTinSoPhieuDaThu.PhieuHoanUng}} </strong>
+									<strong *ngIf="!thongTinSoPhieuDaThu.DaHoanUng"> Chưa </strong>
+								</li>
+								<li *ngIf="thongTinSoPhieuDaThu.TinhTrang === trangThaiThuTienBenhNhan.Huy">
+									Người hủy:
+									<strong> {{thongTinSoPhieuDaThu.NhanVienHuyPhieu}} </strong>
+								</li>
+								<li *ngIf="thongTinSoPhieuDaThu.TinhTrang === trangThaiThuTienBenhNhan.Huy">
+									Ngày hủy:
+									<strong> {{thongTinSoPhieuDaThu.NgayHuyStr}} </strong>
+								</li>
+								<li *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null 
+                                && ((thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi
+                                || thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTamUng)
+                                && thongTinSoPhieuDaThu.TinhTrang === trangThaiThuTienBenhNhan.Huy)">
+									<span>Thu hồi: </span>
+									<strong *ngIf="thongTinSoPhieuDaThu.DaThuHoi"> Rồi </strong>
+									<strong *ngIf="!thongTinSoPhieuDaThu.DaThuHoi">
+										Chưa
+										<mat-icon [icIcon]="icEdit" style="transform: scale(0.8)"
+											(click)="huyPhieuThu(thongTinSoPhieuDaThu ,true)"> </mat-icon>
+									</strong>
+								</li>
+
+								<li *ngIf="thongTinSoPhieuDaThu.DaThuHoi">
+									Người thu hồi:
+									<strong> {{thongTinSoPhieuDaThu.NguoiThuHoi}} </strong>
+								</li>
+								<li *ngIf="thongTinSoPhieuDaThu.DaThuHoi">
+									Ngày thu:
+									<strong> {{thongTinSoPhieuDaThu.NgayThuStr}} </strong>
+								</li>
+							</ul>
+						</div>
+					</fieldset>
+				</li>
+			</ul>
+		</div>
+	</fieldset>
+	<fieldset fxFlex="100%" class="mb-1">
+		<div class="mt-1">
+			<ul class="inline" *ngIf="thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTamUng || 
+            thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.HoanUng">
+				<li *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null">
+					Số tiền:
+					<strong style="color: red"> {{thongTinSoPhieuDaThu.SoTien| number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+				<li *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null">
+					Hình thức thanh toán:
+					<strong> {{thongTinSoPhieuDaThu.HinhThucThanhToan}} </strong>
+				</li>
+				<li *ngIf="thongTinSoPhieuDaThu.TienMat != null">
+					Tiền mặt:
+					<strong> {{thongTinSoPhieuDaThu.TienMat | number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+				<li *ngIf="thongTinSoPhieuDaThu.ChuyenKhoan != null">
+					Chuyển khoản:
+					<strong> {{thongTinSoPhieuDaThu.ChuyenKhoan | number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+				<li *ngIf="thongTinSoPhieuDaThu.CongNo != null">
+					Công nợ:
+					<strong> {{thongTinSoPhieuDaThu.CongNo | number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+			</ul>
+			<ul class="inline" *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null && 
+            thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi || 
+            thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.PhieuChi">
+				<li *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null">
+					Tổng số tiền:
+					<strong style="color: red"> {{thongTinSoPhieuDaThu.TongChiPhi | number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+				<li>
+					BHYT TT:
+					<strong> {{thongTinSoPhieuDaThu.BHYTThanhToan | number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+				<li>
+					Miễm giảm:
+					<strong> {{thongTinSoPhieuDaThu.MienGiam | number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+				<li>
+					Bệnh nhân TT:
+					<strong> {{thongTinSoPhieuDaThu.BenhNhanThanhToan | number:'0.2-2':'vi-VN'}} </strong>
+					(<span>Tiền mặt: </span> <strong> {{thongTinSoPhieuDaThu.TienMat| number:'0.2-2':'vi-VN'}}
+					</strong>
+					<span>Chuyển khoản: </span> <strong> {{thongTinSoPhieuDaThu.ChuyenKhoan| number:'0.2-2':'vi-VN'}}
+					</strong> <span>POS: </span> <strong> {{thongTinSoPhieuDaThu.Pos| number:'0.2-2':'vi-VN'}} </strong>
+					<span>Công nợ: </span> <strong> {{thongTinSoPhieuDaThu.CongNo| number:'0.2-2':'vi-VN'}} </strong>)
+				</li>
+			</ul>
+		</div>
+		<div class="mt-1">
+			<ul class="inline" *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null && 
+            thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi || 
+            thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.PhieuChi">
+				<li>
+					Tạm ứng:
+					<strong> {{thongTinSoPhieuDaThu.TamUng| number:'0.2-2':'vi-VN'}} </strong>
+					<span *ngIf="thongTinSoPhieuDaThu.LaPhieuChi !== true"> => Số
+						tiền phải thu: </span>
+					<span *ngIf="thongTinSoPhieuDaThu.LaPhieuChi === true"> => Số tiền phải trả: </span>
+					<strong style="color: red"> {{thongTinSoPhieuDaThu.SoTienPhaiThuHoacChi| number:'0.2-2':'vi-VN'}}
+					</strong>
+				</li>
+				<li *ngIf="thongTinSoPhieuDaThu.NgayThuStr != null">
+					Ngày thu:
+					<strong> {{thongTinSoPhieuDaThu.NgayThuStr}} </strong>
+				</li>
+				<li *ngIf="thongTinSoPhieuDaThu.NoiDungThu != null">
+					Nội dung thu:
+					<strong> {{thongTinSoPhieuDaThu.NoiDungThu}} </strong>
+				</li>
+			</ul>
+			<ul class="inline" *ngIf="thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTamUng || 
+                    thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.HoanUng">
+				<li *ngIf="thongTinSoPhieuDaThu.NgayThuStr != null">
+					Ngày thu:
+					<strong> {{thongTinSoPhieuDaThu.NgayThuStr}} </strong>
+				</li>
+				<li *ngIf="thongTinSoPhieuDaThu.NoiDungThu != null">
+					Nội dung thu:
+					<strong> {{thongTinSoPhieuDaThu.NoiDungThu}} </strong>
+				</li>
+			</ul>
+		</div>
+		<div class="mt-1">
+			<ul class="inline" *ngIf="thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.HoanThu">
+				<li *ngIf="thongTinSoPhieuDaThu.LoaiPhieu != null">
+					Số tiền:
+					<strong style="color: red"> {{thongTinSoPhieuDaThu.SoTien| number:'0.2-2':'vi-VN'}} </strong>
+				</li>
+				<li *ngIf="thongTinSoPhieuDaThu.NgayThuStr != null">
+					Ngày hoàn thu:
+					<strong> {{thongTinSoPhieuDaThu.NgayThuStr}} </strong>
+				</li>
+				<li *ngIf="thongTinSoPhieuDaThu.NoiDungThu != null">
+					Nội dung hoàn thu:
+					<strong> {{thongTinSoPhieuDaThu.NoiDungThu}} </strong>
+				</li>
+			</ul>
+		</div>
+	</fieldset>
+	<fieldset fxFlex="100%" class="mb-1" *ngIf="thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi || 
+        thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.PhieuChi">
+		<app-ds-da-thu-tien (afterChanged)="dataSourceChanged=false" [dataSourceChanged]="dataSourceChanged"
+			(loadingThanhCong)="loadingThanhCong($event)"
+			[(danhSachChiPhiKhamChuaBenh)]="thongTinSoPhieuDaThu.ChiPhiKhamChuaBenhNoiTruVos"> </app-ds-da-thu-tien>
+	</fieldset>
+</div>
+<div *ngIf="thongTinSoPhieuDaThu.SoPhieuId != null" class="sticky-button-action py-3 text-right" kendoTooltip>
+	<div style="float: left">
+		<button (click)="BackToList()" type="button" mat-button class="mr-2">Quay lại</button>
+		<strong style="color: red; margin-left: 50px;"> Hoàn thu để trả lại tiền người bệnh </strong>
+	</div>
+	<button
+		*ngIf="(thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi || thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.PhieuChi) && thongTinSoPhieuDaThu.TinhTrang == 'Đang hiệu lực'"
+		(click)="bangKeChiPhi(thongTinSoPhieuDaThu)" color="primary" mat-raised-button class="mr-2">Bảng kê chi
+		phí</button>
+	<button (click)="phieuIn(thongTinSoPhieuDaThu)" color="primary" mat-raised-button class="mr-2">Phiếu in</button>
+
+	<button *ngIf="thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTamUng && 
+		   thongTinSoPhieuDaThu.DaHoanUng !== true  &&  thongTinSoPhieuDaThu.TinhTrang !== trangThaiThuTienBenhNhan.Huy"
+		(click)="hoanUngKhongThucHienDV(thongTinSoPhieuDaThu)" color="primary" mat-raised-button class="mr-2">
+		Hoàn ứng
+	</button>
+
+	<button
+		*ngIf="!thongTinSoPhieuDaThu.ConHanHuyPhieuThu && ((thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi && thongTinSoPhieuDaThu.TinhTrang !== trangThaiThuTienBenhNhan.Huy)
+		|| (thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.PhieuChi  && thongTinSoPhieuDaThu.TinhTrang !== trangThaiThuTienBenhNhan.Huy)
+		|| (thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTamUng && thongTinSoPhieuDaThu.TinhTrang !== trangThaiThuTienBenhNhan.Huy))"
+		type="button" (click)="hoanPhieuThu(thongTinSoPhieuDaThu)" color="warn" mat-raised-button class="mr-2">
+		Hoàn phiếu thu
+	</button>
+
+	<button
+		*ngIf="thongTinSoPhieuDaThu.ConHanHuyPhieuThu && ((thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTheoChiPhi && thongTinSoPhieuDaThu.TinhTrang !== trangThaiThuTienBenhNhan.Huy)
+          || (thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.PhieuChi  && thongTinSoPhieuDaThu.TinhTrang !== trangThaiThuTienBenhNhan.Huy)
+          || (thongTinSoPhieuDaThu.LoaiPhieu === trangThaiThuTienBenhNhan.ThuTamUng && thongTinSoPhieuDaThu.TinhTrang !== trangThaiThuTienBenhNhan.Huy))"
+		type="button" (click)="huyPhieuThu(thongTinSoPhieuDaThu, false)" color="warn" mat-raised-button>
+		Hủy phiếu thu
+	</button>
+</div>

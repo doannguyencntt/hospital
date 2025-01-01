@@ -1,0 +1,86 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>IN DỊCH VỤ</div>
+    <button type="button" mat-icon-button (click)="close('No')" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content [ngStyle]="{'height':luaChon == 1 || luaChon == 2 ? '150px': '500px'}">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-radio id="chon-loai-dv" name="select" class="no-format-css pl-4 temp" [(model)]="luaChon"
+            (modelChange)="changeLuaChon($event)"
+            [items]="[{Value:1,Text:'Tất cả'},{Value:2,Text:'Theo nhóm'},{Value:3,Text:'Theo dịch vụ'}]">
+        </app-radio>
+        <span [style.display]="luaChon== 2 &&  data.Model.EnumInChiDinhKhamBenhNgoaiTru == 1 ? 'block':'none'"
+            fxFlex="100%">
+            <app-grid #gridTheoNhom [gridColumns]="gridColumnsNhomNgoaiTru" [gridDataSource]="gridDataSource"
+                [useAddDeault]="false" [useHeaderDefault]="false" (extCheckboxSelection)="extCheckboxSelection($event)"
+                [triggerSelectAll]="true" [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true"
+                [pageable]="false">
+            </app-grid>
+        </span>
+        <span [style.display]="luaChon == 3 &&  data.Model.EnumInChiDinhKhamBenhNgoaiTru == 1? 'block':'none'"
+            fxFlex="100%">
+            <app-grid #gridTheoDichVu [gridColumns]="gridColumnsDichVuNgoaiTru" [gridDataSource]="gridDataSource" [autoRefreshDataSource]="true"
+                [useAddDeault]="false" [useHeaderDefault]="false" (extCheckboxSelection)="extCheckboxSelection($event)"
+                [triggerSelectAll]="true" [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true" [headerTemplate]="headerTemplate"
+                [pageable]="true" [groups]="groups">
+            </app-grid>
+        </span>
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center" *ngIf="luaChon == 3">
+                <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px"
+                    fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)"
+                        (ngModelChange)="searchChanges()"
+                        placeholder="Nhập từ khóa..." />
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right" style="padding-bottom: 15px;">
+    <ng-container *ngIf="data.Model.EnumInChiDinhKhamBenhNgoaiTru == 1 && data.Model.Loai == 1">
+        <button type="button" color="primary" class="mr-1" mat-raised-button (click)="InDichVuChiDinh(1)"
+            >
+            In Chung</button>
+        <button type="button" color="primary" mat-raised-button (click)="InDichVuChiDinh(0)" >
+            In Chỉ Định</button>
+    </ng-container>
+    <ng-container *ngIf="data.Model.EnumInChiDinhKhamBenhNgoaiTru == 1  && data.Model.Loai == 2">
+        <button type="button" color="primary" class="mr-1" mat-raised-button (click)="InChiDinhNoiTru(1)"
+            >
+            In Chung</button>
+        <button (click)="InChiDinhNoiTru(0)" type="button" class="mr-2" color="primary" mat-raised-button>In
+            Chỉ Định</button>
+    </ng-container>
+    <ng-container *ngIf="data.Model.EnumInChiDinhKhamBenhNgoaiTru == 1 && data.Model.Loai == 3">
+        <button type="button" color="primary" class="mr-1" mat-raised-button (click)="InChiDinhPTTT(1)"
+            >
+            In Chung</button>
+        <button type="button" color="primary" mat-raised-button (click)="InChiDinhPTTT(0)" >
+            In Chỉ Định</button>
+    </ng-container>
+</mat-dialog-actions>
+<ng-template #nhomTemplate let-value="value" let-dataItem>
+    {{value}}
+</ng-template>
+
+<ng-template #checkBoxHeaderTemplate let-dataItem>
+    <input type="checkbox" id="vehicle1" name="vehicle1" [(ngModel)]="checkAll"
+        (ngModelChange)="SelectcheckAllboxIn($event)">
+</ng-template>
+<ng-template #checkBoxTemplate let-dataItem>
+    <input type="checkbox" id="vehicle1" [(ngModel)]="dataItem.isCheckRowItem" name="vehicle1"
+        (ngModelChange)="checkboxIn($event,dataItem)">
+</ng-template>
+
+<ng-template #checkBoxHeaderGroupTemplate let-dataItem>
+    <input type="checkbox" id="vehicle1" name="vehicle1" [(ngModel)]="checkAll"
+        (ngModelChange)="SelectcheckAllboxInGroup($event)">
+</ng-template>
+<ng-template #checkBoxGroupTemplate let-dataItem>
+    <input type="checkbox" id="vehicle1" [(ngModel)]="dataItem.isCheckRowItem" name="vehicle1"
+        (ngModelChange)="checkboxInGroup($event,dataItem)">
+</ng-template>

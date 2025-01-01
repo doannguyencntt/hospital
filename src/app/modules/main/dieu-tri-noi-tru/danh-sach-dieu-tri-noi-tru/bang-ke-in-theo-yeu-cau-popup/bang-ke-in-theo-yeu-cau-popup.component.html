@@ -1,0 +1,17 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+	<div>Xem trước khi in</div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+<mat-dialog-content style="overflow:hidden">
+	<app-radio fxFlex="100%" id="chon-phieu-in" class="no-label"
+		[items]="[{Value:true,Text:'In tất cả'},{Value:false,Text:'In theo khoa chỉ định'}]"
+		(modelChange)="modelChange($event)" [(model)]="inPhieuTheoYeuCau" label=" ">
+	</app-radio>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<button mat-button mat-dialog-close>Không</button>
+	<button mat-raised-button mat-button color="primary" (click)="InPhieu()" [mat-dialog-close]="true"
+		cdkFocusInitial>In Phiếu</button>
+</mat-dialog-actions>

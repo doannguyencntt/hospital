@@ -1,0 +1,105 @@
+<vex-page-layout>
+	<vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+		<div [class.px-gutter]="true" class="w-full flex justify-between">
+			<vex-breadcrumbs [crumbs]="[
+			    {Title:'Lịch sử khám chữa bệnh',Path:''}]">
+            </vex-breadcrumbs>
+		</div>
+	</vex-page-layout-header>
+
+	<vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+		<div @fadeInUp class="-mt-16">
+			<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+				<div class="card" fxFlex="100%">
+					<div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                            <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                                fxLayoutAlign="start center" style="margin-top: 2px;" kendoTooltip>
+                                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                                    type="search" name="searchString" [(ngModel)]="timKiemNangCaoObj.SearchString" (keyup)="onKey($event)"
+                                    (ngModelChange)="searchChanges($event)" placeholder="Họ tên, Mã NB, Mã TN" />
+                                <button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button"
+                                    class="button-barcoe-in-search" kendoTooltip title="Quét mã vạch thẻ" title="Phím tắt: Ctrl + Q">
+                                    <img src="assets/img/barcode.png" alt="Scan barcode" />
+                                </button>
+                            </div>
+
+                            <app-textboxnumeric fxFlex="10%" fxFlex.sm="10%" [(model)]="timKiemNangCaoObj.NamSinh" id="nam" label="Năm sinh"
+                                style="margin-top: 1px;" class="ml-2  on-header" (keyup)="onKey($event)" format="0" min="1" max="9999">
+                            </app-textboxnumeric>
+                            <app-textboxmask id="sdt" fxFlex="10%" fxFlex.sm="10%" label="Số điện thoại" class="ml-2 on-header"
+                                (keyup)="onKey($event)" style="margin-top: 1px;" [(model)]="timKiemNangCaoObj.SoDienThoai" mask="000 000 0000"
+                                maxlength="12">
+                            </app-textboxmask>
+                            
+                            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                                <mat-icon [icIcon]="icSearch"></mat-icon>
+                            </button>
+                            
+                            <app-daterangepicker id="tuNgayDenNgay" fxFlex="20%" fxFlex.sm="20%" class="on-header ml-2"
+                                [(model)]="timKiemNangCaoObj.TuNgayDenNgay" label="Từ ngày - đến ngày" (keyup)="onKey($event)">
+                            </app-daterangepicker>
+                            <button type="button" color="primary" (click)="timKiemNangCao()" class="ml-2" mat-raised-button>Tìm</button>
+                        </div>
+
+                        <kendo-splitter class="mt-2" *ngIf="lichSuKhamChuaBenh != undefined">
+                            <kendo-splitter-pane [collapsible]="true" size="25%">
+                                <p *ngIf="lichSuKhamChuaBenh.LichSuTiepNhans.length == 0">
+                                    Không có lịch sử khám chữa bệnh
+                                </p>
+                                <div *ngIf="lichSuKhamChuaBenh.LichSuTiepNhans.length > 0">
+                                    <table fxFlex="100%" class="table table-striped">
+                                        <tbody>
+                                            <ng-container *ngFor="let tiepNhan of lichSuKhamChuaBenh.LichSuTiepNhans">
+                                                <tr class="parent-row">
+                                                    <td valign="center">
+                                                        <div>
+                                                            <a (click)="chonYeuCauTiepNhan(tiepNhan)">{{tiepNhan.DisplayName}}</a>
+                                                            <button *ngIf="tiepNhan.HienLichSuChiTiet" mat-raised-button type="button" 
+                                                                color="primary" class="ml-2" (click)="getTatCaPhieuIn(tiepNhan)">Xem tất cả
+                                                            </button>
+                                                            <ng-container *ngIf="tiepNhan.CoLichSuYLenh && timKiemNangCaoObj.CoQuyenXemYLenh">
+                                                                <button *ngIf="!tiepNhan.HienLichSuNoiTru" mat-raised-button type="button" color="primary" class="ml-2"
+                                                                    (click)="xemBenhAn(tiepNhan)">Xem BA
+                                                                </button>
+                                                                <button *ngIf="tiepNhan.HienLichSuNoiTru" mat-raised-button type="button" color="primary" class="ml-2"
+                                                                    (click)="xemBenhAn(tiepNhan, false)">Ẩn BA
+                                                                </button>
+                                                            </ng-container>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <ng-container *ngIf="tiepNhan.HienLichSuChiTiet">
+                                                    <ng-container *ngFor="let lichSu of tiepNhan.ChiTietKhamChuaBenhs">
+                                                        <tr
+                                                            *ngIf="lichSu.LoaiLichSuKhamChuaBenh != loaiLichSuKhamChuaBenhYLenh || tiepNhan.HienLichSuNoiTru">
+                                                            <td>
+                                                                <b *ngIf="lichSu.IsGroupItem" class="pl-4">{{lichSu.DisplayName}}</b>
+                                                                <a *ngIf="!lichSu.IsGroupItem" class="pl-4"
+                                                                    (click)="chonChiTietCanIn(lichSu, tiepNhan)">{{lichSu.DisplayName}}</a>
+                                                            </td>
+                                                        </tr>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            
+                            </kendo-splitter-pane>
+                            <kendo-splitter-pane style="overflow:initial;">
+                                <div class="container-iframe" *ngIf="fileUrl != null">
+                                    <iframe id="fileLichSuKham" frameborder="0" [src]="fileUrl | safe"
+                                        type="application/pdf" allowTransparency="true" background="transparent" style="display:none"
+                                        onload="this.style.display = 'block';">
+                                    </iframe>
+                                </div>
+                            </kendo-splitter-pane>
+                        </kendo-splitter>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

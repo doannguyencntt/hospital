@@ -1,0 +1,59 @@
+<div class="card overflow-auto mb-4">
+    <app-grid heightToolbar="235" [gridColumns]="gridKetQuaPhauThuatColumns" #gridChild
+        [urlGetData]="'PhauThuatThuThuat/GetDanhSachDaPhauThuatThuThuatHienTaiAsync'" [additionalSearchString]="query"
+        [urlGetTotalPage]="'PhauThuatThuThuat/GetTotalPageDanhSachDaPhauThuatThuThuatHienTaiAsync'" [sort]="sort"
+        [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false"
+        [headerTemplate]="headerTemplate" [checkboxAble]="false">
+    </app-grid>
+</div>
+
+<ng-template #headerTemplate>
+    <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+        <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" style="margin-top: 2px;">
+            <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+            <input class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search" (keyup)="onKey($event)"
+                placeholder="Nhập từ khóa..." [(ngModel)]="searchString" (ngModelChange)="searchChanges()" />
+        </div>
+        <app-datetimepicker fxFlex="220px" id="ThoiDiemTiepNhanTuFormat" label="Thời điểm hoàn thành từ"
+            class="ml-2 on-header" [(model)]="lichSuPTTT.ThoiDiemTiepNhanTuFormat" #tiepnhantu
+             (keyup)="onKey($event)">
+        </app-datetimepicker>
+        <app-datetimepicker fxFlex="220px" id="ThoiDiemTiepNhanDenFormat" class="ml-2 on-header"
+            label="Thời điểm hoàn thành đến" [(model)]="lichSuPTTT.ThoiDiemTiepNhanDenFormat"
+             (keyup)="onKey($event)">
+        </app-datetimepicker>
+        <app-checkbox [(model)]="lichSuPTTT.ThongTinThucHien.ThucHien" id="thucHien" label="Thực hiện" class="ml-2 mt-2 mr-1"></app-checkbox>
+        <app-checkbox [(model)]="lichSuPTTT.ThongTinThucHien.KhongThucHien" id="khongThucHien" label="Không thực hiện" class="mt-2 mr-1"></app-checkbox>
+
+        <button type="button" color="primary" (click)="TimKiemNangCao()" class="ml-2" mat-raised-button>Tìm</button>
+    </div>
+</ng-template>
+
+<ng-template #TrangThaiTemplate let-dataItem>
+    <button color="primary" mat-raised-button
+        (click)="XemPTTTBenhNhanHoanThanh(dataItem.YeuCauTiepNhanId,dataItem.Id,dataItem.SoLan, dataItem.LaKhongThucHien)">Xem</button>
+</ng-template>
+
+<ng-template #TuongTrinhLaiTemplate let-dataItem>
+    <!-- *ngIf="dataItem.DuocTuongTrinhLai===true" -->
+    <button color="primary" mat-raised-button *ngIf="dataItem.DuocTuongTrinhLai===true"
+        (click)="tuongtinhLai(dataItem)">Tường trình lại</button>
+</ng-template>
+
+<ng-template #trangThaiYCKTTemplate let-dataItem>
+    <label *ngIf="dataItem.TuVongTrongPTTT === false">
+        <strong><span class="green">Đã chuyển giao</span></strong>
+    </label>
+    <label *ngIf="dataItem.TuVongTrongPTTT === true">
+        <strong><span class="red">Đã tử vong</span></strong>
+    </label>
+</ng-template>
+
+<ng-template #thoiDiemHoanThanhTemplate let-dataItem>
+    {{dataItem.ThoiDiemHoanThanhStr}}
+</ng-template>
+
+<ng-template #thoiDiemThucHienTemplate let-dataItem>
+    {{dataItem.ThoiDiemThucHienDisplay}}
+</ng-template>

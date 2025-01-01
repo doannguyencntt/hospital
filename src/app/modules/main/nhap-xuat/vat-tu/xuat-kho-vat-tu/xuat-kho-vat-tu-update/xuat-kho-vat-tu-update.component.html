@@ -1,0 +1,131 @@
+<!-- <vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Nhập xuất',Path:''}
+            ,{Title:'Dược phẩm',Path:''}
+            ,{Title:'Xuất kho',Path:'/nhap-xuat/duoc-pham/xuat-kho'}
+            
+                ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6"> -->
+
+<app-header-form [crumbs]="[
+        {Title:'Nhập xuất',Path:''}
+        ,{Title:'Dược phẩm',Path:''}
+        ,{Title:'Xuất kho',Path:'/nhap-xuat/vat-tu/xuat-kho', queryParams: {holdQuery : true}}
+        
+            ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chi Tiết Xuất Kho Dược Phẩm</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <!-- 
+                            <h3 fxFlex="100%" class="sub-title mt-0">THÔNG TIN CHUNG
+                            </h3> -->
+
+
+                    <app-textbox id="SoPhieu" fxFlex="10%" fxFlex.sm="10%" [(model)]="xuatKho.SoPhieu" [disabled]="true"
+                        label="Số phiếu" maxlength="1000">
+                    </app-textbox>
+                    <app-combobox id="KhoXuatId" fxFlex="15%" fxFlex.sm="15%" [(model)]="xuatKho.KhoXuatId"
+                        [disabled]="true" [required]="true" label="Kho xuất" url="TonKho/GetKhoDuocPham"
+                        [modelText]="xuatKho.KhoXuatDisplay"
+                        [validationerror]="'KhoXuatId' | validationerror:validationErrors">
+                    </app-combobox>
+                    <app-combobox id="KhoNhapId" fxFlex="15%" fxFlex.sm="15%"
+                        *ngIf="xuatKho.LoaiXuatKho != xuatChoBenhNhan && xuatKho.KhoNhapId != null"
+                        [(model)]="xuatKho.KhoNhapId" label="Kho nhập" [disabled]="true" url="TonKho/GetKhoDuocPham"
+                        [required]="true" [modelText]="xuatKho.KhoNhapDisplay"
+                        [validationerror]="'KhoNhapId' | validationerror:validationErrors">
+                    </app-combobox>
+
+
+                    <app-combobox id="NguoiXuatId" fxFlex="20%" fxFlex.sm="20%" [(model)]="xuatKho.NguoiXuatId"
+                        [required]="true" [modelText]="xuatKho.NguoiXuatDisplay" bind="true" label="Người xuất"
+                        url="XuatKhoVatTu/GetNguoiXuat" [disabled]="true"
+                        [validationerror]="'NguoiXuatId' | validationerror:validationErrors">
+                    </app-combobox>
+
+                    <app-combobox *ngIf="xuatKho.LoaiNguoiNhan == 1" id="NguoiNhanId" fxFlex="20%" fxFlex.sm="20%"
+                        [(model)]="xuatKho.NguoiNhanId" [modelText]="xuatKho.NguoiNhanDisplay" label="Người nhận"
+                        [disabled]="true" url="XuatKhoVatTu/GetNguoiNhan" [required]="true"
+                        [validationerror]="'NguoiNhanId' | validationerror:validationErrors">
+                    </app-combobox>
+
+                    <app-textbox *ngIf="xuatKho.LoaiNguoiNhan == 2" id="TenNguoiNhan" fxFlex="20%" fxFlex.sm="20%"
+                        [(model)]="xuatKho.TenNguoiNhan" [disabled]="true" label="Người nhận" maxlength="1000">
+                    </app-textbox>
+
+                    <app-datetimepicker id="NgayXuat" fxFlex="20%" fxFlex.sm="20%" label="Ngày xuất"
+                        [(model)]="xuatKho.NgayXuat" [required]="true" [disabled]="true"
+                        [validationerror]="'NgayXuat' | validationerror:validationErrors">
+                    </app-datetimepicker>
+
+                    <app-textbox id="LyDoXuatKho" fxFlex="100%" fxFlex.sm="100%" [(model)]="xuatKho.LyDoXuatKho"
+                        [disabled]="true" label="Ghi chú" maxlength="99999999" [required]="true"
+                        [validationerror]="'LyDoXuatKho' | validationerror:validationErrors">
+                    </app-textbox>
+
+
+                </div>
+
+                <div style="height: 20px;">
+
+                </div>
+
+                <!-- <app-xuat-kho-shared [xemChiTiet]="true">
+                        </app-xuat-kho-shared> -->
+
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <h3 fxFlex="100%" class="sub-title mt-0">THÔNG TIN VẬT TƯ
+                    </h3>
+
+                    <app-grid fxFlex="100%" HideCheckAll="true" [gridColumns]="gridColumns" [sort]="sort"
+                        [headerTemplate]="headerTemplate" [documentType]="documentType" [urlGetData]="urlGetData"
+                        [urlGetTotalPage]="urlGetTotal" [useHeaderDefault]="false" [useActionDefault]="false"
+                        [lazyLoadPage]="true" [checkboxAble]="false" pageSize="50" [autoHeight]="true"
+                        [headerTemplate]="headerTemplate" #gridVatTu [groups]="groups"></app-grid>
+
+                </div>
+
+                <ng-template #tenNhomGroupHeaderTemplate let-value="value" let-dataItem>
+                    <strong>{{value}}</strong>
+                </ng-template>
+
+                <ng-template #headerTemplate>
+                    <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                        <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px"
+                            fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                            <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                            <input [formControl]="searchCtrl"
+                                class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search"
+                                name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)"
+                                (ngModelChange)="clearSearch()" placeholder="Nhập từ khóa..." />
+                        </div>
+                    </div>
+                </ng-template>
+
+                <div class="form-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <!-- <app-formfooter [hiddenUpdateButton]="isValidateUpdate != true" [bodyComponent]="shared" type="update" (updated)="onUpdated()">
+                            </app-formfooter> -->
+                    <button type="button" (click)="huy()" mat-button class="mr-1"><i class="ft-arrow-left"></i>
+                        Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- </vex-page-layout-content>
+</vex-page-layout> -->

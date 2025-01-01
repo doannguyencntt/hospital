@@ -1,0 +1,45 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>XEM TRƯỚC KHI IN</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div>
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-radio fxFlex="100%" id="chon-phieu-in" class="no-label"
+                [items]="[{Value:true,Text:'Tất cả'},{Value:false,Text:'Theo dịch vụ'}]"
+                (modelChange)="modelChange($event)" [(model)]="inPhieuTheoYeuCau" label=" ">
+            </app-radio>
+            <app-grid *ngIf="!inPhieuTheoYeuCau" [gridColumns]="gridColumns" [useActionDefault]="false" [lazyLoadPage]="true"
+                urlGetData="DieuTriNoiTru/GetDataForGridAsyncSuatAn" #gridList [height]="300"
+                urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridAsyncSuatAn" [useHeaderDefault]="false"
+                [headerTemplate]="headerTemplate" [checkboxAble]="true" [documentType]="documentType"
+                (extCheckboxSelection)="chonDichVu($event)"  [triggerSelectAll]="true"
+                [additionalSearchString]="additionString"> </app-grid>
+
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                        fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px" kendoTooltip>
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                            type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)"
+                            (ngModelChange)="searchChanges($event)" placeholder="Tìm kiếm" />
+                    </div>
+                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button"
+                        (click)="clearSearch()">
+                        <mat-icon [icIcon]="icSearch"></mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+	<button mat-button mat-dialog-close>Không</button>
+	<button mat-raised-button mat-button color="primary" (click)="InPhieu()" [mat-dialog-close]="true"
+		cdkFocusInitial>In Phiếu</button>
+</mat-dialog-actions>

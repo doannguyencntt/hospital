@@ -1,0 +1,46 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <!-- <h1 class="title mt-0 mb-1">Danh Mục Hồ Sơ Nhân Viên</h1> -->
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Nhóm Nhân Viên',Path:''}
+                    ,{Title:'Tài Khoản Người Dùng',Path:'/danh-muc/nhom-nhan-vien/tai-khoan-nguoi-dung',Active:true}
+                ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/nhom-nhan-vien/tai-khoan-nguoi-dung" [gridColumns]="gridColumns"
+                [documentType]="documentType" [lazyLoadPage]="true"
+                [useActionDefault]="false" #gridList
+                [showExportExcel]="true" (extExportExcel)="exportExcel()"
+                [checkboxAble]="false" [sort]="sort"></app-grid>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<ng-template #actionTemplate let-dataItem>
+    <button kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+        <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+    </button>
+    <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+        <ng-template let-customer="customer" matMenuContent>
+            <button (click)="thayDoiMatKhau(dataItem.Id)" mat-menu-item>
+                <span>Thay đổi mật khẩu</span>
+            </button>
+            <button (click)="thayDoiQuyen(dataItem.Id)" mat-menu-item>
+                <span>Thay đổi quyền</span>
+            </button>
+            <button (click)="kichHoat(dataItem)" mat-menu-item>
+                <span>Kích hoạt / bỏ kích hoạt</span>
+            </button>
+            <button (click)="xoa(dataItem.Id)" mat-menu-item>
+                <span>Xóa</span>
+            </button>
+        </ng-template>
+    </mat-menu>
+</ng-template>

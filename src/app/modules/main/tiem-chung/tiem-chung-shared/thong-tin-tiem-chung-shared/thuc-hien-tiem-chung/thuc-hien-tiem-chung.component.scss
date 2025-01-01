@@ -1,0 +1,13 @@
+.po-h{
+    color: #005dab;
+    position: relative;
+    top: 5px;
+    left: 5px;
+    mat-icon{
+        display: contents;
+    }
+}
+
+.po-h.disabled {
+    color: rgba(0, 0, 0, 0.12);
+}

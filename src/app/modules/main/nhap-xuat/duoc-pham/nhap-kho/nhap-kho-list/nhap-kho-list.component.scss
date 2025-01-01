@@ -1,0 +1,46 @@
+.selectAddViTri {
+    border: 0px solid #ccc;
+    width: 120px;
+    border-radius: 0px;
+    overflow: hidden;
+    background: #fafafa;
+
+}
+
+.selectAddViTri:before 
+{ 
+	// content:"\f107"; 
+	font-family:'FontAwesome';
+	position: absolute; 
+	top:3px; 
+	right: 12px; 
+	font-size: 18px; 
+}
+
+.selectAddViTri select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+}
+
+.selectAddViTri select:focus 
+{
+    outline: none;
+}
+
+
+select option
+{ 
+    color: black;
+}
+
+// .greenText{ background-color:green; }
+
+// .blueText{ background-color:blue; }
+
+.redText{ color:red; }
+.greenText{ color:green; }

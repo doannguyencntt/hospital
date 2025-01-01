@@ -1,0 +1,71 @@
+<div [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <p fxFlex="100%"><strong>
+        1. Quá trình bệnh lý và diễn biến lâm sàng
+    </strong></p>
+    <app-textarea [(model)]="tongKetBenhAn.QuaTrinhBenhLy" class="no-label" id="QuaTrinhBenhLy" fxFlex="100%" maxlength="2000">
+    </app-textarea>
+    <p fxFlex="100%"><strong>
+        2. Tóm tắt kết quả xét nghiệm và CLS có giá trị chẩn đoán
+    </strong></p>
+    <app-textarea [(model)]="tongKetBenhAn.XNMau" id="XNMau" fxFlex="50%" maxlength="2000" label="XN máu">
+    </app-textarea>
+    <app-textarea [(model)]="tongKetBenhAn.XQuang" id="XQuang" fxFlex="50%" maxlength="2000" label="X quang">
+    </app-textarea>
+    <app-textarea [(model)]="tongKetBenhAn.XNTeBao" id="XNTeBao" fxFlex="50%" maxlength="2000" label="XN tế bào">
+    </app-textarea>
+    <app-textarea [(model)]="tongKetBenhAn.SieuAm" id="SieuAm" fxFlex="50%" maxlength="2000" label="Siêu âm">
+    </app-textarea>
+    <app-textarea [(model)]="tongKetBenhAn.XNBLGP" id="XNBLGP" fxFlex="50%" maxlength="2000" label="XN BLGP">
+    </app-textarea>
+    <app-textarea [(model)]="tongKetBenhAn.XNKhac" id="XNKhac" fxFlex="50%" maxlength="2000" label="Các XN khác">
+    </app-textarea>
+      
+    <div fxFlex="50%">
+        <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <p fxFlex="100%"><strong>
+                3. Phương pháp điều trị
+            </strong></p>  
+            <app-textarea [(model)]="tongKetBenhAn.PhuongPhapDieuTri" style="margin-bottom: 15px;" class="no-label" id="PhuongPhapDieuTri" fxFlex="100%" maxlength="2000">
+            </app-textarea>
+            <p fxFlex="100%"><strong>
+                4. Tình trạng người bệnh khi ra viện
+            </strong></p>  
+            <app-textarea [(model)]="tongKetBenhAn.TinhTrangNguoiBenhKhiRaVien" style="margin-bottom: 15px;" class="no-label" id="TinhTrangNguoiBenhKhiRaVien" fxFlex="100%" maxlength="2000">
+            </app-textarea>
+            <p fxFlex="100%"><strong>
+                5. Hướng điều trị và các chế độ tiếp theo
+            </strong></p>  
+            <app-textarea [(model)]="tongKetBenhAn.HuongDieuTri" minHeight="80" class="no-label" id="HuongDieuTri" fxFlex="100%" maxlength="2000">
+            </app-textarea>
+        </div>
+    </div>
+    
+    <div fxFlex="50%">
+        <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <p fxFlex="100%">
+                <strong>Hồ sơ, phim ảnh</strong>
+            </p>
+            <app-grid fxFlex="100%" HideCheckAll="true" [gridColumns]="gridColumns" [documentType]="documentType"
+            [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false"
+            [pageable]="false" height="auto" #grid
+            [gridDataSource]="gridDataTongKetBenhAn"></app-grid>
+        </div>
+
+    </div>
+
+    <ng-template #soToTemplate  let-dataItem>
+        <app-textboxnumeric class="no-label" id="SoTo{{dataItem.Id}}" [(model)]="dataItem.SoTo"
+        (modelChange)="soToChange($event, dataItem)"
+            min="0" max="99999">
+        </app-textboxnumeric>
+    </ng-template>
+
+</div>
+
+<ng-template #loaiFooterTemplate let-dataItem>
+    <span style="float:right">Tổng cộng:</span>
+</ng-template>
+
+<ng-template #soToFooterTemplate let-dataItem>
+    <div style="text-align: center;">{{tongCong}}</div>
+</ng-template>

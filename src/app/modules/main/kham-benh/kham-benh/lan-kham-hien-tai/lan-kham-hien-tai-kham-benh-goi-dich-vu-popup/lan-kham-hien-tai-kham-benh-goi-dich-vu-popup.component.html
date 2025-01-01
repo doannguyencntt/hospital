@@ -1,0 +1,77 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Thêm gói dịch vụ</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+        <!-- <div style="padding-top: 0;padding-bottom: 0;margin: -16px!important;"> -->
+        <app-grid *ngIf="loadedGrid" fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridColumns"
+            [gridDataSource]="gridDataSource" [documentType]="data.documentType" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            maxHeight="500" [pageable]="false" [groups]="data.groups">
+        </app-grid>
+        <!-- </div> -->
+    </div>
+
+    <ng-template #noiThucHienTemplate let-dataItem let-rowIndex="rowIndex">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+            fxLayoutAlign="space-between">
+            <div fxFlex="100%" style="position: relative;">
+                <!-- Dich vu Giuong -->
+                <app-combobox *ngIf="dataItem.NhomId ===5" [(model)]="dataItem.NoiThucHienId"
+                    [modelText]="dataItem.NoiThucHien" popupSettings="null" class="item-no-padding no-label"
+                    url="KhamBenh/GetPhongThucHienChiDinhGiuong" [template]="phongKhamTemplate"
+                    [templateHeader]="phongKhamTemplateHeader" [idWhere]="dataItem.LoaiYeuCauDichVuId" [autoSelectFirstItem]="true"
+                    [validationerror]="'GoiDichVuChiTietNoiThucHiens['+rowIndex+'].NoiThucHienId' | validationerror:validationErrors">
+                    <ng-template #phongKhamTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="20%">Mã</th>
+                                <th width="80%">Tên phòng</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #phongKhamTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="20%">{{dataItem.MaPhong}}</td>
+                                <td width="80%">{{dataItem.TenPhong}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+                <app-combobox *ngIf="dataItem.NhomId === 1 || dataItem.NhomId === 2" popupSettings="null"
+                    class="item-no-padding no-label" [(model)]="dataItem.NoiThucHienId"
+                    [modelText]="dataItem.NoiThucHien" [idWhere]="dataItem.LoaiYeuCauDichVuId" [autoSelectFirstItem]="true"
+                    url="KhamBenh/GetPhongThucHienChiDinhKhamOrDichVuKyThuat" [template]="phongKhamTemplate"
+                    [templateHeader]="phongKhamTemplateHeader" id="NoiThucHien{{dataItem.Id}}"
+                    [validationerror]="'GoiDichVuChiTietNoiThucHiens['+rowIndex+'].NoiThucHienId' | validationerror:validationErrors">
+                    <ng-template #phongKhamTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="20%">Mã</th>
+                                <th width="40%">Tên phòng</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #phongKhamTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="20%">{{dataItem.MaPhong}}</td>
+                                <td width="40%">{{dataItem.TenPhong}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+            </div>
+        </div>
+    </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-stroked-button color="primary" [mat-dialog-close]="" cdkFocusInitial>Hủy</button>
+    <button mat-raised-button mat-button color="primary" (click)="kiemTraValiDationNoiThucHien()">Lưu</button>
+</mat-dialog-actions>

@@ -1,0 +1,139 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    style="padding-top: 13px;padding-bottom: 10px;" [ngClass]="{'disableDiv':IsKetThucBenhAn}">
+
+    <app-textbox fxFlex="30%" id="So" label="Số" [(model)]="giayChungSinhObj.So" required="true" maxlength="50"
+        [validationerror]="'So' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox fxFlex="30%" id="QuyenSo" label="Quyển Sổ" [(model)]="giayChungSinhObj.QuyenSo" required="true"
+        maxlength="50" [validationerror]="'QuyenSo' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox fxFlex="40%" id="HoVaTenCha" label="Họ và tên cha" [(model)]="giayChungSinhObj.HoVaTenCha"
+        maxlength="200">
+    </app-textbox>
+    <app-textbox fxFlex="30%" id="GiayCMND" label="Giấy CMND/Hộ chiếu" [(model)]="giayChungSinhObj.CMND" required="true"
+        [validationerror]="'CMND' | validationerror:validationErrors">
+    </app-textbox>
+    <app-datepicker id="NgayCap" fxFlex="30%" [(model)]="giayChungSinhObj.NgayCap" required="true" label="Ngày cấp"
+        [validationerror]="'NgayCap' | validationerror:validationErrors">
+    </app-datepicker>
+    <app-textbox fxFlex="40%" id="NoiCap" label="Nơi cấp" [(model)]="giayChungSinhObj.NoiCap" required="true"
+        [validationerror]="'NoiCap' | validationerror:validationErrors">
+    </app-textbox>
+    <!-- <app-textbox fxFlex="30%" id="DuDinhDatTenCon" label="Dự định đặt tên con"
+        [(model)]="giayChungSinhObj.DuDinhDatTenCon" required="true"
+        [validationerror]="'DuDinhDatTenCon' | validationerror:validationErrors">
+    </app-textbox> -->
+    <app-combobox id="DuDinhDatTenCon" fxFlex="30%" fxFlex.sm="30%" label="Dự định đặt tên con" bind="true"
+        url="DieuTriNoiTru/GetDataInfoBACon?yeuCauTiepNhanId={{yeuCauTiepNhanId}}" required="true" 
+        (selectionChange)="selectionThongTinCon($event)"
+        [(model)]="giayChungSinhObj.DuDinhDatTenConId" [(modelText)]="giayChungSinhObj.DuDinhDatTenCon" [autoSelectFirstItem]="true">
+    </app-combobox>
+    
+    <app-textbox id="GioiTinh" fxFlex="15%" label="Giới tính" [(model)]="giayChungSinhObj.GioiTinh">
+    </app-textbox>
+    <app-textboxnumeric fxFlex="15%"  [decimals]="2" format="#.##" [spinners]="false" [(model)]="giayChungSinhObj.CanNang" label="Cân nặng"
+        [max]="9999">
+    </app-textboxnumeric>
+
+    <app-textbox fxFlex="40%" id="GhiChu" label="Ghi chú" [(model)]="giayChungSinhObj.GhiChu">
+    </app-textbox>
+    <app-datepicker id="NgayCapGiayChungSinh" fxFlex="25%" [(model)]="giayChungSinhObj.NgayCapGiayChungSinh"
+        required="true" label="Ngày cấp giấy chứng sinh"
+        [validationerror]="'NgayCapGiayChungSinh' | validationerror:validationErrors">
+    </app-datepicker>
+    <app-combobox id="NhanVienDoDeId" fxFlex="25%" [(model)]="giayChungSinhObj.NhanVienDoDeId" popupSettings="null"
+        [modelText]="giayChungSinhObj.TenNhanVienDoDe" url="ToaThuocMau/BacSiKeToa" label="Người đỡ đẻ"  
+        (selectionChange)="selectChangeNuoiDoDe($event)" 
+       >
+    </app-combobox>
+
+    <app-combobox id="NhanVienGhiPhieuId" fxFlex="25%" [(model)]="giayChungSinhObj.NhanVienGhiPhieuId" 
+        [modelText]="giayChungSinhObj.TenNhanVienGhiPhieu" url="ToaThuocMau/BacSiKeToa" popupSettings="null" (selectionChange)="selectChangeNhanVienGhiPhieu($event)"
+        label="Người ghi phiếu">
+    </app-combobox>
+
+    <app-combobox id="GiamDocChuyenMonId" fxFlex="25%" [(model)]="giayChungSinhObj.GiamDocChuyenMonId"  (selectionChange)="selectChangeGiamDocChuyenMon($event)"
+        [modelText]="giayChungSinhObj.TenGiamDocChuyenMon" url="ToaThuocMau/BacSiKeToa" popupSettings="null"
+        label="Giám đốc chuyên môn">
+    </app-combobox>
+    <app-datepicker id="ThoiGianDe" fxFlex="25%" [(model)]="giayChungSinhObj.ThoiGianDe" label="Thời gian đẻ">
+    </app-datepicker>
+
+    <div fxFlex="100%">
+    </div>
+    <app-upload id="Upload" #uploadChungSinh [allowedExtensions]="allowedExtensions" fxFlex="50%"
+        [(model)]="giayChungSinhObj.FileDinhKems" [multiple]="true" label="File đính kèm"
+        [template]="templateFileChungSinhInfo">
+    </app-upload>
+    <ng-template #templateFileChungSinhInfo let-files>
+        <table width="100%">
+            <tr>
+                <td>
+                    <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                        (click)="uploadChungSinh.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                    <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="uploadChungSinh.viewFile(files[0])"
+                        class="green" class="custom-name green">{{files[0].name}}</a>
+                </td>
+                <td style="width:25px">
+                    <a type="button" (click)="uploadChungSinh.remove(files[0].uid)" mat-icon-button>
+                        <mat-icon [icIcon]="icClear"></mat-icon>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </ng-template>
+    <div fxFlex="70%">
+        <button type="button" color="primary" mat-raised-button mat-button *ngIf="noiTruHoSoKhacGiayChungSinh.Id != 0"(click)="capLai()">
+            Cấp lại
+        </button>
+    </div>
+    <div fxFlex="30%">
+        <div style="padding-top: 11px !important;float: right">
+            <!-- *ngIf="hoSoKhacGiayChungSinh.SoConHienTai > 0" -->
+            <button type="button" style="margin-right: 10px; pointer-events: all;" mat-raised-button mat-button
+                (click)="inGiayChungSinh()">
+                In
+            </button>
+            <button type="button" style="margin-right: 10px; pointer-events: all;" mat-raised-button mat-button
+                (click)="inTatCa()">
+                In tất cả
+            </button>
+            <button type="button" style="margin-right: 10px;" mat-raised-button mat-button (click)="huy()">
+                Hủy
+            </button>
+            <button type="button" color="primary" mat-raised-button mat-button (click)="luu()">
+                Lưu
+            </button>
+        </div>
+    </div>
+    <fieldset fxFlex="100%" [style.display]="gridDataSource.total > 0 ? 'block':'none'">
+        <legend>DANH SÁCH GIẤY CHỨNG SINH</legend>
+        <div fxFlex="100%" style="padding: 15px;">
+            <app-grid #giayChungSinh fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns"
+                [allowSortDefault]="true" [gridDataSource]="gridDataSource" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" maxHeight="500" [pageable]="false" masterName="giayChungSinh">
+            </app-grid>
+        </div>
+    </fieldset>
+    <ng-template #actionTemplate let-dataItem>
+        <button style="color: red;text-align: left;" mat-icon-button kendoTooltip title="Xóa" type="button"
+            (click)="xoaChungSinh(dataItem.NoiTruHoSoKhacId)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+        <span style="text-align: center;">
+            <a style="pointer-events: all;" (click)="viewChungSinh(dataItem.NoiTruHoSoKhacId)">
+                {{dataItem.DuDinhDatTenCon}}
+            </a>
+        </span>
+    </ng-template>
+    <ng-template #trangThaiTemplate let-dataItem>
+        <span *ngIf="dataItem.TrangThaiLuu == 1">Cấp lần đầu</span>
+        <span *ngIf="dataItem.TrangThaiLuu == 2">Cấp lại</span>
+    </ng-template>
+    <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+</div>

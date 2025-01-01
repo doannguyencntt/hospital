@@ -1,0 +1,17 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="Description" fxFlex="100%" fxFlex.sm="100%%" [required]="true" 
+        [(model)]="template.Description" label="Mô tả" [validationerror]="'Description' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Body" fxFlex="100%" fxFlex.sm="100%%" [required]="true" *ngIf="template.MessagingType != 3"
+             [(model)]="template.Body" label="Nội dung" [validationerror]="'Body' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Title" fxFlex="100%" fxFlex.sm="100%%" [required]="true" *ngIf="template.MessagingType == 3"
+        [(model)]="template.Title" label="Tiêu đề" [validationerror]="'Title' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-editor *ngIf="template.MessagingType == 3" id="Body" fxFlex="100%" [(model)]="template.Body" label="Nội dung" [validationerror]="'Body' | validationerror:validationErrors"></app-editor>
+
+</div>

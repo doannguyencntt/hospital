@@ -1,0 +1,124 @@
+<app-grid [sort]="sortConfig" [pageSize]="_pageSize" baseRoute="/danh-sach-thu-dich-vu-noi-tru" 
+[gridColumns]="gridThuNganChuaQuyetToanColumns" [useActionDefault]="false" [keyCode]="keyCode" [lazyLoadPage]="true"
+ urlGetData="ThuNganNoiTru/GetDataNoiTruForGridAsync" heightToolbar="250" urlGetTotalPage="ThuNganNoiTru/GetTotalNoiTruPageForGridAsync" 
+ [useHeaderDefault]="false" #gridList [headerTemplate]="headerTemplate" [checkboxAble]="false" [documentType]="documentType" 
+ (extEnterChangePage)="extEnterChangePage($event)" [additionalSearchString]="queryStrings"> </app-grid>
+<!--============================================ Danh sách chưa quyết toán==============================================-->
+<ng-template #headerTemplate>
+	<div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+		<button [matMenuTriggerFor]="appMenu" mat-flat-button class="button-status" fxFlex="530px" #trigger="matMenuTrigger">
+			<strong>Trạng thái</strong>: <span *ngFor="let item of listTagShowOnHeader; let i = index">{{item.Title + (i==listTagShowOnHeader.length-1?"":";")}} </span>
+			<mat-icon [icIcon]="icExpandMore" class="icon-expand-more"></mat-icon>
+		</button>
+		<div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px" kendoTooltip>
+			<ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+			<input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)" (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa(Mã NB,Tên NB,Năm sinh)..." />
+			<button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button" class="button-barcoe-in-search" kendoTooltip title="Quét mã vạch thẻ" title="Phím tắt: Ctrl + Q">
+				<img src="assets/img/barcode.png" alt="Scan barcode" />
+			</button>
+		</div>
+		<button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+			<mat-icon [icIcon]="icSearch"></mat-icon>
+		</button>
+		<!-- custom lại màm hình fillter -->
+		<button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+			<mat-icon [icIcon]="icSearch"></mat-icon>
+		</button>
+		<mat-menu #appMenu="matMenu" class="menu-form-wrapper menu-status" [hasBackdrop]="false">
+			<div (click)="$event.stopPropagation()" fxFlex="250px">
+				<mat-list class="list mat-elevation-z1">
+					<h3 mat-subheader class="pt-0">Trạng thái:</h3>
+					<mat-list-item>
+						<app-checkbox #choQuyetToan fxFlex="100%" [(model)]="choThuTien.ChoQuyetToan" id="choquyettoan" (modelChange)="getInputSearchValue($event, choQuyetToan.id, choQuyetToan.label)" value="choquyettoan" label="Chờ quyết toán"> </app-checkbox>
+					</mat-list-item>
+					<mat-list-item>
+						<app-checkbox #ChoTamUngThem fxFlex="100%" [(model)]="choThuTien.ChoTamUngThem" id="chotamung" value="chotamung" (modelChange)="getInputSearchValue($event, ChoTamUngThem.id, ChoTamUngThem.label)" label="Chờ tạm ứng thêm"> </app-checkbox>
+					</mat-list-item>
+					<mat-list-item>
+						<app-checkbox #daTamUng fxFlex="100%" [(model)]="choThuTien.DaTamUng" value="datamung" id="datamung" (modelChange)="getInputSearchValue($event, daTamUng.id, daTamUng.label)" label="Đã tạm ứng"> </app-checkbox>
+					</mat-list-item>
+					<mat-list-item>
+						<app-checkbox #chuaTaoBenhAn fxFlex="100%" [(model)]="choThuTien.ChuaTaoBenhAn" value="chuataobenhan" id="chuataobenhan" (modelChange)="getInputSearchValue($event, chuaTaoBenhAn.id, chuaTaoBenhAn.label)" label="Chờ tạo bệnh án"> </app-checkbox>
+					</mat-list-item>
+					<mat-list-item>
+						<div fxFlex="100%">
+							<button type="button" color="primary" id="tim-kiem-nang-cao" (click)="TimkiemNangCao()" class="float-right" mat-raised-button>Tìm</button>
+							<button type="button" (click)="closeMenu()" mat-button class="mr-1 float-left"><i class="ft-arrow-left"></i> Đóng</button>
+						</div>
+					</mat-list-item>
+				</mat-list>
+			</div>
+		</mat-menu>
+		<div class="tag-item-group" kendoTooltip style="height: 60px; white-space: nowrap; margin-left: 8px; margin-top: 4px"></div>
+		<div fxFlex="54%" fxFlex.sm="54%">
+			<!-- thời điểm tiếp nhận -->
+			<!-- <app-datetimepicker fxFlex="210px" [(model)]="choThuTien.ThoiDiemTiepNhanTuFormat" #tiepnhantu
+                id="ThoiDiemTiepNhanTuFormat" (modelChange)="thoiDiemTNChange()" label="Tiếp nhận từ"
+                class="ml-2 on-header" (keyup)="onKey($event)">
+            </app-datetimepicker>
+            <app-datetimepicker fxFlex="210px" [(model)]="choThuTien.ThoiDiemTiepNhanDenFormat" #tiepnhanden
+                id="ThoiDiemTiepNhanDenFormat" (modelChange)="thoiDiemTNChange()" label="Tiếp nhận đến"
+                class="ml-2 on-header" (keyup)="onKey($event)">
+            </app-datetimepicker> -->
+			<button type="button" color="primary" (click)="TimkiemNangCao()" class="ml-2" mat-raised-button>Tìm</button>
+			<!-- thời điểm tiếp nhận -->
+		</div>
+		<!-- custom lại màm hình fillter -->
+		<!-- <button [matMenuTriggerFor]="columnFilterMenu" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip
+            title="Lọc cột" type="button">
+            <mat-icon [icIcon]="icFilterList"></mat-icon>
+        </button> -->
+		<!-- <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+            <div *ngFor="let column of gridThuNganColumns">
+                <button
+                    class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                    <mat-checkbox [disabled]="true" color="primary">
+                        {{ column.Title }}
+                    </mat-checkbox>
+                </button>
+            </div>
+        </mat-menu> -->
+		<!-- <button (click)="exportExcel()" class="ml-3" fxFlex="1%" fxFlex.sm="1%" mat-icon-button kendoTooltip
+            title="Xuất Excel" type="button">
+            <mat-icon [icIcon]="icFileExcel"></mat-icon>
+        </button> -->
+	</div>
+</ng-template>
+<ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+	<div kendoTooltip *ngIf="dataItem.TrangThai  === trangThaiThuTien.ChoQuyetToan ">
+		<strong class="text-color">Chờ quyết toán</strong>
+	</div>
+	<div kendoTooltip *ngIf="dataItem.TrangThai === trangThaiThuTien.ChoTamUngThem">
+		<strong class="text-color-orange">Chờ tạm ứng thêm</strong>
+	</div>
+	<div kendoTooltip *ngIf="dataItem.TrangThai === trangThaiThuTien.DaTamUng">
+		<strong>Đã tạm ứng</strong>
+	</div>
+	<div kendoTooltip *ngIf="dataItem.TrangThai  === trangThaiThuTien.ChuaTaoBenhAn ">
+		<strong class="text-color-purple">Chờ tạo bệnh án</strong>
+	</div>
+</ng-template>
+<ng-template #templateTextSoTienChoXacNhan let-dataItem>
+	<strong class="text-color"> {{dataItem.SoTienBNPhaiTT | number:'0.2-2':'vi-VN'}}</strong>
+</ng-template>
+<ng-template #templateTextSoTienDaXacNhan let-dataItem>
+	<strong class="text-color-blue"> {{dataItem.SoTienBNDaTT | number:'0.2-2':'vi-VN'}}</strong>
+</ng-template>
+<ng-template #templateTextSoTienDaTamUng let-dataItem>
+	<strong> {{dataItem.SoTienTamUng | number:'0.2-2':'vi-VN'}}</strong>
+</ng-template>
+<ng-template #templateTextSoDuTK let-dataItem>
+	<strong> {{dataItem.SoTienDuTaiKhoan | number:'0.2-2':'vi-VN'}}</strong>
+</ng-template>
+<ng-template #templateSTT let-dataItem let-i="rowIndex">
+	<strong>{{i + 1}}</strong>
+</ng-template>
+<ng-template #maBenhAnTemplate let-dataItem>
+	<a (click)="thongTinChiTietThanhToan(dataItem.Id, dataItem)">{{dataItem.MaBenhAn}}</a>
+</ng-template>
+<ng-template #maTNTemplate let-dataItem>
+	<a (click)="thongTinChiTietThanhToan(dataItem.Id, dataItem)">{{dataItem.MaTN}}</a>
+</ng-template>
+<app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none"></app-barcode>
+
+<!--============================================ Danh sách chưa quyết toán==============================================-->

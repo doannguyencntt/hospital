@@ -1,0 +1,122 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"  [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <app-textarea id="ChanDoan" fxFlex="35%" fxFlex.sm="35%" minHeight="20" style="margin-top: 8px;"
+            [(model)]="phieuTheoDoiTruyenDich.ChanDoan" label="Chẩn đoán">
+        </app-textarea>
+        <app-grid fxFlex="100%" masterName="Grid" #grid [gridColumns]="gridColumns" [documentType]="documentType"
+            [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [maxHeight]="500" [lazyLoadPage]="true" [gridDataSource]="dataSourceDanhSach"
+            [pageable]="false">
+        </app-grid>
+        <ng-template #ngayTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-datepicker id="Ngay{{rowIndex}}" (modelChange)="ngayChange($event,dataItem)" [(model)]="dataItem.NgayThu" [disabled]="dataItem.Id != 0">
+            </app-datepicker>
+            <!-- <app-datepicker id="Ngay" [(model)]="dataItem.NgayThu" (modelChange)="ngayChange($event,dataItem)"
+                [disabled]="dataItem.Id != 0" >
+            </app-datepicker> -->
+        </ng-template>
+        <ng-template #tenDichTruyenTemplate let-dataItem let-rowIndex="rowIndex">
+            <!-- <app-autocomplete id="TenTruyenDich" [(model)]="dataItem.TenTruyenDich" [dataList]="dataDuocPham"
+                popupSettings="null" [disabled]="dataItem.Id != 0 || disableItemAdd == true" (modelChange)="changeDichTruyen(dataItem)">
+            </app-autocomplete> -->
+            
+            <app-combobox id="TenTruyenDich{{rowIndex}}" [(model)]="dataItem.IdTruyenDich" [modelText]="dataItem.DisplayName" popupSettings="null"  bind="true"  
+             [queryInfo]="{ParameterDependencies:'{YeuCauTiepNhanId:' + yeuCauTiepNhanId + ',ListDanhSach: ' +  danhSachThuocTheoNgay(timeChonUpdate) +'}', Take: 50}"
+                [disabled]="dataItem.NgayThu == null " (modelChange)="changeDichTruyen($event,dataItem)"
+                 url="DieuTriNoiTru/GetDataDanhSachTruyenDichTheoNgayForGridAsync" >
+            </app-combobox>
+        </ng-template>
+        <ng-template #soLuongTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-textboxnumeric id="SoLuong{{rowIndex}}" (modelChange)="onChangeSoLuong(dataItem,$event)"  min="1"
+                 [(model)]="dataItem.SoLuong" >
+            </app-textboxnumeric>
+        </ng-template>
+        <ng-template #yTaThucHienTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-autocomplete id="yTaThucHien{{rowIndex}}" popupSettings="null" [(model)]="dataItem.YTaThucHien" class="no-lable"
+                [dataList]="dataNhanVien" popupSettings="null">
+            </app-autocomplete>
+        </ng-template>
+        <ng-template #batDauTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-timepicker id="BatDau{{rowIndex}}" [(model)]="dataItem.BatDau" moreClass="pl-0" placeHolder="Giờ"
+                [modelIsNumber]="true" >
+            </app-timepicker>
+        </ng-template>
+        <ng-template #ketThucTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-timepicker id="KetThuc{{rowIndex}}" [(model)]="dataItem.KetThuc" moreClass="pl-0" placeHolder="Giờ" (modelChange)="changeKetThuc(dataItem)"
+                [modelIsNumber]="true" [validationerror]="'KetThuc' | validationerror:validationErrors" >
+            </app-timepicker>
+        </ng-template>
+        <ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="text-center" kendoTooltip *ngIf="dataItem.NoiTruChiTietYLenhThucHien != true">
+                <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                    *ngIf="dataItem.Id == 0" (click)="xoa(dataItem)">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #loTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-textbox id="LoSoSX{{rowIndex}}"  class="no-label"  [(model)]="dataItem.LoSoSX"
+                [isWhiteBackground]="true" [disabled]="true">
+            </app-textbox>
+        </ng-template>
+        <!-- <ng-template #tocDoTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-textbox id="TocDo{{rowIndex}}"  class="no-label"  [(model)]="dataItem.TocDo" [disabled]="true"
+                >
+            </app-textbox>
+        </ng-template> -->
+        <ng-template #bSChiDinhTemplate let-dataItem let-rowIndex="rowIndex">
+            <!-- <app-textbox id="BSChiDinh"  class="no-label"  [(model)]="dataItem.BSChiDinh" [disabled]="true"
+                [isWhiteBackground]="true">
+            </app-textbox> -->
+            <app-autocomplete id="yTaThucHien{{rowIndex}}" [(model)]="dataItem.BSChiDinh" class="no-lable"
+                [dataList]="dataNhanVien" popupSettings="null">
+            </app-autocomplete>
+        </ng-template>
+        <ng-template #footerTemplate>
+            <div class="text-center" kendoTooltip>
+                <button (click)="themDanhSachTruyenDich()" color="primary" mat-mini-fab kendoTooltip title="Thêm"
+                    type="button">
+                    <mat-icon [icIcon]="icAdd"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <app-upload id="Upload" #uploadDeNghiThuTruocKhiDung [allowedExtensions]="allowedExtensions" fxFlex="100%"
+            [(model)]="phieuTheoDoiTruyenDich.FileChuKy" [multiple]="true" label="File chữ ký"
+            [template]="templateFileChuanDoanHAInfo">
+        </app-upload>
+        <ng-template #templateFileChuanDoanHAInfo let-files>
+            <table width="100%" >
+                <tr>
+                    <td>
+                        <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                            (click)="uploadDeNghiThuTruocKhiDung.viewFile(files[0])"
+                            class="custom-name red">{{files[0].name}}</a>
+                        <a *ngIf="!files[0].error" title="{{files[0].name}}"
+                            (click)="uploadDeNghiThuTruocKhiDung.viewFile(files[0])" class="green"
+                            class="custom-name green">{{files[0].name}}</a>
+                    </td>
+                    <td style="width:25px">
+                        <a type="button" (click)="uploadDeNghiThuTruocKhiDung.remove(files[0].uid)" mat-icon-button>
+                            <mat-icon [icIcon]="icClear"></mat-icon>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </ng-template>
+        <div fxFlex="100%" style="padding-bottom: 50px;">
+            <label fxFlex="25%" style="padding-top: 30px;">Người thực hiện :
+                <b>{{phieuTheoDoiTruyenDich.TaiKhoanDangNhap}}</b></label>
+            <label fxFlex="25%" style="padding-top: 30px;">Ngày thực hiện :
+                <b>{{phieuTheoDoiTruyenDich.NgayThucHien}}</b></label>
+            <span fxFlex="50%" style="text-align: right;">
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="InPhieu()" style="pointer-events: all;">In
+                    Phiếu truyền dịch</button>
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                    (click)="Huy()">Hủy</button>
+                <button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+                    Lưu
+                </button>
+            </span>
+        </div>
+    </div>
+</div>

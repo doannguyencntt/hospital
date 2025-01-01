@@ -1,0 +1,74 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+	<div style="font: 500 18px/26px var(--font)">MIỄN GIẢM TẤT CẢ DỊCH VỤ</div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+<mat-dialog-content>
+	<div width="100%" fxLayout="row">
+		<table class="table table-border" width="100%">
+			<tr>
+				<td width="100%">
+					<app-checkbox id="phan-tram" [(model)]="apDungMiemGiamThem.ChietKhauTheoTiLe" value="1" fxFlex="30%"
+						label="%" value="true" (modelChange)="apDungPhanTram($event)"> </app-checkbox>
+					<app-textboxnumeric fxFlex="60%" label="" class="no-label" max="100" min="0"
+						[(model)]="apDungMiemGiamThem.TiLe" [required]="true" [disabled]="disablePhanTram"
+						[validationerror]="'TiLe' | validationerror: validationErrors"> </app-textboxnumeric>
+					<label class="red" fxFlex="10%">(*)</label>
+				</td>
+			</tr>
+			<tr>
+				<td width="100%">
+					<app-checkbox id="so-tien" [(model)]="apDungMiemGiamThem.ChietKhauTheoSoTien" value="1" fxFlex="30%"
+						label="Tiền" value="true" (modelChange)="apDungSoTien($event)"> </app-checkbox>
+					<app-textboxnumeric fxFlex="60%" class="no-label" [disabled]="disableSoTien"
+						[(model)]="apDungMiemGiamThem.SoTien" [required]="true"
+						[validationerror]="'SoTien' | validationerror: validationErrors"> </app-textboxnumeric>
+					<label class="red" fxFlex="10%">(*)</label>
+				</td>
+			</tr>
+			<tr>
+				<td width="100%">
+					<strong fxFlex="30%" style="padding-top: 24px;"> Lý do miễm giảm<label
+							class="red">(*)</label></strong>
+					<div fxFlex="80%" fxFlex.sm="100%" class="d-flex flex-row-reverse">
+						<button style="margin-left: 41px;" class="ml-1 mt-2" color="primary" fxFlex="none" mat-mini-fab
+							kendoTooltip title="Thêm" type="button" (click)="showPopupGhiChuMiemGiam()">
+							<mat-icon style="color: white;" [icIcon]="icAdd"></mat-icon>
+						</button>
+						<app-combobox id="ketQuaMau" fxFlex="82%" fxFlex.sm="82%"
+							url="NoiDungGhiChuMiemGiam/GetListNoiDungMau" popupSettings="null" label="Miễm giảm"
+							class="item-no-padding mr-2" (selectionChange)="selectionChonNoiDungMiemGiam($event)"
+							style="padding-bottom: 0px;" [template]="ketQuaTemplate"
+							[templateHeader]="ketQuaTemplateHeader">
+							<ng-template #ketQuaTemplateHeader let-dataItem>
+								<table width="100%" class="table-combobox">
+									<tr>
+										<th width="50%">Mã</th>
+										<th width="50%">Tên</th>
+									</tr>
+								</table>
+							</ng-template>
+							<ng-template #ketQuaTemplate let-dataItem>
+								<table width="100%" class="table-combobox">
+									<tr>
+										<td width="50%">{{dataItem.Ma}}</td>
+										<td width="50%">{{dataItem.Ten}}</td>
+									</tr>
+								</table>
+							</ng-template>
+						</app-combobox>
+					</div>
+					<!-- <app-textarea fxFlex="60%" id="ghichu" [(model)]="apDungMiemGiamThem.GhiChu" label="Ghi chú" maxlength="2000" minHeight="60"> </app-textarea> -->
+				</td>
+			</tr>
+		</table>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<a (click)="apDungMiemGiamBangThanhTien()" style="z-index: 9999; text-decoration: underline; color: blue">Áp dụng
+		miễm giảm bằng thành tiền </a>
+	<button mat-button mat-dialog-close (click)="HuyApDungMGT()">Hủy</button>
+	<button *ngIf="apDungMiemGiamThem.ChietKhauTheoTiLe || apDungMiemGiamThem.ChietKhauTheoSoTien" mat-raised-button
+		mat-button color="primary" (click)="ApDungMGT()" cdkFocusInitial>Áp dụng</button>
+</mat-dialog-actions>

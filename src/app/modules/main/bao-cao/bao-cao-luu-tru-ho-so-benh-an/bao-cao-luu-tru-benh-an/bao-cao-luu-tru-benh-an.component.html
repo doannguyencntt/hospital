@@ -1,0 +1,73 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[                   
+                {Title:'Thống Kê', Path:''},
+                {Title:'Báo Cáo', Path:''},
+                {Title:'KHTH', Path:''},
+                {Title:'Lưu trữ hồ sơ bệnh án', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid
+                [gridColumns]="gridColumns" [gridDataSource]="gridDataSource"
+                [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true" 
+                [useHeaderDefault]="false" [headerTemplate]="headerTemplate" [checkboxAble]="false"
+                [showStt]="true">
+            </app-grid>
+
+        </div>
+
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <app-combobox id="Khoa" fxFlex="15%" fxFlex.sm="15%" popupSettings=""  style="margin-left: 5px;"  class="mt-1 on-header pb-0 mr-1" label="Khoa" bind="true" 
+                    url="BaoCao/GetKhoaKhamNoiTruCoTatCa" [(model)]="baoCaoSearch.KhoaId" [autoSelectFirstItem]="true">
+                </app-combobox>
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header mr-1">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header mr-1" label="Đến ngày">
+                </app-datetimepicker>
+
+                <app-checkbox [(model)]="baoCaoSearch.BHYT" id="bhyt" label="BHYT" class="mr-2">
+                </app-checkbox>
+                <app-checkbox [(model)]="baoCaoSearch.VienPhi" id="vienPhi" label="Viện phí" class="mr-1 mr-4">
+                </app-checkbox>
+
+                <div fxFlex="30%" fxFlex.sm="30%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                        (click)="exportExcel()">Xuất Excel</button>
+                    <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 mt-2" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                </div>
+
+                <span fxFlex></span>
+
+                <button [matMenuTriggerFor]="columnFilterMenu" fxFlex="none" class="mr-4" mat-icon-button kendoTooltip
+                    title="Lọc cột" type="button">
+                    <mat-icon [icIcon]="icFilterList"></mat-icon>
+                </button>
+
+                <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                    <div *ngFor="let column of gridColumns">
+                        <button *ngIf="column.Title != ''"
+                            class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                            <mat-checkbox [disabled]="true" color="primary">
+                                {{ column.Title }}
+                            </mat-checkbox>
+                        </button>
+                    </div>
+                </mat-menu>
+            </div>
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>

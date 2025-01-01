@@ -1,0 +1,159 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="khoa_phong" fxFlex="20%" fxFlex.sm="20%" label="Khoa phòng" [(model)]="khoaPhong" [disabled]="true">
+    </app-textbox>
+    <app-textarea id="chan_doan_vao_khoa" fxFlex="40%" fxFlex.sm="40%" label="Chẩn đoán vào khoa" [(model)]="pTTT.ChanDoanKhoa" [disabled]="true">
+    </app-textarea>
+
+    <app-textarea id="mo_ta_chan_doan_vao_khoa" [(model)]="pTTT.GhiChuChanDoanKhoa" fxFlex="40%" fxFlex.sm="40%" label="Mô tả" [disabled]="true">
+    </app-textarea>
+
+    <app-datetimepicker id="thoi_gian_bd_gay_me" [disabled]="!canChange || IsDaTuongTrinh" (modelChange)="OnChange()" class="item-no-padding" fxFlex="33%" label="Thời gian bắt đầu gây mê" [formatDate]="'dd/MM/yyyy HH:mm'" [(model)]="pTTT.ThoiGianBatDauGayMe"
+        [validationerror]="'ThoiGianBatDauGayMe' | validationerror:validationErrors">
+    </app-datetimepicker>
+
+    <app-datetimepicker id="thoi_gian_phau_thuat" [disabled]="!canChange || IsDaTuongTrinh" (modelChange)="OnChange()" class="item-no-padding" fxFlex="33%" label="Thời gian bắt đầu PT" [formatDate]="'dd/MM/yyyy HH:mm'" [(model)]="pTTT.ThoiGianPt" [validationerror]="'ThoiGianPt' | validationerror:validationErrors">
+    </app-datetimepicker>
+
+    <app-datetimepicker id="thoi_gian_kt_phau_thuat" [disabled]="!canChange || IsDaTuongTrinh" (modelChange)="OnChange()" class="item-no-padding" fxFlex="33%" label="Thời gian kết thúc PT" [formatDate]="'dd/MM/yyyy HH:mm'" [(model)]="pTTT.ThoiGianKetThucPt"
+        [validationerror]="'ThoiGianKetThucPt' | validationerror:validationErrors">
+    </app-datetimepicker>
+
+    <app-combobox popupSettings="null" id="cd-truoc-phau-thuat" (selectionChange)="OnChange()" fxFlex="40%" [disabled]="!canChange || IsDaTuongTrinh" fxFlex.sm="40%" label="CĐ trước phẫu thuật" class="item-no-padding" url="DieuTriNoiTru/GetChanDoanICD" [template]="truocPhauThuatTemplate"
+        [templateHeader]="truocPhauThuatTemplateHeader" [(model)]="pTTT.ICDTruocId" [modelText]="pTTT.ICDTruoc" #cdTruocPhauThuat>
+        <ng-template #truocPhauThuatTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #truocPhauThuatTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.TenTiengViet}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textbox id="mo-ta-cd-truoc-phau-thuat" (modelChange)="OnChange()" [disabled]="!canChange || IsDaTuongTrinh" class="item-no-padding" fxFlex="60%" maxlength="4000" fxFlex.sm="60%" label="Mô tả" [(model)]="pTTT.MoTaCDTruocPhauThuat" [validationerror]="'MoTaCDTruocPhauThuat' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-combobox popupSettings="null" id="cd_sau_phau_thuat" [disabled]="!canChange || IsDaTuongTrinh" (selectionChange)="OnChange()" fxFlex="40%" fxFlex.sm="40%" label="CĐ sau phẫu thuật" class="item-no-padding" url="DieuTriNoiTru/GetChanDoanICD" [templateHeader]="sauPhauThuatTemplateHeader"
+        [template]="sauPhauThuatTemplate" [(model)]="pTTT.ICDSauId" [modelText]="pTTT.ICDSau" #cdSauPhauThuat>
+        <ng-template #sauPhauThuatTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #sauPhauThuatTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.TenTiengViet}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textbox id="mo-ta-cd-sau-phau-thuat" (modelChange)="OnChange()" [disabled]="!canChange || IsDaTuongTrinh" maxlength="4000" class="item-no-padding" fxFlex="60%" fxFlex.sm="60%" label="Mô tả" [(model)]="pTTT.MoTaCDSauPhauThuat" [validationerror]="'MoTaCDSauPhauThuat' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-multiselect popupSettings="null" id="phuong-phap-pttt" [disabled]="!canChange || IsDaTuongTrinh" fxFlex="100%" fxFlex.sm="100%" label="Phương Pháp PTTT" class="item-no-padding" url="KhamBenh/GetListPhuongPhapPTTT" [template]="phuongPhapTemplate"
+        [templateHeader]="phuongPhapTemplateHeader" [(model)]="pTTT.MaPtttFormat" (modelChange)="onChangePhauThuatThuThuat($event)" #phuongPhapPttt>
+        <ng-template #phuongPhapTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên PTTT</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #phuongPhapTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-multiselect>
+
+    <!-- Update loại PTTT (BVHD-3180) -->
+    <!-- <app-dropdownlist popupSettings="null" id="loai_pttt" [disabled]="!canChange || IsDaTuongTrinh"
+        (selectionChange)="OnChange()" fxFlex="40%" class="item-no-padding" label="Loại PTTT" url="KhamBenh/GetLoaiPttt"
+        [(model)]="pTTT.LoaiPttt" [modelText]="pTTT.LoaiPtttDisplay">
+    </app-dropdownlist> -->
+    <app-textbox id="loai_pttt" [disabled]="true" class="item-no-padding" label="Loại PTTT" [(model)]="pTTT.LoaiPhauThuatThuThuat">
+    </app-textbox>
+
+    <app-combobox popupSettings="null" #phuongPhapVoCam id="pp_vo_cam" [disabled]="!canChange || IsDaTuongTrinh" (selectionChange)="OnChange()" class="item-no-padding" fxFlex="60%" fxFlex.sm="60%" label="PP Vô Cảm" url="KhamBenh/GetListPhuongPhapVoCam" [templateHeader]="phuongPhapVoCamTemplateHeader"
+        [template]="phuongPhapVoCamTemplate" [(model)]="pTTT.PpVoCamId" [modelText]="pTTT.PpVoCam">
+        <ng-template #phuongPhapVoCamTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #phuongPhapVoCamTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textbox id="pttt_vien_chinh" class="item-no-padding" fxFlex="40%" fxFlex.sm="40%" label="PTTT viên chính" [(model)]="pTTTChinh" [disabled]="true">
+    </app-textbox>
+
+    <app-dropdownlist popupSettings="null" id="tinh-hinh-pttt" [disabled]="!canChange || IsDaTuongTrinh" (selectionChange)="OnChange()" class="item-no-padding" label="Tình Hình PTTT" fxFlex="30%" fxFlex.sm="30%" url="KhamBenh/GetTinhHinhPttt" [(model)]="pTTT.TinhHinhPttt"
+        [modelText]="pTTT.TinhHinHPtttDisplay" [popupSettings]="null">
+    </app-dropdownlist>
+
+    <app-dropdownlist popupSettings="null" id="tai-bien-pttt" [disabled]="!canChange || IsDaTuongTrinh" (selectionChange)="OnChange()" class="item-no-padding" label="Tai Biến PTTT" fxFlex="30%" fxFlex.sm="30%" url="KhamBenh/GetTaiBienPttt" [(model)]="pTTT.TaiBienPttt"
+        [modelText]="pTTT.TaiBienPtttDisplay" [popupSettings]="null">
+    </app-dropdownlist>
+
+    <app-textarea id="trinh_tu_pttt" [disabled]="!canChange || IsDaTuongTrinh" (modelChange)="OnChange()" fxFlex="100%" fxFlex.sm="100%" maxlength="4000" label="Trình tự phẫu thuật" [(model)]="pTTT.TrinhTuPttt" [validationerror]="'TrinhTuPttt' | validationerror:validationErrors">
+    </app-textarea>
+</div>
+
+
+<!-- show thông tin hinh ảnh liên quan Lược đồ phẫu thuật -->
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mr-4">LƯỢC ĐỒ PTTT
+        <button class="po-h" color="primary" (click)="UpLoadFile()" [disabled]="!canChange || IsDaTuongTrinh">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+
+    <ng-container *ngIf="pTTT.LuocDoPhauThuats.length === 0">
+        <p>Chưa có lược đồ PTTT</p>
+    </ng-container>
+
+    <div fxFlex="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" style="padding-top: 16px;">
+            <div fxFlex="25%" *ngFor="let thongTinAnh of pTTT.LuocDoPhauThuats">
+                <div class="card overflow-hidden" style="border: 1px solid #ccc;position: relative;">
+                    <mat-icon *ngIf="!IsDaTuongTrinh" [icIcon]="icClose" class="icon-close" (click)="DeleteAnh(thongTinAnh)"></mat-icon>
+                    <div class="mat-ripple p-4 text-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                        <img (click)="ViewImage(thongTinAnh)" src="{{thongTinAnh.LuocDoPhauThuat}}" class="mx-auto" />
+                    </div>
+                    <div class="bg-app-bar p-2">
+                        <p>{{thongTinAnh.MoTa}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <label *ngIf="showValidationMoTa" class="red" [innerHTML]="'MoTa' | validationerror:validationErrors"></label>
+</div>

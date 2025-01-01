@@ -1,0 +1,144 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxFlex="50%" style="text-transform: uppercase;">
+        <ng-container *ngIf="dataYeuCauTiepNhan.NoiTruBenhAn.Id == 0">Tạo Bệnh án</ng-container>
+        <ng-container *ngIf="dataYeuCauTiepNhan.NoiTruBenhAn.Id !== 0">Cập nhật bệnh án</ng-container>
+    </div>
+    <div fxFlex="50%" style="text-align: right; font-size: 14px;">
+        Tạm ứng: <b style="color: green;">{{dataYeuCauTiepNhan.SoDuTaiKhoan | number:'0.2-2':'vi-VN'}}</b> - Còn lại: <b style="color: red;">{{dataYeuCauTiepNhan.SoDuTaiKhoanConLai | number:'0.2-2':'vi-VN'}}</b>
+    </div>
+</div>
+<mat-dialog-content style="height:305px;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <!-- style="background: #e1f5fe;"  -->
+        <fieldset fxFlex="100%" class="{{(dataYeuCauTiepNhan != null && dataYeuCauTiepNhan.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+            <legend>Thông tin hành chính</legend>
+            <div fxFlex="100%" class="ml-2">
+                <ul class="inline">
+                    <li>Mã NB:
+                        <strong>{{dataYeuCauTiepNhan.MaBenhNhan}}</strong>
+                    </li>
+                    <li>Mã TN:
+                        <strong>{{dataYeuCauTiepNhan.MaYeuCauTiepNhan}}</strong>
+                    </li>
+                    <li>Họ tên:
+                        <strong>{{dataYeuCauTiepNhan.HoTen}}</strong>
+                    </li>
+                    <li >Tuổi:
+                        <strong *ngIf="!isDuoi6Tuoi">{{dataYeuCauTiepNhan.Tuoi}}</strong>
+                        <strong *ngIf="isDuoi6Tuoi">{{Duoi6TuoiDisplay}}</strong>
+                    </li>
+                    <li>
+                        Giới tính:
+                        <strong>{{dataYeuCauTiepNhan.TenGioiTinh}}</strong>
+                    </li>
+                    <li>
+                        Tuyến: <strong style="color: green;">{{dataYeuCauTiepNhan.Tuyen}}</strong>
+                    </li>
+                    <li>Dân tộc:
+                        <strong>{{dataYeuCauTiepNhan.DanToc}}</strong>
+                    </li>
+                    <li>
+                        Địa chỉ:
+                        <strong>{{dataYeuCauTiepNhan.DiaChiDayDu}}</strong>
+                    </li>
+                    <li>
+                        Nghề nghiệp:
+                        <strong>{{dataYeuCauTiepNhan.NgheNghiep}}</strong>
+                    </li>
+                    <li>
+                        Đối tượng: <strong>{{dataYeuCauTiepNhan.DoiTuong}}</strong>
+                    </li>
+                    <li>
+                        Mức hưởng: <strong style="color: blue;">{{dataYeuCauTiepNhan.BHYTMucHuong == null ? "" : dataYeuCauTiepNhan.BHYTMucHuong + " %"}}</strong>
+                    </li>
+                    <li *ngIf="dataYeuCauTiepNhan.ThongTinNhapVien.TrangThaiDieuTri == 1 || dataYeuCauTiepNhan.ThongTinNhapVien.TrangThaiDieuTri == 2">
+                        <a style="text-decoration: underline; color: blue;" (click)="capNhatDoiTuong()"><i>Cập nhật đối tượng</i></a>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+        <fieldset fxFlex="100%" class="mt-2">
+            <legend>Thông tin nhập viện</legend>
+            <div fxFlex="100%" class="ml-2">
+                <ul class="three-col">
+                    <!-- col 1 -->
+                    <li>Khoa nhập viện:
+                        <strong>{{dataYeuCauTiepNhan.ThongTinNhapVien.KhoaNhapVien}}</strong>
+                    </li>
+                    <li>Chẩn đoán nhập viện:
+                        <strong>{{dataYeuCauTiepNhan.ThongTinNhapVien.ChanDoanNhapVien}}</strong>
+                    </li>
+                    <li>Trạng thái điều trị:
+                        <strong>
+                            <span [ngClass]="{'orangeText': dataYeuCauTiepNhan.ThongTinNhapVien.TrangThaiDieuTri == 1,
+                                                'blueText': dataYeuCauTiepNhan.ThongTinNhapVien.TrangThaiDieuTri == 2}">
+                                                {{dataYeuCauTiepNhan.ThongTinNhapVien.TenTrangThaiDieuTri}}
+                            </span>
+                        </strong>
+                    </li>
+                    
+
+                    <!-- col 2 -->
+                    <li>Nơi chỉ định:
+                        <strong>{{dataYeuCauTiepNhan.ThongTinNhapVien.NoiChiDinh}}</strong>
+                    </li>
+                    <li>Chẩn đoán kèm theo:
+                        <strong>{{dataYeuCauTiepNhan.ThongTinNhapVien.ChanDoanKemTheo}}</strong>
+                    </li>
+                    <li>Người tiếp nhận:
+                        <strong>{{dataYeuCauTiepNhan.ThongTinNhapVien.NguoiTiepNhan}}</strong>
+                    </li>
+                    
+
+                    <!-- col 3 -->
+                    <li>BS chỉ định:
+                        <strong>{{dataYeuCauTiepNhan.ThongTinNhapVien.BacSiChiDinh}}</strong>
+                    </li>
+                    <li>Lý do nhập viện:
+                        <strong>{{dataYeuCauTiepNhan.ThongTinNhapVien.LyDoNhapVien}}</strong>
+                    </li>
+                    <li>Cấp cứu:
+                        <mat-checkbox color="primary"
+                            [(ngModel)]="dataYeuCauTiepNhan.NoiTruBenhAn.LaCapCuu">
+                        </mat-checkbox>
+                    </li>
+                    
+                </ul>
+                <ul class="three-col">
+                    <li>
+                        <div style="display: flex;">
+                            <div *ngIf="dataYeuCauTiepNhan.NoiTruBenhAn.Id !== 0"
+                                style="display: flex; align-items: center; margin-right: 10px; min-width: 25%; max-width: 40%;">Số BA:
+                                <p class="greenText" style="word-break: break-all;"> {{dataYeuCauTiepNhan.NoiTruBenhAn.SoBenhAn}}</p>
+                            </div>
+                            <app-dropdownlist [disabled]="IsTreSoSinh" fxFlex="auto" label="Loại BA" id="loaiBenhAnId" url="DieuTriNoiTru/GetListLoaiBenhAn"
+                                [(model)]="dataYeuCauTiepNhan.NoiTruBenhAn.LoaiBenhAn" style="padding-bottom: 0px;"
+                                [modelText]="dataYeuCauTiepNhan.NoiTruBenhAn.TenLoaiBenhAn" popupSettings="null" [required]="true"
+                                [validationerror]="'NoiTruBenhAn.LoaiBenhAn' | validationerror:validationErrors">
+                            </app-dropdownlist>
+                        </div>
+                    </li>
+                    <li>
+                        <app-datetimepicker label="Thời gian tiếp nhận" [required]="true"
+                            [(model)]="dataYeuCauTiepNhan.NoiTruBenhAn.ThoiDiemTaoBenhAn"
+                            [validationerror]="'NoiTruBenhAn.ThoiDiemTaoBenhAn' | validationerror:validationErrors">
+                        </app-datetimepicker>
+                    </li>
+                    <li>
+                        <app-datetimepicker label="Thời gian nhập viện" [required]="true"
+                            [(model)]="dataYeuCauTiepNhan.NoiTruBenhAn.ThoiDiemNhapVien"
+                            [validationerror]="'NoiTruBenhAn.ThoiDiemNhapVien' | validationerror:validationErrors">
+                        </app-datetimepicker>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="mt-4 pb-5">
+    <button mat-raised-button mat-button style="background-color: red; color: white" *ngIf="IsShowHuyNhapVien" (click)="xuLyHuyNhapVien()">Hủy nhập viện</button>
+    <button style="margin-left: auto;" type="button" mat-stroked-button color="primary" [mat-dialog-close]="true">Hủy</button>
+    <button mat-raised-button mat-button color="primary" *ngIf="dataYeuCauTiepNhan.NoiTruBenhAn.Id == 0" (click)="xuLyThem()">Lưu & Tạo BA</button>
+    <button mat-raised-button mat-button color="primary" *ngIf="dataYeuCauTiepNhan.NoiTruBenhAn.Id !== 0" (click)="xuLyLuu()">Lưu</button>
+</mat-dialog-actions>

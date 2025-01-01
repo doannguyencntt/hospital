@@ -1,0 +1,31 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxLayoutAlign="space-between">
+    <app-textbox fxFlex="20%" maxlength="50" id="ma" label="Mã" [required]="true" [(model)]="congTyBhtn.Ma" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="ten" fxFlex="40%" fxFlex.sm="50%" maxlength="250" [required]="true" [(model)]="congTyBhtn.Ten" label="Tên" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="dia-chi" fxFlex="40%" fxFlex.sm="100%" maxlength="250" [required]="true" [(model)]="congTyBhtn.DiaChi" label="Địa Chỉ" [validationerror]="'DiaChi' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="sdt" fxFlex="20%" fxFlex.sm="50%" maxlength="100" [required]="true" [(model)]="congTyBhtn.SoDienThoai" label="Số Điện Thoại" [validationerror]="'SoDienThoai' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="email" fxFlex="30%" fxFlex.sm="50%" maxlength="200" [(model)]="congTyBhtn.Email" label="Email" [validationerror]="'Email' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-dropdownlist id="hinh-thuc-bao-hiem" fxFlex="25%" fxFlex.sm="100%" [(model)]="congTyBhtn.HinhThucBaoHiem" [required]="true" bind="true" label="Hình Thức Bảo Hiểm" url="CongTyBhtn/GetHinhThucBaoHiem" [validationerror]="'HinhThucBaoHiem' | validationerror:validationErrors">
+    </app-dropdownlist>
+
+    <app-dropdownlist id="pham-vi-bao-hiem" fxFlex="25%" fxFlex.sm="100%" [(model)]="congTyBhtn.PhamViBaoHiem" [required]="true" bind="true" label="Phạm Vi Bảo Hiểm" url="CongTyBhtn/GetPhamViBaoHiem" [validationerror]="'PhamViBaoHiem' | validationerror:validationErrors">
+    </app-dropdownlist>
+
+    <app-textbox id="ma-so-thue" fxFlex="50%" fxFlex.sm="100%" maxlength="20" [(model)]="congTyBhtn.MaSoThue" label="Mã Số Thuế">
+    </app-textbox>
+
+    <app-textbox id="don-vi" fxFlex="50%" fxFlex.sm="100%" maxlength="200" [(model)]="congTyBhtn.DonVi" label="Đơn Vị">
+    </app-textbox>
+
+    <app-textarea id="ghi-chu" fxFlex="100%" maxlength="4000" [(model)]="congTyBhtn.GhiChu" label="Ghi Chú">
+    </app-textarea>
+</div>

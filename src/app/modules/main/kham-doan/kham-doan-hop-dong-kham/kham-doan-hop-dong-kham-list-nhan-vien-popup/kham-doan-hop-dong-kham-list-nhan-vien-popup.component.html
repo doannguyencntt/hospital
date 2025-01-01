@@ -1,0 +1,421 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;" *ngIf="hopDongNhanVienKhamSucKhoeId == 0">Thêm nhân viên công ty</div>
+    <div style="text-transform: uppercase;" *ngIf="hopDongNhanVienKhamSucKhoeId != 0">Cập nhật nhân viên công ty</div>
+    <button type="button" mat-icon-button mat-dialog-close [mat-dialog-close]="null" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div fxFlex="grow">
+            <button type="button" mat-stroked-button color="primary" (click)="showPopupTimNhanVien()" tabindex="-1">
+                <mat-icon [icIcon]="icSearch"></mat-icon> Tìm
+            </button>
+        </div>
+        <app-textbox id="maBenhNhan" fxFlex="10%" fxFlex.sm="10%" label="Mã NB" [(model)]="danhSachNhanVienCongTy.MaBN"
+            [maxlength]="20" [disabled]="true" [validationerror]="'MaBN' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-textboxnumeric id="STTNhanVien" fxFlex="10%" fxFlex.sm="10%" label="STT" format="0" min="1" max="9999"        
+            [(model)]="danhSachNhanVienCongTy.STTNhanVien" [required]="true"
+            [validationerror]="'STTNhanVien' | validationerror:validationErrors">
+        </app-textboxnumeric>       
+
+        <app-textbox id="maNhanVien" fxFlex="10%" fxFlex.sm="10%" label="Mã NV"
+            [(model)]="danhSachNhanVienCongTy.MaNhanVien" [maxlength]="20"
+            [validationerror]="'MaNhanVien' | validationerror:validationErrors">
+        </app-textbox>
+        <app-textbox [upperCase]="true" id="hoTen" fxFlex="20%" fxFlex.sm="20%" label="Họ tên"
+            [(model)]="danhSachNhanVienCongTy.HoTen" [maxlength]="100" [required]="true"
+            [validationerror]="'HoTen' | validationerror:validationErrors">
+        </app-textbox>
+        <app-textbox id="hoTenKhac" fxFlex="20%" fxFlex.sm="20%" label="Họ tên khác"
+            [(model)]="danhSachNhanVienCongTy.HoTenKhac" [maxlength]="100">
+        </app-textbox>
+        <app-datepicker id="NgaySinh" fxFlex="10%" fxFlex.sm="10%" label="Ngày sinh" [required]="true"
+            [(model)]="danhSachNhanVienCongTy.NgayThangNamSinh" (modelChange)="ThongTinBenhNhanNgaySinhChange($event)"
+            [validationerror]="'NgayThangNamSinh' | validationerror:validationErrors">
+        </app-datepicker>
+        <app-textboxnumeric id="namSinh" fxFlex="10%" fxFlex.sm="10%" label="Năm sinh" format="0" min="1" max="9999"
+            (modelChange)="ThongTinBenhNhanNamSinhChange($event)"
+            [disabled]="danhSachNhanVienCongTy.NgayThangNamSinh!=null" [(model)]="danhSachNhanVienCongTy.NamSinh"
+            [validationerror]="'NamSinh' | validationerror:validationErrors">
+        </app-textboxnumeric>
+        <app-textboxnumeric id="tuoi" fxFlex="10%" fxFlex.sm="10%" [max]="999" label="Tuổi" format="0" min="1" max="999"
+            [disabled]="true" [(model)]="danhSachNhanVienCongTy.Tuoi">
+        </app-textboxnumeric>
+        <app-textboxmask id="NguoiLienHeSoDienThoai" fxFlex="20%" fxFlex.sm="20%" label="Số điện thoại"
+            [(model)]="danhSachNhanVienCongTy.SoDienThoai" mask="000 000 0000" maxlength="12">
+        </app-textboxmask>
+        <app-radio fxFlex="20%" fxFlex.sm="20%" id="gioiTinh" [items]="[{Value:1,Text:'Nam'},{Value:2,Text:'Nữ'}]"
+            [disabled]="danhSachNhanVienCongTy.CoMangThai" label="Giới Tính" [(model)]="danhSachNhanVienCongTy.GioiTinh"
+            [required]="true" [validationerror]="'GioiTinh' | validationerror:validationErrors">
+        </app-radio>
+        <app-combobox id="ngheNghiep" fxFlex="20%" fxFlex.sm="20%" label="Nghề nghiệp" bind="true"
+            url="TiepNhanBenhNhan/GetNgheNghiep" [(model)]="danhSachNhanVienCongTy.NgheNghiepId">
+        </app-combobox>
+        <app-combobox id="quocTinh" fxFlex="20%" fxFlex.sm="20%" label="Quốc tịch" bind="true"
+            url="TiepNhanBenhNhan/GetQuocTich" [(model)]="danhSachNhanVienCongTy.QuocTichId">
+        </app-combobox>
+        <app-combobox id="danToc" fxFlex="20%" fxFlex.sm="20%" label="Dân tộc" bind="true"
+            url="TiepNhanBenhNhan/GetDanToc" [(model)]="danhSachNhanVienCongTy.DanTocId">
+        </app-combobox>
+
+        <app-textbox id="soCMTHC" fxFlex="20%" fxFlex.sm="20%" label="số CMT/HC" [required]="true" [maxlength]="12"
+            [(model)]="danhSachNhanVienCongTy.SoChungMinhThu"
+            [validationerror]="'SoChungMinhThu' | validationerror:validationErrors">
+        </app-textbox>
+        <app-datepicker id="NgayCapChungMinhThu" fxFlex="20%" fxFlex.sm="20%" label="Ngày cấp"
+            [(model)]="danhSachNhanVienCongTy.NgayCapChungMinhThu"
+            [validationerror]="'NgayCapChungMinhThu' | validationerror:validationErrors">
+        </app-datepicker>
+        <app-textbox id="NoiCapChungMinhThu" fxFlex="20%" fxFlex.sm="20%" label="Cấp tại" [maxlength]="12"
+            [(model)]="danhSachNhanVienCongTy.NoiCapChungMinhThu"
+            [validationerror]="'NoiCapChungMinhThu' | validationerror:validationErrors">
+        </app-textbox>
+        <app-textbox id="email" fxFlex="20%" fxFlex.sm="20%" label="Email" [maxlength]="200"
+            [(model)]="danhSachNhanVienCongTy.Email">
+        </app-textbox>
+
+        <div fxFlex="100%">
+            <div class="mt-1">
+                <fieldset>
+                    <legend>Hộ khẩu thường trú</legend>
+                    <div fxFlex="100%">
+                        <div class="mt-1">
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0">
+                                <app-combobox id="HoKhauTinhThanh" fxFlex="20%" fxFlex.sm="100%" bind="true"
+                                    popupSettings="null" label="Tỉnh/Thành Phố" class="item-no-padding"
+                                    [template]="tinhThanhTemplate" [templateHeader]="tinhThanhHKTemplateHeader"
+                                    [(model)]="danhSachNhanVienCongTy.HoKhauTinhThanhId"
+                                    url="TiepNhanBenhNhan/GetTinhThanh/?quanHuyenId={{danhSachNhanVienCongTy.HoKhauQuanHuyenId}}"
+                                    hierarchyKeyToSend="tinhThanhHoKhau"
+                                    (modelChange)="TinhThanhPhoHoKhauChange($event)">
+                                    <ng-template #tinhThanhHKTemplateHeader let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <th width="20%">Mã</th>
+                                                <th>Tên</th>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                    <ng-template #tinhThanhTemplate let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <td width="20%">{{dataItem.Ma}}</td>
+                                                <td>{{dataItem.Ten}}</td>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                </app-combobox>
+                                <app-combobox #comboboxQuanHuyenHoKhau id="HoKhauQuanHuyen" fxFlex="20%"
+                                    fxFlex.sm="100%" label="Quận/Huyện" bind="true" popupSettings="null"
+                                    class="item-no-padding" [template]="quanHuyenTemplate"
+                                    [templateHeader]="quanHuyenHKTemplateHeader"
+                                    [(model)]="danhSachNhanVienCongTy.HoKhauQuanHuyenId"
+                                    (modelChange)="QuanHuyenHoKhauChange($event)"
+                                    url="TiepNhanBenhNhan/GetQuanHuyen/?phuongXaId={{danhSachNhanVienCongTy.HoKhauPhuongXaId}}"
+                                    hierarchyKeyToListen="tinhThanhHoKhau" hierarchyKeyToSend="quanHuyenHoKhau">
+                                    <ng-template #quanHuyenHKTemplateHeader let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <th width="20%">Mã</th>
+                                                <th>Tên</th>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                    <ng-template #quanHuyenTemplate let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <td width="20%">{{dataItem.Ma}}</td>
+                                                <td>{{dataItem.Ten}}</td>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                </app-combobox>
+                                <app-combobox id="HoKhauPhuongXa" fxFlex="20%" fxFlex.sm="100%" label="Phường/Xã"
+                                    class="item-no-padding" popupSettings="null" #comboboxPhuongXaHoKhau
+                                    url="TiepNhanBenhNhan/GetPhuongXa" hierarchyKeyToListen="quanHuyenHoKhau"
+                                    [template]="phuongXaTemplate" [templateHeader]="phuongXaHKTemplateHeader"
+                                    [(model)]="danhSachNhanVienCongTy.HoKhauPhuongXaId"
+                                    (modelChange)="PhuongXaHoKhauChange($event)">
+                                    <ng-template #phuongXaHKTemplateHeader let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <th width="20%">Mã</th>
+                                                <th>Tên</th>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                    <ng-template #phuongXaTemplate let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <td width="20%">{{dataItem.Ma}}</td>
+                                                <td>{{dataItem.Ten}}</td>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                </app-combobox>
+                                <app-textbox id="soNha" fxFlex="40%" fxFlex.sm="100%" label="Số nhà" [maxlength]="200"
+                                    [(model)]="danhSachNhanVienCongTy.HoKhauDiaChi">
+                                </app-textbox>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <div fxFlex="100%">
+            <div class="mt-1">
+                <fieldset>
+                    <legend>Chỗ ở hiện tại</legend>
+                    <div fxFlex="100%">
+                        <div class="mt-1">
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0">
+                                <app-combobox id="TinhThanhPho" fxFlex="20%" fxFlex.sm="100%" bind="true"
+                                    popupSettings="null" label="Tỉnh/Thành Phố" class="item-no-padding"
+                                    [template]="tinhThanhTemplate" [templateHeader]="tinhThanhTemplateHeader"
+                                    [(model)]="danhSachNhanVienCongTy.TinhThanhId"
+                                    url="TiepNhanBenhNhan/GetTinhThanh/?quanHuyenId={{danhSachNhanVienCongTy.QuanHuyenId}}"
+                                    hierarchyKeyToSend="tinhThanh" (modelChange)="TinhThanhPhoChange($event)">
+                                    <ng-template #tinhThanhTemplateHeader let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <th width="20%">Mã</th>
+                                                <th>Tên</th>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                    <ng-template #tinhThanhTemplate let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <td width="20%">{{dataItem.Ma}}</td>
+                                                <td>{{dataItem.Ten}}</td>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                </app-combobox>
+                                <app-combobox #comboboxQuanHuyen id="QuanHuyen" fxFlex="20%" fxFlex.sm="100%"
+                                    label="Quận/Huyện" bind="true" popupSettings="null" class="item-no-padding"
+                                    [template]="quanHuyenTemplate" [templateHeader]="quanHuyenTemplateHeader"
+                                    [(model)]="danhSachNhanVienCongTy.QuanHuyenId"
+                                    (modelChange)="QuanHuyenChange($event)"
+                                    url="TiepNhanBenhNhan/GetQuanHuyen/?phuongXaId={{danhSachNhanVienCongTy.PhuongXaId}}"
+                                    hierarchyKeyToListen="tinhThanh" hierarchyKeyToSend="quanHuyen">
+                                    <ng-template #quanHuyenTemplateHeader let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <th width="20%">Mã</th>
+                                                <th>Tên</th>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                    <ng-template #quanHuyenTemplate let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <td width="20%">{{dataItem.Ma}}</td>
+                                                <td>{{dataItem.Ten}}</td>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                </app-combobox>
+                                <app-combobox id="PhuongXa" fxFlex="20%" fxFlex.sm="100%" label="Phường/Xã"
+                                    class="item-no-padding" popupSettings="null" #comboboxPhuongXa
+                                    url="TiepNhanBenhNhan/GetPhuongXa" hierarchyKeyToListen="quanHuyen"
+                                    [template]="phuongXaTemplate" [templateHeader]="phuongXaTemplateHeader"
+                                    [(model)]="danhSachNhanVienCongTy.PhuongXaId"
+                                    (modelChange)="PhuongXaChange($event)">
+                                    <ng-template #phuongXaTemplateHeader let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <th width="20%">Mã</th>
+                                                <th>Tên</th>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                    <ng-template #phuongXaTemplate let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <td width="20%">{{dataItem.Ma}}</td>
+                                                <td>{{dataItem.Ten}}</td>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                </app-combobox>
+                                <app-textbox id="soNha" fxFlex="40%" fxFlex.sm="100%" label="Số nhà" [maxlength]="200"
+                                    [(model)]="danhSachNhanVienCongTy.DiaChi">
+                                </app-textbox>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <app-textbox id="tenDonViBP" fxFlex="20%" fxFlex.sm="20%" label="Tên đơn vị/BP" [maxlength]="300"
+            [(model)]="danhSachNhanVienCongTy.TenDonViHoacBoPhan">
+        </app-textbox>
+        <app-datepicker id="NgayBatDauLamViec" fxFlex="20%" fxFlex.sm="20%" label="Ngày bắt đầu làm việc"
+            [(model)]="danhSachNhanVienCongTy.NgayBatDauLamViec"
+            [validationerror]="'NgayBatDauLamViec' | validationerror:validationErrors">
+        </app-datepicker>
+        <app-combobox id="nhomMau" fxFlex="20%" fxFlex.sm="20%" label="Nhóm máu" url="NhapKhoMau/GetListNhomMau"
+            [(model)]="danhSachNhanVienCongTy.NhomMau" [(modelText)]="danhSachNhanVienCongTy.TenNhomMau">
+        </app-combobox>
+        <app-combobox id="rh" fxFlex="20%" fxFlex.sm="20%" label="RH" url="NhapKhoMau/GetListYeuToRh"
+            popupSettings="null" [(model)]="danhSachNhanVienCongTy.YeuToRh"
+            [(modelText)]="danhSachNhanVienCongTy.TenNhomMau">
+        </app-combobox>
+        <app-dropdownlist id="honNhan" fxFlex="20%" fxFlex.sm="20%" label="Hôn nhân" url="KhamDoan/GetTinhTrangHonNhans"
+            popupSettings="null" [(model)]="danhSachNhanVienCongTy.TinhTrangHonNhan"
+            [(modelText)]="danhSachNhanVienCongTy.TenTinhTrangHonNhan">
+        </app-dropdownlist>
+
+        <div fxFlex="20%" fxFlex.sm="20%">
+            <div class="container-custom no-label">
+                <label>&nbsp;</label>
+                <div fxLayout="row" fxLayoutGap="16px">
+                    <app-checkbox fxFlex="100%" value="true" id="MangThai" label="Mang thai"
+                        (modelChange)="mangThai($event)" [disabled]="danhSachNhanVienCongTy.GioiTinh == 1"
+                        [(model)]="danhSachNhanVienCongTy.CoMangThai"></app-checkbox>
+                </div>
+            </div>
+        </div>
+        <app-autocomplete id="nhomDTKSK" fxFlex="20%" fxFlex.sm="20%" popupSettings="null"
+            [(model)]="danhSachNhanVienCongTy.NhomDoiTuongKhamSucKhoe" url="KhamDoan/GetListNhomDoiTuongKhamSucKhoe"
+            label="Nhóm ĐT KSK" maxlength="100" [(modelText)]="danhSachNhanVienCongTy.NhomDoiTuongKhamSucKhoe">
+        </app-autocomplete>
+        <app-combobox id="tenGoiKham" popupSettings="null" fxFlex="20%" fxFlex.sm="20%" label="Tên gói khám"
+            [required]="true" [queryInfo]="{ParameterDependencies:'{Id:' + hopDongKhamSucKhoeId +'}', Take: 50}"
+            [(model)]="danhSachNhanVienCongTy.GoiKhamSucKhoeId" url="KhamDoan/GetGoiKhamTheoHopDongs"
+            [(modelText)]="danhSachNhanVienCongTy.TenGoiKhamSucKhoe" [disabled]="danhSachNhanVienCongTy.TinhTrangKham"
+            [validationerror]="'GoiKhamSucKhoeId' | validationerror:validationErrors">
+        </app-combobox>
+        <div fxFlex="100%">
+            <div class="mt-1">
+                <fieldset>
+                    <legend>Nghề, công việc trước đây (liệt kê các công việc đã làm trong vòng 10 năm gần đây, tính từ
+                        thời điểm gần nhất)</legend>
+                    <div fxFlex="100%">
+                        <div class="mt-1">
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0">
+                                <app-grid fxFlex="100%" HideCheckAll="true" [gridColumns]="gridCongViecColumns"
+                                    [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true"
+                                    [checkboxAble]="false" [pageable]="false" height="auto"
+                                    [gridDataSource]="dataSourceCongViec"></app-grid>
+                            </div>
+                            <ng-template #congViecTemplate let-dataItem>
+                                <app-textbox id="congviec" [required]="true" [maxlength]="4000"
+                                    [(model)]="dataItem.CongViec">
+                                </app-textbox>
+                            </ng-template>
+                            <ng-template #tuNgayTemplate let-dataItem let-rowIndex="rowIndex">
+                                <app-datepicker id="tungay" [required]="true" [(model)]="dataItem.TuNgay"
+                                    [validationerror]="'NgheCongViecTruocDays['+rowIndex+'].TuNgay' | validationerror:validationErrors">
+                                </app-datepicker>
+                            </ng-template>
+                            <ng-template #denNgayTemplate let-dataItem let-rowIndex="rowIndex">
+                                <app-datepicker id="denngay" [required]="true" [(model)]="dataItem.DenNgay"
+                                    [validationerror]="'NgheCongViecTruocDays['+rowIndex+'].DenNgay' | validationerror:validationErrors">
+                                </app-datepicker>
+                            </ng-template>
+                            <ng-template #actionTemplate let-dataItem>
+                                <div class="text-center" kendoTooltip>
+                                    <button style="color: red;" (click)="xoaCongViecTruocDo(dataItem)" mat-icon-button
+                                        kendoTooltip title="Xóa" type="button">
+                                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                                    </button>
+                                </div>
+                            </ng-template>
+                            <ng-template #footerTemplate>
+                                <div class="text-right" kendoTooltip>
+                                    <button color="primary" mat-mini-fab kendoTooltip
+                                        title="Thêm nghề, công việc trước đây" (click)="ThemCongViecTruocDo()"
+                                        type="button">
+                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                    </button>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div fxFlex="100%">
+            <div class="mt-1">
+                <fieldset>
+                    <legend>Tiền sử bệnh</legend>
+                    <div fxFlex="100%">
+                        <div class="mt-1">
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0">
+                                <app-grid fxFlex="100%" HideCheckAll="true" [gridColumns]="gridTienSuBenhColumns"
+                                    [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true"
+                                    [checkboxAble]="false" [pageable]="false" height="auto"
+                                    [gridDataSource]="dataSourceTienSuBenh"></app-grid>
+                            </div>
+                            <ng-template #loaiTienSuBenhTemplate let-dataItem let-rowIndex="rowIndex">
+                                <app-combobox id="loaiTienSu" popupSettings="null" url="BenhNhan/GetLoaiTienSuBenh"
+                                    [(model)]="dataItem.LoaiTienSuId"
+                                    (selectionChange)="loaiTienSuBenhChange($event, rowIndex)"
+                                    [modelText]="dataItem.LoaiTienSu">
+                                </app-combobox>
+                            </ng-template>
+                            <ng-template #benhNgheNghiepTemplate let-dataItem let-rowIndex="rowIndex">
+                                <app-checkbox id="check-{{dataItem.Id}}" (modelChange)="benhNgheNghiepChange(dataItem)"
+                                    [(model)]="dataItem.BenhNgheNghiep"></app-checkbox>
+                            </ng-template>
+                            <ng-template #tenBenhTemplate let-dataItem>
+                                <app-textbox *ngIf="!dataItem.BenhNgheNghiep" id="tenBenh" [required]="true"
+                                    [maxlength]="50" [(model)]="dataItem.TenBenh">
+                                </app-textbox>
+                                <app-autocomplete *ngIf="dataItem.BenhNgheNghiep" id="autoTenBenh" popupSettings="null"
+                                    [(model)]="dataItem.TenBenh" url="KhamDoan/GetBenhNgheNghieps" maxlength="100">
+                                </app-autocomplete>
+                            </ng-template>
+
+                            <ng-template #phatHienNamTemplate let-dataItem let-rowIndex="rowIndex">
+                                <app-datepicker id="phathiennam" [required]="true" [(model)]="dataItem.PhatHienNam"
+                                    [validationerror]="'TienSuBenhs['+rowIndex+'].PhatHienNam' | validationerror:validationErrors">
+                                </app-datepicker>
+                            </ng-template>
+
+                            <ng-template #actionTienSuBenhTemplate let-dataItem>
+                                <div class="text-center" kendoTooltip>
+                                    <button style="color: red;" (click)="xoaTienSuBenh(dataItem)" mat-icon-button
+                                        kendoTooltip title="Xóa" type="button">
+                                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                                    </button>
+                                </div>
+                            </ng-template>
+                            <ng-template #footerTienSuBenhTemplate>
+                                <div class="text-right" kendoTooltip>
+                                    <button color="primary" mat-mini-fab kendoTooltip title="Thêm tiền sử bệnh"
+                                        (click)="ThemTienSuBenh()" type="button">
+                                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                                    </button>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <app-textbox id="GhiChuDiUngThuoc" fxFlex="100%" fxFlex.sm="100%" label="Tiền sử dị ứng" [maxlength]="300"
+            [(model)]="danhSachNhanVienCongTy.GhiChuDiUngThuoc">
+        </app-textbox>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="mt-4 pb-5">
+    <button style="margin-left: auto;" type="button" mat-stroked-button color="primary"
+        [mat-dialog-close]="null">Hủy</button>
+    <button mat-raised-button mat-button color="primary" *ngIf="hopDongNhanVienKhamSucKhoeId== 0"
+        (click)="xuLyLuuNhanVienCongTy()">Thêm</button>
+    <button mat-raised-button mat-button color="primary" *ngIf="hopDongNhanVienKhamSucKhoeId != 0"
+        (click)="xuLyLuuNhanVienCongTy()">Lưu</button>
+</mat-dialog-actions>

@@ -1,0 +1,111 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+    <fieldset fxFlex="100%" class="mb-3" *ngIf="checkHaveBHTN === true">
+        <legend>Thông tin bảo hiểm tư nhân</legend>
+        <div class=" mt-1">
+            <app-grid [gridColumns]="gridChildColumns2" [documentType]="documentType" [useAddDeault]="false"
+                class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" [gridDataSource]="dataSourceDanhSachBHTN" [autoHeight]="true" style="width: 1px;"
+                [pageable]="false">
+            </app-grid>
+        </div>
+    </fieldset>
+    <!-- <fieldset *ngIf="!khachVangLaiMuaThuoc" fxFlex="100%" class="mb-3">
+        <legend>Thông tin miễn giảm</legend>
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            start thông tim voucher
+            <div fxFlex="15%">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap.lt-sm="0">
+                    <app-checkbox id="loaiVoucher" fxFlex="100%" fxFlex.sm="100%" value="true"
+                        [disabled]="disabledVoucher" [model]="flagEnableVoucher" (modelChange)="onChangeVoucher($event)"
+                        label="Voucher">
+                    </app-checkbox>
+                    <app-multiselect *ngIf="flagEnableVoucher" fxFlex="100%" fxFlex.sm="100%" label="Mã Voucher"
+                        [(model)]="listVouchers" [required]="true"
+                        url="ThuNgan/GetMaVoucher?loaiVoucher={{loaiVoucher}}&yeucauTiepNhanId={{idMYCTN}}"
+                        (openChange)="onOpenChange()" (modelChange)="onSelectChangeVoucher($event)"
+                        (valueChange)="valueChangeTheVoucher($event)"
+                        [validationerror]="'ListVouchers' | validationerror:quayThuocValidationErrors" #voucherList>
+                    </app-multiselect>
+                </div>
+            </div>
+            end thông tim voucher
+
+
+            thông tin miễm giảm thêm
+            <div fxFlex="{{flagEnableMGThem?'75%':'10%'}}">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <app-checkbox id="MiemGiamThem" fxFlex="100%" fxFlex.sm="100%" value="true"
+                        [model]="flagEnableMGThem" [disabled]="disabledMGThem" (modelChange)="onChangeMienGiam($event)"
+                        label="MG thêm">
+                    </app-checkbox>
+                </div>
+                <div *ngIf="flagEnableMGThem" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid"
+                    fxLayoutGap.lt-sm="0">
+                    <div fxFlex="13%">
+                        <mat-radio-button name="loaiMG" style="position: absolute;z-index: 1;" [checked]="soTienMgCheck"
+                            (change)="onChangeLoaiMg(1)" value="chon-miem-giam">
+                            Số tiền MG <span style="color: red;">*</span>
+                        </mat-radio-button>
+                        <app-textboxnumeric [(model)]="thongTinMienGiamThem.SoTienMG" class="mb-0 pb-0"
+                            [isFormatCurrenly]="true"
+                            [validationerror]="'SoTienMG' | validationerror:quayThuocValidationErrors">
+                        </app-textboxnumeric>
+                    </div>
+                    <div fxFlex="13%" fxLayout.lt-sm="column" fxLayoutGap.lt-sm="0" *ngIf="!checkHiddenSoTienConLai">
+                        <app-textboxnumeric fxFlex="100%" [disabled]="true" label="Số tiền còn lại" class="green"
+                            [isFormatCurrenly]="true" [spinners]="false"
+                            [(model)]="thongTinMienGiamThem.SoTienMGConLai">
+                        </app-textboxnumeric>
+                    </div>
+                    <div fxFlex="13%">
+                        <mat-radio-button name="loaiMG" [checked]="tiLeMgCheck" style="position: absolute;z-index: 1;"
+                            (change)="onChangeLoaiMg(2)" value="chon-miem-giam">
+                            % MG <span style="color: red;">*</span>
+                        </mat-radio-button>
+                        <app-textboxnumeric fxFlex="100%" [disabled]="disabledTiLeMG" max="100"
+                            [(model)]="thongTinMienGiamThem.TiLeMienGiam" class="mb-0 pb-0"
+                            style="margin-top: 1px !important;"
+                            [validationerror]="'TiLeMienGiam' | validationerror:quayThuocValidationErrors">
+                        </app-textboxnumeric>
+                    </div>
+                    <div fxFlex="17%" fxFlex.sm="17%">
+                        <app-textarea id="MienGiamConLai" [required]="true" label="Lý do MG"
+                            [(model)]="thongTinMienGiamThem.LyDoMiemGiam" minHeight="20"
+                            [validationerror]="'LyDoMienGiam' | validationerror:quayThuocValidationErrors">
+                        </app-textarea>
+                    </div>
+                    <div fxFlex="27%" fxFlex.sm="27%">
+                        <app-upload id="Upload" label="File đính kèm" [required]="true"
+                            [model]="thongTinMienGiamThem.TaiLieuDinhKemGiayMiemGiam"
+                            (uploadFileDone)="uploadFileDone($event)"
+                            [validationerror]="'TaiLieuDinhKem' | validationerror:quayThuocValidationErrors">
+                        </app-upload>
+                    </div>
+                    <app-combobox id="NguoiDuyet" fxFlex="17%" fxFlex.sm="17%"
+                        [(model)]="thongTinMienGiamThem.NhanVienDuyetMienGiamThemId"
+                        [modelText]="thongTinMienGiamThem.TenNhanVienDuyet" label="Người duyệt"
+                        class="item-no-padding" url="NhanVien/GetListLookupNhanVien">
+                    </app-combobox>
+                </div>
+            </div>
+            thông tin Áp dụng
+            <div fxFlex="10%">
+                <button mat-raised-button color="primary" (click)="onApplyMGThem()" *ngIf="flagApDung==true"
+                    class="mt-12">
+                    Áp dụng
+                </button>
+            </div>
+        </div>
+    </fieldset> -->
+    <ng-template #actionTemplateSTCongNo let-dataItem let-rowIndex="rowIndex">
+        <app-textboxnumeric class="no-label" [step]="100" [(model)]="dataItem.SoTien" 
+             decimals="2" [format]="format" min="0.00"
+            (keyup)="onKeyCongNo($event, rowIndex)">
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #actionTemplateSubmitCongNo let-dataItem let-rowIndex="rowIndex">
+        <button color="primary" mat-raised-button mat-button (click)="ApDungCongNo(rowIndex)" cdkFocusInitial>Áp
+            dụng</button>
+    </ng-template>
+</div>

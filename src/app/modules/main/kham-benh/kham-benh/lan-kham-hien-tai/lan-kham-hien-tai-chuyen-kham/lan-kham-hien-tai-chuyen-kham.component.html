@@ -1,0 +1,31 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Chuyển dịch vụ khám</div>
+    <button type="button" mat-icon-button (click)="closes()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="overflow-y: hidden;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-combobox fxFlex="40%" label="Dịch vụ khám" id="DichVuKhamBenhBenhVienId" popupSettings="null"
+            hierarchyKeyToSend="DichVuKhamBenhBenhVienId" [(model)]="yeuCauKhamBenh.DichVuKhamBenhBenhVienId"
+            [validationerror]="'DichVuKhamBenhBenhVienId' | validationerror:validationErrors"
+            url="KhamBenh/GetDichVuKhamBenh" required="true">
+        </app-combobox>
+        <app-combobox fxFlex="30%" id="NoiDangKyId" label="Nơi thực hiện" url="KhamBenh/NoiThucHien"
+            hierarchyKeyToListen="DichVuKhamBenhBenhVienId" [(model)]="yeuCauKhamBenh.NoiDangKyId" required="true"
+            hierarchyKeyToSend="NoiDangKyId" [autoSelectFirstItem]="true" popupSettings="null"
+            [validationerror]="'NoiDangKyId' | validationerror:validationErrors">
+        </app-combobox>
+
+        <app-combobox id="BacSiDangKyId" fxFlex="30%" fxFlex.sm="100%" label="Bác sĩ" popupSettings="null"
+            [(model)]="yeuCauKhamBenh.BacSiDangKyId" url="KhamBenh/BacSiKham" hierarchyKeyToListen="NoiDangKyId"
+            [autoSelectFirstItem]="true">
+        </app-combobox>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Hủy</button>
+    <button mat-raised-button mat-button color="primary" (click)="luuChuyenKham()">Lưu</button>
+</mat-dialog-actions>

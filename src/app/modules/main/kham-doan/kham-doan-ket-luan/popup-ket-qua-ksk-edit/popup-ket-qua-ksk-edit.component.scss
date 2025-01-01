@@ -1,0 +1,31 @@
+.po-h{
+    color: #005dab;
+    position: relative;
+    top: 0;
+    left: 5px;
+    mat-icon{
+        display: contents;
+    }
+  }
+ .container-iframe {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 205px);
+    background: #ebeced;
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+.content-edit{
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.mat-dialog-container{
+    padding-bottom: 0px !important;
+}
+

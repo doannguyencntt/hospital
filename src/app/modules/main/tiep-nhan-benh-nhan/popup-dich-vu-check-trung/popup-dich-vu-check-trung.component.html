@@ -1,0 +1,20 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>XÁC NHẬN</div>
+    <!-- <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button> -->
+</div>
+
+<mat-dialog-content>
+    <!-- <h3 class="sub-title">Thông Tin Thẻ</h3> -->
+    <div>
+        Dịch vụ này đã được thêm vào trước đó. Bạn có chắc chắn muốn thêm dịch vụ này hay không?
+    </div>
+    
+</mat-dialog-content>
+
+
+<mat-dialog-actions style="margin-top: 20px;" fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" (click)="Khong()">Không</button>
+    <button mat-raised-button mat-button color="primary" (click)="Co()">Có</button>
+</mat-dialog-actions>

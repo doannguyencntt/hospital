@@ -1,0 +1,23 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Thông Báo</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+        <p>Người bệnh đang khám (Mã TN: {{maTN}}, Họ tên: {{hoTen}}) có cần quay lại phòng khám này không?</p><br>
+        <app-radio fxFlex="30" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="quayLai"
+            class="no-label" >
+        </app-radio>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button *ngIf="quayLai != null" mat-raised-button mat-button color="primary" [mat-dialog-close]="quayLai"
+        cdkFocusInitial>Xác nhận</button>
+
+    <button *ngIf="quayLai == null" style="pointer-events: none; opacity: 0.5;" 
+        mat-raised-button mat-button color="primary" cdkFocusInitial>Xác nhận</button>
+</mat-dialog-actions>

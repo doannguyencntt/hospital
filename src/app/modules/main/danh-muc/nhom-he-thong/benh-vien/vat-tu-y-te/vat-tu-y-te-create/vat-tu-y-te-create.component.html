@@ -1,0 +1,27 @@
+<app-header-form current="" [crumbs]="[
+    {Title:'Danh Mục',Path:''}
+    ,{Title:'Nhóm Hệ Thống',Path:''}
+    ,{Title:'Vật Tư',Path:''}
+    ,{Title:'Vật Tư',Path:'/danh-muc/nhom-he-thong/bao-hiem-y-te/vat-tu-y-te',Active:true}
+]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Thêm Vật Tư</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-vat-tu-y-te-shared></app-vat-tu-y-te-shared>
+
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <app-formfooter [bodyComponent]="shared" type="create" (created)="onCreated()">
+                    </app-formfooter>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

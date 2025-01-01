@@ -1,0 +1,29 @@
+<app-header-form [crumbs]="[
+    {Title:'Nhập Xuất',Path:''},
+    {Title:'Hành chính - KSNK',Path:''},
+    {Title:'Dự Trù Mua',Path:''},
+    {Title:'Tổng Hợp Dự Trù Mua Kiểm Soát Nhiễm Khuẩn Tại Giám Đốc',
+    Path:'/nhap-xuat/ksnk/tong-hop-mua-ksnk-tai-giam-doc', queryParams: {holdQuery : true}, Active: true}
+]" [isicMoreVert]="false">
+</app-header-form>
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b render-tu-choi" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">{{title}}</h2>
+                <div [innerHTML]="tinhTrangTxt"></div>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-du-tru-giam-doc-shared (fireStatus)="GetCurrentStatus($event)" #shared></app-du-tru-giam-doc-shared>
+                <div class="form-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <button type="button" (click)="Back()" mat-raised-button class="mr-1"><i class="ft-arrow-left"></i>
+                        {{txtReturn}}</button>
+                    <button *ngIf="status==null" type="button" color="warn" (click)="Decline()" mat-raised-button class="mr-1"><i class="ft-arrow-left"></i>
+                        Từ Chối</button>
+                    <button *ngIf="status==null" type="button" color="primary" (click)="Approve()" mat-raised-button class="mr-1"><i class="ft-arrow-left"></i>
+                        Duyệt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

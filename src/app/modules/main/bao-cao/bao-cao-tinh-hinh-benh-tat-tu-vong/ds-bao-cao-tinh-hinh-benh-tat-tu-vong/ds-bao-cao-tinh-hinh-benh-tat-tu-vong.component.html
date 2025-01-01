@@ -1,0 +1,332 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                {Title:'Thống Kê', Path:''},
+                {Title:'Báo Cáo', Path:''},
+                {Title:'KHTH', Path:''},
+                {Title:'Báo Cáo Tình Hình Tử Vong', Path:'', Active:true}]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6 pb-0">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgay" #tiepnhantu id="TuNgay"
+                    [maxDate]="baoCaoSearch.DenNgay" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgay" #tiepnhanden id="DenNgay"
+                    [minDate]="baoCaoSearch.TuNgay" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="0%" fxFlex.sm="0%" class="pb-0" style="margin-left: 10px;">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="xemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="xuatBaoCao()">Xuất Excel</button>
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" [ngStyle]="{'min-height': height+'px'}" class="pb-0">
+                    <kendo-grid [data]="gridDataSource" class="k-grid1 grid-bao-cao" [pageable]="true"
+                        [resizable]="true" [height]="height" [pageSize]="pageSize" [skip]="skip"
+                        (pageChange)="pageChange($event)" id="baoCaoGrid" #baoCaoGrid>
+
+                        <kendo-grid-column field="{{getFieldColumn(0)}}" title="{{getTitleColumn(0)}}"
+                            width="{{getWidthColumn(0)}}"
+                            [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{rowIndex + 1}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(1)}}" title="{{getTitleColumn(1)}}"
+                            width="{{getWidthColumn(1)}}"
+                            [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.STT}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(2)}}" title="{{getTitleColumn(2)}}"
+                            width="{{getWidthColumn(2)}}"
+                            [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.TenNhomBenh}}</span>
+                            </ng-template>
+                            <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                                <div style="font-weight: bold;color:#000;">Tổng cộng</div>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column field="{{getFieldColumn(3)}}" title="{{getTitleColumn(3)}}"
+                            width="{{getWidthColumn(3)}}"
+                            [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.MaICD}}</span>
+                            </ng-template>
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{rowIndex + 1}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column-group title="Hoạt động khám bệnh">
+                            <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                <div class="text-center">{{getTitleColumn(4)}}</div>
+                            </ng-template>
+                            <kendo-grid-column field="{{getFieldColumn(5)}}" title="{{getTitleColumn(5)}}"
+                                width="{{getWidthColumn(5)}}"
+                                [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.HDKBSoLanKhamChung}}</span>
+                                </ng-template>
+                                <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                    <strong>{{ sumHDKBSoLanKhamChung | number}}</strong>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(6)}}" title="{{getTitleColumn(6)}}"
+                                width="{{getWidthColumn(6)}}"
+                                [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.HDKBSoLanKhamTreEm}}</span>
+                                </ng-template>
+                                <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                    <strong>{{ sumHDKBSoLanKhamTreEm | number}}</strong>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="{{getFieldColumn(7)}}" title="{{getTitleColumn(7)}}"
+                                width="{{getWidthColumn(7)}}"
+                                [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.HDKBSoTuVong}}</span>
+                                </ng-template>
+                                <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                    <strong>{{ sumHDKBSoTuVong | number}}</strong>
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid-column-group>
+
+                        <kendo-grid-column-group title="Hoạt động điều trị">
+                            <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                <div class="text-center">{{getTitleColumn(8)}}</div>
+                            </ng-template>
+
+                            <kendo-grid-column-group title="Tổng số bệnh nhân">
+                                <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                    <div class="text-center">{{getTitleColumn(9)}}</div>
+                                </ng-template>
+                                <kendo-grid-column field="{{getFieldColumn(10)}}" title="{{getTitleColumn(10)}}"
+                                    width="{{getWidthColumn(10)}}"
+                                    [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                        <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.TSBNSoMacBenh}}</span>
+                                    </ng-template>
+                                    <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                        <strong>{{ sumTSBNSoMacBenh | number}}</strong>
+                                    </ng-template>
+                                </kendo-grid-column>
+                                <kendo-grid-column field="{{getFieldColumn(11)}}" title="{{getTitleColumn(11)}}"
+                                    width="{{getWidthColumn(11)}}"
+                                    [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                        <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.TSBNSoTuVong}}</span>
+                                    </ng-template>
+                                    <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                        <strong>{{ sumTSBNSoTuVong | number}}</strong>
+                                    </ng-template>
+                                </kendo-grid-column>
+                                <kendo-grid-column field="{{getFieldColumn(12)}}" title="{{getTitleColumn(12)}}"
+                                    width="{{getWidthColumn(12)}}"
+                                    [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                        <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.TSBNNgayDieuTri}}</span>
+                                    </ng-template>
+                                    <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                        <strong>{{ sumTSBNNgayDieuTri | number}}</strong>
+                                    </ng-template>
+                                </kendo-grid-column>
+                            </kendo-grid-column-group>
+
+                            <kendo-grid-column-group title="Trong đó TE <= 15 tuổi">
+                                <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                    <div class="text-center">{{getTitleColumn(13)}}</div>
+                                </ng-template>
+                                <kendo-grid-column-group title="Mắc">
+                                    <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex"
+                                        let-column="column">
+                                        <div class="text-center">{{getTitleColumn(14)}}</div>
+                                    </ng-template>
+                                    <kendo-grid-column field="{{getFieldColumn(15)}}" title="{{getTitleColumn(15)}}"
+                                        width="{{getWidthColumn(15)}}"
+                                        [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                            <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.TEMacTS}}</span>
+                                        </ng-template>
+                                        <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                            <strong>{{ sumTEMacTS | number}}</strong>
+                                        </ng-template>
+                                    </kendo-grid-column>
+                                    <kendo-grid-column field="{{getFieldColumn(16)}}" title="{{getTitleColumn(16)}}"
+                                        width="{{getWidthColumn(16)}}"
+                                        [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                            <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.TEMacDuoi6T}}</span>
+                                        </ng-template>
+                                        <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                            <strong>{{ sumTEMacDuoi6T | number}}</strong>
+                                        </ng-template>
+                                    </kendo-grid-column>
+                                </kendo-grid-column-group>
+
+                                <kendo-grid-column-group title="Số tử vong">
+                                    <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex"
+                                        let-column="column">
+                                        <div class="text-center">{{getTitleColumn(17)}}</div>
+                                    </ng-template>
+                                    <kendo-grid-column field="{{getFieldColumn(18)}}" title="{{getTitleColumn(18)}}"
+                                        width="{{getWidthColumn(18)}}"
+                                        [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                            <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.TESoTuVongTS}}</span>
+                                        </ng-template>
+                                        <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                            <strong>{{ sumTESoTuVongTS | number}}</strong>
+                                        </ng-template>
+                                    </kendo-grid-column>
+                                    <kendo-grid-column field="{{getFieldColumn(19)}}" title="{{getTitleColumn(19)}}"
+                                        width="{{getWidthColumn(19)}}"
+                                        [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                            <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.TESoTuVongDuoi6T}}</span>
+                                        </ng-template>
+                                        <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                            <strong>{{ sumTESoTuVongDuoi6T | number}}</strong>
+                                        </ng-template>
+                                    </kendo-grid-column>
+                                </kendo-grid-column-group>
+
+                                <kendo-grid-column-group title="TS ngày điều trị">
+                                    <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex"
+                                        let-column="column">
+                                        <div class="text-center">{{getTitleColumn(20)}}</div>
+                                    </ng-template>
+                                    <kendo-grid-column field="{{getFieldColumn(21)}}" title="{{getTitleColumn(21)}}"
+                                        width="{{getWidthColumn(21)}}"
+                                        [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                            <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.TENgayDieuTriTS}}</span>
+                                        </ng-template>
+                                        <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                            <strong>{{ sumTENgayDieuTriTS | number}}</strong>
+                                        </ng-template>
+                                    </kendo-grid-column>
+                                    <kendo-grid-column field="{{getFieldColumn(22)}}" title="{{getTitleColumn(22)}}"
+                                        width="{{getWidthColumn(22)}}"
+                                        [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                            <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.TENgayDieuTriDuoi6T}}</span>
+                                        </ng-template>
+                                        <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                            <strong>{{ sumTENgayDieuTriDuoi6T | number}}</strong>
+                                        </ng-template>
+                                    </kendo-grid-column>
+                                </kendo-grid-column-group>
+
+                            </kendo-grid-column-group>
+
+
+
+                        </kendo-grid-column-group>
+
+
+                        <kendo-grid-column-group title="Trong đó > 60 tuổi">
+                            <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                <div class="text-center">{{getTitleColumn(23)}}</div>
+                            </ng-template>
+
+                            <kendo-grid-column-group title="Số mắc bệnh">
+                                <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                    <div class="text-center">{{getTitleColumn(24)}}</div>
+                                </ng-template>
+                                <kendo-grid-column field="{{getFieldColumn(25)}}" title="{{getTitleColumn(25)}}"
+                                    width="{{getWidthColumn(25)}}"
+                                    [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                        <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.Tren60TMacBenhTS}}</span>
+                                    </ng-template>
+                                    <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                        <strong>{{ sumTren60TMacBenhTS | number}}</strong>
+                                    </ng-template>
+                                </kendo-grid-column>
+                                <kendo-grid-column field="{{getFieldColumn(26)}}" title="{{getTitleColumn(26)}}"
+                                    width="{{getWidthColumn(26)}}"
+                                    [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                        <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.Tren60TMacBenhLaNu}}</span>
+                                    </ng-template>
+                                    <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                        <strong>{{ sumTren60TMacBenhLaNu | number}}</strong>
+                                    </ng-template>
+                                </kendo-grid-column>
+                            </kendo-grid-column-group>
+
+                            <kendo-grid-column-group title="Số mắc bệnh">
+                                <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                    <div class="text-center">{{getTitleColumn(27)}}</div>
+                                </ng-template>
+                                <kendo-grid-column field="{{getFieldColumn(28)}}" title="{{getTitleColumn(28)}}"
+                                    width="{{getWidthColumn(28)}}"
+                                    [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                        <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.Tren60TTuVongTS}}</span>
+                                    </ng-template>
+                                    <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                        <strong>{{ sumTren60TTuVongTS | number}}</strong>
+                                    </ng-template>
+                                </kendo-grid-column>
+                                <kendo-grid-column field="{{getFieldColumn(29)}}" title="{{getTitleColumn(29)}}"
+                                    width="{{getWidthColumn(29)}}"
+                                    [headerStyle]="{'text-align': 'center','vertical-align': 'top'}">
+                                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                        <span [ngClass]="{'text_underline': dataItem.LaChuong}"> {{dataItem.Tren60TTuVongLaNu}}</span>
+                                    </ng-template>
+                                    <ng-template kendoGridFooterTemplate let-aggregates let-field="field">
+                                        <strong>{{ sumTren60TTuVongLaNu | number}}</strong>
+                                    </ng-template>
+                                </kendo-grid-column>
+                            </kendo-grid-column-group>
+
+                        </kendo-grid-column-group>
+
+                        <kendo-grid-messages noRecords="Không có dữ liệu." pagerOf="trong số" pagerItems="dòng"
+                            detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết">
+                        </kendo-grid-messages>
+
+                        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+                            <div style="justify-content: center;" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                fxLayoutAlign="space-between" fxFlex="100%" *ngIf="_showDefaultPagerTemplate">
+                                <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                                <kendo-pager-numeric-buttons [buttonCount]="5" class="d-none d-sm-none d-md-block">
+                                </kendo-pager-numeric-buttons>
+                                <button *ngIf="_isLoadingTotalPage" kendoButton
+                                    class="btn btn-raised btn-default btn-min-width mb-0">
+                                    <img src="/assets/img/loader_circle.gif" alt="Đang tính..." style="height: 20px;" />
+                                </button>
+                                <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                                <kendo-pager-info></kendo-pager-info>
+                                <div kendoTooltip class="k-icon k-i-refresh"
+                                    style="order: 10;cursor: pointer; align-self: center;" title="Làm mới"
+                                    (click)="xemBaoCao()"></div>
+                                <div *ngIf="_isLoading" class="grid-loading k-i-loading"></div>
+                            </div>
+                        </ng-template>
+                    </kendo-grid>
+                </div>
+            </div>
+        </div>
+
+    </vex-page-layout-content>
+</vex-page-layout>

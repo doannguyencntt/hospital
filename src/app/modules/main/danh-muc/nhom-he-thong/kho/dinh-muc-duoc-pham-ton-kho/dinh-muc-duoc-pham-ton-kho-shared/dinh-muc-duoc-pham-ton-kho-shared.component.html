@@ -1,0 +1,44 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-combobox fxFlex="20%" [(model)]="duocPhamTonKho.KhoDuocPhamId" [required]="true"
+        [modelText]="duocPhamTonKho.TenKhoDuocPham" label="Kho Dược Phẩm"
+        [validationerror]="'KhoDuocPhamId' | validationerror:validationErrors"
+        url="DinhMucDuocPhamTonKho/GetTenKhoDuocPham">
+    </app-combobox>
+    <app-combobox id="DuocPhamBenhVienId" fxFlex="20%" fxFlex.sm="50%" label="Tên Dược Phẩm"
+        url="DinhMucDuocPhamTonKho/GetTenDuocPham" [(model)]="duocPhamTonKho.DuocPhamBenhVienId"
+        [modelText]="duocPhamTonKho.TenDuocPham" class="item-no-padding" [template]="duocPhamTemplate"
+        [templateHeader]="duocPhamTemplateHeader" [required]="true"
+        [validationerror]="'DuocPhamBenhVienId' | validationerror:validationErrors" [popupSettings]="{width: 600,popupClass:'item-no-padding'}">
+        <ng-template #duocPhamTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="40%">Tên</th>
+                    <th>Hoạt Chất</th>
+                    <th>Nhà Sản Xuất</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #duocPhamTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="40%">{{dataItem.Ten}}</td>
+                    <td>{{dataItem.HoatChat}}</td>
+                    <td>{{dataItem.NhaSanXuat}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+    <app-textboxnumeric id="TonToiThieu" fxFlex="20%" fxFlex.sm="40%" [(model)]="duocPhamTonKho.TonToiThieu"
+        (change)="convertInt()" label="Tồn Tối Thiểu" min="0" max="999999" data-format="0" data-decimals="0"
+        data-min="0" [validationerror]="'TonToiThieu' | validationerror:validationErrors"></app-textboxnumeric>
+    <app-textboxnumeric id="TonToiDa" fxFlex="20%" fxFlex.sm="40%" [(model)]="duocPhamTonKho.TonToiDa" min="0"
+        max="999999" data-format="0" data-decimals="0" data-min="0" (change)="convertInt()" label="Tồn Tối Đa"
+        [validationerror]="'TonToiDa' | validationerror:validationErrors">
+    </app-textboxnumeric>
+    <app-textboxnumeric id="SoNgayTruocKhiHetHan" fxFlex="20%" fxFlex.sm="40%" (change)="convertInt()"
+        [(model)]="duocPhamTonKho.SoNgayTruocKhiHetHan" label="Số Ngày Trước Khi Hết Hạn" min="0" max="999999"
+        data-format="0" data-decimals="0" data-min="0"
+        [validationerror]="'SoNgayTruocKhiHetHan' | validationerror:validationErrors"></app-textboxnumeric>
+    <app-textarea id="MoTa" fxFlex="100%" [(model)]="duocPhamTonKho.MoTa" maxlength="2000" label="Mô Tả"
+        [validationerror]="'MoTa' | validationerror:validationErrors"></app-textarea>
+</div>

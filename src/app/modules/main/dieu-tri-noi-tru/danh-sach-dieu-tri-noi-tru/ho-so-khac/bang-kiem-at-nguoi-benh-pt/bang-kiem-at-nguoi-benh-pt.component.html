@@ -1,0 +1,474 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+        [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <div fxFlex="100%" style="margin-top: 10px;">
+            <label fxFlex="70%"></label>
+            <app-datetimepicker fxFlex="30%" [(model)]="bangKiemAnToanNguoiBenhPT.ThoiDiemKham" id="ThoiDiemKham"
+                style="float: right;margin-right: 5px;" 
+                label="Thời điểm khám" required="true" (modelChange)="changeThoiDiemKham($event)"
+                [validationerror]="'ThoiDiemKham' | validationerror:validationErrors">
+            </app-datetimepicker>
+        </div>
+        <!-- <app-multiselect fxFlex="100%" fxFlex.sm="100%" label="Thuốc đang dùng"
+        [(model)]="bangKiemAnToanNguoiBenhPT.ThuocDangDung"
+        url="DieuTriNoiTru/GetListThuocDangDung?yeuCauTiepNhanId={{yeuCauTiepNhanId}}"
+        [queryInfo]="multiselectQueryInfo">
+        </app-multiselect> -->
+        <app-textarea id="thuoc-dang-dung" fxFlex="100%" fxFlex.sm="100%" label="Thuốc đang dùng"
+            [(model)]="bangKiemAnToanNguoiBenhPT.ThuocDangDung" minHeight="20">
+        </app-textarea>
+
+        <app-textarea id="TienSuBenh" fxFlex="100%" fxFlex.sm="100%" label="Tiền sư bệnh"
+            [(model)]="bangKiemAnToanNguoiBenhPT.TienSuDiUng" minHeight="20">
+        </app-textarea>
+       
+        <label fxFlex="100%" style="margin-top: 10px;">Chuẩn bị người bệnh</label>
+        <div fxFlex="100%">
+            <table width="100%">
+                <tr>
+                    <td style="width: 82%;" colspan="4">Khám và tư vấn của PTV</td>
+                    <td style="width: 18%;">
+                        <app-radio class="no-label" id="KhamVaTuVanCuaPTV" name="IsOfficial"
+                            style="padding-top: 3px;margin-right: 7px;"
+                            [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.KhamVaTuVanCuaPTV">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 10%;">Chẩn đoán</td>
+                    <td style="width: 26%;">Bệnh chính</td>
+                    <td style="width: 18%;">
+                        <app-radio id="BenhChinh" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.BenhChinh">
+                        </app-radio>
+                    </td>
+                    <td style="width: 26%;">Vết thương hở</td>
+                    <td style="width: 20%;">
+                        <app-radio id="VetThuongHo" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                        class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                        [(model)]="bangKiemAnToanNguoiBenhPT.VetThuongHo">
+                    </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 10%;"></td>
+                    <td style="width: 26%;">Bệnh kèm theo</td>
+                    <td style="width: 18%;"><app-radio id="CoKhongSoLan" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                        class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                        [(model)]="bangKiemAnToanNguoiBenhPT.BenhKemTheo">
+                    </app-radio></td>
+                    <td style="width: 26%;">Vệ sinh da vùng mổ</td>
+                    <td style="width: 20%;">
+                        <app-radio id="VeSinhDaVungMo" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.VeSinhDaVungMo">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 10%;"></td>
+                    <td style="width: 26%;">Đái tháo đường</td>
+                    <td style="width: 18%;">
+                        <app-radio id="CoKhongSoLan" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.DaiThaoDuong">
+                        </app-radio>
+                    </td>
+                    <td style="width: 26%;">Băng vô trùng da/đánh dấu vị trí phẩu thuật</td>
+                    <td style="width: 20%;">
+                        <app-radio id="BangVoTrungDanhDauViTriPhauThuat" name="IsOfficial"
+                            style="padding-top: 3px;margin-right: 7px;" class="no-label"
+                            [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.BangVoTrungDanhDauViTriPhauThuat">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 10%;">Tiền sử bệnh</td>
+                    <td style="width: 26%;">Tăng huyết áp</td>
+                    <td style="width: 18%;">
+                        <app-radio id="CoKhongSoLan" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                        class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                        [(model)]="bangKiemAnToanNguoiBenhPT.TangHuyetAp">
+                    </app-radio>
+                    </td>
+                    <td style="width: 26%;">Khám gây mê</td>
+                    <td style="width: 20%;">
+                        <app-radio id="KhamGayMe" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;" class="no-label"
+                            [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="bangKiemAnToanNguoiBenhPT.KhamGayMe">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 10%;"></td>
+                    <td style="width: 26%;">Khác:</td>
+                    <td style="width: 18%;">
+                        <app-radio id="CoKhongSoLan" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.Khac">
+                        </app-radio>
+                    </td>
+                    <td style="width: 26%;">Hồ sơ bệnh án đủ:Phiếu cam đoan PT/TT, GMHS</td>
+                    <td style="width: 20%;">
+                        <app-radio id="PhieuCamDoanPTTT" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.PhieuCamDoanPTTT">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 10%;">Thẻ định danh:</td>
+                    <td style="width: 26%;"></td>
+                    <td style="width: 18%;">
+                        <app-radio id="TheDinhDanh" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.TheDinhDanh">
+                        </app-radio>
+                    </td>
+                    <td style="width: 26%;">Phiếu xét nghiệm:CTM, nhóm máu, đông máu, HBsAg, HIV, sinh hoá nước tiểu, sinh hoá máu</td>
+                    <td style="width: 20%;">
+                        <app-radio id="PhieuXN" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.PhieuXN">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 10%;">Dặn người bệnh nhịn ăn uống trước 6 giờ:</td>
+                    <td style="width: 26%;"></td>
+                    <td style="width: 18%;">
+                        <app-radio id="NhacBenhNhanNhinAn" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.NhacBenhNhanNhinAn">
+                        </app-radio>
+                    </td>
+                    <td style="width: 26%;">Phim chụp phổi, số lượng</td>
+                    <td style="width: 20%;">
+                        <app-radio id="PhimChupPhoiSL" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.PhimChupPhoiSL">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 36%;" colspan="2">vệ sinh (tắm gội)</td>
+                    <td style="width: 18%;">
+                        <app-radio id="VeSinhTamGoi" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                        class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                        [(model)]="bangKiemAnToanNguoiBenhPT.VeSinhTamGoi">
+                    </app-radio>
+                    </td>
+                    <td style="width: 26%;">Các loại phim ảnh khác, số lượng</td>
+                    <td style="width: 20%;">
+                        <app-radio id="CacLoaiPhimAnh" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.CacLoaiPhimAnh">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 36%;" colspan="2">Vật liệu cấy ghép (Prothese)</td>
+                    <td style="width: 18%;">
+                        <app-radio id="VatLieuCayGhep" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.VatLieuCayGhep">
+                        </app-radio>
+                    </td>
+                    <td style="width: 26%;">Điện tim, siêu âm</td>
+                    <td style="width: 20%;">
+                        <app-radio id="DienTim" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.DienTim">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 36%;" colspan="2">Cắt móng tay, móng chân:</td>
+                    <td style="width: 18%;">
+                        <app-radio id="CatMongTayMongChan" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.CatMongTayMongChan">
+                        </app-radio>
+                    </td>
+                    <td style="width: 26%;">Xác nhận thành viên gây mê, phẫu thuật</td>
+                    <td style="width: 20%;">
+                        <app-radio id="XacNhanThanhVienGayMePhauThuat" name="IsOfficial"
+                            style="padding-top: 3px;margin-right: 7px;" class="no-label"
+                            [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.XacNhanThanhVienGayMePhauThuat">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 36%;" colspan="2">Đố trang sức</td>
+                    <td style="width: 18%;">
+                        <app-radio id="DoTrangSuc" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.DoTrangSuc">
+                        </app-radio>
+                    </td>
+                    <td style="width: 26%;">Ký cam kết sử dụng KT cao, VT theo yêu cầu</td>
+                    <td style="width: 20%;">
+                        <app-radio id="KyCamKetSuDungKTCao" name="IsOfficial"
+                            style="padding-top: 3px;margin-right: 7px;" class="no-label"
+                            [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.KyCamKetSuDungKTCao">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 36%;" colspan="2">Tháo răng giả</td>
+                    <td style="width: 18%;">
+                        <app-radio id="ThaoRangGia" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.ThaoRangGia">
+                        </app-radio>
+                    </td>
+                   <td style="width: 26%;" >Kháng sinh dự phòng</td>
+                    <td style="width: 20%;">
+                        <app-radio id="KhangSinhDuPhong" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.KhangSinhDuPhong">
+                        </app-radio>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 36%;" colspan="2">Quần áo sạch(quần, áo, váy )</td>
+                    <td style="width: 18%;">
+                        <app-radio id="QuanAoSachMoiThay" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.QuanAoSachMoiThay">
+                        </app-radio>
+                    </td>
+                    <td style="width: 26%;">Duyệt phẫu thuật</td>
+                    <td style="width: 20%;">
+                        <app-radio id="DuyetPhauThuat" name="IsOfficial" style="padding-top: 3px;margin-right: 7px;"
+                            class="no-label" [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]"
+                            [(model)]="bangKiemAnToanNguoiBenhPT.DuyetPhauThuat">
+                        </app-radio>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <h3 fxFlex="100%" class="sub-title mr-4">CHỈ SỐ SINH TỒN
+            <button class="po-h" color="primary" (click)="themChiSoSinhTon()">
+                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </h3>
+        <ng-container *ngIf="dataSourceSinhHieu.data.length == 0">
+            <p fxFlex="100%">Không có chỉ số sinh tồn</p>
+        </ng-container>
+        <app-grid fxFlex="100%" *ngIf="dataSourceSinhHieu.data.length > 0" masterName="SinhHieu"
+            [gridColumns]="gridSinhHieuColumns" [documentType]="documentType" [useAddDeault]="false"
+            class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+            [maxHeight]="200" [lazyLoadPage]="true" [gridDataSource]="dataSourceSinhHieu" [pageable]="false">
+        </app-grid>
+
+        <ng-template #nhipTimTemplate let-dataItem>
+            <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.Edit == true" [max]="9999" [spinners]="false" [(model)]="dataItem.NhipTim"
+                class="no-label" (modelChange)="onChangeNhipTim(dataItem, $event)">
+            </app-textboxnumeric>
+            <p class="ml-1" *ngIf="dataItem.Id != 0 && dataItem.Edit != true&& dataItem.Edit != true">{{dataItem.NhipTim}}</p>
+        </ng-template>
+        <ng-template #huyetApTemplate let-dataItem>
+            <table width="100%" *ngIf="dataItem.Id == 0 || dataItem.Edit == true || dataItem.Edit == true ">
+                <tr>
+                    <td style="width:calc(50% - 3px);padding:0">
+                        <app-textboxnumeric [spinners]="false" [(model)]="dataItem.HuyetApTamThu" class="no-label"
+                            [max]="9999" (modelChange)="onChangeHuyetApTamThu($event, dataItem)">
+                        </app-textboxnumeric>
+                    </td>
+                    <td style="width:6px;padding:0">/</td>
+                    <td style="width:calc(50% - 3px);padding:0">
+                        <app-textboxnumeric [spinners]="false" [(model)]="dataItem.HuyetApTamTruong" class="no-label"
+                            [max]="9999" (modelChange)="onChangeHuyetApTamTruong($event, dataItem)">
+                        </app-textboxnumeric>
+                    </td>
+                </tr>
+            </table>
+            <p class="ml-1" *ngIf="dataItem.Id != 0 && dataItem.Edit != true">{{dataItem.HuyetAp}}</p>
+        </ng-template>
+        <ng-template #thanNhietTemplate let-dataItem>
+            <app-textboxnumeric [format]="format" [max]="9999" [spinners]="false" *ngIf="dataItem.Id == 0 || dataItem.Edit == true"
+                [decimals]="1" [(model)]="dataItem.ThanNhiet" class="no-label">
+            </app-textboxnumeric>
+            <p class="ml-1" *ngIf="dataItem.Id != 0 && dataItem.Edit != true">{{dataItem.ThanNhiet | number}}</p>
+        </ng-template>
+        <ng-template #nhipThoTemplate let-dataItem>
+            <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.Edit == true" [max]="9999" [spinners]="false" [(model)]="dataItem.NhipTho"
+                class="no-label" (modelChange)="onChangeNhipTho($event, dataItem)">
+            </app-textboxnumeric>
+            <p class="ml-1" *ngIf="dataItem.Id != 0 && dataItem.Edit != true">{{dataItem.NhipTho}}</p>
+        </ng-template>
+        <ng-template #canNangTemplate let-dataItem>
+            <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.Edit == true" [format]="format" [spinners]="false"
+                [(model)]="dataItem.CanNang" class="no-label" [max]="9999" [decimals]="1"
+                (modelChange)="onChangeCanNang(dataItem)">
+            </app-textboxnumeric>
+            <p class="ml-1" *ngIf="dataItem.Id != 0 && dataItem.Edit != true">{{dataItem.CanNang | number}}</p>
+        </ng-template>
+        <ng-template #chieuCaoTemplate let-dataItem>
+            <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.Edit == true" [format]="format" [spinners]="false"
+                [(model)]="dataItem.ChieuCao" [decimals]="1" class="no-label" [max]="9999"
+                (modelChange)="onChangeChieuCao(dataItem)">
+            </app-textboxnumeric>
+            <p class="ml-1" *ngIf="dataItem.Id != 0 && dataItem.Edit != true">{{dataItem.ChieuCao | number}}</p>
+        </ng-template>
+        <ng-template #BMITemplate let-dataItem>
+            <p class="ml-1">{{dataItem.BMI | number: '1.2-2'}}</p>
+        </ng-template>
+        <ng-template #glassgowTemplate let-dataItem>
+            <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.Edit == true" [max]="9999" [format]="format" [spinners]="false"
+                [(model)]="dataItem.Glassgow" [decimals]="1" class="no-label">
+            </app-textboxnumeric>
+            <p class="ml-1" *ngIf="dataItem.Id != 0 && dataItem.Edit != true">{{dataItem.Glassgow | number}}</p>
+        </ng-template>
+        <ng-template #spO2Template let-dataItem>
+            <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.Edit == true " [max]="9999" [format]="format" [spinners]="false"
+                [(model)]="dataItem.SpO2" [decimals]="1" class="no-label">
+            </app-textboxnumeric>
+            <p class="ml-1" *ngIf="dataItem.Id != 0 && dataItem.Edit != true">{{dataItem.SpO2 | number}}</p>
+        </ng-template>
+        <ng-template #actionSinhHieuTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <button *ngIf="dataItem.Id == 0 || dataItem.Edit == true" color="primary" mat-icon-button kendoTooltip title="Lưu" type="button"
+                        (click)="luuChiSoSinhHieu(dataItem)">
+                        <mat-icon [icIcon]="icSave"></mat-icon>
+                    </button>
+                <button color="primary" *ngIf="dataItem.Id != 0 && dataItem.Edit != true" mat-icon-button kendoTooltip title="Sửa" type="button" (click)="suaChiSoSinhHieu(dataItem)">
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                    </button>
+                <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button"
+                    (click)="xoaChiSoSinhHieu(dataItem)">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <label fxFlex="20%" style="margin-top: 10px;">Tiếp xúc</label>
+        <label fxFlex="20%" style="margin-top: 10px;">Thông số khác</label>
+        <label fxFlex="20%" style="margin-top: 10px;">Nguy cơ suy hô hấp, mất máu</label>
+        <label fxFlex="20%" style="margin-top: 10px;">Lâm sàng, CLS cần lưu ý</label>
+        <label fxFlex="20%" style="margin-top: 10px;">Những lưu ý khác</label>
+        <app-textarea id="TiepXuc" fxFlex="20%" fxFlex.sm="20%" class="no-lable"
+            [(model)]="bangKiemAnToanNguoiBenhPT.TiepXuc" minHeight="20">
+        </app-textarea>
+        <app-textarea id="ThongSoKhac" fxFlex="20%" fxFlex.sm="20%" [(model)]="bangKiemAnToanNguoiBenhPT.ThongSoKhac"
+            class="no-lable" minHeight="20">
+        </app-textarea>
+        <app-textarea id="NguyCoSuyHoHapMatMau" fxFlex="20%" fxFlex.sm="20%" class="no-lable"
+            [(model)]="bangKiemAnToanNguoiBenhPT.NguyCoSuyHoHapMatMau" minHeight="20">
+        </app-textarea>
+        <app-textarea id="LamSangCLSCanLuuY" fxFlex="20%" fxFlex.sm="20%" class="no-lable"
+            [(model)]="bangKiemAnToanNguoiBenhPT.LamSangCLSCanLuuY" minHeight="20">
+        </app-textarea>
+        <app-textarea id="NhungLuuYKhac" fxFlex="20%" fxFlex.sm="20%" class="no-lable"
+            [(model)]="bangKiemAnToanNguoiBenhPT.NhungLuuYKhac" minHeight="20">
+        </app-textarea>
+        <app-datetimepicker fxFlex="48%" [(model)]="bangKiemAnToanNguoiBenhPT.NgayGioDuaBNDiPT" #hoiChanLuc
+                id="NgayGioDuaBNDiPT" style="margin-right: 5px;" (modelChange)="NgayGioDuaBNDiPTChange($event)"
+                label="Ngày giờ đưa NB đi PT" required="true"
+                [validationerror]="'NgayGioDuaBNDiPT' | validationerror:validationErrors">
+            </app-datetimepicker>
+            <app-datetimepicker fxFlex="48%" [(model)]="bangKiemAnToanNguoiBenhPT.NgayGioDuDinhGayMe" #hoiChanLuc
+                id="NgayGioDuDinhGayMe" (modelChange)="NgayGioDuDinhGayMeChange($event)" label="Ngày giờ dự định gây mê"
+                >
+            </app-datetimepicker>
+
+        <app-textarea id="YKienCuaNguoiNhanNguoiBenhTaiPhongGMHS" fxFlex="100%" fxFlex.sm="100%"
+            [(model)]="bangKiemAnToanNguoiBenhPT.YKienCuaNguoiNhanNguoiBenhTaiPhongGMHS" minHeight="20"
+            label="Ý kiến của người nhận người bệnh tại phòng GMHS:">
+        </app-textarea>
+        <label fxFlex="25%" style="margin-top: 10px;">Chuẩn bị trước PT</label>
+        <label fxFlex="25%" style="margin-top: 10px;">Người giao</label>
+        <label fxFlex="25%" style="margin-top: 10px;">Người nhận</label>
+        <label fxFlex="25%" style="margin-top: 10px;"></label>
+        <span fxFlex="25%">
+            <app-autocomplete id="DDChuanBiNBTruocPT" [(model)]="bangKiemAnToanNguoiBenhPT.DDChuanBiNBTruocPT"
+                popupSettings="null" [dataList]="dataNhanVien">
+            </app-autocomplete>
+        </span>
+        <span fxFlex="25%">
+            <app-autocomplete id="DDChuanBiNBDenPhongPT" [(model)]="bangKiemAnToanNguoiBenhPT.DDChuanBiNBDenPhongPT"
+                popupSettings="null" [dataList]="dataNhanVien">
+            </app-autocomplete>
+        </span>
+        <span fxFlex="25%">
+            <app-autocomplete id="DDNhanBNTaiPhongPTGMHS" [(model)]="bangKiemAnToanNguoiBenhPT.DDNhanBNTaiPhongPTGMHS"
+                popupSettings="null" [dataList]="dataNhanVien">
+            </app-autocomplete>
+        </span>
+        <span fxFlex="25%"></span>
+        <app-upload id="Upload" #uploadBangKiemATNBPT [allowedExtensions]="allowedExtensions" fxFlex="60%"
+            [(model)]="bangKiemAnToanNguoiBenhPT.FileChuKy" [multiple]="true" label="File chữ ký"
+            [template]="templateFileChuanDoanHAInfo">
+        </app-upload>
+        <ng-template #templateFileChuanDoanHAInfo let-files>
+            <table width="100%">
+                <tr>
+                    <td>
+                        <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                            (click)="uploadBangKiemATNBPT.viewFile(files[0])"
+                            class="custom-name red">{{files[0].name}}</a>
+                        <a *ngIf="!files[0].error" title="{{files[0].name}}"
+                            (click)="uploadBangKiemATNBPT.viewFile(files[0])" class="green"
+                            class="custom-name green">{{files[0].name}}</a>
+                    </td>
+                    <td style="width:25px">
+                        <a type="button" (click)="uploadBangKiemATNBPT.remove(files[0].uid)" mat-icon-button>
+                            <mat-icon [icIcon]="icClear"></mat-icon>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </ng-template>
+        <div fxFlex="100%" style="padding-bottom: 50px;">
+            <label fxFlex="25%" style="padding-top: 30px;">Người thực hiện :
+                <b>{{bangKiemAnToanNguoiBenhPT.TaiKhoanDangNhap}}</b></label>
+            <label fxFlex="25%" style="padding-top: 30px;">Ngày thực hiện :
+                <b>{{bangKiemAnToanNguoiBenhPT.NgayThucHien}}</b></label>
+            <span fxFlex="50%" style="text-align: right;">
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="ThemPhieu()"
+                    *ngIf="checkDieuKienThemPhieu == true">Thêm bảng kiểm mới</button>
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="In()"
+                    style="pointer-events: all;">In</button>
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                    (click)="Huy()">Hủy</button>
+                <button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+                    Lưu
+                </button>
+            </span>
+        </div>
+        <fieldset fxFlex="100%" [style.display]="gridDataSource.data.length > 0 ? 'block':'none'">
+            <legend>Danh sách bảng kiểm an toàn người bệnh phẫu thuật</legend>
+            <div fxFlex="100%" style="padding: 15px;">
+                <app-grid #gridChild baseRoute="" [gridColumns]="gridColumns" [urlGetData]="urlGetDataGrid"
+                    [urlGetTotalPage]="urlGetTotalPageGrid" [documentType]="documentType" [useActionDefault]="false"
+                    [lazyLoadPage]="true" [showExportExcel]="true" [additionalSearchString]="yeuCauTiepNhanId"
+                    [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                    [autoHeight]="true" [pageable]="false"></app-grid>
+            </div>
+        </fieldset>
+
+        <ng-template #actionTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                    (click)="xoa(dataItem)">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+        <ng-template #ngayGioDuaBNDiPTTemplate let-dataItem>
+            <div kendoTooltip>
+                <a (click)="viewDataBangKiem(dataItem)">
+                    {{dataItem.NgayGioDuaBNDiPTString}}
+                </a>
+            </div>
+        </ng-template>
+    </div>
+</div>

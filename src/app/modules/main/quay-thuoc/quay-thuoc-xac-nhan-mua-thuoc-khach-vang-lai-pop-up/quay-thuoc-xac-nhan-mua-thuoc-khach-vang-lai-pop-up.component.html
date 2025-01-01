@@ -1,0 +1,12 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>{{Title}}</div>
+</div>
+<p class="mb-3" *ngIf="dataItem.Model != null"> Người bệnh này chưa có phát sinh đơn thuốc nào. Bạn có muốn bán thuốc cho người bệnh này như khách vãng lai hay không?  </p>
+<p class="mb-3" *ngIf="dataItem.Model == null"> Không tìm thấy người bệnh này trong hệ thống. Bạn có muốn bán thuốc cho người bệnh này như khách vãng lai hay không?  </p>
+<div style="float: right;">
+    <button type="button"  mat-raised-button mat-button class="mr-1 mt-2"
+    (click)="close(1)">Không</button>
+    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+    (click)="close(2)">Có</button>
+</div>
+

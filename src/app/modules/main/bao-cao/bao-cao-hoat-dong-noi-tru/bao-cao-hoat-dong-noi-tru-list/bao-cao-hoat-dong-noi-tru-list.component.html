@@ -1,0 +1,71 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'KHTH', Path:''},
+                    {Title:'Hoạt Dông Nội Trú', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-combobox id="NoiDieuTriId" fxFlex="15%" fxFlex.sm="15%" hierarchyKeyToSend="khoa"
+                    class="mt-1 on-header" popupSettings="null" [templateHeader]="noiDieuTriTemplateHeader"
+                    [template]="noiDieuTriTemplate" label="Nơi điêu trị" url="BaoCao/GetListNoiDieuTri" bind="true"
+                    [(model)]="baoCaoSearch.NoiDieuTriId">
+                </app-combobox>
+
+                <ng-template #noiDieuTriTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th>Nơi điều trị</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #noiDieuTriTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td>{{dataItem.DisplayName}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="55%" fxFlex.sm="55%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                    <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 mt-2" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" [ngStyle]="{'min-height': height+'px'}" class="pb-0">
+                    <app-grid [gridColumns]="gridColumns" [useAddDeault]="false"
+                        [checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [documentType]="documentType" [gridDataSource]="dataSource">
+                    </app-grid>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<ng-template #tongTemplate let-dataItem>
+    <span *ngIf="dataItem.IsPerCent==false">{{dataItem.Tong | number:'0.2-2':'vi-VN'}}</span>
+    <span *ngIf="dataItem.IsPerCent==true">{{dataItem.Tong*100 | number:'0.2-2':'vi-VN'}}%</span>
+</ng-template>

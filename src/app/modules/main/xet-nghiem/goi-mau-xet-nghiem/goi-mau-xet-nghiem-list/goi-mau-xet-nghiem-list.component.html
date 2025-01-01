@@ -1,0 +1,195 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">           
+            <vex-breadcrumbs [crumbs]="[
+                {Title:'Xét nghiệm',Path:''},
+                {Title:'DS gửi mẫu',Path:'/xet-nghiem/goi-mau', Active: true}]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid #gridDanhSachXetNghiem
+                [documentType]="documentType"
+                [useHeaderDefault]="false" [useAddDeault]="false" [useAddDeault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [gridColumns]="gridDanhSachXetNghiemColumns" [urlGetData]="urlGetDataDanhSachXetNghiem"
+                [detailTemplate]="gridNhomXetNghiemTemplate" [headerTemplate]="headerTemplate" [additionalSearchString]="firstSearchString"
+                [sort]="sortDanhSachXetNghiem">
+            </app-grid>
+
+            <ng-template #gridNhomXetNghiemTemplate let-dataItem>
+                <app-grid #gridNhomXetNghiem pageSize="5" 
+                    [additionalSearchString]="getAdditionalSearchStringNhomDichVu(dataItem)"
+                    [documentType]="documentType" [autoHeight]="true"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [useAddDeault]="false" [checkboxAble]="false"
+                    [gridColumns]="gridNhomXetNghiemColumns" [urlGetData]="urlGetDataNhomXetNghiem"
+                    [detailTemplate]="gridDichVuXetNghiemTemplate" [urlGetTotalPage]="urlGetTotalPageNhomXetNghiem"
+                    [sort]="sortNhomXetNghiem" [showStt]="true">
+                </app-grid>
+            </ng-template>
+
+            <ng-template #gridDichVuXetNghiemTemplate let-dataItem>
+                <app-grid #gridDichVuXetNghiem pageSize="5" 
+                    [additionalSearchString]="'{PhienXetNghiemId:' + dataItem.PhienXetNghiemId + ', NhomDichVuBenhVienId: '+ dataItem.NhomDichVuBenhVienId +'}'"
+                    [documentType]="documentType" [autoHeight]="true"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [useAddDeault]="false" [checkboxAble]="false"
+                    [gridColumns]="gridDichVuXetNghiemColumns" [urlGetData]="urlGetDataDichVuXetNghiem" [urlGetTotalPage]="urlGetTotalPageDichVuXetNghiem"
+                    [sort]="sortDichVuXetNghiem" [showStt]="true">
+                </app-grid>
+            </ng-template>
+            
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <app-checkbox (modelChange)="checkboxChange($event, true, false)" id="ChoNhanMau"
+                        [(model)]="goiMauXetNghiemSearch.ChoNhanMau" class="ml-2" label="Chờ nhận mẫu">
+                    </app-checkbox>
+
+                    <app-checkbox (modelChange)="checkboxChange($event, false, true)" id="DaNhanMau"
+                        [(model)]="goiMauXetNghiemSearch.DaNhanMau" class="ml-2" label="Đã nhận mẫu">
+                    </app-checkbox>
+
+                    <!-- <div class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                        fxLayout="row" fxLayoutAlign="start center">
+                        <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                            type="search" name="searchString" [(ngModel)]="goiMauXetNghiemSearch.SearchString"
+                            (keyup)="onKey($event)" (ngModelChange)="clearSearch()" placeholder="Tìm kiếm theo Mã NB, Mã TN, Họ tên NB, Barcode" />
+                        <button color="primary" mat-mini-fab type="button" class="button-barcoe-in-search" kendoTooltip title="Phím tắt: Ctrl + Q"
+                            (click)="QuetMaQRCodeClick()">
+                            <img src="assets/img/barcode.png" alt="Scan barcode" />
+                        </button>
+                    </div>
+                    <app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none;"></app-barcode> -->
+
+                    <div class="bg-card rounded-full border px-4 ml-2" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                            fxLayoutAlign="start center" style="margin-top: 2px;">
+                            <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                            <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search"
+                                name="searchString" [(ngModel)]="goiMauXetNghiemSearch.SearchString" (keyup)="onKey($event)"
+                                (ngModelChange)="clearSearch()" placeholder="Tìm kiếm theo Mã NB, Mã TN, Họ tên NB, Barcode" />
+                            <button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button" class="button-barcoe-in-search"
+                                kendoTooltip title="Phím tắt: Ctrl + Q">
+                                <img src="assets/img/barcode.png" alt="Scan barcode" />
+                            </button>
+                            <app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none;"></app-barcode>
+                        </div>
+                        <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                            <mat-icon [icIcon]="icSearch"></mat-icon>
+                        </button>
+
+                    <app-daterangepicker id="tuNgayDenNgay" fxFlex="300px" fxFlex.sm="auto" class="mt-1 ml-2 on-header"
+                        [(model)]="goiMauXetNghiemSearch.RangeNgayGoiMau" 
+                        label="Từ ngày - đến ngày"  (modelChange)="timKiem()">
+                    </app-daterangepicker>
+                    <!-- <app-datepicker id="TuNgay" fxFlex="250px" fxFlex.sm="auto" label="Từ ngày" class="mt-4 ml-6 on-header"
+                        [(model)]="goiMauXetNghiemSearch.TuNgay"
+                        (keyup)="onKeyTuNgay($event)" (modelChange)="changeTuNgay($event)">
+                    </app-datepicker>
+
+                    <app-datepicker id="DenNgay" fxFlex="250px" fxFlex.sm="auto" label="Đến ngày" class="mt-4 ml-6 on-header"
+                        [(model)]="goiMauXetNghiemSearch.DenNgay"
+                        (keyup)="onKeyDenNgay($event)" (modelChange)="changeDenNgay($event)">
+                    </app-datepicker> -->
+
+                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+                        <mat-icon [icIcon]="icSearch"></mat-icon>
+                    </button>
+
+                    <span fxFlex></span>
+
+                    <button [matMenuTriggerFor]="columnFilterMenu" class="mr-4" fxFlex="none" mat-icon-button
+                        kendoTooltip title="Lọc cột" type="button">
+                        <mat-icon [icIcon]="icFilterList"></mat-icon>
+                    </button>
+
+                    <button (click)="exportExcel()" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip title="Xuất Excel"
+                        type="button">
+                        <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                    </button>
+
+                    <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                        <div *ngFor="let column of filterColumns">
+                            <button
+                                class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                                <mat-checkbox [disabled]="true" color="primary">
+                                    {{ column.Title }}
+                                </mat-checkbox>
+                            </button>
+                        </div>
+                    </mat-menu>
+                </div>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<!-- DanhSachXetNghiem -->
+<ng-template #soPhieuDanhSachXetNghiemTemplate let-dataItem>
+    <a (click)="xemChiTiet(dataItem.Id)">
+        {{dataItem.SoPhieu}}
+    </a>
+</ng-template>
+
+<ng-template #tinhTrangDanhSachXetNghiemTemplate let-dataItem>
+    <span [ngClass]="{ 'greenText': dataItem.TinhTrang, 'orangeText': !dataItem.TinhTrang }">
+        {{dataItem.TinhTrangDisplay}}
+    </span>
+</ng-template>
+
+<ng-template #nguoiGoiMauDanhSachXetNghiemTemplate let-dataItem>
+    {{dataItem.NguoiGoiMauDisplay}}
+</ng-template>
+
+<ng-template #nguoiNhanMauDanhSachXetNghiemTemplate let-dataItem>
+    {{dataItem.NguoiNhanMauDisplay}}
+</ng-template>
+
+<ng-template #ngayGoiMauDanhSachXetNghiemTemplate let-dataItem>
+    {{dataItem.NgayGoiMauDisplay}}
+</ng-template>
+
+<ng-template #ngayNhanMauDanhSachXetNghiemTemplate let-dataItem>
+    {{dataItem.NgayNhanMauDisplay}}
+</ng-template>
+
+<ng-template #noiTiepNhanDanhSachXetNghiemTemplate let-dataItem>
+    {{dataItem.NoiTiepNhan}}
+</ng-template>
+
+<ng-template #actionDanhSachXetNghiemTemplate let-dataItem>
+    <button *ngIf="!dataItem.TinhTrang" type="button" color="primary" mat-stroked-button mat-button class="mr-1" title="Huỷ" (click)="xoaPhieuGoiMauXetNghiem(dataItem)"> Xóa
+    </button>
+</ng-template>
+
+<!-- NhomXetNghiem -->
+<ng-template #nhomDichVuBenhVienNhomXetNghiemTemplate let-dataItem>
+    {{dataItem.NhomDichVuBenhVienDisplay}}
+</ng-template>
+
+<ng-template #gioiTinhNhomXetNghiemTemplate let-dataItem>
+    {{dataItem.GioiTinhDisplay}}
+</ng-template>
+
+<ng-template #loaiMauNhomXetNghiemTemplate let-dataItem>
+    <!-- {{getLoaiMauDisplay(dataItem)}} -->
+    <ul style="display: inline-flex;">
+        <li class="mr-2 loai-mau" *ngFor="let item of dataItem.LoaiMauXetNghiems">
+            <mat-icon *ngIf="item.TrangThai == 2" style="color: green;" [icIcon]="icDone"></mat-icon>
+            <mat-icon *ngIf="item.TrangThai == 3" style="color: red;" [icIcon]="icClear"></mat-icon>
+            {{item.LoaiMauDisplay}}
+        </li>
+    </ul>
+</ng-template>
+
+<!-- DichVuXetNghiem -->
+<ng-template #thoiGianChiDinhDichVuXetNghiemTemplate let-dataItem>
+    {{dataItem.ThoiGianChiDinhDisplay}}
+</ng-template>
+
+<ng-template #nguoiChiDinhDichVuXetNghiemTemplate let-dataItem>
+    {{dataItem.NguoiChiDinhDisplay}}
+</ng-template>
+
+<ng-template #loaiMauDichVuXetNghiemTemplate let-dataItem>
+    {{dataItem.LoaiMauDisplay}}
+</ng-template>

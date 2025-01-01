@@ -1,0 +1,35 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>THÔNG BÁO</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <!-- <h3 class="sub-title">Thông Tin Thẻ</h3> -->
+    <table width="100%">
+        <tr>
+            <td>Số thẻ BHYT: <strong>{{data.BHYTMaSoThe}}</strong></td>
+        </tr>
+        <tr>
+            <td>Họ và tên: <strong>{{data.HoTen}}</strong></td>
+            <td>Năm sinh: <strong>{{data.NgayThangNamSinhDisplay}}</strong></td>
+            <td>Giới tính: <strong>{{data.GioiTinhDisplay}}</strong></td>
+        </tr>
+        <tr>
+            <td>Ngày có hiệu lực: <strong>{{data.NgayCoHieuLucDisplay}}</strong></td>
+            <td>Ngày hết hiệu lực: <strong [style.color] = "data.isOutOfDate == true ? 'red' : 'black' ">{{data.NgayHetHieuLucDisplay}}</strong></td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 30px">
+        <h3 class="sub-title, sub-title-bottom">Bạn không thể sử dụng thẻ này vì thẻ đã hết hiệu lực</h3>
+    </div>
+
+    <div class="div-title-bottom">
+        <button type="button" mat-button class="mr-1" (click)="huy()">Hủy</button>
+        <button type="button" class="mr-1" (click)="khamKhongBHYT()" color="primary" mat-raised-button>Khám không có thẻ BHYT</button>
+        <button type="button" (click)="chapNhanBHYTNhapTay()" color="primary" mat-raised-button>Chấp nhận BHYT nhập tay</button>
+    </div>
+    
+</mat-dialog-content>

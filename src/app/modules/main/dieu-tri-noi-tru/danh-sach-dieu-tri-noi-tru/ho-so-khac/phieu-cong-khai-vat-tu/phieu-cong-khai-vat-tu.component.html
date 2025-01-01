@@ -1,0 +1,55 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <label fxFlex="40%" style="margin-top: 10px;margin-right: 5px ;">Chẩn đoán</label>
+        <label fxFlex="20%" style="margin-top: 10px;"></label>
+        <label fxFlex="20%" style="margin-top: 10px;margin-right: 5px ;"></label>
+        <app-textarea id="NoiCongTac" fxFlex="40%" fxFlex.sm="40%" minHeight="20"
+            [(model)]="phieuCongKhaiVatTu.ChanDoan">
+        </app-textarea>
+        <app-datepicker fxFlex="25%" id="NgayVaoVien" style="margin-right: 5px;"
+        (blur)="blurNgayVao($event)" label="Từ ngày"  required="true"
+            [(model)]="phieuCongKhaiVatTu.NgayVaoVien" [validationerror]="'NgayRaVien' | validationerror:validationErrors">
+        </app-datepicker>
+        <app-datepicker fxFlex="25%" id="NgayRaVien" style="margin-right: 5px;" (blur)="blurNgayRa($event)" required="true"
+            label="Đến ngày"  [(model)]="phieuCongKhaiVatTu.NgayRaVien" [validationerror]="'NgayVaoVien' | validationerror:validationErrors">
+        </app-datepicker>
+        <div fxFlex="100%">
+            <div *ngFor="let item of table">
+                <div [innerHTML]="item.Html"></div>
+            </div>
+        </div>
+        <app-upload id="Upload" #upload15NgayDieuTri [allowedExtensions]="allowedExtensions" fxFlex="50%"
+        [(model)]="phieuCongKhaiVatTu.FileChuKy" [multiple]="true" label="File chữ ký"
+        [template]="templateFileChuanDoanHAInfo">
+    </app-upload>
+    <ng-template #templateFileChuanDoanHAInfo let-files>
+        <table width="100%" >
+            <tr>
+                <td>
+                    <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                        (click)="upload15NgayDieuTri.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                    <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="upload15NgayDieuTri.viewFile(files[0])"
+                        class="green" class="custom-name green">{{files[0].name}}</a>
+                </td>
+                <td style="width:25px">
+                    <a type="button" (click)="upload15NgayDieuTri.remove(files[0].uid)" mat-icon-button>
+                        <mat-icon [icIcon]="icClear"></mat-icon>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </ng-template>
+    <div fxFlex="100%" style="padding-bottom: 50px;">
+        <label fxFlex="25%" style="padding-top: 30px;">Người thực hiện :
+            <b>{{phieuCongKhaiVatTu.TaiKhoanDangNhap}}</b></label>
+        <label fxFlex="25%" style="padding-top: 30px;">Ngày thực hiện : <b>{{phieuCongKhaiVatTu.NgayThucHien}}</b></label>
+        <span fxFlex="50%" style="text-align: right;">
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="In()" style="pointer-events: all;">In</button>
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="Huy()">Hủy</button>
+            <button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+                Lưu
+            </button>
+        </span>
+    </div>
+    </div>
+</div>

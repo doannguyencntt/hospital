@@ -1,0 +1,112 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title  mr-4"><strong style="color: black;font-weight: bold;">TOA THUỐC</strong></h3>
+    <app-grid [gridColumns]="gridToaThuocChildColumns" fxFlex="100%" [documentType]="documentType" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+        [lazyLoadPage]="true"  [pageable]="false" [autoHeight]="true" 
+        [urlGetData]="urlGetDataGridChildToaThuoc" [additionalSearchString]="yeuCauKhamBenhId+''" [groups]="groups">
+    </app-grid>
+    <h3 fxFlex="100%" class="sub-title  mr-4"><strong style="color: black;font-weight: bold;">VẬT TƯ Y TẾ</strong></h3>
+    <app-grid fxFlex="100%" class="k-grid-border" [gridColumns]="gridVatTuYTColumns"
+                [documentType]="documentType" #gridVatTu [useAddDeault]="false" [useHeaderDefault]="false"
+                [useActionDefault]="false" masterName="VatTu" [checkboxAble]="false" [lazyLoadPage]="true"
+                [autoHeight]="true" urlGetData="KhamBenh/GetVatTuYTDataForGridAsync"
+                (extOnDataBound)="onDataBoundVatTuGrid($event)"
+                urlGetTotalPage="KhamBenh/GetVatTuYTTotalPageForGridAsync"
+                [additionalSearchString]="yeuCauKhamBenhId+''"  style="width: 1px;" [pageable]="false">
+            </app-grid>
+    <!-- template -->
+    <ng-template #donGiatemplate let-dataItem>
+        {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #thanhTientemplate let-dataItem>
+        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #BNTratemplate let-dataItem>
+        {{dataItem.BNChiTra | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <!-- footer -->
+    <ng-template #donGiaFooter let-dataItem>
+        <span style="float:right">Tổng cộng :</span>
+    </ng-template>
+    <ng-template #thanhTienFooter let-dataItem>
+        <span style="color:blue">{{total('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+    <ng-template #BHTraFooter let-dataItem>
+        <span style="color:blue">{{total('BHChiTra') | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+    <ng-template #BNTraFooter let-dataItem>
+        <span style="color:red;">{{total('BNChiTra') | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+    <ng-template #loaiGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+    <ng-template #sangTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <p *ngIf="dataItem.ThoiGianDungSangDisplay != null" kendoTooltip
+                title="{{dataItem.SangDisplay + ' ' +(dataItem.ThoiGianDungSangDisplay)}}">
+                {{dataItem.SangDisplay}}&nbsp;
+                {{dataItem.ThoiGianDungSangDisplay}}
+            </p>
+            <p *ngIf="dataItem.ThoiGianDungSangDisplay == null" kendoTooltip title="{{dataItem.SangDisplay}}">
+                {{dataItem.SangDisplay}}
+            </p>
+        </div>
+    </ng-template>
+    <ng-template #truaTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <p *ngIf="dataItem.ThoiGianDungTruaDisplay != null" kendoTooltip
+                title="{{dataItem.TruaDisplay + ' ' +(dataItem.ThoiGianDungTruaDisplay)}}">
+                {{dataItem.TruaDisplay}}&nbsp;
+                {{dataItem.ThoiGianDungTruaDisplay}}
+            </p>
+            <p *ngIf="dataItem.ThoiGianDungTruaDisplay == null" kendoTooltip title="{{dataItem.TruaDisplay}}">
+                {{dataItem.TruaDisplay}}
+            </p>
+        </div>
+    </ng-template>
+    <ng-template #chieuTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <p *ngIf="dataItem.ThoiGianDungChieuDisplay != null" kendoTooltip
+                title="{{dataItem.ChieuDisplay + ' ' +(dataItem.ThoiGianDungChieuDisplay)}}">
+                {{dataItem.ChieuDisplay}}&nbsp;
+                {{dataItem.ThoiGianDungChieuDisplay}}
+            </p>
+            <p *ngIf="dataItem.ThoiGianDungChieuDisplay == null" kendoTooltip title="{{dataItem.ChieuDisplay}}">
+                {{dataItem.ChieuDisplay}}
+            </p>
+        </div>
+
+
+    </ng-template>
+    <ng-template #toiTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <p *ngIf="dataItem.ThoiGianDungToiDisplay != null" kendoTooltip
+                title="{{dataItem.ToiDisplay + ' ' +(dataItem.ThoiGianDungToiDisplay)}}">
+                {{dataItem.ToiDisplay}}&nbsp;
+                {{dataItem.ThoiGianDungToiDisplay}}
+            </p>
+            <p *ngIf="dataItem.ThoiGianDungToiDisplay == null" kendoTooltip title="{{dataItem.ToiDisplay}}">
+                {{dataItem.ToiDisplay}}
+            </p>
+        </div>
+
+    </ng-template>
+    <ng-template #thanhTienVatTuTemplate let-dataItem>
+        {{dataItem.ThanhTienVatTu | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #donGiaVatTuTemplate let-dataItem>
+        {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+
+    <ng-template #thanhTienVatTuFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold;">
+            <span>{{totalThanhTienVatTu('ThanhTienVatTu') | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+    <ng-template #donGiaVatTuFooterTemplate>
+        <span style="float:right">Tổng cộng:</span>
+    </ng-template>
+    <ng-template #thanhTienVatTuGroupFooterTemplate let-aggregates>
+        {{aggregates.ThanhTienVatTu.sum | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+</div>

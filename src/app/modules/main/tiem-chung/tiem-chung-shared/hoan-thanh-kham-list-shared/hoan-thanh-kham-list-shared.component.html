@@ -1,0 +1,67 @@
+<div class="card overflow-auto mb-4">
+    <app-grid #gridDaKham [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+        [lazyLoadPage]="true" [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotalPage" [useHeaderDefault]="false"
+        [allowSortDefault]="false"
+        [checkboxAble]="false" [headerTemplate]="headerTemplate" heightToolbar="235">
+    </app-grid>
+</div>
+
+<ng-template #headerTemplate>
+    <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+        <div class="bg-card rounded-full border px-4 ml-2" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" style="margin-top: 2px;">
+            <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+            <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search"
+                name="searchString" [(ngModel)]="timKiemNangCaoObj.SearchString" (keyup)="onKey($event)"
+                (ngModelChange)="searchChanges($event)" placeholder="Tìm kiếm theo Mã NB, Mã TN, Họ tên" />
+        </div>
+        <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+            <mat-icon [icIcon]="icSearch"></mat-icon>
+        </button>
+
+        <ng-container *ngIf="loaiHangDoi == hangDoiThucHienTiem">
+            <app-combobox id="congTy" fxFlex="300px" label="Vacxin" class="ml-2 mt-5 on-header" url="TiemChung/GetListVacXin"
+                [(model)]="timKiemNangCaoObj.VacxinId" (modelChange)="timKiemNangCao()" [reloadForGrid]="true"
+                [popupSettings]="null">
+            </app-combobox>
+        </ng-container>
+        
+        <app-daterangepicker id="tuNgayDenNgay" fxFlex="300px" fxFlex.sm="auto" class="mt-1 ml-2 on-header"
+            [(model)]="timKiemNangCaoObj.TuNgayDenNgay"
+            label="Từ ngày - đến ngày {{loaiHangDoi == hangDoiThucHienTiem ? 'Thời điểm tiêm' : 'Thời điểm khám'}}"
+            (keyup)="onKey($event)">
+            <!-- (modelChange)="timKiemNangCao()" -->
+        </app-daterangepicker>
+        
+        <button type="button" color="primary" (click)="timKiemNangCao()" class="ml-2" mat-raised-button>Tìm</button>
+    </div>
+</ng-template>
+
+
+<ng-template #maTiepNhanTemplate let-dataItem>
+    <a (click)="xemLichSuKham(dataItem)">{{dataItem.MaYeuCauTiepNhan}}</a>
+</ng-template>
+
+<ng-template #hoTenTemplate let-dataItem>
+    <p style="position: relative;">{{dataItem.HoTen}}<img *ngIf="dataItem.BaoHiemChiTra" src="assets/img/logoBHXH.png"
+            class="icon-bhyt" /></p>
+</ng-template>
+
+<ng-template #thoiDiemKhamTemplate let-dataItem>
+    <div class="reverse-ellipsis r">{{dataItem.ThoiDiemKhamDisplay}}</div>
+</ng-template>
+
+<ng-template #vacxinTemplate let-dataItem>
+    <div class="reverse-ellipsis r" [innerHTML]="dataItem.MuiTiem"></div>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <ng-container *ngIf="dataItem.BenhNhanDaTaoBenhAn != true">
+        <button *ngIf="loaiHangDoi != hangDoiThucHienTiem" color="primary" mat-raised-button 
+            (click)="CapNhatKhamLaiKhamSangLoc(dataItem)">Khám Lại</button>
+        <button *ngIf="loaiHangDoi == hangDoiThucHienTiem" color="primary" mat-raised-button 
+            (click)="CapNhatKhamLaiThucHienTiemTheoPhong(dataItem)">Tường trình lại</button>
+        <button color="primary" mat-raised-button class="ml-2"
+            (click)="inPhieuKhamSangLoc(dataItem)">In Phiếu Khám</button>
+    </ng-container>
+</ng-template>

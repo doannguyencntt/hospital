@@ -1,0 +1,118 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+        class="order-info-area">
+        <p class="order-thong-tin">Thông tin người cần báo tin của người bệnh
+            <button class="po-h" (click)="addNewInfo()" >
+                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </p>
+        <ng-container *ngIf="gridDataSource.data.length == 0">
+            <p>Không có thông tin nào!</p>
+        </ng-container>
+        <app-grid id="grid-bien-ban-cam-ket-phau-thuat" *ngIf="gridDataSource.data.length > 0"
+            masterName="CamKetPhauThuatGrid" [gridColumns]="gridColumns" [documentType]="documentType"
+            [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true" [gridDataSource]="gridDataSource"
+            style="width: 1px;" [pageable]="false" #gridCamKet>
+        </app-grid>
+    </div>
+
+
+    <app-autocomplete fxFlex="30%" fxFlex.md="100%" fxFlex.sm="100%" [(model)]="bienBanCamKetPhauThuat.BsGiaiThich" popupSettings="null"
+        url="PhauThuatThuThuat/GetListBacSiAutoComplete" label="BS giải thích" maxlength="120" [required]="true"
+        [validationerror]="'BsGiaiThich' | validationerror:validationErrors">
+    </app-autocomplete>
+    <app-textarea id="chan-doan" fxFlex="70%" fxFlex.md="100%" fxFlex.sm="100%" minHeight="20" maxlength="1000"
+        label="Chẩn đoán" [(model)]="bienBanCamKetPhauThuat.ChanDoan">
+    </app-textarea>
+
+
+
+    <app-autocomplete fxFlex="30%" fxFlex.md="100%" fxFlex.sm="100%" [(model)]="bienBanCamKetPhauThuat.PhuongPhapPttt" popupSettings="null"
+        url="KhamBenh/GetListPhuongPhapPtttAutoComplete" label="Phương pháp PTTT" maxlength="120" [required]="true"
+        [validationerror]="'PhuongPhapPttt' | validationerror:validationErrors">
+    </app-autocomplete>
+
+    <app-datetimepicker id="thoi-gian-hoi-chan" fxFlex="25%" fxFlex.md="100%" fxFlex.sm="100%"
+        [(model)]="bienBanCamKetPhauThuat.NgayHoiChan" label="Ngày hội chẩn" [required]="true"
+        [validationerror]="'NgayHoiChan' | validationerror:validationErrors">
+    </app-datetimepicker>
+
+    <app-datetimepicker id="thoi-gian-thuc-hien" fxFlex="25%" fxFlex.md="100%" fxFlex.sm="100%"
+        [(model)]="bienBanCamKetPhauThuat.NgayThucHien" label="Ngày thực hiện" [required]="true"
+        [validationerror]="'NgayThucHien' | validationerror:validationErrors">
+    </app-datetimepicker>
+
+    <app-combobox id="bac-si-thuc-hien" label="BS thực hiện" fxFlex="20%" fxFlex.md="100%" fxFlex.sm="100%" popupSettings="null"
+        [(model)]="bienBanCamKetPhauThuat.BacSiThucHien" [required]="true" [bind]="true"
+        url="PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=1"
+        [validationerror]="'BacSiThucHien' | validationerror:validationErrors">
+    </app-combobox>
+
+
+    <app-upload id="Upload" #upload15NgayDieuTri [allowedExtensions]="allowedExtensions" fxFlex="40%"
+        [(model)]="bienBanCamKetPhauThuat.FileChuKy" [multiple]="true" label="File chữ ký"
+        [template]="templateFileChuanDoanHAInfo">
+    </app-upload>
+    <ng-template #templateFileChuanDoanHAInfo let-files>
+        <table width="100%">
+            <tr>
+                <td>
+                    <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                        (click)="upload15NgayDieuTri.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                    <a *ngIf="!files[0].error" title="{{files[0].name}}"
+                        (click)="upload15NgayDieuTri.viewFile(files[0])" class="green"
+                        class="custom-name green">{{files[0].name}}</a>
+                </td>
+                <td style="width:25px">
+                    <a type="button" (click)="upload15NgayDieuTri.remove(files[0].uid)" mat-icon-button>
+                        <mat-icon [icIcon]="icClear"></mat-icon>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </ng-template>
+    <div style="justify-content: space-between;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+        fxLayoutGap.lt-sm="0" class="order-btn">
+        <div style="display: flex;align-items: center;">
+            <p>Người thực hiện:&nbsp;</p>
+            <strong>{{bienBanCamKetPhauThuat.NguoiThucHienReadonly}}&nbsp;</strong>
+            <p>Ngày thực hiện:&nbsp;</p>
+            <strong>{{bienBanCamKetPhauThuat.NgayThucHienReadonly}}&nbsp;</strong>
+        </div>
+        <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+            <button type="button" class="mr-2" mat-button color="primary" (click)="print()">In</button>
+            <button type="button" class="mr-2" mat-button color="primary" (click)="cancel()">Huỷ</button>
+            <button type="button" class="mr-2" color="primary" mat-raised-button (click)="save()">Lưu</button>
+        </div>
+    </div>
+</div>
+<ng-template #hoTenTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox maxlength="120" [(model)]="dataItem.HoTen" class="no-label" label=" ">
+    </app-textbox>
+</ng-template>
+<ng-template #namSinhTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textboxnumeric id="NamSinh{{rowIndex}}" [min]="0" [max]="9999" [format]="'0'" [spinners]="false" [(model)]="dataItem.NamSinh" 
+    [validationerror]="'listGrid['+ rowIndex + '].NamSinh' | validationerror:validationNamSinhErrors"
+        [decimals]="1" class="no-label">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #cmndTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox maxlength="150" [(model)]="dataItem.Cmnd" class="no-label" label=" ">
+    </app-textbox>
+</ng-template>
+<ng-template #quanHeTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-combobox popupSettings="null" class="no-label" label=" " [(model)]="dataItem.QuanHe" [bind]="true"
+        url="TiepNhanBenhNhan/GetQuanHe">
+    </app-combobox>
+</ng-template>
+<ng-template #diaChiTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox maxlength="150" [(model)]="dataItem.DiaChi" class="no-label" label=" ">
+    </app-textbox>
+</ng-template>
+<ng-template #actionTemplate let-dataItem>
+    <button (click)="delete(dataItem.Id)" mat-menu-item >
+        <mat-icon [icIcon]="icDelete" style="color: red;"></mat-icon>
+    </button>
+</ng-template>

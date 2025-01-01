@@ -1,0 +1,113 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="p-2 mb-6 clear-margin-bottom">
+    <app-combobox #tuVongPttt id="ten-pttt" fxFlex="50%" fxFlex.sm="80%" (openCombobox)="OnOpen($event)" (selectionChange)="SpecifyYcdvkt($event)" label="DS PTTT của NB " [data]="ptttCombobox.lstPttt" [(model)]="ptttCombobox.ptttId" [modelText]="ptttCombobox.ptttDisplay"
+        [template]="truocPhauThuatTemplate" [templateHeader]="truocPhauThuatTemplateHeader" #lstPtttCmb>
+        <ng-template #truocPhauThuatTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="15%">Loại</th>
+                    <th width="45%">Dịch vụ</th>
+                    <th width="20%">Bác sĩ chính</th>
+                    <th width="20%">Tình trạng</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #truocPhauThuatTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="15%">{{dataItem.LoaiPTTT}}</td>
+                    <td width="45%">{{dataItem.TenDv}}</td>
+                    <td width="20%">{{dataItem.BacSi}}</td>
+                    <td *ngIf="dataItem.IsDaTuongTrinh" width="20%"><span style="color:green;">{{dataItem.TuongTrinhDisplay}}</span>
+                    </td>
+                    <td *ngIf="!dataItem.IsDaTuongTrinh" width="20%">{{dataItem.TuongTrinhDisplay}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <div class="thong-tin-phong-kham">
+        <span>
+            <b>Phòng khám chỉ định:</b> {{thongTinChiDinhDichVu.NoiChiDinhDisplay}}
+            -
+            <b>Nhân viên chỉ định:</b> {{thongTinChiDinhDichVu.NhanVienChiDinhDisplay}}
+        </span>
+    </div>
+
+    <div id="show-khong-thuc-hien" (click)="ShowModal()"></div>
+
+    <kendo-tabstrip id="tabstrip-tuong-trinh" *ngIf="ptttCombobox.ptttId!=null" fxFlex="100%" class="horizontal-tab-strip-pttt-tuong-trinh tab-no-padding-content field-set-p" [tabPosition]="'left'" [keepTabContent]="true" (tabSelect)="onTabSelect($event)">
+        <!-- Tab Ekip thực hiện -->
+        <kendo-tabstrip-tab [selected]="lstStatusSelectedTab.selectedTabEkip">
+            <ng-template kendoTabTitle>
+                <div kendoTooltip title="Phím tắt: Chưa có">
+                    EKIP <br /> THỰC HIỆN
+                </div>
+            </ng-template>
+            <ng-template kendoTabContent>
+                <div class="p-2">
+                    <app-pttt-ekip-thuc-hien [ycdvktId]="ycdvktId" [IsDaTuongTrinh]="IsDaTuongTrinh" [thongTinBenhNhan]="thongTinBenhNhan" (afterSavingEkip)="AfterSavingEkip($event)" (displaySaveCcl)="OnDisplaySaveCancelEkip($event)" #ekip>
+                    </app-pttt-ekip-thuc-hien>
+                    <div kendoTooltip class="sticky-button-action py-3 text-right">
+                        <button *ngIf="logicDisplay.IsDisplayReset && !IsDaTuongTrinh && !thongTinBenhNhan.IsTuongTrinhLai" type="button" (click)="onResetEkip()" color="primary" mat-button class="mr-2" title="Phím tắt: ESC">Huỷ</button>
+                        <button *ngIf="logicDisplay.IsDisplaySave && !IsDaTuongTrinh && !thongTinBenhNhan.IsTuongTrinhLai" type="button" (click)="onSaveEkip()" class="mr-2" color="primary" mat-raised-button title="Phím tắt: Ctrl + S">Lưu</button>
+                    </div>
+                </div>
+            </ng-template>
+        </kendo-tabstrip-tab>
+
+        <kendo-tabstrip-tab [selected]="lstStatusSelectedTab.selectedTabTuongTrinh" *ngIf="isDangPhauThuat">
+            <ng-template kendoTabTitle>
+                <div kendoTooltip title="Phím tắt: Chưa có">
+                    TƯỜNG TRÌNH <br /> PT/TT
+                </div>
+            </ng-template>
+            <ng-template kendoTabContent>
+                <div class="p-2">
+                    <app-pttt-tuong-trinh-pttt 
+                        [pTTTChinh]="ptChinh" [ycdvktId]="ycdvktId" [IsDaTuongTrinh]="IsDaTuongTrinh" [thongTinBenhNhan]="thongTinBenhNhan" 
+                        (displaySaveCclForTuongTrinh)="OnDisplayBtnForTuongTrinh($event)" #tuongTrinh>
+                    </app-pttt-tuong-trinh-pttt>
+
+                    <div kendoTooltip class="sticky-button-action py-3 text-right">
+                        <button *ngIf="logicDisplayTt.IsDisplayReset && !IsDaTuongTrinh" type="button" color="primary" mat-button class="mr-2" (click)="onResetTuongTrinh()" title="Phím tắt: ESC">Huỷ</button>
+                        <button *ngIf="logicDisplayTt.IsDisplaySave && !IsDaTuongTrinh" type="button" class="mr-2" color="primary" (click)="onSaveTuongTrinh()" mat-raised-button title="Phím tắt: Ctrl + S">Lưu</button>
+                    </div>
+                </div>
+            </ng-template>
+        </kendo-tabstrip-tab>
+
+        <kendo-tabstrip-tab [selected]="lstStatusSelectedTab.selectedTabVtThuoc" *ngIf="isDangPhauThuat">
+            <ng-template kendoTabTitle>
+                <div kendoTooltip title="Phím tắt: Chưa có">
+                    GHI NHẬN <br /> VT/THUỐC
+                </div>
+            </ng-template>
+            <ng-template kendoTabContent>
+                <div class="p-2">
+                    <app-pttt-ghi-nhan [benhNhanHienTai]="thongTinBenhNhan" [yeuCauDichVuKyThuatId]="ycdvktId"
+                        (outputSoDuTaiKhoanChanged)="SoDuTaiKhoanChanged($event)"
+                        (outputSoDuTaiKhoanConLaiChanged)="SoDuTaiKhoanConLaiChanged($event)">
+                    </app-pttt-ghi-nhan>
+                </div>
+            </ng-template>
+        </kendo-tabstrip-tab>
+
+        <kendo-tabstrip-tab [selected]="lstStatusSelectedTab.selectedTabCsst" *ngIf="isDangPhauThuat">
+            <ng-template kendoTabTitle>
+                <div kendoTooltip title="Phím tắt: Chưa có">
+                    CHỈ SỐ <br /> SINH TỒN
+                </div>
+            </ng-template>
+            <ng-template kendoTabContent class="wrapContent">
+                <div class="p-2">
+                    <app-pttt-sinh-ton [thongTinBenhNhan]="thongTinBenhNhan" [IsDaTuongTrinh]="IsDaTuongTrinh" (displayForBtnSinhTon)="OnDisplayBtnForSinhTon($event)" #ptttSinhTon>
+                    </app-pttt-sinh-ton>
+                </div>
+                <div kendoTooltip class="wrapBtnLuu">
+                    <button *ngIf="logicDisplayCsst.IsDisplayReset && !IsDaTuongTrinh" class="btnHuy" (click)="ResetSinhTon()" title="Phím tắt: ESC">Hủy</button>
+                    <button *ngIf="logicDisplayCsst.IsDisplaySave && !IsDaTuongTrinh" class="btnLuu" (click)="SaveSinhTon()" title="Phím tắt: Ctrl + S">Lưu</button>
+                </div>
+            </ng-template>
+        </kendo-tabstrip-tab>
+    </kendo-tabstrip>
+</div>

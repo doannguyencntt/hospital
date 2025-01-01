@@ -1,0 +1,362 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <div *ngIf="tuChoiDuyet" fxFlex="100%" fxFlex.sm="100%" style="color: red;">Lí do: {{nhapKho.LyDoKhongDuyet}}</div>
+
+    <app-textbox [disabled]="daDuyet == true" id="KyHieuHoaDon" fxFlex="10%" fxFlex.sm="17%" [required]="true"
+        [(model)]="nhapKho.KyHieuHoaDon" label="Ký hiệu HĐ" maxlength="50"
+        [validationerror]="'KyHieuHoaDon' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox [disabled]="daDuyet == true" id="SoChungTuId" fxFlex="10%" fxFlex.sm="17%" [required]="true"
+        [(model)]="nhapKho.SoChungTu" label="Số hóa đơn" [onlynumber]="true" maxlength="8"
+        [validationerror]="'SoChungTu' | validationerror:validationErrors">
+        <!-- (blurChange)="blurChangeSoChungTu($event)" -->
+    </app-textbox>
+
+    <app-combobox fxFlex="14%" fxFlex.sm="14%" id="NguoiNhapId" label="Người nhập" url="NhanVien/GetListLookupNhanVien"
+        [(model)]="nhapKho.NguoiNhapId" disabled="true" bind="true" [required]="true"
+        [validationerror]="'NguoiNhapId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-radio [disabled]="daDuyet == true" fxFlex="21%" fxFlex.sm="21%" id="LoaiNguoiGiaoId" name="LoaiNguoiGiao"
+        (modelChange)="loaiNguoiGiaoChange($event)"
+        [items]="[{Value:1,Text:'Trong hệ thống'},{Value:2,Text:'Ngoài hệ thống'}]" [(model)]="nhapKho.LoaiNguoiGiao"
+        label="Loại người giao" [required]="true"
+        [validationerror]="'LoaiNguoiGiao' | validationerror:validationErrors">
+    </app-radio>
+
+    <!-- *ngIf="nhapKho.LoaiNguoiGiao == 2"  -->
+    <app-textbox [disabled]="daDuyet == true" *ngIf="nhapKho.LoaiNguoiGiao == 2" id="NguoiGiaoNgoaiHeThongId"
+        fxFlex="15%" fxFlex.sm="15%" [(model)]="nhapKho.TenNguoiGiao" label="Tên người giao" maxlength="100"
+        [validationerror]="'TenNguoiGiao' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-combobox [disabled]="daDuyet == true" *ngIf="nhapKho.LoaiNguoiGiao == 1" id="NguoiGiaoTrongHeThongId"
+        fxFlex="15%" fxFlex.sm="15%" label="Người giao" [(model)]="nhapKho.NguoiGiaoId"
+        url="NhanVien/GetListLookupNhanVien" bind="true"
+        [validationerror]="'NguoiGiaoId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-datepicker [disabled]="daDuyet == true" id="NgayHoaDon" fxFlex="15%" fxFlex.sm="15%"
+        [(model)]="nhapKho.NgayHoaDon" label="Ngày hóa đơn"
+        [validationerror]="'NgayHoaDon' | validationerror:validationErrors" [disabled]="isDisabled">
+    </app-datepicker>
+    <app-datepicker [disabled]="daDuyet == true" id="NgayNhapId" fxFlex="15%" fxFlex.sm="15%" [required]="true"
+        [(model)]="nhapKho.NgayNhap" label="Ngày nhập" [validationerror]="'NgayNhap' | validationerror:validationErrors"
+        [disabled]="isDisabled">
+    </app-datepicker>
+
+    <app-combobox *ngIf="daDuyet" fxFlex="20%" fxFlex.sm="20%" id="NhanVienDuyetId" label="Người duyệt"
+        url="NhanVien/GetListLookupNhanVien" [(model)]="nhapKho.NhanVienDuyetId" disabled="true" bind="true">
+    </app-combobox>
+
+    <app-datepicker *ngIf="daDuyet" [disabled]="daDuyet == true" id="NgayDuyet" fxFlex="20%" fxFlex.sm="20%"
+        [(model)]="nhapKho.NgayDuyet" label="Ngày duyệt"
+        [validationerror]="'NgayDuyet' | validationerror:validationErrors" disabled="true">
+    </app-datepicker>
+
+    <app-combobox *ngIf="tuChoiDuyet" fxFlex="20%" fxFlex.sm="20%" id="NhanVienDuyetId" label="Người từ chối"
+        url="NhanVien/GetListLookupNhanVien" [(model)]="nhapKho.NhanVienDuyetId" disabled="true" bind="true">
+    </app-combobox>
+
+    <app-datepicker *ngIf="tuChoiDuyet" disabled="true" id="NgayDuyet" fxFlex="20%" fxFlex.sm="20%"
+        [(model)]="nhapKho.NgayDuyet" label="Ngày từ chối"
+        [validationerror]="'NgayDuyet' | validationerror:validationErrors" disabled="true">
+    </app-datepicker>
+
+
+    <h3 fxFlex="100%" class="sub-title mt-0">THÔNG TIN KIỂM SOÁT NHIỄM KHUẨN</h3>
+
+    <div fxFlex="87%" class="po-h-radio">
+        <app-radio id="chon-loai-nhap" [disabled]="blockLoaiNhap" name="select" class="no-format-css pl-4 temp"
+            (modelChange)="onChangeLoaiNhap($event)" [(model)]="loaiNhap"
+            [items]="[{Value:1,Text:'Nhập từ HĐ thầu'},{Value:2,Text:'Nhập từ NCC'}]">
+        </app-radio>
+    </div>
+
+    <app-combobox *ngIf="loaiNhap==1" (openCombobox)="openComboboxHopDong($event)" (keyup)="onKeyHopDong($event)"
+        [disabled]="daDuyet == true" fxFlex="20%" fxFlex.sm="20%" label="Hợp đồng" id="HopDongThauVatTuId"
+        [(model)]="nhapKhoChiTiet.HopDongThauVatTuId" [modelText]="nhapKhoChiTiet.HopDongThauDisplay"
+        (modelChange)="onChangeHopDongThau($event)" class="item-no-padding" [template]="hopDongThauTemplate" bind="true"
+        [templateHeader]="hopDongThauTemplateHeader" [required]="true" url="NhapKhoVatTuKSNK/GetListNhaThauNhapKho"
+        [validationerror]="'HopDongThauVatTuId' | validationerror:validationErrors"
+        [popupSettings]="{width: 600,popupClass:'item-no-padding'}">
+        <ng-template #hopDongThauTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="10%">SHĐ</th>
+                    <th width="30%">NCC</th>
+                    <th width="60%">Địa chỉ</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #hopDongThauTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="10%">{{dataItem.SoHopDong}}</td>
+                    <td width="30%">{{dataItem.Ten}}</td>
+                    <td width="60%">{{dataItem.DiaChi}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox *ngIf="loaiNhap==2" (openCombobox)="openComboboxHopDong($event)" (keyup)="onKeyHopDong($event)"
+        [disabled]="daDuyet == true  || disableNCC" fxFlex="20%" fxFlex.sm="20%" label="Nhà cung cấp" id="nha-cung-cap"
+        [(model)]="nhapKhoChiTiet.NhaThauId" [modelText]="nhapKhoChiTiet.NhaThauDisplay" class="item-no-padding"
+        (modelChange)="nhaThauChange()" [template]="nhaThauTemplate" bind="true"
+        [templateHeader]="nhaThauTemplateHeader" [required]="true" url="HopDongThauDuocPham/GetListNhaThau"
+        [validationerror]="'NhaThauId' | validationerror:validationErrors"
+        [popupSettings]="{width: 600,popupClass:'item-no-padding'}">
+        <ng-template #nhaThauTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="30%">NCC</th>
+                    <th width="70%">Địa chỉ</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #nhaThauTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="30%">{{dataItem.Ten}}</td>
+                    <td width="70%">{{dataItem.DiaChi}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox *ngIf="loaiNhap==1" #duocPhamCombobox (openCombobox)="openComboboxDuocPham($event)"
+        (keyup)="onKeyDuocPham($event)" [disabled]="daDuyet == true || isUpdate == true" fxFlex="50%" fxFlex.sm="40%"
+        label="Vật tư"
+        [queryInfo]="{ParameterDependencies:'{HopDongThauVatTuId:' + nhapKhoChiTiet.HopDongThauVatTuId+', KhoId: ' + nhapKhoChiTiet.KhoNhapSauKhiDuyetId +', LaVatTuBHYT: ' + nhapKhoChiTiet.LaVatTuBHYT +'}', Take: 50}"
+        id="VatTuId" [(model)]="nhapKhoChiTiet.VatTuBenhVienId" class="item-no-padding" [template]="vatTuTemplate"
+        url="NhapKhoVatTuKSNK/GetListVatTuNhapKho" [templateHeader]="vatTuTemplateHeader" [required]="true"
+        (selectionChange)="onChangeVatTu($event)"
+        [validationerror]="'VatTuBenhVienId' | validationerror:validationErrors">
+        <ng-template #vatTuTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="40%">Tên</th>
+                    <th width="15%">Mã Vật tư</th>
+                    <th width="15%">Nhóm Vật tư</th>
+                    <th width="10%">ĐVT</th>
+                    <th width="10%">SL Tồn</th>
+                    <th width="10%">SL C.Nhập</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #vatTuTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="40%">{{dataItem.Ten}}</td>
+                    <td width="15%">{{dataItem.Ma}}</td>
+                    <td width="15%">{{dataItem.TenNhomVatTu}}</td>
+                    <th width="10%">{{dataItem.DVT}}</th>
+                    <td width="10%">{{dataItem.SLTon | number}}</td>
+                    <td width="10%">{{dataItem.SoLuongChuaNhap | number}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox *ngIf="loaiNhap==2" bind="true" #duocPhamCombobox (openCombobox)="openComboboxDuocPham($event)"
+        (keyup)="onKeyDuocPham($event)" [disabled]="daDuyet == true || isUpdate == true" fxFlex="60%" fxFlex.sm="50%"
+        label="Vật tư" id="VatTuId" [(model)]="nhapKhoChiTiet.VatTuBenhVienId" class="item-no-padding"
+        [template]="vatTuTemplate" url="NhapKhoVatTuKSNK/GetDropDownListVatTuFromNhaThau"
+        [queryInfo]="{ParameterDependencies:'{KhoNhapSauKhiDuyetId:' + nhapKhoChiTiet.KhoNhapSauKhiDuyetId +'}', Take: 50}"
+        [templateHeader]="vatTuTemplateHeader" [required]="true" (selectionChange)="onChangeVatTu($event)"
+        [validationerror]="'VatTuBenhVienId' | validationerror:validationErrors">
+        <ng-template #vatTuTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="40%">Tên</th>
+                    <th width="20%">Mã Vật tư</th>
+                    <th width="20%">Nhóm Vật tư</th>
+                    <th width="10%">ĐVT</th>
+                    <th width="10%">SL tồn</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #vatTuTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="40%">{{dataItem.Ten}}</td>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td width="20%">{{dataItem.TenNhomVatTu}}</td>
+                    <th width="10%">{{dataItem.DVT}}</th>
+                    <th width="10%">{{dataItem.SLTon | number:'1.0-2':'vi-VN'}}</th>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+    <app-textbox [disabled]="true" id="DonViTinh" fxFlex="10%" fxFlex.sm="20%" [(model)]="nhapKhoChiTiet.DVT"
+        label="ĐVT">
+    </app-textbox>
+    <app-radio *ngIf="loaiNhap==1" (keyup)="onKey($event)" [disabled]="daDuyet == true" fxFlex="20%" fxFlex.sm="20%"
+        id="LaVatTuBHYT" name="Loai" [required]="true" (modelChange)="loaiChange($event)"
+        [items]="[{Value:false,Text:'Không BHYT'},{Value:true,Text:'BHYT'}]" [(model)]="nhapKhoChiTiet.LaVatTuBHYT"
+        label="Loại" [validationerror]="'LaVatTuBHYT' | validationerror:validationErrors">
+    </app-radio>
+
+    <app-radio *ngIf="loaiNhap==2" (keyup)="onKey($event)" [disabled]="daDuyet == true" fxFlex="10%" fxFlex.sm="10%"
+        id="LaVatTuBHYT" name="Loai" [required]="true" (modelChange)="loaiChange($event)"
+        [items]="[{Value:false,Text:'Không BHYT'}]" [(model)]="nhapKhoChiTiet.LaVatTuBHYT" label="Loại"
+        [validationerror]="'LaVatTuBHYT' | validationerror:validationErrors">
+    </app-radio>
+    <app-textboxnumeric (keyup)="onKey($event)" [disabled]="daDuyet == true" id="SoLuongNhapId" fxFlex="10%"
+        fxFlex.sm="20%" min="1" max="999999" [(model)]="nhapKhoChiTiet.SoLuongNhap" label="Số lượng" [required]="true"
+        [validationerror]="'SoLuongNhap' | validationerror:validationErrors"
+        (modelChange)="modelChangeSoLuongNhap($event)">
+    </app-textboxnumeric>
+
+    <app-textboxnumeric (keyup)="onKey($event)" id="DonGiaNhapId" fxFlex="10%" fxFlex.sm="20%" decimals="2"
+        [format]="format" min="0" max="9999999999" [(model)]="nhapKhoChiTiet.DonGiaNhap" label="Đơn giá"
+        [required]="true" [disabled]="daDuyet == true" (modelChange)="modelChangeDonGiaNhap($event)"
+        [validationerror]="'DonGiaNhap' | validationerror:validationErrors">
+    </app-textboxnumeric>
+
+    <app-textboxnumeric *ngIf="loaiNhap == 1" [disabled]="daDuyet == true" id="ThanhTienTruocVat" fxFlex="10%"
+        fxFlex.sm="20%" decimals="2" (modelChange)="modelChangeThanhTienTruocVat($event)" [format]="format"
+        [(model)]="nhapKhoChiTiet.ThanhTienTruocVat" label="Thành tiền (chưa VAT)">
+    </app-textboxnumeric>
+
+    <app-textboxnumeric (keyup)="onKey($event)" id="VAT" fxFlex="10%" fxFlex.sm="20%" [format]="format" decimals="2"
+        min="0" max="100" label="VAT" [required]="true" [(model)]="nhapKhoChiTiet.VAT" [disabled]="daDuyet == true"
+        (modelChange)="modelChangeVAT($event)" *ngIf="!nhapKhoChiTiet.LaVatTuBHYT"
+        [validationerror]="'VAT' | validationerror:validationErrors">
+    </app-textboxnumeric>
+    <app-textboxnumeric [disabled]="daDuyet == true" id="ThanhTienSauVat" fxFlex="10%" fxFlex.sm="20%" decimals="2"
+        [format]="format" *ngIf="!nhapKhoChiTiet.LaVatTuBHYT" [(model)]="nhapKhoChiTiet.ThanhTienSauVat"
+        (modelChange)="modelThanhTienSauVat($event)" label="Thanh toán">
+    </app-textboxnumeric>
+
+
+
+    <app-textbox (keyup)="onKey($event)" [disabled]="daDuyet == true" id="SoLoId" fxFlex="10%" fxFlex.sm="20%"
+        [required]="true" [(model)]="nhapKhoChiTiet.Solo" label="Số lô" maxlength="50" [upperCase]="true"
+        [validationerror]="'Solo' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-datepicker (keyup)="onKey($event)" [disabled]="daDuyet == true" id="HanSuDungId" fxFlex="20%" fxFlex.sm="20%"
+        [required]="true" [(model)]="nhapKhoChiTiet.HanSuDung" label="Hạn sử dụng"
+        (modelChange)="onChangeHanSuDung($event)" [validationerror]="'HanSuDung' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-combobox [disabled]="daDuyet == true" id="KhoNhapSauKhiDuyetId" fxFlex="20%" fxFlex.sm="20%"
+        label="Xuất về kho sau khi duyệt" [(model)]="nhapKhoChiTiet.KhoNhapSauKhiDuyetId" [required]="true"
+        [modelText]="nhapKhoChiTiet.KhoNhapSauKhiDuyetDisplayName"
+        [validationerror]="'KhoNhapSauKhiDuyetId' | validationerror:validationErrors"
+        url="NhapKhoDuocPham/GetKhoLoaiVatTus" bind="true">
+    </app-combobox>
+    <app-combobox *ngIf="nhapKhoChiTiet.KhoNhapSauKhiDuyetId>0" id="NguoiNhapSauKhiDuyetId" fxFlex="20%" fxFlex.sm="20%"
+        [(model)]="nhapKhoChiTiet.NguoiNhapSauKhiDuyetId" label="Người nhận sau khi duyệt"
+        url="NhanVien/GetListLookupNhanVien" bind="true" [required]="true"
+        [validationerror]="'NguoiNhapSauKhiDuyetId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-textboxnumeric *ngIf="loaiNhap==1" [disabled]="true" (keyup)="onKey($event)" id="gia-ap-thau" fxFlex="10%"
+        fxFlex.sm="20%" decimals="2" [format]="format" [(model)]="nhapKhoChiTiet.GiaApThau" label="Giá áp thầu">
+    </app-textboxnumeric>
+
+    <app-textboxnumeric (keyup)="onKey($event)" id="TiLeBHYTThanhToan" fxFlex="10%" fxFlex.sm="20%" [format]="format"
+        min=1 max="100" label="TL bảo hiểm thanh toán" [required]="true" [(model)]="nhapKhoChiTiet.TiLeBHYTThanhToan"
+        [disabled]="daDuyet == true" *ngIf="nhapKhoChiTiet.LaVatTuBHYT"
+        [validationerror]="'TiLeBHYTThanhToan' | validationerror:validationErrors">
+    </app-textboxnumeric>
+
+    <app-textbox (keyup)="onKey($event)" [disabled]="daDuyet == true" id="MaRef" fxFlex="10%" fxFlex.sm="20%"
+        [(model)]="nhapKhoChiTiet.MaRef" label="Mã REF" maxlength="200">
+    </app-textbox>
+
+    <app-textboxnumeric *ngIf="loaiNhap == 2" [disabled]="daDuyet == true" id="ThanhTienTruocVat" fxFlex="10%"
+        fxFlex.sm="20%" decimals="2" [format]="format" [(model)]="nhapKhoChiTiet.ThanhTienTruocVat"
+        label="Thành tiền (chưa VAT)" (modelChange)="modelChangeThanhTienTruocVat($event)">
+    </app-textboxnumeric>
+
+    <app-textboxnumeric *ngIf="loaiNhap == 2" [disabled]="daDuyet == true" id="ThueVatLamTron" fxFlex="10%"
+        fxFlex.sm="20%" decimals="2" [format]="format" [(model)]="nhapKhoChiTiet.ThueVatLamTron"
+        label="Thuế VAT làm tròn">
+    </app-textboxnumeric>
+
+
+    <app-textboxnumeric [disabled]="true" id="HeSoDinhMucDonViTinh" fxFlex="10%" fxFlex.sm="20%" min="1" max="999999"
+        [(model)]="nhapKhoChiTiet.HeSoDinhMucDonViTinh" label="Hệ số định mức">
+    </app-textboxnumeric>
+    <app-textboxnumeric (keyup)="onKey($event)" [disabled]="daDuyet == true" id="SoLuongNhapSoCap" fxFlex="10%"
+        fxFlex.sm="20%" min="1" max="999999" [(model)]="nhapKhoChiTiet.SoLuongNhapSoCap" label="Số lượng sơ cấp"
+        (modelChange)="modelChangeSoLuongNhapSoCap($event)">
+    </app-textboxnumeric>
+
+    <app-textbox (keyup)="onKey($event)" [disabled]="daDuyet == true" id="MaVachId" fxFlex="10%" fxFlex.sm="20%"
+        [(model)]="nhapKhoChiTiet.MaVach" label="Mã vạch" maxlength="100" onlynumber="true"
+        [validationerror]="'MaVach' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox (keyup)="onKey($event)" [disabled]="daDuyet == true" id="MaVachId" fxFlex="20%" fxFlex.sm="20%"
+        [(model)]="nhapKhoChiTiet.GhiChu" label="Ghi Chú" maxlength="1000">
+    </app-textbox>
+    
+    <div *ngIf="daDuyet != true" fxFlex="100%" fxFlex.sm="100%">
+        <button *ngIf="isUpdate == false" (click)="AddRow()" style="float: right" type="button" color="primary"
+            mat-raised-button>Thêm</button>
+        <button *ngIf="isUpdate == true" (click)="UpdateRow()" style="float: right" type="button" color="primary"
+            mat-raised-button> Cập Nhật</button>
+        <button (click)="Huy()" style="float: right" type="button" mat-button>Hủy</button>
+    </div>
+
+    <app-grid [groups]="groups" #grid fxFlex="100%" fxFlex.sm="100%" [gridDataSource]="gridDataSource"
+        [gridColumns]="gridColumns" [useHeaderDefault]="false" [useActionDefault]="false"
+        [useActionDefault]="actionTemplate" maxHeight="500" [useAddDeault]="false" [checkboxAble]="false"
+        [lazyLoadPage]="false" [pageable]="false" [autoHeight]="true" (extOnDataBound)="onDataBound($event)">
+    </app-grid>
+
+    <ng-template #giaTemplate let-dataItem>
+        {{dataItem.DonGiaNhap | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #nhomDisplayGroupHeaderTemplate let-value="value" let-dataItem>
+        <strong>{{value}}</strong>
+    </ng-template>
+    <ng-template #thanhTienTruocVatTemplate let-dataItem>
+        {{dataItem.ThanhTienTruocVat | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #thanhTienSauVatTemplate let-dataItem>
+        {{dataItem.ThanhTienSauVat | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #tongThanhTienTruocVatFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold;">
+            <span>{{totalTongThanhTien('ThanhTienTruocVat') | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+
+    <ng-template #tongThanhTienVatFooterTemplate let-dataItem>
+        <p style="color: red; font-weight: bold;">
+            <span>{{totalTongThanhTien('VAT') | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+
+    <ng-template #tongThanhTienSauVatFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold;">
+            <span>{{totalTongThanhTien('ThanhTienSauVat') | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+
+    <ng-template #actionTemplate let-dataItem>
+
+        <button [disabled]="daDuyet == true" (click)="$event.stopPropagation()" kendoTooltip title="Hành động"
+            [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+            <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+        </button>
+        <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+            <ng-template let-customer="customer" matMenuContent>
+                <button (click)="UpdateRowGripView(dataItem)" mat-menu-item>
+                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                    <span>Sửa</span>
+                </button>
+                <button (click)="DeleteRowGripView(dataItem.IdView)" mat-menu-item>
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                    <span>Xóa</span>
+                </button>
+            </ng-template>
+        </mat-menu>
+    </ng-template>
+
+</div>

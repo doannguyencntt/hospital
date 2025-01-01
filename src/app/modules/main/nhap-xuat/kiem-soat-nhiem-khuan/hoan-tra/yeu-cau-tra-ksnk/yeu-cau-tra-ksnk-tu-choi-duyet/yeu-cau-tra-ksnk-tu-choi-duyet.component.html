@@ -1,0 +1,24 @@
+<app-header-form [crumbs]="[
+{Title:'Nhập Xuất',Path:''},
+{Title:'Hành chính - KSNK',Path:''},
+{Title:'Hoàn Trả',Path:''},
+{Title:'Yêu Cầu Trả', Path:'/nhap-xuat/ksnk/yeu-cau-tra-ksnk', queryParams: {holdQuery : true}, Active: true}
+]" [isicMoreVert]="false">
+</app-header-form>
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b render-tu-choi" fxLayout="row" fxLayoutAlign="start center">
+                <h2 style="width: 50%;" class="title m-0">Yêu Cầu Trả Kiểm Soát Nhiễm Khuẩn</h2>
+                <span class="title-alert">Từ chối duyệt</span>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-yeu-cau-tra-ksnk-other-shared [tuChoiDuyet]="true"></app-yeu-cau-tra-ksnk-other-shared>
+                <div style="margin-top:18px;" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <button type="button" (click)="huy()" mat-button class="mr-1"><i class="ft-arrow-left"></i>
+                        Quay Lại</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

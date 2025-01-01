@@ -1,0 +1,23 @@
+.pt-checkbox-container {
+    padding-top: 1.03125em;
+}
+
+@media (max-width: 959px){
+    .mt-sm-0 {
+        margin-top: 0 !important;
+    }
+}
+
+@media (min-width: 960px) and(max-width: 1884px){
+    .mt-md-4 {
+        margin-top: 1rem !important;
+    }
+
+    .mt-md-2 {
+        margin-top: 0.5rem !important;
+    }
+
+    .mt-md-0 {
+        margin-top: 0 !important;
+    }
+}

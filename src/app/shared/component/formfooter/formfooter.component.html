@@ -1,0 +1,11 @@
+<div class="form-footer">
+    <button type="button" (click)="cancel()" mat-button class="mr-1"><i class="ft-arrow-left"></i> Hủy</button>
+    <button type="button" *ngIf="!loading && type=='create'" (click)="create()" color="primary" mat-raised-button><i
+            class="ft-save"></i>{{buttonAccessText}}</button>
+    <button type="button" *ngIf="!loading && type=='update' && hiddenUpdateButton == false" (click)="update()" color="primary" [disabled]="read"
+        mat-raised-button><i class="ft-save"></i>{{buttonAccessText}}</button>
+    <button type="button" *ngIf="!loading && type=='detail' && idCustomize == null" (click)="showUpdate()"
+        color="primary" mat-raised-button><i class="ft-edit"></i> Sửa</button>
+    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+            alt="Loading" /></button>
+</div>

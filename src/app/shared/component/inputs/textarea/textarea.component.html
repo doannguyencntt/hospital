@@ -1,0 +1,50 @@
+<mat-form-field class="{{moreClass}}" title="{{title}}">
+    <mat-label>{{label}}<span class="red">{{required?' *':''}}</span></mat-label>
+    <textarea autosize [minRows]="1" matInput ngControl="model" [readonly]="readonly" [disabled]="disabled" id="{{id}}" name="{{id}}"
+        [(ngModel)]="model" (ngModelChange)="emit($event)" maxlength="{{maxlength}}" [style.height.px]="minHeight"
+        [style.min-height.px]="minHeight" *ngIf="required && !useVoicePopup" (blur)="blur($event)"></textarea>
+    <textarea autosize [minRows]="1" matInput ngControl="model" [readonly]="readonly" [disabled]="disabled" id="{{id}}" name="{{id}}"
+        [(ngModel)]="model" (ngModelChange)="emit($event)" maxlength="{{maxlength}}" [style.height.px]="minHeight"
+        [style.min-height.px]="minHeight" *ngIf="!required && !useVoicePopup" (blur)="blur($event)"></textarea>
+
+        <textarea autosize [minRows]="1" matInput ngControl="model" [readonly]="readonly" [disabled]="disabled" id="final_span" name="{{id}}"
+        [(ngModel)]="model" (ngModelChange)="emit($event)" maxlength="{{maxlength}}" [style.height.px]="minHeight"
+        [style.min-height.px]="minHeight" *ngIf="required && useVoicePopup" (blur)="blur($event)"></textarea>
+    <textarea autosize [minRows]="1" matInput ngControl="model" [readonly]="readonly" [disabled]="disabled" id="final_span" name="{{id}}"
+        [(ngModel)]="model" (ngModelChange)="emit($event)" maxlength="{{maxlength}}" [style.height.px]="minHeight"
+        [style.min-height.px]="minHeight" *ngIf="!required && useVoicePopup" (blur)="blur($event)"></textarea>
+
+    <mat-icon [icIcon]="icKeyboardVoice" class="voice" *ngIf="useVoice" (click)="showVoice()"></mat-icon>
+    <mat-icon [icIcon]="icClear" [class]="!useVoice ? 'btn-clear' : 'btn-clear has-voice'" *ngIf="showButtonClearData" (click)="clearData()" kendoTooltip title="Xóa"></mat-icon>
+    <label class="red" [innerHTML]="validationerror"></label>
+
+    <mat-icon style="position: absolute; top: -1000px;" *ngIf="useVoicePopup" #inputVoice id="start_button" onclick="startButton(event)" [icIcon]="icKeyboardVoice" class="voice"></mat-icon>
+</mat-form-field>
+<!-- <div class="form-row" kendoTooltip>
+  <div class="form-group {{moreClass}} col-sm-12" *ngIf="!horizontalForm">
+      <label for="{{id}}" *ngIf="label!=null && label!=''">{{label}}<span class="text-danger" *ngIf="required">*</span></label>
+      <textarea class="form-control" [ngClass]="validationerror!=''?'has-error':''" kendoTextArea id="{{id}}"
+          [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+          ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}" [autoSize]="autoSize" [style.height.px]="minHeight"
+           [style.min-height.px]="minHeight" maxlength="{{maxlength}}"></textarea>
+  </div>
+
+  <div class="{{moreClass}}" *ngIf="horizontalForm">
+      <label for="{{id}}" class="{{classLabel}} col-form-label" *ngIf="label!=null && label!=''">{{label}} <span
+              class="text-danger" *ngIf="required">*</span></label>
+      <div class="{{classField}}">
+          <textarea class="form-control" [ngClass]="validationerror!=''?'has-error':''" kendoTextArea id="{{id}}"
+              [readonly]="readonly" [disabled]="disabled" placeholder="{{placeHolder}}" (ngModelChange)="emit($event)"
+              ngControl="model" name="{{id}}" [(ngModel)]="model" title="{{title}}" [autoSize]="autoSize" [style.height.px]="minHeight" 
+              [style.min-height.px]="minHeight" maxlength="{{maxlength}}"></textarea>
+      </div>
+  </div>
+  <div class="col-sm-12">
+      <div class="alert alert-danger alert-dismissible fade show mt-n-15" role="alert" *ngIf="validationerror!=''">
+          <div [innerHTML]="validationerror"></div>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="validationerror=''">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+  </div>
+</div> -->

@@ -1,0 +1,36 @@
+.head-ngay-phat-sinh{
+    color:red;
+    font-weight:bold;
+    background: #ebeced;
+}
+
+.head-dv-bv{
+    font-weight:bold;   
+    padding-left:20px !important;
+}
+
+.head-dv-bhyt{
+    color:blue;
+    font-weight:bold;   
+    padding-left:20px !important;
+}
+
+.pl-30{
+    padding-left:40px !important;
+}
+
+.content-min-height {
+    min-height: 210px;
+}
+
+@media (max-width: 1450){
+    .content-min-height-md {
+        min-height: 235px !important;
+    }
+}
+
+@media (max-width: 959px){
+    .content-min-height-sm {
+        min-height: 290px !important;
+    }
+}

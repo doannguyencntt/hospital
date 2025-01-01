@@ -1,0 +1,91 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between">
+
+    <div fxFlex="100%" *ngIf="!isCreate && trangThaiVo != null && trangThaiVo.TrangThai == false">
+        <h4 style="color: red;">Lý do: {{yeuCauTraVatTu.LyDoKhongDuyet}}</h4>
+    </div>
+
+    <app-textbox id="SoPhieu" *ngIf="!isCreate" fxFlex="15%" maxlength="250" label="Số phiếu"
+        [(model)]="yeuCauTraVatTu.SoPhieu" disabled={{true}} [required]="true">
+    </app-textbox>
+
+    <app-combobox id="KhoaHoanTraId" fxFlex="25%" url="YeuCauTraThuocTuBenhNhan/GetKhoaPhong"
+        [(model)]="yeuCauTraVatTu.KhoaHoanTraId" [modelText]="yeuCauTraVatTu.TenKhoaTra" label="Khoa hoàn trả"
+        class="item-no-padding" [disabled]="true">
+    </app-combobox>
+
+    <app-combobox id="KhoTraId" fxFlex="25%" [required]="true" [(model)]="yeuCauTraVatTu.KhoTraId"
+        [disabled]="!isCreate" [modelText]="yeuCauTraVatTu.TenKhoTra" url="YeuCauTraVatTuTuBenhNhan/GetKhoVatTuCap2"
+        label="Hoàn trả về kho" (modelChange)="khoTraChange($event)" class="item-no-padding"
+        [validationerror]="'KhoTraId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-textbox id="TenNhanVienYeuCau" [fxFlex]="!isCreate ? '18%' : '25%'" [required]="true"
+        [fxFlex.sm]="!isCreate ? '18%' : '25%'" [(model)]="yeuCauTraVatTu.TenNhanVienYeuCau" maxlength="250"
+        label="Người yêu cầu" disabled={{true}}>
+    </app-textbox>
+
+    <app-datepicker id="NgayYeuCau" [fxFlex]="!isCreate? '17%' : '25%'" [fxFlex.sm]="!isCreate ? '17%' : '25%'"
+        [(model)]="yeuCauTraVatTu.NgayYeuCau" disabled={{true}} [required]="true" label="Ngày yêu cầu">
+    </app-datepicker>
+
+    <app-textarea id="ghiChu" fxFlex="100" fxFlex.sm="100" maxlength="4000" label="Ghi chú" minHeight="20"
+        [disabled]="!isCreate && trangThaiVo != undefined && trangThaiVo != null && (trangThaiVo.TrangThai == true || trangThaiVo.TrangThai == false) "
+        [(model)]="yeuCauTraVatTu.GhiChu">
+    </app-textarea>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin vật tư</h3>
+
+    <app-daterangepicker *ngIf="isCreate" style="margin-left: 5px;" id="range-ngay-yeu-cau" fxFlex="250px"
+        fxFlex.sm="auto" [(model)]="yeuCauTraVatTu.RangeFromDate" label="Yêu cầu từ ngày - đến ngày"
+        (modelChange)="changeNgayBatDauRange()" (blur)="blur()" class="mt-1 on-header">
+    </app-daterangepicker>
+
+    <div fxFlex="100%" fxLayoutAlign="end center">
+        <app-grid #gridChild [gridColumns]="gridVatTuColumns" [documentType]="documentType" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            [urlGetData]="urlGetDataVatTu" [groups]="groups" [urlGetTotalPage]="urlGetTotalPageVatTu"
+            (extOnDataBound)="onDataBoundGrid($event)" [detailTemplate]="detailTemplate" [autoHeight]="true"
+            [pageable]="false">
+        </app-grid>
+        <ng-template #detailTemplate let-dataItem>
+            <app-grid *ngIf="isCreate" [gridColumns]="gridYeuCauChiTietColumns" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" [urlGetData]="urlGetDataBenhNhan" [urlGetTotalPage]="urlGetTotalPageBenhNhan"
+                [groups]="groupBenhNhan" additionalSearchString="0;{{dataItem.VatTuBenhVienId}};true;{{dataItem.KhoTraId}};{{dataItem.LaVatTuBHYT}};{{yeuCauTraVatTu.KhoaHoanTraId}}"
+                [autoHeight]="true" [pageable]="false">
+            </app-grid>
+            <app-grid *ngIf="!isCreate" [gridColumns]="gridYeuCauChiTietColumns" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" [urlGetData]="urlGetDataBenhNhan" [urlGetTotalPage]="urlGetTotalPageBenhNhan"
+                [groups]="groupBenhNhan"
+                additionalSearchString="{{dataItem.YeuCauTraVatTuTuBenhNhanId}};{{dataItem.VatTuBenhVienId}};false;{{dataItem.KhoTraId}};{{dataItem.LaVatTuBHYT}};{{yeuCauTraVatTu.KhoaHoanTraId}}"
+                [autoHeight]="true" [pageable]="false">
+            </app-grid>
+        </ng-template>
+    </div>
+
+    <ng-template #benhNhanGroupHeaderTemplate let-value="value">
+        <div [innerHTML]="value" style="font-weight: normal;"></div>
+    </ng-template>
+
+    <ng-template #ngayDieuTriTemplate let-dataItem>
+        {{dataItem.NgayDieuTriDisplay}}
+    </ng-template>
+
+    <ng-template #ngayTraTemplate let-dataItem>
+        {{dataItem.NgayTraDisplay}}
+    </ng-template>
+
+    <ng-template #donGiaTemplate let-dataItem>
+        {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #thanhTienTemplate let-dataItem>
+        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #nhomGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+
+</div>

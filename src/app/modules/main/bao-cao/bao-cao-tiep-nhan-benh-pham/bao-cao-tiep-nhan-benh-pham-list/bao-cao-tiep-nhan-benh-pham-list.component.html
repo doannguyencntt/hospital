@@ -1,0 +1,67 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'Xét Ngiệm', Path:''},
+                    {Title:'Tiếp Nhận Bệnh Phẩm', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-combobox id="NhomDoiTuongId" fxFlex="15%" fxFlex.sm="15%" hierarchyKeyToSend="khoa"
+                    class="mt-1 on-header" popupSettings="null" [templateHeader]="doanTemplateHeader"
+                    [template]="doanTemplate" label="Nhóm dối tượng" url="BaoCao/GetListNhomDoiTuong" bind="true"
+                    [(model)]="baoCaoSearch.DoanId">
+                </app-combobox>
+
+                <ng-template #doanTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #doanTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td>{{dataItem.DisplayName}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="55%" fxFlex.sm="55%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                    <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 mt-2" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" class="pb-0"  [style.display]="ishowView==true ? 'block':'none'">
+                    <app-grid  [gridColumns]="gridColumns" [documentType]="documentType"
+                        [useActionDefault]="false" [autoHeight]="true" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                        [checkboxAble]="false" pageSize="50" [gridDataSource]="dataSource">
+                    </app-grid>
+                </div>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

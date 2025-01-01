@@ -1,0 +1,167 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                    {Title:'Khám Đoàn',Path:''},
+                    {Title:'DS Kết Luận Khám Sức Khỏe Đoàn',Path:'/kham-doan/ket-luan-kham-suc-khoe-doan', queryParams: {holdQuery : true}},
+                    {Title:'Kết Luận Khám Sức Khỏe Đoàn Chi Tiết',Path:'', Active:true} 
+
+                    ]">
+            </vex-breadcrumbs>
+
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <div class="row mb-3">
+                            <app-kham-doan-thong-tin-hanh-chinh [yeuCauTiepNhanId]="yeuCauTiepNhanId">
+                            </app-kham-doan-thong-tin-hanh-chinh>
+                        </div>
+
+                        <div class="row">
+                            <div fxFlex="100%">
+                                <fieldset fxFlex="100%">
+                                    <legend class="sub-title">Thông tin khám sức khỏe</legend>
+                                    <div class="row">
+                                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="8px grid"
+                                            fxLayoutGap.lt-sm="0">
+                                            <h3 fxFlex="100%" class="sub-title title-blue-text">I. Khám cận lâm sàng</h3>
+                                            <ng-container
+                                                *ngIf="khamDoanChuaKetLuan.KetLuanKhamSucKhoeDoanDichVuKhamTemplates != undefined 
+                                                    && khamDoanChuaKetLuan.KetLuanKhamSucKhoeDoanDichVuKhamTemplates != null">
+                                                <ng-container
+                                                    *ngFor="let items of khamDoanChuaKetLuan.KetLuanKhamSucKhoeDoanDichVuKhamTemplates, let i = index">
+                                                    <div fxFlex="100%" class="sub-title title-red-text"
+                                                        style="font-size: 15px;">{{i+1}}. {{items.Title}}</div>
+                                                    <ng-container *ngIf="items.ThongTinKhamTheoDichVuData == null">
+                                                        <b>&nbsp;&nbsp;&nbsp;&nbsp;Dịch vụ chưa khám</b>
+                                                    </ng-container>
+                                                    <ng-container *ngFor="let data of thongTinKhamTheoDichVuDatas">
+                                                        <ng-container *ngIf="items.Type == data.Type">
+                                                            <div fxFlex="{{data.fxFlex}}">
+                                                                <label *ngIf="data.TypeTemplate == 4"
+                                                                    class="ml-4"><b>{{data.Label}} </b></label>
+                                                                <label *ngIf="data.TypeTemplate != 4"
+                                                                    class="ml-4">{{data.Label}} </label>
+                                                                <strong class="ml-2">{{data.Value}}</strong>
+                                                            </div>
+
+                                                        </ng-container>
+
+                                                    </ng-container>
+
+                                                </ng-container>
+
+
+                                            </ng-container>
+                                            <h3 fxFlex="100%" class="sub-title title-blue-text">II. Khám cận lâm sàng
+                                            </h3>
+                                            <div fxFlex="100%">
+                                                <label class="ml-4">a) Kết quả: </label>
+                                                <strong
+                                                    class="ml-2">{{khamDoanChuaKetLuan.KSKKetQuaCanLamSang}}</strong>
+                                            </div>
+                                            <div fxFlex="100%">
+                                                <label class="ml-4">b) Đánh giá: </label>
+                                                <strong
+                                                    class="ml-2">{{khamDoanChuaKetLuan.KSKDanhGiaCanLamSang}}</strong>
+                                            </div>
+                                            <!-- <h3 *ngIf="!khamDoanChuaKetLuan.IsHiddenKetLuan" fxFlex="100%"
+                                                class="sub-title title-blue-text">III. Kết luận </h3> -->
+                                            <!-- Chưa kết luận -->
+                                            <ng-container *ngIf="khamDoanChuaKetLuan.TrangThaiYeuCauTiepNhan == 1">
+                                                <h3 fxFlex="100%" class="sub-title title-blue-text">III. Kết luận </h3>
+                                                <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+                                                    <button type="button" class="mr-1" color="primary" mat-raised-button
+                                                        (click)="ketQuaMau()">Kết quả mẫu</button>
+                                                </div>
+                                                <app-combobox *ngIf="khamDoanChuaKetLuan.CoHienThiPhanLoai"
+                                                    id="PhanLoaiSucKhoeId" fxFlex="15%" fxFlex.sm="30%"
+                                                    label="Phân loại sức khỏe" url="KhamDoan/GetPhanLoaiSucKhoes"
+                                                    [(model)]="khamDoanChuaKetLuan.PhanLoaiSucKhoeId" [required]="true"
+                                                    [modelText]="khamDoanChuaKetLuan.KSKKetLuanPhanLoaiSucKhoe"
+                                                    [validationerror]="'PhanLoaiSucKhoeId' | validationerror:validationErrors">
+                                                </app-combobox>
+
+                                                <app-textarea id="cacBenhKhac" fxFlex="auto" fxFlex.sm="100%"
+                                                    [(model)]="khamDoanChuaKetLuan.KSKKetLuanCacBenhTat"
+                                                    label="Các bệnh tật (nếu có)" [maxlength]="4000">
+                                                </app-textarea>
+
+                                                <app-textarea id="ghiChu" fxFlex="100%" fxFlex.sm="auto" label="Đề nghị"
+                                                    [(model)]="khamDoanChuaKetLuan.KSKKetLuanGhiChu" [maxlength]="4000">
+                                                </app-textarea>
+
+                                            </ng-container>
+
+                                            <!-- Đã kết luận -->
+                                            <ng-container *ngIf="khamDoanChuaKetLuan.TrangThaiYeuCauTiepNhan == 2 && khamDoanChuaKetLuan.CoHienThiPhanLoai">
+                                                <div fxFlex="100%">
+                                                    <label class="ml-4">Phân loại sức khỏe:</label>
+                                                    <strong class="ml-2">
+                                                        {{khamDoanChuaKetLuan.KSKKetLuanPhanLoaiSucKhoe}}</strong>
+                                                </div>
+
+                                                <div fxFlex="100%">
+                                                    <label class="ml-4">Đề nghị: </label>
+                                                    <strong
+                                                        class="ml-2">{{khamDoanChuaKetLuan.KSKKetLuanGhiChu}}</strong>
+                                                </div>
+
+                                                <div fxFlex="100%">
+                                                    <label class="ml-4">Các bệnh tật (nếu có): </label>
+                                                    <strong
+                                                        class="ml-2">{{khamDoanChuaKetLuan.KSKKetLuanCacBenhTat}}</strong>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="row pt-4">
+
+                            <button type="button" color="primary" (click)="inSoKSK()" mat-raised-button mat-button
+                                class="float-left mr-1">
+                                In số KSK định kỳ</button>
+
+                            <button type="button" color="primary" (click)="inKetQuaKSK()" mat-raised-button mat-button
+                                class="float-left">
+                                In kết quả KSK</button>
+
+                                <button *ngIf="from==null ||from==''" type="button"  (click)="redirectKetLuanCLS()" color="primary" class="float-right"
+                                mat-raised-button><i class="ft-save"></i>Lưu và chuyển sang kết luận cls</button>
+                            <button *ngIf="khamDoanChuaKetLuan.TrangThaiYeuCauTiepNhan == 1" type="button"
+                                color="primary" (click)="luuVaHoanThanhKhamKSKDoan()" mat-raised-button mat-button
+                                class="float-right mr-1">
+                                Lưu và hoàn thành khám</button>
+
+                            <button *ngIf="khamDoanChuaKetLuan.TrangThaiYeuCauTiepNhan == 1" type="button"
+                                color="primary" (click)="luuKSKDoan()" mat-raised-button mat-button
+                                class="float-right mr-1">
+                                Lưu</button>
+
+                            <button *ngIf="khamDoanChuaKetLuan.TrangThaiYeuCauTiepNhan == 1" type="button"
+                                color="default" title="Phím tắt: Esc" (click)="huy()" mat-raised-button mat-button
+                                class="float-right mr-1">
+                                Hủy</button>
+
+                            <button *ngIf="khamDoanChuaKetLuan.TrangThaiYeuCauTiepNhan != 1" type="button"
+                                color="default" title="Phím tắt: Esc" (click)="huy()" mat-raised-button mat-button
+                                class="float-right mr-1">
+                                Quay lại</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+
+</vex-page-layout>

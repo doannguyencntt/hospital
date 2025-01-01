@@ -1,0 +1,370 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="
+                    [
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'Kế Toán', Path:''},
+                        {Title:'Công Nợ Bảo Hiểm Tư Nhân',Path:'', Active:true}          
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6 pb-0">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="100%" class="bg-app-bar px-0 h-15 border-b py-1">
+                <app-checkbox [(model)]="timKiemNangCaoObj.TrangThai.DungGoi" id="dungGoi" label="Dùng gói" class="ml-2 mt-2"
+                    (modelChange)="timKiemNangCao()">
+                </app-checkbox>
+                <app-checkbox [(model)]="timKiemNangCaoObj.TrangThai.KhongDungGoi" id="khongDungGoi" label="Không dùng gói" class="ml-2 mt-2"
+                    (modelChange)="timKiemNangCao()">
+                </app-checkbox>
+
+                <app-combobox fxFlex="300px" label="Công ty" id="CongTyId" class="ml-2 mt-1 mr-2 on-header" url="GachNo/GetListBaoHiemTuNhan" 
+                    [(model)]="timKiemNangCaoObj.CongTyId"
+                    popupSettings="null" [reloadForGrid]="true"
+                    [templateHeader]="congTyTemplateHeader" [template]="congTyTemplate" [broadcastAfterLoaded]="true">
+                    <!-- (modelChange)="timKiemNangCao()"  -->
+                    <ng-template #congTyTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="20%">Mã</th>
+                                <th>Ten</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #congTyTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="20%">{{dataItem.Ma}}</td>
+                                <td>{{dataItem.Ten}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+                <!-- <app-daterangepicker id="tuNgayDenNgayCT" fxFlex="300px" fxFlex.sm="auto" class="mt-1 on-header"
+                    [(model)]="timKiemNangCaoObj.TuNgayDenNgayCT" label="CT từ ngày - đến ngày">
+                </app-daterangepicker>
+                <app-daterangepicker id="tuNgayDenNgayHD" fxFlex="300px" fxFlex.sm="auto" class="ml-2 mr-2 mt-1 on-header"
+                    [(model)]="timKiemNangCaoObj.TuNgayDenNgayHD" label="HĐ từ ngày - đến ngày">
+                </app-daterangepicker> -->
+
+                <app-daterangepicker id="tuNgayDenNgay" fxFlex="250px" fxFlex.sm="auto" class="mr-2 mt-1 on-header"
+                    [(model)]="timKiemNangCaoObj.TuNgayDenNgay" label="Từ ngày - đến ngày">
+                </app-daterangepicker>
+                
+                <div class="bg-card rounded-full border px-4" fxFlex="350px" fxFlex.lt-md="auto" fxHide.xs
+                    fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        type="search" name="searchString" [(ngModel)]="timKiemNangCaoObj.SearchString"
+                        (keyup)="onKey($event)" (ngModelChange)="searchChanges($event)"
+                        placeholder="Nhập từ khóa tìm..."/>
+                </div>
+                <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                </button>
+                <button type="button" color="primary" mat-raised-button mat-button class="ml-2 mt-1" (click)="timKiemNangCao()">Xem Báo
+                    Cáo</button>
+                
+                <button [matMenuTriggerFor]="columnFilterMenu" style="opacity: 0.5;" class="ml-auto" fxFlex="none" mat-icon-button kendoTooltip title="Lọc cột" type="button">
+                    <mat-icon [icIcon]="icFilterList"></mat-icon>
+                </button>
+                
+                <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                    <div *ngFor="let column of _gridColumnsFilter">
+                        <button class="checkbox-item mat-menu-item" *ngIf="!column.HideFilter">
+                            <mat-checkbox [disabled]="!column.HasFilter" [(ngModel)]="_isCheckColumnFilter" color="primary">
+                                {{ column.Title }}
+                            </mat-checkbox>
+                        </button>
+                    </div>
+                </mat-menu>
+                <button *ngIf="ishowView == true" style="opacity: 0.5;" (click)="exportExcel()" fxFlex="none" mat-icon-button kendoTooltip title="Xuất Excel" type="button">
+                    <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                </button>
+            </div>
+            <kendo-grid fxFlex="100%" [data]="gridView" class="k-grid1 shared-header grid-bao-cao" [pageable]="true" [resizable]="true"
+                [height]="height" [pageSize]="pageSize" [skip]="skip" (pageChange)="pageChange($event)"
+                id="baoCaoCongNoCongTyBhtn" #baoCaoCongNoCongTyBhtn
+                (columnResize)="columnResize($event)">
+                
+                <kendo-grid-span-column>
+                <kendo-grid-column field="{{getFieldColumn(0)}}" title="{{getTitleColumn(0)}}" width="{{getWidthColumn(0)}}"
+                    [style]="{'text-align': 'center'}">
+                    <!-- <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{rowIndex + 1}}
+                    </ng-template> -->
+                </kendo-grid-column>
+                    <kendo-grid-column field="{{getFieldColumn(1)}}" title="{{getTitleColumn(1)}}" width="{{getWidthColumn(1)}}"
+                        [style]="{'text-align': 'center'}">
+                    </kendo-grid-column>
+                    <kendo-grid-column field="{{getFieldColumn(2)}}" title="{{getTitleColumn(2)}}" width="{{getWidthColumn(2)}}"
+                        [style]="{'text-align': 'center'}">
+                    </kendo-grid-column>
+                    <kendo-grid-column field="{{getFieldColumn(3)}}" title="{{getTitleColumn(3)}}" width="{{getWidthColumn(3)}}"
+                        [style]="{'text-align': 'center'}">
+                    </kendo-grid-column>
+                    <kendo-grid-column field="{{getFieldColumn(4)}}" title="{{getTitleColumn(4)}}" width="{{getWidthColumn(4)}}"
+                        [style]="{'text-align': 'center'}">
+                    </kendo-grid-column>
+                    <kendo-grid-column field="{{getFieldColumn(5)}}" title="{{getTitleColumn(5)}}" width="{{getWidthColumn(5)}}"
+                        [style]="{'text-align': 'center'}">
+                    </kendo-grid-column>
+                    <kendo-grid-column field="{{getFieldColumn(6)}}" title="{{getTitleColumn(6)}}" width="{{getWidthColumn(6)}}"
+                        [style]="{'text-align': 'center'}">
+                    </kendo-grid-column>
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div style="text-align: left;">{{ dataItem.TenCongTy}}</div>
+                    </ng-template>
+                </kendo-grid-span-column>
+                <kendo-grid-column field="{{getFieldColumn(7)}}" title="{{getTitleColumn(7)}}" width="{{getWidthColumn(7)}}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div style="font-weight: normal;" *ngIf="dataItem.CongTyId == 0">{{dataItem.DienGiai}}</div>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                        <div style="font-weight: bold;color:#000;text-align: left;">Tổng Cộng :</div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="{{getFieldColumn(8)}}" title="{{getTitleColumn(8)}}" width="{{getWidthColumn(8)}}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div style="font-weight: normal;" *ngIf="dataItem.CongTyId == 0">{{dataItem.MaTienTe}}</div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="{{getFieldColumn(9)}}" title="{{getTitleColumn(9)}}" width="{{getWidthColumn(9)}}"
+                    [style]="{'text-align': 'center'}"  [headerStyle]="{'text-align': 'right'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div style="text-align: right;" [style.font-weight]="dataItem.CongTyId == 0 ? 'normal' : 'bold'" *ngIf="dataItem.PhatSinhNo != null">
+                            {{ dataItem.PhatSinhNo | number:'0.2-2':'vi-VN'}}</div>
+                        <div style="text-align: right;" [style.font-weight]="dataItem.CongTyId == 0 ? 'normal' : 'bold'" *ngIf="dataItem.PhatSinhNo == null">
+                            {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                    </ng-template>
+            
+                    <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                        <div style="text-align: right;">{{totalPhatSinhNo| number:'0.2-2':'vi-VN'}}</div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="{{getFieldColumn(10)}}" title="{{getTitleColumn(10)}}" width="{{getWidthColumn(10)}}"
+                    [style]="{'text-align': 'center'}" [headerStyle]="{'text-align': 'right'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div style="text-align: right;" [style.font-weight]="dataItem.CongTyId == 0 ? 'normal' : 'bold'" *ngIf="dataItem.PhatSinhCo != null">
+                            {{ dataItem.PhatSinhCo | number:'0.2-2':'vi-VN'}}</div>
+                        <div style="text-align: right;" [style.font-weight]="dataItem.CongTyId == 0 ? 'normal' : 'bold'" *ngIf="dataItem.PhatSinhCo == null">
+                            {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                    </ng-template>
+            
+                    <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                        <div style="text-align: right;">{{totalPhatSinhCo| number:'0.2-2':'vi-VN'}}</div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="{{getFieldColumn(11)}}" title="{{getTitleColumn(11)}}" width="{{getWidthColumn(11)}}"
+                    [style]="{'text-align': 'center'}" [headerStyle]="{'text-align': 'right'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <ng-container *ngIf="dataItem.CongTyId == 0">
+                            <div style="text-align: right;font-weight: normal;" *ngIf="dataItem.DauKyNo != null">
+                                {{ dataItem.DauKyNo | number:'0.2-2':'vi-VN'}}</div>
+                            <div style="text-align: right;font-weight: normal;" *ngIf="dataItem.DauKyNo == null">
+                                {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                        </ng-container>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="{{getFieldColumn(12)}}" title="{{getTitleColumn(12)}}" width="{{getWidthColumn(12)}}"
+                    [style]="{'text-align': 'center'}" [headerStyle]="{'text-align': 'right'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <div *ngIf="dataItem.CongTyId != 0" style="font-weight: bold;color:orange;text-align: left;">Nợ cuối kỳ :</div>
+                        <ng-container *ngIf="dataItem.CongTyId == 0">
+                            <div style="text-align: right; font-weight: normal;" *ngIf="dataItem.DauKyCo != null">
+                                {{ dataItem.DauKyCo | number:'0.2-2':'vi-VN'}}</div>
+                            <div style="text-align: right; font-weight: normal;" *ngIf="dataItem.DauKyCo == null">
+                                {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                        </ng-container>
+                    </ng-template>
+                    <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                        <div style="font-weight: bold;color:red;text-align: left;">Nợ cuối kỳ :</div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="{{getFieldColumn(13)}}" title="{{getTitleColumn(13)}}" width="{{getWidthColumn(13)}}"
+                    [style]="{'text-align': 'center'}" [headerStyle]="{'text-align': 'right'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <ng-container *ngIf="dataItem.CongTyId != 0">
+                            <div style="text-align: right;color:orange" *ngIf="dataItem.CuoiKyNo != null">
+                                {{ dataItem.CuoiKyNo | number:'0.2-2':'vi-VN'}}</div>
+                            <div style="text-align: right;color:orange" *ngIf="dataItem.CuoiKyNo == null">
+                                {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                        </ng-container>
+                    
+                        <ng-container *ngIf="dataItem.CongTyId == 0">
+                            <div style="text-align: right;font-weight: normal;" *ngIf="dataItem.CuoiKyNo != null">
+                                {{ dataItem.CuoiKyNo | number:'0.2-2':'vi-VN'}}</div>
+                            <div style="text-align: right;font-weight: normal;" *ngIf="dataItem.CuoiKyNo == null">
+                                {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                        </ng-container>
+                    </ng-template>
+            
+                    <ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+                        <div style="text-align: right;color:red">{{totalCuoiKyNo| number:'0.2-2':'vi-VN'}}</div>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column field="{{getFieldColumn(14)}}" title="{{getTitleColumn(14)}}" width="{{getWidthColumn(14)}}"
+                    [style]="{'text-align': 'center'}" [headerStyle]="{'text-align': 'right'}">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <ng-container *ngIf="dataItem.CongTyId == 0">
+                            <div style="text-align: right;font-weight: normal;" *ngIf="dataItem.CuoiKyCo != null">
+                                {{ dataItem.CuoiKyCo | number:'0.2-2':'vi-VN'}}</div>
+                            <div style="text-align: right;font-weight: normal;" *ngIf="dataItem.CuoiKyCo == null">
+                                {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+                        </ng-container>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-messages [hidden]="!_isMessage" noRecords="Không có dữ liệu." pagerOf="trong số" pagerItems="dòng"
+                    detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết">
+                </kendo-grid-messages>
+                <ng-template kendoGridNoRecordsTemplate>
+                    <span style="font-weight: normal;" *ngIf="_isLoading">Đang tải dữ liệu...</span>
+                    <span style="font-weight: normal;" *ngIf="!_isLoading">Không có dữ liệu</span>
+                </ng-template>
+                <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+                    <div style="justify-content: center;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-between" fxFlex="100%">
+                        <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                        <kendo-pager-numeric-buttons [buttonCount]="5" class="d-none d-sm-none d-md-block">
+                        </kendo-pager-numeric-buttons>
+                        <button *ngIf="_isLoadingTotalPage" kendoButton class="btn btn-raised btn-default btn-min-width mb-0">
+                        <img src="/assets/img/loader_circle.gif" alt="Đang tính..." style="height: 20px;" />
+                    </button>
+                        <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                        <kendo-pager-info></kendo-pager-info>
+                        <div kendoTooltip class="k-icon k-i-refresh" style="order: 10;cursor: pointer; align-self: center;" title="Làm mới" (click)="timKiemNangCao(true)"></div>
+                        <div *ngIf="_isLoading" class="grid-loading k-i-loading"></div>
+                    </div>
+                </ng-template>
+            
+                <!-- Child ---------------------------------------------------------------->
+                <ng-template kendoGridDetailTemplate let-dataItem="dataItem" [kendoGridDetailTemplateShowIf]="condition">
+                    <app-grid [useHeaderDefault]="false" 
+                        class="k-grid-crollbar"
+                        urlGetData="GachNo/GetChiTietBaoCaoGachNoCongTyBaoHiemTuNhanForGrid" urlGetTotalPage="GachNo/GetTotalChiTietBaoCaoGachNoCongTyBaoHiemTuNhanForGrid"
+                        [gridColumns]="gridColumns" [useAddDeault]="false" [lazyLoadPage]="true" [checkboxAble]="false"
+                        [additionalSearchString]="queryString" [searchString]="dataItem.CongTyId+''"
+                        [autoHeight]="true" [useActionDefault]="false" [pageSize]="15">
+                    </app-grid>
+                </ng-template>
+            
+            </kendo-grid>
+        </div>
+            <ng-template #sttTemplate let-rowIndex="rowIndex">
+                {{rowIndex + 1}}
+            </ng-template>
+
+            <ng-template #maTiepNhantemplate let-dataItem>
+                <!-- <a *ngIf="dataItem.YeuCauTiepNhanId != 0" (click)="xemChiTietThuTien(dataItem)">{{dataItem.MaTiepNhan}}</a> -->
+                <ng-container *ngIf="dataItem.YeuCauTiepNhanId != 0">{{dataItem.MaTiepNhan}}</ng-container>
+            </ng-template>
+
+            <ng-template #ngayChungTuTemplate let-dataItem>
+                {{dataItem.NgayChungTuDisplay}}
+            </ng-template>
+            <ng-template #ngayHopDongTemplate let-dataItem>
+                {{dataItem.NgayHoaDonDisplay}}
+            </ng-template>
+            <ng-template #phatSinhNoTemplate let-dataItem>
+                <div style="text-align: right;" *ngIf="dataItem.PhatSinhNo != null">
+                    {{ dataItem.PhatSinhNo | number:'0.2-2':'vi-VN'}}</div>
+                <div style="text-align: right;" *ngIf="dataItem.PhatSinhNo == null">
+                    {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+            </ng-template>
+            <ng-template #phatSinhCoTemplate let-dataItem>
+                <div style="text-align: right;" *ngIf="dataItem.PhatSinhCo != null">
+                    {{ dataItem.PhatSinhCo | number:'0.2-2':'vi-VN'}}</div>
+                <div style="text-align: right;" *ngIf="dataItem.PhatSinhCo == null">
+                    {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+            </ng-template>
+            <ng-template #phatSinhNoGroupFooterTemplate let-aggregates>
+                {{aggregates.PhatSinhNo.sum | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+            <ng-template #phatSinhCoGroupFooterTemplate let-aggregates>
+                {{aggregates.PhatSinhCo.sum | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+            <ng-template #phatSinhNoFooterTemplate let-dataItem>
+                {{dataItem.PhatSinhNo | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+            <ng-template #phatSinhCoFooterTemplate let-dataItem>
+                {{dataItem.PhatSinhCo | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #dauKyNoTemplate let-dataItem>
+                <div style="text-align: right;" *ngIf="dataItem.DauKyNo != null">
+                    {{ dataItem.DauKyNo | number:'0.2-2':'vi-VN'}}</div>
+                <div style="text-align: right;" *ngIf="dataItem.DauKyNo == null">
+                    {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+            </ng-template>
+            <ng-template #dauKyCoTemplate let-dataItem>
+                <div style="text-align: right;" *ngIf="dataItem.DauKyCo != null">
+                    {{ dataItem.DauKyCo | number:'0.2-2':'vi-VN'}}</div>
+                <div style="text-align: right;" *ngIf="dataItem.DauKyCo == null">
+                    {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+            </ng-template>
+            <ng-template #cuoiKyNoTemplate let-dataItem>
+                <div style="text-align: right;" *ngIf="dataItem.CuoiKyNo != null">
+                    {{ dataItem.CuoiKyNo | number:'0.2-2':'vi-VN'}}</div>
+                <div style="text-align: right;" *ngIf="dataItem.CuoiKyNo == null">
+                    {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+            </ng-template>
+            <ng-template #cuoiKyCoTemplate let-dataItem>
+                <div style="text-align: right;" *ngIf="dataItem.CuoiKyCo != null">
+                    {{ dataItem.CuoiKyCo | number:'0.2-2':'vi-VN'}}</div>
+                <div style="text-align: right;" *ngIf="dataItem.CuoiKyCo == null">
+                    {{ 0 | number:'0.2-2':'vi-VN'}}</div>
+            </ng-template>
+            
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar px-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <app-combobox fxFlex="300px" label="Công ty" id="CongTyId" class="ml-2 mt-5 mr-2 on-header" url="GachNo/GetListBaoHiemTuNhan" 
+                        [(model)]="timKiemNangCaoObj.CongTyId"
+                        popupSettings="null" [reloadForGrid]="true"
+                        [templateHeader]="congTyTemplateHeader" [template]="congTyTemplate" [broadcastAfterLoaded]="true">
+                        <!-- (modelChange)="timKiemNangCao()"  -->
+                        <ng-template #congTyTemplateHeader let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <th width="20%">Mã</th>
+                                    <th>Ten</th>
+                                </tr>
+                            </table>
+                        </ng-template>
+                        <ng-template #congTyTemplate let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <td width="20%">{{dataItem.Ma}}</td>
+                                    <td>{{dataItem.Ten}}</td>
+                                </tr>
+                            </table>
+                        </ng-template>
+                    </app-combobox>
+                    <app-daterangepicker id="tuNgayDenNgayCT" fxFlex="300px" fxFlex.sm="auto" class="mt-1 ml-2 on-header"
+                        [(model)]="timKiemNangCaoObj.TuNgayDenNgayCT" label="CT từ ngày - đến ngày">
+                        <!-- (modelChange)="timKiemNangCao()" -->
+                    </app-daterangepicker>
+                    <app-daterangepicker id="tuNgayDenNgayHD" fxFlex="300px" fxFlex.sm="auto" class="mt-1 ml-2 mr-2 on-header"
+                        [(model)]="timKiemNangCaoObj.TuNgayDenNgayHD" label="HĐ từ ngày - đến ngày">
+                        <!-- (modelChange)="timKiemNangCao()" -->
+                    </app-daterangepicker>
+                    
+                    <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                        fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                            type="search" name="searchString" [(ngModel)]="timKiemNangCaoObj.SearchString" (keyup)="onKey($event)"
+                            (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa tìm..." />
+                    </div>
+                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                        <mat-icon [icIcon]="icSearch"></mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

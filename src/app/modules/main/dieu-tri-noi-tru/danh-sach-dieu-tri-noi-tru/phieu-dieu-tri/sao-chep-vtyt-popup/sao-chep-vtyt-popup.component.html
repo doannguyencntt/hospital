@@ -1,0 +1,92 @@
+<div style="overflow: hidden;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+    fxLayoutGap.lt-sm="0">
+
+    <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100%" class="mb-0">
+        <h3 fxFlex="95%" style="text-align: center;">CHỌN TẠO ĐƠN VTYT MỚI THEO NGÀY</h3>
+        <button fxFlex="5%" type="button" mat-icon-button (click)="close('NoAnswer')" tabindex="-1">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+
+    <div style="height: 100px;" fxFlex="100%">
+        <div style="overflow: auto;" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+            fxLayoutGap.lt-sm="0">
+            <ul style="height: 20px;" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                fxLayoutGap.lt-sm="0">
+                <li *ngFor="let y of lstYear" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column"
+                    fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <p style="width: 100%;font-weight: bold;">
+                        <span style="cursor: pointer;" *ngIf="y.Expands" ng-model="y.Expands"
+                            (click)="y.Expands=!y.Expands">- &nbsp;</span>
+                        <span style="cursor: pointer;" *ngIf="!y.Expands" ng-model="y.Expands"
+                            (click)="y.Expands=!y.Expands">+ &nbsp;</span>
+                        <span style="color:blue">Năm {{y.Year}}</span>
+                    </p>
+                    <div fxFlex="100%" *ngIf="y.Expands" fxLayout="row wrap" fxLayout.lt-sm="column"
+                        fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                        <ul fxFlex="100%" *ngFor="let m of y.Months" fxLayout="row wrap" fxLayout.lt-sm="column"
+                            fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                            <p fxFlex="100%">
+                                <span>&nbsp;&nbsp;&nbsp;&nbsp; Tháng {{m.Month}}</span>
+                            </p>
+                            <li class="li-tag-div" fxFlex="100%" style="margin-left: 38px;" fxLayout="row wrap"
+                                fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                                <div *ngFor="let d of m.DayCopies" fxFlex="4%" fxFlex.sm="10%">
+                                    <div [ngClass]="checkActiveDay(d.PhieuDieuTriId)" kendoTooltip
+                                        title="Khoa chỉ định: {{d.TenKhoa}}"
+                                        (click)="dayAction(d.Day, d.Month, d.Year, d.PhieuDieuTriId)">
+                                        {{d.Day}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid" fxLayout.lt-md="column">
+        <div [style.display]="isShowKhoLe ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+                <h3 fxFlex="100%" class="sub-title  mr-4 mt-0">TỦ TRỰC</h3>
+                <app-grid #gridVatTu masterName="gridVatTu" fxFlex="100%" style="width: 1px;"
+                    [gridColumns]="gridColumnVTYTs" [documentType]="documentType" [useHeaderDefault]="false"
+                    [useActionDefault]="false" [lazyLoadPage]="false" [checkboxAble]="false" class="k-grid-border"
+                    [additionalSearchString]="additionString" (extOnDataBound)="onDataBoundChild($event)"
+                    urlGetData="DieuTriNoiTru/GetDataForGridDanhSachVatTu"
+                    urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachVatTu" [showStt]="true" pageSize="10"
+                    [pageable]="true" heightToolbar="235">
+                </app-grid>
+            </ng-container>
+        </div>
+
+        <div [style.display]="isShowKhoTong ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+                <h3 fxFlex="100%" class="sub-title  mr-4 mt-0">KHO TỔNG</h3>
+                <app-grid #gridVatTuKhoTong masterName="gridVatTuKhoTong" fxFlex="100%" style="width: 1px;"
+                    [gridColumns]="gridColumnVTYTs" [documentType]="documentType" [useHeaderDefault]="false"
+                    [useActionDefault]="false" [lazyLoadPage]="false" [checkboxAble]="false" class="k-grid-border"
+                    [additionalSearchString]="additionString" [showStt]="true"
+                    (extOnDataBound)="onDataBoundChildKhoTong($event)"
+                    urlGetData="DieuTriNoiTru/GetDataForGridDanhSachVatTuKhoTong"
+                    urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachVatTuKhoTong" pageSize="10"
+                    [pageable]="true" heightToolbar="235">
+                </app-grid>
+            </ng-container>
+        </div>
+
+    </div>
+
+    <ng-template #slTemplate let-dataItem>
+        {{dataItem.SoLuong | number:'1.0-2':'vi-VN'}}
+    </ng-template>
+
+    <div class="div-bottom" fxFlex="100%">
+        <button (click)="chonNgayApDung()" type="button" class="mr-2" color="primary" mat-raised-button>Chọn ngày áp
+            dụng đơn VTYT</button>
+        <button [disabled]="disabled" (click)="tao()" type="button" class="mr-2 float-right" color="primary"
+            mat-raised-button>Tạo</button>
+    </div>
+
+</div>

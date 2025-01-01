@@ -1,0 +1,282 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%">
+        <a (click)="xemChanDoan()" style="color:green; text-decoration: underline; font-weight: bold; bottom: 20px;">Xem
+            chẩn đoán của bác sĩ khác</a>
+    </div>
+    <h3 fxFlex="100%" class="sub-title" style="text-transform: none;">TÓM TẮT KẾT QUẢ CLS</h3>
+    <app-textarea fxFlex="100%" id="TomTatKetQuaCLS" label="Kết Quả" [(model)]="yeuCauKhamBenh.TomTatKetQuaCLS"
+        (modelChange)="changeData()" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <h3 fxFlex="100%" class="sub-title" style="text-transform: none;">CHẨN ĐOÁN ICD CHÍNH</h3>
+
+    <app-combobox fxFlex="50%" label="Chẩn đoán ICD chính" url="KhamBenh/ICD" [(model)]="yeuCauKhamBenh.IcdchinhId"
+        (selectionChange)="iCDSelectionChange($event)" [(modelText)]="yeuCauKhamBenh.TenICDChinh" required="true"
+        [template]="iCDChinhTemplate" [templateHeader]="iCDChinhTemplateHeader" class="item-no-padding"
+        [queryInfo]="{ParameterDependencies:'{ChanDoanICDId:' + yeuCauKhamBenh.IcdchinhId +'}', Take: 50}"
+        [validationerror]="'IcdchinhId' | validationerror:validationErrors">
+
+        <ng-template #iCDChinhTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="25%">Mã</th>
+                    <th>Tên Tiếng Việt</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #iCDChinhTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="25%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+
+    </app-combobox>
+
+    <app-textarea fxFlex="50%" id="GhiChu" label="Chẩn đoán" [(model)]="yeuCauKhamBenh.GhiChuICDChinh"
+        (modelChange)="changeData()" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <div fxFlex="100%">
+        <h3 class="sub-title" style="text-transform: none;">CHẨN ĐOÁN ICD KÈM THEO
+            <button (click)="themICDsPhu()">
+                <mat-icon color="#005dab" [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </h3>
+        <app-grid #iCDKhacs masterName="ICDPhuIds" [gridColumns]="gridICDsPhuKhacColumns" [useAddDeault]="false"
+            class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+            [gridDataSource]="dataSourceICDsPhuKhac" [maxHeight]="150" [lazyLoadPage]="true" style="width: 1px;"
+            [pageable]="false">
+        </app-grid>
+        <ng-template #teniCDsPhuKhacTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-combobox *ngIf="dataItem.Id == 0" [(model)]="dataItem.ICDId"
+                (selectionChange)="onChangeSetTenICDPhu($event, rowIndex)" [modelText]="dataItem.TenICD"
+                popupSettings="null" url="KhamBenh/GetListICDBaoGomItemDaChon" [required]="true"
+                [queryInfo]="{ParameterDependencies:'{ICDId:' + dataItem.ICDId +'}', Take: 50}"
+                [validationerror]="'YeuCauKhamBenhICDKhacs['+rowIndex+'].ICDId' | validationerror:validationErrors"
+                class="no-label item-no-padding" label=" " [templateHeader]="chanDoanPhanbietTemplateHeader"
+                [template]="chanDoanPhanBietTemplate">
+                <!-- url="ChuanDoan/GetChuanDoanLienKetICD" -->
+                <ng-template #chanDoanPhanbietTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="20%">Mã</th>
+                            <th>Tên Tiếng Việt</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #chanDoanPhanBietTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="20%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+            <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.TenICD}}</p>
+        </ng-template>
+        <ng-template #ghiChuICDsPhuKhacTemplate let-dataItem>
+            <app-textarea *ngIf="dataItem.Id == 0" maxlength="4000" [(model)]="dataItem.GhiChu" class="no-label"
+                label="" minHeight="20">
+            </app-textarea>
+            <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.GhiChu}}</p>
+        </ng-template>
+        <ng-template #actionICDsPhuKhacTemplate let-dataItem let-rowIndex="rowIndex">
+            <div class="text-center" kendoTooltip>
+                <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                    (click)="xoaICDsPhu(dataItem)">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+    </div>
+
+    <div fxFlex="100%">
+        <h3 class="sub-title" style="text-transform: none;">CÁCH GIẢI QUYẾT
+        </h3>
+    </div>
+    <app-textarea fxFlex="100%" id="CachGiaiQuyet" label="Cách giải quyết" [(model)]="yeuCauKhamBenh.CachGiaiQuyet"
+        required="true" (modelChange)="changeData()" maxlength="4000" minHeight="20"
+        [validationerror]="'CachGiaiQuyet' | validationerror:validationErrors">
+    </app-textarea>
+
+    <div fxFlex="100%" kendoTooltip>
+        <app-checkbox *ngIf="yeuCauKhamBenh.LaChiDinhTuNoiTru != true" id="ChoVeKeDonThuoc" fxFlex="20%" label="Cho về, Kê đơn thuốc" [(model)]="yeuCauKhamBenh.CoKeToa"
+            title="Phím tắt: Ctrl + F7" (modelChange)="boCheckDeXoaToaThuoc($event)"></app-checkbox>
+        <!-- [disabled]="yeuCauKhamBenh.CoNhapVien == true || yeuCauKhamBenh.CoChuyenVien || yeuCauKhamBenh.CoTuVong || yeuCauKhamBenh.KhongKeToa" -->
+
+        <app-checkbox id="ChoVeKhongKeDonThuoc" label="Cho về, Không toa" [(model)]="yeuCauKhamBenh.KhongKeToa"
+            (modelChange)="checkKhongKeToa($event)">
+        </app-checkbox>
+        <!-- [disabled]="yeuCauKhamBenh.CoNhapVien == true || yeuCauKhamBenh.CoChuyenVien || yeuCauKhamBenh.CoTuVong || yeuCauKhamBenh.CoKeToa" -->
+    </div>
+    <ng-container *ngIf="yeuCauKhamBenh.CoKeToa">
+        <app-lan-kham-hien-tai-ke-toa [data]="benhNhanHienTai" [dataYeuCauKhamBenhPrevious]="dataYeuCauKhamBenhPrevious"
+            (dataThuoc)="dataThuoc($event)" (dataVatTu)="dataVatTu($event)"
+            (validationErrorsOut)="validationErrorsOut($event)" (hideTextBoxLoiDan)="hideTextBoxLoiDan($event)"
+            fxFlex="100%" [documentType]="documentType">
+        </app-lan-kham-hien-tai-ke-toa>
+    </ng-container>
+
+    <div fxFlex="100%" kendoTooltip>
+        <app-checkbox id="HenTaiKham" label="Hẹn tái khám" [(model)]="yeuCauKhamBenh.CoTaiKham"
+            title="Phím tắt: Ctrl + F8" (modelChange)="boCheckDeXoaTaiKham()" (click)="removeValidator()">
+        </app-checkbox>
+    </div>
+    <!-- [disabled]="yeuCauKhamBenh.CoNhapVien == true || yeuCauKhamBenh.CoChuyenVien || yeuCauKhamBenh.CoTuVong" -->
+
+
+    <ng-container *ngIf="yeuCauKhamBenh.CoTaiKham">
+        <app-datepicker fxFlex="25%" label="Ngày hẹn tái khám" [(model)]="yeuCauKhamBenh.NgayTaiKham"
+            [validationerror]="'NgayTaiKham' | validationerror:validationErrors" (modelChange)="changeData()"
+            required="true">
+        </app-datepicker>
+        <app-textarea id="GhiChuTaiKham" maxlength="2000" fxFlex="75%" label="Ghi chú" (modelChange)="changeData()"
+            [(model)]="yeuCauKhamBenh.GhiChuTaiKham" minHeight="20">
+        </app-textarea>
+    </ng-container>
+    <div fxFlex="100%" kendoTooltip>
+        <app-checkbox id="CoDieuTriNgoaiTru" label="Điều trị ngoại trú"
+            (modelChange)="boCheckDeXoaDieuTriNgoaiChu($event)" title="Phím tắt: Ctrl + F9"
+            [(model)]="yeuCauKhamBenh.CoDieuTriNgoaiTru" (click)="removeValidator()">
+        </app-checkbox>
+    </div>
+    <!-- [disabled]="yeuCauKhamBenh.CoNhapVien == true || yeuCauKhamBenh.CoChuyenVien || yeuCauKhamBenh.CoTuVong" -->
+
+
+    <ng-container *ngIf="yeuCauKhamBenh.CoDieuTriNgoaiTru && yeuCauKhamBenh.YeuCauDichVuKyThuat != undefined">
+        <app-combobox fxFlex="50%" id="DichVuKyThuatBenhVienId" label="Dịch vụ kỹ thuật"
+            [modelText]="yeuCauKhamBenh.YeuCauDichVuKyThuat.TenDichVuHienThi"
+            (modelChange)="changeDataDichVuKyThuat($event)"
+            [(model)]="yeuCauKhamBenh.YeuCauDichVuKyThuat.DichVuKyThuatBenhVienId"
+            [validationerror]="'YeuCauDichVuKyThuat.DichVuKyThuatBenhVienId' | validationerror:validationErrors"
+            url="KhamBenh/GetDichVuKyThuatBenhViens" [queryInfo]="queryInfoDichVuKyThuatBenhVien" required="true">
+        </app-combobox>
+
+        <app-textboxnumeric fxFlex="20%" min="0" max="9999" id="SoLan" required="true"
+            [(model)]="yeuCauKhamBenh.YeuCauDichVuKyThuat.SoLan" (modelChange)="changeData()" label="Số lần điều trị"
+            [validationerror]="'YeuCauDichVuKyThuat.SoLan' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-datepicker fxFlex="30%" id="ThoiDiemBatDauDieuTri" label="Thời gian bắt đầu điều trị"
+            [(model)]="yeuCauKhamBenh.YeuCauDichVuKyThuat.ThoiDiemBatDauDieuTri"
+            [validationerror]="'YeuCauDichVuKyThuat.ThoiDiemBatDauDieuTri' | validationerror:validationErrors"
+            (modelChange)="changeData()" required="true">
+        </app-datepicker>
+    </ng-container>
+    <div *ngIf="yeuCauKhamBenh.LaChiDinhTuNoiTru != true" fxFlex="100%" kendoTooltip>
+        <app-checkbox id="NhapVien" label="Nhập viện" [(model)]="yeuCauKhamBenh.CoNhapVien" title="Phím tắt: Ctrl + F10"
+            (click)="removeValidator()" (modelChange)="boCheckDeXoaNhapVien($event)">
+        </app-checkbox>
+        <!-- [disabled]=" yeuCauKhamBenh.CoKeToa==true || yeuCauKhamBenh.CoTaiKham || yeuCauKhamBenh.CoTuVong ||
+        yeuCauKhamBenh.CoDieuTriNgoaiTru || yeuCauKhamBenh.KhongKeToa"  -->
+    </div>
+
+    <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+        *ngIf="yeuCauKhamBenh.CoNhapVien">
+        <app-combobox [(model)]="yeuCauKhamBenh.KhoaPhongNhapVienId" url="KhamBenh/KhoaPhongNhapViens" required="true"
+            (selectionChange)="selectChangeKhoa($event)" [modelText]="yeuCauKhamBenh.TenKhoaPhongNhapVien" fxFlex="50%"
+            [validationerror]="'KhoaPhongNhapVienId' | validationerror:validationErrors" id="KhoaId" label="Khoa">
+        </app-combobox>
+        <!-- <app-textarea fxFlex="50%" [(model)]="yeuCauKhamBenh.LyDoNhapVien" id="LyDoNhapVien"
+            (modelChange)="changeData()" label="Lý Do" maxlength="1000" minHeight="20">
+        </app-textarea> -->
+
+        <app-autocomplete fxFlex="50%" fxFlex.sm="50%" [(model)]="yeuCauKhamBenh.LyDoNhapVien"
+            (modelChange)="changeData()" url="KhamBenh/GetLyDoNhapVienString" label="Lý Do" maxlength="1000"
+            minHeight="20" (openCombobox)="openCombobox($event)">
+        </app-autocomplete>
+    </div>
+
+    <div fxFlex="100%" kendoTooltip>
+        <app-checkbox id="ChuyenVien" label="Chuyển tuyến" [(model)]="yeuCauKhamBenh.CoChuyenVien"
+            title="Phím tắt: Ctrl + F11" (modelChange)="boCheckDeXoaChuyenVien($event)">
+        </app-checkbox>
+    </div>
+    <!-- [disabled]="yeuCauKhamBenh.CoKeToa == true || yeuCauKhamBenh.CoTaiKham || yeuCauKhamBenh.CoTuVong || yeuCauKhamBenh.CoDieuTriNgoaiTru || yeuCauKhamBenh.KhongKeToa" -->
+
+
+    <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+        *ngIf="yeuCauKhamBenh.CoChuyenVien">
+
+        <app-combobox [(model)]="yeuCauKhamBenh.BenhVienChuyenVienId" url="KhamBenh/BenhVienChuyenViens" required="true"
+            [modelText]="yeuCauKhamBenh.TenBenhVienChuyenVien" fxFlex="40%" id="BenhVienId"
+            [queryInfo]="queryInfoBenhVienChuyenVien"
+            [validationerror]="'BenhVienChuyenVienId' | validationerror:validationErrors"
+            (selectionChange)="selectChangeBenhVien($event)" label="Bệnh Viện Chuyển Đến"></app-combobox>
+
+        <app-textarea fxFlex="60%" [(model)]="yeuCauKhamBenh.TinhTrangBenhNhanChuyenVien"
+            id="TinhTrangBenhNhanChuyenVien" (modelChange)="changeData()" label="Tình Trạng Người Bệnh Lúc Chuyển Tuyến"
+            maxlength="1000" minHeight="20">
+        </app-textarea>
+
+        <app-radio fxFlex="100%" fxFlex.sm="100%" id="LoaiLyDoChuyenVien"
+            [items]="[{Value:1,Text:'Đủ điều kiện chuyển tuyến'},{Value:2,Text:'Theo yêu cầu của người bệnh hoặc người đại diện hợp pháp của người bệnh'}]"
+            [(model)]="yeuCauKhamBenh.LoaiLyDoChuyenVien" label="Lý Do Chuyển Tuyến" (modelChange)="changeData()"
+            [validationerror]="'LoaiLyDoChuyenVien' | validationerror:validationErrors">
+        </app-radio>
+        <app-textarea fxFlex="40%" [(model)]="yeuCauKhamBenh.KetQuaXetNghiemCLS"
+            id="KetQuaXetNghiemCLS" (modelChange)="changeData()" label="Kết Quả Xét Nghiệm, Cận Lâm Sàng"
+            maxlength="2000" minHeight="20">
+        </app-textarea>
+        <app-textarea fxFlex="60%" [(model)]="yeuCauKhamBenh.PhuongPhapTrongDieuTri"
+            id="PhuongPhapTrongDieuTri" (modelChange)="changeData()" label="Phương pháp, thủ thuật, kỹ thuật, thuốc đã sử dụng trong điều trị"
+            maxlength="2000" minHeight="20">
+        </app-textarea>
+        <app-textarea *ngIf="coLyDoChuyenVien" fxFlex="100%" [(model)]="yeuCauKhamBenh.LyDoChuyenVien"
+            id="LyDoChuyenVien" (modelChange)="changeData()" label="Hướng Điều Trị" maxlength="1000" minHeight="20">
+        </app-textarea>
+        <app-datetimepicker fxFlex="30%" [(model)]="yeuCauKhamBenh.ThoiDiemChuyenVien" id="ThoiDiemChuyenVien"
+            required="true" (modelChange)="changeData()" [minDate]="dateChuyenVienMin"
+            [validationerror]="'ThoiDiemChuyenVien' | validationerror:validationErrors" label="Thời Điểm Chuyển Tuyến">
+        </app-datetimepicker>
+
+        <!-- required="true" -->
+        <!-- [validationerror]="'NhanVienHoTongChuyenVienId' | validationerror:validationErrors" -->
+        <app-combobox [(model)]="yeuCauKhamBenh.NhanVienHoTongChuyenVienId" url="KhamBenh/GetNhanVienHoTongs"
+            [modelText]="yeuCauKhamBenh.HoTenNhanVienHoTong" fxFlex="30%"
+            (selectionChange)="selectChangeNhanVienHoTong($event)" id="NhanVienHoTongChuyenVienId"
+            [templateHeader]="nhanViensTemplateHeader" [template]="nhanViensTemplate" label="Nhân Viên Hộ Tống">
+            <ng-template #nhanViensTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="30%">Họ tên</th>
+                        <th width="30%">Chức danh</th>
+                        <th width="40%">Trình độ chuyên môn</th>
+
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #nhanViensTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="30%">{{dataItem.TenNhanVien}}</td>
+                        <td width="30%">{{dataItem.TenNhomChucDanh}}</td>
+                        <td width="40%">{{dataItem.TenVanBang}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        <app-textarea fxFlex="40%" [(model)]="yeuCauKhamBenh.PhuongTienChuyenVien" id="PhuongTienChuyenVien"
+            (modelChange)="changeData()" label="Phương Tiện Vận Chuyển" maxlength="1000" minHeight="20">
+        </app-textarea>
+
+    </div>
+    <div fxFlex="100%" *ngIf="yeuCauKhamBenh.CoChuyenVien">
+        <button style="float: right;"
+            [disabled]="yeuCauKhamBenh.BenhVienChuyenVienId == null || yeuCauKhamBenh.ThoiDiemChuyenVien == null"
+            (click)="InGiayChuyenVien()" type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2">In
+            Giấy Chuyển Tuyến</button>
+        <!-- [disabled]="yeuCauKhamBenh.BenhVienChuyenVienId == null || yeuCauKhamBenh.ThoiDiemChuyenVien == null 
+                        || yeuCauKhamBenh.NhanVienHoTongChuyenVienId == null"  -->
+    </div>
+
+    <div fxFlex="100%" kendoTooltip>
+        <app-checkbox label="Tử vong" [(model)]="yeuCauKhamBenh.CoTuVong" id="CoTuVong" title="Phím tắt: Ctrl + F12"
+            (modelChange)="coCheckTuVong($event)">
+        </app-checkbox>
+        <!-- [disabled]="yeuCauKhamBenh.CoKeToa == true || yeuCauKhamBenh.CoTaiKham || yeuCauKhamBenh.CoDieuTriNgoaiTru || yeuCauKhamBenh.KhongKeToa" -->
+
+    </div>
+</div>

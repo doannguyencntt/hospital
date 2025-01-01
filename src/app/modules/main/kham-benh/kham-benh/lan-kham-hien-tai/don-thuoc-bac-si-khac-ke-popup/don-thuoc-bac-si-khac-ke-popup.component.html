@@ -1,0 +1,33 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Đơn Thuốc Bác Sĩ Khác Đã Kê</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+        <app-grid fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumns" [useAddDeault]="false"
+            [urlGetData]="urlGetDataGridDonThuocBacSiKhac" [urlGetTotalPage]="urlGetTotalPageGridDonThuocBacSiKhac"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            [autoHeight]="true" [additionalSearchString]="yeuCauKhamBenhId" [detailTemplate]="detailTemplate"
+            style="width: 1px;" [pageable]="false">
+        </app-grid>
+        <ng-template #detailTemplate let-dataItem>
+            <app-grid class="k-grid-border" [gridColumns]="gridColumnsDetail" [useAddDeault]="false"
+                [useActionDefault]="false" [useHeaderDefault]="false" [urlGetData]="urlGetDataGridToaThuoc"
+                [urlGetTotalPage]="urlGetTotalPageGridToaThuoc" searchString="{{dataItem.Id}}" [checkboxAble]="false"
+                [groups]="groupNhomThuoc" [lazyLoadPage]="true" [autoHeight]="true" style="width: 1px;"
+                [pageable]="false">
+            </app-grid>
+        </ng-template>
+        <ng-template #nhomGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+    </div>
+
+</mat-dialog-content>
+<!-- 
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" (click)="close()" mat-stroked-button color="primary" mat-dialog-close>Đóng</button>
+</mat-dialog-actions> -->

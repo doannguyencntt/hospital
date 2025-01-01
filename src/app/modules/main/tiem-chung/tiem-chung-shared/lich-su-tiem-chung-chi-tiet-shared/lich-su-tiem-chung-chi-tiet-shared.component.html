@@ -1,0 +1,21 @@
+<div class="-mt-16">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="100%">
+            <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                <app-thong-tin-tiem-chung-shared 
+                    [documentType]="documentType"
+                    [thongTinBenhNhan]="yeuCauKhamTiemChung"
+                    [isTabKhamLocChungReadOnly]="true" [isTabThucHienTiemReadOnly]="true"
+                    [isTabThucHienTiemDisplayed]="true" [isTabTheoDoiDisplayed]="true"
+                    [isTabTheoDoiDefault]="true"
+                    [isLichSuTiemChung]="true"
+                ></app-thong-tin-tiem-chung-shared>
+                
+                <div class="row pt-4">
+                    <button type="button" color="default" class="float-right" mat-raised-button mat-button
+                        title="Phím tắt: Esc" (click)="quayLai()">Quay lại</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

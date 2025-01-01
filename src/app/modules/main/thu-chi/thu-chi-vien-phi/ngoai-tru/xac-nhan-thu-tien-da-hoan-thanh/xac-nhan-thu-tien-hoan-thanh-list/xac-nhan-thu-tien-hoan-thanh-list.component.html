@@ -1,0 +1,66 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Thu Ngân',Path:''},
+            {Title:'Dịch Vụ Đã Hoàn Thành',Path:'', Active:true}                  
+            ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid [pageSize]="_pageSize" [gridColumns]="gridThuNganColumns" [useActionDefault]="false"
+                [keyCode]="keyCode" [lazyLoadPage]="true" [sort]="sortConfig"
+                urlGetData="ThuNgan/GetDataThuTienDaHoanThanhForGridAsync" [searchString]="searchString"
+                urlGetTotalPage="ThuNgan/GetTotalThuTienDaHoanThanhPageForGridAsync" [useHeaderDefault]="false"
+                #gridList [headerTemplate]="headerTemplate" [checkboxAble]="false"
+                [additionalSearchString]="queryStrings">
+            </app-grid>
+        </div>
+    </vex-page-layout-content>
+    <ng-template #headerTemplate>
+        <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+            <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                fxLayoutAlign="start center" style="margin-top: 2px;">
+                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                    type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)"
+                    (ngModelChange)="searchChanges($event)"
+                    placeholder="Nhập từ khóa(Mã NB,Tên NB,Năm sinh,Địa chỉ)..." />
+            </div>
+            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                <mat-icon [icIcon]="icSearch"></mat-icon>
+            </button>
+            <div fxFlex="77%" fxFlex.sm="40%"></div>
+            <button [matMenuTriggerFor]="columnFilterMenu" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip
+                title="Lọc cột" type="button">
+                <mat-icon [icIcon]="icFilterList"></mat-icon>
+            </button>
+            <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                <div *ngFor="let column of gridThuNganColumns">
+                    <button
+                        class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                        <mat-checkbox [disabled]="true" color="primary">
+                            {{ column.Title }}
+                        </mat-checkbox>
+                    </button>
+                </div>
+            </mat-menu>
+            <button class="ml-3" (click)="exportExcel()" fxFlex="1%" fxFlex.sm="1%" mat-icon-button kendoTooltip
+                title="Xuất Excel" type="button">
+                <mat-icon [icIcon]="icFileExcel"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+    <ng-template #templateTextSoTienDaXacNhan let-dataItem>
+        <strong class="text-color-blue"> {{dataItem.SoTienBNDaTT | number:'0.2-2':'vi-VN'}}</strong>
+    </ng-template>
+    <ng-template #templateSTT let-dataItem let-i="rowIndex">
+        <strong>{{i + 1}}</strong>
+    </ng-template>
+    <ng-template #maTnTemplate let-dataItem>
+        <a (click)="thongTinChiTiet(dataItem)">{{dataItem.MaTN}}</a>
+    </ng-template>
+</vex-page-layout>
+<!-- <app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none;"></app-barcode> -->

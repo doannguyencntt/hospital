@@ -1,0 +1,413 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Nhập Xuất',Path:''}
+            ,{Title:'Vật Tư',Path:''}
+            ,{Title:'Dự Trù Mua',Path:''}
+            ,{Title:'THDT Mua Tại Khoa',Path:'',Active:true}
+            ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+
+        <div class="card overflow-auto -mt-15">
+            <kendo-tabstrip fxFlex="100%" class="tab-no-padding-content field-set-p"
+                (tabSelect)="chuyenDen('card1', $event)">
+                <kendo-tabstrip-tab [selected]="lstStatusSelectTabTHDTKhoa.selectedTabChoXuLy">
+                    <ng-template kendoTabTitle>
+                        CHỜ XỬ LÝ   
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <kendo-splitter>
+                            <kendo-splitter-pane [collapsible]="true" class="sticky-panelbar">
+                                <div class="">
+                                    <kendo-panelbar class="m-1">
+                                        <kendo-panelbar-item expanded="true" class="panelbar-item">
+                                            <ng-template kendoPanelBarContent>
+                                                <div class="card overflow-auto -mt-15">
+                                                    <app-grid [gridColumns]="gridColumns" [documentType]="documentType"
+                                                        [useActionDefault]="false"
+                                                        [additionalSearchString]="addtionStringDefault"
+                                                        (extOnDataBound)="onDataBound($event)" [lazyLoadPage]="true"
+                                                        [useHeaderDefault]="false" [allowSortDefault]="false"
+                                                        [checkboxAble]="false" pageSize="50" #gridChoDuyet
+                                                        [sort]="sortDuTruChoXuLy"
+                                                        urlGetData="YeuCauMuaVatTu/GetDanhSachDuyetMuaDuTruTaiKhoaForGridAsync"
+                                                        urlGetTotalPage="YeuCauMuaVatTu/GetTotalDanhSachDuyetMuaDuTruTaiKhoaForGridAsync"
+                                                        [headerTemplate]="headerTemplate" [groups]="groups"
+                                                        [detailTemplate]="detailTemplate" heightToolbar="200">
+                                                        <ng-template #detailTemplate let-dataItem>
+                                                            <app-grid [gridColumns]="gridChildThuocVacXinColumns"
+                                                                [documentType]="documentType" [useAddDeault]="false"
+                                                                [sort]="sortDuTruChild" [showStt]="true"
+                                                                [groups]="groupChiTietTabChoGoi"
+                                                                [urlGetData]="urlGetDataGridChildAsyncChoXuLy"
+                                                                [additionalSearchString]="dataItem.Id"
+                                                                [urlGetTotalPage]="urlGetTotalPageGridChildChoXuLy"
+                                                                [useHeaderDefault]="false" [useActionDefault]="false"
+                                                                [checkboxAble]="false" [lazyLoadPage]="true"
+                                                                [autoHeight]="true">
+                                                            </app-grid>
+                                                        </ng-template>
+                                                    </app-grid>
+                                                </div>
+                                            </ng-template>
+                                        </kendo-panelbar-item>
+                                    </kendo-panelbar>
+                                </div>
+                            </kendo-splitter-pane>
+                        </kendo-splitter>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+                <kendo-tabstrip-tab [selected]="lstStatusSelectTabTHDTKhoa.selectedTabDaXuLy">
+                    <ng-template kendoTabTitle>
+                        ĐÃ GỬI
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <kendo-splitter>
+                            <kendo-splitter-pane [collapsible]="true" class="sticky-panelbar">
+                                <div class="">
+                                    <kendo-panelbar class="m-1">
+                                        <kendo-panelbar-item expanded="true" class="panelbar-item">
+                                            <ng-template kendoPanelBarContent>
+                                                <div class="card overflow-auto -mt-15">
+                                                    <app-grid [gridColumns]="gridDaXuLyColumns" #gridChildDaXuLy
+                                                        [documentType]="documentType" [useActionDefault]="false"
+                                                        [lazyLoadPage]="true" [useHeaderDefault]="false"
+                                                        [additionalSearchString]="addtionStringDefaultDaXuLy"
+                                                        [allowSortDefault]="false" [checkboxAble]="false" pageSize="50"
+                                                        urlGetData="YeuCauMuaVatTu/GetDataTHDTTaiKhoaDaXuLyForGridAsync"
+                                                        urlGetTotalPage="YeuCauMuaVatTu/GetTotalTHDTTaiKhoaDaXuLyForGridAsync"
+                                                        [headerTemplate]="headerTemplate1"
+                                                        [sort]="sortDaGoi"
+                                                        [detailTemplate]="detailTemplate1" heightToolbar="200">
+                                                        <ng-template #detailTemplate1 let-dataItem>
+                                                            <app-grid [gridColumns]="gridDaXuLyChiTietColumns"
+                                                                [documentType]="documentType" [useAddDeault]="false"
+                                                                [showStt]="true"
+                                                                urlGetData="YeuCauMuaVatTu/GetDataTHDTTaiKhoaDaXuLyForGridAsyncDetail"
+                                                                urlGetTotalPage="YeuCauMuaVatTu/GetTotalTHDTTaiKhoaDaXuLyForGridAsyncDetail"
+                                                                [useHeaderDefault]="false" [useActionDefault]="false"
+                                                                searchString="{{dataItem.Id}}" [checkboxAble]="false"
+                                                                [lazyLoadPage]="true" [autoHeight]="true"
+                                                                [detailTemplate]="detailTemplateChild">
+                                                                <ng-template #detailTemplateChild let-dataItem>
+                                                                    <app-grid
+                                                                        [gridColumns]="gridDaXuLyChiTietChildColumns"
+                                                                        [documentType]="documentType"
+                                                                        [useAddDeault]="false"
+                                                                        [urlGetData]="urlGetDataDaXuLyChiTietChild"
+                                                                        [urlGetTotalPage]="urlGetTotalDaXuLyChiTietChild"
+                                                                        [additionalSearchString]="dataItem.Id"
+                                                                        [useHeaderDefault]="false"
+                                                                        [useActionDefault]="false"
+                                                                        [groups]="groupDaXuLyChiTiets"
+                                                                        [checkboxAble]="false" [lazyLoadPage]="true"
+                                                                        [autoHeight]="true" [showStt]="true">
+                                                                    </app-grid>
+                                                                </ng-template>
+                                                            </app-grid>
+                                                        </ng-template>
+                                                    </app-grid>
+                                                </div>
+                                            </ng-template>
+                                        </kendo-panelbar-item>
+                                    </kendo-panelbar>
+                                </div>
+                            </kendo-splitter-pane>
+                        </kendo-splitter>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+                <kendo-tabstrip-tab [selected]="lstStatusSelectTabTHDTKhoa.selectedTabTuChoi">
+                    <ng-template kendoTabTitle>
+                        TỪ CHỐI
+                    </ng-template>
+                    <ng-template kendoTabContent>
+                        <kendo-splitter>
+                            <kendo-splitter-pane [collapsible]="true" class="sticky-panelbar">
+                                <div class="">
+                                    <kendo-panelbar class="m-1">
+                                        <kendo-panelbar-item expanded="true" class="panelbar-item">
+                                            <ng-template kendoPanelBarContent>
+                                                <div class="card overflow-auto -mt-15">
+                                                    <app-grid [gridColumns]="gridTuChoiXuLyColumns"
+                                                        [documentType]="documentType" [useActionDefault]="false"
+                                                        [lazyLoadPage]="true" [useHeaderDefault]="false"
+                                                        #gridChildTuChoi [allowSortDefault]="false"
+                                                        [urlGetData]="urlGetDataTuChoi"
+                                                        [additionalSearchString]="addtionStringDefaultTuChoi"
+                                                        [urlGetTotalPage]="urlGetTotalPageTuChoi" [checkboxAble]="false"
+                                                        pageSize="50" [headerTemplate]="headerTemplate2"
+                                                        [detailTemplate]="detailTemplate2" heightToolbar="200">
+                                                        <ng-template #detailTemplate2 let-dataItem>
+                                                            <app-grid [gridColumns]="gridChildTuChoiChildColumns"
+                                                                [showStt]="true" [documentType]="documentType"
+                                                                [useAddDeault]="false" [sort]="sortDuTruChild"
+                                                                [groups]="groupTuChois"
+                                                                [urlGetData]="urlGetDataGridChildAsyncTuChoi"
+                                                                [urlGetTotalPage]="urlGetTotalPageGridChildTuChoi"
+                                                                [additionalSearchString]="dataItem.Id"
+                                                                [useHeaderDefault]="false" [useActionDefault]="false"
+                                                                [checkboxAble]="false" [lazyLoadPage]="true"
+                                                                [autoHeight]="true">
+                                                            </app-grid>
+                                                        </ng-template>
+
+                                                    </app-grid>
+                                                </div>
+                                            </ng-template>
+                                        </kendo-panelbar-item>
+                                    </kendo-panelbar>
+                                </div>
+                            </kendo-splitter-pane>
+                        </kendo-splitter>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+            </kendo-tabstrip>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<!-- template dang chờ duyêt  -->
+<ng-template #soPhieuTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <a (click)="chiTiet(dataItem.Id, dataItem.TrangThaiDuTru)">
+            <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.SoPhieu}}">
+                {{dataItem.SoPhieu}}
+            </p>
+        </a>
+    </div>
+</ng-template>
+<ng-template #headerTemplate>
+    <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+        <app-checkbox name="cho-duyet" class="ml-2" value="coduyet"
+            [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.ChoDuyet"
+            (modelChange)="trangThaiCheckBox($event, 'choduyet', 0)" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" label="Chờ duyệt">
+        </app-checkbox>
+        <app-checkbox name="co-goi" class="ml-2" value="coduyet"
+            (modelChange)="trangThaiCheckBox($event, 'chogoi', 0)"
+            [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.DaDuyet" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" label="Chờ gửi">
+        </app-checkbox>
+        <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" style="margin-top: 2px;margin-left: 10px;">
+            <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+            <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                type="search" name="searchString" [(ngModel)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.SearchString"
+                (keyup)="onKey($event)" (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa..." />
+        </div>
+        <app-daterangepicker style="margin-left: 5px;" id="range-ngay-yeu-cau" fxFlex="250px" fxFlex.sm="auto"
+            [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.RangeFromDate" label="Yêu cầu từ ngày - đến ngày"
+            (keyup)="onKey($event)" (modelChange)="timKiem()" (blur)="blur()" class="mt-1 on-header">
+        </app-daterangepicker>
+        <span fxFlex></span>
+
+    </div>
+</ng-template>
+<ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem let-aggregates="aggregates">
+    <div fxFlex="100%">
+        <strong fxFlex="15%"  [ngStyle]="{'color':value !== 'Chờ duyệt' ? '#afb42b' : 'sandybrown' }">
+            <span>{{theFirstValueFormat(value)}}({{aggregates.TrangThai.count}})</span>
+        </strong>
+        <strong fxFlex="70%" *ngIf="value !== 'Chờ duyệt'">
+            <span fxFlex="60%">Kỳ dự trù: <span style="color:#afb42b">{{theFirstValueFormatChuKy(value)}}</span></span>
+        </strong>
+        <button fxFlex="15%" type="button" color="primary" mat-raised-button mat-button
+            (click)="guiKhoaDuyetTatCa(value)" *ngIf="value !== 'Chờ duyệt'" style="margin-right: -25px">
+            Gửi khoa dược duyệt
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <button *ngIf="dataItem.TrangThai === 'Chờ duyệt'" type="button" (click)="TuChoi(dataItem.Id)" color="warn"
+        mat-raised-button><i class="ft-save mr-1"></i> Từ chối</button>
+    <button *ngIf="dataItem.TrangThai === 'Chờ duyệt'" style="margin-left: 3px" type="button"
+        (click)="PheDuyet(dataItem.Id)" color="primary" mat-raised-button><i class="ft-save mr-1"></i>Duyệt</button>
+    <button *ngIf="dataItem.TrangThai !== 'Chờ duyệt'" type="button" (click)="HuyDuyet(dataItem.Id)" color="warn"
+        mat-raised-button><i class="ft-save mr-1"></i> Hủy duyệt</button>
+</ng-template>
+<!--End template dang chờ duyêt  -->
+
+<!-- template Đã xử lý -->
+
+<!-- <ng-template #soPhieuTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <a (click)="chiTiet(dataItem.Id, dataItem.TinhTrang)">
+            <p kendoTooltip class="reverse-ellipsis l"
+                title="{{dataItem.SoPhieu}}">
+                {{dataItem.SoPhieu}}</p>
+        </a>
+    </div>
+</ng-template> -->
+
+<ng-template #headerTemplate1>
+    <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+        <app-checkbox name="cho-duyet" (modelChange)="trangThaiCheckBox($event,'choduyet',1)" class="ml-2"
+            value="coduyet" [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.DaGuiChoDuyet" fxFlex.lt-md="auto" fxHide.xs
+            fxLayout="row" fxLayoutAlign="start center" label="Đã gửi & Chờ duyệt">
+        </app-checkbox>
+        <app-checkbox name="co-goi" (modelChange)="trangThaiCheckBox($event,'daduyet',1)" class="ml-2" value="coduyet"
+            [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.DaDuyetDaXuLy" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" label="Đã duyệt">
+        </app-checkbox>
+        <app-checkbox name="co-goi" (modelChange)="trangThaiCheckBox($event,'tuchoi',1)" class="ml-2" value="coduyet"
+            [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.TuChoiDuyet" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" label="Từ chối">
+        </app-checkbox>
+        <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" style="margin-top: 2px;margin-left: 10px;">
+            <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+            <input [formControl]="searchCtrlDaXuLy" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                type="search" name="searchCtrlDaXuLy"
+                [(ngModel)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.SearchStringDaXuLy" (keyup)="onKey($event)"
+                (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa..." />
+        </div>
+        <app-daterangepicker style="margin-left: 5px;" id="range-ngay-yeu-cau" fxFlex="250px" fxFlex.sm="auto"
+            [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.RangeFromDateDaXuLy" label="Yêu cầu từ ngày - đến ngày"
+            (keyup)="onKey($event)" (modelChange)="timKiem()" (blur)="blur()" class="mt-1 on-header">
+        </app-daterangepicker>
+        <span fxFlex></span>
+    </div>
+</ng-template>
+
+<ng-template #ngayYeuCauDaXuLyTemplate let-dataItem>
+    {{dataItem.NgayYeuCauDisplay}}
+</ng-template>
+<ng-template #ngayYeuCauDetailDaXuLyTemplate let-dataItem>
+    {{dataItem.NgayYeuCauDisplay}}
+</ng-template>
+<ng-template #ngayKhoDuocDaXuLyTemplate let-dataItem>
+    {{dataItem.NgayKhoDuocDuyetDisplay}}
+</ng-template>
+<ng-template #ngayGiamDocDaXuLyTemplate let-dataItem>
+    {{dataItem.NgayGiamDocDuyetDisplay}}
+</ng-template>
+<ng-template #ngayTruongKhoaDaXuLyTemplate let-dataItem>
+    {{dataItem.NgayTruongKhoaDuyetDisplay}}
+</ng-template>
+
+<ng-template #tinhTrangTemplate let-dataItem>
+    <label *ngIf="dataItem.TinhTrang == 0" style="color: blue;">
+        <span>Đã gửi & Chờ duyệt</span>
+    </label>
+    <label *ngIf="dataItem.TinhTrang == 1" class="green">
+        <span>Đã duyệt</span>
+    </label>
+    <label *ngIf="dataItem.TinhTrang == 2" class="red">
+        <span>Từ chối</span>
+    </label>
+</ng-template>
+
+<ng-template #soPhieuDaXuLyTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <a (click)="chiTietDaXuLyParent(dataItem.Id)">
+            <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.SoPhieu}}">
+                {{dataItem.SoPhieu}}
+            </p>
+        </a>
+    </div>
+</ng-template>
+
+<ng-template #soPhieuDaXuLyChiTietTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <a (click)="chiTietDaXuLy(dataItem.Id, dataItem.TinhTrang, 1)">
+            <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.SoPhieu}}">
+                {{dataItem.SoPhieu}}
+            </p>
+        </a>
+    </div>
+</ng-template>
+<!--End template Đã xử lý -->
+
+
+<!-- template Từ chối -->
+<ng-template #headerTemplate2>
+    <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+        <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" style="margin-top: 2px;margin-left: 10px;">
+            <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+            <input [formControl]="searchCtrlTuChoi" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                type="search" name="SearchStringTuChoi"
+                [(ngModel)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.SearchStringTuChoi" (keyup)="onKey($event)"
+                (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa..." />
+        </div>
+        <app-daterangepicker style="margin-left: 5px;" id="range-ngay-yeu-cau" fxFlex="250px" fxFlex.sm="auto"
+            [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.RangeFromDateTuChoi" label="Yêu cầu từ ngày - đến ngày"
+            (keyup)="onKey($event)" (modelChange)="timKiem()" (blur)="blur()" class="mt-1 on-header">
+        </app-daterangepicker>
+        <span fxFlex></span>
+    </div>
+</ng-template>
+<ng-template #soPhieuTuChoiTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <a (click)="chiTietDaXuLy(dataItem.Id, 2, 1)">
+            <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.SoPhieu}}">
+                {{dataItem.SoPhieu}}
+            </p>
+        </a>
+    </div>
+</ng-template>
+
+<ng-template #nhomGroupTuChoiHeaderTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+
+<ng-template #ngayYeuCauTuChoiTemplate let-dataItem>
+    {{dataItem.NgayYeuCauDisplay}}
+</ng-template>
+
+<ng-template #ngayTuChoiTemplate let-dataItem>
+    {{dataItem.NgayTuChoiDisplay}}
+</ng-template>
+<!--End template Từ chối -->
+
+<ng-template #nhomChiTietTabChoGoiTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+
+
+<ng-template #nhomGroupDaXuLyChiTietHeaderTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+
+<ng-template #khoTongTonTemplate let-dataItem>
+    <ng-template #templateHdInfo let-dataItem>
+        <table class="table table-border" width="100%">
+            <tr *ngFor="let hdt of khos">
+                <td>{{hdt.Ten}}:</td>
+                <td>{{hdt.SLTon}}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <div class="kho-tong-ton-ng-template" kendoTooltip>
+        <span class="kho-tong-ton-label">{{dataItem.HDChuaNhap}}</span>
+        <span *ngIf="dataItem.HDChuaNhap != 0" class="kho-tong-ton-ng-template" kendoTooltip #tooltip="kendoTooltip"
+            tooltipClass="tooltip-block" position="left" [tooltipTemplate]="templateHdInfo" filter="*">
+            <mat-icon [icIcon]="icInfo" (mouseover)="TooltipCustom(dataItem)" class="info"></mat-icon>
+        </span>
+    </div>
+</ng-template>
+
+<ng-template #hdChuaNhapTemplate let-dataItem>
+    <ng-template #templateInfo let-dataItem>
+        <table class="table table-border" width="100%">
+            <tr *ngFor="let kho of hdts">
+                <td>{{kho.Ten}}:</td>
+                <td>{{kho.SLTon}}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <div class="kho-tong-ton-ng-template" kendoTooltip>
+        <span class="kho-tong-ton-label">{{dataItem.KhoTongTon}}</span>
+        <span *ngIf="dataItem.KhoTongTon != 0" class="kho-tong-ton-ng-template" kendoTooltip #tooltip="kendoTooltip"
+            tooltipClass="tooltip-block" position="left" [tooltipTemplate]="templateInfo" filter="*">
+            <mat-icon [icIcon]="icInfo" (mouseover)="TooltipCustom(dataItem)" class="info"></mat-icon>
+        </span>
+    </div>
+</ng-template>

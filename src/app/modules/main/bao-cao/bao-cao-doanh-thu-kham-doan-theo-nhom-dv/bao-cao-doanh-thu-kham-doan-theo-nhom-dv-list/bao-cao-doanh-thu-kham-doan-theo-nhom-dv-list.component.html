@@ -1,0 +1,178 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'Kế Toán', Path:''},
+                    {Title:'Doanh Thu Khám Đoàn Theo Nhóm Dịch Vụ', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="55%" fxFlex.sm="55%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                    <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 mt-2" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+                    <app-grid fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns" [documentType]="documentType"
+                        [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                        [checkboxAble]="false" pageSize="50"
+                        [groups]="groups" [showStt]="true"
+                        urlGetData="BaoCao/GetDataBaoCaoDoanhThuKhamDoanTheoNhomDVForGridAsync"
+                        urlGetTotalPage="BaoCao/GetDataTotalPageBaoCaoDoanhThuKhamDoanTheoNhomDVForGridAsync">
+                    </app-grid>
+                    <ng-template #tongCongTitleTemplate let-dataItem>
+                        <strong>
+                            Tổng cộng:
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #khamBenhTemplate let-dataItem>
+                            {{dataItem.KhamBenh | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumKhamBenhFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumKhamBenh | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #xetNghiemTemplate let-dataItem>
+                            {{dataItem.XetNghiem | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumXetNghiemFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumXetNghiem | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #noiSoiTemplate let-dataItem>
+                            {{dataItem.NoiSoi | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumNoiSoiFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumNoiSoi | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #noiSoiTMHTemplate let-dataItem>
+                            {{dataItem.NoiSoiTMH | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumNoiSoiTMHFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumNoiSoiTMH | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #sieuAmTemplate let-dataItem>
+                            {{dataItem.SieuAm | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumSieuAmFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumSieuAm | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #xQuangTemplate let-dataItem>
+                            {{dataItem.XQuang | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumXQuangFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumXQuang | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #cTScanTemplate let-dataItem>
+                            {{dataItem.CTScan | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumCTScanFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumCTScan | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #mRITemplate let-dataItem>
+                            {{dataItem.MRI | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumMRIFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumMRI | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #dienTimDienNaoTemplate let-dataItem>
+                            {{dataItem.DienTimDienNao | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumDienTimDienNaoFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumDienTimDienNao | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #doLoangXuongTemplate let-dataItem>
+                            {{dataItem.TDCNDoLoangXuong | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumDoLoangXuongFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumDoLoangXuong | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #dVKhacTemplate let-dataItem>
+                            {{dataItem.DVKhac | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumDVKhacFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumDVKhac | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #tongTienTemplate let-dataItem>
+                            {{dataItem.TongDoanhThuTheoNhomDichVu | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #sumTongTienFooterTemplate let-dataItem>
+                        <strong>
+                            {{sumTongTien | number:'0.2-2':'vi-VN'}}
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #tenCongTyTemplate let-value="value">
+                        <strong>{{value}}</strong>
+                    </ng-template>
+                </div>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,210 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" style="margin: -10px;">
+    <div>THÔNG TIN KẾT QUẢ KHÁM SỨC KHỎE ĐOÀN</div>
+    <div>
+        <!-- <button type="button" mat-icon-button (click)="fullscreen()" tabindex="-1">
+            <mat-icon [icIcon]="isFullscreen?icFullscreenExit:icFullscreen"></mat-icon>
+        </button> -->
+        <button type="button" mat-icon-button (click)="close('No')" tabindex="-1">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+</div>
+<mat-dialog-content style="overflow-y: hidden;overflow-x: hidden;">
+    <div class="container-iframe" style="overflow-y: hidden;">
+        <div class="content-edit" [ngStyle]="{'height':isFullscreen ? '100%' : '330px'}">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="8px grid" fxLayoutGap.lt-sm="0"
+                style="padding-top: 10px;">
+                <h3 fxFlex="100%" class="sub-title mr-4">CHỈ SỐ SINH TỒN
+                    <button class="po-h" color="primary" (click)="themChiSoSinhTon()">
+                        <mat-icon [icIcon]="icAddCircle"></mat-icon>
+                    </button>
+                </h3>
+                <ng-container *ngIf="dataSourceSinhHieuDisplay.data.length == 0">
+                    <p>Không có chỉ số sinh tồn</p>
+                </ng-container>
+                <app-grid #gridSinhHieu fxFlex="100%" *ngIf="dataSourceSinhHieuDisplay.data.length > 0"
+                    masterName="SinhHieu" [gridColumns]="gridSinhHieuColumns" [documentType]="documentType"
+                    [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+                    [checkboxAble]="false" [lazyLoadPage]="true" [autoHeight]="true"
+                    [gridDataSource]="dataSourceSinhHieuDisplay" [pageable]="false">
+                </app-grid>
+                <ng-template #nhipTimTemplate let-dataItem>
+                    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [spinners]="false"
+                        [(model)]="dataItem.NhipTim" class="no-label" (modelChange)="onChangeNhipTim(dataItem, $event)">
+                    </app-textboxnumeric>
+                    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.NhipTim}}</p>
+                </ng-template>
+                <ng-template #huyetApTemplate let-dataItem>
+                    <table width="100%" *ngIf="dataItem.Id == 0 || dataItem.IsUpdate">
+                        <tr>
+                            <td style="width:calc(50% - 3px);padding:0">
+                                <app-textboxnumeric [spinners]="false" [(model)]="dataItem.HuyetApTamThu"
+                                    class="no-label" [max]="9999"
+                                    (modelChange)="onChangeHuyetApTamThu($event, dataItem)">
+                                </app-textboxnumeric>
+                            </td>
+                            <td style="width:6px;padding:0">/</td>
+                            <td style="width:calc(50% - 3px);padding:0">
+                                <app-textboxnumeric [spinners]="false" [(model)]="dataItem.HuyetApTamTruong"
+                                    class="no-label" [max]="9999"
+                                    (modelChange)="onChangeHuyetApTamTruong($event, dataItem)">
+                                </app-textboxnumeric>
+                            </td>
+                        </tr>
+                    </table>
+                    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.HuyetAp}}</p>
+                </ng-template>
+                <ng-template #thanNhietTemplate let-dataItem>
+                    <app-textboxnumeric [format]="format" [max]="9999" [spinners]="false"
+                        *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [decimals]="1" [(model)]="dataItem.ThanNhiet"
+                        class="no-label">
+                    </app-textboxnumeric>
+                    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.ThanNhiet | number}}</p>
+                </ng-template>
+                <ng-template #nhipThoTemplate let-dataItem>
+                    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [spinners]="false"
+                        [(model)]="dataItem.NhipTho" class="no-label" (modelChange)="onChangeNhipTho($event, dataItem)">
+                    </app-textboxnumeric>
+                    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.NhipTho}}</p>
+                </ng-template>
+                <ng-template #canNangTemplate let-dataItem>
+                    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [format]="format"
+                        [spinners]="false" [(model)]="dataItem.CanNang" class="no-label" [max]="9999" [decimals]="1"
+                        (modelChange)="onChangeCanNang(dataItem)">
+                    </app-textboxnumeric>
+                    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.CanNang | number}}</p>
+                </ng-template>
+                <ng-template #chieuCaoTemplate let-dataItem>
+                    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [format]="format"
+                        [spinners]="false" [(model)]="dataItem.ChieuCao" [decimals]="1" class="no-label" [max]="9999"
+                        (modelChange)="onChangeChieuCao(dataItem)">
+                    </app-textboxnumeric>
+                    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.ChieuCao | number}}</p>
+                </ng-template>
+                <ng-template #BMITemplate let-dataItem>
+                    <p class="ml-1">{{dataItem.BMI | number: '1.2-2'}}</p>
+                </ng-template>
+                <ng-template #glassgowTemplate let-dataItem>
+                    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [format]="format"
+                        [spinners]="false" [(model)]="dataItem.Glassgow" [decimals]="1" class="no-label">
+                    </app-textboxnumeric>
+                    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.Glassgow | number}}</p>
+                </ng-template>
+                <ng-template #spO2Template let-dataItem>
+                    <app-textboxnumeric *ngIf="dataItem.Id == 0 || dataItem.IsUpdate" [max]="9999" [format]="format"
+                        [spinners]="false" [(model)]="dataItem.SpO2" [decimals]="1" class="no-label">
+                    </app-textboxnumeric>
+                    <p class="ml-1" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate">{{dataItem.SpO2 | number}}</p>
+                </ng-template>
+                <ng-template #actionSinhHieuTemplate let-dataItem>
+                    <div class="text-center" kendoTooltip>
+                        <button color="primary" *ngIf="dataItem.Id != 0 && !dataItem.IsUpdate" mat-icon-button
+                            kendoTooltip title="Sửa" type="button" (click)="suaChiSoSinhHieu(dataItem)">
+                            <mat-icon [icIcon]="icEdit"></mat-icon>
+                        </button>
+                        <button style="color: red;" mat-icon-button kendoTooltip title="Xóa" type="button"
+                            (click)="xoaChiSoSinhHieu(dataItem)">
+                            <mat-icon [icIcon]="icDelete"></mat-icon>
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="8px grid" fxLayoutGap.lt-sm="0"
+                style="padding-top: 20px;">
+                <app-grid #gridChinhSua fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns"
+                    [allowSortDefault]="true" [gridDataSource]="gridDataSource" [documentType]="documentType"
+                    [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                    [lazyLoadPage]="true" [showStt]="true" [pageable]="false" [autoHeight]="true"
+                    masterName="gridChinhSua" [groups]="groups" >
+                </app-grid>
+                <ng-template #nhomGroupHeaderTemplate let-aggregates let-value="value" >
+                    <strong *ngIf="value == 'DỊCH VỤ KHÁM BỆNH'">{{value}}</strong>
+                    <strong *ngIf="value == 'DỊCH VỤ KỸ THUẬT'">{{value}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button  type="button" color="primary" mat-raised-button mat-button class="mr-1"
+                        (click)="CopyKetQuaHienThi()">Copy kết quả hiển thị</button></strong>
+                </ng-template>
+                <ng-template #editTemplate let-dataItem>
+                    <app-textarea *ngIf="dataItem.NhomId == 2" id="KetQuaDichVu" class="no-label" maxlength="1000"
+                        [(model)]="dataItem.KetQuaDichVu" minHeight="20">
+                    </app-textarea>
+                    <app-textarea *ngIf="dataItem.NhomId == 1" fxFlex="100%" maxlength="1000" class="no-label"
+                        [(model)]="dataItem.KetQuaDichVu" minHeight="20">
+                    </app-textarea>
+                </ng-template>
+                <ng-template #editDefaultTemplate let-dataItem>
+                    <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px"
+                                                class="mt-2" kendoTooltip>
+                                                <span class="reverse-ellipsis r" title="{{dataItem.KetQuaDichVuDefault}}">
+                                                    {{dataItem.KetQuaDichVuDefault}}
+                                                </span>
+                                            </div>
+                </ng-template>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="8px grid" fxLayoutGap.lt-sm="0"
+             *ngIf="!isFullscreen">
+            <app-grid *ngIf="showGrid == true" #gridChinhSua fxFlex="100%" fxFlex.sm="100%"
+                [gridColumns]="gridPhanLoaiCacBenhTatVaDeNghiColumns" [allowSortDefault]="true"
+                [gridDataSource]="gridDataSourcePhanLoaiCacBenhTatVaDeNghi" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" [showStt]="true" height="195" [pageable]="false"
+                masterName="gridChinhSuaPhanLoaiCacBenhTatVaDeNghi">
+            </app-grid>
+        </div>
+    </div>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="8px grid" fxLayoutGap.lt-sm="0"
+        style="padding-top: 10px;" *ngIf="isFullscreen">
+        <app-grid *ngIf="showGrid == true" #gridChinhSua [gridColumns]="gridPhanLoaiCacBenhTatVaDeNghiColumns"
+            [allowSortDefault]="true" [gridDataSource]="gridDataSourcePhanLoaiCacBenhTatVaDeNghi"
+            [documentType]="documentType" [useAddDeault]="false" height="195" [useHeaderDefault]="false"
+            [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" [showStt]="true" [pageable]="false"
+            masterName="gridChinhSuaPhanLoaiCacBenhTatVaDeNghi">
+        </app-grid>
+
+    </div>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div fxFlex="100%" style="text-align: right;" [ngStyle]="{'padding-top':isFullscreen ? '10px' : '30px'}">
+        <button tabindex="-1" type="button" color="primary" mat-raised-button mat-button class="mr-1"
+            (click)="Luu(1)">Lưu</button>
+        <button tabindex="-1" type="button" color="primary" mat-raised-button mat-button class="mr-1" 
+            (click)="Luu(2)">In
+            kết quả
+            KSK</button>
+            <button tabindex="-1" type="button" color="primary" mat-raised-button mat-button class="mr-1" *ngIf="showInLuuChuyenDanhSach" (click)="Luu(3)">Lưu và chuyển sang danh sách kết luận</button>
+    </div>
+</mat-dialog-actions>
+
+<ng-template #editTenTemplate let-dataItem>
+    <span style="font-weight: bold;">{{dataItem.Ten}}</span>
+</ng-template>
+<ng-template #KetQuaDefaultTemplate let-dataItem>
+    <span *ngIf="dataItem.ShowComBoBox == true">
+        <app-combobox id="PhanLoaiSucKhoeId" class="no-label"
+            url="KhamDoan/GetPhanLoaiSucKhoePopupketLuan?phanLoaiId={{dataItem.PhanLoaiId}}" popupSettings="null"
+            [disabled]="true" [(model)]="dataItem.PhanLoaiId" [bind]="true"
+            (modelChange)="changePhanLoai(dataItem,$event)">
+        </app-combobox>
+    </span>
+    <span *ngIf="dataItem.ShowComBoBox == false">
+        {{dataItem.KetQuaDefault}}
+    </span>
+
+</ng-template>
+<ng-template #editCapNhatTemplate let-dataItem>
+    <span *ngIf="dataItem.ShowComBoBox == true">
+        <app-combobox id="PhanLoaiSucKhoeId" class="no-label" url="KhamDoan/GetPhanLoaiSucKhoePopupketLuan"
+            popupSettings="null" [(model)]="dataItem.PhanLoaiIdCapNhat" [bind]="true"
+            (modelChange)="changePhanLoaiCapNhat(dataItem,$event)">
+        </app-combobox>
+    </span>
+    <span *ngIf="dataItem.ShowComBoBox == false">
+        <app-textarea id="KetQua" fxFlex="auto" fxFlex.sm="auto" class="no-label" [(model)]="dataItem.KetQua"
+            [maxlength]="4000">
+        </app-textarea>
+    </span>
+</ng-template>
+<ng-template #tenDichVuTemplate let-dataItem>
+    <span style="font-weight: bold;">{{dataItem.TenDichVu}}</span>
+</ng-template>
+

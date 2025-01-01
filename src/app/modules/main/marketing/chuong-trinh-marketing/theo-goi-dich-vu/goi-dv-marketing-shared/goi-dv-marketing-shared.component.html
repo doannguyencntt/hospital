@@ -1,0 +1,343 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="ma-ct" [disabled]="notAllowChangeGoiDv" fxFlex="25%" fxFlex.sm="100%" maxlength="20"
+        [required]="true" [(model)]="goiMarketing.Ma" label="Mã"
+        [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="ten-ct" [disabled]="notAllowChangeGoiDv" fxFlex="25%" fxFlex.sm="100%" maxlength="250"
+        [required]="true" [(model)]="goiMarketing.Ten" label="Tên Gói Theo Chương Trình"
+        [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-datepicker id="tu-ngay" [disabled]="notAllowChangeGoiDv" fxFlex="25%" fxFlex.sm="100%" label="Từ Ngày"
+        [(model)]="goiMarketing.TuNgay" [required]="true"
+        [validationerror]="'TuNgay' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-datepicker id="den-ngay" fxFlex="25%" fxFlex.sm="100%" label="Đến Ngày" [(model)]="goiMarketing.DenNgay"
+        [validationerror]="'DenNgay' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-combobox id="congty-bhtn-bao-lanh" fxFlex="25%" fxFlex.sm="100%" label="Công ty BHTN Bảo lãnh"
+        url="TiepNhanBenhNhan/GetCongTyBaoHiemTuNhan" [(model)]="goiMarketing.CongTyBaoHiemTuNhanId" bind="true">
+    </app-combobox>
+
+    <!-- <div fxFlex="25%" fxFlex.sm="100%">
+        <div class="container-custom no-label">
+            <label>&nbsp;</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <app-checkbox id="GoiSoSinh" fxFlex="100%" value="true" label="Gói dành cho trẻ sơ sinh"
+                    [(model)]="goiMarketing.GoiSoSinh">
+                </app-checkbox>
+            </div>
+        </div>
+    </div> -->
+
+    <app-combobox fxFlex="20%" [(model)]="goiMarketing.LoaiGoiDichVuId" [modelText]="goiMarketing.TenLoaiGoiDichVu"
+        id="LoaiGoiDichVuId" label="Loại gói" url="GoiDichVuChuongTrinhMarketing/LoaiGoiDichVus">
+    </app-combobox>
+
+    <div fxFlex="5%" class="mt-2" fxLayoutAlign="start center">
+        <button (click)="themLoaiGoi()" class="right" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm"
+            type="button">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+
+    <div fxFlex="25%" fxFlex.sm="100%">
+        <div class="container-custom no-label">
+            <label>&nbsp;</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <app-checkbox id="tam-ngung" fxFlex="100%" value="true" label="Ngừng sử dụng"
+                    [(model)]="goiMarketing.TamNgung">
+                </app-checkbox>
+            </div>
+        </div>
+    </div>
+    <app-combobox id="ten-goi-dv" [disabled]="notAllowChangeGoiDv" fxFlex="25%" fxFlex.sm="100%" label="Nhóm Dịch Vụ"
+        url="GoiDichVuChuongTrinhMarketing/GetGoiDv" [(model)]="goiMarketing.GoiDvId" [modelText]="goiMarketing.GoiDv"
+        [required]="true" [validationerror]="'GoiDvId' | validationerror:validationErrors"
+        (selectionChange)="onChangeGoiDichVu($event)">
+    </app-combobox>
+
+    <app-grid fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumnsNhomDichVu"
+        [gridDataSource]="gridDataSourceNhomDichVu" [documentType]="documentType" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true"
+        [groups]="groups" [pageable]="false" #gridNhomDichVu>
+    </app-grid>
+    <app-checkbox [disabled]="notAllowChangeGoiDv" fxFlex="100%" fxFlex.sm="100%" class="mt-0" id="qua-tang-kem-goi"
+        value="true" label="QUÀ TẶNG KÈM THEO GÓI" [(model)]="coQuaTang" (modelChange)="onCheckQuaTang()">
+    </app-checkbox>
+
+    <ng-container>
+        <app-combobox [disabled]="notAllowChangeGoiDv" *ngIf="coQuaTang" id="qua-tang" fxFlex="30%" fxFlex.sm="100%"
+            label="Quà Tặng" url="GoiDichVuChuongTrinhMarketing/GetListQuaTang" [(model)]="quaTang.QuaTangId"
+            class="item-no-padding" bind="true" [template]="dichVuKhamBenhTemplate"
+            [templateHeader]="dichVuKhamBenhTemplateHeader" [required]="true"
+            [validationerror]="'QuaTangId' | validationerror:validationErrors"
+            (selectionChange)="onChangeQuaTang($event)" (openCombobox)="openComboboxQuaTang($event)"
+            (keyup)="onKeyAddQua($event)">
+            <ng-template #dichVuKhamBenhTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="70%">Tên</th>
+                        <th>ĐVT</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #dichVuKhamBenhTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="70%">{{dataItem.Ten}}</td>
+                        <td>{{dataItem.Dvt}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <app-textboxnumeric [disabled]="notAllowChangeGoiDv" *ngIf="coQuaTang" id="so-luong"
+            (keyup)="onKeyAddQua($event)" fxFlex="10%" fxFlex.sm="100%" [(model)]="quaTang.SoLuong" [spinners]="false"
+            [required]="true" label="Số Lượng" [min]="1" [max]="9999999"
+            [validationerror]="'SoLuong' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-textbox *ngIf="coQuaTang" [disabled]="notAllowChangeGoiDv" id="ghi-chu" (keyup)="onKeyAddQua($event)"
+            fxFlex="60%" fxFlex.sm="100%" maxlength="1000" [(model)]="quaTang.GhiChu" label="Ghi Chú">
+        </app-textbox>
+
+    </ng-container>
+
+    <div *ngIf="coQuaTang" fxFlex="100%">
+        <div class="form-footer" style="float: right;">
+            <button type="button" (click)="Reset()" [disabled]="notAllowChangeGoiDv" mat-raised-button>Hủy</button>
+            <button color="primary" [disabled]="notAllowChangeGoiDv" class="btn btn-raised btn-raised btn-primary mb-0"
+                (click)="Add()" color="primary" mat-raised-button>Thêm</button>
+        </div>
+    </div>
+
+    <app-grid *ngIf="coQuaTang" fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns"
+        [gridDataSource]="gridDataSource" [documentType]="documentType" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true"
+        [pageable]="false" #gridQuaTangKem>
+    </app-grid>
+
+    <ng-template #trangThaiTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button [disabled]="notAllowChangeGoiDv" style="color: red" mat-icon-button kendoTooltip title="Xóa"
+                (click)="ConfirmDelete(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+    <ng-template #soLuongTemplate let-dataItem>
+        <app-textboxnumeric [disabled]="notAllowChangeGoiDv" id="so-luong-grid" [(model)]="dataItem.SoLuong"
+            [spinners]="false" class="no-label" label=" " [min]="1" [max]="9999999"
+            [validationerror]="'dataItem[' + goiMarketing.QuaTangKems.indexOf(dataItem) + '].SoLuong' | validationerror:validationErrors">
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #sttTemplate let-i="rowIndex">
+        {{i + 1}}
+    </ng-template>
+    <ng-template #ghiChuTemplate let-dataItem>
+        <app-textbox [disabled]="notAllowChangeGoiDv" id="ghi-chu-grid" fxFlex="100%" maxlength="1000" class="no-label"
+            minHeight="20" [(model)]="dataItem.GhiChu" label=" ">
+        </app-textbox>
+    </ng-template>
+
+    <app-checkbox [disabled]="notAllowChangeGoiDv" fxFlex="100%" fxFlex.sm="100%" class="mt-0" id="khuyen-mai-kem-goi"
+        value="true" label="DỊCH VỤ KHUYẾN MẠI KÈM THEO GÓI" [(model)]="coKhuyenMai" (modelChange)="onCheckKhuyenMai()">
+    </app-checkbox>
+    <ng-container *ngIf="coKhuyenMai">
+
+        <app-radio id="chon-loai-dv" fxFlex="100%" fxFlex.sm="100%" name="select" class="no-format-css pl-4 temp"
+            (modelChange)="onChangeGoiDvLuaChon($event)" [(model)]="luaChonGoiDichVu"
+            [items]="[{Value:1,Text:'Dịch vụ khám'},{Value:2,Text:'Dịch vụ kỹ thuật'},{Value:3,Text:'Dịch vụ giường'}]">
+        </app-radio>
+
+        <app-combobox id="ten-dv" fxFlex="40%" fxFlex.sm="100%" label="Tên Dịch Vụ"
+            url="{{luaChonGoiDichVu===1?'KhamBenh/GetDichVuKhamBenh':(luaChonGoiDichVu===2?'GoiDichVu/GetListDichVuKyThuat':'GoiDichVu/GetListDichVuGiuong')}}"
+            [(model)]="khuyenMaiKem.DvId" class="item-no-padding" bind="true" [template]="dichVuKhamBenhTemplate"
+            [templateHeader]="dichVuKhamBenhTemplateHeader" [required]="true"
+            [validationerror]="'DvId' | validationerror:validationErrors" (selectionChange)="onChangeDichVu($event)"
+            (openCombobox)="openComboboxKhamBenh($event)" (keyup)="onKeyAddDv($event)">
+            <ng-template #dichVuKhamBenhTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="30%">Mã</th>
+                        <th>Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #dichVuKhamBenhTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="30%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        <app-dropdownlist id="loai-gia" (openDropDownList)="openComboboxLoaiGiaKhamBenh($event)" fxFlex="10%"
+            fxFlex.sm="50%" label="Loại Giá" [data]="danhSachLoaiGia" [(model)]="khuyenMaiKem.LoaiGia"
+            [validationerror]="'LoaiGia' | validationerror:validationErrors" (keyup)="onKeyAddDv($event)" bind="true"
+            [required]="true" (selectionChange)="onChangeLoaiGia($event)">
+        </app-dropdownlist>
+
+        <app-textboxnumeric id="so-luong" (keyup)="onKeyAddDv($event)" fxFlex="10%" fxFlex.sm="50%"
+            [(model)]="khuyenMaiKem.SoLuong" (modelChange)="ChangeSoLuong($event)" [required]="true" label="Số Lượng"
+            [min]="1" [max]="10000" [validationerror]="'SoLuong' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-textboxnumeric id="don-gia" fxFlex="10%" fxFlex.sm="50%" [(model)]="khuyenMaiKem.DonGia" [spinners]="false"
+            label="Đơn Giá" [disabled]="true" [validationerror]="'DonGia' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <!--BVHD-3238 => Khách hàng mong muốn  cho phép lưu bằng 0  -->
+        <app-textboxnumeric id="don-gia-khuyen-mai" (keyup)="onKeyAddDv($event)" fxFlex="10%" fxFlex.sm="50%"
+            [required]="true" [(model)]="khuyenMaiKem.DonGiaKhuyenMai" (modelChange)="ChangeDonGiaKhuyenMai($event)"
+            [spinners]="false" label="Đơn Giá KM"
+            [validationerror]="'DonGiaKhuyenMai' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-textboxnumeric id="thanh-tien" (keyup)="onKeyAddDv($event)" fxFlex="10%" fxFlex.sm="50%"
+            [(model)]="khuyenMaiKem.ThanhTien" [spinners]="false" label="Thành Tiền" [disabled]="true">
+        </app-textboxnumeric>
+
+        <app-textboxnumeric id="SoNgaySuDung" (keyup)="onKeyAddDv($event)" fxFlex="10%" fxFlex.sm="50%"
+            [(model)]="khuyenMaiKem.SoNgaySuDung" [required]="true" label="Số ngày sử dụng" [min]="1" [max]="10000"
+            [validationerror]="'SoNgaySuDung' | validationerror:validationErrors">
+        </app-textboxnumeric>
+        <app-textarea id="ghi-chu" (keyup)="onKeyAddDv($event)" fxFlex="100%" maxlength="1000" minHeight="20"
+            [(model)]="khuyenMaiKem.GhiChu" label="Ghi Chú">
+        </app-textarea>
+
+        <div fxFlex="100%">
+
+            <div class="form-footer" style="float: right;">
+                <button type="button" (click)="ResetKhuyenMai()" [disabled]="notAllowChangeGoiDv"
+                    mat-raised-button>Hủy</button>
+                <button color="primary" [disabled]="notAllowChangeGoiDv"
+                    class="btn btn-raised btn-raised btn-primary mb-0" (click)="AddKhuyenMai()" color="primary"
+                    mat-raised-button>Thêm</button>
+            </div>
+        </div>
+    </ng-container>
+
+    <app-grid *ngIf="coKhuyenMai" fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumnsKhuyenMai"
+        [gridDataSource]="gridDataSourceKhuyenMai" [documentType]="documentType" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true"
+        [groups]="groups" [pageable]="false" #gridKhuyenMaiKem>
+    </app-grid>
+
+    <ng-template #soLuongKMTemplate let-dataItem>
+        <app-textboxnumeric [disabled]="notAllowChangeGoiDv" id="so-luong-grid" [(model)]="dataItem.SoLuong"
+            [spinners]="true" class="no-label" label=" " [min]="1" [max]="9999999"
+            (modelChange)="ChangeSoLuongDataItem($event,dataItem)"
+            [validationerror]="'dataItem[' + goiMarketing.KhuyenMaiKems.indexOf(dataItem) + '].SoLuong' | validationerror:validationErrors">
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #donGiaKMTemplate let-dataItem>
+        <app-textboxnumeric [disabled]="notAllowChangeGoiDv" id="so-luong-grid" [(model)]="dataItem.DonGiaKhuyenMai"
+            [spinners]="false" class="no-label" label=" " [min]="0" [max]="999999999"
+            (modelChange)="ChangeDonGiaKhuyenMaiDataItem($event,dataItem)"
+            [validationerror]="'dataItem[' + goiMarketing.KhuyenMaiKems.indexOf(dataItem) + '].DonGiaKhuyenMai' | validationerror:validationErrors">
+        </app-textboxnumeric>
+    </ng-template>
+
+    <ng-template #soNgaySuDungTemplate let-dataItem>
+        <app-textboxnumeric [disabled]="notAllowChangeGoiDv" id="SoNgaySuDungGrid" [(model)]="dataItem.SoNgaySuDung"
+            [spinners]="true" class="no-label" label=" " [min]="1" [max]="9999999"
+            [validationerror]="'dataItem[' + goiMarketing.KhuyenMaiKems.indexOf(dataItem) + '].SoNgaySuDung' | validationerror:validationErrors">
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #thanhTienKMFooterTemplate let-dataItem>
+        <div fxLayoutAlign="start center" fxLayout="row">
+            <div>
+                <span style="color:blue;">{{tongThanhTien('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #donGiaKMFooterTemplate let-dataItem>
+        <span style="float:right">Tổng cộng:</span>
+    </ng-template>
+    <ng-template #trangThaiKMTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button style="color: red" mat-icon-button kendoTooltip title="Xóa" (click)="ConfirmDeleteKM(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+    <ng-template #thanhTienTemplate let-dataItem>
+        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #donGiaTemplate let-dataItem>
+        {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+
+
+    <ng-template #donGiaTruocChietKhauHeaderTemplate let-dataItem>
+        <span>ĐG TRƯỚC CK <mat-icon [icIcon]="icEdit" style="font-size: 15px;cursor: pointer;margin-left: 5px;"
+                (click)="showFormNhapTruocChietKhauPopup()"></mat-icon></span>
+    </ng-template>
+    <ng-template #donGiaSauChietKhauHeaderTemplate let-dataItem>
+        <span>ĐG SAU CK <mat-icon [icIcon]="icEdit" style="font-size: 15px;cursor: pointer;margin-left: 5px;"
+                (click)="showFormNhapSauChietKhauPopup()"></mat-icon></span>
+    </ng-template>
+    <ng-template #soLuongNhomDichVuTemplate let-dataItem>
+        <app-textboxnumeric [disabled]="notAllowChangeGoiDv" id="so-luong-nhomdv-grid" [(model)]="dataItem.SoLuong"
+            [spinners]="true" class="no-label" label=" " [min]="1" [max]="9999999"
+            (modelChange)="ChangeSoLuongNhomDichVuDataItem($event,dataItem)"
+            [validationerror]="'dataItem[' + goiMarketing.NhomDichVus.indexOf(dataItem) + '].SoLuong' | validationerror:validationErrors">
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #donGiaBenhVienTemplate let-dataItem>
+        {{dataItem.DonGiaBenhVien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #thanhTienBenhVienTemplate let-dataItem>
+        {{dataItem.ThanhTienBenhVien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #thanhTienTruocChietKhauTemplate let-dataItem>
+        {{dataItem.ThanhTienTruocChietKhau | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #thanhTienSauChietKhauTemplate let-dataItem>
+        {{dataItem.ThanhTienSauChietKhau | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #donGiaTruocChietKhauTemplate let-dataItem>
+        <app-textboxnumeric [disabled]="notAllowChangeGoiDv" id="DonGiaTruocChietKhaugrid"
+            [(model)]="dataItem.DonGiaTruocChietKhau" [spinners]="false" class="no-label" label=" " [min]="0"
+            [max]="999999999" (modelChange)="ChangeDonGiaTruocChietKhauDataItem($event,dataItem)"
+            [validationerror]="'dataItem[' + goiMarketing.NhomDichVus.indexOf(dataItem) + '].DonGiaTruocChietKhau' | validationerror:validationErrors">
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #donGiaSauChietKhauTemplate let-dataItem>
+        <app-textboxnumeric [disabled]="notAllowChangeGoiDv" id="DonGiaSauChietKhaugrid"
+            [(model)]="dataItem.DonGiaSauChietKhau" [spinners]="false" class="no-label" label=" " [min]="0"
+            [max]="999999999" (modelChange)="ChangeDonGiaSauChietKhauDataItem($event,dataItem)"
+            [validationerror]="'dataItem[' + goiMarketing.NhomDichVus.indexOf(dataItem) + '].DonGiaSauChietKhau' | validationerror:validationErrors">
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #thanhTienBenhVienFooterTemplate let-dataItem>
+        <div fxLayoutAlign="start center" fxLayout="row">
+            <div>
+                <span>{{tongThanhTien('ThanhTienBenhVien') | number:'0.2-2':'vi-VN'}}</span>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #thanhTienTruocChietKhauFooterTemplate let-dataItem>
+        <div fxLayoutAlign="start center" fxLayout="row">
+            <div>
+                <span style="color:blue;">{{tongThanhTien('ThanhTienTruocChietKhau') | number:'0.2-2':'vi-VN'}}</span>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #thanhTienSauChietKhauFooterTemplate let-dataItem>
+        <div fxLayoutAlign="start center" fxLayout="row">
+            <div>
+                <span style="color:red;">{{tongThanhTien('ThanhTienSauChietKhau') | number:'0.2-2':'vi-VN'}}</span>
+            </div>
+        </div>
+    </ng-template>
+
+</div>

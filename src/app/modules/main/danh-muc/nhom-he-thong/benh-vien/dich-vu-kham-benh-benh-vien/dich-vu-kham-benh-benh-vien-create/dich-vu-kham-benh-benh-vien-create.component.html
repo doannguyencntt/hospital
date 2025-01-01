@@ -1,0 +1,27 @@
+<app-header-form [crumbs]="[
+    {Title:'Danh Mục',Path:''}
+    ,{Title:'Nhóm Hệ Thống',Path:''}
+    ,{Title:'Bệnh Viện',Path:''}
+    ,{Title:'Dịch Vụ Khám Bệnh Tại Bệnh Viện',Path:'/danh-muc/nhom-he-thong/benh-vien/dich-vu-kham-benh-tai-benh-vien',Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Thêm Dịch Vụ Khám Bệnh Tại Bệnh Viện</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-dich-vu-kham-benh-benh-vien-shared></app-dich-vu-kham-benh-benh-vien-shared>
+
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <app-formfooter [bodyComponent]="shared" type="create" (created)="onCreated()">
+                    </app-formfooter>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

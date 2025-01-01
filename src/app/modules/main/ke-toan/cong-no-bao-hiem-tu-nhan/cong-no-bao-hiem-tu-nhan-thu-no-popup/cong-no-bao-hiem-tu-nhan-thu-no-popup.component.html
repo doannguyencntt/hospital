@@ -1,0 +1,215 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">
+        <ng-container *ngIf="gachNo.Id == 0">Tạo Cập Nhật Công Nợ</ng-container>
+        <ng-container *ngIf="gachNo.Id != null && gachNo.Id != 0">Chi Tiết Cập Nhật Công Nợ</ng-container>
+    </div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose" (click)="close()"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-textbox *ngIf="gachNo.Id != null && gachNo.Id != 0" id="SoChungTu" fxFlex="15%" fxFlex.sm="15%" label="Số chứng từ" 
+            [required]="true" [maxlength]="50" [disabled]="true"
+            [(model)]="gachNo.SoChungTu" 
+            [validationerror]="'SoChungTu' | validationerror:validationErrors">
+        </app-textbox>
+        <app-datepicker id="NgayChungTu" [fxFlex]="(gachNo.Id != null && gachNo.Id != 0) ? '15%' : '25%'" [fxFlex.sm]="(gachNo.Id != null && gachNo.Id != 0) ? '15%' : '25%'" 
+            [required]="true" label="Ngày chứng từ"
+            [(model)]="gachNo.NgayChungTu" (modelChange)="changeNgayChungTu($event)" [disabled]="gachNo.IsDisabledView"
+            [validationerror]="'NgayChungTu' | validationerror:validationErrors">
+        </app-datepicker>
+        <app-dropdownlist id="LoaiChungTu" fxFlex="25%" fxFlex.sm="25%" label="Loại chứng từ" [required]="true"
+            [(model)]="gachNo.LoaiChungTu" [modelText]="gachNo.TenLoaiChungTu"
+            url="GachNo/GetListLoaiChungTu" [bind]="true" [disabled]="gachNo.IsDisabledView"
+            [validationerror]="'LoaiChungTu' | validationerror:validationErrors">
+        </app-dropdownlist>
+        <app-textbox id="KyKeToan" fxFlex="25%" fxFlex.sm="25%" label="Kỳ kế toán" [maxlength]="50" [disabled]="true"
+            [(model)]="gachNo.KyKeToan"
+            [validationerror]="'KyKeToan' | validationerror:validationErrors">
+        </app-textbox>
+        <app-textbox id="TrangThai" [fxFlex]="(gachNo.Id != null && gachNo.Id != 0) ? '20%' : '25%'" [fxFlex.sm]="(gachNo.Id != null && gachNo.Id != 0) ? '20%' : '25%'" 
+            label="Trạng thái" [maxlength]="50" [disabled]="true"
+            [(model)]="gachNo.TenTrangThai"
+            [validationerror]="'TrangThai' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-dropdownlist id="LoaiTienTe" fxFlex="15%" fxFlex.sm="15%" label="Loại tiền tệ" [required]="true"
+            [(model)]="gachNo.LoaiTienTe" [modelText]="gachNo.TenLoaiTienTe" [bind]="true" [disabled]="gachNo.IsDisabledView"
+            url="GachNo/GetListLoaiTienTe" (selectionChange)="chonLoaiTienTe($event)" (modelChange)="changeLoaiTienTe($event)"
+            [validationerror]="'LoaiTienTe' | validationerror:validationErrors">
+        </app-dropdownlist>
+        <app-textboxnumeric id="TyGia" fxFlex="15%" fxFlex.sm="15%" [max]="100000" label="Tỷ giá" [decimals]="2" [format]="format"
+            [(model)]="gachNo.TyGia" [disabled]="isDisabledTyGia" (modelChange)="tinhTongTienHachToan()"  [required]="true"
+            [validationerror]="'TyGia' | validationerror:validationErrors">
+        </app-textboxnumeric>
+        <app-datepicker id="NgayThucThu" fxFlex="15%" fxFlex.sm="15%" [required]="true" label="Ngày thực thu"
+            [(model)]="gachNo.NgayThucThu" [disabled]="gachNo.IsDisabledView" (modelChange)="changeNgayThucThu($event)"
+            [validationerror]="'NgayThucThu' | validationerror:validationErrors"> 
+        </app-datepicker>
+        <hr class="line-hr" fxFlex="100%">
+
+        <app-dropdownlist id="LoaiDoiTuong" fxFlex="15%" fxFlex.sm="15%" label="Loại đối tượng" [required]="true"
+            [(model)]="gachNo.LoaiDoiTuong" [modelText]="gachNo.TenLoaiDoiTuong" [bind]="true" [autoSelectFirstItem]="true"
+            url="GachNo/GetListDoiTuong" (selectionChange)="chonLoaiDoiTuong($event)" [disabled]="gachNo.IsDisabledView"
+            [validationerror]="'LoaiDoiTuong' | validationerror:validationErrors">
+        </app-dropdownlist>
+
+        <ng-container *ngIf="gachNo.LoaiDoiTuong == null || gachNo.LoaiDoiTuong == 1">
+            <app-combobox id="congtyBHTN" fxFlex="15%" fxFlex.sm="15%" label="Mã đối tượng" [required]="true"
+                [(model)]="gachNo.CongTyBaoHiemTuNhanId" [modelText]="gachNo.CongTyBaoHiemTuNhan.Ma" [disabled]="gachNo.IsDisabledView"
+                url="GachNo/GetListMaCongTyBaoHiemTuNhan" (selectionChange)="chonCongTyBaoHiemTuNhan($event)"
+                [validationerror]="'CongTyBaoHiemTuNhanId' | validationerror:validationErrors">
+            </app-combobox>
+            <button fxFlex="5%" fxFlex.sm="8%" type="button" title="Tìm kiếm" class="icon-color-button" (click)="timKiemDoiTuongCongTy()"
+                [disabled]="gachNo.IsDisabledView">
+                <mat-icon [icIcon]="icSearch"></mat-icon>
+            </button>
+            <div fxFlex="10%" fxFlex.sm="10%">
+                <div class="container-custom no-label">
+                    <label>&nbsp;</label>
+                    <div fxLayout="row" fxLayoutGap="16px">
+                        <app-checkbox fxFlex="100%" value="true" id="AnhXa" label="Sử dụng gói"
+                            [(model)]="gachNo.SuDungGoi" [disabled]="gachNo.IsDisabledView"></app-checkbox>
+                    </div>
+                </div>
+            </div>
+            <app-textbox id="tenDoiTuong" fxFlex="30%" fxFlex.sm="30%" label="Tên đối tượng" [disabled]="true"
+                [(model)]="gachNo.CongTyBaoHiemTuNhan.Ten">
+            </app-textbox>
+            <app-textbox id="mst" fxFlex="25%" fxFlex.sm="25%" label="MST" [disabled]="true"
+                [(model)]="gachNo.CongTyBaoHiemTuNhan.MaSoThue">
+            </app-textbox>
+            <app-textbox id="donVi" fxFlex="50%" fxFlex.sm="50%" label="Đơn vị" [disabled]="true"
+                [(model)]="gachNo.CongTyBaoHiemTuNhan.DonVi">
+            </app-textbox>
+            <app-textbox id="diaChi" fxFlex="50%" fxFlex.sm="50%" label="Địa chỉ" [disabled]="true"
+                [(model)]="gachNo.CongTyBaoHiemTuNhan.DiaChi">
+            </app-textbox>
+        </ng-container>
+        
+        <ng-container *ngIf="gachNo.LoaiDoiTuong == 2">
+            <app-combobox id="maBenhNhan" fxFlex="15%" fxFlex.sm="15%" label="Mã đối tượng" [required]="true"
+                [(model)]="gachNo.BenhNhanId" [modelText]="gachNo.BenhNhan.MaBN" (selectionChange)="chonBenhNhan($event)"
+                url="GachNo/GetListMaBenhNhan" [disabled]="gachNo.IsDisabledView"
+                [validationerror]="'BenhNhanId' | validationerror:validationErrors">
+            </app-combobox>
+            <button fxFlex="5%" fxFlex.sm="5%" type="button" title="Tìm kiếm" class="icon-color-button" (click)="timKiemDoiTuongBenhNhan()" 
+                [disabled]="gachNo.IsDisabledView">
+                <mat-icon [icIcon]="icSearch"></mat-icon>
+            </button>
+            <div fxFlex="10%" fxFlex.sm="10%">
+                <div class="container-custom no-label">
+                    <label>&nbsp;</label>
+                    <div fxLayout="row" fxLayoutGap="16px">
+                        <app-checkbox fxFlex="100%" value="true" id="AnhXa" label="Sử dụng gói"
+                            [(model)]="gachNo.SuDungGoi" [disabled]="gachNo.IsDisabledView"></app-checkbox>
+                    </div>
+                </div>
+            </div>
+            <app-textbox id="tenDoiTuong" fxFlex="25%" fxFlex.sm="25%" label="Tên đối tượng" [disabled]="true"
+                [(model)]="gachNo.BenhNhan.HoTen">
+            </app-textbox>
+            <app-textbox id="ngaySinh" fxFlex="15%" fxFlex.sm="15%" label="Ngày sinh" [disabled]="true"
+                [(model)]="gachNo.BenhNhan.NgayThangNamSinh">
+            </app-textbox>
+            <app-textbox id="gioiTinh" fxFlex="15%" fxFlex.sm="15%" label="Giới tính" [disabled]="true"
+                [(model)]="gachNo.BenhNhan.TenGioiTinh">
+            </app-textbox>
+
+            <app-textbox id="cmnd" fxFlex="25%" fxFlex.sm="25%" label="CMND" [disabled]="true"
+                [(model)]="gachNo.BenhNhan.SoChungMinhThu">
+            </app-textbox>
+            <app-textbox id="dienThoai" fxFlex="25%" fxFlex.sm="25%" label="Điện thoại" [disabled]="true"
+                [(model)]="gachNo.BenhNhan.SoDienThoaiDisplay">
+            </app-textbox>
+            <app-textbox id="diaChi" fxFlex="50%" fxFlex.sm="50%" label="Địa chỉ" [disabled]="true"
+                [(model)]="gachNo.BenhNhan.DiaChiDayDu">
+            </app-textbox>
+        </ng-container>
+        <hr class="line-hr" fxFlex="100%">
+
+        <app-dropdownlist id="TaiKhoan" fxFlex="20%" fxFlex.sm="20%" label="Tài khoản"
+            [(model)]="gachNo.TaiKhoan" [modelText]="gachNo.TaiKhoan" [queryInfo]="{ParameterDependencies:'{KeyId:\'' + gachNo.TaiKhoan +'\', GhiChu:\'' + gachNo.TaiKhoanLoaiTien +'\'}', Take: 50}"
+            url="GachNo/GetListTaiKhoan" (selectionChange)="chonTaiKhoan($event)" [disabled]="gachNo.IsDisabledView"
+            [validationerror]="'TaiKhoan' | validationerror:validationErrors">
+        </app-dropdownlist>
+        <app-textbox [disabled]="true" id="LoaiTienTeTheoTaiKhoan" fxFlex="20%" fxFlex.sm="20%" label="Tên tài khoản"
+            [(model)]="gachNo.TaiKhoanLoaiTien">
+        </app-textbox>
+        <app-textbox id="nguoiNop" fxFlex="20%" fxFlex.sm="20%" label="Người nộp" [maxlength]="150"
+            [(model)]="gachNo.NguoiNop" [disabled]="gachNo.IsDisabledView">
+        </app-textbox>
+        <app-textbox id="chungTuGoc" fxFlex="20%" fxFlex.sm="20%" label="Chứng từ gốc" [maxlength]="250"
+            [(model)]="gachNo.ChungTuGoc" [disabled]="gachNo.IsDisabledView">
+        </app-textbox>
+        <app-textbox id="dienGiaiChung" fxFlex="20%" fxFlex.sm="20%" label="Diễn giải chung" [maxlength]="250"
+            [(model)]="gachNo.DienGiaiChung" [disabled]="gachNo.IsDisabledView">
+        </app-textbox>
+
+        <app-dropdownlist id="soTaiKhoanNganHang" fxFlex="20%" fxFlex.sm="20%" label="Số TK NH"
+            [(model)]="gachNo.SoTaiKhoanNganHang" [modelText]="gachNo.SoTaiKhoanNganHang"
+            url="GachNo/GetListSoTaiKhoanNganHang" [disabled]="gachNo.IsDisabledView" [queryInfo]="{ParameterDependencies:'{soTaiKhoanNganHangDangChon:\'' + gachNo.SoTaiKhoanNganHang +'\'}', Take: 50}"
+            [validationerror]="'SoTaiKhoanNganHang' | validationerror:validationErrors">
+        </app-dropdownlist>
+        <app-textbox id="NguyenTe" fxFlex="20%" fxFlex.sm="20%" label="Nguyên tệ" [maxlength]="150"
+            [(model)]="gachNo.NguyenTe" [disabled]="gachNo.IsDisabledView">
+        </app-textbox>
+        <app-textbox id="ThueNguyenTe" fxFlex="20%" fxFlex.sm="20%" label="Thuế nguyên tệ" [maxlength]="150"
+            [(model)]="gachNo.ThueNguyenTe" [disabled]="gachNo.IsDisabledView">
+        </app-textbox>
+        <app-textbox id="TongNguyenTe" fxFlex="20%" fxFlex.sm="20%" label="Tổng nguyên tệ" [maxlength]="150"
+            [(model)]="gachNo.TongNguyenTe" [disabled]="gachNo.IsDisabledView">
+        </app-textbox>
+        <div fxFlex="20%"></div>
+        <div fxFlex="20%"></div>
+        <app-textbox id="HachToan" fxFlex="20%" fxFlex.sm="20%" label="Hạch toán" [maxlength]="150"
+            [(model)]="gachNo.HachToan" [disabled]="gachNo.IsDisabledView">
+        </app-textbox>
+        <app-textbox id="ThueHachToan" fxFlex="20%" fxFlex.sm="20%" label="Thuế hạch toán" [maxlength]="150"
+            [(model)]="gachNo.ThueHachToan" [disabled]="gachNo.IsDisabledView">
+        </app-textbox>
+        <app-textbox id="TongHachToan" fxFlex="20%" fxFlex.sm="20%" label="Tổng hạch toán" [maxlength]="150"
+            [(model)]="gachNo.TongHachToan" [disabled]="gachNo.IsDisabledView">
+        </app-textbox>
+        <hr class="line-hr" fxFlex="100%">
+
+        <app-dropdownlist id="loaiThuChi" fxFlex="20%" fxFlex.sm="20%" label="Loại T/C" [required]="true"
+            [(model)]="gachNo.LoaiThuChi" [modelText]="gachNo.LoaiThuChi" url="GachNo/GetListLoaiThuChi" [disabled]="gachNo.IsDisabledView"
+            [bind]="true" [autoSelectFirstItem]="true" popupSettings="null" [queryInfo]="{ParameterDependencies:'{LoaiThuChiDangChon:\'' + gachNo.LoaiThuChi +'\'}', Take: 50}"
+            [validationerror]="'LoaiThuChi' | validationerror:validationErrors">
+        </app-dropdownlist>
+        <app-textboxnumeric id="VAT" fxFlex="20%" fxFlex.sm="20%" label="VAT(%)" [max]="100"
+            [(model)]="gachNo.VAT" [disabled]="isDisabledVAT || gachNo.IsDisabledView" (modelChange)="changeVAT($event)">
+        </app-textboxnumeric>
+        <app-textboxnumeric id="TienHachToan" fxFlex="20%" fxFlex.sm="20%" [max]="gachNo.LoaiTienTe == loaiTienUSD ? 9999999 : 999999999" label="Tiền HT ({{gachNo.TenLoaiTienTe}})" [decimals]="2" [format]="format" [required]="true"
+            [(model)]="gachNo.TienHachToan" (modelChange)="changeTienHachToan($event)" [disabled]="gachNo.IsDisabledView"
+            [validationerror]="'TienHachToan' | validationerror:validationErrors">
+        </app-textboxnumeric>
+        <app-textboxnumeric id="TienThueHachToan" fxFlex="20%" fxFlex.sm="20%" [max]="gachNo.LoaiTienTe == loaiTienUSD ? 9999999 : 999999999" label="Tiền thuế HT ({{gachNo.TenLoaiTienTe}})" [decimals]="2" [format]="format"
+            [(model)]="gachNo.TienThueHachToan" [disabled]="true">
+        </app-textboxnumeric>
+        <app-textboxnumeric id="TongTienHachToan" fxFlex="20%" fxFlex.sm="20%" [max]="99999999999999999" label="Tổng tiền HT(VND)" [decimals]="2" [format]="format"
+            [(model)]="gachNo.TongTienHachToan" [disabled]="true">
+        </app-textboxnumeric>
+
+        <app-textbox id="khoanMucPhi" fxFlex="60%" fxFlex.sm="60%" label="Khoản mục phí" [maxlength]="250"
+            [(model)]="gachNo.KhoanMucPhi" [disabled]="gachNo.IsDisabledView">
+        </app-textbox>
+        <app-textbox id="soHoaDon" fxFlex="20%" fxFlex.sm="20%" label="Số HĐ" [maxlength]="150"
+            [(model)]="gachNo.SoHoaDon" [disabled]="gachNo.IsDisabledView">
+        </app-textbox>
+        <app-datepicker id="NgayHoaDon" fxFlex="20%" fxFlex.sm="20%"  label="Ngày HĐ"
+            [(model)]="gachNo.NgayHoaDon" [disabled]="gachNo.IsDisabledView">
+        </app-datepicker>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="mt-4 pb-5">
+    <button *ngIf="gachNo.IsShowXacNhanNhapLieu" mat-raised-button mat-button color="primary" (click)="xacNhanNhapLieu()">Xác nhận nhập liệu</button>
+
+    <button style="margin-left: auto;" type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Hủy</button>
+    <button *ngIf="id == 0" mat-raised-button mat-button color="primary" (click)="xuLyThem()">Thêm</button>
+    <button *ngIf="id != undefined && id > 0" [disabled]="gachNo.IsDisabledView" mat-raised-button mat-button color="primary" (click)="xuLyLuu()">Lưu</button>
+</mat-dialog-actions>

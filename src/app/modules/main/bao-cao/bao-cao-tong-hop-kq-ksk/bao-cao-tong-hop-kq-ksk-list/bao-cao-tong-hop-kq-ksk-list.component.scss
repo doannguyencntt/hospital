@@ -1,0 +1,52 @@
+table {
+    table-layout: fixed;;
+    width:100%;
+    border-collapse: collapse;
+    border: 1px solid #dddddd;
+    th.stt{
+        width: 50px;
+    }
+    th.namsinh{
+        width: 80px;
+    }
+    th.gioiTinh{
+        width: 80px;
+    }
+    th.chieucao{
+        width: 80px;
+    }
+    th.cannang{
+        width: 80px;
+    }
+    th.huyetap{
+        width: 80px;
+    }
+    th.dichvu{
+        width: 200px;
+    }
+    th.phanloai{
+        width: 200px;
+    }
+    th.ketluan{
+        width: 200px;
+    }
+    th.denghi{
+        width: 200px;
+    }
+    th,td{
+     width: 150px;
+     text-align: left;
+     padding: 3px;
+     
+    }
+  
+  }
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+  tr:hover {background-color:#f5f5f5;}
+  ul.inline > li{
+    padding-right: 10px !important;
+    padding-bottom: 0.625em;
+    display: inline-block !important;
+}

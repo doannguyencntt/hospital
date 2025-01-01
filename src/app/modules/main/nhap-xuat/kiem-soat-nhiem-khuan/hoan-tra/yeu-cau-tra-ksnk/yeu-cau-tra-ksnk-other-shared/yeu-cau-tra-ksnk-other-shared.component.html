@@ -1,0 +1,77 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <div *ngIf="tuChoiDuyet" fxFlex="100%" fxFlex.sm="100%" style="color: red;">Lí do: {{yeuCauTraVatTu.LyDoKhongDuyet}}
+    </div>
+
+    <app-combobox fxFlex="16%" fxFlex.sm="100%" id="hoan-tra-tu-kho" label="Hoàn trả từ kho"
+        url="YeuCauTraKSNK/GetKhoVatTu" [(model)]="yeuCauTraVatTu.KhoXuatId" [modelText]="yeuCauTraVatTu.KhoXuat"
+        disabled="true" bind="true" [required]="true">
+    </app-combobox>
+
+    <app-combobox fxFlex="16%" fxFlex.sm="100%" id="hoan-tra-ve-kho" autoSelectFirstItem="true" label="Hoàn trả về kho"
+        url="YeuCauTraKSNK/GetKhoVatTuHoanTra" [(model)]="yeuCauTraVatTu.KhoNhapId" [modelText]="yeuCauTraVatTu.KhoNhap"
+        disabled="true" bind="true" [required]="true">
+    </app-combobox>
+
+    <app-combobox fxFlex="16%" fxFlex.sm="100%" id="nguoi-yeu-cau" label="Người yêu cầu"
+        url="NhanVien/GetListLookupNhanVien" [(model)]="yeuCauTraVatTu.NhanVienYeuCauId"
+        [modelText]="yeuCauTraVatTu.NhanVienYeuCau" disabled="true" bind="true" [required]="true">
+    </app-combobox>
+
+    <app-datepicker [disabled]="true" id="ngay-yeu-cau" fxFlex="16%" fxFlex.sm="100%" [required]="true"
+        [(model)]="yeuCauTraVatTu.NgayYeuCau" label="Ngày yêu cầu" [disabled]="true">
+    </app-datepicker>
+
+
+    <app-combobox *ngIf="tuChoiDuyet" fxFlex="16%" fxFlex.sm="100%" id="nguoi-tu-choi-duyet" label="Người từ chối duyệt"
+        url="NhanVien/GetListLookupNhanVien" [(model)]="yeuCauTraVatTu.NhanVienDuyetId"
+        [modelText]="yeuCauTraVatTu.NhanVienDuyet" disabled="true" bind="true" [required]="true">
+    </app-combobox>
+
+    <app-combobox *ngIf="!tuChoiDuyet" fxFlex="16%" fxFlex.sm="100%" id="nguoi-duyet" label="Người phê duyệt"
+        url="NhanVien/GetListLookupNhanVien" [(model)]="yeuCauTraVatTu.NhanVienDuyetId"
+        [modelText]="yeuCauTraVatTu.NhanVienDuyet" disabled="true" bind="true" [required]="true">
+    </app-combobox>
+
+    <app-datepicker *ngIf="tuChoiDuyet" [disabled]="true" id="ngay-tu-choi-duyet" fxFlex="16%" fxFlex.sm="100%"
+        [(model)]="yeuCauTraVatTu.NgayDuyet" label="Ngày từ chối duyệt" [required]="true">
+    </app-datepicker>
+
+    <app-datepicker *ngIf="!tuChoiDuyet" [disabled]="true" id="ngay-duyet" fxFlex="16%" fxFlex.sm="100%"
+        [(model)]="yeuCauTraVatTu.NgayDuyet" label="Ngày phê duyệt" [required]="true">
+    </app-datepicker>
+
+    <app-textbox id="ghi-chu" [disabled]="true" fxFlex="100%" fxFlex.sm="100%" [(model)]="yeuCauTraVatTu.GhiChu"
+        label="Ghi chú" maxlength="1000">
+    </app-textbox>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">THÔNG TIN KIỂM SOÁT NHIỄM KHUẨN
+    </h3>
+
+    <app-grid *ngIf="loaiDuocPhamVatTu === loaiVatTu" [groups]="groups" #grid fxFlex="100%" fxFlex.sm="100%"
+        [gridColumns]="gridColumns" [sort]="sort" [useActionDefault]="false" [urlGetData]="urlGetDataGridVatTuChild"
+        [urlGetTotalPage]="urlGetTotalPageGridVatTuChild" [additionalSearchString]="id"
+        [useActionDefault]="actionTemplate" maxHeight="500" [useAddDeault]="false" [checkboxAble]="false"
+        [pageable]="true" [autoHeight]="true" [lazyLoadPage]="true">
+    </app-grid>
+
+
+    <app-grid *ngIf="loaiDuocPhamVatTu === loaiDuocPham" [groups]="groups" #grid fxFlex="100%" fxFlex.sm="100%"
+        [gridColumns]="gridColumns" [sort]="sort" [useActionDefault]="false" [urlGetData]="urlGetDataGridDuocPhamChild"
+        [urlGetTotalPage]="urlGetTotalPageGridDuocPhamChild" [additionalSearchString]="id"
+        [useActionDefault]="actionTemplate" maxHeight="500" [useAddDeault]="false" [checkboxAble]="false"
+        [pageable]="true" [autoHeight]="true" [lazyLoadPage]="true">
+    </app-grid>
+
+    <ng-template #giaTemplate let-dataItem>
+        {{dataItem.DonGiaNhap | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #tenNhomGroupHeaderTemplate let-value="value" let-dataItem>
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-template #soLuongTemplate let-dataItem>
+        {{dataItem.SoLuongTra | number:'1.0':'vi-VN' }}
+    </ng-template>
+</div>

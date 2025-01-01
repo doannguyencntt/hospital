@@ -1,0 +1,101 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0" class="order-form">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}" style="padding-top: 10px;">
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textbox id="cach-mo" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangTheoDoiHoiTinh.CachMo" label="Cách mổ" maxlength="40">
+                </app-textbox>
+
+                <app-textbox id="cach-vo-cam" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangTheoDoiHoiTinh.CachVoCam" label="Cách vô cảm" maxlength="30">
+                </app-textbox>
+
+                <app-textbox id="phong-mo" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangTheoDoiHoiTinh.PhongMo" label="Phòng mổ" maxlength="30">
+                </app-textbox>
+
+                <app-autocomplete popupSettings="null" id="dd-nhan" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangTheoDoiHoiTinh.DdNhan" url="PhauThuatThuThuat/GetListDieuDuongAutoComplete" label="Điều dưỡng nhận" maxlength="120">
+                </app-autocomplete>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-datetimepicker id="gio-nhan" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangTheoDoiHoiTinh.GioNhan" label="Giờ nhận">
+                </app-datetimepicker>
+
+                <app-datetimepicker id="gio-chuyen" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangTheoDoiHoiTinh.GioChuyen" label="Giờ chuyển">
+                </app-datetimepicker>
+
+                <app-textbox id="ve-phong" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangTheoDoiHoiTinh.VePhong" label="Về phòng" maxlength="30">
+                </app-textbox>
+
+                <app-autocomplete popupSettings="null"id="phau-thuat-vien" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangTheoDoiHoiTinh.PhauThuatVien" url="PhauThuatThuThuat/GetListPhauThuatAutoComplete" label="Phẫu thuật viên" maxlength="120">
+                </app-autocomplete>
+            </div>
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-autocomplete popupSettings="null"id="bs-gmhs" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangTheoDoiHoiTinh.BsGmhs" url="PhauThuatThuThuat/GetListBacSiAutoComplete" label="Bác sĩ GMHS" maxlength="120">
+                </app-autocomplete>
+
+                <app-autocomplete popupSettings="null" id="theo-y-lenh" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangTheoDoiHoiTinh.YlenhBs" url="PhauThuatThuThuat/GetListBacSiAutoComplete" label="Theo y lệnh BS" maxlength="120">
+                </app-autocomplete>
+
+                <app-textbox id="phong-hoi-tinh-so" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" [(model)]="bangTheoDoiHoiTinh.PhongHoiTinhSo" label="Phòng hồi tỉnh số" maxlength="30">
+                </app-textbox>
+
+                <app-datepicker id="ngay-thuc-hien" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Ngày thực hiện" [(model)]="bangTheoDoiHoiTinh.NgayThucHien" [required]="true" [validationerror]="'NgayThucHien' | validationerror:validationErrors">
+                </app-datepicker>
+            </div>
+
+
+            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-upload id="Upload" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" #upload15NgayDieuTri [allowedExtensions]="allowedExtensions" [(model)]="bangTheoDoiHoiTinh.FileChuKy" [multiple]="true" label="File chữ ký" [template]="templateFileChuanDoanHAInfo">
+                </app-upload>
+            </div>
+
+
+            <ng-template #templateFileChuanDoanHAInfo let-files>
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                            <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="upload15NgayDieuTri.viewFile(files[0])" class="green" class="custom-name green">{{files[0].name}}</a>
+                        </td>
+                        <td style="width:25px">
+                            <a type="button" (click)="upload15NgayDieuTri.remove(files[0].uid)" mat-icon-button>
+                                <mat-icon [icIcon]="icClear"></mat-icon>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </ng-template>
+        </div>
+
+        <div style="justify-content: space-between;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="order-btn">
+            <div style="display: flex;align-items: center;">
+                <p>Người thực hiện:&nbsp;</p>
+                <strong>{{bangTheoDoiHoiTinh.NguoiThucHienReadonly}}&nbsp;</strong>
+                <p>Ngày thực hiện:&nbsp;</p>
+                <strong>{{bangTheoDoiHoiTinh.NgayThucHienReadonly}}&nbsp;</strong>
+            </div>
+            <div fxFlex="40%" fxFlex.md="100%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+                <button *ngIf="showAddNewPhieu" type="button" class="mr-2" mat-button color="primary" (click)="addNewBangTheoDoi()">Thêm
+                    Bảng theo dõi mới</button>
+                <button type="button" class="mr-2" mat-button color="primary" (click)="print()">In</button>
+                <button type="button" class="mr-2" mat-button color="primary" (click)="cancel()">Huỷ</button>
+                <button type="button" class="mr-2" color="primary" mat-raised-button (click)="save()">Lưu</button>
+            </div>
+        </div>
+
+        <div *ngIf="showGrid" class="card overflow-auto">
+            <app-grid #gridBangTheoDoiHoiTinh [autoHeight]="true" [showStt]="true" [gridColumns]="gridColumns" [gridDataSource]="gridDataSource" [documentType]="documentType" [useActionDefault]="false" [useHeaderDefault]="false" [checkboxAble]="false" [pageable]="false">
+            </app-grid>
+        </div>
+    </div>
+</div>
+<ng-template #ngayThucHienTemplate let-dataItem>
+    <a href="#" (click)="getPhieu(dataItem.Id, $event)">{{dataItem.NgayThucHienDisplay}}</a>
+</ng-template>
+<ng-template #actionTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="delete(dataItem.Id)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>

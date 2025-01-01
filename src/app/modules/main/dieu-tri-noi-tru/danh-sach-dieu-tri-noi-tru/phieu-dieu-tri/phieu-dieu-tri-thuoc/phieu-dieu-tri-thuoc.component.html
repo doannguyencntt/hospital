@@ -1,0 +1,1632 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0"
+    class="div-parent-contentThuoc">
+
+    <ng-container
+        *ngIf="(this.dataBenhNhan.KetThucBenhAn || !laKhoaKhamBenhChiDinh) && !isShowKhoLeThuoc && !isShowKhoTongThuoc && !isShowKhoLeDichTruyen && !isShowKhoTongDichTruyen">
+        <label>Người bệnh không có đơn thuốc hay dịch truyền được chỉ định.</label>
+    </ng-container>
+
+    <ng-container *ngIf="(!this.dataBenhNhan.KetThucBenhAn && laKhoaKhamBenhChiDinh)">
+
+        <app-radio id="KhuVuc" label="Khu vực" fxFlex="32%" fxFlex.sm="32%" [(model)]="keToaNew.KhuVuc"
+            [disabled]="keToaThuocTiemNew.LaThuocTiem || keToaThuocTiemNew.LaThuocTruyen"
+            (modelChange)="clearDuocPhamTheoKhuVuc()" [items]="[{Value:1,Text:'Trong BV'},{Value:2,Text:'Ngoài BV'}]">
+        </app-radio>
+
+        <div fxFlex="30%" fxFlex.sm="24%">
+            <div class="container-custom no-label">
+                <label>&nbsp;</label>
+                <div fxLayout="row">
+                    <app-checkbox id="LaThuocTiem" label="Pha thuốc tiêm" class="mb-1"
+                        (modelChange)="laThuocTiemHoacTruyen($event,'Tiem')" [(model)]="keToaThuocTiemNew.LaThuocTiem"
+                        style="margin-top: 1px;">
+                    </app-checkbox>
+
+                    <app-checkbox id="LaThuocTruyen" label="Pha thuốc truyền" class="ml-4 mb-1"
+                        (modelChange)="laThuocTiemHoacTruyen($event,'Truyen')"
+                        [(model)]="keToaThuocTiemNew.LaThuocTruyen" style="margin-top: 1px;">
+                    </app-checkbox>
+                </div>
+            </div>
+
+        </div>
+        <div *ngIf="keToaThuocTiemNew.LaThuocTiem" fxFlex="38%" class="mt-2" fxLayoutAlign="start center">
+            <button (click)="themThuocTiemHoacTruyen(true)" class="right" color="primary" fxFlex="none" mat-mini-fab
+                kendoTooltip title="Thêm thuốc tiêm" type="button">
+                <mat-icon [icIcon]="icAdd"></mat-icon>
+            </button>
+        </div>
+
+        <div *ngIf="keToaThuocTiemNew.LaThuocTruyen" fxFlex="38%" class="mt-2" fxLayoutAlign="start center">
+            <button (click)="themThuocTiemHoacTruyen(false)" class="right" color="primary" fxFlex="none" mat-mini-fab
+                kendoTooltip title="Thêm thuốc truyền" type="button">
+                <mat-icon [icIcon]="icAdd"></mat-icon>
+            </button>
+        </div>
+        <div *ngIf="!keToaThuocTiemNew.LaThuocTiem && !keToaThuocTiemNew.LaThuocTruyen" fxFlex="38%"></div>
+
+        <!--THUỐC - DỊCH TRUYỀN ------------------------------------------ -->
+        <ng-container *ngIf="!keToaThuocTiemNew.LaThuocTiem && !keToaThuocTiemNew.LaThuocTruyen">
+            <app-combobox *ngIf="keToaNew.KhuVuc == 1" id="TenKho" fxFlex="32%" fxFlex.sm="32%" label="Tên Kho"
+                url="DieuTriNoiTru/GetKho" (selectionChange)="chonKho($event)" [(model)]="keToaNew.KhoId"
+                [required]="true" popupSettings="null" (openCombobox)="openCombobox($event)"
+                [validationerror]="'KhoId' | validationerror:validationErrors">
+            </app-combobox>
+
+            <app-radio *ngIf="dataBenhNhan.CoBHYT == true && keToaNew.KhuVuc == 1" id="BHYT" label="BHYT" fxFlex="17%"
+                fxFlex.sm="17%" [(model)]="keToaNew.LaDuocPhamBHYT" (modelChange)="clearDuocPham()"
+                [items]="[{Value:2,Text:'Có'},{Value:1,Text:'Không'}]">
+            </app-radio>
+            <app-combobox *ngIf="dataBenhNhan.CoBHYT == true && keToaNew.KhuVuc == 1" id="DuocPhamId" fxFlex="auto"
+                fxFlex.sm="auto" #isFocus label="Dược phẩm/Hoạt chất" [required]="true"
+                [(model)]="keToaNew.DuocPhamBenhVienId" [isAutoFocus]="true" url="YeuCauLinhDuocPham/GetDuocPhamKho"
+                class="item-no-padding" (selectionChange)="chonDuoc($event)" (keyup)="onKey($event)"
+                (openCombobox)="openCombobox($event)"
+                [queryInfo]="{ParameterDependencies:'{KhoId:' + keToaNew.KhoId +', LaDuocPhamBHYT: ' + keToaNew.LaDuocPhamBHYT +'}', Take: 50}"
+                [template]="duocPhamTemplate" [templateHeader]="duocPhamTemplateHeader"
+                [validationerror]="'DuocPhamBenhVienId' | validationerror:validationErrors"
+                [popupSettings]="{width:1000,popupClass:'item-no-padding'}">
+                <ng-template #duocPhamTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="30%">Tên</th>
+                            <th width="10%">Hoạt Chất</th>
+                            <th width="20%">Nồng độ/Hàm lượng</th>
+                            <th width="10%">ĐVT</th>
+                            <th width="10%">Đường dùng</th>
+                            <!-- <th width="10%">HSD</th> -->
+                            <th width="10%">Tồn</th>
+                            <th width="10%">NSX</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #duocPhamTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="30%">{{dataItem.Ten}}</td>
+                            <td width="10%">{{dataItem.HoatChat}}</td>
+                            <td width="20%">{{dataItem.HamLuong}}</td>
+                            <td width="10%">{{dataItem.DVT}}</td>
+                            <td width="10%">{{dataItem.DuongDung}}</td>
+                            <!-- <td width="10%">{{dataItem.HanSuDung}}</td> -->
+                            <td width="10%">{{dataItem.SLTonFormat}}</td>
+                            <td width="10%">{{dataItem.NhaSX}}</td>
+
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+            <app-combobox *ngIf="dataBenhNhan.CoBHYT != true && keToaNew.KhuVuc == 1" id="DuocPhamId" fxFlex="51%"
+                fxFlex.sm="51%" #isFocus label="Dược phẩm/Hoạt chất" [required]="true"
+                [(model)]="keToaNew.DuocPhamBenhVienId" [isAutoFocus]="true" url="YeuCauLinhDuocPham/GetDuocPhamKho"
+                class="item-no-padding" (selectionChange)="chonDuoc($event)" (keyup)="onKey($event)"
+                (openCombobox)="openCombobox($event)"
+                [queryInfo]="{ParameterDependencies:'{KhoId:' + keToaNew.KhoId +', LaDuocPhamBHYT: ' + 1 +'}', Take: 50}"
+                [template]="duocPhamTemplate" [templateHeader]="duocPhamTemplateHeader"
+                [validationerror]="'DuocPhamBenhVienId' | validationerror:validationErrors"
+                [popupSettings]="{width: 1000,popupClass:'item-no-padding'}">
+                <ng-template #duocPhamTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="30%">Tên</th>
+                            <th width="10%">Hoạt Chất</th>
+                            <th width="20%">Nồng độ/Hàm lượng</th>
+                            <th width="10%">ĐVT</th>
+                            <th width="10%">Đường dùng</th>
+                            <!-- <th width="10%">HSD</th> -->
+                            <th width="10%">Tồn</th>
+                            <th width="10%">NSX</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #duocPhamTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="30%">{{dataItem.Ten}}</td>
+                            <td width="10%">{{dataItem.HoatChat}}</td>
+                            <td width="20%">{{dataItem.HamLuong}}</td>
+                            <td width="10%">{{dataItem.DVT}}</td>
+                            <td width="10%">{{dataItem.DuongDung}}</td>
+                            <!-- <td width="10%">{{dataItem.HanSuDung}}</td> -->
+                            <td width="10%">{{dataItem.SLTonFormat}}</td>
+                            <td width="10%">{{dataItem.NhaSX}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+
+            <app-combobox *ngIf="keToaNew.KhuVuc == 2" id="DuocPhamId" fxFlex="auto" fxFlex.sm="auto" #isFocus
+                label="Dược phẩm/Hoạt chất" [required]="true" [(model)]="keToaNew.DuocPhamBenhVienId"
+                [isAutoFocus]="true" url="ToaThuocMau/DuocPhams"
+                [queryInfo]="{ParameterDependencies:'{DuocPhamId:' + keToaNew.DuocPhamBenhVienId +'}', Take: 50}"
+                class="item-no-padding" (selectionChange)="chonDuoc($event)" (keyup)="onKey($event)"
+                (openCombobox)="openCombobox($event)" popupSettings="null" [template]="duocPhamTemplate"
+                [templateHeader]="duocPhamTemplateHeader" [popupSettings]="{width: 1000,popupClass:'item-no-padding'}"
+                [validationerror]="'DuocPhamBenhVienId' | validationerror:validationErrors">
+                <ng-template #duocPhamTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="30%">Tên</th>
+                            <th width="10%">Hoạt Chất</th>
+                            <th width="20%">Nồng độ/Hàm lượng</th>
+                            <th width="10%">ĐVT</th>
+                            <th width="10%">Đường dùng</th>
+                            <!-- <th width="10%">HSD</th> -->
+                            <th width="10%">NSX</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #duocPhamTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="30%">{{dataItem.Ten}}</td>
+                            <td width="10%">{{dataItem.HoatChat}}</td>
+                            <td width="20%">{{dataItem.HamLuong}}</td>
+                            <td width="10%">{{dataItem.DVT}}</td>
+                            <td width="10%">{{dataItem.DuongDung}}</td>
+                            <!-- <td width="10%">{{dataItem.HanSuDung}}</td> -->
+                            <td width="10%">{{dataItem.NhaSX}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+
+            <div fxFlex="17%" fxFlex.sm="17%">
+                <div class="container-custom no-label">
+                    <label>&nbsp;</label>
+                    <div fxLayout="row" fxLayoutGap="10px">
+                        <app-checkbox fxFlex="100%" id="LaDichTruyen" [(model)]="keToaNew.LaDichTruyen"
+                            label="Là dịch truyền" (modelChange)="checkLaDichTruyen()" value="true"></app-checkbox>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="keToaNew.DuocPhamBenhVienId != undefined && keToaNew.DuocPhamBenhVienId != null">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0"
+                    fxFlex="100%" style="padding-top: 10px;">
+                    <div fxFlex="100%">
+                        <fieldset
+                            style="border:1px solid #ccc;border-radius: 5px;padding: 7px 15px 8px 15px;background: #e3f2fd;">
+                            <div fxFlex="100%">
+                                <ul class="inline">
+                                    <li>Đơn vị tính: <strong>{{thongTinDuocPham.TenDonViTinh}}</strong></li>
+                                    <li>Đường dùng: <strong>{{thongTinDuocPham.TenDuongDung}}</strong></li>
+                                    <li>Tương tác thuốc:
+                                        <strong *ngIf="thongTinDuocPham.FlagTuongTac == true"
+                                            class="red">{{thongTinDuocPham.TuongTacThuoc}}
+                                        </strong>
+                                        <strong *ngIf="thongTinDuocPham.FlagTuongTac == false" class="green">
+                                            {{thongTinDuocPham.TuongTacThuoc}}
+                                        </strong>
+                                    </li>
+                                    <li>Dị ứng thuốc:
+                                        <strong *ngIf="thongTinDuocPham.FlagDiUng == true" class="red">
+                                            {{thongTinDuocPham.DiUngThuoc}}
+                                        </strong>
+                                        <strong *ngIf="thongTinDuocPham.FlagDiUng == false" class="green">
+                                            {{thongTinDuocPham.DiUngThuoc}}
+                                        </strong>
+                                    </li>
+
+                                    <li>Mức độ:
+                                        <strong *ngIf="thongTinDuocPham.MucDo == 0">
+                                            Không
+                                        </strong>
+                                        <strong *ngIf="thongTinDuocPham.MucDo == 1">
+                                            {{thongTinDuocPham.MucDoDisplay}}
+                                        </strong>
+                                        <strong *ngIf="thongTinDuocPham.MucDo == 2" style="color:yellow;">
+                                            {{thongTinDuocPham.MucDoDisplay}}
+                                        </strong>
+                                        <strong *ngIf="thongTinDuocPham.MucDo == 3" style="color:orangered;">
+                                            {{thongTinDuocPham.MucDoDisplay}}
+                                        </strong>
+                                        <strong *ngIf="thongTinDuocPham.MucDo == 4" style="color:red;">
+                                            {{thongTinDuocPham.MucDoDisplay}}
+                                        </strong>
+                                    </li>
+
+                                    <li *ngIf="keToaNew.LaDichTruyen != true">Thuốc đã kê:
+                                        <strong *ngIf="thongTinDuocPham.FlagThuocDaKe == true" class="red">
+                                            {{thongTinDuocPham.ThuocDaKe}}
+                                        </strong>
+                                        <strong *ngIf="thongTinDuocPham.FlagThuocDaKe == false">
+                                            {{thongTinDuocPham.ThuocDaKe}}
+                                        </strong>
+                                    </li>
+                                    <!-- DỊCH TRUYỀN -->
+                                    <li *ngIf="keToaNew.LaDichTruyen == true">Dịch đã kê:
+                                        <strong *ngIf="thongTinDuocPham.FlagDichDaKe == true" class="red">
+                                            {{thongTinDuocPham.DichDaKe}}
+                                        </strong>
+                                        <strong *ngIf="thongTinDuocPham.FlagDichDaKe == false">
+                                            {{thongTinDuocPham.DichDaKe}}
+                                        </strong>
+                                    </li>
+                                    <li *ngIf="keToaNew.KhuVuc == 1">
+                                        Tồn kho:
+                                        <strong>
+                                            <span *ngIf="thongTinDuocPham.TonKho <= 10" class="red">
+                                                {{thongTinDuocPham.TonKho | number:'1.0-2':'vi-VN'}}
+                                            </span>
+                                            <span *ngIf="thongTinDuocPham.TonKho > 10" class="green">
+                                                {{thongTinDuocPham.TonKho | number:'1.0-2':'vi-VN'}}
+                                            </span>
+                                        </strong>
+                                    </li>
+
+                                    <li *ngIf="keToaNew.KhuVuc == 1">
+                                        HSD:
+                                        <strong>
+                                            <strong>
+                                                {{thongTinDuocPham.HSD}}
+                                            </strong>
+                                        </strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </ng-container>
+            <div *ngIf="keToaNew.LaDichTruyen != true" fxLayout="row wrap" fxLayout.lt-sm="column"
+                fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0" style="padding-top: 10px;">
+                <app-textboxnumeric
+                    *ngIf="keToaNew.LoaiKho != undefined && keToaNew.LoaiKho != null && keToaNew.LoaiKho == 5"
+                    id="SoLuong" fxFlex="8%" [(model)]="keToaNew.SoLuong" [min]="0.01" max="999999999"
+                    (modelChange)="SoLuongChange($event)" label="SL" (keyup)="onKey($event)" [format]="format"
+                    [decimals]="2" [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+                </app-textboxnumeric>
+
+                <app-textboxnumeric
+                    *ngIf="keToaNew.LoaiKho == undefined || keToaNew.LoaiKho == null || (keToaNew.LoaiKho != undefined && keToaNew.LoaiKho != null && keToaNew.LoaiKho != 5)"
+                    id="SoLuong" fxFlex="8%" [(model)]="keToaNew.SoLuong" [min]="1" max="999999999"
+                    (modelChange)="SoLuongChange($event)" label="SL" (keyup)="onKey($event)"
+                    [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+                </app-textboxnumeric>
+
+                <app-textboxnumeric id="SoLanTrenVien" fxFlex="8%" [(model)]="keToaNew.SoLanTrenVien" [min]="1"
+                    (modelChange)="SoLanLieuDungDisplayChange($event,'SoLanVien')" max="999999999" label="Lần/Viên"
+                    (keyup)="onKey($event)">
+                </app-textboxnumeric>
+
+                <app-textbox fxFlex="8%" id="LieuDung" label="L.dùng/ngày" [(model)]="keToaNew.LieuDungTrenNgayDisplay"
+                    (modelChange)="SoLanLieuDungDisplayChange($event,'LieuDung')" (keyup)="onKey($event)">
+                </app-textbox>
+
+                <app-textboxnumeric id="CachGioDungThuoc" fxFlex="8%" fxFlex.sm="10%" [min]="0.1" [max]="cachGioMax"
+                    (keyup)="onKey($event)" format="#.#" [decimals]="1" [(model)]="keToaNew.CachGioDungThuoc"
+                    label="Cách giờ">
+                </app-textboxnumeric>
+
+                <app-autocomplete id="Sang" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+                    [(model)]="keToaNew.DungSang" label="Sáng" placeHolder="SL" (openCombobox)="openCombobox($event)"
+                    popupSettings="null" [validationerror]="'DungSang' | validationerror:validationErrors" class="pr-0">
+                </app-autocomplete>
+
+                <app-timepicker id="GioSang" fxFlex="10%" label="" placeHolder="Giờ" (keyup)="onKey($event)"
+                    [tabindex]="-1" [(model)]="keToaNew.ThoiGianDungSang" [modelIsNumber]="true" moreClass="pl-0">
+                </app-timepicker>
+
+                <app-autocomplete id="Trua" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+                    [(model)]="keToaNew.DungTrua" label="Trưa" placeHolder="SL" (openCombobox)="openCombobox($event)"
+                    popupSettings="null" [validationerror]="'DungTrua' | validationerror:validationErrors" class="pr-0">
+                </app-autocomplete>
+                <app-timepicker id="GioTrua" fxFlex="10%" label="" placeHolder="Giờ" (keyup)="onKey($event)"
+                    [tabindex]="-1" [(model)]="keToaNew.ThoiGianDungTrua" [modelIsNumber]="true" moreClass="pl-0">
+                </app-timepicker>
+
+                <app-autocomplete id="Chieu" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+                    [(model)]="keToaNew.DungChieu" label="Chiều" placeHolder="SL" (openCombobox)="openCombobox($event)"
+                    popupSettings="null" [validationerror]="'DungChieu' | validationerror:validationErrors"
+                    class="pr-0">
+                </app-autocomplete>
+                <app-timepicker id="GioChieu" fxFlex="10%" label="" placeHolder="Giờ" (keyup)="onKey($event)"
+                    [tabindex]="-1" [(model)]="keToaNew.ThoiGianDungChieu" [modelIsNumber]="true" moreClass="pl-0">
+                </app-timepicker>
+
+                <app-autocomplete id="Toi" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+                    [(model)]="keToaNew.DungToi" label="Tối" placeHolder="SL" (openCombobox)="openCombobox($event)"
+                    popupSettings="null" [validationerror]="'DungToi' | validationerror:validationErrors" class="pr-0">
+                </app-autocomplete>
+                <app-timepicker id="GioToi" fxFlex="10%" label="" placeHolder="Giờ" [(model)]="keToaNew.ThoiGianDungToi"
+                    [tabindex]="-1" (keyup)="onKey($event)" [modelIsNumber]="true" moreClass="pl-0">
+                </app-timepicker>
+
+
+                <app-autocomplete id="ghiChuThuoc" [fxFlex]="keToaNew.KhuVuc == 1 ? '83%' : '100%'" fxFlex.sm="100%"
+                    [(model)]="keToaNew.GhiChu" label="Cách dùng" (keyup)="onKey($event)" maxlength="1000"
+                    url="KhamBenh/GetGhiChuDonThuocChiTietString" (openCombobox)="openCombobox($event)"
+                    popupSettings="null"
+                    [queryInfo]="{ParameterDependencies:'{LoaiDuocPhamHoacVatTu:' +loaiDuocPhamHoacVatTu +'}', Take: 50}">
+                </app-autocomplete>
+                <div *ngIf="keToaNew.KhuVuc == 1" fxFlex="17%" fxFlex.sm="20%">
+                    <div class="container-custom no-label">
+                        <label>&nbsp;</label>
+                        <div fxLayout="row" fxLayoutGap="16px">
+                            <app-checkbox fxFlex="100%" id="KhongTinhPhi" [(model)]="keToaNew.KhongTinhPhi"
+                                label="Tính phí" value="true"></app-checkbox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="keToaNew.LaDichTruyen == true" fxLayout="row wrap" fxLayout.lt-sm="column"
+                fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0" style="padding-top: 10px;">
+
+                <!-- <app-textboxnumeric id="SoLuong" fxFlex="12%" [(model)]="keToaNew.SoLuong" min="1" max="999999999"
+                label="SL" (keyup)="onKey($event)" [format]="format" [decimals]="2"
+                [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+            </app-textboxnumeric> -->
+
+                <app-textboxnumeric
+                    *ngIf="keToaNew.LoaiKho != undefined && keToaNew.LoaiKho != null && keToaNew.LoaiKho == 5"
+                    id="SoLuong" fxFlex="12%" [(model)]="keToaNew.SoLuong" [min]="0.01" max="999999999" label="SL"
+                    (keyup)="onKey($event)" [format]="format" [decimals]="2"
+                    [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+                </app-textboxnumeric>
+
+                <app-textboxnumeric
+                    *ngIf="keToaNew.LoaiKho == undefined || keToaNew.LoaiKho == null || (keToaNew.LoaiKho != undefined && keToaNew.LoaiKho != null && keToaNew.LoaiKho != 5)"
+                    id="SoLuong" fxFlex="12%" [(model)]="keToaNew.SoLuong" [min]="1" max="999999999" label="SL"
+                    (keyup)="onKey($event)" [validationerror]="'SoLuong' | validationerror:validationErrors"
+                    required="true">
+                </app-textboxnumeric>
+
+                <app-textboxnumeric id="TheTich" fxFlex="10%" fxFlex.sm="10%" min=1 max=99999999 label="Thể tích(ml)"
+                    [disabled]="true" [(model)]="thongTinDuocPham.TheTich">
+                </app-textboxnumeric>
+
+                <app-textboxnumeric id="TocDoTruyen" fxFlex="10%" fxFlex.sm="10%" min=1 max=99999999
+                    label="Tốc độ truyền" (keyup)="onKey($event)" [(model)]="keToaNew.TocDoTruyen">
+                </app-textboxnumeric>
+
+                <app-combobox id="DonViTocDoTruyen" fxFlex="12%" fxFlex.sm="12%" label="Đơn vị tốc độ truyền"
+                    (keyup)="onKey($event)" [(model)]="keToaNew.DonViTocDoTruyen" popupSettings="null"
+                    url="DieuTriNoiTru/GetDonViTocDoTruyen">
+                </app-combobox>
+
+                <app-timepicker id="ThoiGianBatDauTruyen" fxFlex="15%" fxFlex.sm="15%" label="Giờ bắt đầu"
+                    (modelChange)="thoiGianBatDauTruyenChange($event)" [(model)]="keToaNew.ThoiGianBatDauTruyen"
+                    required="true" [modelIsNumber]="true" moreClass="pl-0" (keyup)="onKey($event)"
+                    [validationerror]="'ThoiGianBatDauTruyen' | validationerror:validationErrors">
+                </app-timepicker>
+
+                <app-textboxnumeric id="SoLanDungTrongNgay"
+                    [disabled]="keToaNew.ThoiGianBatDauTruyen == undefined || keToaNew.ThoiGianBatDauTruyen == null"
+                    (modelChange)="soLanDungTrongNgayChange($event)" fxFlex="10%" fxFlex.sm="10%" [min]="1" [max]="20"
+                    (keyup)="onKey($event)" [(model)]="keToaNew.SoLanDungTrongNgay" label="Số lần/ngày">
+                </app-textboxnumeric>
+
+                <ng-container
+                    *ngIf="keToaNew.SoLanDungTrongNgay != undefined && keToaNew.SoLanDungTrongNgay != null && keToaNew.SoLanDungTrongNgay > 1">
+                    <app-textboxnumeric id="CachGioTruyenDich"
+                        [disabled]="keToaNew.SoLanDungTrongNgay == undefined || keToaNew.SoLanDungTrongNgay == null || keToaNew.SoLanDungTrongNgay <= 1"
+                        (modelChange)="cachGioTruyenDichChange($event)" fxFlex="10%" fxFlex.sm="10%" [min]="0.1"
+                        [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                        [(model)]="keToaNew.CachGioTruyenDich" required="true"
+                        [validationerror]="'CachGioTruyenDich' | validationerror:validationErrors" label="Cách giờ">
+                    </app-textboxnumeric>
+                </ng-container>
+
+                <ng-container
+                    *ngIf="keToaNew.SoLanDungTrongNgay != undefined && keToaNew.SoLanDungTrongNgay != null && keToaNew.SoLanDungTrongNgay == 1">
+                    <app-textboxnumeric id="CachGioTruyenDich"
+                        [disabled]="keToaNew.SoLanDungTrongNgay == undefined || keToaNew.SoLanDungTrongNgay == null || keToaNew.SoLanDungTrongNgay <= 1"
+                        (modelChange)="cachGioTruyenDichChange($event)" fxFlex="10%" fxFlex.sm="10%" [min]="0.1"
+                        [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                        [(model)]="keToaNew.CachGioTruyenDich" label="Cách giờ">
+                    </app-textboxnumeric>
+                </ng-container>
+
+                <ng-container *ngIf="keToaNew.SoLanDungTrongNgay == undefined || keToaNew.SoLanDungTrongNgay == null">
+                    <app-textboxnumeric id="CachGioTruyenDich"
+                        [disabled]="keToaNew.SoLanDungTrongNgay == undefined || keToaNew.SoLanDungTrongNgay == null || keToaNew.SoLanDungTrongNgay <= 1"
+                        (modelChange)="cachGioTruyenDichChange($event)" fxFlex="10%" fxFlex.sm="10%" [min]="0.1"
+                        [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                        [(model)]="keToaNew.CachGioTruyenDich" label="Cách giờ">
+                    </app-textboxnumeric>
+                </ng-container>
+
+
+                <app-textbox id="GioSuDung" fxFlex="auto" fxFlex.sm="20%" [(model)]="keToaNew.GioSuDung"
+                    label="Giờ sử dụng" [readonly]="true">
+                </app-textbox>
+
+
+                <app-autocomplete [fxFlex]="keToaNew.KhuVuc == 1 ? '83%' : '100%'" fxFlex.sm="100%"
+                    [(model)]="keToaNew.GhiChu" label="Cách dùng" (keyup)="onKey($event)" maxlength="1000"
+                    url="KhamBenh/GetGhiChuDonThuocChiTietString" (openCombobox)="openCombobox($event)"
+                    popupSettings="null"
+                    [queryInfo]="{ParameterDependencies:'{LoaiDuocPhamHoacVatTu:' +loaiDuocPhamHoacVatTu +'}', Take: 50}">
+                </app-autocomplete>
+
+                <div *ngIf="keToaNew.KhuVuc == 1" fxFlex="17%" fxFlex.sm="20%">
+                    <div class="container-custom no-label">
+                        <label>&nbsp;</label>
+                        <div fxLayout="row" fxLayoutGap="16px">
+                            <app-checkbox fxFlex="100%" id="KhongTinhPhi" [(model)]="keToaNew.KhongTinhPhi"
+                                label="Tính phí" value="true"></app-checkbox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+                <button type="button" mat-button class="mr-2" (click)="clearDuocPham()">Hủy</button>
+                <button *ngIf="keToaNew.KhuVuc == 1" type="button" class="mr-2" color="primary" mat-raised-button
+                    (click)="themDuocPham()">Thêm</button>
+                <button *ngIf="keToaNew.KhuVuc == 2" type="button" class="mr-2" color="primary" mat-raised-button
+                    (click)="themThuocHoacDichTruyenNgoai()">Thêm</button>
+
+            </div>
+        </ng-container>
+        <!--END -------THUỐC - DỊCH TRUYỀN ------------------------------------------ -->
+
+        <!---------THUỐC TIÊM - THUỐC TRUYỀN ------------------------------------------ -->
+
+        <!--THUỐC TIÊM------------------------------------------ -->
+        <ng-container *ngIf="keToaThuocTiemNew.LaThuocTiem">
+            <div fxFlex="100%" fxLayout.lt-sm="column" fxLayoutGap="9px grid" fxLayoutGap.lt-sm="0"
+                *ngFor="let item of keToaThuocTiemNew.NoiTruChiDinhDuocPhams; let i = index">
+                <app-combobox *ngIf="keToaNew.KhuVuc == 1" id="TenKho{{i+1}}" fxFlex="32%" fxFlex.sm="32%"
+                    label="Tên Kho {{i + 1}}" url="DieuTriNoiTru/GetKho" (selectionChange)="chonKhoTiem($event,i)"
+                    bind="true" [(model)]="item.KhoId" [required]="true" popupSettings="null"
+                    (openCombobox)="openCombobox($event)"
+                    [validationerror]="'NoiTruChiDinhDuocPhams['+i+'].KhoId' | validationerror:validationErrorsTiem">
+                </app-combobox>
+
+                <app-radio *ngIf="dataBenhNhan.CoBHYT == true && keToaNew.KhuVuc == 1" id="BHYT{{i+1}}"
+                    label="BHYT {{i + 1}}" fxFlex="17%" fxFlex.sm="20%" [(model)]="item.LaDuocPhamBHYT"
+                    (modelChange)="clearThuocTiem(i)" [items]="[{Value:2,Text:'Có'},{Value:1,Text:'Không'}]">
+                </app-radio>
+                <app-combobox *ngIf="dataBenhNhan.CoBHYT == true && keToaNew.KhuVuc == 1" id="DuocPhamId{{i+1}}"
+                    fxFlex="auto" fxFlex.sm="auto" #isFocus label="Dược Phẩm/ Hoạt chất {{i + 1}}" [required]="true"
+                    [(model)]="item.DuocPhamBenhVienId" [isAutoFocus]="true" url="YeuCauLinhDuocPham/GetDuocPhamKho"
+                    class="item-no-padding" (keyup)="onKey($event)" (openCombobox)="openCombobox($event)"
+                    [queryInfo]="{ParameterDependencies:'{KhoId:' + item.KhoId +', LaDuocPhamBHYT: ' + item.LaDuocPhamBHYT +'}', Take: 50}"
+                    [template]="duocPhamTemplate" [templateHeader]="duocPhamTemplateHeader"
+                    [validationerror]="'NoiTruChiDinhDuocPhams['+i+'].DuocPhamBenhVienId' | validationerror:validationErrorsTiem"
+                    [popupSettings]="{width:1000,popupClass:'item-no-padding'}">
+                    <ng-template #duocPhamTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="30%">Tên</th>
+                                <th width="10%">Hoạt Chất</th>
+                                <th width="20%">Nồng độ/Hàm lượng</th>
+                                <th width="10%">ĐVT</th>
+                                <th width="10%">Đường dùng</th>
+                                <!-- <th width="10%">HSD</th> -->
+                                <th width="10%">Tồn</th>
+                                <th width="10%">NSX</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #duocPhamTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="30%">{{dataItem.Ten}}</td>
+                                <td width="10%">{{dataItem.HoatChat}}</td>
+                                <td width="20%">{{dataItem.HamLuong}}</td>
+                                <td width="10%">{{dataItem.DVT}}</td>
+                                <td width="10%">{{dataItem.DuongDung}}</td>
+                                <!-- <td width="10%">{{dataItem.HanSuDung}}</td> -->
+                                <td width="10%">{{dataItem.SLTonFormat}}</td>
+                                <td width="10%">{{dataItem.NhaSX}}</td>
+
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+                <app-combobox *ngIf="dataBenhNhan.CoBHYT != true && keToaNew.KhuVuc == 1" id="DuocPhamId{{i+1}}"
+                    fxFlex="51%" fxFlex.sm="51%" #isFocus label="Dược Phẩm/ Hoạt chất {{i + 1}}" [required]="true"
+                    [(model)]="item.DuocPhamBenhVienId" [isAutoFocus]="true" url="YeuCauLinhDuocPham/GetDuocPhamKho"
+                    class="item-no-padding" (keyup)="onKey($event)" (openCombobox)="openCombobox($event)"
+                    [queryInfo]="{ParameterDependencies:'{KhoId:' + item.KhoId +', LaDuocPhamBHYT: ' + 1 +'}', Take: 50}"
+                    [template]="duocPhamTemplate" [templateHeader]="duocPhamTemplateHeader"
+                    [validationerror]="'NoiTruChiDinhDuocPhams['+i+'].DuocPhamBenhVienId' | validationerror:validationErrorsTiem"
+                    [popupSettings]="{width: 1000,popupClass:'item-no-padding'}">
+                    <ng-template #duocPhamTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="30%">Tên</th>
+                                <th width="10%">Hoạt Chất</th>
+                                <th width="20%">Nồng độ/Hàm lượng</th>
+                                <th width="10%">ĐVT</th>
+                                <th width="10%">Đường dùng</th>
+                                <!-- <th width="10%">HSD</th> -->
+                                <th width="10%">Tồn</th>
+                                <th width="10%">NSX</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #duocPhamTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="30%">{{dataItem.Ten}}</td>
+                                <td width="10%">{{dataItem.HoatChat}}</td>
+                                <td width="20%">{{dataItem.HamLuong}}</td>
+                                <td width="10%">{{dataItem.DVT}}</td>
+                                <td width="10%">{{dataItem.DuongDung}}</td>
+                                <!-- <td width="10%">{{dataItem.HanSuDung}}</td> -->
+                                <td width="10%">{{dataItem.SLTonFormat}}</td>
+                                <td width="10%">{{dataItem.NhaSX}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+
+                <app-combobox *ngIf="keToaNew.KhuVuc == 2" id="DuocPhamId{{i+1}}" fxFlex="auto" fxFlex.sm="auto"
+                    #isFocus label="Dược Phẩm/ Hoạt chất {{i + 1}}" [required]="true"
+                    [(model)]="item.DuocPhamBenhVienId" [isAutoFocus]="true" url="ToaThuocMau/DuocPhams"
+                    [queryInfo]="{ParameterDependencies:'{DuocPhamId:' + item.DuocPhamBenhVienId +'}', Take: 50}"
+                    class="item-no-padding" (keyup)="onKey($event)" (openCombobox)="openCombobox($event)"
+                    [template]="duocPhamTemplate" [templateHeader]="duocPhamTemplateHeader"
+                    [popupSettings]="{width: 1000,popupClass:'item-no-padding'}"
+                    [validationerror]="'NoiTruChiDinhDuocPhams['+i+'].DuocPhamBenhVienId' | validationerror:validationErrorsTiem">
+                    <ng-template #duocPhamTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="30%">Tên</th>
+                                <th width="10%">Hoạt Chất</th>
+                                <th width="20%">Nồng độ/Hàm lượng</th>
+                                <th width="10%">ĐVT</th>
+                                <th width="10%">Đường dùng</th>
+                                <!-- <th width="10%">HSD</th> -->
+                                <th width="10%">NSX</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #duocPhamTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="30%">{{dataItem.Ten}}</td>
+                                <td width="10%">{{dataItem.HoatChat}}</td>
+                                <td width="20%">{{dataItem.HamLuong}}</td>
+                                <td width="10%">{{dataItem.DVT}}</td>
+                                <td width="10%">{{dataItem.DuongDung}}</td>
+                                <!-- <td width="10%">{{dataItem.HanSuDung}}</td> -->
+                                <td width="10%">{{dataItem.NhaSX}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+
+                <app-textboxnumeric id="SoLuong{{i+1}}" fxFlex="16%" [(model)]="item.SoLuong" [min]="1" max="999999999"
+                    label="SL/ml" (keyup)="onKey($event)"
+                    [validationerror]="'NoiTruChiDinhDuocPhams['+i+'].SoLuong' | validationerror:validationErrorsTiem"
+                    required="true">
+                </app-textboxnumeric>
+
+                <div fxFlex="5%" fxFlex.sm="20%">
+                    <button mat-icon-button kendoTooltip title="Xóa" class="mt-3"
+                        (click)="xoaThuocTiemHoacTruyen(i,'Tiem')">
+                        <mat-icon [icIcon]="icDelete" color="warn"></mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- (modelChange)="thoiGianBatDauTruyenChange($event)"  -->
+            <app-timepicker id="ThoiGianBatDauTiem" fxFlex="16%" fxFlex.sm="16%" label="Giờ bắt đầu"
+                [(model)]="keToaThuocTiemNew.ThoiGianBatDauTiem" required="true" [modelIsNumber]="true" moreClass="pl-0"
+                (modelChange)="thoiGianBatDauPhaThuocTiemChange($event)" (keyup)="onKey($event)"
+                [validationerror]="'ThoiGianBatDauTiem' | validationerror:validationErrorsTiem">
+            </app-timepicker>
+
+            <app-textboxnumeric id="SoLanTrenMui" fxFlex="16%" [(model)]="keToaThuocTiemNew.SoLanTrenMui" [min]="1"
+                max="999999999" label="Lần/Mũi" (keyup)="onKey($event)">
+            </app-textboxnumeric>
+
+            <app-textboxnumeric id="SoLanTrenNgay" fxFlex="17%" [(model)]="keToaThuocTiemNew.SoLanTrenNgay" [min]="1"
+                [max]="20" (modelChange)="soLanDungTrongNgayPhaThuocTiemChange($event)" label="SL/Ngày"
+                [disabled]="keToaThuocTiemNew.ThoiGianBatDauTiem == null" (keyup)="onKey($event)">
+            </app-textboxnumeric>
+
+            <ng-container
+                *ngIf="keToaThuocTiemNew.SoLanTrenNgay != undefined && keToaThuocTiemNew.SoLanTrenNgay != null && keToaThuocTiemNew.SoLanTrenNgay > 1">
+                <app-textboxnumeric id="CachGioTiem"
+                    [disabled]="keToaThuocTiemNew.SoLanTrenNgay == undefined || keToaThuocTiemNew.SoLanTrenNgay == null || keToaThuocTiemNew.SoLanTrenNgay <= 1"
+                    (modelChange)="cachGioPhaThuocTiemChange($event)" fxFlex="10%" fxFlex.sm="10%" [min]="0.1"
+                    [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                    [(model)]="keToaThuocTiemNew.CachGioTiem" required="true"
+                    [validationerror]="'CachGioTiem' | validationerror:validationErrorsTiem" label="Cách giờ">
+                </app-textboxnumeric>
+            </ng-container>
+
+            <ng-container
+                *ngIf="keToaThuocTiemNew.SoLanTrenNgay != undefined && keToaThuocTiemNew.SoLanTrenNgay != null && keToaThuocTiemNew.SoLanTrenNgay == 1">
+                <app-textboxnumeric id="CachGioTiem"
+                    [disabled]="keToaThuocTiemNew.SoLanTrenNgay == undefined || keToaThuocTiemNew.SoLanTrenNgay == null || keToaThuocTiemNew.SoLanTrenNgay <= 1"
+                    (modelChange)="cachGioPhaThuocTiemChange($event)" fxFlex="10%" fxFlex.sm="10%" [min]="0.1"
+                    [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                    [(model)]="keToaThuocTiemNew.CachGioTiem" label="Cách giờ">
+                </app-textboxnumeric>
+            </ng-container>
+
+            <ng-container
+                *ngIf="keToaThuocTiemNew.SoLanTrenNgay == undefined || keToaThuocTiemNew.SoLanTrenNgay == null">
+                <app-textboxnumeric id="CachGioTiem"
+                    [disabled]="keToaThuocTiemNew.SoLanTrenNgay == undefined || keToaThuocTiemNew.SoLanTrenNgay == null || keToaThuocTiemNew.SoLanTrenNgay <= 1"
+                    (modelChange)="cachGioPhaThuocTiemChange($event)" fxFlex="10%" fxFlex.sm="10%" [min]="0.1"
+                    [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                    [(model)]="keToaThuocTiemNew.CachGioTiem" label="Cách giờ">
+                </app-textboxnumeric>
+            </ng-container>
+
+
+            <app-textbox id="GioSuDungTiem" fxFlex="auto" fxFlex.sm="20%" [(model)]="keToaThuocTiemNew.GioSuDung"
+                label="Giờ sử dụng" [readonly]="true">
+            </app-textbox>
+
+            <app-autocomplete [fxFlex]="keToaNew.KhuVuc == 1 ? '83%' : '100%'" fxFlex.sm="100%"
+                [(model)]="keToaThuocTiemNew.GhiChu" label="Cách dùng" (keyup)="onKey($event)" maxlength="1000"
+                url="KhamBenh/GetGhiChuDonThuocChiTietString" (openCombobox)="openCombobox($event)" popupSettings="null"
+                [queryInfo]="{ParameterDependencies:'{LoaiDuocPhamHoacVatTu:' +loaiDuocPhamHoacVatTu +'}', Take: 50}">
+            </app-autocomplete>
+
+            <div *ngIf="keToaNew.KhuVuc == 1" fxFlex="17%" fxFlex.sm="20%">
+                <div class="container-custom no-label">
+                    <label>&nbsp;</label>
+                    <div fxLayout="row" fxLayoutGap="16px">
+                        <app-checkbox fxFlex="100%" id="KhongTinhPhiTiem" [(model)]="keToaThuocTiemNew.KhongTinhPhi"
+                            label="Tính phí" value="true"></app-checkbox>
+                    </div>
+                </div>
+            </div>
+            <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+                <button type="button" mat-button class="mr-2" (click)="huyThuocTiem()">Hủy</button>
+                <button *ngIf="keToaNew.KhuVuc == 1 && keToaThuocTiemNew.LaThuocTiem" type="button" class="mr-2"
+                    color="primary" mat-raised-button (click)="themThuocTiems()">Thêm</button>
+                <button *ngIf="keToaNew.KhuVuc == 2 && keToaThuocTiemNew.LaThuocTiem" type="button" class="mr-2"
+                    color="primary" mat-raised-button (click)="themThuocTiemNgoais()">Thêm</button>
+
+            </div>
+
+
+        </ng-container>
+
+
+        <!--THUỐC TRUYỀN ------------------------------------------ -->
+        <ng-container *ngIf="keToaThuocTiemNew.LaThuocTruyen">
+            <div fxFlex="100%" fxLayout.lt-sm="column" fxLayoutGap="9px grid" fxLayoutGap.lt-sm="0"
+                *ngFor="let item of keToaThuocTruyenNew.NoiTruChiDinhDuocPhams; let i = index">
+                <app-combobox *ngIf="keToaNew.KhuVuc == 1" id="TenKhoTruyen{{i+1}}" fxFlex="32%" fxFlex.sm="32%"
+                    label="Tên Kho {{i + 1}}" url="DieuTriNoiTru/GetKho" (selectionChange)="chonKhoTruyen($event,i)"
+                    bind="true" [(model)]="item.KhoId" [required]="true" popupSettings="null"
+                    (openCombobox)="openCombobox($event)"
+                    [validationerror]="'NoiTruChiDinhDuocPhams['+i+'].KhoId' | validationerror:validationErrorsTruyen">
+                </app-combobox>
+
+                <app-radio *ngIf="dataBenhNhan.CoBHYT == true && keToaNew.KhuVuc == 1" id="BHYT{{i+1}}"
+                    label="BHYT {{i + 1}}" fxFlex="17%" fxFlex.sm="20%" [(model)]="item.LaDuocPhamBHYT"
+                    (modelChange)="clearThuocTruyen(i)" [items]="[{Value:2,Text:'Có'},{Value:1,Text:'Không'}]">
+                </app-radio>
+                <app-combobox *ngIf="dataBenhNhan.CoBHYT == true && keToaNew.KhuVuc == 1" id="DuocPhamTruyenId{{i+1}}"
+                    fxFlex="auto" fxFlex.sm="auto" #isFocus label="Dược Phẩm/ Hoạt chất {{i + 1}}" [required]="true"
+                    [(model)]="item.DuocPhamBenhVienId" [isAutoFocus]="true" url="YeuCauLinhDuocPham/GetDuocPhamKho"
+                    class="item-no-padding" (keyup)="onKey($event)" (openCombobox)="openCombobox($event)"
+                    [queryInfo]="{ParameterDependencies:'{KhoId:' + item.KhoId +', LaDuocPhamBHYT: ' + item.LaDuocPhamBHYT +'}', Take: 50}"
+                    [template]="duocPhamTemplate" [templateHeader]="duocPhamTemplateHeader"
+                    [validationerror]="'NoiTruChiDinhDuocPhams['+i+'].DuocPhamBenhVienId' | validationerror:validationErrorsTruyen"
+                    [popupSettings]="{width:1000,popupClass:'item-no-padding'}">
+                    <ng-template #duocPhamTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="30%">Tên</th>
+                                <th width="10%">Hoạt Chất</th>
+                                <th width="20%">Nồng độ/Hàm lượng</th>
+                                <th width="10%">ĐVT</th>
+                                <th width="10%">Đường dùng</th>
+                                <!-- <th width="10%">HSD</th> -->
+                                <th width="10%">Tồn</th>
+                                <th width="10%">NSX</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #duocPhamTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="30%">{{dataItem.Ten}}</td>
+                                <td width="10%">{{dataItem.HoatChat}}</td>
+                                <td width="20%">{{dataItem.HamLuong}}</td>
+                                <td width="10%">{{dataItem.DVT}}</td>
+                                <td width="10%">{{dataItem.DuongDung}}</td>
+                                <!-- <td width="10%">{{dataItem.HanSuDung}}</td> -->
+                                <td width="10%">{{dataItem.SLTonFormat}}</td>
+                                <td width="10%">{{dataItem.NhaSX}}</td>
+
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+                <app-combobox *ngIf="dataBenhNhan.CoBHYT != true && keToaNew.KhuVuc == 1" id="DuocPhamTruyenId{{i+1}}"
+                    fxFlex="51%" fxFlex.sm="51%" #isFocus label="Dược Phẩm/ Hoạt chất {{i + 1}}" [required]="true"
+                    [(model)]="item.DuocPhamBenhVienId" [isAutoFocus]="true" url="YeuCauLinhDuocPham/GetDuocPhamKho"
+                    class="item-no-padding" (keyup)="onKey($event)" (openCombobox)="openCombobox($event)"
+                    [queryInfo]="{ParameterDependencies:'{KhoId:' + item.KhoId +', LaDuocPhamBHYT: ' + 1 +'}', Take: 50}"
+                    [template]="duocPhamTemplate" [templateHeader]="duocPhamTemplateHeader"
+                    [validationerror]="'NoiTruChiDinhDuocPhams['+i+'].DuocPhamBenhVienId' | validationerror:validationErrorsTruyen"
+                    [popupSettings]="{width: 1000,popupClass:'item-no-padding'}">
+                    <ng-template #duocPhamTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="30%">Tên</th>
+                                <th width="10%">Hoạt Chất</th>
+                                <th width="20%">Nồng độ/Hàm lượng</th>
+                                <th width="10%">ĐVT</th>
+                                <th width="10%">Đường dùng</th>
+                                <!-- <th width="10%">HSD</th> -->
+                                <th width="10%">Tồn</th>
+                                <th width="10%">NSX</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #duocPhamTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="30%">{{dataItem.Ten}}</td>
+                                <td width="10%">{{dataItem.HoatChat}}</td>
+                                <td width="20%">{{dataItem.HamLuong}}</td>
+                                <td width="10%">{{dataItem.DVT}}</td>
+                                <td width="10%">{{dataItem.DuongDung}}</td>
+                                <!-- <td width="10%">{{dataItem.HanSuDung}}</td> -->
+                                <td width="10%">{{dataItem.SLTonFormat}}</td>
+                                <td width="10%">{{dataItem.NhaSX}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+
+                <app-combobox *ngIf="keToaNew.KhuVuc == 2" id="DuocPhamTruyenId{{i+1}}" fxFlex="auto" fxFlex.sm="auto"
+                    #isFocus label="Dược Phẩm/ Hoạt chất {{i + 1}}" [required]="true"
+                    [(model)]="item.DuocPhamBenhVienId" [isAutoFocus]="true" url="ToaThuocMau/DuocPhams"
+                    [queryInfo]="{ParameterDependencies:'{DuocPhamTruyenId:' + item.DuocPhamBenhVienId +'}', Take: 50}"
+                    class="item-no-padding" (keyup)="onKey($event)" (openCombobox)="openCombobox($event)"
+                    [template]="duocPhamTemplate" [templateHeader]="duocPhamTemplateHeader"
+                    [popupSettings]="{width: 1000,popupClass:'item-no-padding'}"
+                    [validationerror]="'NoiTruChiDinhDuocPhams['+i+'].DuocPhamBenhVienId' | validationerror:validationErrorsTruyen">
+                    <ng-template #duocPhamTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="30%">Tên</th>
+                                <th width="10%">Hoạt Chất</th>
+                                <th width="20%">Nồng độ/Hàm lượng</th>
+                                <th width="10%">ĐVT</th>
+                                <th width="10%">Đường dùng</th>
+                                <!-- <th width="10%">HSD</th> -->
+                                <th width="10%">NSX</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #duocPhamTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="30%">{{dataItem.Ten}}</td>
+                                <td width="10%">{{dataItem.HoatChat}}</td>
+                                <td width="20%">{{dataItem.HamLuong}}</td>
+                                <td width="10%">{{dataItem.DVT}}</td>
+                                <td width="10%">{{dataItem.DuongDung}}</td>
+                                <!-- <td width="10%">{{dataItem.HanSuDung}}</td> -->
+                                <td width="10%">{{dataItem.NhaSX}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+
+                <app-textboxnumeric id="SoLuong{{i+1}}" fxFlex="16%" [(model)]="item.SoLuong" [min]="1" max="999999999"
+                    label="SL/ml" (keyup)="onKey($event)"
+                    [validationerror]="'NoiTruChiDinhDuocPhams['+i+'].SoLuong' | validationerror:validationErrorsTruyen"
+                    required="true">
+                </app-textboxnumeric>
+
+                <div fxFlex="5%" fxFlex.sm="20%">
+                    <button mat-icon-button kendoTooltip title="Xóa" class="mt-3"
+                        (click)="xoaThuocTiemHoacTruyen(i,'Truyen')">
+                        <mat-icon [icIcon]="icDelete" color="warn"></mat-icon>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- (modelChange)="thoiGianBatDauTruyenChange($event)"  -->
+
+            <app-textboxnumeric id="TocDoTruyenThuoc" fxFlex="16%" fxFlex.sm="10%" min=1 max=99999999
+                label="Tốc độ truyền" (keyup)="onKey($event)" [(model)]="keToaThuocTruyenNew.TocDoTruyen">
+            </app-textboxnumeric>
+
+            <app-combobox id="DonViTocDoTruyen" fxFlex="16%" fxFlex.sm="12%" label="Đơn vị tốc độ truyền"
+                (keyup)="onKey($event)" [(model)]="keToaThuocTruyenNew.DonViTocDoTruyen" popupSettings="null"
+                url="DieuTriNoiTru/GetDonViTocDoTruyen">
+            </app-combobox>
+
+
+            <app-timepicker id="ThoiGianBatDauTruyen" fxFlex="16%" fxFlex.sm="16%" label="Giờ bắt đầu"
+                [(model)]="keToaThuocTruyenNew.ThoiGianBatDauTruyen" required="true" [modelIsNumber]="true"
+                moreClass="pl-0" (keyup)="onKey($event)" (modelChange)="thoiGianBatDauPhaThuocTruyenChange($event)"
+                [validationerror]="'ThoiGianBatDauTruyen' | validationerror:validationErrorsTruyen">
+            </app-timepicker>
+
+            <app-textboxnumeric id="SoLanTrenNgay" fxFlex="10%" [(model)]="keToaThuocTruyenNew.SoLanTrenNgay" [min]="1"
+                [max]="20" (modelChange)="soLanDungTrongNgayPhaThuocTruyenChange($event)" label="SL/Ngày"
+                [disabled]="keToaThuocTruyenNew.ThoiGianBatDauTruyen == null" (keyup)="onKey($event)">
+            </app-textboxnumeric>
+
+            <ng-container
+                *ngIf="keToaThuocTruyenNew.SoLanTrenNgay != undefined && keToaThuocTruyenNew.SoLanTrenNgay != null && keToaThuocTruyenNew.SoLanTrenNgay > 1">
+                <app-textboxnumeric id="CachGioTruyen"
+                    [disabled]="keToaThuocTruyenNew.SoLanTrenNgay == undefined || keToaThuocTruyenNew.SoLanTrenNgay == null || keToaThuocTruyenNew.SoLanTrenNgay <= 1"
+                    (modelChange)="cachGioPhaThuocTruyenChange($event)" fxFlex="10%" fxFlex.sm="10%" [min]="0.1"
+                    [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                    [(model)]="keToaThuocTruyenNew.CachGioTruyen" required="true"
+                    [validationerror]="'CachGioTruyen' | validationerror:validationErrorsTruyen" label="Cách giờ">
+                </app-textboxnumeric>
+            </ng-container>
+
+            <ng-container
+                *ngIf="keToaThuocTruyenNew.SoLanTrenNgay != undefined && keToaThuocTruyenNew.SoLanTrenNgay != null && keToaThuocTruyenNew.SoLanTrenNgay == 1">
+                <app-textboxnumeric id="CachGioTruyen"
+                    [disabled]="keToaThuocTruyenNew.SoLanTrenNgay == undefined || keToaThuocTruyenNew.SoLanTrenNgay == null || keToaThuocTruyenNew.SoLanTrenNgay <= 1"
+                    (modelChange)="cachGioPhaThuocTruyenChange($event)" fxFlex="10%" fxFlex.sm="10%" [min]="0.1"
+                    [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                    [(model)]="keToaThuocTruyenNew.CachGioTruyen" label="Cách giờ">
+                </app-textboxnumeric>
+            </ng-container>
+
+            <ng-container
+                *ngIf="keToaThuocTruyenNew.SoLanTrenNgay == undefined || keToaThuocTruyenNew.SoLanTrenNgay == null">
+                <app-textboxnumeric id="CachGioTruyen"
+                    [disabled]="keToaThuocTruyenNew.SoLanTrenNgay == undefined || keToaThuocTruyenNew.SoLanTrenNgay == null || keToaThuocTruyenNew.SoLanTrenNgay <= 1"
+                    (modelChange)="cachGioPhaThuocTruyenChange($event)" fxFlex="10%" fxFlex.sm="10%" [min]="0.1"
+                    [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                    [(model)]="keToaThuocTruyenNew.CachGioTruyen" label="Cách giờ">
+                </app-textboxnumeric>
+            </ng-container>
+
+
+            <app-textbox id="GioSuDungTruyen" fxFlex="auto" fxFlex.sm="20%" [(model)]="keToaThuocTruyenNew.GioSuDung"
+                label="Giờ sử dụng" [readonly]="true">
+            </app-textbox>
+
+            <app-autocomplete [fxFlex]="keToaNew.KhuVuc == 1 ? '83%' : '100%'" fxFlex.sm="100%"
+                [(model)]="keToaThuocTruyenNew.GhiChu" label="Cách dùng" (keyup)="onKey($event)" maxlength="1000"
+                url="KhamBenh/GetGhiChuDonThuocChiTietString" (openCombobox)="openCombobox($event)" popupSettings="null"
+                [queryInfo]="{ParameterDependencies:'{LoaiDuocPhamHoacVatTu:' +loaiDuocPhamHoacVatTu +'}', Take: 50}">
+            </app-autocomplete>
+
+            <div *ngIf="keToaNew.KhuVuc == 1" fxFlex="17%" fxFlex.sm="20%">
+                <div class="container-custom no-label">
+                    <label>&nbsp;</label>
+                    <div fxLayout="row" fxLayoutGap="16px">
+                        <app-checkbox fxFlex="100%" id="KhongTinhPhiTruyen" [(model)]="keToaThuocTruyenNew.KhongTinhPhi"
+                            label="Tính phí" value="true"></app-checkbox>
+                    </div>
+                </div>
+            </div>
+            <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+                <button type="button" mat-button class="mr-2" (click)="huyThuocTruyen()">Hủy</button>
+                <button *ngIf="keToaNew.KhuVuc == 1 && keToaThuocTiemNew.LaThuocTruyen" type="button" class="mr-2"
+                    color="primary" mat-raised-button (click)="themThuocTruyens()">Thêm</button>
+                <button *ngIf="keToaNew.KhuVuc == 2 && keToaThuocTiemNew.LaThuocTruyen" type="button" class="mr-2"
+                    color="primary" mat-raised-button (click)="themThuocTruyenNgoais()">Thêm</button>
+
+            </div>
+        </ng-container>
+        <!--END -------THUỐC TIÊM - THUỐC TRUYỀN ------------------------------------------ -->
+
+
+    </ng-container>
+    <!-- <ng-container *ngIf="!keToaThuocTiemNew.LaThuocTiem && !keToaThuocTiemNew.LaThuocTruyen "> -->
+    <ng-container>
+        <h1 *ngIf="isShowKhoLeDichTruyen ||  isShowKhoTongDichTruyen" fxFlex="100%"
+            class="sub-titlewithh1  mr-4 mt-0 red">
+            DỊCH TRUYỀN TRONG BỆNH VIỆN</h1>
+
+        <!-- <div [style.display]="isShowKhoLeDichTruyen ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+                <h3 fxFlex="100%" class="sub-title  mr-4 mt-0">TỦ TRỰC</h3>
+                <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                    fxLayout.lt-md="column">
+                    <app-grid #gridDichTruyen masterName="gridDichTruyen" fxFlex="100%" style="width: 1px;"
+                        [gridColumns]="gridTruyenDichKhoLeColumns" [documentType]="documentType"
+                        [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="false"
+                        [removeGroupFooterIfIsOnlyOne]="true" [checkboxAble]="false" class="k-grid-border"
+                        urlGetData="DieuTriNoiTru/GetDataForGridDanhSachTruyenDich" [sort]="sortToaThuoc"
+                        urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachTruyenDich"
+                        (extOnDataBound)="onDataBoundChildDichTruyen($event)" [additionalSearchString]="additionString"
+                        [pageable]="false" [autoHeight]="true">
+                    </app-grid>
+                </div>
+            </ng-container>
+        </div> -->
+        <div [style.display]="isShowKhoTongDichTruyen ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+                <!-- <h3 fxFlex="100%" class="sub-title  mr-4 mt-0">KHO TỔNG</h3> -->
+                <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                    fxLayout.lt-md="column">
+                    <app-grid #gridDichTruyenKhoTong masterName="gridDichTruyenKhoTong" fxFlex="100%"
+                        style="width: 1px;" [gridColumns]="gridTruyenDichKhoTongColumns" [documentType]="documentType"
+                        [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="false"
+                        [removeGroupFooterIfIsOnlyOne]="true" [checkboxAble]="false" class="k-grid-border"
+                        urlGetData="DieuTriNoiTru/GetDataForGridDanhSachTruyenDichKhoTong" [sort]="sortToaThuoc"
+                        urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachTruyenDichKhoTong"
+                        (extOnDataBound)="onDataBoundChildKhoTongDichTruyen($event)"
+                        [additionalSearchString]="additionString" [pageable]="false" [autoHeight]="true">
+                    </app-grid>
+                </div>
+            </ng-container>
+        </div>
+
+        <h1 *ngIf="isShowKhoLeThuoc ||  isShowKhoTongThuoc" fxFlex="100%" class="sub-titlewithh1  mr-4 mt-0 blue">THUỐC
+            TRONG BỆNH VIỆN</h1>
+
+        <!-- <div [style.display]="isShowKhoLeThuoc ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+                <div>
+                    <h3 fxFlex="100%" class="sub-title  mr-4 mt-0">TỦ TRỰC</h3>
+                </div>
+                <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                    fxLayout.lt-md="column">
+                    <app-grid #gridThuocKhoLe masterName="gridThuocKhoLe" fxFlex="100%" style="width: 1px;"
+                        [gridColumns]="gridThuocKhoLeColumns" [documentType]="documentType" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [lazyLoadPage]="false" [removeGroupFooterIfIsOnlyOne]="true"
+                        [checkboxAble]="false" class="k-grid-border"
+                        urlGetData="DieuTriNoiTru/GetDataForGridDanhSachThuocKhoLe" [sort]="sortToaThuoc"
+                        urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachThuocKhoLe"
+                        (extOnDataBound)="onDataBoundChild($event)" [additionalSearchString]="additionString"
+                        [pageable]="false" [autoHeight]="true">
+
+                    </app-grid>
+                </div>
+            </ng-container>
+        </div> -->
+
+        <div [style.display]="isShowKhoTongThuoc ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+                <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                    fxLayout.lt-md="column">
+                    <app-grid #gridThuocKhoTong masterName="gridThuocKhoTong" fxFlex="100%" style="width: 1px;"
+                        [gridColumns]="gridThuocKhoTongColumns" [documentType]="documentType" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [lazyLoadPage]="false" [removeGroupFooterIfIsOnlyOne]="true"
+                        [checkboxAble]="false" class="k-grid-border"
+                        urlGetData="DieuTriNoiTru/GetDataForGridDanhSachThuocKhoTong" [sort]="sortToaThuoc"
+                        urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachThuocKhoTong"
+                        (extOnDataBound)="onDataBoundChildKhoTong($event)" [additionalSearchString]="additionString"
+                        [pageable]="false" [autoHeight]="true">
+                    </app-grid>
+                </div>
+            </ng-container>
+        </div>
+
+
+
+        <div fxFlex="100%" class="py-3 text-right" kendoTooltip>
+        <!-- *ngIf="coThuocBHYT" -->
+            <div>
+                <button
+                    *ngIf="(isShowKhoLeDichTruyen || isShowKhoTongDichTruyen || isShowKhoLeThuoc || isShowKhoTongThuoc) && !dataBenhNhan.KetThucBenhAn"
+                    style="pointer-events: all;" type="button" class="float-left" color="primary" mat-raised-button
+                    (click)="sapXepThuoc()">Sắp xếp theo TT 23</button>
+            </div>
+
+        <button *ngIf="isShowKhoLeDichTruyen || isShowKhoTongDichTruyen || isShowKhoLeThuoc || isShowKhoTongThuoc"
+            style="pointer-events: all;" type="button" class="mr-2" color="primary" mat-raised-button
+            (click)="inPhieuThucHienThuoc()">In phiếu thực hiện thuốc</button>
+        <button *ngIf="isShowKhoLeDichTruyen || isShowKhoTongDichTruyen || isShowKhoLeThuoc || isShowKhoTongThuoc"
+            style="pointer-events: all;" type="button" class="mr-2" color="primary" mat-raised-button
+            (click)="inPhieuCongKhaiThuoc()">In phiếu công
+            khai thuốc</button>
+    </div>
+
+
+        <h1 *ngIf="isShowThuocNgoai" fxFlex="100%" class="sub-titlewithh1  mr-4 mt-0 blue">THUỐC
+            NGOÀI BỆNH VIỆN</h1>
+
+        <div [style.display]="isShowThuocNgoai ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+
+                <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                    fxLayout.lt-md="column">
+                    <app-grid #gridThuocNgoai masterName="gridThuocNgoai" fxFlex="100%" style="width: 1px;"
+                        [gridColumns]="gridThuocNgoaiColumns" [documentType]="documentType" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [lazyLoadPage]="false" [checkboxAble]="false" class="k-grid-border"
+                        urlGetData="DieuTriNoiTru/GetDataForGridDanhSachThuocNgoai"
+                        urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachThuocKhoLe" [showStt]="true"
+                        (extOnDataBound)="onDataBoundChildThuocNgoai($event)" [additionalSearchString]="additionString"
+                        [pageable]="false" [autoHeight]="true">
+                    </app-grid>
+                </div>
+            </ng-container>
+        </div>
+
+        <h1 *ngIf="isShowDichTruyenNgoai" fxFlex="100%" class="sub-titlewithh1  mr-4 mt-0 red">DỊCH TRUYỀN
+            NGOÀI BỆNH VIỆN</h1>
+
+        <div [style.display]="isShowDichTruyenNgoai ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+                <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                    fxLayout.lt-md="column">
+                    <app-grid #gridTruyenDichNgoai masterName="gridTruyenDichNgoai" fxFlex="100%" style="width: 1px;"
+                        [gridColumns]="gridTruyenDichNgoaiColumns" [documentType]="documentType"
+                        [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="false"
+                        [checkboxAble]="false" class="k-grid-border"
+                        urlGetData="DieuTriNoiTru/GetDataForGridDanhSachDichTruyenNgoai"
+                        urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachThuocKhoLe" [showStt]="true"
+                        (extOnDataBound)="onDataBoundChildDichTruyenNgoai($event)"
+                        [additionalSearchString]="additionString" [pageable]="false" [autoHeight]="true">
+                    </app-grid>
+                </div>
+            </ng-container>
+        </div>
+
+        <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+            <!-- *ngIf="coThuocBHYT" -->
+            <button *ngIf="isShowThuocNgoai || isShowDichTruyenNgoai" style="pointer-events: all;" type="button"
+                class="mr-2" color="primary" mat-raised-button (click)="inPhieuThuocNgoaiBenhVien()">In phiếu thuốc/
+                dịch
+                truyền ngoài bệnh viện</button>
+        </div>
+    </ng-container>
+
+    <!-- <ng-container *ngIf="keToaThuocTiemNew.LaThuocTiem">
+        <h1 *ngIf="isShowPhaThuocTiem" fxFlex="100%" class="sub-titlewithh1  mr-4 mt-0 blue">PHA THUỐC TIÊM
+            TRONG BỆNH VIỆN</h1>
+        <div [style.display]="isShowPhaThuocTiem ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+                <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                    fxLayout.lt-md="column">
+                    <app-grid #gridThuocTiem masterName="gridThuocTiem" fxFlex="100%" style="width: 1px;"
+                        [gridColumns]="gridThuocTiemColumns" [documentType]="documentType" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [lazyLoadPage]="false" [removeGroupFooterIfIsOnlyOne]="true"
+                        [checkboxAble]="false" class="k-grid-border"
+                        urlGetData="DieuTriNoiTru/GetDataForGridDanhSachPhaThuocTiem" [sort]="sortToaThuoc"
+                        urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachPhaThuocTiem"
+                        (extOnDataBound)="onDataBoundChildPhaThuocTiem($event)"
+                        [additionalSearchString]="additionString" [pageable]="false" [autoHeight]="true">
+
+                    </app-grid>
+                </div>
+            </ng-container>
+        </div>
+
+        <h1 *ngIf="isShowPhaThuocTiemNgoai" fxFlex="100%" class="sub-titlewithh1  mr-4 mt-0 blue">PHA THUỐC TIÊM
+            NGOÀI BỆNH VIỆN</h1>
+
+        <div [style.display]="isShowPhaThuocTiemNgoai ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+
+                <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                    fxLayout.lt-md="column">
+                    <app-grid #gridThuocTiemNgoaiBV masterName="gridThuocTiemNgoaiBV" fxFlex="100%" style="width: 1px;"
+                        [gridColumns]="gridThuocTiemNgoaiBVColumns" [documentType]="documentType" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [lazyLoadPage]="false" [checkboxAble]="false" class="k-grid-border"
+                        urlGetData="DieuTriNoiTru/GetDataForGridDanhSachPhaThuocTiemNgoai"
+                        urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachPhaThuocTiemNgoai" [showStt]="true"
+                        (extOnDataBound)="onDataBoundChildThuocNgoai($event)" [additionalSearchString]="additionString"
+                        [pageable]="false" [autoHeight]="true">
+                    </app-grid>
+                </div>
+            </ng-container>
+        </div>
+
+    </ng-container> -->
+
+    <!-- <ng-container *ngIf="keToaThuocTiemNew.LaThuocTruyen">
+        <h1 *ngIf="isShowPhaThuocTruyen" fxFlex="100%" class="sub-titlewithh1  mr-4 mt-0 blue">PHA THUỐC TRUYỀN
+            TRONG BỆNH VIỆN</h1>
+        <div [style.display]="isShowPhaThuocTruyen ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+                <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                    fxLayout.lt-md="column">
+                    <app-grid #gridThuocTruyen masterName="gridThuocTruyen" fxFlex="100%" style="width: 1px;"
+                        [gridColumns]="gridThuocTruyenColumns" [documentType]="documentType" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [lazyLoadPage]="false" [removeGroupFooterIfIsOnlyOne]="true"
+                        [checkboxAble]="false" class="k-grid-border"
+                        urlGetData="DieuTriNoiTru/GetDataForGridDanhSachPhaThuocTruyen" [sort]="sortToaThuoc"
+                        urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachPhaThuocTruyen"
+                        (extOnDataBound)="onDataBoundChildPhaThuocTruyen($event)"
+                        [additionalSearchString]="additionString" [pageable]="false" [autoHeight]="true">
+
+                    </app-grid>
+                </div>
+            </ng-container>
+        </div>
+        
+        <h1 *ngIf="isShowDichTruyenNgoai" fxFlex="100%" class="sub-titlewithh1  mr-4 mt-0 red">DỊCH TRUYỀN
+            NGOÀI BỆNH VIỆN</h1>
+
+        <div [style.display]="isShowDichTruyenNgoai ? 'block' : 'none'" fxFlex="100%">
+            <ng-container>
+                <div class="div-content" fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid"
+                    fxLayout.lt-md="column">
+                    <app-grid #gridTruyenDichNgoai masterName="gridTruyenDichNgoai" fxFlex="100%" style="width: 1px;"
+                        [gridColumns]="gridTruyenDichNgoaiColumns" [documentType]="documentType"
+                        [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="false"
+                        [checkboxAble]="false" class="k-grid-border"
+                        urlGetData="DieuTriNoiTru/GetDataForGridDanhSachDichTruyenNgoai"
+                        urlGetTotalPage="DieuTriNoiTru/GetTotalPageForGridDanhSachThuocKhoLe" [showStt]="true"
+                        (extOnDataBound)="onDataBoundChildDichTruyenNgoai($event)"
+                        [additionalSearchString]="additionString" [pageable]="false" [autoHeight]="true">
+                    </app-grid>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container> -->
+
+
+    <ng-template #sangTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <p *ngIf="dataItem.DungSang != null && dataItem.ThoiGianDungSangDisplay != null" kendoTooltip
+                title="{{dataItem.DungSang + ' ' +(dataItem.ThoiGianDungSangDisplay)}}">
+                {{dataItem.DungSang}}&nbsp;
+                {{dataItem.ThoiGianDungSangDisplay}}
+            </p>
+            <p *ngIf="dataItem.DungSang != null && dataItem.ThoiGianDungSangDisplay == null" kendoTooltip
+                title="{{dataItem.DungSang}}">
+                {{dataItem.DungSang}}
+            </p>
+            <p *ngIf="dataItem.DungSang == null && dataItem.ThoiGianDungSangDisplay != null" kendoTooltip
+                title="{{dataItem.ThoiGianDungSangDisplay}}">
+                {{dataItem.ThoiGianDungSangDisplay}}
+            </p>
+        </div>
+    </ng-template>
+    <ng-template #truaTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <p *ngIf="dataItem.DungTrua != null && dataItem.ThoiGianDungTruaDisplay != null" kendoTooltip
+                title="{{dataItem.DungTrua + ' ' +(dataItem.ThoiGianDungTruaDisplay)}}">
+                {{dataItem.DungTrua}}&nbsp;
+                {{dataItem.ThoiGianDungTruaDisplay}}
+            </p>
+            <p *ngIf="dataItem.DungTrua != null && dataItem.ThoiGianDungTruaDisplay == null" kendoTooltip
+                title="{{dataItem.DungTrua}}">
+                {{dataItem.DungTrua}}
+            </p>
+            <p *ngIf="dataItem.DungTrua == null && dataItem.ThoiGianDungTruaDisplay != null" kendoTooltip
+                title="{{dataItem.ThoiGianDungTruaDisplay}}">
+                {{dataItem.ThoiGianDungTruaDisplay}}
+            </p>
+        </div>
+    </ng-template>
+    <ng-template #chieuTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <p *ngIf="dataItem.DungChieu != null && dataItem.ThoiGianDungChieuDisplay != null" kendoTooltip
+                title="{{dataItem.DungChieu + ' ' +(dataItem.ThoiGianDungChieuDisplay)}}">
+                {{dataItem.DungChieu}}&nbsp;
+                {{dataItem.ThoiGianDungChieuDisplay}}
+            </p>
+            <p *ngIf="dataItem.DungChieu != null && dataItem.ThoiGianDungChieuDisplay == null" kendoTooltip
+                title="{{dataItem.DungChieu}}">
+                {{dataItem.DungChieu}}
+            </p>
+            <p *ngIf="dataItem.DungChieu == null && dataItem.ThoiGianDungChieuDisplay != null" kendoTooltip
+                title="{{dataItem.ThoiGianDungChieuDisplay}}">
+                {{dataItem.ThoiGianDungChieuDisplay}}
+            </p>
+        </div>
+    </ng-template>
+    <ng-template #toiTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <p *ngIf="dataItem.DungToi != null && dataItem.ThoiGianDungToiDisplay != null" kendoTooltip
+                title="{{dataItem.DungToi + ' ' +(dataItem.ThoiGianDungToiDisplay)}}">
+                {{dataItem.DungToi}}&nbsp;
+                {{dataItem.ThoiGianDungToiDisplay}}
+            </p>
+            <p *ngIf="dataItem.DungToi != null && dataItem.ThoiGianDungToiDisplay == null" kendoTooltip
+                title="{{dataItem.DungToi}}">
+                {{dataItem.DungToi}}
+            </p>
+            <p *ngIf="dataItem.DungToi == null && dataItem.ThoiGianDungToiDisplay != null" kendoTooltip
+                title="{{dataItem.ThoiGianDungToiDisplay}}">
+                {{dataItem.ThoiGianDungToiDisplay}}
+            </p>
+        </div>
+    </ng-template>
+
+    <ng-template #lieuDungTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <p *ngIf="dataItem.SoLanTrenNgay != null" kendoTooltip title="ngày {{dataItem.SoLanTrenNgay}} lần">
+                ngày {{dataItem.SoLanTrenNgay}} lần
+            </p>
+        </div>
+
+    </ng-template>
+    <!-- THUỐC -->
+    <!-- Kho lẻ (Tủ trực) -->
+    <ng-template #donGiaTemplate let-dataItem>
+        <p *ngFor="let item of dataItem.DonGias" class="thanhTien">
+            {{item | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #thanhTienTemplate let-dataItem>
+        <p *ngFor="let item of dataItem.ThanhTiens" class="thanhTien">
+            {{item | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #thanhTienFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold; text-align: right;">
+            <span>{{totalThanhTienKhoLe('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </p>
+    </ng-template>
+    <ng-template #donGiaFooterTemplate>
+        <span style="float:right">Tổng cộng:</span>
+    </ng-template>
+    <ng-template #thanhTienGroupFooterTemplate let-aggregates>
+        <p class="thanhTien">{{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}</p>
+    </ng-template>
+    <ng-template #donGiaGroupFooterTemplate let-dataItem>
+        <span style="float:right">Cộng:</span>
+    </ng-template>
+
+    <!-- Kho tổng -->
+    <ng-template #donGiaKhoTongTemplate let-dataItem>
+        <p *ngFor="let item of dataItem.DonGias" class="thanhTien">
+            {{item | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #thanhTienKhoTongTemplate let-dataItem>
+        <p *ngFor="let item of dataItem.ThanhTiens" class="thanhTien">
+            {{item | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #thanhTienKhoTongFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold;  text-align: right;">
+            <span>{{totalThanhTienKhoTong('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </p>
+    </ng-template>
+    <ng-template #donGiaKhoTongFooterTemplate>
+        <span style="float:right">Tổng cộng:</span>
+    </ng-template>
+    <ng-template #thanhTienKhoTongGroupFooterTemplate let-aggregates>
+        <p class="thanhTien">{{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}</p>
+    </ng-template>
+    <ng-template #donGiaKhoTongGroupFooterTemplate let-dataItem>
+        <span style="float:right">Cộng:</span>
+    </ng-template>
+
+
+    <!-- DỊCH TRUYỀN -->
+    <!-- Kho lẻ (Tủ trực) -->
+
+    <ng-template #donGiaDichTruyenTemplate let-dataItem>
+        <p *ngFor="let item of dataItem.DonGias" class="thanhTien">
+            {{item | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #thanhTienDichTruyenTemplate let-dataItem>
+        <p *ngFor="let item of dataItem.ThanhTiens" class="thanhTien">
+            {{item | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #thanhTienDichTruyenFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold;  text-align: right;">
+            <span>{{totalThanhTienKhoLeDichTruyen('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </p>
+
+    </ng-template>
+    <ng-template #donGiaDichTruyenFooterTemplate>
+        <span style="float:right">Tổng cộng:</span>
+    </ng-template>
+    <ng-template #thanhTienDichTruyenGroupFooterTemplate let-aggregates>
+        <p class="thanhTien">{{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}</p>
+    </ng-template>
+    <ng-template #donGiaDichTruyenGroupFooterTemplate let-dataItem>
+        <span style="float:right">Cộng:</span>
+    </ng-template>
+
+    <!-- Kho tổng -->
+
+    <ng-template #donGiaKhoTongDichTruyenTemplate let-dataItem>
+        <p *ngFor="let item of dataItem.DonGias" class="thanhTien">
+            {{item | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #thanhTienKhoTongDichTruyenTemplate let-dataItem>
+        <p *ngFor="let item of dataItem.ThanhTiens" class="thanhTien">
+            {{item | number:'0.2-2':'vi-VN'}}
+        </p>
+    </ng-template>
+    <ng-template #thanhTienKhoTongDichTruyenFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold;  text-align: right;">
+            <span>{{totalThanhTienKhoTongDichTruyen('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </p>
+    </ng-template>
+    <ng-template #donGiaKhoTongDichTruyenFooterTemplate>
+        <span style="float:right">Tổng cộng:</span>
+    </ng-template>
+    <ng-template #thanhTienKhoTongDichTruyenGroupFooterTemplate let-aggregates>
+        <p class="thanhTien">{{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}</p>
+    </ng-template>
+    <ng-template #donGiaKhoTongDichTruyenGroupFooterTemplate let-dataItem>
+        <span style="float:right">Cộng:</span>
+    </ng-template>
+
+
+    <ng-template #SLTemplate let-dataItem>
+        <p *ngFor="let item of dataItem.SoLuongDisplay">
+            {{item | number:'1.0-2':'vi-VN'}}
+        </p>
+    </ng-template>
+
+    <ng-template #thanhTienPTTFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold; text-align: right;">
+            <span>{{totalThanhTienPhaThuocTiem('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </p>
+    </ng-template>
+
+    <ng-template #thanhTienPTTGroupFooterTemplate let-aggregates>
+        <p class="thanhTien">{{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}</p>
+    </ng-template>
+
+    <ng-template #thanhTienPTTruyenFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold; text-align: right;">
+            <span>{{totalThanhTienPhaThuocTruyen('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </p>
+    </ng-template>
+
+    <ng-template #thanhTienPTTruyenGroupFooterTemplate let-aggregates>
+        <p class="thanhTien">{{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}</p>
+    </ng-template>
+
+    <ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+        <div class="text-right" kendoTooltip
+            *ngIf="this.dataBenhNhan.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true">
+            <button
+                *ngIf="dataItem.SoLuong !=0 && !dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.KhuVuc == 1"
+                color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaThuoc(dataItem)" type="button">
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+            </button>
+            <button *ngIf="dataItem.KhuVuc == 2" color="primary" mat-icon-button kendoTooltip title="Sửa"
+                (click)="suaThuoc(dataItem)" type="button">
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+            </button>
+            <button *ngIf="!dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.KhuVuc == 1" color="primary"
+                mat-icon-button kendoTooltip title="Xóa" (click)="xoaThuoc(dataItem)" type="button">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+            <button *ngIf="dataItem.KhuVuc == 2" color="primary" mat-icon-button kendoTooltip title="Xóa"
+                (click)="xoaThuoc(dataItem)" type="button">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+
+            <button color="warn" mat-icon-button kendoTooltip title="Tăng STT" (click)="tangGiamSTT(dataItem, 'tang')"
+                type="button">
+                <mat-icon [icIcon]="icArrowUpward"></mat-icon>
+            </button>
+
+            <button color="primary" mat-icon-button kendoTooltip title="Giảm STT"
+                (click)="tangGiamSTT(dataItem, 'giam')" type="button">
+                <mat-icon [icIcon]="icArrowDownward"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #actionKhoTongTemplate let-dataItem let-rowIndex="rowIndex">
+        <div class="text-right" kendoTooltip
+            *ngIf="this.dataBenhNhan.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true">
+
+            <!-- style="color:orangered" -->
+            <button [ngStyle]="{
+                'color' : dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet ? 'orangered' : 'blue'
+              }" *ngIf="dataItem.TinhTrang && dataItem.KhuVuc == 1 && !dataItem.LaTuTruc" mat-icon-button kendoTooltip
+                title="Hoàn trả" (click)="hoanTra(dataItem)" type="button">
+                <mat-icon [icIcon]="icUndo"></mat-icon>
+            </button>
+            <ng-container *ngIf="dataItem.LaDichTruyen != true">
+                <!-- <button
+                    *ngIf="!dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.KhuVuc == 1 && !dataItem.LaTuTruc"
+                    color="primary" mat-icon-button kendoTooltip title="Hoàn trả" (click)="hoanTra(dataItem)"
+                    type="button">
+                    <mat-icon [icIcon]="icUndo"></mat-icon>
+                </button> -->
+                <button
+                    *ngIf="dataItem.SoLuong !=0 && !dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && !dataItem.TinhTrang && !dataItem.LaTuTruc"
+                    color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaThuoc(dataItem)" type="button">
+                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                </button>
+                <button
+                    *ngIf="dataItem.SoLuong !=0 && !dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.LaTuTruc"
+                    color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaThuoc(dataItem)" type="button">
+                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                </button>
+                <button
+                    *ngIf="!dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && !dataItem.TinhTrang && !dataItem.LaTuTruc"
+                    color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaThuoc(dataItem)" type="button">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+                <button
+                    *ngIf="!dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.LaTuTruc"
+                    color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaThuoc(dataItem)" type="button">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+
+            </ng-container>
+
+            <ng-container *ngIf="dataItem.LaDichTruyen == true">
+                <ng-container
+                    *ngIf="dataItem.NoiTruChiDinhPhaThuocTiemId == null && dataItem.NoiTruChiDinhPhaThuocTruyenId == null">
+
+                    <!-- <button
+                        *ngIf="!dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.KhuVuc == 1 && !dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Hoàn trả" (click)="hoanTra(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icUndo"></mat-icon>
+                    </button> -->
+                    <button
+                        *ngIf="dataItem.SoLuong !=0 && !dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && !dataItem.TinhTrang && !dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaThuoc(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                    </button>
+                    <button
+                        *ngIf="dataItem.SoLuong !=0 && !dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaThuoc(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                    </button>
+                    <button
+                        *ngIf="!dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && !dataItem.TinhTrang && !dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaThuoc(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                    </button>
+                    <button
+                        *ngIf="!dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaThuoc(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                    </button>
+                </ng-container>
+
+                <ng-container *ngIf="dataItem.NoiTruChiDinhPhaThuocTiemId != null">
+                    <button
+                        *ngIf="dataItem.SoLuong !=0 && !dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaPhaThuocTiem(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                    </button>
+
+                    <button
+                        *ngIf="dataItem.SoLuong !=0 && !dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && !dataItem.TinhTrang && !dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaPhaThuocTiem(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                    </button>
+
+                    <button
+                        *ngIf="!dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaPhaThuocTiem(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                    </button>
+
+                    <button
+                        *ngIf="!dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && !dataItem.TinhTrang && !dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaPhaThuocTiem(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                    </button>
+                </ng-container>
+
+                <ng-container *ngIf="dataItem.NoiTruChiDinhPhaThuocTruyenId != null">
+                    <button
+                        *ngIf="dataItem.SoLuong !=0 && !dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && !dataItem.TinhTrang && !dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaPhaThuocTruyen(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                    </button>
+
+                    <button
+                        *ngIf="dataItem.SoLuong !=0 && !dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaPhaThuocTruyen(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                    </button>
+
+                    <button
+                        *ngIf="!dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && !dataItem.TinhTrang && !dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaPhaThuocTruyen(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                    </button>
+
+                    <button
+                        *ngIf="!dataItem.CoYeuCauTraDuocPhamTuBenhNhanChiTiet && dataItem.TinhTrang && dataItem.LaTuTruc"
+                        color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaPhaThuocTruyen(dataItem)"
+                        type="button">
+                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                    </button>
+                </ng-container>
+
+            </ng-container>
+
+
+            <button color="warn" mat-icon-button kendoTooltip title="Tăng STT" (click)="tangGiamSTT(dataItem, 'tang')"
+                type="button">
+                <mat-icon [icIcon]="icArrowUpward"></mat-icon>
+            </button>
+
+            <button color="primary" mat-icon-button kendoTooltip title="Giảm STT"
+                (click)="tangGiamSTT(dataItem, 'giam')" type="button">
+                <mat-icon [icIcon]="icArrowDownward"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem>
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-template #checkBoxTemplate let-dataItem>
+        <ng-container
+            *ngIf="dataItem.NoiTruChiDinhPhaThuocTiemId == null && dataItem.NoiTruChiDinhPhaThuocTruyenId == null">
+            <input *ngIf="this.dataBenhNhan.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true" type="checkbox"
+                id="vehicle1{{dataItem.Id}}" [(ngModel)]="dataItem.KhongTinhPhi" name="vehicle1"
+                (ngModelChange)="khongTinhPhiChange($event,dataItem)">
+
+            <input *ngIf="this.dataBenhNhan.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false" type="checkbox"
+                [disabled]="true" id="vehicle1{{dataItem.Id}}disabled" [(ngModel)]="dataItem.KhongTinhPhi"
+                name="vehicle1">
+        </ng-container>
+        <ng-container *ngIf="dataItem.NoiTruChiDinhPhaThuocTiemId != null">
+            <input *ngIf="this.dataBenhNhan.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true" type="checkbox"
+                id="vehicle1{{dataItem.Id}}Tiem" [(ngModel)]="dataItem.KhongTinhPhi" name="vehicle1"
+                (ngModelChange)="khongTinhPhiTiemHoacTruyenChange($event,dataItem, true)">
+
+            <input *ngIf="this.dataBenhNhan.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false" type="checkbox"
+                [disabled]="true" id="vehicle1{{dataItem.Id}}disabledTiem" [(ngModel)]="dataItem.KhongTinhPhi"
+                name="vehicle1">
+        </ng-container>
+
+        <ng-container *ngIf="dataItem.NoiTruChiDinhPhaThuocTruyenId != null">
+            <input *ngIf="this.dataBenhNhan.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true" type="checkbox"
+                id="vehicle1{{dataItem.Id}}Truyen" [(ngModel)]="dataItem.KhongTinhPhi" name="vehicle1"
+                (ngModelChange)="khongTinhPhiTiemHoacTruyenChange($event,dataItem, false)">
+
+            <input *ngIf="this.dataBenhNhan.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false" type="checkbox"
+                [disabled]="true" id="vehicle1{{dataItem.Id}}disabledTruyen" [(ngModel)]="dataItem.KhongTinhPhi"
+                name="vehicle1">
+        </ng-container>
+    </ng-template>
+
+    <!-- <ng-template #checkBoxPTTiemTemplate let-dataItem>
+        <input *ngIf="this.dataBenhNhan.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true" type="checkbox"
+            id="vehicle1{{dataItem.Id}}Tiem" [(ngModel)]="dataItem.KhongTinhPhi" name="vehicle1"
+            (ngModelChange)="khongTinhPhiTiemHoacTruyenChange($event,dataItem, true)">
+
+        <input *ngIf="this.dataBenhNhan.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false" type="checkbox"
+            [disabled]="true" id="vehicle1{{dataItem.Id}}disabledTiem" [(ngModel)]="dataItem.KhongTinhPhi"
+            name="vehicle1">
+    </ng-template>
+
+    <ng-template #checkBoxPTTruyenTemplate let-dataItem>
+        <input *ngIf="this.dataBenhNhan.KetThucBenhAn == false && laKhoaKhamBenhChiDinh == true" type="checkbox"
+            id="vehicle1{{dataItem.Id}}Truyen" [(ngModel)]="dataItem.KhongTinhPhi" name="vehicle1"
+            (ngModelChange)="khongTinhPhiTiemHoacTruyenChange($event,dataItem, false)">
+
+        <input *ngIf="this.dataBenhNhan.KetThucBenhAn == true || laKhoaKhamBenhChiDinh == false" type="checkbox"
+            [disabled]="true" id="vehicle1{{dataItem.Id}}disabledTruyen" [(ngModel)]="dataItem.KhongTinhPhi"
+            name="vehicle1">
+    </ng-template> -->
+
+    <ng-template #checkBoxInTemplate let-dataItem kendoTooltip let-rowIndex="rowIndex">
+        <app-checkbox value="true" [(model)]="dataItem.CheckBox" label=" " class="pl-2" id="check-{{dataItem.Id}}"
+            (modelChange)="checkBoxThuocVatTu(dataItem, $event, true)">
+        </app-checkbox>
+    </ng-template>
+
+    <ng-template #checkBoxHeaderTemplate let-dataItem>
+        <app-checkbox value="true" [(model)]="checkAll" label=" " class="pl-2" name="vehicle1"
+            (modelChange)="checkBoxAllChange($event, true)">
+        </app-checkbox>
+    </ng-template>
+
+    <ng-template #checkBoxInDichTruyenTemplate let-dataItem kendoTooltip let-rowIndex="rowIndex">
+        <app-checkbox value="true" [(model)]="dataItem.CheckBox" label=" " class="pl-2" id="check-{{dataItem.Id}}-dt"
+            (modelChange)="checkBoxThuocVatTu(dataItem, $event, false)">
+        </app-checkbox>
+    </ng-template>
+
+    <ng-template #checkBoxHeaderDichTruyenTemplate let-dataItem>
+        <app-checkbox value="true" [(model)]="checkAll" label=" " class="pl-2" name="vehicle1dt"
+            (modelChange)="checkBoxAllChange($event, false)">
+        </app-checkbox>
+    </ng-template>
+</div>

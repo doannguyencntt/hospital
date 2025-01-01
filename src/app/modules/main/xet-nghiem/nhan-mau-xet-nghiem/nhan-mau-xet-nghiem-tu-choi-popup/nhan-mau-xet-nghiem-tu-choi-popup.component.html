@@ -1,0 +1,40 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>XÁC NHẬN</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <p fxFlex="100%">Bạn có chắc chắn không tiếp nhận mẫu này không?</p>
+    <app-grid #gridTuChoiMau fxFlex="100%"
+        [documentType]="documentType" [additionalSearchString]="additionalSearchString"
+        [useHeaderDefault]="false" [useAddDeault]="false" [useAddDeault]="false" [useActionDefault]="false" [checkboxAble]="false"
+        [gridColumns]="gridTuChoiMauColumns" [urlGetData]="urlGetDataTuChoiMau" [maxHeight]="200" [pageable]="false"
+        [sort]="sortNhomXetNghiem"
+        (extOnDataBound)="onDataBoundGridTuChoiMau($event)">
+    </app-grid>
+    
+    <div style="flex-direction: row;justify-content: flex-end;align-items: flex-end;display: flex;margin: 0;" fxFlex="100%">
+        <button type="button" color="primary" mat-stroked-button mat-button class="mr-1 mt-2" (click)="close()">Không</button>
+        <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2" (click)="tuChoiMau()">Có</button>
+    </div> 
+</mat-dialog-content>
+
+<ng-template #loaiMauTemplate let-dataItem>
+    {{dataItem.LoaiMauXetNghiemDisplay}}
+</ng-template>
+
+<ng-template #khongDatTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-checkbox id="KhongDat{{rowIndex + 1}}"
+        [(model)]="dataItem.KhongDatChatLuong">
+    </app-checkbox>
+</ng-template>
+
+<ng-template #lyDoTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox id="LyDoKhongDat{{rowIndex + 1}}" label="Lý do" maxlength="200"
+        [required]="dataItem.KhongDatChatLuong"
+        [(model)]="dataItem.LyDoKhongDat"
+        [validationerror]="'LyDoKhongDat[' + mauXetNghiems.indexOf(dataItem) + ']' | validationerror:validationErrors">
+    </app-textbox>
+</ng-template>

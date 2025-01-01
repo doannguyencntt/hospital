@@ -1,0 +1,309 @@
+<!-- <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <p class="title m-0" fxFlex="100%" fxFlex.sm="100%">Thông tin đăng nhập</p>
+
+    <app-textbox id="SoDienThoai" fxFlex="30%" fxFlex.sm="30%" [required]="true"  [(model)]="modelFE.SoDienThoai" label="Số điện thoại" maxlength="20"
+        [validationerror]="'SoDienThoai' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Email" fxFlex="30%" fxFlex.sm="30%" [required]="true" [(model)]="modelFE.Email" label="Email" maxlength="200"
+        [validationerror]="'Email' | validationerror:validationErrors">
+    </app-textbox>
+
+
+    <app-combobox id="QuyenHan" fxFlex="40%" fxFlex.sm="40%" [(model)]="modelFE.LoaimodelFEId" [modelText]="modelFE.TenLoaimodelFE" label="Quyền hạn"
+        url="modelFE/GetListLoaimodelFE" [validationerror]="'QuyenHan' | validationerror:validationErrors">
+    </app-combobox>
+
+</div> -->
+
+<div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <fieldset fxFlex="100%" class="mb-3">
+            <legend>Thông tin cá nhân</legend>
+            <div fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <div fxFlex="20%" fxFlex.sm="20%">
+                        <div class="avt">
+                            <p>Ảnh đại diện:</p>
+                            <div class="content mt-3">
+                                <div class="avatar-hsct" *ngIf="modelFE.Avatar">
+                                    <img [src]="modelFE.Avatar" alt="" (click)="ViewImage(modelFE)" />
+                                </div>
+                                <div class="avatar-hsct" *ngIf="!modelFE.Avatar">
+                                    <img src="assets/img/default_avatar.png" />
+                                </div>
+                                <input type="file" name="imageUpload" id="imageUpload" class="hide" (change)="fileProgress($event)" />
+                                <label class="mat-button mat-raised-button mat-button-base mat-primary _mat-animation-noopable mt-3" for="imageUpload">Chọn ảnh</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div fxFlex="80%" fxFlex.sm="80%">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                            <app-textbox id="HoTen" fxFlex="20%" fxFlex.sm="30%" [required]="true" [(model)]="modelFE.HoTen" label="Họ tên" maxlength="100" [validationerror]="'HoTen' | validationerror:validationErrors">
+                            </app-textbox>
+
+                            <app-datepicker id="NgaySinh" fxFlex="20%" fxFlex.sm="30%" [required]="true" [(model)]="modelFE.NgaySinh" label="Ngày sinh" [validationerror]="'NgaySinh' | validationerror:validationErrors">
+                            </app-datepicker>
+
+                            <app-radio fxFlex="20%" fxFlex.sm="40%" id="GioiTinh" name="GioiTinh" [required]="true" [items]="[{Value:1,Text:'Nam'},{Value:2,Text:'Nữ'}]" [(model)]="modelFE.GioiTinh" label="Giới tính" [validationerror]="'GioiTinh' | validationerror:validationErrors">
+                            </app-radio>
+
+                            <!-- <app-textbox id="SoDienThoai" fxFlex="20%" fxFlex.sm="40%" [required]="true"
+                                [(model)]="modelFE.SoDienThoai" label="Số điện thoại" maxlength="20" onlynumber="true"
+                                [validationerror]="'SoDienThoai' | validationerror:validationErrors">
+                            </app-textbox> -->
+
+                            <app-textboxmask id="SoDienThoai" [required]="true" fxFlex="20%" fxFlex.sm="40%" label="Điện thoại" maxlength="20" [(model)]="modelFE.SoDienThoai" mask="000 000 0000" onlynumber="true" [validationerror]="'SoDienThoai' | validationerror:validationErrors">
+                            </app-textboxmask>
+
+                            <app-textbox id="Email" fxFlex="20%" fxFlex.sm="40%" [required]="true" [(model)]="modelFE.Email" label="Email" maxlength="200" [validationerror]="'Email' | validationerror:validationErrors">
+                            </app-textbox>
+
+                            <app-textbox id="SoCMT" fxFlex="20%" fxFlex.sm="30%" [(model)]="modelFE.SoCMT" label="Chứng minh thư " maxlength="12" onlynumber="true" [validationerror]="'SoCMT' | validationerror:validationErrors">
+                            </app-textbox>
+
+                            <app-textbox id="DiaChi" fxFlex="20%" fxFlex.sm="30%" [(model)]="modelFE.DiaChi" label="Địa chỉ" maxlength="200" [validationerror]="'DiaChi' | validationerror:validationErrors">
+                            </app-textbox>
+
+                            <app-combobox id="PhamViHanhNgheId" fxFlex="20%" fxFlex.sm="40%" [(model)]="modelFE.PhamViHanhNgheId" [modelText]="modelFE.TextTenPhamViHanhNghe" label="Phạm vi hành nghề" class="item-no-padding" [template]="PhamViHanhNgheTemplate" [templateHeader]="PhamViHanhNgheTemplateHeader"
+                                url="PhamViHanhNghe/GetListPhamViHanhNghe" [validationerror]="'TextTenPhamViHanhNghe' | validationerror:validationErrors">
+                                <ng-template #PhamViHanhNgheTemplateHeader let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <th width="20%">Mã</th>
+                                            <th>Tên</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template #PhamViHanhNgheTemplate let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <td width="20%">{{dataItem.Ma}}</td>
+                                            <td>{{dataItem.Ten}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </app-combobox>
+
+                            <app-textbox id="MaChungChiHanhNghe" fxFlex="20%" fxFlex.sm="40%" [(model)]="modelFE.MaChungChiHanhNghe" label="Mã chứng chỉ" maxlength="50" [validationerror]="'MaChungChiHanhNghe' | validationerror:validationErrors">
+                            </app-textbox>
+
+                            <app-textbox id="NoiCapChungChiHanhNghe" fxFlex="20%" fxFlex.sm="30%" [(model)]="modelFE.NoiCapChungChiHanhNghe" label="Nơi cấp chứng chỉ" maxlength="200" [validationerror]="'NoiCapChungChiHanhNghe' | validationerror:validationErrors">
+                            </app-textbox>
+
+                            <app-datepicker id="NgayCapChungChiHanhNghe" fxFlex="20%" fxFlex.sm="30%" [(model)]="modelFE.NgayCapChungChiHanhNghe" label="Ngày cấp chứng chỉ" [validationerror]="'NgayCapChungChiHanhNghe' | validationerror:validationErrors">
+                            </app-datepicker>
+
+
+                            <app-datepicker id="NgayKyHopDong" fxFlex="20%" fxFlex.sm="30%" [(model)]="modelFE.NgayKyHopDong" label="Ngày ký hợp đồng" [validationerror]="'NgayKyHopDong' | validationerror:validationErrors">
+                            </app-datepicker>
+
+                            <app-datepicker id="NgayHetHopDong" fxFlex="20%" fxFlex.sm="30%" [(model)]="modelFE.NgayHetHopDong" label="Ngày hết hạn" [validationerror]="'NgayHetHopDong' | validationerror:validationErrors">
+                            </app-datepicker>
+
+                            <app-combobox id="VanBangChuyenMon" fxFlex="20%" fxFlex.sm="20%" [(model)]="modelFE.VanBangChuyenMonId" [modelText]="modelFE.TextTenVanBangChuyenMon" label="Văn bằng chuyên môn" url="VanBangChuyenMon/GetListVanBangChuyenMon" [template]="vbcmTemplateData"
+                                [templateHeader]="vbcmTemplateHeader" class="item-no-padding" [validationerror]="'TextTenVanBangChuyenMon' | validationerror:validationErrors">
+                                <ng-template #vbcmTemplateHeader let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <th width="40%">Mã</th>
+                                            <th>Tên</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template #vbcmTemplateData let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <td width="40%">{{dataItem.Ma}}</td>
+                                            <td>{{dataItem.Ten}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </app-combobox>
+
+                            <app-combobox id="HocViHocHam" fxFlex="20%" fxFlex.sm="40%" [(model)]="modelFE.HocHamHocViId" [modelText]="modelFE.TextTenHocHamHocVi" label="Học hàm học vị" url="HocViHocHam/GetListHocViHocHam" [template]="hvhhTemplateData" [templateHeader]="hvhhTemplateHeader"
+                                class="item-no-padding" [validationerror]="'TextTenHocHamHocVi' | validationerror:validationErrors">
+                                <ng-template #hvhhTemplateHeader let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <th width="30%">Mã</th>
+                                            <th>Tên</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template #hvhhTemplateData let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <td width="30%">{{dataItem.Ma}}</td>
+                                            <td>{{dataItem.Ten}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </app-combobox>
+
+                            <app-combobox id="ChucDanh" fxFlex="20%" fxFlex.sm="20%" [(model)]="modelFE.ChucDanhId" [modelText]="modelFE.TextTenChucDanh" label="Chức danh" [template]="cdTemplateData" [templateHeader]="cdTemplateHeader" class="item-no-padding" url="ChucDanh/GetListChucDanh"
+                                [validationerror]="'TextTenChucDanh' | validationerror:validationErrors">
+                                <ng-template #cdTemplateHeader let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <th width="20%">Mã</th>
+                                            <th>Tên</th>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                                <ng-template #cdTemplateData let-dataItem>
+                                    <table width="100%" class="table-combobox">
+                                        <tr>
+                                            <td width="20%">{{dataItem.Ma}}</td>
+                                            <td>{{dataItem.Ten}}</td>
+                                        </tr>
+                                    </table>
+                                </ng-template>
+                            </app-combobox>
+                            
+                            <!-- <app-multiselect id="KhoaPhongNhanVienId" fxFlex="40%" fxFlex.sm="40%"
+                                [(model)]="modelFE.KhoaPhongIds" label="Khoa Phòng"
+                                (modelChange)="onSelectChangeKhoaPhong($event)"
+                                url="NhanVien/GetListKhoaPhongByHoSoNhanVien" [required]="true"
+                                [validationerror]="'KhoaPhongIds' | validationerror:validationErrors">
+                            </app-multiselect>
+                            <app-multiselect id="PhongNhanVienId" fxFlex="40%" fxFlex.sm="40%"
+                                [disabled]="isChonKhoaPhong" [(model)]="modelFE.PhongBenhVienIds"
+                                (openChange)="OnOpen($event)"  #lstPtttCmb
+                                [data]="phongKhamHienTais" label="Chọn Phòng">
+                            </app-multiselect> -->
+                            <app-textbox id="GhiChu" fxFlex="80%" fxFlex.sm="80%" [(model)]="modelFE.GhiChu" label="Ghi chú" maxlength="2000" [validationerror]="'GhiChu' | validationerror:validationErrors">
+                            </app-textbox>
+                            <app-multiselect fxFlex="20%" [(model)]="modelFE.ChucVuIds" [modelText]="" label="Chức vụ bệnh viện"
+                              [popupSettings]="null" [autoClose]="false"
+                                url="NhanVien/GetListChucVu">
+                            </app-multiselect>
+                            <app-upload id="Upload" #uploadHoSoGiayNVDieuTri [allowedExtensions]="allowedExtensions" fxFlex="80%"
+                                [(model)]="modelFE.HoSoNhanVienFileDinhKems" [multiple]="true" label="Upload hồ sơ"
+                                [template]="templateFileHoSoGiayNVInfo">
+                            </app-upload>
+                            <ng-template #templateFileHoSoGiayNVInfo let-files>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                                                (click)="uploadHoSoGiayNVDieuTri.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                                            <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="uploadHoSoGiayNVDieuTri.viewFile(files[0])"
+                                                class="green" class="custom-name green">{{files[0].name}}</a>
+                                        </td>
+                                        <td style="width:25px">
+                                            <a type="button" (click)="uploadHoSoGiayNVDieuTri.remove(files[0].uid)" mat-icon-button>
+                                                <mat-icon [icIcon]="icClear"></mat-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <fieldset fxFlex="100%" class="mb-3 mt-3">
+        <legend>
+            <app-checkbox class="check-box-tao-tai-khoan" [(model)]="modelFE.TaoTaiKhoan" id="TaoTaiKhoan">
+            </app-checkbox>
+            Thông tin tài khoản
+        </legend>
+
+        <div fxLayout="column">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <!-- <app-textbox id="SoDienThoai" fxFlex="20%" fxFlex.sm="40%" disabled="true"
+                    [(model)]="modelFE.SoDienThoai" label="Số điện thoại" maxlength="12" onlynumber="true">
+                </app-textbox> -->
+                <app-textboxmask disabled="true" id="SoDienThoai1" fxFlex="20%" fxFlex.sm="40%" maxlength="12" mask="000 000 0000" [(model)]="modelFE.SoDienThoai" label="Số điện thoại" maxlength="12" onlynumber="true">
+                </app-textboxmask>
+
+                <app-textbox id="Email" fxFlex="20%" fxFlex.sm="40%" disabled="true" [(model)]="modelFE.Email" label="Email" maxlength="200">
+                </app-textbox>
+
+                <app-textbox *ngIf="id == null || id == undefined" [eyesDisplay]="true" id="MatKhauQuanLyTaiKhoan" type="password" fxFlex="20%" fxFlex.sm="40%" label="Mật khẩu" [(model)]="modelFE.Password" required="true" [validationerror]="'Password' | validationerror:validationErrors">
+                </app-textbox>
+
+                <app-textbox *ngIf="id == null || id == undefined" [eyesDisplay]="true" id="ConfirmMatKhauQuanLyTaiKhoan" type="password" fxFlex="20%" fxFlex.sm="40%" label="Nhắc lại mật khẩu" [(model)]="modelFE.PasswordConfirm" required="true" [validationerror]="'PasswordConfirm' | validationerror:validationErrors">
+                </app-textbox>
+
+                <app-textbox *ngIf="id != null && id != undefined" [eyesDisplay]="true" id="PasswordNew" type="password" fxFlex="20%" fxFlex.sm="40%" label="Mật khẩu mới" [(model)]="modelFE.PasswordNew" [validationerror]="'PasswordNew' | validationerror:validationErrors">
+                </app-textbox>
+
+                <app-textbox *ngIf="id != null && id != undefined" [eyesDisplay]="true" id="PasswordNewConfirm" type="password" fxFlex="20%" fxFlex.sm="40%" label="Nhắc lại mật khẩu mới" [(model)]="modelFE.PasswordNewConfirm" [validationerror]="'PasswordNewConfirm' | validationerror:validationErrors">
+                </app-textbox>
+
+                <app-multiselect fxFlex="20%" fxFlex.sm="40%" label="Quyền hạn" [(model)]="modelFE.LstRole" url="QuanLyTaiKhoan/GetLstRole?nhanVienId=0" required="true" [validationerror]="'LstRole' | validationerror:validationErrors">
+                </app-multiselect>
+
+            </div>
+        </div>
+
+    </fieldset>
+</div>
+
+<div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <fieldset fxFlex="50%" class="mb-3 mt-3">
+        <legend>
+            Thông tin khoa phòng
+        </legend>
+        <div fxLayout="column">
+            <app-grid fxFlex="100%" fxFlex.sm="100%" [useHeaderDefault]="false" [urlGetData]="urlGetDataGridKhoaPhongAsync" [gridColumns]="gridKhoaPhongsColumn" [useActionDefault]="false" [useAddDeault]="false" [groups]="groups" [checkboxAble]="false" [headerTemplate]="permissionHeaderTemplate"
+                [pageable]="false" [heightToolbar]="300" (extOnDataBound)="GetDataKhoaPhong($event)" #gridKhoaPhong [additionalSearchString]="userId">
+            </app-grid>
+            <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem let-aggregates>
+                <app-checkbox id="check_{{dataItem.items[0].NhomKhoaId}}" label="" (modelChange)="OnChangeParent($event, dataItem ,aggregates )" [(model)]="aggregates.items[0].IsCheckedParent"></app-checkbox>
+                <strong><span style="margin: 3px;"> </span> {{value}}</strong>
+            </ng-template>
+            <ng-template #maPhongTemplate let-dataItem>
+                <app-checkbox  id="check_{{dataItem.Id}}_khoaphong" label="" [model]="dataItem.IsChecked" (modelChange)="OnChangeChildren($event, dataItem)">
+                </app-checkbox>
+            </ng-template>
+            <ng-template #maPhongTemplateHeader>
+                <app-checkbox fxFlex="14%" fxFlex.md="14%" id="checkAll" value="true" [(model)]="isCheckAll" (modelChange)="onSelectAll($event)">
+                </app-checkbox>
+            </ng-template>
+            <ng-template #phongChinhTemplate let-dataItem>
+                <input type="radio" id="phongChinh{{dataItem.Id}}" name="chonphong" value="true" (click)="ChonPhongChinh(dataItem.Id)" (model)="dataItem.PhongChinh" [disabled]="!dataItem.IsChecked" />
+            </ng-template>
+            <ng-template #permissionHeaderTemplate>
+                <div class="bg-app-bar px-6 h-15 border-b sticky left-0 render-header" fxLayout="row" fxLayoutAlign="start center" style="justify-content: space-between;">
+                    <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search" name="searchString" (ngModelChange)="searchChanges($event)" [(ngModel)]="searchString" placeholder="Nhập từ khóa tìm kiếm" />
+                    </div>
+                    <app-validationerrorother id="PhongBenhVienIds" [validationerror]="'PhongBenhVienIds' | validationerror:validationErrors">
+                    </app-validationerrorother>
+                </div>
+            </ng-template>
+        </div>
+    </fieldset>
+    <fieldset fxFlex="50%" class="mb-3 mt-3">
+        <legend>
+            Thông tin kho
+        </legend>
+        <div fxLayout="column">
+            <app-grid fxFlex="100%" fxFlex.sm="100%" [useHeaderDefault]="false" [urlGetData]="urlGetDataGridPhongBenhVienAsync" [gridColumns]="gridKhoColumn" [useActionDefault]="false" [useAddDeault]="false" [checkboxAble]="true" [headerTemplate]="permissionHeaderTemplate1"
+                [pageable]="false" [heightToolbar]="300" #gridKho (extOnDataBound)="GetDataKho($event)" (extCheckboxSelection)="SelectionKho($event)">
+            </app-grid>
+            <ng-template #permissionHeaderTemplate1>
+                <div class="bg-app-bar px-6 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search" name="searchStringKho" (ngModelChange)="searchKhoChanges($event)" [(ngModel)]="searchStringKho" placeholder="Nhập từ khóa tìm kiếm" />
+                    </div>
+                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+                        <mat-icon [icIcon]="icSearch"></mat-icon>
+                    </button>
+                    <div fxFlex="70%" fxFlex.sm="70%"></div>
+                </div>
+            </ng-template>
+        </div>
+    </fieldset>
+</div>

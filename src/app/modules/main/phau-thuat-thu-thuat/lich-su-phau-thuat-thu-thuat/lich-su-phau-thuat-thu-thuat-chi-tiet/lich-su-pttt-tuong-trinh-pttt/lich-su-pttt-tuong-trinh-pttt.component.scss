@@ -1,0 +1,26 @@
+ kendo-tabstrip.horizontal-tab-strip-pttt-tuong-trinh {
+    z-index: 0;
+    
+ 
+}
+
+kendo-list {
+    li {
+        &.k-item {
+            &.ng-star-inserted {
+                padding: 0;
+            }
+        }
+    }
+}
+
+#show-khong-thuc-hien {
+    display: flex;
+    align-items: center;
+    padding: 0 !important;
+    .decor-dv-ko-thuc-hien {
+        text-decoration: underline;
+        color: #005dab;
+        cursor: pointer;
+    }
+}

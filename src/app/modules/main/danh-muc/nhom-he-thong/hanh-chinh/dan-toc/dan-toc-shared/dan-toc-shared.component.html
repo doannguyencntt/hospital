@@ -1,0 +1,18 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="Textbox1" fxFlex="20%" fxFlex.sm="20%" maxlength="20" [required]="true" [(model)]="danToc.Ma"
+        label="Mã" [validationerror]="'Ma' | validationerror:validationErrors" >
+    </app-textbox>
+    <app-textbox id="Textbox" fxFlex="30%" fxFlex.sm="30%" maxlength="250" [required]="true" [(model)]="danToc.Ten"
+        label="Tên" [validationerror]="'Ten' | validationerror:validationErrors" >
+    </app-textbox>
+
+    <app-combobox  id="TenQuocGia" fxFlex="20%" fxFlex.sm="20%" label="Tên Quốc Gia"
+        hierarchyKeyToSend="TenQuocGia" url="DanToc/GetListQuocGia" [(model)]="danToc.QuocGiaId"
+        [modelText]="danToc.TenQuocGia" class="item-no-padding" 
+        [validationerror]="'QuocGiaId' | validationerror:validationErrors" [required]="true" (modelChange)="choQuocGia($event)">
+    </app-combobox >
+    <app-radio fxFlex="30%" fxFlex.sm="30%" id="IsDisabled" name="IsOfficial"
+        [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" [(model)]="danToc.IsDisabled" label="Sử Dụng"
+        [validationerror]="'IsDisabled' | validationerror:validationErrors" >
+    </app-radio>
+</div>

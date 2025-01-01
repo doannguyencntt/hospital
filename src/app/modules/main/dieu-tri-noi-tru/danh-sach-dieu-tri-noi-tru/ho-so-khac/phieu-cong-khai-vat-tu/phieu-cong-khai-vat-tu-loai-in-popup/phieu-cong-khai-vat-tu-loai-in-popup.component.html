@@ -1,0 +1,19 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>XÁC NHẬN</div>
+    <button type="button" mat-icon-button (click)="close(true)" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-radio id="chon-loai-dv" name="select" class="no-format-css pl-4 temp" [(model)]="loaiPhieu"
+            [items]="[{Value:1,Text:'In tất cả'},{Value:2,Text:'In theo khoa chỉ định'}]">
+        </app-radio>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="mt-3">
+    <button mat-button (click)="close(true)">Không</button>
+    <button mat-button color="primary" (click)="close()">In Phiếu</button>
+</mat-dialog-actions>

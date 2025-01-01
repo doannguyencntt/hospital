@@ -1,0 +1,28 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Thông Tin Bảo Hiểm Y Tế</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <h3 class="sub-title">Thông Tin Thẻ</h3>
+    <table width="100%">
+        <tr>
+            <td width="28%">Ngày sinh: <strong>{{data.BenhNhan.NgayThangNamSinhDisplay}}</strong></td>
+            <td width="29%">Giới tính: <strong>{{data.BenhNhan.GioiTinhDisplay}}</strong></td>
+            <td>Địa chỉ: <strong>{{data.DiaChiDisplay}}</strong></td>
+        </tr>
+        <tr>
+            <td>Mã ĐKBĐ: <strong>{{data.MaDKBD}}</strong></td>
+            <td>Nơi ĐKBH: <strong>{{data.BenhNhan.NoiDangKyBHYT}}</strong></td>
+            <td>Cơ quan BHXH: <strong>{{data.cqBHXH}}</strong></td>
+        </tr>
+        <tr>
+            <td>Ngày có hiệu lực: <strong>{{data.NgayCoHieuLucDisplay}}</strong></td>
+            <td>Ngày hết hiệu lực: <strong [style.color] = "data.isOutOfDate == true ? 'red' : 'black' ">{{data.NgayHetHieuLucDisplay}}</strong></td>
+            <td>Ngày đủ 5 năm: <strong>{{data.NgayDu5NamDisplay}}</strong></td>
+        </tr>
+    </table>
+    <h3 class="sub-title">Thông Tin Khám Chữa Bệnh</h3>
+</mat-dialog-content>

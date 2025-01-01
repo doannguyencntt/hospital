@@ -1,0 +1,87 @@
+kendo-tabstrip.horizontal-tab-strip-pttt-tuong-trinh {
+    z-index: 0;
+    .k-tabstrip-items .k-item {
+        border: 1px solid #ccc;
+        margin-bottom: 3px;
+        background: #ebeced;
+        .k-link {
+            text-align: center;
+            justify-content: center;
+            padding: 14px;
+        }
+    }
+    .k-tabstrip-items .k-item.k-state-active {
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        border-left: 2px solid #005dab;
+        border-right: none;
+        background: #fff;
+    }
+    .k-content.k-state-active {
+        border-left: none;
+        border-right: none;
+        border-top: 1px solid #ccc;
+        border-bottom: none;
+    }
+}
+
+kendo-list {
+    li {
+        &.k-item {
+            &.ng-star-inserted {
+                padding: 0;
+            }
+        }
+    }
+}
+
+ng-template.wrapContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.wrapBtnLuu {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 30px;
+    button {
+        &.btnLuu {
+            padding: 0 16px;
+            background: #005dab;
+            border-radius: 4px;
+            line-height: 36px;
+            font-weight: 500;
+            color: white;
+        }
+        &.btnHuy {
+            padding: 0 16px;
+            border-radius: 4px;
+            line-height: 36px;
+            font-weight: 500;
+            color: #005dab;
+        }
+    }
+}
+
+kendo-tabstrip#tabstrip-tuong-trinh ul.k-reset.k-tabstrip-items.ng-star-inserted {
+    height: 300px;
+    top: 130px;
+    border: transparent;
+}
+
+#show-khong-thuc-hien {
+    display: flex;
+    align-items: center;
+    padding: 0 !important;
+    .decor-dv-ko-thuc-hien {
+        text-decoration: underline;
+        color: #005dab;
+        cursor: pointer;
+    }
+}
+
+.thong-tin-phong-kham {
+    display: flex;
+    align-items: center;
+}

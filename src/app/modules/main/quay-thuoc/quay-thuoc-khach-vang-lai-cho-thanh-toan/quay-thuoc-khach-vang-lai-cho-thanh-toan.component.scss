@@ -1,0 +1,48 @@
+.xac-nhan-ng-template {
+    display: inline;
+    white-space: nowrap;
+}
+
+.title {
+    font-size: 15px;
+    background: #ebeced;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+mat-icon {
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.warning {
+    margin-bottom: -8px;
+    margin-top: 0px;
+    color: #ff5722;
+}
+
+.info {
+    color: #00bcd4;
+}
+
+.ten-dich-vu-label {
+    display: inline;
+    text-overflow: ellipsis;
+}
+
+.tooltip-block {
+    background: #005dab;
+    color: #fff;
+    * {
+        font-size: 13px;
+    }
+}
+
+section.check-box-huong-bhyt {
+    display: flex;
+    justify-content: center;
+}
+
+.color-red {
+    color: red;
+  }

@@ -1,0 +1,585 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0"
+    [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <!-------------------------------------------------- BEGIN CHẨN ĐOÁN --------------------------------------------->
+    <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+        <h3 class="blue-text" style="display: inline; float: left;">III. CHẨN ĐOÁN</h3>
+    </div>
+    <h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%"><strong>1. Nơi chuyển đến</strong></h5>
+    <div fxFlex="100%">
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <div fxFlex="50%" fxFlex.sm="100%">
+                    <!-- <span class="item-no">ICD chính</span> -->
+                    <app-combobox label="Chẩn đoán ICD chính" url="KhamBenh/ICD"
+                        [(model)]="raVienNoiTru.ChuanDoanNoiChuyenDenId"
+                        [(modelText)]="raVienNoiTru.TenChuanDoanNoiChuyenDen"
+                        (selectionChange)="iCDSelectionChangeNoiChuyenDen($event)" [template]="iCDChinhTemplate"
+                        [templateHeader]="iCDChinhTemplateHeader" class="item-no-padding"
+                        [queryInfo]="{ParameterDependencies:'{ChanDoanICDId:' + raVienNoiTru.ChuanDoanNoiChuyenDenId +'}', Take: 50}">
+                        <ng-template #iCDChinhTemplateHeader let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <th width="25%">Mã</th>
+                                    <th>Tên Tiếng Việt</th>
+                                </tr>
+                            </table>
+                        </ng-template>
+                        <ng-template #iCDChinhTemplate let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <td width="25%">{{dataItem.Ma}}</td>
+                                    <td>{{dataItem.Ten}}</td>
+                                </tr>
+                            </table>
+                        </ng-template>
+
+                    </app-combobox>
+                </div>
+                <div fxFlex="50%" fxFlex.sm="100%">
+                    <!-- <span class="item-no">Chẩn đoán</span> -->
+                    <app-textarea id="GhiChu" label="Chẩn đoán" [(model)]="raVienNoiTru.GhiChuChuanDoanNoiChuyenDen"
+                        maxlength="4000" minHeight="20">
+                    </app-textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%"><strong>2. KKB, Cấp cứu</strong></h5>
+    <div fxFlex="100%">
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <div fxFlex="50%" fxFlex.sm="100%">
+                    <!-- <span class="item-no">ICD chính</span> -->
+                    <app-combobox label="Chẩn đoán ICD chính" url="KhamBenh/ICD"
+                        [(model)]="raVienNoiTru.ChuanDoanKKBCapCuuId" [(modelText)]="raVienNoiTru.TenChuanDoanKKBCapCuu"
+                        (selectionChange)="iCDSelectionChangeCapCuu($event)" [template]="iCDChinhTemplate"
+                        [templateHeader]="iCDChinhTemplateHeader" class="item-no-padding"
+                        [queryInfo]="{ParameterDependencies:'{ChanDoanICDId:' + raVienNoiTru.ChuanDoanKKBCapCuuId +'}', Take: 50}">
+                        <ng-template #iCDChinhTemplateHeader let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <th width="25%">Mã</th>
+                                    <th>Tên Tiếng Việt</th>
+                                </tr>
+                            </table>
+                        </ng-template>
+                        <ng-template #iCDChinhTemplate let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <td width="25%">{{dataItem.Ma}}</td>
+                                    <td>{{dataItem.Ten}}</td>
+                                </tr>
+                            </table>
+                        </ng-template>
+
+                    </app-combobox>
+                </div>
+                <div fxFlex="50%" fxFlex.sm="100%">
+                    <!-- <span class="item-no">Chẩn đoán</span> -->
+                    <app-textarea id="GhiChu" label="Chẩn đoán" [(model)]="raVienNoiTru.GhiChuChuanDoanKKBCapCuu"
+                        maxlength="4000" minHeight="20">
+                    </app-textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%"><strong>3. Lúc vào đẻ</strong></h5>
+    <div fxFlex="100%">
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <div fxFlex="50%" fxFlex.sm="100%">
+                    <!-- <span class="item-no">ICD chính</span> -->
+                    <app-combobox label="Chẩn đoán ICD chính" url="KhamBenh/ICD"
+                        [(model)]="raVienNoiTru.NoiChuanDoanLucVaoDeId"
+                        [(modelText)]="raVienNoiTru.TenNoiChuanDoanLucVaoDe"
+                        (selectionChange)="iCDSelectionChangeVaoKhoaDT($event)" [template]="iCDChinhTemplate"
+                        [templateHeader]="iCDChinhTemplateHeader" class="item-no-padding"
+                        [queryInfo]="{ParameterDependencies:'{ChanDoanICDId:' + raVienNoiTru.NoiChuanDoanLucVaoDeId +'}', Take: 50}">
+                        <ng-template #iCDChinhTemplateHeader let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <th width="25%">Mã</th>
+                                    <th>Tên Tiếng Việt</th>
+                                </tr>
+                            </table>
+                        </ng-template>
+                        <ng-template #iCDChinhTemplate let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <td width="25%">{{dataItem.Ma}}</td>
+                                    <td>{{dataItem.Ten}}</td>
+                                </tr>
+                            </table>
+                        </ng-template>
+
+                    </app-combobox>
+                </div>
+                <div fxFlex="50%" fxFlex.sm="100%">
+                    <!-- <span class="item-no">Chẩn đoán</span> -->
+                    <app-textarea id="GhiChu" label="Chẩn đoán" [(model)]="raVienNoiTru.GhiChuNoiChuanDoanLucVaoDe"
+                        maxlength="4000" minHeight="20">
+                    </app-textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div fxFlex="100%">
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <div fxFlex="50%" fxFlex.sm="100%">
+                    <h5 class="mt-2 mb-2"><strong>4. Ngày đẻ (đẻ mổ)</strong></h5>
+                    <app-datetimepicker [(model)]="raVienNoiTru.NgayDe" id="ngayde" bind="true" label="Ngày đẻ (mổ đẻ)">
+                    </app-datetimepicker>
+                </div>
+                <div fxFlex="50%" fxFlex.sm="100%">
+                    <h5 class="mt-2 mb-2"><strong>5. Ngôi thai</strong></h5>
+                    <app-textbox id="ngoithai" [(model)]="raVienNoiTru.NgoiThai" class="item-no-padding"
+                        label="Ngôi thai">
+                    </app-textbox>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%"><strong>6. Cách thức đẻ</strong></h5>
+
+    <!-- <app-textbox id="ngoithai" fxFlex="50%" [(model)]="raVienNoiTru.CachThucDe" class="item-no-padding"
+        label="Cách thức đẻ">
+    </app-textbox> -->
+
+    <app-radio fxFlex="50%" fxFlex.sm="50%" id="chontraigai" name="chontraigai"
+        [(model)]="cachThucDe"
+        (modelChange)="modelChangeCachDe($event)" [items]="[{Value:true,Text:'Đẻ thường'},{Value:false,Text:'Đẻ mổ'}]">
+    </app-radio>
+
+    <app-textbox fxFlex="30%" [(model)]="raVienNoiTru.KiemXoatTuCung" fxFlex.sm="100%" id="ngoithai"
+        class="item-no-padding" label="Kiểm soát tử cung">
+    </app-textbox>
+    <app-radio fxFlex="20%" fxFlex.sm="100%" id="bienchung" name="Chung" [(model)]="raVienNoiTru.TrieuChung"
+        [items]="[{Value:true,Text:'Tai biến'},{Value:false,Text:'Biến chứng'}]"> </app-radio>
+
+    <app-checkbox [(model)]="raVienNoiTru.DoPhauThuat" fxFlex="15%" fxFlex.sm="25%" class="mt-2"
+        label="1.Do phẫu thuật"></app-checkbox>
+    <app-checkbox [(model)]="raVienNoiTru.DoGayMe" fxFlex="15%" fxFlex.sm="25%" class="mt-2" label="2.Do gây mê">
+    </app-checkbox>
+    <app-checkbox [(model)]="raVienNoiTru.DoNhiemKhau" fxFlex="15%" fxFlex.sm="25%" class="mt-2"
+        label="3.Do nhiễm khuẩn"></app-checkbox>
+    <app-checkbox [(model)]="raVienNoiTru.Khac" fxFlex="15%" fxFlex.sm="25%" class="mt-2" label="4.Khác">
+    </app-checkbox>
+
+    <h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%"><strong>7. Tình hình phẫu thuật</strong></h5>
+    <div fxFlex="100%">
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxFlex="50%">
+                <app-radio fxFlex="100%" fxFlex.sm="100%" id="bienchung" name="Chung" class="mr-3"
+                    [(model)]="raVienNoiTru.TinhTrangCapCuuChuDong"
+                    [items]="[{Value:true,Text:'Cấp cứu'},{Value:false,Text:'Chủ động'}]"> </app-radio>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-1" fxFlex="100%" fxFlex.sm="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="50%" fxFlex.sm="100%">
+                <!-- <span class="item-no">ICD chính</span> -->
+                <app-combobox label="Chẩn đoán trước phẩu thuật" url="KhamBenh/ICD"
+                    [(model)]="raVienNoiTru.ChuanDoanTruocPhauThuatId"
+                    [(modelText)]="raVienNoiTru.TenChuanDoanTruocPhauThuat"
+                    (selectionChange)="iCDSelectionChangeTruocPT($event)" [template]="iCDChinhTemplate"
+                    [templateHeader]="iCDChinhTemplateHeader" class="item-no-padding"
+                    [queryInfo]="{ParameterDependencies:'{ChanDoanICDId:' + raVienNoiTru.ChuanDoanTruocPhauThuatId +'}', Take: 50}">
+                    <ng-template #iCDChinhTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="25%">Mã</th>
+                                <th>Tên Tiếng Việt</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #iCDChinhTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="25%">{{dataItem.Ma}}</td>
+                                <td>{{dataItem.Ten}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+
+                </app-combobox>
+            </div>
+            <div fxFlex="50%" fxFlex.sm="100%">
+                <!-- <span class="item-no">Chẩn đoán</span> -->
+                <app-textarea id="GhiChu" label="Chẩn đoán" [(model)]="raVienNoiTru.GhiChuChuanDoanTruocPhauThuat"
+                    maxlength="4000" minHeight="20">
+                </app-textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-1" fxFlex="100%" fxFlex.sm="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="50%" fxFlex.sm="100%">
+                <!-- <span class="item-no">ICD chính</span> -->
+                <app-combobox label="Chẩn đoán sau phẩu thuật" url="KhamBenh/ICD"
+                    [(model)]="raVienNoiTru.ChuanDoanSauPhauThuatId"
+                    [(modelText)]="raVienNoiTru.TenChuanDoanSauPhauThuat"
+                    (selectionChange)="iCDSelectionChangeSauPT($event)" [template]="iCDChinhTemplate"
+                    [templateHeader]="iCDChinhTemplateHeader" class="item-no-padding"
+                    [queryInfo]="{ParameterDependencies:'{ChanDoanICDId:' + raVienNoiTru.ChuanDoanSauPhauThuatId +'}', Take: 50}">
+                    <ng-template #iCDChinhTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="25%">Mã</th>
+                                <th>Tên Tiếng Việt</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #iCDChinhTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="25%">{{dataItem.Ma}}</td>
+                                <td>{{dataItem.Ten}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+
+                </app-combobox>
+            </div>
+            <div fxFlex="50%" fxFlex.sm="100%">
+                <!-- <span class="item-no">Chẩn đoán</span> -->
+                <app-textarea id="GhiChu" label="Chẩn đoán" [(model)]="raVienNoiTru.GhiChuChuanDoanSauPhauThuat"
+                    maxlength="4000" minHeight="20">
+                </app-textarea>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%">
+        <strong>8. Trẻ sơ sinh</strong>
+    </h5>
+    <div fxFlex="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxFlex="50%">
+            <app-radio fxFlex="100%" fxFlex.sm="100%" id="thai" name="thai" [(model)]="raVienNoiTru.ChonThai"
+                [disabled]="true" [items]="[{Value:true,Text:'Đơn thai'},{Value:false,Text:'Đa thai'}]"> </app-radio>
+            <div fxFlex="50%" fxFlex.sm="100%" *ngIf="raVienNoiTru.ChonThai===true">
+                <app-radio fxFlex="100%" fxFlex.sm="100%" id="chontraigai" name="chontraigai" [disabled]="true"
+                    [(model)]="raVienNoiTru.ChonTraiGai" [items]="[{Value:true,Text:'Trai'},{Value:false,Text:'Gái'}]">
+                </app-radio>
+                <app-radio fxFlex="100%" fxFlex.sm="100%" id="chonsongchet" name="chonsongchet" [disabled]="true"
+                    [(model)]="raVienNoiTru.ChonSongChet"
+                    [items]="[{Value:true,Text:'Sống'},{Value:false,Text:'Chết'}]">
+                </app-radio>
+            </div>
+            <div fxFlex="100%" fxFlex.sm="100%" *ngIf="raVienNoiTru.ChonThai === false">
+                <!-- Chọn Trai -->
+                <app-checkbox [disabled]="true" [(model)]="raVienNoiTru.ChonTrai" class="ml-2" fxFlex="25%"
+                    fxFlex.sm="100%" label="Trai: {{raVienNoiTru.SoLuongTrai}}">
+                </app-checkbox>
+                <app-checkbox [disabled]="true" [(model)]="raVienNoiTru.ChonTraiSong" class="ml-2" fxFlex="25%"
+                    fxFlex.sm="100%" label="Sống: {{raVienNoiTru.SoLuongTraiSong}}"></app-checkbox>
+                <app-checkbox [disabled]="true" [(model)]="raVienNoiTru.ChonTraiChet" class="ml-2" fxFlex="25%"
+                    fxFlex.sm="100%" label="Chết: {{raVienNoiTru.SoLuongTraiChet}}"></app-checkbox>
+            </div>
+            <div fxFlex="100%" fxFlex.sm="100%" *ngIf="raVienNoiTru.ChonThai === false">
+                <!-- Chọn gái -->
+                <app-checkbox [disabled]="true" [(model)]="raVienNoiTru.ChonGai" class="ml-2" fxFlex="25%"
+                    fxFlex.sm="100%" label="Gái: {{raVienNoiTru.SoLuongGai}}">
+                </app-checkbox>
+                <app-checkbox [(model)]="raVienNoiTru.ChonGaiSong" class="ml-2" fxFlex="25%" fxFlex.sm="100%"
+                    [disabled]="true" label="Sống: {{raVienNoiTru.SoLuongGaiSong}}"></app-checkbox>
+                <app-checkbox [disabled]="true" [(model)]="raVienNoiTru.ChonGaiChet" class="ml-2" fxFlex="25%"
+                    fxFlex.sm="100%" label="Chết: {{raVienNoiTru.SoLuongGaiChet}}"></app-checkbox>
+            </div>
+            <div fxFlex="100%" fxFlex.sm="100%">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                    fxFlex="100%">
+                    <app-textarea id="ditatthai" fxFlex="50%" fxFlex.sm="100%" label="Dị tật thai"
+                        [(model)]="raVienNoiTru.DiTatThai" maxlength="4000" minHeight="20">
+                    </app-textarea>
+                    <app-textboxnumeric [(model)]="raVienNoiTru.CanNang" id="cannang" fxFlex="50%" fxFlex.sm="100%"
+                        min="1" max="999999" format="n2" decimals="2" label="Cân nặng thai(gram)" bind="true">
+                    </app-textboxnumeric>
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxFlex="50%">
+            <span fxFlex="100%" class="item-no">
+                <strong class="mt-3 mr-2 ml-4">9. Tổng số ngày điều trị sau phẫu thuật</strong>
+                <app-textboxnumeric [(model)]="raVienNoiTru.TongSoNgayDieuTriSauPT" class="no-label p-0" min="0"
+                    max="999" id="tong-so-ngay-phau-thuat" fxFlex="20%" fxFlex.sm="20%" label="" bind="true">
+                </app-textboxnumeric>
+            </span>
+            <span fxFlex="100%" class="item-no">
+                <strong class="mt-3 mr-2 ml-4">10. Tổng số lần phẫu thuật</strong>
+                <app-textboxnumeric [(model)]="raVienNoiTru.TongSoLanPT" class="no-label p-0 mb-5" min="0" max="99"
+                    id="tong-so-ngay-phau-thuat" fxFlex="20%" fxFlex.sm="20%" label="" bind="true">
+                </app-textboxnumeric>
+            </span>
+        </div>
+    </div>
+
+    <ng-template #gioiTinhTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-combobox id="gioi-tinh" class="item-no-padding" url="DieuTriNoiTru/GetGioiTinh"
+            [(model)]="dataItem.GioiTinhId" (selectionChange)="onChangeGioiTinh($event, rowIndex)"
+            [popupSettings]="null" [(modelText)]="dataItem.GioiTinh">
+        </app-combobox>
+    </ng-template>
+    <ng-template #tinhTrangTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-combobox id="tinh-trang" class="item-no-padding" url="DieuTriNoiTru/GetTrangThai"
+            [(model)]="dataItem.TinhTrangId" (selectionChange)="onChangeTinhTrang($event, rowIndex)"
+            [popupSettings]="null" [(modelText)]="dataItem.TenTinhTrang">
+        </app-combobox>
+    </ng-template>
+    <ng-template #diTatTemplate let-dataItem>
+        <app-textbox [(model)]="dataItem.DiTat" id="di-tat" class="item-no-padding">
+        </app-textbox>
+    </ng-template>
+    <ng-template #canNangTemplate let-dataItem>
+        <app-textboxnumeric class="no-label p-0" [(model)]="dataItem.CanNang" id="can-nang" bind="true">
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #actionTemplate let-dataItem>
+        <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoa(dataItem)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </ng-template>
+
+
+    <!---------------------------------------------------END CHẨN ĐOÁN ------------------------------------------------->
+    <!-------------------------------------------------- BEGIN TÌNH TRẠNG RA VIỆN ------------------------------------------->
+    <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+        <h3 class="blue-text" style="display: inline; float: left;">IV. TÌNH TRẠNG RA VIỆN</h3>
+    </div>
+    <div fxFlex="100%">
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-combobox id="ket-qua-dieu-tri" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%"
+                    [popupSettings]="null" url="DieuTriNoiTru/GetKetQuaDieuTri" [(model)]="raVienNoiTru.KetQuaDieuTriId"
+                    [required]="true" (selectionChange)="onChangeKetQuaDieuTri($event)"
+                    [(modelText)]="raVienNoiTru.TenKetQuaDieuTri" label="Kết quả điều trị"
+                    [validationerror]="'KetQuaDieuTriId' | validationerror:validationErrors">
+                </app-combobox>
+                <app-combobox id="giai-phau-benh" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%"
+                    url="DieuTriNoiTru/GetGiaiPhauThuat" [(model)]="raVienNoiTru.GiaPhauThuatId" [popupSettings]="null"
+                    (selectionChange)="onChangeGiauPTBenh($event)" [(modelText)]="raVienNoiTru.TenGiaPhauThuat"
+                    label="Giải phẫu bệnh (khi có sinh khiết)"
+                    [validationerror]="'GiaPhauThuatId' | validationerror:validationErrors">
+                </app-combobox>
+                <app-datetimepicker [(model)]="raVienNoiTru.ThoiGianRaVien" id="thoi-gian-ra-vien"
+                    class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Thời gian ra viện" [required]="true"
+                    [validationerror]="'ThoiGianRaVien' | validationerror:validationErrors">
+                </app-datetimepicker>
+                <app-combobox id="hinh-thuc-ra-vien" url="DieuTriNoiTru/GetHinhThucRaVien"
+                    (selectionChange)="onChangeHTRaVien($event)" [(model)]="raVienNoiTru.HinhThucRaVienId"
+                    [(modelText)]="raVienNoiTru.TenHinhThucRaVien" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%"
+                    label="Hình thức ra viện" [required]="true" [popupSettings]="null"
+                    [validationerror]="'HinhThucRaVienId' | validationerror:validationErrors">
+                </app-combobox>
+            </div>
+        </div>
+    </div>
+    <div fxFlex="100%" *ngIf="isTuVong===true">
+        <div class="mt-1">
+            <fieldset style="background: #e1f5fe;">
+                <legend>Thông tin tử vong</legend>
+                <div fxFlex="100%">
+                    <div class="mt-1">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                            <app-datetimepicker [(model)]="raVienNoiTru.ThoiGianTuVong" id="thoi-gian-tu-vong"
+                                class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Thời gian tử vong">
+                            </app-datetimepicker>
+                            <app-combobox id="ly-do-tu-vong" url="DieuTriNoiTru/GetNguyenNhanTuVong"
+                                (selectionChange)="iCDSelectionLyDoTuVong($event)" [(model)]="raVienNoiTru.LyDoTuVongId"
+                                [(modelText)]="raVienNoiTru.TenLyDoTuVong" label="Lý do tử vong" class="item-no-padding"
+                                fxFlex="25%" fxFlex.sm="100%">
+                            </app-combobox>
+                            <div fxFlex="25%" fxFlex.sm="100%">
+                                <app-combobox label="Nguyên nhân chính tử vong" url="KhamBenh/ICD"
+                                    [(model)]="raVienNoiTru.NguyenNhanChinhTuVongId"
+                                    [(modelText)]="raVienNoiTru.TenNguyenNhanChinhTuVong"
+                                    (selectionChange)="iCDSelectionNguyenNhanChinhTuVong($event)"
+                                    [template]="iCDChinhTemplate" [templateHeader]="iCDChinhTemplateHeader"
+                                    class="item-no-padding"
+                                    [queryInfo]="{ParameterDependencies:'{ChanDoanICDId:' + raVienNoiTru.NguyenNhanChinhTuVongId +'}', Take: 50}">
+                                    <ng-template #iCDChinhTemplateHeader let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <th width="25%">Mã</th>
+                                                <th>Tên Tiếng Việt</th>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                    <ng-template #iCDChinhTemplate let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <td width="25%">{{dataItem.Ma}}</td>
+                                                <td>{{dataItem.Ten}}</td>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+
+                                </app-combobox>
+                            </div>
+                            <div fxFlex="25%" fxFlex.sm="100%">
+                                <app-textarea id="GhiChu" label="Chẩn đoán"
+                                    [(model)]="raVienNoiTru.ChiTietChuanDoanTuVong" maxlength="4000" minHeight="20">
+                                </app-textarea>
+                            </div>
+                            <app-checkbox (modelChange)="modelChange($event)" [(model)]="raVienNoiTru.KhamNghiemTuThi"
+                                class="mt-10" fxFlex="25%" fxFlex.sm="100%" label="Khám nghiệm tử thi">
+                            </app-checkbox>
+                            <div fxFlex="25%" fxFlex.sm="100%" *ngIf="isChanDoanTuVong===true">
+                                <app-combobox label="Chẩn đoán giải phẫu tử thi" url="KhamBenh/ICD"
+                                    [(model)]="raVienNoiTru.ChuanDoanTuThiId"
+                                    [(modelText)]="raVienNoiTru.TenChuanDoanTuThi"
+                                    (selectionChange)="iCDSelectionKhamNghiemTuThi($event)"
+                                    [template]="iCDChinhTemplate" [templateHeader]="iCDChinhTemplateHeader"
+                                    class="item-no-padding"
+                                    [queryInfo]="{ParameterDependencies:'{ChanDoanICDId:' + raVienNoiTru.ChuanDoanTuThiId +'}', Take: 50}">
+                                    <ng-template #iCDChinhTemplateHeader let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <th width="25%">Mã</th>
+                                                <th>Tên Tiếng Việt</th>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+                                    <ng-template #iCDChinhTemplate let-dataItem>
+                                        <table width="100%" class="table-combobox">
+                                            <tr>
+                                                <td width="25%">{{dataItem.Ma}}</td>
+                                                <td>{{dataItem.Ten}}</td>
+                                            </tr>
+                                        </table>
+                                    </ng-template>
+
+                                </app-combobox>
+                            </div>
+                            <div fxFlex="50%" fxFlex.sm="100%" *ngIf="isChanDoanTuVong===true">
+                                <app-textarea id="GhiChu" label="Chi tiết chẩn đoán"
+                                    [(model)]="raVienNoiTru.ChiTietChuanDoanTuThi" maxlength="4000" minHeight="20">
+                                </app-textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div fxFlex="100%" *ngIf="isChuyenVien===true">
+        <div class="mt-4">
+            <fieldset style="background: #e1f5fe;">
+                <legend>Thông tin chuyển viện</legend>
+                <div fxFlex="100%">
+                    <div class="mt-1">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            fxFlex="40%">
+                            <app-combobox id="tuyen-chuyen" url="DieuTriNoiTru/GetTuyenChuyen" [required]="true"
+                                (selectionChange)="onChangeTuyenChuyen($event)" [(model)]="raVienNoiTru.TuyenChuyenId"
+                                [(modelText)]="raVienNoiTru.TenTuyenChuyen" label="Tuyến chuyển"
+                                class="item-no-padding mr-2" fxFlex="100%" fxFlex.sm="100%"
+                                [validationerror]="'TuyenChuyenId' | validationerror:validationErrors">
+                            </app-combobox>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            fxFlex="40%">
+                            <app-combobox id="bs-cham-soc" fxFlex="99%" fxFlex.sm="100%" [required]="true"
+                                [(model)]="raVienNoiTru.BenhVienId" [modelText]="raVienNoiTru.TenBenhVien"
+                                [queryInfo]="queryInfoBenhVienChuyenVien" (selectionChange)="onChangeBenhVien($event)"
+                                url="KhamBenh/BenhVienChuyenViens" label="Chuyển đến BV" maxlength="120"
+                                [validationerror]="'BenhVienId' | validationerror:validationErrors">
+                            </app-combobox>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            fxFlex="40%">
+                            <app-textarea label="Tình trạng NB lúc chuyển viện" id="tinh-trang-suc-khoe"
+                                [(model)]="raVienNoiTru.TinhTrangBenhNhanLucChuyenVien" class="item-no-padding mr-2"
+                                fxFlex="99%" fxFlex.sm="100%" maxlength="4000" [required]="true"
+                                [validationerror]="'TinhTrangBenhNhanLucChuyenVien' | validationerror:validationErrors">
+                            </app-textarea>
+                        </div>
+                    </div>
+                    <div class="mt-1">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            fxFlex="40%">
+                            <app-combobox id="ly-do-chuyen" label="Lý do chuyển tuyến" class="item-no-padding mr-2"
+                                url="DieuTriNoiTru/LyDoChuyenTuyen" [(model)]="raVienNoiTru.LyDoChuyenTuyenId"
+                                (selectionChange)="onChangeLyDoChuyenTuyen($event)" [required]="true"
+                                [(modelText)]="raVienNoiTru.TenLyDoChuyenTuyen" fxFlex="100%" fxFlex.sm="100%"
+                                [validationerror]="'LyDoChuyenTuyenId' | validationerror:validationErrors">
+                            </app-combobox>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            fxFlex="40%">
+                            <app-datepicker id="tg-chuyen" label="Thời gian chuyển viện" class="item-no-padding mr-2"
+                                [(model)]="raVienNoiTru.ThoiGianChuyenVien" fxFlex="100%" fxFlex.sm="100%"
+                                [required]="true"
+                                [validationerror]="'ThoiGianChuyenVien' | validationerror:validationErrors">
+                            </app-datepicker>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            fxFlex="40%">
+                            <app-autocomplete id="nguoi-ho-tong" fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%"
+                                [(model)]="raVienNoiTru.TenNguoiHoTong" url="NhanVien/GetListLookupNhanVienAutoComplete"
+                                label="Người hộ tống" maxlength="120">
+                            </app-autocomplete>
+                        </div>
+                    </div>
+                    <div class="mt-1">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            fxFlex="40%">
+                            <app-autocomplete id="chuc-vu-nguoi-ht" fxFlex="99%" fxFlex.md="99%" fxFlex.sm="100%"
+                                [(model)]="raVienNoiTru.TenChucVuNguoiHoTong"
+                                url="NhanVien/GetListLookupChucDanhNhanVienAutoComplete" label="Chức vụ người hộ tống"
+                                maxlength="120">
+                            </app-autocomplete>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            fxFlex="40%">
+                            <app-autocomplete id="trinh-do-chuyen-mon" fxFlex="99%" fxFlex.md="99%" fxFlex.sm="100%"
+                                [(model)]="raVienNoiTru.TenTrinhDoNguoiHoTong"
+                                url="VanBangChuyenMon/GetListVanBangChuyenMonAutoComplete" label="Trình độ chuyên môn"
+                                maxlength="120">
+                            </app-autocomplete>
+                        </div>
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            fxFlex="40%">
+                            <app-textbox [(model)]="raVienNoiTru.PhuongTienNguoiHoTong" id="phuong-tien-vc"
+                                class="item-no-padding mr-2" fxFlex="99%" label="Phương tiện vận chuyển"
+                                fxFlex.sm="100%">
+                            </app-textbox>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div fxFlex="100%">
+        <div class="mt-1">
+            <app-checkbox [(model)]="raVienNoiTru.HenTaiKham" class="mt-3" fxFlex="100%" fxFlex.sm="100%"
+                (modelChange)="henTaiKhamChange($event)" label="Hẹn tái khám"></app-checkbox>
+        </div>
+        <div class="mt-1" *ngIf="raVienNoiTru.HenTaiKham">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-datepicker (modelChange)="ktNgayTaiKham($event)" [(model)]="raVienNoiTru.NgayHienTaiKham"  [required]="true"  
+                    id="ngay-tai-kham" class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Ngày hẹn tái khám"
+                    [validationerror]="'NgayHienTaiKham' | validationerror:validationErrors">
+                </app-datepicker>
+                <app-textbox [(model)]="raVienNoiTru.GhiChuTaiKham" id="ghi-chu" class="item-no-padding" fxFlex="50%"
+                    fxFlex.sm="100%" label="Ghi chú" maxlength="4000">
+                </app-textbox>
+            </div>
+        </div>
+        <div class="mt-3">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxFlex="30%">
+                Tổng số ngày điều trị:<strong>{{raVienNoiTru.TongSoNgayDieuTri}}</strong>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" fxFlex="70%">
+                Người sửa đổi cuối cùng:<strong>{{raVienNoiTru.NguoiSuaCuoiCung}}</strong>vào
+                ngày:<strong>{{raVienNoiTru.NgaySuaCuoiCungDislay}}</strong>
+            </div>
+        </div>
+    </div>
+    <!-------------------------------------------------- END TÌNH TRẠNG RA VIỆN --------------------------------------------->
+</div>

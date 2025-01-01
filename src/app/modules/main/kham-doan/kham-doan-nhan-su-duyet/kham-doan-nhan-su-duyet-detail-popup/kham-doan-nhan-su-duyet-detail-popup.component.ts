@@ -1,0 +1,226 @@
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import icClose from '@iconify/icons-ic/twotone-close';
+import icDelete from '@iconify/icons-ic/twotone-delete';
+import icClear from '@iconify/icons-ic/twotone-clear';
+import { DocumentType } from 'src/app/shared/enum/document-type.enum';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { MatDialog } from '@angular/material';
+import { NotificationService } from 'src/app/core/services/notification.service';
+import { ApiService } from 'src/app/core/services/api.service';
+import { LoadingComponent } from 'src/app/shared/component/dialogs/loading/loading.component';
+import { SecurityOperation } from 'src/app/shared/enum/security-operation.enum';
+import { ConfirmComponent } from 'src/app/shared/component/dialogs/confirm/confirm.component';
+import { SystemMessage } from 'src/app/shared/configdata/system-message';
+import {
+    KhamDoanKhthDuyetTuChoiPopupComponent
+} from '../../kham-doan-khth-duyet/kham-doan-khth-duyet-tu-choi-popup/kham-doan-khth-duyet-tu-choi-popup.component';
+import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { YeuCauNhanSuKhamSucKhoeDetail } from '../kham-doan-nhan-su-duyet.model';
+import { ApiError } from 'src/app/shared/models/api-error.model';
+import { Router } from '@angular/router';
+
+@Component({
+    // tslint:disable-next-line: component-selector
+    selector: 'app-kham-doan-nhan-su-duyet-detail-popup',
+    templateUrl: './kham-doan-nhan-su-duyet-detail-popup.component.html',
+    styleUrls: ['./kham-doan-nhan-su-duyet-detail-popup.component.scss']
+})
+export class KhamDoanNhanSuDuyetDetailPopupComponent implements OnInit {
+
+    icClose = icClose;
+    icDelete = icDelete;
+    icClear = icClear;
+
+    documentType: DocumentType;
+    validationErrors: any = [];
+    format = 'n2';
+    popupLoadingData: any;
+    id: number;
+
+    gridDiaDiemKhamColumns: any[] = [];
+    gridNhanSuColumns: any[] = [];
+
+    title = 'Chi tiết duyệt yêu cầu nhân sự khám sức khỏe';
+
+    // cần cập nhật lại theo mdel
+    diaDiemKhamDisplay = false;
+    gridDiaDiemKhamDatasource: any = {
+        data: [],
+        total: 0
+    };
+    gridNhanSuDatasource: any = {
+        data: [],
+        total: 0
+    };
+    khamDoanNhanSuDetail: YeuCauNhanSuKhamSucKhoeDetail = new YeuCauNhanSuKhamSucKhoeDetail();
+
+    @ViewChild('ngayKhamTemplate', { static: true }) ngayKhamTemplate: TemplateRef<any>;
+    @ViewChild('hoTenTemplate', { static: true }) hoTenTemplate: TemplateRef<any>;
+    @ViewChild('donViTemplate', { static: true }) donViTemplate: TemplateRef<any>;
+    @ViewChild('sdtTemplate', { static: true }) sdtTemplate: TemplateRef<any>;
+    @ViewChild('nguoiGioiThieuTemplate', { static: true }) nguoiGioiThieuTemplate: TemplateRef<any>;
+    @ViewChild('taiLieuTemplate', { static: true }) taiLieuTemplate: TemplateRef<any>;
+    @ViewChild('ghiChuTemplate', { static: true }) ghiChuTemplate: TemplateRef<any>;
+    constructor(
+        private authService: AuthService,
+        private dialog: MatDialog,
+        private notificationService: NotificationService,
+        private router: Router,
+        private apiService: ApiService,
+        private location: Location,
+        private route: ActivatedRoute
+    ) { }
+
+    ngOnInit() {
+        this.documentType = DocumentType.KhamDoanDuyetYeuCauNhanSuKhamSucKhoePhongNhanSu;
+        this.id = this.route.snapshot.params.id;
+        this.id = (this.id === undefined || this.id === null) ? 0 : this.id;
+        this.getData(this.id);
+
+        this.gridDiaDiemKhamColumns = [
+            { Field: 'DiaDiem', Title: 'Địa điểm khám', Width: 220 },
+            { Field: 'CongViec', Title: 'Công việc', Width: 120 },
+            { Field: 'Ngay', Title: 'Ngày', Width: 100, Template: this.ngayKhamTemplate },
+            { Field: 'GhiChu', Title: 'Ghi chú', Width: 193 }
+        ];
+
+        this.gridNhanSuColumns = [
+            { Field: 'HoTen', Title: 'Họ tên', Width: 120, Template: this.hoTenTemplate },
+            { Field: 'DonVi', Title: 'Đơn vị', Width: 244, Template: this.donViTemplate },
+            { Field: 'ViTriLamViec', Title: 'Vị trí làm việc', Width: 90 },
+            { Field: 'SoDienThoai', Title: 'SĐT', Width: 90, Template: this.sdtTemplate },
+            { Field: 'DoiTuongLamViecDisplay', Title: 'Đối tượng', Width: 90 },
+            { Field: 'NguoiGioiThieu', Title: 'Người giới thiệu', Width: 120, Template: this.nguoiGioiThieuTemplate },
+            { Field: '', Title: 'Tài liệu ĐK', Width: 209, Template: this.taiLieuTemplate },
+            { Field: 'GhiChu', Title: 'Ghi chú', Width: 100, Template: this.ghiChuTemplate }
+        ];
+    }
+
+    showPopupLoadingData() {
+        if (this.popupLoadingData == undefined
+            || this.popupLoadingData == null
+            || this.popupLoadingData.openDialogs == undefined
+            || (this.popupLoadingData.openDialogs != undefined && this.popupLoadingData.openDialogs.length == 0)) {
+            this.popupLoadingData = this.dialog.open(LoadingComponent, {
+                disableClose: true,
+                width: '200px',
+                height: '90px',
+                data: { Title: 'Đang tải dữ liệu...' },
+            });
+        }
+
+    }
+
+    closePopupLoadingData() {
+        if (this.popupLoadingData != undefined && this.popupLoadingData != null) {
+            this.popupLoadingData.close();
+        }
+    }
+
+    getData(id: number) {
+        this.showPopupLoadingData();
+        this.apiService
+            .get<any>('KhamDoan/GetThongTinYeuCauNhanSuKhamSucKhoe?id=' + id)
+            // tslint:disable-next-line: deprecation
+            .subscribe(
+                (resultData) => {                    
+                    if (resultData.HopDongKhamSucKhoeDiaDiems && resultData.HopDongKhamSucKhoeDiaDiems.some(x => x)) {
+                        this.diaDiemKhamDisplay = true;
+                        this.gridDiaDiemKhamDatasource.data = Array.from(resultData.HopDongKhamSucKhoeDiaDiems);
+                        this.gridDiaDiemKhamDatasource.total = resultData.HopDongKhamSucKhoeDiaDiems.length;
+                    }
+                   
+                    this.khamDoanNhanSuDetail = JSON.parse(JSON.stringify(resultData));
+                    this.gridNhanSuDatasource.data = Array.from(resultData.YeuCauNhanSuKhamSucKhoeChiTiets);
+                    this.gridNhanSuDatasource.total = resultData.YeuCauNhanSuKhamSucKhoeChiTiets.length;
+                    this.closePopupLoadingData();
+                },
+                (err: ApiError) => {
+                    this.validationErrors = err.ValidationErrors;
+                    if (err.Message !== 'Validation Failed') {
+                        this.notificationService.showError(err.Message);
+                    }
+                    this.closePopupLoadingData();
+                }
+            );
+    }
+
+    xuLyDuyet() {
+        if (this.authService.hasPermission(this.documentType, SecurityOperation.Update)) {
+            this.dialog.open(ConfirmComponent, {
+                disableClose: false,
+                width: '400px',
+                data: { Title: 'Xác nhận', Message: 'Bạn có chắc chắn muốn duyệt yêu cầu nhân sự khám sức khỏe này không?' }
+            }).afterClosed().subscribe(result => {
+                if (result == 'Yes') {
+                    const requestDuyet = {
+                        Id: this.id,
+                        NhanSus: this.gridNhanSuDatasource.data.filter(x => x.NguonNhanSu === 2)
+                    };
+                    this.apiService
+                        .post<any>('KhamDoan/DuyetPhongNhanSu', requestDuyet)
+                        // tslint:disable-next-line: deprecation
+                        .subscribe(
+                            () => {
+                                this.notificationService.showSuccess('Đã duyệt nhân sự thành công');
+                                this.quayLai();
+                            },
+                            (err: ApiError) => {
+                                this.validationErrors = err.ValidationErrors;
+                                if (err.Message !== 'Validation Failed') {
+                                    this.notificationService.showError(err.Message);
+                                }
+                            }
+                        );
+                }
+            });
+        } else {
+            this.notificationService.showError(SystemMessage.UnAuthorizedMessage);
+        }
+    }
+
+    xuLyTuChoi() {
+        if (this.authService.hasPermission(this.documentType, SecurityOperation.Update)) {
+            this.dialog.open(KhamDoanKhthDuyetTuChoiPopupComponent, {
+                disableClose: false,
+                width: '600px',
+                data: { Title: 'Xác nhận', Message: 'Bạn chắc chắn muốn từ chối yêu cầu nhân sự khám sức khỏe này không?' }
+            }).afterClosed().subscribe(result => {
+                if (result) {
+                    const requestTuChoi = {
+                        Id: this.id,
+                        LyDo: result
+                    };
+                    this.apiService
+                        .post<any>('KhamDoan/TuChoiDuyetPhongNhanSu', requestTuChoi)
+                        // tslint:disable-next-line: deprecation
+                        .subscribe(
+                            () => {
+                                this.notificationService.showSuccess('Đã từ chối nhân sự thành công');
+                                this.quayLai();
+                            },
+                            (err: ApiError) => {
+                                this.validationErrors = err.ValidationErrors;
+                                if (err.Message !== 'Validation Failed') {
+                                    this.notificationService.showError(err.Message);
+                                }
+                            }
+                        );
+                }
+            });
+        } else {
+            this.notificationService.showError(SystemMessage.UnAuthorizedMessage);
+        }
+    }
+
+    getTenTaiLieuDinhKem(dataItem) {
+        return dataItem != null ?
+            dataItem.NhanSuKhamSucKhoeTaiLieuDinhKem != null && dataItem.NhanSuKhamSucKhoeTaiLieuDinhKem.some(x => x) ?
+                dataItem.NhanSuKhamSucKhoeTaiLieuDinhKem[0].Ten : '' : '';
+    }
+
+    quayLai() {
+        this.router.navigateByUrl('/kham-doan/nhan-su-duyet?holdQuery=true');
+    }
+}

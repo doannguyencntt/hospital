@@ -1,0 +1,35 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Dược phẩm',Path:''}
+                ,{Title:'Hoàn trả',Path:''}
+                ,{Title:'Từ người bệnh',Path:''}
+                ,{Title:'Yêu cầu trả',Path:''}
+                ,{Title:'Tạo phiếu trả thuốc',Path:'/nhap-xuat/duoc-pham/tu-benh-nhan/yeu-cau-tra-duoc-pham',Active:true}
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Tạo phiếu trả thuốc từ người bệnh nội trú</h2>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-yeu-cau-tra-thuoc-tu-benh-nhan-shared [validationErrors]="validationErrors" [isCreate]="true"
+                    [trangThaiVo]="trangThaiVo">
+                </app-yeu-cau-tra-thuoc-tu-benh-nhan-shared>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+
+                    <button type="button" title="Phím tắt: Esc" (click)="cancel()" mat-button
+                        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Hủy</button>
+                    <button type="button" (click)="guiPhieuTraDuocPham()" color="primary" mat-raised-button><i
+                            class="ft-save"></i> Gửi</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,35 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>KẾT QUẢ CLS</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1" (click)="close()">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <app-grid  #GridChiDinh  fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" masterName="gridChiDinh" maxHeight="500" reorderRowsMoveItemData="true"
+        [gridColumns]="gridColumns" [gridDataSource]="gridDataSource"
+        [useHeaderDefault]="false" [showDefaultPagerTemplate]="false" [checkboxAble]="false"
+        [useActionDefault]="false">
+    </app-grid>
+
+    <ng-template #downloadHeaderTemplate let-dataItem>
+        <div class="text-center">
+            <button type="button" color="primary" mat-stroked-button mat-button (click)="DownloadAllFiles()">Tải tất cả</button>
+        </div>
+    </ng-template>
+
+    <ng-template #actionTemplate let-dataItem>
+        <div fxLayout="row wrap">
+            <div fxFlex="50%">
+                <button *ngIf="dataItem.LoaiTapTin == loaiTapTin.Image || dataItem.LoaiTapTin == loaiTapTin.Pdf" type="button" mat-button mat-raised-button color="primary"
+                    (click)="ViewImageAndPdf(dataItem)">
+                    Xem
+                </button>
+            </div>
+            <div fxFlex="50%">
+                <button type="button" mat-button mat-raised-button color="primary" (click)="DownloadFile(dataItem)">
+                    Tải
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</mat-dialog-content>

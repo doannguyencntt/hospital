@@ -1,0 +1,50 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Toa Thuốc</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+        <app-grid fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumns" [useAddDeault]="false"
+            [showStt]="true" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+            [lazyLoadPage]="true" [groups]="groupNhomThuocLichSuKeToa" [autoHeight]="true"
+            [gridDataSource]="dataToaThuoc" style="width: 1px;" [pageable]="false">
+        </app-grid>
+        <ng-template #nhomThuocGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+        <ng-template #sangTemplate let-dataItem>
+            {{dataItem.SangDisplay}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{dataItem.ThoiGianDungSangDisplay}}
+        </ng-template>
+        <ng-template #truaTemplate let-dataItem>
+            {{dataItem.TruaDisplay}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{dataItem.ThoiGianDungTruaDisplay}}
+        </ng-template>
+        <ng-template #chieuTemplate let-dataItem>
+            {{dataItem.ChieuDisplay}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{dataItem.ThoiGianDungChieuDisplay}}
+        </ng-template>
+        <ng-template #toiTemplate let-dataItem>
+            {{dataItem.ToiDisplay}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{dataItem.ThoiGianDungToiDisplay}}
+        </ng-template>
+    </div>
+    <div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+        <div>
+            <label style="color: red;">
+                <span>
+                    <h3><b><i>{{canhBao}}</i></b></h3>
+                </span>
+            </label>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" (click)="close()" mat-stroked-button color="primary" mat-dialog-close>Hủy</button>
+    <!-- <button mat-raised-button mat-button color="primary" (click)="apDungLichSuKeToaConfirm()" cdkFocusInitial>Xác
+        nhận</button> -->
+</mat-dialog-actions>

@@ -1,0 +1,21 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between">
+    <app-textbox fxFlex="20%" maxlength="20%" id="Ma" label="Mã" maxlength="20" [required]="true"
+    [(model)]="mauVaChePham.Ma" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textbox id="Ten" fxFlex="20%" fxFlex.sm="20%" [required]="true" maxlength="500" [(model)]="mauVaChePham.Ten"
+        label="Tên" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+    <app-combobox id="PhanLoaiMau" fxFlex="25%" fxFlex.sm="25%" label="Phân Loại Màu"
+    hierarchyKeyToSend="PhanLoaiMau"  url="MauVaChePham/GetListPhanLoaiMau"
+    [(model)]="mauVaChePham.PhanLoaiMau" [modelText]="mauVaChePham.TenPhanLoaiMau" [required]="true"
+    [validationerror]="'PhanLoaiMau' | validationerror:validationErrors">
+</app-combobox>
+    <app-textboxnumeric id="TheTich" fxFlex="17%" fxFlex.sm="17%" [(model)]="mauVaChePham.TheTich" [required]="true" label="Thể tích" [validationerror]="'TheTich' | validationerror:validationErrors" min ="1">
+    </app-textboxnumeric>
+    <app-textboxnumeric id="GiaTriToiDa" [format]="" fxFlex="17%" fxFlex.sm="17%" [(model)]="mauVaChePham.GiaTriToiDa" [required]="true" label="Giá máu" [validationerror]="'GiaTriToiDa' | validationerror:validationErrors" min="1">
+    </app-textboxnumeric>
+    <app-textarea id="Textarea" fxFlex="100%" [(model)]="mauVaChePham.GhiChu" label="Ghi Chú"  maxlength="500"
+        [validationerror]="'GhiChu' | validationerror:validationErrors">
+    </app-textarea>
+</div>

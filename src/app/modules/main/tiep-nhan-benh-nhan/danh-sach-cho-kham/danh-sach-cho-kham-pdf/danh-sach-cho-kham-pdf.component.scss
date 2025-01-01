@@ -1,0 +1,15 @@
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  .header, .header-space,
+.footer, .footer-space { height: 100px; }
+.header { position: fixed; top: 0; }
+.footer { position: fixed; bottom: 0; }
+
+ @media screen {
+  :host {
+    display: none;
+  }
+} 

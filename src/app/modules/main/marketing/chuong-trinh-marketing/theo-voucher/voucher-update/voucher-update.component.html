@@ -1,0 +1,29 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+    { Title: 'Marketing', Path: '' },
+    { Title: 'Chương Trình Marketing', Path: '' },
+    { Title: 'Theo Voucher', Path: '/marketing/ct-marketing/voucher' , queryParams: {holdQuery : true}, Active: true }]">
+</app-header-form>
+
+<div [@stagger]="true" class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chỉnh Sửa Voucher</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+                <app-voucher-shared></app-voucher-shared>
+                
+                <div>
+                    <!-- <app-formfooter [bodyComponent]="shared" type="update" (updated)="onUpdated()"></app-formfooter> -->
+                    <div kendoTooltip class="sticky-button-action py-3 text-right">
+                        <button type="button" mat-button mat-raised-button color="primary" class="float-left" (click)="in()">In</button>
+                        <button type="button" mat-button color="primary" (click)="huy()">Hủy</button>
+                        <button type="button" class="mr-2" color="primary" mat-raised-button (click)="luu()">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

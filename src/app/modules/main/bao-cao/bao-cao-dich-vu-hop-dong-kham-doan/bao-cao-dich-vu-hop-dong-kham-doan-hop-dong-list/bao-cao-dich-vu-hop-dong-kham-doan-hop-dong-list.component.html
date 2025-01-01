@@ -1,0 +1,171 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Báo cáo',Path:''}
+            ,{Title:'Khám đoàn',Path:''}
+            ,{Title:'Người bệnh khám sức khỏe theo hợp đồng',Path:'',Active:true}
+            ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <!-- pageSize="50" -->
+            <ng-container
+                *ngIf="baoCaoDichVuHopDongKhamDoanTheoHopDong.Loai == null || baoCaoDichVuHopDongKhamDoanTheoHopDong.Loai == 1">
+                <app-grid *ngIf="baoCaoDichVuHopDongKhamDoanTheoHopDong.ChuaKham == true" #gridChildHopDongChuaKham
+                    [gridColumns]="gridColumnsHopDongChuaKham" [documentType]="documentType" [useActionDefault]="false"
+                    [lazyLoadPage]="false" [useHeaderDefault]="false" [allowSortDefault]="true" [checkboxAble]="false"
+                    [pageable]="false" [showStt]="true"
+                    urlGetData="BaoCaoKhamDoanHopDong/GetDataForGridAsyncTheoHopDong"
+                    [additionalSearchString]="addtionStringDefault" (extOnDataBound)="onDataBoundGridHopDong($event)"
+                    [headerTemplate]="headerTemplate">
+                </app-grid>
+                <!-- pageSize="50" -->
+                <app-grid *ngIf="baoCaoDichVuHopDongKhamDoanTheoHopDong.DaKham == true" #gridChildHopDongDaKham
+                    [gridColumns]="gridColumnsHopDongDaKham" [documentType]="documentType" [useActionDefault]="false"
+                    [lazyLoadPage]="false" [useHeaderDefault]="false" [allowSortDefault]="true" [checkboxAble]="false"
+                    [pageable]="false" [showStt]="true"
+                    urlGetData="BaoCaoKhamDoanHopDong/GetDataForGridAsyncTheoHopDong"
+                    [additionalSearchString]="addtionStringDefault" (extOnDataBound)="onDataBoundGridHopDong($event)"
+                    [headerTemplate]="headerTemplate">
+                </app-grid>
+
+
+            </ng-container>
+
+            <ng-container *ngIf="baoCaoDichVuHopDongKhamDoanTheoHopDong.Loai == 2">
+                <app-grid *ngIf="baoCaoDichVuHopDongKhamDoanTheoHopDong.ChuaKhamNhanVien == true" #gridChildNhanVien
+                    [gridColumns]="gridColumnsNhanVienChuaKham" [documentType]="documentType" [useActionDefault]="false"
+                    [lazyLoadPage]="true" [useHeaderDefault]="false" [allowSortDefault]="true" [checkboxAble]="false"
+                    [showStt]="true" urlGetData="BaoCaoKhamDoanHopDong/GetDataForGridAsyncTheoNhanVien"
+                    urlGetTotalPage="BaoCaoKhamDoanHopDong/GetTotalPageForGridAsyncTheoNhanVien"
+                    [additionalSearchString]="addtionStringDefault" [headerTemplate]="headerTemplate">
+                </app-grid>
+
+                <app-grid *ngIf="baoCaoDichVuHopDongKhamDoanTheoHopDong.DangKhamNhanVien == true" #gridChildNhanVien
+                    [gridColumns]="gridColumnsNhanVienDangKham" [documentType]="documentType" [useActionDefault]="false"
+                    [lazyLoadPage]="true" [useHeaderDefault]="false" [allowSortDefault]="true" [checkboxAble]="false"
+                    [showStt]="true" urlGetData="BaoCaoKhamDoanHopDong/GetDataForGridAsyncTheoNhanVien"
+                    urlGetTotalPage="BaoCaoKhamDoanHopDong/GetTotalPageForGridAsyncTheoNhanVien"
+                    [additionalSearchString]="addtionStringDefault" [headerTemplate]="headerTemplate">
+                </app-grid>
+
+                <app-grid *ngIf="baoCaoDichVuHopDongKhamDoanTheoHopDong.DaKhamNhanVien == true" #gridChildNhanVien
+                    [gridColumns]="gridColumnsNhanVienDaKham" [documentType]="documentType" [useActionDefault]="false"
+                    [lazyLoadPage]="true" [useHeaderDefault]="false" [allowSortDefault]="true" [checkboxAble]="false"
+                    [showStt]="true" urlGetData="BaoCaoKhamDoanHopDong/GetDataForGridAsyncTheoNhanVien"
+                    urlGetTotalPage="BaoCaoKhamDoanHopDong/GetTotalPageForGridAsyncTheoNhanVien"
+                    [additionalSearchString]="addtionStringDefault" [headerTemplate]="headerTemplate">
+                </app-grid>
+            </ng-container>
+
+            <ng-template #tenHopDongKhamSucKhoeTemplate let-dataItem>
+                <div class="text-center" kendoTooltip>
+                    <a (click)="xemChiTiet(dataItem.Id)">
+                        <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.TenHopDongKhamSucKhoe}}">
+                            {{dataItem.TenHopDongKhamSucKhoe}}</p>
+                    </a>
+                </div>
+            </ng-template>
+
+            <ng-template #tongFooterTemplate>
+                <span>Tổng :</span>
+            </ng-template>
+
+            <ng-template #tongSoFooterTemplate let-dataItem>
+                <p style="color: blue; font-weight: bold;">
+                    <span>{{totalSoLuong('SoLuongNhanVienTheoHopDong') | number:'1.0':'vi-VN'}}</span>
+            </ng-template>
+            <ng-template #tongSoThucTeChuaKhamFooterTemplate let-dataItem>
+                <p style="color: blue; font-weight: bold;">
+                    <span>{{totalSoLuong('SoLuongNhanVienKhamThucTe') | number:'1.0':'vi-VN'}}</span>
+            </ng-template>
+
+            <ng-template #tongSoThucTeFooterTemplate let-dataItem>
+                <p style="color: blue; font-weight: bold;">
+                    <span>{{totalSoLuong('SoLuongNhanVienThucTe') | number:'1.0':'vi-VN'}}</span>
+            </ng-template>
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+
+                    <app-dropdownlist fxFlex="150px" [(model)]="baoCaoDichVuHopDongKhamDoanTheoHopDong.Loai" id="Loai"
+                        label="Loại" url="BaoCaoKhamDoanHopDong/GetLoaiNhanVienHoacHopDong" popupSettings="null"
+                        bind="true" class="mt-5 ml-1 on-header" [autoSelectFirstItem]="true">
+                    </app-dropdownlist>
+                    <ng-container *ngIf="baoCaoDichVuHopDongKhamDoanTheoHopDong.Loai == 1">
+                        <app-checkbox name="co-duyet" class="ml-2" value="coduyet"
+                            [(model)]="baoCaoDichVuHopDongKhamDoanTheoHopDong.ChuaKham" fxFlex.lt-md="auto" fxHide.xs
+                            (modelChange)="daKhamChange($event,'Khong',1 )" fxLayout="row" fxLayoutAlign="start center"
+                            label="Chưa khám">
+                        </app-checkbox>
+
+                        <app-checkbox name="co-duyet" class="ml-2" value="coduyet"
+                            [(model)]="baoCaoDichVuHopDongKhamDoanTheoHopDong.DaKham" fxFlex.lt-md="auto" fxHide.xs
+                            (modelChange)="daKhamChange($event,'Co',1)" fxLayout="row" fxLayoutAlign="start center"
+                            label="Đã khám">
+                        </app-checkbox>
+
+                        <ng-container *ngIf="baoCaoDichVuHopDongKhamDoanTheoHopDong.DaKham== true">
+                            <app-datetimepicker fxFlex="245px"
+                                [(model)]="baoCaoDichVuHopDongKhamDoanTheoHopDong.ThoiDiemTiepNhanTuFormat1"
+                                #tiepnhantu1 id="ThoiDiemTiepNhanTuFormat1" label="Từ ngày" class="ml-2 on-header">
+                            </app-datetimepicker>
+                            <app-datetimepicker fxFlex="245px"
+                                [(model)]="baoCaoDichVuHopDongKhamDoanTheoHopDong.ThoiDiemTiepNhanDenFormat1"
+                                #tiepnhanden1 id="ThoiDiemTiepNhanDenFormat1" label="Đến ngày" class="ml-2 on-header">
+                            </app-datetimepicker>
+                        </ng-container>
+
+                    </ng-container>
+
+                    <ng-container *ngIf="baoCaoDichVuHopDongKhamDoanTheoHopDong.Loai == 2">
+                        <app-checkbox name="co-duyet" class="ml-2" value="coduyet"
+                            [(model)]="baoCaoDichVuHopDongKhamDoanTheoHopDong.ChuaKhamNhanVien" fxFlex.lt-md="auto"
+                            fxHide.xs (modelChange)="daKhamChange($event,'ChuaKham',2)" fxLayout="row"
+                            fxLayoutAlign="start center" label="Chưa khám">
+                        </app-checkbox>
+
+                        <app-checkbox name="co-duyet" class="ml-2" value="coduyet"
+                            [(model)]="baoCaoDichVuHopDongKhamDoanTheoHopDong.DangKhamNhanVien" fxFlex.lt-md="auto"
+                            fxHide.xs (modelChange)="daKhamChange($event,'DangKham',2)" fxLayout="row"
+                            fxLayoutAlign="start center" label="Đang khám">
+                        </app-checkbox>
+                        <app-checkbox name="co-duyet" class="ml-2" value="coduyet"
+                            [(model)]="baoCaoDichVuHopDongKhamDoanTheoHopDong.DaKhamNhanVien" fxFlex.lt-md="auto"
+                            fxHide.xs (modelChange)="daKhamChange($event,'DaKham',2)" fxLayout="row"
+                            fxLayoutAlign="start center" label="Đã khám">
+                        </app-checkbox>
+
+                        <app-datetimepicker fxFlex="245px"
+                            [(model)]="baoCaoDichVuHopDongKhamDoanTheoHopDong.ThoiDiemTiepNhanTuFormat" #tiepnhantu
+                            id="ThoiDiemTiepNhanTuFormat" label="Từ ngày" class="ml-2 on-header">
+                        </app-datetimepicker>
+                        <app-datetimepicker fxFlex="245px"
+                            [(model)]="baoCaoDichVuHopDongKhamDoanTheoHopDong.ThoiDiemTiepNhanDenFormat" #tiepnhanden
+                            id="ThoiDiemTiepNhanDenFormat" label="Đến ngày" class="ml-2 on-header">
+                        </app-datetimepicker>
+                    </ng-container>
+
+                    <div fxFlex="20%" fxFlex.sm="32%" class="pb-0">
+                        <button type="button" color="primary" mat-raised-button mat-button class="mr-1"
+                            style="margin-left: 5px;" (click)="timKiem()">Tìm kiếm</button>
+                    </div>
+
+                    <span fxFlex></span>
+
+                    <button *ngIf="baoCaoDichVuHopDongKhamDoanTheoHopDong.Loai == 2" class="ml-4 right" color="primary"
+                        style="right: 20px;" type="button" mat-raised-button mat-button (click)="xuatExcel()"
+                        kendoTooltip title="Xuất Excel" fxFlex="none">
+                        Xuất Excel
+                    </button>
+
+
+                </div>
+            </ng-template>
+
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

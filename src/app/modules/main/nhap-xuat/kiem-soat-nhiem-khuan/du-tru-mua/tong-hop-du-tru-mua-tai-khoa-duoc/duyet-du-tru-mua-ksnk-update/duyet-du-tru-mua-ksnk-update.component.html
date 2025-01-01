@@ -1,0 +1,40 @@
+<app-header-form [crumbs]="[
+{Title:'Nhập xuất',Path:''}
+,{Title:'Hành chính - KSNK',Path:''}
+,{Title:'Dự trù mua',Path:''}
+,{Title:'THDT mua tại Hành chính​​​​',Path:'/nhap-xuat/ksnk/tong-hop-mua-ksnk-tai-hanh-chinh',queryParams: {holdQuery : true},Active:true}
+]" [isicMoreVert]="false">
+</app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Duyệt Tổng Hợp Dự Trù Mua Kiểm Soát Nhiễm Khuẩn​</h2>
+                <b class="status-yeu-cau-linh trang-thai t{{thongTinDuTruMuaVatTuTaiKhoaDuoc.TrangThai}}">{{thongTinDuTruMuaVatTuTaiKhoaDuoc.TrangThaiHienThi}}</b>
+               
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-duyet-du-tru-mua-ksnk-shared (dataItem)="getDataItem($event)">
+                </app-duyet-du-tru-mua-ksnk-shared>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                            <button type="button" (click)="huy()" mat-button class="mr-1 align-right-fx"
+                                *ngIf="thongTinDuTruMuaVatTuTaiKhoaDuoc.TrangThai =='2' || thongTinDuTruMuaVatTuTaiKhoaDuoc.TrangThai =='1'"><i
+                                    class="ft-arrow-left"></i> Hủy</button>
+                            <button type="button" (click)="huy()" mat-button class="mr-1 align-right-fx"
+                                *ngIf="thongTinDuTruMuaVatTuTaiKhoaDuoc.TrangThai =='4' || thongTinDuTruMuaVatTuTaiKhoaDuoc.TrangThai=='5' || thongTinDuTruMuaVatTuTaiKhoaDuoc.TrangThai=='3'"><i
+                                    class="ft-arrow-left"></i> Quay lại</button>
+                            <button type="button" (click)="tuChoi()" mat-button class="mr-1 color-button"
+                                *ngIf="thongTinDuTruMuaVatTuTaiKhoaDuoc.TrangThai =='1'"><i class="ft-arrow-left"></i>Từ chối</button>
+                            <button type="button" *ngIf="thongTinDuTruMuaVatTuTaiKhoaDuoc.TrangThai=='1'" (click)="Duyet()" color="primary"
+                                mat-raised-button><i class="ft-save"></i> Duyệt</button>
+                            <button type="button" (click)="huyDuyet()" mat-button class="mr-1 color-button"
+                                *ngIf="thongTinDuTruMuaVatTuTaiKhoaDuoc.TrangThai=='2'"><i class="ft-arrow-left"></i>Hủy Duyệt</button>
+                            <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                                    alt="Loading" /></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,47 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Báo cáo',Path:''}
+            ,{Title:'Khám đoàn',Path:''}
+            ,{Title:'Người bệnh khám sức khỏe theo hợp đồng',Path:'/bao-cao/bao-cao-benh-nhan-kham-suc-khoe-doan'}
+            ,{Title:tinhTrang==0?'Danh sách chi tiết người bệnh chưa khám':'Danh sách chi tiết người bệnh đã khám',Path:'',Active:true}
+            ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid #gridChildNhanVien [gridColumns]="gridColumns" [documentType]="documentType"
+                [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false" [allowSortDefault]="false"
+                [checkboxAble]="false" pageSize="50" [showStt]="true"
+                urlGetData="BaoCaoKhamDoanHopDong/GetDataForGridAsyncTheoNhanVien"
+                urlGetTotalPage="BaoCaoKhamDoanHopDong/GetTotalPageForGridAsyncTheoNhanVien"
+                [additionalSearchString]="addtionStringDefault" [headerTemplate]="headerTemplate">
+            </app-grid>
+
+
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <div fxFlex="100%" fxFlex.sm="32%" class="pb-0">
+                        <button type="button" color="default" mat-raised-button mat-button class="ml-1"
+                            (click)="quayLai()" style="float: left;">Quay lại</button>
+
+                        <button style="float: right;" type="button" color="primary" mat-raised-button mat-button
+                            class="mr-1" (click)="In()">In</button>
+
+                        <button style="float: right;" type="button" color="primary" mat-raised-button mat-button
+                            class="mr-1" (click)="exportExcel()">Xuất Excel</button>
+
+                    </div>
+
+
+                </div>
+            </ng-template>
+            <ng-template #thoiDiemThucHienTemplate let-dataItem>
+                {{dataItem.ThoiDiemThucHienDisplay}}
+            </ng-template>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,118 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="
+                    [
+                        {Title:'Kế Toán',Path:''}  ,
+                        {Title:'Cập Nhật Công Nợ',Path:'', Active:true}          
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+                [lazyLoadPage]="true" [useHeaderDefault]="false" [searchString]="timKiemNangCaoObj.SearchString"
+                [checkboxAble]="false" [headerTemplate]="headerTemplate"
+                urlGetData="GachNo/GetDataGachNoForGrid" urlGetTotalPage="GachNo/GetTotalPageGachNoForGrid">
+            </app-grid>
+
+            <ng-template #soChungTuTemplate let-dataItem>
+                <a (click)="showPopupThongTinThuNo(dataItem.Id)">
+                    <p kendoTooltip class="reverse-ellipsis l" title="{{dataItem.SoChungTu}}">{{dataItem.SoChungTu}}
+                    </p>
+                </a>
+            </ng-template>
+            <ng-template #ngayChungTuTemplate let-dataItem>
+                {{dataItem.NgayChungTuDisplay}}
+            </ng-template>
+            <ng-template #ngayHoaDonTemplate let-dataItem>
+                {{dataItem.NgayHoaDonDisplay}}
+            </ng-template>
+            <ng-template #ngayXacNhanNhapLieuTemplate let-dataItem>
+                <p kendoTooltip class="reverse-ellipsis r" title="{{dataItem.NgayXacNhanNhapLieuDisplay}}">
+                    {{dataItem.NgayXacNhanNhapLieuDisplay}}
+                </p>
+            </ng-template>
+            <ng-template #tienHachToanTemplate let-dataItem>
+                <ng-container [ngSwitch]="dataItem.LoaiTienTe">
+                    <div *ngSwitchCase="loaiTienTeUSD">{{dataItem.TienHachToan | currency:'USD': '$'}}</div>
+                    <div *ngSwitchDefault>{{dataItem.TienHachToan | number:'0.2-2':'vi-VN'}}</div>
+                </ng-container>
+            </ng-template>
+            <ng-template #tienThueHachToanTemplate let-dataItem>
+                <ng-container [ngSwitch]="dataItem.LoaiTienTe">
+                    <div *ngSwitchCase="loaiTienTeUSD">{{dataItem.TienThueHachToan | currency:'USD': '$'}}</div>
+                    <div *ngSwitchDefault>{{dataItem.TienThueHachToan | number:'0.2-2':'vi-VN'}}</div>
+                </ng-container>
+            </ng-template>
+            <ng-template #tongTienHachToanTemplate let-dataItem>
+                {{dataItem.TongTienHachToan | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+            <ng-template #trangThaiTemplate let-dataItem>
+                <span [ngClass]="{'redText': dataItem.TrangThai == trangThaiNhapLieu,
+                                  'greenText': dataItem.TrangThai == trangThaiXacNhanNhapLieu}">
+                    {{dataItem.TenTrangThai}}
+                </span>
+            </ng-template>
+
+            <ng-template #actionTemplate let-dataItem>
+                <div class="text-center" kendoTooltip>
+                    <button *ngIf="dataItem.TrangThai != trangThaiXacNhanNhapLieu" color="primary" mat-icon-button kendoTooltip title="Xóa" color="warn" type="button">
+                        <mat-icon [icIcon]="icDelete" (click)="xoaGachNo(dataItem.Id)"></mat-icon>
+                    </button>
+                    <button color="primary" mat-icon-button kendoTooltip title="Lịch sử" type="button">
+                        <mat-icon [icIcon]="icRestore" (click)="showPopupLichSu(dataItem.Id)"></mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar px-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <app-combobox fxFlex="200px" label="Loại T/C" id="LoaiThuChi" class="ml-2 mt-5 on-header" url="GachNo/GetListLoaiThuChi" 
+                        [(model)]="timKiemNangCaoObj.LoaiThuChi" [modelText]="timKiemNangCaoObj.LoaiThuChi"
+                        (modelChange)="timKiemNangCao()" popupSettings="null" [reloadForGrid]="true" [broadcastAfterLoaded]="true">
+                    </app-combobox>
+                    <app-daterangepicker id="tuNgayDenNgayCT" fxFlex="230px" fxFlex.sm="auto" class="mt-1 ml-2 on-header"
+                        [(model)]="timKiemNangCaoObj.TuNgayDenNgayCT" label="CT từ ngày - đến ngày" (modelChange)="timKiemNangCao()">
+                    </app-daterangepicker>
+                    <app-daterangepicker id="tuNgayDenNgayHD" fxFlex="230px" fxFlex.sm="auto" class="mt-1 ml-2 mr-2 on-header"
+                        [(model)]="timKiemNangCaoObj.TuNgayDenNgayHD" label="HĐ từ ngày - đến ngày" (modelChange)="timKiemNangCao()">
+                    </app-daterangepicker>
+                    
+                    <div class="bg-card rounded-full border px-4" fxFlex="320px" fxFlex.lt-md="auto" fxHide.xs
+                        fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                            type="search" name="searchString" [(ngModel)]="timKiemNangCaoObj.SearchString" (keyup)="onKey($event)"
+                            (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa tìm..." />
+                    </div>
+                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                        <mat-icon [icIcon]="icSearch"></mat-icon>
+                    </button>
+
+                    <button [matMenuTriggerFor]="columnFilterMenu" class="ml-auto mr-2" fxFlex="none" mat-icon-button kendoTooltip title="Lọc cột" type="button">
+                        <mat-icon [icIcon]="icFilterList"></mat-icon>
+                    </button>
+                    
+                    <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                        <div *ngFor="let column of _gridColumnsFilter">
+                            <button class="checkbox-item mat-menu-item" *ngIf="!column.HideFilter">
+                                <mat-checkbox [disabled]="!column.HasFilter" [(ngModel)]="_isCheckColumnFilter" color="primary">
+                                    {{ column.Title }}
+                                </mat-checkbox>
+                            </button>
+                        </div>
+                    </mat-menu>
+                    <button (click)="exportExcel()" class="mr-2" fxFlex="none" mat-icon-button kendoTooltip title="Xuất Excel" type="button">
+                        <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                    </button>
+                    <button class="mr-2" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm" type="button" (click)="showPopupThongTinThuNo()">
+                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

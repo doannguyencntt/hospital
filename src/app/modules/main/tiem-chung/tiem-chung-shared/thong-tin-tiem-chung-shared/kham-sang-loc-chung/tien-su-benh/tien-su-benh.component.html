@@ -1,0 +1,48 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mr-4">TIỀN SỬ BỆNH
+        <button *ngIf="!isTienSuBenhReadOnly" class="po-h" color="primary" (click)="themTienSuBenh()">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+
+    <ng-container *ngIf="dataSourceTienSuBenh.data.length == 0">
+        <p>Không có tiền sử bệnh</p>
+    </ng-container>
+
+    <app-grid *ngIf="dataSourceTienSuBenh.data.length > 0" fxFlex="100%" class="k-grid-border"
+        [maxHeight]="200"
+        [documentType]="documentType" [useAddDeault]="false"  [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [pageable]="false"
+        [gridColumns]="tienSuBenhColumns" [gridDataSource]="dataSourceTienSuBenh"
+        [lazyLoadPage]="true">
+    </app-grid>
+
+    <ng-template #loaiTienSuTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-dropdownlist *ngIf="!isTienSuBenhReadOnly && !dataItem.Id" class="no-label" label=" "
+            [required]="true"
+            [popupSettings]="null" url="KhamBenh/getListLoaiTienSuBenh"
+            [(model)]="dataItem.LoaiTienSuBenh" [modelText]="dataItem.TenLoaiTienSuBenh"
+            [validationerror]="'YeuCauTiepNhan.BenhNhan.BenhNhanTiemVacxinTienSuBenhs[' + rowIndex + '].LoaiTienSuBenh' | validationerror: thongTinBenhNhan.validationErrors">
+        </app-dropdownlist>
+
+        <p *ngIf="isTienSuBenhReadOnly || dataItem.Id">{{dataItem.TenLoaiTienSuBenh}}</p>
+    </ng-template>
+
+    <ng-template #tenBenhTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-textbox *ngIf="!isTienSuBenhReadOnly && !dataItem.Id" class="no-label" maxlength="200" label=" "
+            [required]="true"
+            [(model)]="dataItem.TenBenh"
+            [validationerror]="'YeuCauTiepNhan.BenhNhan.BenhNhanTiemVacxinTienSuBenhs[' + rowIndex + '].TenBenh' | validationerror: thongTinBenhNhan.validationErrors">
+        </app-textbox>
+
+        <p *ngIf="isTienSuBenhReadOnly || dataItem.Id">{{dataItem.TenBenh}}</p>
+    </ng-template>
+
+    <ng-template #actionTienSuBenhTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button *ngIf="!isTienSuBenhReadOnly" color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" 
+                (click)="xoaTienSuBenh(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+</div>

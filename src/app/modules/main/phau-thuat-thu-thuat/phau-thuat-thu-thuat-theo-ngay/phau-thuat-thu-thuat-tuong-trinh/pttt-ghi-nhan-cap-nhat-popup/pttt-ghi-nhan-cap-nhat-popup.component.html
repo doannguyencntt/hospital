@@ -1,0 +1,60 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Chỉnh Sửa {{ptttVatTuThuoc.NhomYeuCauId == nhomGoiDichVu.VatTuTieuHao ? 'Vật Tư' : 'Thuốc'}} Chi Tiết</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 210px;">
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3">
+            <legend>
+                Thông tin {{ptttVatTuThuoc.NhomYeuCauId == nhomGoiDichVu.VatTuTieuHao ? 'vật tư' : 'thuốc'}}
+            </legend>
+
+            <div fxLayout="column">
+                <ul class="inline">
+                    <li>{{ptttVatTuThuoc.NhomYeuCauId == nhomGoiDichVu.VatTuTieuHao ? 'Vật tư' : 'Thuốc'}}: &nbsp;<strong>{{thongTinVatTu.Ten}}</strong></li>
+                    <li>Mã: &nbsp;<strong>{{thongTinVatTu.Ma}}</strong></li>
+                    <li>Đơn vị tính: &nbsp;<strong>{{thongTinVatTu.DVT}}</strong></li>
+                    <li>Nhà SX: &nbsp;<strong>{{thongTinVatTu.NhaSX}}</strong></li>
+                    <li>Nước SX: &nbsp;<strong>{{thongTinVatTu.NuocSX}}</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3 mt-3">
+            <legend>
+                Thông tin chỉnh sửa
+            </legend>
+
+            <div fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                    style="padding-top: 16px;">
+                    <app-textboxnumeric id="SoLuongAdd" fxFlex="70%" fxFlex.sm="70%" label="Số lượng"
+                        [min]="ptttVatTuThuoc.LoaiKho == 5 ? 0.01 : 1" max="999999999"
+                        [format]="ptttVatTuThuoc.LoaiKho == 5 ? format : ''" [decimals]="ptttVatTuThuoc.LoaiKho == 5 ? 2 : 0"
+                        [(model)]="ptttVatTuThuoc.SoLuong"
+                        (keyup)="onKey($event)" 
+                        [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+                    </app-textboxnumeric>
+                    <div fxFlex="30%" fxFlex.sm="30%">
+                        <div class="container-custom no-label">
+                            <label>&nbsp;</label>
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <app-checkbox fxFlex="100%" id="vehicle1KhuVucVT1" [(model)]="ptttVatTuThuoc.TinhPhi"
+                                    label="Tính phí" value="true"></app-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" mat-stroked-button color="primary" mat-dialog-close>Hủy</button>
+    <button tabindex="-1" type="button" (click)="luuVatTu()" mat-stroked-button color="primary" class="md-primary">Cập
+        nhật</button>
+</mat-dialog-actions>

@@ -1,0 +1,86 @@
+<div class="border-b" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-multiselect [disabled]="!isDisplay" id="KhoaKham" fxFlex="100%" fxFlex.sm="50%" label="Dịch vụ kỹ thuật" *ngIf="isUpdate==false"
+        url="DoiTuongUuDai/GetDichVuKyThuat" [(model)]="doiTuongUuDaiKyThuat.ListDichVuKyThuatBenhVienId"
+        [modelText]="doiTuongUuDaiKyThuat.DichVuKyThuatModelText" class="item-no-padding"
+        [template]="dichVuKyThuatTemplate" [templateHeader]="dichVuKyThuatTemplateHeader" [required]="true"
+        [validationerror]="'DichVuKyThuatBenhVienId' | validationerror:validationErrors">
+        <ng-template #dichVuKyThuatTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th width="20%">Mã 4350</th>
+                    <th>Dịch vụ</th>
+                    <!-- <th width="20%">Tên khoa</th> -->
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #dichVuKyThuatTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td width="20%">{{dataItem.Ma4350}}</td>
+                    <td>{{dataItem.DichVu}}</td>
+                    <!-- <td>{{dataItem.TenKhoa}}</td> -->
+                </tr>
+            </table>
+        </ng-template>
+    </app-multiselect>
+    <app-combobox [disabled]="!isDisplay" id="KhoaKham" fxFlex="100%" fxFlex.sm="50%" label="Dịch vụ kỹ thuật" *ngIf="isCreate==false"
+    url="DoiTuongUuDai/GetDichVuKyThuatById?id={{dichvuKyThuatId}}" [(model)]="doiTuongUuDaiKyThuat.DichVuKyThuatBenhVienId"
+    [modelText]="doiTuongUuDaiKyThuat.DichVuKyThuatModelText" class="item-no-padding"
+    [template]="dichVuKyThuatTemplate" [templateHeader]="dichVuKyThuatTemplateHeader" [required]="true"
+    [validationerror]="'DichVuKyThuatBenhVienId' | validationerror:validationErrors">
+    <ng-template #dichVuKyThuatTemplateHeader let-dataItem>
+        <table width="100%" class="table-combobox">
+            <tr>
+                <th width="20%">Mã</th>
+                <th width="20%">Mã 4350</th>
+                <th>Dịch vụ</th>
+                <!-- <th width="20%">Tên khoa</th> -->
+            </tr>
+        </table>
+    </ng-template>
+    <ng-template #dichVuKyThuatTemplate let-dataItem>
+        <table width="100%" class="table-combobox">
+            <tr>
+                <td width="20%">{{dataItem.Ma}}</td>
+                <td width="20%">{{dataItem.Ma4350}}</td>
+                <td>{{dataItem.DichVu}}</td>
+                <!-- <td width="20%" >{{dataItem.TenKhoa}}</td> -->
+            </tr>
+        </table>
+    </ng-template>
+</app-combobox>
+   
+    <h4 class="sub-title" fxFlex="100%">Đối tượng</h4>
+    <div fxFlex="100%" fxFlex.sm="100%"
+        *ngFor="let item of doiTuongUuDaiKyThuat.DoiTuongUuDai;let i = index">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-dropdownlist  label="Đối tượng"  fxFlex="45%" fxFlex.sm="25%"
+                id="DoiTuong{{i}}" required="true" [(model)]="item.DoiTuongId" [modelText]="item.Ten" 
+                url="DoiTuongUuDai/GetDoiTuong"
+                [validationerror]="'DoiTuongUuDai['+i+'].DoiTuongId' | validationerror:validationErrors">
+            </app-dropdownlist>
+
+            <app-textboxnumeric [disabled]="!isDisplay" id="TiLeUuDai" fxFlex="45%" fxFlex.sm="25%" [required]="true" min="1"
+                [(model)]="item.TiLeUuDai" label="Tỉ lệ ưu đãi" max="100" min="0"
+                [validationerror]="'DoiTuongUuDai['+i+'].TiLeUuDai' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <div fxFlex="10%" fxFlex.sm="20%">
+                <button mat-icon-button class="mt-3" (click)="XoaBaoHiem(i)">
+                    <mat-icon [icIcon]="icRemove" color="warn"></mat-icon>
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <button mat-mini-fab color="primary" (click)="ThemBaoHiem()">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+
+    
+</div>

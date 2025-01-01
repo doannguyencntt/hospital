@@ -1,0 +1,36 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between">
+    <app-textbox id="Ma" fxFlex="25%" fxFlex.sm="50%" [required]="true" [(model)]="quocGia.Ma" label="Mã"
+        maxlength="20" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Ten" fxFlex="25%" fxFlex.sm="50%" [required]="true" [(model)]="quocGia.Ten" label="Tên"
+        maxlength="250" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="TenVietTat" fxFlex="25%" fxFlex.sm="50%" maxlength="50" label="Tên viết tắt" [required]="true"
+        [(model)]="quocGia.TenVietTat" [validationerror]="'TenVietTat' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Quoctich" fxFlex="25%" fxFlex.sm="50%" maxlength="250" label="Quốc tịch" [required]="true"
+        [(model)]="quocGia.QuocTich" [validationerror]="'QuocTich' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="MaDienThoaiQuocTe" fxFlex="25%" fxFlex.sm="50%" maxlength="100" label="Mã đt quốc tế" [required]="true"
+        [(model)]="quocGia.MaDienThoaiQuocTe" [onlynumber]="'true'" (modelChange)="maDienThoaiChanged($event)" [validationerror]="'MaDienThoaiQuocTe' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="ThuDo" fxFlex="25%" fxFlex.sm="50%" maxlength="50" label="Thủ đô" [required]="true"
+        [(model)]="quocGia.ThuDo" [validationerror]="'ThuDo' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-dropdownlist id="ChauLuc" fxFlex="25%" fxFlex.sm="50%" label="Châu lục" url="QuocGia/GetListChauLuc" [required]="true"
+        [modelText]="quocGia.ChauLucText" [(model)]="quocGia.ChauLuc"
+        [validationerror]="'ChauLuc' | validationerror:validationErrors">
+    </app-dropdownlist>
+
+    <app-radio id="IsDisabled" fxFlex="25%" fxFlex.sm="50%" name="IsOfficial" label="Sử dụng"
+        [items]="[{ Value: false, Text: 'Có' }, { Value: true, Text: 'Không' }]" [(model)]="quocGia.IsDisabled"
+        [validationerror]="'IsDisabled' | validationerror:validationErrors">
+    </app-radio>
+</div>

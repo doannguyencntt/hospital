@@ -1,0 +1,25 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+    { Title: 'Danh Mục', Path: '' },
+    { Title: 'Nhóm Hệ Thống', Path: '' },
+    { Title: 'Hành Chính', Path: '' },
+    { Title: 'Quốc Gia', Path: '/danh-muc/nhom-he-thong/hanh-chinh/quoc-gia', Active: true }]">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Thêm Quốc Gia</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+                <app-quoc-gia-share></app-quoc-gia-share>
+
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="pt-4">
+                    <app-formfooter [bodyComponent]="shared" type="create" (created)="onCreated()">
+                    </app-formfooter>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

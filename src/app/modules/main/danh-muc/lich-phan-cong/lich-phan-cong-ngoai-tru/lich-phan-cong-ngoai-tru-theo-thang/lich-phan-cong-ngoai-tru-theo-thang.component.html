@@ -1,0 +1,106 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs fxFlex="100%" fxFlex.sm="100%" [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Lịch Phân Công',Path:''}
+                    ,{Title:'Ngoại Trú',Path:'/danh-muc/lich-phan-cong/ngoai-tru', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+
+        <div class="overflow-auto -mt-15">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="auto">
+                    <div class="px-6 py-4 p-0 border-b" fxLayout="row wrap" fxLayoutAlign="start center"
+                        fxLayoutAlign="space-between">
+                        <app-combobox id="KhoaPhongId" label="Combobox"
+                            url="LichPhanCongNgoaiTru/GetListKhoaPhongXepLichPhong" fxFlex="300px"
+                            (selectionChange)="onSelectKhoaPhong($event)" label="Chọn Khoa Phòng"
+                            [(model)]="lichPhanCong.khoaPhongId" bind="true" class="mt-1 on-header" popupSettings=""
+                            style="padding-bottom: 0em;">
+                        </app-combobox>
+                        <mat-button-toggle-group class="float-right" style="padding-bottom: 0em;">
+                            <mat-button-toggle (click)="prevMonthLink()">
+                                <mat-icon [icIcon]="icChevronLeft"></mat-icon>
+                            </mat-button-toggle>
+                            <mat-button-toggle (click)="monthpicker.toggle()">
+                                <kendo-datepicker #monthpicker style="visibility: hidden;width: 0;height: 0;"
+                                    (ngModelChange)="changeMonthLink($event)" [(ngModel)]="monthLinkValue"
+                                    [value]="monthLinkValue" [bottomView]="'year'" [topView]="'decade'"
+                                    [format]="'MM/yyyy'"></kendo-datepicker>
+                                <span [innerHTML]="monthLinkText"></span>
+                            </mat-button-toggle>
+                            <mat-button-toggle (click)="nextMonthLink()">
+                                <mat-icon [icIcon]="icChevronRight"></mat-icon>
+                            </mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+                    <div class="px-6 py-4" fxLayout="column">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card overflow-auto -mt-15">
+            <div fxFlex="100%">
+                <table width="100%" class="table mt-3">
+                    <tr>
+                        <th></th>
+                        <th *ngFor="let week of weeks">{{week.Name}}<br />({{week.StartDate}} - {{week.EndDate}})</th>
+                    </tr>
+                    <tr *ngFor="let item of listKhoaPhongXepLich">
+                        <td><strong>{{item.TenKhoa}}</strong></td>
+                        <td *ngIf="weeks.length>0" align="center">
+                            <mat-checkbox color="primary" onclick="return false;" [checked]="true"
+                                *ngIf="item.XepLichTuan1" (click)="xemChiTietLich(1,item)">Đã xếp lịch</mat-checkbox>
+                            <button [disabled]="item.Now >= item.NgayEndTuan1" type='button' mat-raised-button
+                                color="primary" *ngIf="!item.XepLichTuan1" (click)="xepLich(1,item)">Xếp
+                                lịch</button>
+                        </td>
+                        <td *ngIf="weeks.length>1" align="center">
+                            <mat-checkbox color="primary" onclick="return false;" [checked]="true"
+                                *ngIf="item.XepLichTuan2" (click)="xemChiTietLich(2,item)">Đã xếp lịch</mat-checkbox>
+                            <button [disabled]="item.Now >= item.NgayEndTuan2" type='button' mat-raised-button
+                                color="primary" *ngIf="!item.XepLichTuan2" (click)="xepLich(2,item)">Xếp
+                                lịch</button>
+                        </td>
+                        <td *ngIf="weeks.length>2" align="center">
+                            <mat-checkbox color="primary" onclick="return false;" [checked]="true"
+                                *ngIf="item.XepLichTuan3" (click)="xemChiTietLich(3,item)">Đã xếp lịch</mat-checkbox>
+                            <button [disabled]="item.Now >= item.NgayEndTuan3" type='button' mat-raised-button
+                                color="primary" *ngIf="!item.XepLichTuan3" (click)="xepLich(3,item)">Xếp
+                                lịch</button>
+                        </td>
+                        <td *ngIf="weeks.length>3" align="center">
+                            <mat-checkbox color="primary" onclick="return false;" [checked]="true"
+                                *ngIf="item.XepLichTuan4" (click)="xemChiTietLich(4,item)">Đã xếp lịch</mat-checkbox>
+                            <button [disabled]="item.Now >= item.NgayEndTuan4" type='button' mat-raised-button
+                                color="primary" *ngIf="!item.XepLichTuan4" (click)="xepLich(4,item)">Xếp
+                                lịch</button>
+                        </td>
+                        <td *ngIf="weeks.length>4" align="center">
+                            <mat-checkbox color="primary" onclick="return false;" [checked]="true"
+                                *ngIf="item.XepLichTuan5" (click)="xemChiTietLich(5,item)">Đã xếp lịch</mat-checkbox>
+                            <button [disabled]="item.Now >= item.NgayEndTuan5" type='button' mat-raised-button
+                                color="primary" *ngIf="!item.XepLichTuan5" (click)="xepLich(5,item)">Xếp
+                                lịch</button>
+                        </td>
+                        <td *ngIf="weeks.length>5" align="center">
+                            <mat-checkbox color="primary" onclick="return false;" [checked]="true"
+                                *ngIf="item.XepLichTuan6" (click)="xemChiTietLich(6,item)">Đã xếp lịch</mat-checkbox>
+                            <button [disabled]="item.Now >= item.NgayEndTuan6" type='button' mat-raised-button
+                                color="primary" *ngIf="!item.XepLichTuan6" (click)="xepLich(6,item)">Xếp
+                                lịch</button>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

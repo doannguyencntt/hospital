@@ -1,0 +1,114 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''}
+                    ,{Title:'Bác Sĩ', Path:''}
+                    ,{Title:'Người Bệnh Khám Ngoại Trú', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-combobox id="KhoaId" fxFlex="15%" fxFlex.sm="15%" hierarchyKeyToSend="khoa" class="mt-1 on-header"
+                    popupSettings="null" [templateHeader]="khoaTemplateHeader" [template]="khoaTemplate" label="Khoa"
+                    url="GiuongBenh/GetListKhoaPhong" bind="true" [(model)]="baoCaoSearch.KhoaId">
+                </app-combobox>
+                <ng-template #khoaTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="30%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #khoaTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="30%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+                <app-combobox id="PhongId" fxFlex="15%" fxFlex.sm="15%" hierarchyKeyToListen="khoa"
+                    [disabled]="baoCaoSearch.KhoaId == 0 || baoCaoSearch.KhoaId == null" class="mt-1 on-header" label="Phòng"
+                    [templateHeader]="phongTemplateHeader" [template]="phongTemplate" url="BaoCao/GetTaCaPhongTheoKhoa"
+                    bind="true" [(model)]="baoCaoSearch.PhongId" popupSettings="null">
+                </app-combobox>
+                <ng-template #phongTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="20%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #phongTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="20%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="40%" fxFlex.sm="40%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <!-- <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="InbaoCao()" style="float: right;" *ngIf="showPrintExport">In Báo cáo</button> -->
+
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                </div>
+                <app-grid fxFlex="100%" fxFlex.sm="100%" *ngIf="ishowView" [gridColumns]="gridColumns"
+                    [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true" [groups]="groups"
+                    [useHeaderDefault]="false" [checkboxAble]="false" pageSize="50" [autoHeight]="true"
+                    [gridDataSource]="gridView" [showStt]="true">
+                </app-grid>
+
+                <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+                    {{rowIndex + 1}}
+                </ng-template>
+
+                <ng-template #tenPhongKhamGroupTemplate let-value="value">
+                    <strong>{{value}}</strong>
+                </ng-template>
+
+                <ng-template #tongSoGroupFooterTemplate kendoGridGroupFooterTemplate let-aggregates let-field="field">
+                    <span>{{aggregates.PhongKhamId.min}}</span>
+                </ng-template>              
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+
+<ng-template #thoiGianKhamTemplate let-dataItem>
+    <p kendoTooltip class="reverse-ellipsis r" title="{{dataItem.ThoiGianKhamDisplay}}">{{dataItem.ThoiGianKhamDisplay}}
+    </p>
+</ng-template>
+<ng-template #ngaySinhTemplate let-dataItem>
+    <p kendoTooltip class="reverse-ellipsis r" title="{{dataItem.NgaySinhDisplay}}">{{dataItem.NgaySinhDisplay}}
+    </p>
+</ng-template>
+<ng-template #suDungGoiTemplate let-dataItem>
+    <app-checkbox id="coSuDungGoi{{dataItem.Id}}" label="" [(model)]="dataItem.SuDungGoi" [disabled]="true">
+    </app-checkbox>
+</ng-template>
+<ng-template #ngoaiGioHanhChinhTemplate let-dataItem>
+    <app-checkbox id="ngoaiGioHanhChinh{{dataItem.Id}}" label="" [(model)]="dataItem.NgoaiGioHanhChinh" [disabled]="true">
+    </app-checkbox>
+</ng-template>

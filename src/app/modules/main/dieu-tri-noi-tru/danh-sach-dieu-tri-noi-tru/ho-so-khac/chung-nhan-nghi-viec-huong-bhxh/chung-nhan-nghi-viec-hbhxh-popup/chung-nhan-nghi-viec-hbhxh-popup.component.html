@@ -1,0 +1,16 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>XEM TRƯỚC KHI IN</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="overflow:hidden">
+    <div class="container-iframe">
+        <iframe width="100%" style="height: 500px;" [src]="src| safe" allowTransparency="true"
+            background="transparent"></iframe>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <app-print-form textPrint="In" type="PDF" [event]="modelPrint" [bodyComponent]="this"  typeLayout="landscape">
+    </app-print-form>
+</mat-dialog-actions>

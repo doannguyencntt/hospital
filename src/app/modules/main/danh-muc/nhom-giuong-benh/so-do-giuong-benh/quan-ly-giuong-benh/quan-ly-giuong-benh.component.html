@@ -1,0 +1,171 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+            {Title:'Danh Mục',Path:''}
+            ,{Title:'Nhóm Giường Bệnh',Path:''}
+            ,{Title:'Tình Trạng Giường Bệnh',Path:'/danh-muc/nhom-giuong-benh/so-do-giuong-benh/'}
+            ,{Title:'Quản Lý Giường Bệnh Tại Phòng: '+maTenPhong +' - Khoa: '+tenKhoa,Path:'', Active: true}
+            ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="danh-muc/nhom-giuong-benh/so-do-giuong-benh" [headerTemplate]="headerTemplate"
+                [urlGetData]="urlData" [urlGetTotalPage]="urlTotal" (getDataSource)="getDataSource($event)"
+                [useHeaderDefault]="false" [lazyLoadPage]="true" [gridColumns]="gridColumns"
+                [documentType]="documentType" [checkboxAble]="false" [useActionDefault]="false" [lazyLoadPage]="true" heightToolbar="195">
+            </app-grid>
+
+
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+
+                    <div class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                        <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                            (ngModelChange)="clearSearch($event)"
+                            type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)" (blur)="blur()"
+                            placeholder="Nhập tên giường, tên NB" />
+                    </div>
+                   
+
+                    <div style="width: 100%; text-align: right;">
+                        <button type="button" color="primary" (click)="quayLai()" class="ml-2"
+                        mat-raised-button>
+                            Quay lại
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+
+            <!-- <div #testTemplate> -->
+                <ng-template #benhNhanTemplate let-dataItem let-rowIndex>
+                    <div>
+                        <div class="tip" title="{{setTitle(dataItem, 1)}}">
+                            {{displayFieldBenhNhan(dataItem, 1)}}
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #benhNhan2Template let-dataItem let-rowIndex>
+                    <div>
+                        <div class="tip" title="{{setTitle(dataItem, 2)}}">
+                            {{displayFieldBenhNhan(dataItem, 2)}}
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #benhNhan3Template let-dataItem let-rowIndex>
+                    <div>
+                        <div class="tip" title="{{setTitle(dataItem, 3)}}">
+                            {{displayFieldBenhNhan(dataItem, 3)}}
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #benhNhan4Template let-dataItem let-rowIndex>
+                    <div>
+                        <div class="tip" title="{{setTitle(dataItem, 4)}}">
+                            {{displayFieldBenhNhan(dataItem, 4)}}
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #benhNhan5Template let-dataItem let-rowIndex>
+                    <div>
+                        <div class="tip" title="{{setTitle(dataItem, 5)}}">
+                            {{displayFieldBenhNhan(dataItem, 5)}}
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #benhNhan6Template let-dataItem let-rowIndex>
+                    <div>
+                        <div class="tip" title="{{setTitle(dataItem, 6)}}">
+                            {{displayFieldBenhNhan(dataItem, 6)}}
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #benhNhan7Template let-dataItem let-rowIndex>
+                    <div>
+                        <div class="tip" title="{{setTitle(dataItem, 7)}}">
+                            {{displayFieldBenhNhan(dataItem, 7)}}
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #benhNhan8Template let-dataItem let-rowIndex>
+                    <div>
+                        <div class="tip" title="{{setTitle(dataItem, 8)}}">
+                            {{displayFieldBenhNhan(dataItem, 8)}}
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #benhNhan9Template let-dataItem let-rowIndex>
+                    <div>
+                        <div class="tip" title="{{setTitle(dataItem, 9)}}">
+                            {{displayFieldBenhNhan(dataItem, 9)}}
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #benhNhan10Template let-dataItem let-rowIndex>
+                    <div>
+                        <div class="tip" title="{{setTitle(dataItem, 10)}}">
+                            {{displayFieldBenhNhan(dataItem, 10)}}
+                        </div>
+                    </div>
+                </ng-template>
+            <!-- </div> -->
+
+            <!-- <ng-template #phongTemplate let-dataItem>
+                <a (click)="Xem(dataItem)" style="width: 100; text-align: center;">
+                    {{dataItem.Ten}}
+                </a>
+            </ng-template>
+
+
+            <ng-template #khoaFooterTemplate let-dataItem>
+                <span style="float:right">Tổng:</span>
+            </ng-template>
+
+            <ng-template #giuongTrongFooteremplate let-aggregates>
+                {{totalGiuongTrong}}
+            </ng-template>
+
+            <ng-template #giuongCoBenhNhanFooteremplate let-aggregates>
+                {{totalGiuongCoBenhNhan}}
+            </ng-template>
+
+            <ng-template #giuongBenhCuaKhoaFooteremplate let-aggregates>
+                {{totalTongGiuongBenhCuaKhoa}}
+            </ng-template> -->
+
+            
+
+        <div>
+            <div class="styleTinhTong">
+                <ul class="inline">
+                    <li class="styleLI">Tổng số giường: <strong>{{getTotalBottomGrid(1)}}</strong>
+                    </li>
+                    <li class="styleLI">Tổng số giường trống: <strong>{{getTotalBottomGrid(2)}}</strong>
+                    </li>
+                    <li class="styleLI">Tổng số giường có NB: <strong>{{getTotalBottomGrid(3)}}</strong>
+                    </li>
+                    <li>Tổng số giường nằm ghép: <strong>{{getTotalBottomGrid(4)}}</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        </div>
+
+
+    </vex-page-layout-content>
+</vex-page-layout>

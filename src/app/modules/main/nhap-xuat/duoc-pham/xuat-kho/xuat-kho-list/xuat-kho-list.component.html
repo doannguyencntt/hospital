@@ -1,0 +1,112 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Dược phẩm',Path:''}
+                ,{Title:'Xuất kho',Path:'/nhap-xuat/duoc-pham/xuat-kho', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid #parentGrid baseRoute="/nhap-xuat/duoc-pham/xuat-kho" [sort]="sort" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useHeaderDefault]="false" [headerTemplate]="headerTemplate"
+                [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false"
+                [detailTemplate]="detailTemplate" [showExportExcel]="true" (extExportExcel)="exportExcel()"
+                [additionalSearchString]="additionalSearchString"></app-grid>
+            <ng-template #detailTemplate let-dataItem>
+                <app-grid baseRoute="/nhap-xuat/duoc-pham/xuat-kho" [groups]="groups" [sort]="sortChild"
+                    [gridColumns]="gridChildColumns" [documentType]="documentType" [useAddDeault]="false" pageSize="5"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                    [urlGetData]="urlGetDataGridChild" [urlGetTotalPage]="urlGetTotalPageGridChild"
+                    searchString="{{dataItem.Id}}" [autoHeight]="true">
+                </app-grid>
+            </ng-template>
+        </div>
+        <ng-template #trangThaiTemplate let-dataItem>
+            <button kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+            </button>
+            <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                <ng-template let-customer="customer" matMenuContent>
+                    <!-- <button (click)="detail(dataItem.Id)" mat-menu-item>
+                        <mat-icon [icIcon]="icEdit"></mat-icon>
+                        <span>Xem Chi Tiết</span>
+                    </button> -->
+                    <button (click)="InPhieuXuat(dataItem.Id)" mat-menu-item>
+                        <mat-icon [icIcon]="icPrint"></mat-icon>
+                        <span>In</span>
+                    </button>
+                </ng-template>
+            </mat-menu>
+        </ng-template>
+
+        <ng-template #khoDuocPhamXuatTemplate let-dataItem>
+            <a (click)="detail(dataItem.Id)">
+                {{dataItem.KhoDuocPhamXuat}}
+            </a>
+        </ng-template>
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px"
+                    fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                    <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        type="search" name="searchString" [(ngModel)]="xuatKhoSearch.SearchString"
+                        (keyup)="onKey($event)" (ngModelChange)="clearSearch($event)" placeholder="Nhập từ khóa..." />
+                </div>
+
+                <app-daterangepicker style="margin-left: 5px;" id="RangeXuat" fxFlex="250px" fxFlex.sm="auto"
+                    [(model)]="xuatKhoSearch.RangeXuat" label="Xuất từ ngày - đến ngày" (keyup)="onKeyNgayXuat($event)"
+                    (modelChange)="changeNgayXuatRange($event)" (blur)="blur($event)" class="mt-1 on-header">
+                </app-daterangepicker>
+
+                <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                </button>
+
+                <span fxFlex></span>
+                <button [matMenuTriggerFor]="columnFilterMenu" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip
+                    title="Lọc cột" type="button">
+                    <mat-icon [icIcon]="icFilterList"></mat-icon>
+                </button>
+
+                <button (click)="exportExcel()" class="mr-4" fxFlex="none" mat-icon-button kendoTooltip
+                    title="Xuất Excel" type="button">
+                    <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                </button>
+
+                <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                    <div *ngFor="let column of gridColumns">
+                        <button *ngIf="column.Title != ''"
+                            class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                            <mat-checkbox [disabled]="true" color="primary">
+                                {{ column.Title }}
+                            </mat-checkbox>
+                        </button>
+                    </div>
+                </mat-menu>
+
+                <button (click)="themMoiXuatKho()" class="mr-6" color="primary" fxFlex="none" mat-mini-fab kendoTooltip
+                    title="Thêm" type="button">
+                    <mat-icon [icIcon]="icAdd"></mat-icon>
+                </button>
+
+            </div>
+        </ng-template>
+
+        <ng-template #tenNhomGroupHeaderTemplate let-value="value" let-dataItem>
+            <strong>{{value}}</strong>
+        </ng-template>
+
+        <ng-template #soChungTuTemplate let-dataItem>
+            <a (click)="xemChiTiet(dataItem.Id, dataItem)">
+                {{dataItem.SoPhieu}}</a>
+        </ng-template>
+
+    </vex-page-layout-content>
+</vex-page-layout>

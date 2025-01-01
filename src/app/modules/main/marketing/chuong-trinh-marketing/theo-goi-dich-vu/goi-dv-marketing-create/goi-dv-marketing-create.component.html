@@ -1,0 +1,26 @@
+<app-header-form [crumbs]="[
+{Title:'Marketing',Path:''}
+,{Title:'Chương Trình Marketing',Path:''}
+,{Title:'Theo Gói Dịch Vụ',Path:'/marketing/ct-marketing/goi-dv', queryParams: {holdQuery : true}, Active: true}
+]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">TẠO CHƯƠNG TRÌNH MARKETING THEO GÓI DỊCH VỤ</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-goi-dv-marketing-shared [isCreate]="true"></app-goi-dv-marketing-shared>
+
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <app-formfooter [bodyComponent]="shared" (created)="onCreated()" (validateClient)="onValidateClient($event)" #footer></app-formfooter>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

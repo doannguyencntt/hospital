@@ -1,0 +1,30 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="HoTen" fxFlex="30%" fxFlex.sm="40%" maxlength="100" [required]="true"
+        [(model)]="nguoiGioiThieu.HoTen" label="Họ Tên" [validationerror]="'HoTen' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textbox id="SoDienThoai" fxFlex="30%" fxFlex.sm="40%" maxlength="12" [(model)]="nguoiGioiThieu.SoDienThoai"
+        onlynumber="true" label="Số Điện Thoại" [validationerror]="'SoDienThoai' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-combobox fxFlex="40%" [(model)]="nguoiGioiThieu.NhanVienQuanLyId" [required]="true"
+        [validationerror]="'NhanVienQuanLyId' | validationerror:validationErrors" id="NhanVienQuanLyId"
+        [modelText]="nguoiGioiThieu.HoTenNguoiQuanLy" label="Người Quản Lý" url="NguoiGioiThieu/GetNguoiQuanLy"
+        [templateHeader]="nguoiQuanLyTemplateHeader" [template]="nguoiQuanLyTemplate" class="item-no-padding">
+        <ng-template #nguoiQuanLyTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="50%">Họ Tên</th>
+                    <th>Số Điện Thoại</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #nguoiQuanLyTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="50%">{{dataItem.HoTen}}</td>
+                    <td>{{dataItem.SoDienThoai}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+</div>

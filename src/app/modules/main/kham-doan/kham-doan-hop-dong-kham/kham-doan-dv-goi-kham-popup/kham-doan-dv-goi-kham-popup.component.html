@@ -1,0 +1,60 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>{{title}}</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-grid *ngIf="laDichVuTrongGoi" #gridDichVuChiTietTrongGoi masterName="gridDichVuChiTietTrongGoi" fxFlex="100%"
+        fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridDichVuKhamDoanColumns" [allowSortDefault]="false"
+        [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+        [checkboxAble]="false" [lazyLoadPage]="true" [groups]="groups" maxHeight="500" [pageable]="false"
+        [additionalSearchString]="additionalSearchString" [sort]="sort" [showStt]="true"
+        [removeGroupFooterIfIsOnlyOne]="true" (extOnDataBound)="onDataBoundChild($event)"
+        urlGetData="KhamDoan/GetDataForGridAsyncBangKeDichVuKhamDoanChiTiet"
+        urlGetTotalPage="KhamDoan/GetTotalPageForGridAsyncBangKeDichVuKhamDoanChiTiet">
+    </app-grid>
+
+    <app-grid *ngIf="!laDichVuTrongGoi" #gridDichVuChiTietNgoaiGoi masterName="gridDichVuChiTietNgoaiGoi" fxFlex="100%"
+        fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridDichVuKhamDoanColumns" [allowSortDefault]="false"
+        [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+        [checkboxAble]="false" [lazyLoadPage]="true" [groups]="groups" maxHeight="500" [pageable]="false"
+        [additionalSearchString]="additionalSearchString" [sort]="sort" [showStt]="true"
+        [removeGroupFooterIfIsOnlyOne]="true" (extOnDataBound)="onDataBoundChild($event)"
+        urlGetData="KhamDoan/GetDataForGridAsyncBangKeDichVuKhamDoanChiTiet"
+        urlGetTotalPage="KhamDoan/GetTotalPageForGridAsyncBangKeDichVuKhamDoanChiTiet">
+    </app-grid>
+
+    <ng-template #donGiaTemplate let-dataItem>
+        {{dataItem.DonGiaUuDai | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #thanhTienTemplate let-dataItem>
+        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    <ng-template #thanhTienFooterTemplate let-dataItem>
+        <p style="color: blue; font-weight: bold;">
+            <span>{{totalThanhTien('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+    <ng-template #donGiaFooterTemplate>
+        <span style="float:right">Tổng: </span>
+    </ng-template>
+    <ng-template #thanhTienGroupFooterTemplate let-aggregates>
+        {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #nhomGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-template #trangThaiTemplate let-dataItem>
+        <span *ngIf="dataItem.TrangThaiYeuCauKhamBenh != null && dataItem.LaDichVuKham"
+            [ngStyle]="{'color': dataItem.TrangThaiYeuCauKhamBenh == 6 ? 'red' : (dataItem.TrangThaiYeuCauKhamBenh == 5 ? 'green' : (dataItem.TrangThaiYeuCauKhamBenh == 2 ? 'orange' : '')) }">
+            {{dataItem.TrangThaiYeuCauKhamBenhDisplay}}</span>
+
+        <span *ngIf="dataItem.TrangThaiYeuCauDichVuKyThuat != null && !dataItem.LaDichVuKham"
+            [ngStyle]="{'color': dataItem.TrangThaiYeuCauDichVuKyThuat == 4 ? 'red' : (dataItem.TrangThaiYeuCauDichVuKyThuat == 3 ? 'green' : (dataItem.TrangThaiYeuCauDichVuKyThuat == 2 ? 'orange' : '')) }">
+            {{dataItem.TrangThaiYeuCauDichVuKyThuatDisplay}}</span>
+    </ng-template>
+
+</div>

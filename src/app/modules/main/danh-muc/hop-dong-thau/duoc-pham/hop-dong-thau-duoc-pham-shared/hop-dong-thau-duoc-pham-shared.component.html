@@ -1,0 +1,234 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <h3 fxFlex="100%" class="sub-title mt-0">THÔNG TIN CHUNG
+    </h3>
+
+    <app-combobox id="NhaThau" fxFlex="25%" fxFlex.sm="25%" label="Nhà Cung Cấp"
+        url="HopDongThauDuocPham/GetListNhaThau" [(model)]="hopDongThauDuocPham.NhaThauId"
+        [modelText]="hopDongThauDuocPham.NhaThau" class="item-no-padding" [template]="nhaThauTemplate"
+        [templateHeader]="nhaThauTemplateHeader" [required]="true" [disabled]="isDisableUpdate"
+        [validationerror]="'NhaThauId' | validationerror:validationErrors">
+        <ng-template #nhaThauTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="30%">Tên</th>
+                    <th>Địa Chỉ</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #nhaThauTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="30%">{{dataItem.Ten}}</td>
+                    <td>{{dataItem.DiaChi}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textbox id="SoHopDong" fxFlex="25%" fxFlex.sm="25%" [(model)]="hopDongThauDuocPham.SoHopDong"
+        label="Số Hợp Đồng" maxlength="50" [disabled]="isDisableUpdate">
+    </app-textbox>
+
+    <app-textbox id="SoQuyetDinh" fxFlex="25%" fxFlex.sm="25%" [(model)]="hopDongThauDuocPham.SoQuyetDinh"
+        [required]="true" label="Số Quyết Định" maxlength="25" [disabled]="isDisableUpdate"
+        [validationerror]="'SoQuyetDinh' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-datepicker id="CongBo" fxFlex="25%" fxFlex.sm="25%" [required]="true" [(model)]="hopDongThauDuocPham.CongBo"
+        (modelChange)="ngayChange($event, true)" label="Công Bố" [disabled]="isDisableUpdate"
+        [validationerror]="'CongBo' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-datepicker id="NgayKy" fxFlex="25%" fxFlex.sm="25%" [(model)]="hopDongThauDuocPham.NgayKy" label="Ngày Ký"
+        [disabled]="isDisableUpdate" [validationerror]="'NgayKy' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-datepicker id="NgayHieuLuc" fxFlex="25%" fxFlex.sm="25%" [required]="true"
+        [(model)]="hopDongThauDuocPham.NgayHieuLuc" label="Ngày Hiệu Lực" [disabled]="isDisableUpdate"
+        (modelChange)="ngayChange($event, false)" [validationerror]="'NgayHieuLuc' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-datepicker id="NgayHetHan" fxFlex="25%" fxFlex.sm="25%" [required]="true"
+        [(model)]="hopDongThauDuocPham.NgayHetHan" label="Ngày Hết Hạn" [disabled]="isDisableUpdate"
+        [validationerror]="'NgayHetHan' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-textboxnumeric id="Nam" fxFlex="25%" fxFlex.sm="25%" [(model)]="hopDongThauDuocPham.Nam" [required]="true"
+        label="Năm" [min]="minYear" [max]="maxYear" [format]="'0'" [spinners]="false" [disabled]="isDisableUpdate"
+        [validationerror]="'Nam' | validationerror:validationErrors">
+    </app-textboxnumeric>
+
+
+
+    <app-combobox id="LoaiThau" fxFlex="25%" fxFlex.sm="25%" [(model)]="hopDongThauDuocPham.LoaiThau" [required]="true"
+        [modelText]="hopDongThauDuocPham.TenLoaiThau" label="Loại Thầu" [disabled]="isDisableUpdate"
+        [autoSelectFirstItem]="true" bind="true" url="HopDongThauDuocPham/GetListLoaiThau"
+        [validationerror]="'LoaiThau' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-combobox id="LoaiThuocThau" fxFlex="25%" fxFlex.sm="25%" [(model)]="hopDongThauDuocPham.LoaiThuocThau"
+        [required]="true" [modelText]="hopDongThauDuocPham.TenLoaiThuocThau" label="Loại Thuốc Thầu"
+        [autoSelectFirstItem]="true" bind="true" [disabled]="isDisableUpdate"
+        url="HopDongThauDuocPham/GetListLoaiThuocThau"
+        [validationerror]="'LoaiThuocThau' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-textbox id="NhomThau" fxFlex="25%" fxFlex.sm="25%" [(model)]="hopDongThauDuocPham.NhomThau" [required]="true"
+        [disabled]="isDisableUpdate" label="Nhóm Thầu" maxlength="50"
+        [validationerror]="'NhomThau' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="GoiThau" fxFlex="25%" fxFlex.sm="25%" [(model)]="hopDongThauDuocPham.GoiThau" [required]="true"
+        [disabled]="isDisableUpdate" label="Gói Thầu" maxlength="2"
+        [validationerror]="'GoiThau' | validationerror:validationErrors">
+    </app-textbox>
+
+
+
+    <h3 fxFlex="100%" class="sub-title">THÔNG TIN CHI TIẾT
+    </h3>
+
+    <div fxFlex="100%" fxFlex.sm="100%" [hidden]="showFormDetail">
+        <button (click)="ThemDuocPham()" type="button" color="primary" [disabled]="isDisableUpdate" mat-raised-button>
+            Thêm Dược Phẩm</button>
+    </div>
+
+    <div fxFlex="100%" fxFlex.sm="100%" [hidden]="!showFormDetail">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-combobox id="DuocPham" fxFlex="50%" fxFlex.sm="50%" label="Dược Phẩm" (keyup)="onKeyAddDp($event)"
+                (openCombobox)="openComboboxHdt($event)" url="HopDongThauDuocPham/GetListDuocPham" [reloadForGrid]="true"
+                [queryInfo]="{ParameterDependencies:'{DuocPhamId:' + hopDongThauDuocPhamChiTiet.DuocPhamId +'}', Take: 50}"
+                [(model)]="hopDongThauDuocPhamChiTiet.DuocPhamId" [modelText]="hopDongThauDuocPhamChiTiet.DuocPham"
+                class="item-no-padding" [template]="duocPhamTemplate" [templateHeader]="duocPhamTemplateHeader"
+                [required]="true" [validationerror]="'DuocPhamId' | validationerror:validationErrorsForDetail"
+                (selectionChange)="onChangeDuocPham($event)">
+                <ng-template #duocPhamTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="30%">Tên</th>
+                            <th width="30%">Hoạt Chất</th>
+                            <th>Nhà Sản Xuất</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #duocPhamTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="30%">{{dataItem.Ten}}</td>
+                            <td width="30%">{{dataItem.HoatChat}}</td>
+                            <td>{{dataItem.NhaSanXuat}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+
+            <app-textboxnumeric id="Gia" fxFlex="15%" fxFlex.sm="15%" [(model)]="hopDongThauDuocPhamChiTiet.Gia"
+                [step]="100" [required]="true" label="Giá" decimals="2" format="n2" (keyup)="onKeyAddDp($event)"
+                [validationerror]="'Gia' | validationerror:validationErrorsForDetail">
+            </app-textboxnumeric>
+
+            <app-textboxnumeric id="SoLuong" fxFlex="10%" fxFlex.sm="10%" [(model)]="hopDongThauDuocPhamChiTiet.SoLuong"
+                [spinners]="false" [required]="true" label="Số Lượng" [decimals]="2" [format]="format"
+                (keyup)="onKeyAddDp($event)" [validationerror]="'SoLuong' | validationerror:validationErrorsForDetail">
+            </app-textboxnumeric>
+            <app-checkbox [disabled]="disabledSuDungTaiBenhVien==true" id="SuDungTaiBenhVien" fxFlex="15%"
+                fxFlex.sm="15%" class="mt-4" [(model)]="hopDongThauDuocPhamChiTiet.SuDungTaiBenhVien"
+                label="Sử dụng tại bệnh viện" (modelChange)="modelChangeSuDungTaiBenhVien($event)">
+            </app-checkbox>
+
+            <ng-container *ngIf="hopDongThauDuocPhamChiTiet.SuDungTaiBenhVien == true">
+                <app-combobox id="DuocPhamBenhVienPhanNhomChaId" fxFlex="25%" fxFlex.sm="25%"
+                    [disabled]="hopDongThauDuocPhamChiTiet.DuocPhamBenhVienId != null && hopDongThauDuocPhamChiTiet.DuocPhamBenhVienId != 0"
+                    [(model)]="hopDongThauDuocPhamChiTiet.DuocPhamBenhVienPhanNhomChaId"
+                    url="DuocPhamBenhVien/DuocPhamBenhVienChaPhanNhoms"
+                    [modelText]="hopDongThauDuocPhamChiTiet.TenDuocPhamBenhVienPhanNhomCha" label="Loại thuốc hoặc hoạt chất"
+                    required="true" [autoSelectFirstItem]="true" bind="true" (modelChange)="nhomChaChange($event)"
+                    (keyup)="onKeyAddDp($event)" (openCombobox)="openComboboxHdt($event)"
+                    [validationerror]="'DuocPhamBenhVienPhanNhomChaId' | validationerror:validationErrorsForDetail">
+                </app-combobox>
+            
+                <app-combobox-tree #cboPhanNhomCon fxFlex="25%" fxFlex.sm="25%" label="Phân loại theo tác dụng Dược lý"
+                    [(model)]="hopDongThauDuocPhamChiTiet.DuocPhamBenhVienPhanNhomConId" id="DuocPhamBenhVienPhanNhomConId"
+                    [disabled]="(hopDongThauDuocPhamChiTiet.DuocPhamBenhVienId != null && hopDongThauDuocPhamChiTiet.DuocPhamBenhVienId != 0) || hopDongThauDuocPhamChiTiet.DuocPhamBenhVienPhanNhomChaId == undefined ||  hopDongThauDuocPhamChiTiet.DuocPhamBenhVienPhanNhomChaId == null"
+                    [popupSettings]="{width: 1000,popupClass:'item-no-padding'}" [bind]="true"
+                    [queryInfo]="{ParameterDependencies:'{DuocPhamBenhVienPhanNhomChaId:' + hopDongThauDuocPhamChiTiet.DuocPhamBenhVienPhanNhomChaId + '}', Take: 50}"
+                    [modelText]="hopDongThauDuocPhamChiTiet.TenDuocPhamBenhVienPhanNhomCon"
+                    (keyup)="onKeyAddDp($event)" (openCombobox)="openComboboxHdt($event)"
+                    url="DuocPhamBenhVien/DichVuBenhVienPhanNhomsLv2VaLv3" (modelChange)="nhomConChange($event)">
+                </app-combobox-tree>
+            </ng-container>
+
+            <app-textbox [disabled]="disabledSuDungTaiBenhVien==true" fxFlex="25%" id="MaDuocPhamBenhVien"
+                label="Mã dược phẩm bệnh viện" maxlength="250" [(model)]="hopDongThauDuocPhamChiTiet.MaDuocPhamBenhVien"
+                [required]="true" [validationerror]="'MaDuocPhamBenhVien' | validationerror:validationErrorsForDetail"
+                *ngIf="hopDongThauDuocPhamChiTiet.SuDungTaiBenhVien == true">
+            </app-textbox>
+            <!-- <app-combobox-tree fxFlex="15%" label="Nhóm dịch vụ" [(model)]="hopDongThauDuocPhamChiTiet.DuocPhamBenhVienPhanNhomId"
+                [disabled]="disabledSuDungTaiBenhVien==true" [modelText]="hopDongThauDuocPhamChiTiet.DuocPhamBenhVienPhanNhomModelText"
+                url="DuocPhamBenhVien/GetListDichVuBenhVienPhanNhomAsync" *ngIf="hopDongThauDuocPhamChiTiet.SuDungTaiBenhVien == true"
+                [validationerror]="'DuocPhamBenhVienPhanNhomId' | validationerror:validationErrorsForDetail">
+            </app-combobox-tree> -->
+            <div fxFlex="100%" fxFlex.sm="100%">
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <div class="form-footer">
+                        <button type="button" class="mr-1" mat-button (click)="ClearData()">
+                            Hủy</button>
+                        <button *ngIf="!isUpdate" type="button" color="primary" mat-raised-button (click)="Add()">
+                            Thêm</button>
+                        <button *ngIf="isUpdate" type="button" color="primary" mat-raised-button (click)="Update()">
+                            Cập Nhật</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-grid fxFlex="100%" fxFlex.sm="100%" *ngIf="showGrid" [height]="300" [gridDataSource]="gridDataSource"
+        [useHeaderDefault]="false" [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+        [useAddDeault]="false" [checkboxAble]="false" [lazyLoadPage]="true" [autoHeight]="true" style="width: 1px;"
+        [pageable]="false" #gridHdtDp>
+    </app-grid>
+
+    <ng-template #giaTemplate let-dataItem>
+        {{dataItem.Gia | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #maDuocPhamTemplate let-dataItem let-rowIndex="rowIndex">
+        <p>{{dataItem.MaDuocPhamBenhVien}}</p>
+        <app-validationerrorother [validationerror]="'HopDongThauDuocPhamChiTiets['+rowIndex+'].MaDuocPhamBenhVien' | validationerror:validationErrors">
+        </app-validationerrorother>
+    </ng-template>
+
+    <ng-template #duocPhamThauTemplate let-dataItem let-rowIndex="rowIndex">
+        <p>{{dataItem.DuocPham}}</p>
+        <app-validationerrorother [validationerror]="'HopDongThauDuocPhamChiTiets['+rowIndex+'].DuocPhamId' | validationerror:validationErrors">
+        </app-validationerrorother>
+    </ng-template>
+
+    <ng-template #trangThaiTemplate let-dataItem>
+
+        <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu"
+            mat-icon-button type="button" [disabled]="isDisableUpdate">
+            <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+        </button>
+        <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+            <ng-template let-customer="customer" matMenuContent>
+                <button (click)="BindValue(dataItem)" mat-menu-item>
+                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                    <span>Sửa</span>
+                </button>
+                <button (click)="ConfirmDelete(dataItem)" mat-menu-item>
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                    <span>Xóa</span>
+                </button>
+            </ng-template>
+        </mat-menu>
+    </ng-template>
+</div>
+
+<div *ngIf="!isCreate" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+    <app-formfooter [bodyComponent]="this" type="update" [read]="isDisableUpdate" (updated)="onUpdated()">
+    </app-formfooter>
+</div>

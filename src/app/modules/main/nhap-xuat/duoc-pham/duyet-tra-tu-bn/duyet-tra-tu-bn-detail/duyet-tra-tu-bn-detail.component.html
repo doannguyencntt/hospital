@@ -1,0 +1,28 @@
+<app-header-form [crumbs]="[
+    {Title:'Nhập Xuất',Path:''},
+    {Title:'Dược Phẩm',Path:''},
+    {Title:'Hoàn Trả',Path:''},
+    {Title:'Từ Người Bệnh',Path:''},
+    {Title:'Duyệt Hoàn Trả',
+    Path:'/nhap-xuat/duoc-pham/hoan-tra/tu-benh-nhan/duyet-hoan-tra', queryParams: {holdQuery : true}, Active: true}
+]" [isicMoreVert]="false">
+</app-header-form>
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b render-tu-choi" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Chi Tiết Duyệt Phiếu Trả Thuốc Từ Người Bệnh Nội Trú</h2>
+                <div [innerHTML]="tinhTrangTxt"></div>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-duyet-tra-thuoc-tu-bn-shared (fireStatus)="GetCurrentStatus($event)" #shared></app-duyet-tra-thuoc-tu-bn-shared>
+                <div class="form-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <button type="button" (click)="Back()" mat-raised-button class="mr-1"><i class="ft-arrow-left"></i>
+                        Quay lại</button>
+                    <button *ngIf="status!=true" type="button" color="primary" (click)="Approve()" mat-raised-button class="mr-1"><i class="ft-arrow-left"></i>
+                        Duyệt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

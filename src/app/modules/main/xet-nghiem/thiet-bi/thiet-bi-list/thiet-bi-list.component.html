@@ -1,0 +1,53 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                  {Title:'Xét Nghiệm',Path:''}
+                  ,{Title:'Thiết Bị Xét Nghiệm',Path:'/xet-nghiem/thiet-bi',Active:true}
+                  ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid (extOnDataBound)="setColor()" [baseRoute]="baseRoute" [groups]="groups" [checkboxAble]="false" [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true" [showExportExcel]="true" #gridThietBi (extExportExcel)="exportExcel()"></app-grid>
+            <ng-template #trangThaiTemplate let-dataItem>
+                <button *ngIf="dataItem.HieuLuc != 1" (click)="update(dataItem.Id,dataItem.HieuLuc)" mat-menu-item>
+                    <mat-icon [icIcon]="icClose" color="warn"></mat-icon><span>Ngừng sử dụng</span>
+                </button>
+                <button *ngIf="dataItem.HieuLuc == 1" (click)="update(dataItem.Id,dataItem.HieuLuc)" mat-menu-item>
+                    <mat-icon [icIcon]="icicdone" color="primary"></mat-icon><span>Đang sử dụng</span>
+                </button>
+            </ng-template>
+            <ng-template #tinhTrangTemplate let-dataItem>
+                <span [innerHTML]="dataItem.TinhTrangDisplay"></span>
+            </ng-template>
+            <ng-template #actionTemplate let-dataItem>
+                <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                    <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+                </button>
+                <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                    <ng-template let-customer="customer" matMenuContent>
+                        <button (click)="edit(dataItem.Id)" mat-menu-item>
+                            <mat-icon [icIcon]="icEdit"></mat-icon>
+                            <span>Sửa</span>
+                        </button>
+                        <button (click)="delete(dataItem.Id)" mat-menu-item>
+                            <mat-icon [icIcon]="icDelete"></mat-icon>
+                            <span>Xóa</span>
+                        </button>
+                        <button (click)="copy(dataItem.Id)" mat-menu-item>
+                            <mat-icon [icIcon]="icCopy"></mat-icon>
+                            <span>Copy</span>
+                        </button>
+                    </ng-template>
+                </mat-menu>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+<ng-template #nhomXetNghiemTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>

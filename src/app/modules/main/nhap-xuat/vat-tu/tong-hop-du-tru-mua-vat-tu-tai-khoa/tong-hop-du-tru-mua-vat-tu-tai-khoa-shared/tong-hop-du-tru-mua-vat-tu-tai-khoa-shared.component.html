@@ -1,0 +1,187 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.LyDoGiamDocTuChoi !== undefined && 
+    danhSachTongHopDuTruMuaVatTuTaiKhoa.LyDoGiamDocTuChoi !== null">
+        <h4 style="color: red;">Lý do: {{danhSachTongHopDuTruMuaVatTuTaiKhoa.LyDoGiamDocTuChoi}}</h4>
+    </div>
+
+    <div fxFlex="100%" *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.LyDoTruongKhoaTuChoi !== undefined && 
+    danhSachTongHopDuTruMuaVatTuTaiKhoa.LyDoTruongKhoaTuChoi !== null">
+        <h4 style="color: red;">Lý do: {{danhSachTongHopDuTruMuaVatTuTaiKhoa.LyDoTruongKhoaTuChoi}}</h4>
+    </div>
+
+    <app-textbox id="soPhieu" fxFlex="20" fxFlex.sm="20" [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.SoPhieu"
+        [required]="true" maxlength="250" label="Số phiếu" [disabled]="true">
+    </app-textbox>
+
+    <app-combobox id="khoNhapId" fxFlex="20" fxFlex.sm="20" [required]="true"
+        [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.KhoNhapId" [disabled]="true"
+        [modelText]="danhSachTongHopDuTruMuaVatTuTaiKhoa.TenKho" url="YeuCauLinhVatTu/GetKhoCurrentUser" label="Kho"
+        [validationerror]="'KhoNhapId' | validationerror:validationErrors">
+    </app-combobox>
+    <app-textbox id="KyDuTru" fxFlex="20" fxFlex.sm="20" [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.KyDuTru"
+        [required]="true" maxlength="250" label="Kỳ dự trù" [disabled]="true">
+    </app-textbox>
+
+    <app-textbox id="TenNhanVienYeuCau" fxFlex="20" fxFlex.sm="20"
+        [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.TenNhanVienYeuCau" [required]="true" maxlength="250"
+        label="Người yêu cầu" [disabled]="true">
+    </app-textbox>
+    <app-datetimepicker id="ngayYeuCau" fxFlex="20" fxFlex.sm="20"
+        [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.NgayYeuCau" [disabled]="true" [required]="true"
+        label="Ngày yêu cầu">
+    </app-datetimepicker>
+
+    <!-- Nhân viên kho dược và giám đốc duyệt -->
+    <app-textbox id="TenNhanVienKhoDuocDuyet" fxFlex="20" fxFlex.sm="20" *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.TenNhanVienKhoDuocDuyet !== undefined && 
+   danhSachTongHopDuTruMuaVatTuTaiKhoa.TenNhanVienKhoDuocDuyet !== null"
+        [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.TenNhanVienKhoDuocDuyet" [required]="true" maxlength="250"
+        label="Nhân viên kho dược duyệt" [disabled]="true">
+    </app-textbox>
+    <app-datetimepicker id="NgayKhoDuocDuyet" fxFlex="20" fxFlex.sm="20" *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.TenNhanVienKhoDuocDuyet !== undefined && 
+   danhSachTongHopDuTruMuaVatTuTaiKhoa.TenNhanVienKhoDuocDuyet !== null"
+        [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.NgayKhoDuocDuyet" [disabled]="true" [required]="true"
+        label="Ngày kho dược duyệt">
+    </app-datetimepicker>
+    <app-textbox id="TenGiamDocDuyet" fxFlex="20" fxFlex.sm="20" *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.TenGiamDocDuyet !== undefined && 
+danhSachTongHopDuTruMuaVatTuTaiKhoa.TenGiamDocDuyet !== null"
+        [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.TenGiamDocDuyet" [required]="true" maxlength="250"
+        label="Tên giám đốc" [disabled]="true">
+    </app-textbox>
+    <app-datetimepicker id="NgayGiamDocDuyet" fxFlex="20" fxFlex.sm="20" *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.TenGiamDocDuyet !== undefined && 
+                           danhSachTongHopDuTruMuaVatTuTaiKhoa.TenGiamDocDuyet !== null"
+        [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.NgayGiamDocDuyet" [disabled]="true" [required]="true"
+        label="Ngày giám đốc duyệt">
+    </app-datetimepicker>
+    <!-- <app-textbox id="LyDoGiamDocTuChoi" fxFlex="80" fxFlex.sm="80" *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.LyDoGiamDocTuChoi !== undefined && 
+danhSachTongHopDuTruMuaVatTuTaiKhoa.LyDoGiamDocTuChoi !== null"
+        [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.LyDoGiamDocTuChoi" [disabled]="true" maxlength="250"
+        label="Lý do giám đốc từ chối">
+    </app-textbox> -->
+    <!-- Nhân viên kho dược và giám đốc duyệt -->
+
+    <app-textbox id="GhiChu" fxFlex="100" fxFlex.sm="100" [(model)]="danhSachTongHopDuTruMuaVatTuTaiKhoa.GhiChu"
+        [disabled]="true" maxlength="250" label="Ghi chú">
+    </app-textbox>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin chi tiết</h3>
+    <div fxFlex="100%" [style.display]="tabSelected == 'DaXuLy' ? 'block' : 'none'">
+        <!-- <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault]="false"
+            [urlGetData]="YeuCauMuaVatTu/GetDuTruMuaVatTuTHDTChiTietForGridAsync"
+            [urlGetTotalPage]="YeuCauMuaVatTu/GetTotalDuTruMuaVatTuTHDTChiTietForGridAsync"
+            [additionalSearchString]="duTruMuaVatTuId" [useHeaderDefault]="false" [useActionDefault]="false"
+            [groups]="groups" [checkboxAble]="false" [detailTemplate]="detailTemplate" [lazyLoadPage]="true"
+            [autoHeight]="true" [showStt]="true">
+            <ng-template #nhomGroupHeaderTemplate let-value="value">
+                <strong>{{value}}</strong>
+            </ng-template>
+        </app-grid>
+        <ng-template #detailTemplate let-dataItem>
+            <app-grid [gridColumns]="gridColumnsChild" [documentType]="documentType" [useAddDeault]="false"
+                [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                [urlGetData]="YeuCauMuaVatTu/GetDuTruMuaVatTuTaiKhoaChiTietForGridAsyncChild"
+                [urlGetTotalPage]="YeuCauMuaVatTu/GetTotalDuTruMuaVatTuTaiKhoaChiTietForGridAsyncChild"
+                [autoHeight]="true" [showStt]="true"
+                [additionalSearchString]="dataItem.DuTruMuaVatTuTheoKhoaId + ';' + dataItem.LaBHYT + ';'  + dataItem.VatTuId">
+            </app-grid>
+        </ng-template> -->
+
+        <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault]="false"
+            [urlGetData]="urlGetDataDaXuLy" [urlGetTotalPage]="urlGetTotalPageDaXuLy"
+            [additionalSearchString]="duTruMuaVatTuId" [useHeaderDefault]="false" [useActionDefault]="false"
+            [groups]="groups" [checkboxAble]="false" [detailTemplate]="detailTemplate" [lazyLoadPage]="true"
+            [autoHeight]="true" [showStt]="true" (extOnDataBound)="onDataBound($event)">
+            <ng-template #nhomGroupHeaderTemplate let-value="value">
+                <strong>{{value}}</strong>
+            </ng-template>
+        </app-grid>
+        <ng-template #detailTemplate let-dataItem>
+            <app-grid [gridColumns]="gridColumnsChild" [documentType]="documentType" [useAddDeault]="false"
+                [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                [urlGetData]="urlGetDataDaXuLyChild" [urlGetTotalPage]="urlGetTotalPageDaXuLyChild" [autoHeight]="true"
+                [showStt]="true"
+                [additionalSearchString]="dataItem.DuTruMuaVatTuTheoKhoaId + ';' + dataItem.LaBHYT + ';'  + dataItem.VatTuId">
+            </app-grid>
+        </ng-template>
+    </div>
+    <div fxFlex="100%" [style.display]="tabSelected != 'DaXuLy' ? 'block' : 'none'">
+        <app-grid [gridColumns]="gridChildThuocVacXinColumns" [documentType]="documentType" [useAddDeault]="false"
+            [sort]="sortDuTruChild" [urlGetData]="urlGetDataGridChildAsync" [additionalSearchString]="duTruMuaVatTuId"
+            [urlGetTotalPage]="urlGetTotalPageGridChild" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [lazyLoadPage]="true" [autoHeight]="true" (extOnDataBound)="onDataBound($event)"
+            [groups]="groups">
+        </app-grid>
+        <ng-template #nhomSLTKDuyet let-dataItem let-rowIndex="rowIndex">
+            <app-textboxnumeric class="no-label" [step]="100" [(model)]="dataItem.SoLuongDuTruTruongKhoaDuyet"
+              max="999999" min="1" [disabled]="danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang == 0 && tabSelected != 'DaXuLy'">
+            </app-textboxnumeric>
+        </ng-template>
+        <ng-template #nhomGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+    </div>
+
+
+</div>
+
+<ng-template #khoTongTonTemplate let-dataItem>
+    <ng-template #templateHdInfo let-dataItem>
+        <table class="table table-border" width="100%">
+            <tr *ngFor="let hdt of khos">
+                <td>{{hdt.Ten}}:</td>
+                <td>{{hdt.SLTon}}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <div class="kho-tong-ton-ng-template" kendoTooltip>
+        <span class="kho-tong-ton-label">{{dataItem.HDChuaNhap}}</span>
+        <span *ngIf="dataItem.HDChuaNhap != 0" class="kho-tong-ton-ng-template" kendoTooltip #tooltip="kendoTooltip"
+            tooltipClass="tooltip-block" position="left" [tooltipTemplate]="templateHdInfo" filter="*">
+            <mat-icon [icIcon]="icInfo" (mouseover)="TooltipCustom(dataItem)" class="info"></mat-icon>
+        </span>
+    </div>
+</ng-template>
+
+<ng-template #hdChuaNhapTemplate let-dataItem>
+    <ng-template #templateInfo let-dataItem>
+        <table class="table table-border" width="100%">
+            <tr *ngFor="let kho of hdts">
+                <td>{{kho.Ten}}:</td>
+                <td>{{kho.SLTon}}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <div class="kho-tong-ton-ng-template" kendoTooltip>
+        <span class="kho-tong-ton-label">{{dataItem.KhoTongTon}}</span>
+        <span *ngIf="dataItem.KhoTongTon != 0" class="kho-tong-ton-ng-template" kendoTooltip #tooltip="kendoTooltip"
+            tooltipClass="tooltip-block" position="left" [tooltipTemplate]="templateInfo" filter="*">
+            <mat-icon [icIcon]="icInfo" (mouseover)="TooltipCustom(dataItem)" class="info"></mat-icon>
+        </span>
+    </div>
+</ng-template>
+
+<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+    <button *ngIf="tabSelected == 'DaXuLy'" type="button" mat-button class="mr-1 align-left-fx"
+        (click)="InPhieuTongHopTaiKhoa()" mat-raised-button color="primary"><i class="ft-arrow-left"></i>
+        In phiếu tổng hợp tại khoa </button>
+    <button type="button" *ngIf="tabSelected == 'DaXuLy'" title="Phím tắt: Esc" (click)="cancel()" mat-button
+        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Quay Lại</button>
+
+    <!-- Trường hợp chờ gửi  đang ở trạng thái chờ gửi thì các nút là Quay lại, HỦy duyệt 0 chờ duyet 1 chua duyet-->
+    <button *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang == 0 && tabSelected != 'DaXuLy'" type="button"
+        title="Phím tắt: Esc" (click)="cancel()" mat-button class="mr-1 align-right-fx"><i class="ft-arrow-left"></i>
+        Quay lại</button>
+    <button *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang == 0 && tabSelected != 'DaXuLy'" type="button"
+        (click)="HuyDuyet(duTruMuaVatTuId)" color="warn" mat-raised-button><i class="ft-save"></i>Hủy Duyệt</button>
+
+    <!-- Trường hợp chửa gửi  đang ở trạng thái chờ gửi thì các nút là Quay lại, HỦy duyệt 0 chờ duyet 1 chua duyet-->
+    <button *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang === 1 && tabSelected != 'DaXuLy'" type="button"
+        title="Phím tắt: Esc" (click)="cancel()" mat-button class="mr-1 align-right-fx"><i class="ft-arrow-left"></i>
+        Hủy</button>
+    <button *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang === 1 && tabSelected != 'DaXuLy'" type="button"
+        (click)="TuChoi()" color="warn" mat-raised-button><i class="ft-save"></i>Từ chối</button>
+    <button *ngIf="danhSachTongHopDuTruMuaVatTuTaiKhoa.TinhTrang === 1 && tabSelected != 'DaXuLy'" type="button"
+        (click)="PheDuyet(duTruMuaVatTuId)" color="primary" mat-raised-button><i class="ft-save"></i>
+        Duyệt</button>
+</div>

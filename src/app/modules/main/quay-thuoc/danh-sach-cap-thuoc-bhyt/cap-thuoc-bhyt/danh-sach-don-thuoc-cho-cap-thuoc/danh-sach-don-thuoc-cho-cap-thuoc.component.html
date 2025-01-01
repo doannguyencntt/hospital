@@ -1,0 +1,147 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="
+                    [
+                    {Title:'Cấp phát thuốc bhyt',Path:''},
+                    {Title:'DS Đơn Thuốc cấp phát',Path:'/nha-thuoc', Active:true}
+                    ]">
+            </vex-breadcrumbs>
+            <app-hot-key style="position: absolute;right: 180px;top: 7px;" [keys]="[
+            {Key:'Ctrl + Q',Description:'Quét mã vạch',End:true}
+            ]">
+            </app-hot-key>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+
+                        <fieldset class="m-0">
+                            <legend>TÌM NGƯỜI BỆNH</legend>
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0">
+                                <div fxFlex="15%" fxFlex.sm="15%" style="position: relative;">
+                                    <app-textbox id="SoTheBHYT" fxFlex="100%" fxFlex.sm="100%" label="Mã NB"
+                                        [(model)]="timKiem.MaBenhNhan" (keyup)="onKey($event)" [isAutoFocus]="true"
+                                        (modelChange)="searchChangeMaBN($event)">
+                                    </app-textbox>
+                                    <button style="position: absolute;right: 21px;margin-top: 10px;"
+                                        (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button"
+                                        kendoTooltip title="Quét mã vạch thẻ BHYT">
+                                        <img src="assets/img/barcode.png" alt="Scan barcode" />
+                                    </button>
+                                </div>
+
+                                <app-textbox id="MaTN" fxFlex="10%" fxFlex.sm="15%" maxlength="4000"
+                                    [(model)]="timKiem.MaTiepNhan" style="padding-left: 10px;" (keyup)="onKey($event)"
+                                    label="Mã TN" (modelChange)="searchChangeMaTN($event)"
+                                    [validationerror]="'MaTN' | validationerror:validationErrors">
+                                </app-textbox>
+
+                                <app-textbox id="HoTen" fxFlex="30%" fxFlex.sm="30%" maxlength="4000"
+                                    [(model)]="timKiem.HoTen" style="padding-left: 10px;" (keyup)="onKey($event)"
+                                    label="Họ Tên" [validationerror]="'HoTen' | validationerror:validationErrors">
+                                </app-textbox>
+
+                                <app-textboxmask id="SoDienThoai" onlynumber="true" fxFlex="10%" fxFlex.sm="10%"
+                                    label="Số điện thoại" (keyup)="onKey($event)" maxlength="10"
+                                    [(model)]="timKiem.SoDienThoai" mask="000 000 0000">
+                                </app-textboxmask>
+
+                                <app-daterangepicker id="Daterange" fxFlex="20%" fxFlex.sm="20%"
+                                    [(model)]="timKiem.RangeDate" label="Từ ngày - Đến ngày" (keyup)="onKey($event)">
+                                </app-daterangepicker>
+
+                                <div fxFlex="209px">
+                                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-5"
+                                        (click)="TimKiemChoCapThuocBHYT()">Tìm
+                                        kiếm</button>
+                                    <button type="button" color="primary" mat-raised-button (click)="exportExcel()">Xuất
+                                        Excel</button>
+
+                                </div>
+
+                                <app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)"
+                                    style="display: none;"></app-barcode>
+                            </div>
+                        </fieldset>
+
+                        <!-- Begin danh sách đơn thuốc chờ cấp phát -->
+
+                        <app-grid #gridList [gridColumns]="gridParentColumnsDSChoCapThuoc" [documentType]="documentType"
+                            [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+                            [checkboxAble]="false" [lazyLoadPage]="true" [sort]="sortConfig"
+                            [urlGetData]="urlGetDataGridChild" [urlGetTotalPage]="urlGetTotalPageGridChild"
+                            heightToolbar="272" [additionalSearchString]="queryStringSearchUuTien"
+                            [detailTemplate]="detailTemplate">
+                        </app-grid>
+                        <ng-template #TongGiaTriDonThuocTemplate let-dataItem>
+                            <strong class="text-color" style="color:red"
+                                *ngIf="dataItem.TrangThaiHienThi=='Chưa thanh toán'">
+                                {{dataItem.TongGiaTriDonThuoc | number:'0.2-2':'vi-VN'}}</strong>
+                            <strong class="text-color" style="color:blue"
+                                *ngIf="dataItem.TrangThaiHienThi=='Đã thanh toán'">
+                                {{dataItem.TongGiaTriDonThuoc | number:'0.2-2':'vi-VN'}}</strong>
+                        </ng-template>
+                        <ng-template #SoTienChoThanhToanTemplate let-dataItem>
+                            <strong class="text-color" style="color:red"
+                                *ngIf="dataItem.TrangThaiHienThi=='Chưa thanh toán'">
+                                {{dataItem.SoTienChoThanhToan | number:'0.2-2':'vi-VN'}}</strong>
+                            <strong class="text-color" style="color:blue"
+                                *ngIf="dataItem.TrangThaiHienThi=='Đã thanh toán'">
+                                {{dataItem.SoTienChoThanhToan | number:'0.2-2':'vi-VN'}}</strong>
+                        </ng-template>
+                        <ng-template #actionTemplate let-dataItem>
+                            <div class="text-center" kendoTooltip>
+                                <button type="button" color="primary" (click)="xemChoCapThuocBHYT(dataItem)" class="mr-1 float-right"
+                                    mat-raised-button>
+                                    Xem</button>
+                            </div>
+                        </ng-template>
+                        <ng-template #maTNTemplate let-dataItem>
+                            <a (click)="xemChoCapThuocBHYT(dataItem)">{{dataItem.MaTN}}</a>
+                        </ng-template>
+                        <ng-template #detailTemplate let-dataItem>
+                            <app-grid baseRoute="" [gridColumns]="gridChildColumnsDSChoCapThuoc"
+                                [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+                                [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                                [urlGetData]="urlGetDataChild"
+                                [additionalSearchString]="dataItem.Id + '-' +dataItem.DateStart + '-' + dataItem.DateEnd"
+                                [autoHeight]="true" [pageable]="false">
+                            </app-grid>
+                        </ng-template>
+                        <ng-template #nhomGroupHeaderTemplate let-value="value">
+                            <strong>{{value}}</strong>
+                        </ng-template>
+                        <ng-template #templatePrint let-dataItem>
+                            <span *ngIf="dataItem.DonThuocBacSiKeToa == false">
+                                <button kendoTooltip title="In phiếu"
+                                    (click)="PrinAllDonThuocBenhNhan(dataItem.DonThuocThanhToanId, dataItem.LoaiDonThuoc , dataItem.YeuCauKhambenhId)"
+                                    mat-icon-button type="button">
+                                    <mat-icon [icIcon]="icPrint"></mat-icon>
+                                </button>
+                            </span>
+                        </ng-template>
+                        <ng-template #SoTienThuoctemplate let-dataItem>
+                            <span style="color:red"> {{dataItem.SoTienDisPlay}}</span>
+                        </ng-template>
+                        <ng-template #TinhTrangThuoctemplate let-dataItem>
+                            <span style="color:red"
+                                *ngIf="dataItem.TinhTrang =='Chưa xuất thuốc' || dataItem.TinhTrang =='Chưa thanh toán'">
+                                {{dataItem.TinhTrang}}</span>
+                            <span style="color:blue" *ngIf="dataItem.TinhTrang =='Đã thanh toán'">
+                                {{dataItem.TinhTrang}}</span>
+                            <span style="color: blue;" *ngIf="dataItem.TinhTrang =='Đã xuất thuốc'">
+                                {{dataItem.TinhTrang}}</span>
+                        </ng-template>
+
+                        <!-- End danh sách đơn thuốc chờ cấp phát -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

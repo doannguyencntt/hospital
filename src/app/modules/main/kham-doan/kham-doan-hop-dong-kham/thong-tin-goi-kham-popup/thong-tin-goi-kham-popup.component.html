@@ -1,0 +1,26 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">Thông tin gói khám</div>
+    <button type="button" mat-icon-button mat-dialog-close [mat-dialog-close]="null" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content [ngClass]="ThongTinGoiKhamError[0].Error == null ? 'thanhcong' :'thatbai'">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3">
+            <legend>Thông tin gói khám nhập đúng </legend>
+             Bạn thêm được: <strong style="color: green;">{{total}} gói khám thành công</strong>
+        </fieldset>
+        <fieldset *ngIf="ThongTinGoiKhamError[0].Error != null">
+            <legend>Thông tin gói khám nhập sai </legend>
+            <app-grid fxFlex="100%" fxFlex.sm="100%" HideCheckAll="true"
+                [gridColumns]="gridDanhSachNhanVienErrorColumns" [useHeaderDefault]="false" [useActionDefault]="false"
+                [lazyLoadPage]="true" [checkboxAble]="false" [pageable]="false" height="auto"
+                [gridDataSource]="dataSourceDanhSachGoiKham">
+            </app-grid>
+        </fieldset>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions class="mt-4 pb-5">    
+    <button style="margin-left: auto;" type="button" mat-stroked-button color="primary"
+        [mat-dialog-close]="null">Hủy</button>
+</mat-dialog-actions>

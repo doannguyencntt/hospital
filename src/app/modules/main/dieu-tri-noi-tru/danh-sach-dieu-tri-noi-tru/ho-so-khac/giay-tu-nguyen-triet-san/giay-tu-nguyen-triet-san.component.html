@@ -1,0 +1,54 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="100%" fxFlex.sm="100%"></div>
+
+            <app-datepicker id="ngay-thuc-hien" class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Ngày thực hiện"
+                [required]="true"
+                [(model)]="thongTinHoSoGiayTuNguyenTrietSan.NgayThucHien"
+                [validationerror]="'NgayThucHien' | validationerror: validationErrors">
+            </app-datepicker>
+
+            <app-combobox id="bs-thuc-hien" fxFlex="25%" fxFlex.sm="100%" label="BS thực hiện triệt sản"
+                [popupSettings]="null" [url]="'PhauThuatThuThuat/GetListBacSiDieuDuong?nhomChucDanh=' + nhomChucDanh.BacSi"
+                [(model)]="thongTinHoSoGiayTuNguyenTrietSan.BacSiThucHienId" [modelText]="thongTinHoSoGiayTuNguyenTrietSan.BacSiThucHienDisplay"
+                (selectionChange)="evtBsThucHienTrietSanChanged($event)"
+                [validationerror]="'BacSiThucHienId' | validationerror: validationErrors">
+            </app-combobox>
+
+            <app-upload id="upload" #chuKyPhieuSangLocDinhDuong [allowedExtensions]="allowedExtensions" fxFlex="50%" fxFlex.sm="100%"
+                [(model)]="noiTruHoSoKhac.FilesChuKy" [multiple]="true" label="File chữ ký"
+                [template]="templateFileChuanDoanHAInfo">
+            </app-upload>
+            
+            <ng-template #templateFileChuanDoanHAInfo let-files>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td>
+                            <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                                (click)="chuKyPhieuSangLocDinhDuong.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                            <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="chuKyPhieuSangLocDinhDuong.viewFile(files[0])"
+                                class="green" class="custom-name green">{{files[0].name}}</a>
+                        </td>
+                        <td style="width:25px">
+                            <a type="button" (click)="chuKyPhieuSangLocDinhDuong.remove(files[0].uid)" mat-icon-button>
+                                <mat-icon [icIcon]="icClear"></mat-icon>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </ng-template>
+        </div>
+
+        <p fxFlex="70%" fxFlex.md="70%" fxFlex.sm="100%">
+            Người thực hiện: <b>{{noiTruHoSoKhac.NhanVienThucHienDisplay}}</b> 
+            Ngày thực hiện: <b>{{noiTruHoSoKhac.ThoiDiemThucHienDisplay}}</b>
+        </p>
+
+        <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+            <button type="button" class="mr-2" mat-button color="primary" style="pointer-events: all;" (click)="in()">In</button>
+            <button type="button" class="mr-2" mat-button color="primary" (click)="huy()">Huỷ</button>
+            <button type="button" class="mr-2" color="primary" mat-raised-button (click)="luuThongTinGiayTuNguyenTrietSan()">Lưu</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>TÌM NHÂN VIÊN</div>
+    <!-- <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button> -->
+</div>
+
+<mat-dialog-content>
+    <app-grid [gridColumns]="gridColumns" [documentType]="documentType"
+        [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false" #grid [useActionDefault]="false"
+        [checkboxAble]="false" height="400" [headerTemplate]="headerTemplate" [sort]="sort"
+        urlGetData="QuanLyTaiKhoan/GetDataForGridTimNhanVienAsync" urlGetTotalPage="QuanLyTaiKhoan/GetTotalPageForGridTimNhanVienAsync">
+    </app-grid>
+</mat-dialog-content>
+
+<ng-template #actionTemplate let-dataItem>
+    <button class="button-chon" (click)="chonNhanVien(dataItem)" mat-menu-item>
+        Chọn
+    </button>
+</ng-template>
+
+<ng-template #headerTemplate>
+    <div  fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    
+        
+        <app-textbox fxFlex="15%" [(model)]="timKiemNhanVien.HoTen" id="HoTen" label="Họ tên" (keyup)="onKey($event)">
+        </app-textbox>
+        <app-radio fxFlex="15%" fxFlex.sm="15%" id="GioiTinh" label="Giới tính"
+            [(model)]="timKiemNhanVien.GioiTinh" [items]="[{Value:1,Text:'Nam'},{Value:2,Text:'Nữ'}]">
+        </app-radio>
+        <app-textbox fxFlex="15%" [(model)]="timKiemNhanVien.SoDienThoai" id="SoDienThoai" label="Số điện thoại"
+            (keyup)="onKey($event)">
+        </app-textbox>
+        <app-textbox fxFlex="15%" [(model)]="timKiemNhanVien.Email" id="Email" label="Email" (keyup)="onKey($event)">
+        </app-textbox>
+        <app-textbox fxFlex="30%" [(model)]="timKiemNhanVien.DiaChi" id="DiaChi" label="Địa chỉ" (keyup)="onKey($event)">
+        </app-textbox>
+
+            
+
+            <div  fxFlex="10%">
+                <button type="button" color="primary" (keyup)="onKey($event)"
+                 (click)="TimKiem()" mat-raised-button class="mt-5">
+                    Tìm</button>
+            </div>
+       
+    </div>
+</ng-template>

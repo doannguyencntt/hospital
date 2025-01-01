@@ -1,0 +1,91 @@
+<div class="w-full h-full bg-pattern" fxLayout="column" fxLayoutAlign="center center">
+    <!-- max-w-sm -->
+    <div @fadeInUp class="card overflow-hidden w-full max-w-21r">
+        <div class="p-6 pb-0" fxLayout="column" fxLayoutAlign="center center">
+            <div class="fill-current text-center">
+                <img class="w-16" src="assets/img/logo.png">
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <h2 class="title m-0">BỆNH VIỆN ĐA KHOA QUỐC TẾ BẮC HÀ</h2>
+            <h4 class="body-2 text-secondary m-0">{{titleLoaiDangNhap}}</h4>
+        </div>
+
+        <div class="p-6" fxLayout="column" fxLayoutGap="16px">
+            <ng-container *ngIf="isNhanVienTrongPhongBan && !isLoginKhamDoanNgoaiVien">
+                <app-textbox id="UserName" fxFlex="grow" label="SỐ ĐIỆN THOẠI/EMAIL" (keyup)="onKeyDangNhap($event)"
+                    maxlength="200" [type]="'email'" [required]="true" [(model)]="login.userName"
+                    [isWhiteBackground]="true" [validationerror]="'UserName' | validationerror:validationErrors">
+                </app-textbox>
+                <app-textbox id="Password" fxFlex="grow" label="MẬT KHẨU" maxlength="200"
+                    (keyup)="onKeyDangNhap($event)" [type]="'password'" [eyesDisplay]="true" [required]="true"
+                    [(model)]="login.password" [isWhiteBackground]="true"
+                    [validationerror]="'Password' | validationerror:validationErrors">
+                </app-textbox>
+                <app-radio fxFlex="grow" id="dangNhapVao" name="dangNhapVao" [(model)]="loaiLogIn"
+                    (modelChange)="changeLoaiLogin($event)"
+                    [items]="[{Value:loginNoiVien,Text:'Nội viện'},{Value:loginNgoaiVien,Text:'Khám đoàn ngoại viện'}]"
+                    label="ĐĂNG NHẬP VÀO">
+                </app-radio>
+            </ng-container>
+
+            <!-- CHỌN KHOA VÀ PHÒNG BAN -->
+            <ng-container *ngIf="!isLoginKhamDoanNgoaiVien && !isNhanVienTrongPhongBan">
+                <app-dropdownlist popupSettings="null" id="Khoa" fxFlex="grow" label="CHỌN KHOA"
+                    [isWhiteBackground]="true" url="PhongBenhVien/GetKhoaNoiBos" 
+                    [(model)]="khoa.KeyId" [modelText]="khoa.DisplayName" [bind]="true"
+                    (modelChange)="changeKhoa($event)">
+                </app-dropdownlist>
+                <app-dropdownlist popupSettings="null" id="Phong" fxFlex="grow" label="CHỌN PHÒNG" [required]="true"
+                    [bind]="true" [isWhiteBackground]="true" (selectionChange)="onSelectionChange($event)"
+                    url="PhongBenhVien/GetPhongNoiBos?khoaPhongId={{selectedKhoa}}" [data]="danhSachPhong"
+                    (modelChange)="changePhong($event)" [validationerror]="'Phong' | validationerror:validationErrors">
+                </app-dropdownlist>
+            </ng-container>
+
+            <!-- CHỌN CÔNG TY -->
+            <ng-container *ngIf="isLoginKhamDoanNgoaiVien">
+                <app-dropdownlist popupSettings="null" id="congTy" fxFlex="grow" label="CÔNG TY" [required]="true"
+                    [isWhiteBackground]="true" [(model)]="hopDongKhamSucKhoeId"
+                    url="KhamDoan/TimKiemHopDongConHieuLucNhanVien?userName={{login.userName}}"
+                    (modelChange)="changeHopDong($event)" [bind]="true"
+                    (selectionChange)="selectionChangeHopDong($event)"
+                    [validationerror]="'CongTyId' | validationerror:validationErrors">
+                </app-dropdownlist>
+                <app-dropdownlist popupSettings="null" id="phong" fxFlex="grow" label="PHÒNG" [required]="true"
+                    [bind]="true" [isWhiteBackground]="true" [(model)]="phongId" [data]="danhSachPhong"
+                    url="PhongBenhVien/GetPhongNgoaiViens?hopDongKhamId={{selectedHopDongKham}}"
+                    [disabled]="hopDongKhamSucKhoeId == undefined || hopDongKhamSucKhoeId == null" (modelChange)="changePhong($event)"
+                    [validationerror]="'Phong' | validationerror:validationErrors">
+                </app-dropdownlist>
+            </ng-container>
+
+            <div fxLayout="row" fxLayoutAlign="space-between center" *ngIf="isNhanVienTrongPhongBan">
+                <app-checkbox name="dang-thanh-toan" fxFlex.lt-md="auto" label="Nhớ tôi" [(model)]="login.rememberMe"
+                    (modelChange)="toggleRememberMe($event)">
+                </app-checkbox>
+
+                <a [routerLink]="['/khoi-phuc-mat-khau']" class="caption">Quên mật khẩu?</a>
+            </div>
+
+            <button *ngIf="(isHienDangNhap ) && !loading" (click)="onSubmit()"
+                color="primary" mat-raised-button type="button">
+                ĐĂNG NHẬP
+            </button>
+
+            <ng-container *ngIf="(!isNhanVienTrongPhongBan || isLoginKhamDoanNgoaiVien) && !loading">
+                <button (click)="saveHoatDongNhanVien()" color="primary" mat-raised-button type="button">
+                    CHỌN TIẾP
+                </button>
+                <div fxLayout="row" style="text-align: center;text-align: center;" fxLayoutAlign="center">
+                    <a (click)="BackToLogin()" class="caption">Quay lại</a>
+                </div>
+            </ng-container>
+
+            <button *ngIf="loading" color="primary" mat-raised-button type="button">
+                <img src="/assets/img/loader.gif" alt="Loading" style="display: inline;" />
+            </button>
+        </div>
+    </div>
+</div>

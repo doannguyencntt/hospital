@@ -1,0 +1,59 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[                   
+                {Title:'Thống Kê', Path:''},
+                {Title:'Báo Cáo', Path:''},
+                {Title:'Kế Toán', Path:''},
+                {Title:'Nhập Xuất Tồn', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-combobox id="KhoaId" fxFlex="15%" fxFlex.sm="15%" popupSettings="" style="margin-left: 5px;"
+                    class="mt-1 on-header" label="Khoa" bind="true" url="BaoCao/GetTatCakhoaNhapXuatTonLookupAsync"
+                    [(model)]="baoCaoSearch.KhoaPhongId" [autoSelectFirstItem]="true"
+                    (modelChange)="changeKhoa($event)">
+                </app-combobox>
+
+                <!-- <app-combobox id="KhoId" fxFlex="15%" fxFlex.sm="15%" popupSettings="" style="margin-left: 5px;"
+                    class="mt-1 on-header" label="Kho" bind="true" url="BaoCao/GetTatCakhoTheoKhoaLookupAsync"
+                    [(model)]="baoCaoSearch.KhoId" [autoSelectFirstItem]="true" (modelChange)="changeKho($event)"
+                    [queryInfo]="{ParameterDependencies:'{KhoaId:' + baoCaoSearch.KhoaPhongId + '}', Take: 50}">
+                </app-combobox> -->
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <app-checkbox fxFlex="5%" fxFlex.sm="5%" [disabled]="disableCoVAT" id="coVat" class="mt-4 on-header"
+                    [(model)]="baoCaoSearch.CoVAT" label="Có VAT">
+                </app-checkbox>
+
+                <app-checkbox fxFlex="5%" fxFlex.sm="5%" id="coThuoc" class="mt-4 on-header"
+                    [(model)]="baoCaoSearch.CoThuoc" label="Thuốc">
+                </app-checkbox>
+
+                <app-checkbox fxFlex="5%" fxFlex.sm="5%" id="coVTYT" class="mt-4 on-header"
+                    [(model)]="baoCaoSearch.CoVTYT" label="VTYT">
+                </app-checkbox>
+
+                <div fxFlex="25%" fxFlex.sm="25%" class="pb-4">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                        (click)="exportExcel()">Xuất Excel</button>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

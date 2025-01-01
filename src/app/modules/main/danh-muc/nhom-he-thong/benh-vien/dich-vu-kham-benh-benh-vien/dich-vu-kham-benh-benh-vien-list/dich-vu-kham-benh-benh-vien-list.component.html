@@ -1,0 +1,94 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Nhóm Hệ Thống',Path:''}
+                    ,{Title:'Bệnh Viện',Path:''}
+                    ,{Title:'Dịch Vụ Khám Bệnh Tại Bệnh Viện',Path:'/danh-muc/nhom-he-thong/benh-vien/dich-vu-kham-benh-tai-benh-vien',Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+
+            <app-grid #gridParent baseRoute="/danh-muc/nhom-he-thong/benh-vien/dich-vu-kham-benh-tai-benh-vien"
+                [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault]="true"
+                [useHeaderDefault]="false" [useActionDefault]="true" [checkboxAble]="false" [showStt]="true"
+                [headerTemplate]="headerTemplate" [detailTemplate]="detailTemplate" [lazyLoadPage]="true"
+                [showExportExcel]="true" (extExportExcel)="exportExcel()">
+            </app-grid>
+
+            <ng-template #giaBHYTTemplate let-dataItem>{{ dataItem.GiaBHYT |number:'0.2-2':'vi-VN'}}</ng-template>
+            <ng-template #giaThuongBenhVienTemplate let-dataItem>{{ dataItem.GiaThuongBenhVien |number:'0.2-2':'vi-VN'}}
+            </ng-template>
+
+            <ng-template #detailTemplate let-dataItem>
+                <p style="text-align: center;width: 80%;"><b>GIÁ BẢO HIỂM</b></p>
+                <app-grid baseRoute="danh-muc/nhom-he-thong/benh-vien/dich-vu-kham-benh-tai-benh-vien"
+                    [gridColumns]="gridChildColumns" [documentType]="documentType" [useAddDeault]="false"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                    [urlGetData]="urlGetDataGridChild" [urlGetTotalPage]="urlGetTotalPageGridChild"
+                    searchString="{{dataItem.Id}}" [autoHeight]="true" [pageable]="false">
+                </app-grid>
+                <p style="text-align: center;width: 80%;padding-top: 10px;"><b>GIÁ BỆNH VIỆN</b></p>
+                <app-grid baseRoute="danh-muc/nhom-he-thong/benh-vien/dich-vu-kham-benh-tai-benh-vien"
+                    [gridColumns]="gridChildColumns2" [documentType]="documentType" [useAddDeault]="false"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                    [urlGetData]="urlGetDataGridChild2" [urlGetTotalPage]="urlGetTotalPageGridChild2" [groups]="groups"
+                    searchString="{{dataItem.Id}}" [autoHeight]="true" [pageable]="false">
+                </app-grid>
+            </ng-template>
+
+            <ng-template #actionChiTietTemplate let-dataItem>
+                <button kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                    <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+                </button>
+                <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                    <ng-template let-customer="customer" matMenuContent>
+
+                        <button (click)="gridChild.edit(dataItem.Id)" mat-menu-item>
+                            <mat-icon [icIcon]="icEdit"></mat-icon>
+                            <span>Sửa</span>
+                        </button>
+                        <button (click)="gridChild.delete(dataItem.Id)" mat-menu-item>
+                            <mat-icon [icIcon]="icBlock"></mat-icon>
+                            <span>Xóa</span>
+                        </button>
+                    </ng-template>
+                </mat-menu>
+            </ng-template>
+
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <app-combobox class="mt-6 ml-2 on-header" fxFlex="12.5%" fxFlex.sm="12.5%" label="Ánh xạ"
+                        popupSettings="" [data]="models" [(model)]="dichVuKhamBenhSreach.AnhXa">
+                    </app-combobox>
+                    <app-combobox class="mt-6 ml-2 on-header" fxFlex="12.5%" fxFlex.sm="12.5%" popupSettings=""
+                        label="Hiệu lực" [data]="models" [(model)]="dichVuKhamBenhSreach.HieuLuc">
+                    </app-combobox>
+                    <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px"
+                        fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                        <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                            type="search" name="searchString" [(ngModel)]="dichVuKhamBenhSreach.SearchString"
+                            (keyup)="onKey($event)" placeholder="Nhập từ khóa..." />
+                    </div>
+                    <div fxFlex="209px">
+                        <button type="button" color="primary" mat-raised-button mat-button class="ml-3"
+                            (click)="timKiem()">Tìm kiếm</button>
+                    </div>
+                    <div fxFlex="509px"></div>
+                    <div fxFlex="209px" style="padding: 38px;">
+                        <button type="button" color="primary" mat-raised-button mat-button class="ml-3"
+                            (click)="exportExcel()">Xuất Excel</button>
+                    </div>
+                </div>
+            </ng-template>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

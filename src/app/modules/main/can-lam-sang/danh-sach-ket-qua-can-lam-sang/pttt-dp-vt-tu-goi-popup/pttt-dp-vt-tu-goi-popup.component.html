@@ -1,0 +1,58 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>DƯỢC PHẨM/VTYT TRONG DỊCH VỤ</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="max-height: 86vh;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="p-2 mb-6">
+        <app-combobox id="khoSuDung" fxFlex="100%" label="Kho sử dụng" class="item-no-padding" required="true"
+            url="PhauThuatThuThuat/GetKhoLeNhanVienQuanLy" popupSettings=""
+            [(model)]="ghiNhanGoiDuocPhamVatTuPTTTVo.KhoLuaChonId" bind="true" (modelChange)="changeKhoSuDung()"
+            [autoSelectFirstItem]="true">
+        </app-combobox>
+
+        <app-grid #gridGoiDPVT fxFlex="100%" class="k-grid-border" [useAddDeault]="false" [useHeaderDefault]="false"
+            [useActionDefault]="false" [checkboxAble]="false" [documentType]="documentType" [gridColumns]="gridColumns"
+            [urlGetData]="urlGetDataGoiDuocPhamVatTuTrongDichVu"
+            [urlGetTotalPage]="urlGetTotalPagesGoiDuocPhamVatTuTrongDichVu" [groups]="groups"
+            [additionalSearchString]="additionalSearchString" [lazyLoadPage]="true" [autoHeight]="true"
+            [pageable]="false">
+        </app-grid>
+
+        <ng-template #checkBoxHeaderTemplate let-dataItem>
+            <input type="checkbox" id="vehicle1All" (ngModelChange)="chonTatCa($event)" name="vehicle1All"
+                [(ngModel)]="checkAll">
+        </ng-template>
+
+        <ng-template #checkBoxTemplate let-dataItem>
+            <app-checkbox *ngIf="dataItem.SoLuongTon >=  dataItem.SoLuongKe" value="true" [(model)]="dataItem.CheckBox"
+                (modelChange)="chonDuocPhamVatTu(dataItem, $event)" label=" " class="pl-2">
+            </app-checkbox>
+        </ng-template>
+
+        <ng-template #checkBoxKhongTinhPhiTemplate let-dataItem>
+            <input type="checkbox" [disabled]="true" id="vehicle1{{dataItem.Id}}disabled"
+                [(ngModel)]="dataItem.KhongTinhPhi" name="vehicle1">
+        </ng-template>
+
+        <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem>
+            <div [ngClass]="value === 'Đủ tồn trong tủ trực' ? 'green' : 'red'"><strong
+                    style="text-transform: uppercase;">{{value}}</strong></div>
+        </ng-template>
+
+        <ng-template #slTemplate let-dataItem>
+            {{dataItem.SoLuongKe | number:'1.0-2':'vi-VN'}}
+        </ng-template>
+
+        <ng-template #slTonTemplate let-dataItem>
+            {{dataItem.SoLuongTon | number:'1.0-2':'vi-VN'}}
+        </ng-template>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Hủy</button>
+    <button mat-raised-button mat-button color="primary" (click)="themGoiDuocPhamVatTu()">Thêm</button>
+</mat-dialog-actions>

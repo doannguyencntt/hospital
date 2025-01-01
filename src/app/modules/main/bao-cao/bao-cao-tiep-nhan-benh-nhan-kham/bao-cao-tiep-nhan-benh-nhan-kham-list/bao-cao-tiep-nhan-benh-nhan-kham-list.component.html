@@ -1,0 +1,66 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Báo Cáo',Path:''}
+            ,{Title:'Báo Cáo Tiếp Nhận Người Bệnh Khám',Path:''}
+            ,{Title:'Báo Cáo Tiếp Nhận Người Bệnh Khám',Path:'',Active:true}
+            ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid #gridChild [gridColumns]="gridColumns" [documentType]="documentType" [headerTemplate]="headerTemplate"
+                [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false" [checkboxAble]="false" [allowSortDefault]="true"
+                [groups]="groups" [showStt]="true" [pageable]="true"
+                urlGetData="BaoCao/GetDataBaoCaoTiepNhanBenhNhanKhamForGridAsync" urlGetTotalPage="BaoCao/GetTotalBaoCaoTiepNhanBenhNhanKhamForGridAsync">
+            </app-grid>
+
+            <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+                {{rowIndex + 1}}
+            </ng-template>
+
+            <ng-template #thoiGianTiepNhanTemplate let-dataItem>
+                {{dataItem.ThoiGianTiepNhanDisplay}}
+            </ng-template>
+
+            <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem>
+                <strong>{{value}}</strong>
+            </ng-template>
+
+            <ng-template #ngoaiGioHanhChinhTemplate let-dataItem>
+                <app-checkbox id="ngoaiGioHanhChinh{{dataItem.Id}}" label="" [(model)]="dataItem.NgoaiGioHanhChinh" [disabled]="true">
+                </app-checkbox>
+            </ng-template>
+
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <div fxFlex="1%" fxFlex.sm></div>
+                    <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                        [maxDate]="baoCaoSearch.DenNgayFormat" (modelChange)="changeValueStart()" label="Từ ngày" class="mt-1 on-header">
+                    </app-datetimepicker>
+                    <div fxFlex="1%" fxFlex.sm></div>
+                    <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden
+                        [minDate]="baoCaoSearch.TuNgayFormat" id="DenNgayFormat" (modelChange)="changeValueStart()" class="mt-1 on-header" label="Đến ngày">
+                    </app-datetimepicker>
+                    <div fxFlex="1%" fxFlex.sm></div>
+                    <div fxFlex="67%" fxFlex.sm="67%" class="pb-0">
+                        <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                            (click)="XemBaoCao()">Xem Báo Cáo</button>
+                        <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                            (click)="exportExcel()">Xuất Excel</button>
+
+                        <!-- <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                            (click)="XemBaoCao()">Xem Báo Cáo</button>
+                        <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                            class="mr-1 mt-1" (click)="exportExcel()" style="float: right;">Xuất Excel</button> -->
+                        <!-- <button [disabled]="!IsData" type="button" color="primary" mat-raised-button mat-button
+                            class="mr-1 mt-1" (click)="InBaoCao()" style="float: right;">In Báo cáo</button> -->
+                    </div>
+                    <span fxFlex></span>
+                </div>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,81 @@
+.blue-text {
+  color: #005dab;
+}
+
+.link-highlight {
+  color: #005dab;
+  font-style: italic;
+  text-decoration: underline;
+}
+
+#hanh-chinh .k-textbox-container {
+  padding: 0 !important;
+}
+
+#hanh-chinh app-combobox kendo-textbox-container {
+  padding: 0 !important;
+}
+
+@media (max-width: 959px) {
+  .mt-sm-0 {
+    margin-top: 0 !important;
+  }
+}
+.item-no {
+  padding: 0 !important;
+}
+
+ul.inline > li {
+  padding-right: 10px !important;
+  padding-bottom: 0.625em;
+  display: inline-block !important;
+}
+
+.po-h {
+  color: #005dab;
+  position: relative;
+  top: 5px;
+  left: 5px;
+  mat-icon {
+    display: contents;
+  }
+}
+
+.icon-close {
+  position: absolute;
+  z-index: 9;
+  right: 0;
+  cursor: pointer;
+  &:hover {
+    color: #005dab;
+  }
+}
+
+fieldset {
+  display: block;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding-top: 0.35em !important;
+  padding-bottom: 0.625em !important;
+  padding-left: 0.75em !important;
+  padding-right: 0.75em !important;
+  border: 1px #e0e0e0;
+  border-style: inherit;
+  //border-radius: 4%;
+
+  .item_right {
+    text-align: right !important;
+    float: right;
+  }
+
+  ul > li {
+    padding-right: 15px !important;
+  }
+
+  ul.inline > li {
+    display: inline !important;
+  }
+}
+.link-dieu-tri-so-sinh{
+  color:green; text-decoration: underline; font-weight: bold;height: 30px;  display: inline-block; margin-right: 15px;
+}

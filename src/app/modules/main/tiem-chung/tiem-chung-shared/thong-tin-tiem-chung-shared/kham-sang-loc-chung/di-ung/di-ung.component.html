@@ -1,0 +1,108 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mr-4">DỊ ỨNG
+        <button *ngIf="!isDiUngThuocReadOnly" class="po-h" color="primary" (click)="themDiUng()">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+
+    <ng-container *ngIf="dataSourceDiUng.data.length == 0">
+        <p>Không có dị ứng</p>
+    </ng-container>
+
+    <app-grid *ngIf="dataSourceDiUng.data.length > 0" fxFlex="100%" class="k-grid-border"
+        [maxHeight]="200"
+        [documentType]="documentType" [useAddDeault]="false"  [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [pageable]="false"
+        [gridColumns]="diUngColumns" [gridDataSource]="dataSourceDiUng"
+        [lazyLoadPage]="true">
+    </app-grid>
+
+    <ng-template #loaiDiUngTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-dropdownlist *ngIf="!isDiUngThuocReadOnly && !dataItem.Id" popupSettings="null" class="no-label item-no-padding" label=" "
+            url="KhamBenh/getListLoaiDiUng"
+            [required]="true" [template]="DuocPhamTemplate" [templateHeader]="DuocPhamTemplateHeader"
+            [(model)]="dataItem.LoaiDiUng" [modelText]="dataItem.TenLoaiDiUng"
+            [validationerror]="'YeuCauTiepNhan.BenhNhan.BenhNhanTiemVacxinDiUngThuocs[' + rowIndex + '].LoaiDiUng' | validationerror: thongTinBenhNhan.validationErrors">
+            <ng-template #DuocPhamTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Loại</th>
+                        <th>Tên dị ứng</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #DuocPhamTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%" style="font-weight: normal;">{{dataItem.KeyId}}</th>
+                        <th style="font-weight: normal;">{{dataItem.DisplayName}}</th>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-dropdownlist>
+
+        <p *ngIf="isDiUngThuocReadOnly || dataItem.Id">{{dataItem.TenLoaiDiUng}}</p>
+    </ng-template>
+
+    <ng-template #tenDiUngTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-combobox *ngIf="!isDiUngThuocReadOnly && !dataItem.Id && dataItem.LoaiDiUng == loaiDiUng.Thuoc" class="no-label item-no-padding" label=" " popupSettings="null"
+            [modelText]="dataItem.TenDiUng"
+            [template]="DuocPhamTemplate" (selectionChange)="chonThuoc($event, dataItem)"
+            [templateHeader]="DuocPhamTemplateHeader" url="KhamBenh/GetListThuoc" [required]="true"
+            [validationerror]="'YeuCauTiepNhan.BenhNhan.KhamBenhBenhNhanDiUngThuocs['+rowIndex+'].TenDiUng' | validationerror: thongTinBenhNhan.validationErrors">
+            <ng-template #DuocPhamTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="15%">Dược Phẩm</th>
+                        <th>Hoạt Chất</th>
+                        <th width="25%">Đường Dùng</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #DuocPhamTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="15%">{{dataItem.HoatChat}}</td>
+                        <td>{{dataItem.TenThuoc}}</td>
+                        <td width="25%">{{dataItem.DuongDung}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <app-textbox *ngIf="!isDiUngThuocReadOnly && !dataItem.Id && dataItem.LoaiDiUng != loaiDiUng.Thuoc" class="no-label" maxlength="1000" label=" "
+            [required]="true"
+            [(model)]="dataItem.TenDiUng"
+            [validationerror]="'YeuCauTiepNhan.BenhNhan.BenhNhanTiemVacxinDiUngThuocs[' + rowIndex + '].TenDiUng' | validationerror: thongTinBenhNhan.validationErrors">
+        </app-textbox>
+
+        <p *ngIf="isDiUngThuocReadOnly || dataItem.Id">{{dataItem.TenDiUng}}</p>
+    </ng-template>
+
+    <ng-template #bieuHienDiUngTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-textbox *ngIf="!isDiUngThuocReadOnly && !dataItem.Id" class="no-label" maxlength="2000" label=" "
+            [required]="true"
+            [(model)]="dataItem.BieuHienDiUng"
+            [validationerror]="'YeuCauTiepNhan.BenhNhan.BenhNhanTiemVacxinDiUngThuocs[' + rowIndex + '].BieuHienDiUng' | validationerror: thongTinBenhNhan.validationErrors">
+        </app-textbox>
+
+        <p *ngIf="isDiUngThuocReadOnly || dataItem.Id">{{dataItem.BieuHienDiUng}}</p>
+    </ng-template>
+
+    <ng-template #mucDoTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-dropdownlist *ngIf="!isDiUngThuocReadOnly && !dataItem.Id" class="no-label" label=" " url="KhamBenh/GetListMucDoDiUng"
+            [required]="true" [popupSettings]="null"
+            [(model)]="dataItem.MucDo" [modelText]="dataItem.TenMucDo"
+            [validationerror]="'YeuCauTiepNhan.BenhNhan.BenhNhanTiemVacxinDiUngThuocs[' + rowIndex + '].MucDo' | validationerror: thongTinBenhNhan.validationErrors">
+        </app-dropdownlist>
+
+        <p *ngIf="isDiUngThuocReadOnly || dataItem.Id">{{dataItem.TenMucDo}}</p>
+    </ng-template>
+
+    <ng-template #actionDiUngTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button *ngIf="!isDiUngThuocReadOnly" color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoaDiUng(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+</div>

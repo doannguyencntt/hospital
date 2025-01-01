@@ -1,0 +1,55 @@
+image-drawing{
+    >div{        
+        width: 100%;
+        height: 100%;
+        border: 1px solid #ccc !important;      
+        overflow: auto;
+        .canvas-container{
+            width: 100% !important;
+            // overflow: auto;
+            // canvas{
+            //     width: 100% !important;
+            // }
+        }
+    }
+    
+    .toolbar {
+        position: relative !important;
+        overflow: initial;
+        .tools{            
+            width: 100% !important;
+            padding: 10px !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+            position: relative !important;
+            display: block !important;
+            .row{              
+                width: 50% !important;
+                float: left !important;
+            }
+        }
+        .buttons{                
+            position: absolute !important;
+            right: 0 !important;
+            bottom: -50px !important;
+            display: block !important;
+            margin: 0 !important;
+            .button {
+                color: #000 !important;
+                float: right !important;
+                margin: 0 !important;
+                &.btn-primary{
+                    background: #005dab;
+                    color: #fff !important;
+                }
+            }
+        }
+
+    }
+}
+.btn-loading{
+    padding: 15px;
+    background: #fff;
+    position: absolute;
+    right: 0;
+}

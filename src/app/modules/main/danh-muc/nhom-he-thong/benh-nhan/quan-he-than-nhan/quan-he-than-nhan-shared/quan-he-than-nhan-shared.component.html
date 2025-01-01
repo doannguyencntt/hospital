@@ -1,0 +1,17 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between">
+    <app-textbox fxFlex="30%" maxlength="50" id="TenVietTat" label="Tên Viết Tắt" [required]="true"
+        [(model)]="quanHeThanNhan.TenVietTat" [validationerror]="'TenVietTat' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textbox id="Ten" fxFlex="40%" fxFlex.sm="40%" maxlength="250" [required]="true" [(model)]="quanHeThanNhan.Ten"
+        label="Tên" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+    <app-radio fxFlex="30%" fxFlex.sm="40%" id="IsDisabled" name="IsOfficial"
+        [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" [(model)]="quanHeThanNhan.IsDisabled"
+        label="Sử Dụng" [validationerror]="'IsDisabled' | validationerror:validationErrors">
+    </app-radio>
+
+    <app-textarea id="Textarea" fxFlex="100%" maxlength="2000" [(model)]="quanHeThanNhan.MoTa" label="Mô Tả"
+        [validationerror]="'MoTa' | validationerror:validationErrors">
+    </app-textarea>
+</div>

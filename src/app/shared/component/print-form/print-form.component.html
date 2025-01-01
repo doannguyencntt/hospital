@@ -1,0 +1,11 @@
+
+<button *ngIf="type==='Barcode' && showInMenuItem" [disabled]="isDisable==true" (click)="onPrintBarcode()" mat-menu-item type="button">
+    <mat-icon [icIcon]="icPrint"></mat-icon>
+    <span>{{textPrint}}</span>
+</button>
+<button *ngIf="type==='PDF' && showInMenuItem" [disabled]="isDisable==true" (click)="onPrintPDF()" mat-menu-item type="button">
+    <mat-icon [icIcon]="icPrint"></mat-icon>
+    <span>{{textPrint}}</span>
+</button>
+<button *ngIf="type==='Barcode' && !showInMenuItem" [disabled]="isDisable==true" class="ml-3" type="button" color="primary" mat-raised-button mat-button (click)="onPrintBarcode()"> {{textPrint}}</button>
+<button *ngIf="type==='PDF' && !showInMenuItem" [disabled]="isDisable==true" class="ml-1" color="primary" mat-raised-button mat-button Tooltip="In" type="button" (click)="onPrintPDF()"><mat-icon [icIcon]="icPrint" *ngIf="showIconPrint"></mat-icon> {{textPrint}}</button>

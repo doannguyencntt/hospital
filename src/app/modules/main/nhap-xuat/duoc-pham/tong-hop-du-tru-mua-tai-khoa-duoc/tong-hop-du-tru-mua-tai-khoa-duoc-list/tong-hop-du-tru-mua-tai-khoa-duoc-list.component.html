@@ -1,0 +1,48 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Nhập xuất',Path:''}
+            ,{Title:'Dược phẩm',Path:''}
+            ,{Title:'Dự trù mua',Path:''}
+            ,{Title:'THDT Mua Tại K.Dược​',Path:'',Active:true}
+            ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+            <div class="card overflow-auto -mt-15" style="overflow: hidden;">
+                <kendo-tabstrip (tabSelect)="chuyenDen('card1', $event)">
+                   <!-- Chờ xử lý -->
+                    <kendo-tabstrip-tab [title]="'Chờ xử lý'"  [selected]="lstStatusSelectTabTHDTKhoa.selectedTabChoXuLy">
+                        <ng-template kendoTabContent >
+                            <div class="content-tab-popup"  style="margin-top: -13px;">
+                                <app-tong-hop-du-tru-mua-tai-khoa-duoc-cho-xu-ly >
+                                </app-tong-hop-du-tru-mua-tai-khoa-duoc-cho-xu-ly>
+                            </div>
+                        </ng-template>
+                    </kendo-tabstrip-tab>
+        
+                    <!-- Đã xử lý -->
+                    <kendo-tabstrip-tab [title]="'Đã gửi'"   [selected]="lstStatusSelectTabTHDTKhoa.selectedTabDaXuLy">
+                        <ng-template kendoTabContent>
+                            <div class="content-tab-popup" style="margin-top: -13px;">
+                               <app-tong-hop-du-tru-mua-tai-khoa-duoc-da-xu-ly >
+                               </app-tong-hop-du-tru-mua-tai-khoa-duoc-da-xu-ly>
+                            </div>
+                        </ng-template>
+                    </kendo-tabstrip-tab>
+        
+                    <!-- Từ chối -->
+                    <kendo-tabstrip-tab [title]="'Từ chối'" [selected]="lstStatusSelectTabTHDTKhoa.selectedTabTuChoi">
+                        <ng-template kendoTabContent>
+                            <div class="content-tab-popup" style="margin-top: -13px;">
+                                <app-tong-hop-du-tru-mua-tai-khoa-duoc-tu-choi> 
+                                </app-tong-hop-du-tru-mua-tai-khoa-duoc-tu-choi>
+                            </div>
+                        </ng-template>
+                    </kendo-tabstrip-tab>
+                </kendo-tabstrip>
+            </div>
+    </vex-page-layout-content>
+</vex-page-layout>

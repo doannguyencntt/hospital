@@ -1,0 +1,47 @@
+fieldset {
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    border: 1px #e0e0e0;
+    border-style: inherit;
+
+    .item_right{
+        text-align: right !important;
+        float:right;
+    }
+
+    ul>li{
+        padding-right: 15px !important;
+    }
+
+    ul.inline > li{
+        display: inline !important;
+    }
+  }
+
+  .sticky-button-action{
+    position: sticky;
+    position: -webkit-sticky;
+    bottom: 0px;
+    background-color: white;
+    border-top: 1px solid #ccc;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.redText{ 
+    color:red; 
+}
+.greenText{
+     color:green;
+}
+.orangeText{
+    color: orange;
+}
+.blueText{
+    color:blue;
+}

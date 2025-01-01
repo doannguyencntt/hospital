@@ -1,0 +1,42 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-textbox id="Ten" fxFlex="100%" fxFlex.sm="100%" maxlength="200"
+                [(model)]="trieuChungKhamBanDau" label="Triệu chứng khám"
+                (modelChange)="onSaveTrieuChungKham()">
+            </app-textbox>
+
+            <app-multiselect id="TrieuChungLamSang" fxFlex="100%" fxFlex.sm="100%" [(model)]="trieuChungs"
+                label="Triệu chứng lâm sàng" url="KhamBenh/GetListTrieuChung" (valueChange)="saveTrieuChung($event)">
+            </app-multiselect>
+
+            <app-textbox id="Ten" fxFlex="100%" fxFlex.sm="100%" maxlength="200"
+                [(model)]="ghiChuTrieuChungBanDau" label="Ghi chú triệu chứng lâm sàng"
+                (modelChange)="onSaveGhiChuTrieuChung()">
+            </app-textbox>
+
+            <app-multiselect id="ChuanDoan" fxFlex="100%" [(model)]="chuanDoans" fxFlex.sm="100%"
+                label="Chẩn đoán ban đầu" url="KhamBenh/GetListChuanDoan" (valueChange)="saveChuanDoan($event)">
+            </app-multiselect>
+            <ng-container
+                *ngIf="templateKhoaPhongObj!=null && templateKhoaPhongObj.ComponentDynamics!=null && templateKhoaPhongObj.ComponentDynamics.length>0">
+                <h3 fxFlex="100%" class="sub-title">{{tenKhoaPhong}}</h3>
+                <ng-container *ngFor="let item of templateKhoaPhongObj.ComponentDynamics">
+                    <app-textbox *ngIf="item.Type==1" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}"
+                        id="{{item.Id}}" label="{{item.Label}}" [(model)]="item.Value" (modelChange)="changeText()"
+                        maxlength="1000">
+                    </app-textbox>
+                    <app-textarea *ngIf="item.Type==2" fxFlex="{{item.fxFlex}}" fxFlex.sm="{{item.fxFlexSm}}"
+                        id="{{item.Id}}" label="{{item.Label}}" [(model)]="item.Value" (modelChange)="changeTextArea()"
+                        maxlength="1000">
+                    </app-textarea>
+                </ng-container>
+            </ng-container>
+        </div>
+        <div style="float:right;" *ngIf="displayButton===true">
+            <button (click)="reset()" mat-flat-button
+                style="margin-right: 5px; margin-top:5px; height: 36px;">Hủy</button>
+            <button (click)="save()" mat-flat-button color="primary" style="margin-top:5px; height: 36px;">Lưu</button>
+        </div>
+    </div>
+</div>

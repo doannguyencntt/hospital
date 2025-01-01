@@ -1,0 +1,108 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="Ma" fxFlex="25%" fxFlex.sm="40%%" [required]="true" [(model)]="benhVien.Ma" label="Mã bệnh viện"
+        maxlength="20" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textbox id="TenVietTat" fxFlex="25%" fxFlex.sm="40%%" [required]="true" [(model)]="benhVien.TenVietTat"
+        label="Tên viết tắt" maxlength="50" [validationerror]="'TenVietTat' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textbox id="Ten" fxFlex="25%" fxFlex.sm="40%%" [required]="true" [(model)]="benhVien.Ten" label="Tên bệnh viện"
+        maxlength="250" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+
+    <app-combobox id="DonViHanhChinh" fxFlex="25%" fxFlex.sm="40%" [(model)]="benhVien.DonViHanhChinhId"
+        [modelText]="benhVien.TenDonViHanhChinh" [template]="TemplateData" [templateHeader]="TemplateHeader"
+        label="Đơn vị hành chính" [required]="true" url="BenhVien/GetListDonViHanhChinh"
+        [validationerror]="'DonViHanhChinhId' | validationerror:validationErrors" class="item-no-padding">
+        <ng-template #TemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #TemplateData let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+    <app-combobox id="LoaiBenhVien" fxFlex="25%" fxFlex.sm="40%" [(model)]="benhVien.LoaiBenhVienId"
+        [modelText]="benhVien.TenLoaiBenhVien" label="Loại bệnh viện" [required]="true"
+        url="BenhVien/GetListLoaiBenhVien" [validationerror]="'LoaiBenhVienId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-combobox fxFlex="25%" [(model)]="benhVien.HangBenhVien" [required]="true"
+        [validationerror]="'HangBenhVien' | validationerror:validationErrors" [modelText]="benhVien.HangBenhVienDisplay"
+        label="Hạng Bệnh Viện" url="BenhVien/GetHangBenhVien">
+    </app-combobox>
+    <app-combobox fxFlex="25%" [(model)]="benhVien.TuyenChuyenMonKyThuat" [required]="true"
+        [validationerror]="'TuyenChuyenMonKyThuat' | validationerror:validationErrors"
+        [modelText]="benhVien.TuyenChuyenMonKyThuatDisplay" label="Tuyến Chuyên Môn Kỹ Thuật"
+        url="BenhVien/GetTuyenChuyenMonKyThuat">
+    </app-combobox>
+
+    <app-radio fxFlex="25%" fxFlex.sm="40%" id="HieuLuc" name="IsOfficial"
+        [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" [(model)]="benhVien.HieuLuc" label="Sử dụng"
+        [validationerror]="'HieuLuc' | validationerror:validationErrors">
+    </app-radio>
+    <app-textbox id="DiaChi" fxFlex="50%" fxFlex.sm="40%" [required]="true" [(model)]="benhVien.DiaChi" label="Địa chỉ"
+        maxlength="250" [validationerror]="'DiaChi' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textboxmask id="SoDienThoaiLanhDao" fxFlex="50%" fxFlex.sm="40%" [(model)]="benhVien.SoDienThoaiLanhDao"
+        label="Số Điện Thoại Lãnh Đạo" mask="000 000 0000"
+        [validationerror]="'SoDienThoaiLanhDao' | validationerror:validationErrors">
+    </app-textboxmask>
+    <!--
+        <div fxFlex="40%" fxFlex.sm="40%">
+                <div class="container-custom">
+                    <label>Tình trạng</label>
+                    <div fxLayout="row" fxLayoutGap="16px">
+                        <app-switch id="TamNgung" [(model)]="benhVien.TamNgung" *ngIf="!benhVien.TamNgung" label="Tạm ngưng" (modelChange)="onChangeLoaiBenhVien($event)"></app-switch>
+                        <app-switch id="TamNgung1" [(model)]="benhVien.TamNgung" *ngIf="benhVien.TamNgung" label="sử dụng" (modelChange)="onChangeLoaiBenhVien($event)"></app-switch>
+                    </div>
+                    <app-validationerrorother [validationerror]="'TamNgung' | validationerror:validationErrors"></app-validationerrorother>
+                </div>
+        </div> -->
+    <!--
+    <div class="printMe"  id="printMe">
+            <div>Row 1, Column 1</div>
+              <br>
+                <table border="1">
+                    <tr>
+                      <td>Row 1, Column 1</td>
+                      <td>Row 1, Column 2</td>
+                    </tr>
+                    <tr>
+                      <td>Row 2, Column 1</td>
+                      <td>Row 2, Column 2</td>
+                    </tr>
+                </table>
+              <br>
+                <div>
+                        <SPAN style="BORDER-LEFT: black 0.02in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: white 0.06in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: black 0.02in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: white 0.02in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: black 0.04in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: white 0.06in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: black 0.02in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: white 0.01in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: black 0.02in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: white 0.06in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: black 0.02in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: white 0.02in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                        <SPAN style="BORDER-LEFT: black 0.05in solid; DISPLAY: inline-block; HEIGHT: 1in"></SPAN>
+                </div>
+              <br>
+             <div>
+                <img src="https://freetuts.net/upload/tut_post/images/2014/08/14/122/xay-dung-chuc-nang-scrollto-voi-jquery.gif"/>
+             </div>
+    </div>  -->
+
+</div>

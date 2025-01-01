@@ -1,0 +1,66 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">  
+    <app-grid [gridColumns]="gridSinhHieuColumns" [documentType]="documentType" [useAddDeault]="false"
+        urlGetData="KhamBenh/GetDataForGridAsyncChiSoSinhHieu" urlGetTotalPage="" fxFlex="100%"
+        [additionalSearchString]="maTiepNhanBNId" class="k-grid-border" [useHeaderDefault]="false"
+        [useActionDefault]="false" [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true" [pageable]="false">
+    </app-grid>
+    <ng-template #nhipTimTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="dataItem.Id == 0" [(model)]="dataItem.NhipTim" class="no-label">
+        </app-textboxnumeric>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.NhipTim}}</p>
+    </ng-template>
+    <ng-template #huyetApTemplate let-dataItem>
+        <div style="width:100%;display: block;overflow: hidden;">
+            <div *ngIf="dataItem.Id == 0" style="width: calc(50% - 10px);float: left;">
+                <app-textboxnumeric *ngIf="dataItem.Id == 0" [(model)]="huyetApTamThu" class="no-label" [min]="90"
+                    [max]="140">
+                </app-textboxnumeric>
+            </div>
+            <div *ngIf="dataItem.Id == 0" style="width: 20px;text-align: center;float: left;line-height: 43px;">/</div>
+            <div *ngIf="dataItem.Id == 0" style="width: calc(50% - 10px);float: left;">
+                <app-textboxnumeric *ngIf="dataItem.Id == 0" [(model)]="huyetApTamTruong" class="no-label" [min]="60"
+                    [max]="90">
+                </app-textboxnumeric>
+            </div>
+        </div>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.HuyetAp}} </p>
+    </ng-template>
+    <ng-template #thanNhietTemplate let-dataItem>
+        <app-textboxnumeric [format]="format" *ngIf="dataItem.Id == 0" [(model)]="dataItem.ThanNhiet" class="no-label">
+        </app-textboxnumeric>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.ThanNhiet | number}}</p>
+    </ng-template>
+    <ng-template #nhipThoTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="dataItem.Id == 0" [(model)]="dataItem.NhipTho" class="no-label">
+        </app-textboxnumeric>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.NhipTho | number}} </p>
+    </ng-template>
+    <ng-template #canNangTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="dataItem.Id == 0" [format]="format" [(model)]="dataItem.CanNang" class="no-label"
+            [min]="2.0" [max]="222.0">
+        </app-textboxnumeric>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.CanNang | number}} </p>
+    </ng-template>
+    <ng-template #BMITemplate let-dataItem>
+        <app-textboxnumeric *ngIf="dataItem.Id == 0" [format]="format" [(model)]="dataItem.BMI" class="no-label">
+        </app-textboxnumeric>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.Bmi  | number: '1.2-2'}}</p>
+    </ng-template>
+    <ng-template #chieuCaoTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="dataItem.Id == 0" [format]="format" [(model)]="dataItem.ChieuCao" class="no-label"
+            [min]="100.0" [max]="250.0">
+        </app-textboxnumeric>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.ChieuCao}} </p>
+    </ng-template>
+    <ng-template #glassgowTemplate let-dataItem>
+        <app-textboxnumeric *ngIf="dataItem.Id == 0" [format]="format" [spinners]="false" [(model)]="dataItem.Glassgow"
+            [decimals]="1" class="no-label">
+        </app-textboxnumeric>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.Glassgow | number}}</p>
+    </ng-template>
+    <ng-template #spO2Template let-dataItem>
+        <app-textboxnumeric *ngIf="dataItem.Id == 0" [max]="9999" [format]="format" [spinners]="false" [(model)]="dataItem.SpO2" [decimals]="1" class="no-label">
+        </app-textboxnumeric>
+        <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.SpO2 | number}}</p>
+    </ng-template>
+</div>

@@ -1,0 +1,76 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="so-phieu" fxFlex="20" fxFlex.md="50" fxFlex.sm="100" [required]="true"
+        [(model)]="duyetTraVatTuTuBn.SoPhieu" [disabled]="true" label="Số phiếu"
+        [validationerror]="'SoPhieu' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-combobox fxFlex="20" fxFlex.md="50" fxFlex.sm="100" id="khoa-hoan-tra" label="Khoa hoàn trả"
+        [modelText]="duyetTraVatTuTuBn.KhoaHoanTraDisplay" [disabled]="true" [required]="true"
+        [(model)]="duyetTraVatTuTuBn.KhoaHoanTraId" url=""
+        [validationerror]="'KhoaHoanTraDisplay' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-combobox fxFlex="20" fxFlex.md="50" fxFlex.sm="100" id="hoan-tra-ve-kho" label="Hoàn trả về kho"
+        [modelText]="duyetTraVatTuTuBn.HoanTraVeKhoDisplay" [disabled]="true" [required]="true"
+        [(model)]="duyetTraVatTuTuBn.HoanTraVeKhoId" url=""
+        [validationerror]="'HoanTraVeKhoDisplay' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-combobox fxFlex="20" fxFlex.md="50" fxFlex.sm="100" id="nguoi-yeu-cau" label="Người yêu cầu"
+        [modelText]="duyetTraVatTuTuBn.NguoiYeuCauDisplay" [disabled]="true" [required]="true"
+        [(model)]="duyetTraVatTuTuBn.NguoiYeuCauId" url=""
+        [validationerror]="'NguoiYeuCauDisplay' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-datepicker id="ngay-yeu-cau" fxFlex="20" fxFlex.md="50" fxFlex.sm="100"
+        [(model)]="duyetTraVatTuTuBn.NgayYeuCau" [disabled]="true" [required]="true" label="Ngày yêu cầu"
+        [validationerror]="'NgayYeuCau' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-textarea id="ghi-chu" fxFlex="100" fxFlex.md="100" fxFlex.sm="100" maxlength="4000" label="Ghi chú"
+        minHeight="20" [(model)]="duyetTraVatTuTuBn.GhiChu"
+        [disabled]="duyetTraVatTuTuBn != undefined && duyetTraVatTuTuBn != null && duyetTraVatTuTuBn.TinhTrang == true">
+
+    </app-textarea>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin dược phẩm</h3>
+    <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;"
+        baseRoute="nhap-xuat/vat-tu/hoan-tra/tu-benh-nhan/duyet-hoan-tra" [gridColumns]="gridColumns"
+        [allowSortDefault]="true" [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+        [useActionDefault]="false" [checkboxAble]="false" [sort]="sort" maxHeight="500" [urlGetData]="urlGetDataVatTu"
+        [detailTemplate]="detailTemplateBenhNhan" additionalSearchString="{{id}}">
+    </app-grid>
+
+    <ng-template #detailTemplateBenhNhan let-dataItem>
+        <app-grid [gridColumns]="gridYeuCauChiTietColumns" [documentType]="documentType" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+            [urlGetData]="urlGetDataBenhNhan" [groups]="groupBenhNhan"
+            additionalSearchString="{{dataItem.YeuCauTraVatTuTuBenhNhanId}};{{dataItem.VatTuBenhVienId}}"
+            [autoHeight]="true" [pageable]="false">
+        </app-grid>
+    </ng-template>
+</div>
+
+<ng-template #nhomGroupHeaderTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+
+<ng-template #benhNhanGroupHeaderTemplate let-value="value">
+    <div [innerHTML]="value" style="font-weight: normal;"></div>
+</ng-template>
+
+<ng-template #donGiaTemplate let-dataItem>
+    {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #thanhTienTemplate let-dataItem>
+    {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #ngayTraTemplate let-dataItem>
+    {{dataItem.NgayTraDisplay}}
+</ng-template>
+
+<ng-template #ngayDieuTriTemplate let-dataItem>
+    {{dataItem.NgayDieuTriDisplay}}
+</ng-template>

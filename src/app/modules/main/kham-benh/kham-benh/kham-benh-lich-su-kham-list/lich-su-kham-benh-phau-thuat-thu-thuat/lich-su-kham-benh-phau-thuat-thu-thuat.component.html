@@ -1,0 +1,90 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <label fxFlex="100%" >
+        <span style="font-weight: bold;">Tên khoa phòng</span> : {{thongTinTuongTrinhKhoaPhong}}
+    </label>
+
+
+    <label fxFlex="40%" >
+        <span style="font-weight: bold;">Chẩn đoán vào khoa</span> : {{thongTinTuongTrinhChanDoanVaoKhoa}}
+    </label>
+    <label fxFlex="60%" >
+        <span style="font-weight: bold;">Mô tả</span> : {{thongTinTuongTrinhMoTa}}
+    </label>
+    <div class="" fxFlex="100%">
+        <kendo-panelbar>
+            <kendo-panelbar-item *ngFor="let item of pTTT" [title]="item.Ten" expanded="true"
+                class="panelbar-item panelbar-item-padr">
+                <ng-template kendoPanelBarContent>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                        style="padding-top: 16px;">
+
+                        <label fxFlex="30%" fxFlex.sm="30%" >
+                            <span style="font-weight: bold;">CĐ trước phẫu thuật</span> :
+                            {{item.ICDTruocPhauThuatDisplay}}
+                        </label>
+                        <label fxFlex="70%" fxFlex.sm="70%" >
+                            <span style="font-weight: bold;">Mô tả</span> : {{item.GhiChuICDTruocPhauThuat}}
+                        </label>
+
+                        <label fxFlex="30%" fxFlex.sm="30%" >
+                            <span style="font-weight: bold;">CĐ sau phẫu thuật</span> : {{item.ICDSauPhauThuatDisplay}}
+                        </label>
+                        <label fxFlex="70%" fxFlex.sm="70%" >
+                            <span style="font-weight: bold;">Mô tả</span> : {{item.GhiChuICDSauPhauThuat}}
+                        </label>
+                        <label fxFlex="100%" fxFlex.sm="100%" >
+                            <span style="font-weight: bold;">Phương Pháp PTTT</span> :
+                            {{item.PhuongPhapPhauThuatThuThuatDisplay}}
+                        </label>
+
+                        <label fxFlex="30%" fxFlex.sm="30%" >
+                            <span style="font-weight: bold;">Loại PTTT</span> : {{item.LoaiPTTTDisplay}}
+                        </label>
+                        <label fxFlex="70%" fxFlex.sm="70%" >
+                            <span style="font-weight: bold;">PP Vô Cảm</span> : {{item.PhuongPhapVoCamDisplay}}
+                        </label>
+                        <label fxFlex="30%" fxFlex.sm="30%" >
+                            <span style="font-weight: bold;">PTTT Viên</span> : {{item.NhanVienThucHienDisplay}}
+                        </label>
+                        <label fxFlex="70%" fxFlex.sm="70%" >
+                            <span style="font-weight: bold;">Tình Hình PTTT</span> : {{item.TinhHinhPtttDisplay}}
+                        </label>
+                        <label fxFlex="30%" fxFlex.sm="30%" >
+                            <span style="font-weight: bold;">Tai Biến PTTT</span> : {{item.TaiBienPtttDisplay}}
+                        </label>
+                        <label fxFlex="70%" fxFlex.sm="70%" >
+                            <span style="font-weight: bold;">Tai Biến PTTT</span> : {{item.TuVongPtttDisplay}}
+                        </label>
+
+                        <label fxFlex="100%" fxFlex.sm="100%" >
+                            <span style="font-weight: bold;">Trình tự phẫu thuật</span> : {{item.TrinhTuPttt}}
+                        </label>
+                        <label fxFlex="100%" fxFlex.sm="100%" >
+                            <h3>LƯỢC ĐỒ PTTT</h3>
+                            <div class="mb-3">
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0">
+                                    <div fxFlex="20%"
+                                        *ngFor="let thongTinAnh of item.ListLuocDoPhauThuatThuThuatResultVo">
+                                        <div class="card overflow-hidden"
+                                            style="border: 1px solid #ccc;position: relative;">
+                                            <div
+                                                class="mat-ripple p-4 text-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                                                <img (click)="ViewImage(thongTinAnh)" src="{{thongTinAnh.LuocDo}}"
+                                                    class="mx-auto" />
+                                            </div>
+                                            <div class="bg-app-bar p-2">
+                                                <p>{{thongTinAnh.MoTa}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+
+                    </div>
+                </ng-template>
+            </kendo-panelbar-item>
+        </kendo-panelbar>
+    </div>
+</div>

@@ -1,0 +1,224 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="12%" fxFlex.sm="12%">
+        <div class="container-custom no-label">
+            <label>&nbsp;</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <app-checkbox fxFlex="100%" value="true" id="AnhXa" label="Ánh xạ"
+                    [(model)]="dichVuKhamBenhBenhVien.AnhXa" (modelChange)="XuLyAnhXa($event)"></app-checkbox>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!dichVuKhamBenhBenhVien.AnhXa" fxFlex="88%"></div>
+    <ng-container *ngIf="dichVuKhamBenhBenhVien.AnhXa">
+        <app-combobox id="KhoaKham" fxFlex="50%" label="Dịch vụ khám bệnh"
+            url="DichVuKhamBenhBenhVien/GetDichVuKhamBenh" [(model)]="dichVuKhamBenhBenhVien.DichVuKhamBenhId"
+            [modelText]="dichVuKhamBenhBenhVien.DichVuKhamBenhModelText" class="item-no-padding"
+            (selectionChange)="ChonDichVu($event)" [template]="dichVuKhamBenhTemplate"
+            [templateHeader]="dichVuKyThuatTemplateHeader" [required]="true"
+            [validationerror]="'DichVuKhamBenhId' | validationerror:validationErrors">
+            <ng-template #dichVuKyThuatTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th>Dịch vụ</th>
+                        <!-- <th>Tên khoa BHYT</th> -->
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #dichVuKhamBenhTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.DichVu}}</td>
+                        <!-- <td>{{dataItem.TenKhoa}}</td> -->
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        <div fxFlex="38%"></div>
+    </ng-container>
+
+    <fieldset *ngIf="dichVuKhamBenhBenhVien.AnhXa" fxFlex="99%">
+        <legend>Thông tin dịch vụ khám bệnh ánh xạ</legend>
+        <div fxFlex="100%" class="mt-4 ml-4">
+            <ul class="inline">
+                <li>Mã dịch vụ:
+                    <strong>{{dichVuKhamBenhBenhVien.DichVuKhamBenh.MaChung}}</strong>
+                </li>
+                <li>Tên dịch vụ:
+                    <strong>{{dichVuKhamBenhBenhVien.DichVuKhamBenh.TenChung}}</strong>
+                </li>
+                <li>Mã 4350:
+                    <strong>{{dichVuKhamBenhBenhVien.DichVuKhamBenh.MaTT37}}</strong>
+                </li>
+                <li>Mô tả:
+                    <strong>{{dichVuKhamBenhBenhVien.DichVuKhamBenh.MoTa}}</strong>
+                </li>
+            </ul>
+        </div>
+    </fieldset>
+
+    <app-textbox id="Ma" fxFlex="25%" fxFlex.sm="25%" label="Mã" [required]="true" [(model)]="dichVuKhamBenhBenhVien.Ma"
+        [maxlength]="50" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textbox id="Ten" fxFlex="25%" fxFlex.sm="25%" label="Tên" [required]="true"
+        [(model)]="dichVuKhamBenhBenhVien.Ten" [maxlength]="250"
+        [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+    <div fxFlex="12%" fxFlex.sm="12%">
+        <div class="container-custom no-label">
+            <label>&nbsp;</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <app-checkbox fxFlex="100%" value="true" id="HieuLuc" label="Hiệu lực"
+                    [(model)]="dichVuKhamBenhBenhVien.HieuLuc"></app-checkbox>
+            </div>
+        </div>
+    </div>
+    <app-textbox id="MoTa" fxFlex="38%" fxFlex.sm="38%" label="Mô tả" [(model)]="dichVuKhamBenhBenhVien.MoTa"
+        maxlength="2000">
+    </app-textbox>
+
+    <app-multiselect fxFlex="50%" [(model)]="dichVuKhamBenhBenhVien.KhoaPhongIds" idWhere="{{id}}" [modelText]=""
+        label="Khoa" class="item-no-padding" [template]="khoaPhongTemplate" (modelChange)="changeKhoa($event)"
+        [templateHeader]="khoaPhongTemplateHeader" url="DichVuKhamBenhBenhVien/GetKhoaPhong" required="true"
+        [validationerror]="'KhoaPhongIds' | validationerror:validationErrors">
+        <ng-template #khoaPhongTemplateHeader let-dataItem>
+
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #khoaPhongTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.DichVu}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-multiselect>
+
+    <app-multiselect #noiThucHien fxFlex="50%" [(model)]="dichVuKhamBenhBenhVien.NoiThucHienIds" idWhere="{{id}}"
+        [queryInfo]="queryNoiThucHien" [modelText]="" label="Nơi thực hiện" class="item-no-padding"
+        [template]="phongBenhVienTemplate" url="DichVuKhamBenhBenhVien/GetPhongBenhVienDichVuKhamBenh" required="true"
+        [autoClose]="false" [validationerror]="'NoiThucHienIds' | validationerror:validationErrors"
+        [popupSettings]="null">
+        <ng-template #phongBenhVienTemplate let-dataItem>
+            <div>
+                <input type="checkbox" class="k-checkbox" [checked]="isItemSelected(dataItem)">
+                <label [ngClass]="dataItem.KhoaId !== null ? 'item-multi-child' : 'item-multi-parent'"
+                    class="k-checkbox-label">{{dataItem.DisplayName}}</label>
+            </div>
+        </ng-template>
+    </app-multiselect>
+
+    <ng-container *ngIf="dichVuKhamBenhBenhVien.AnhXa">
+        <h4 class="sub-title" fxFlex="100%">Giá bảo hiểm</h4>
+        <div fxFlex="100%" fxFlex.sm="100%"
+            *ngFor="let item of dichVuKhamBenhBenhVien.DichVuKhamBenhBenhVienGiaBaoHiems;let i = index">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textboxnumeric id="GiaBH{{i}}" fxFlex="25%" fxFlex.sm="25%" [required]="true" max="999999999"
+                    [(model)]="item.Gia" label="Giá" min="0"
+                    [validationerror]="'DichVuKhamBenhBenhVienGiaBaoHiems['+i+'].Gia' | validationerror:validationErrors">
+                </app-textboxnumeric>
+
+                <app-textboxnumeric id="TiLeBaoHiemThanhToanBH{{i}}" fxFlex="25%" fxFlex.sm="25%" [required]="true"
+                    max="9999999" [(model)]="item.TiLeBaoHiemThanhToan" label="Tỉ lệ thanh toán" max="100" min="0"
+                    [validationerror]="'DichVuKhamBenhBenhVienGiaBaoHiems['+i+'].TiLeBaoHiemThanhToan' | validationerror:validationErrors">
+                </app-textboxnumeric>
+                <app-datepicker id="TuNgayBH{{i}}" fxFlex="23%" fxFlex.sm="25%" label="Từ ngày" [required]="true"
+                    [(model)]="item.TuNgay" [required]="true" *ngIf="item.DenNgayRequired"
+                    [validationerror]="'DichVuKhamBenhBenhVienGiaBaoHiems['+i+'].TuNgay' | validationerror:validationErrors">
+                </app-datepicker>
+                <app-datepicker id="TuNgayBH{{i}}" fxFlex="23%" fxFlex.sm="25%" label="Từ ngày" [required]="true"
+                    [(model)]="item.TuNgay" [required]="true" *ngIf="!item.DenNgayRequired"
+                    (modelChange)="ChangeTuNgayGiaBH($event,i)"
+                    [validationerror]="'DichVuKhamBenhBenhVienGiaBaoHiems['+i+'].TuNgay' | validationerror:validationErrors">
+                </app-datepicker>
+
+                <app-datepicker id="DenNgayBH{{i}}" fxFlex="23%" fxFlex.sm="25%" label="Đến Ngày"
+                    *ngIf="item.DenNgayRequired == true" [required]="true" [(model)]="item.DenNgay"
+                    [validationerror]="'DichVuKhamBenhBenhVienGiaBaoHiems['+i+'].DenNgay' | validationerror:validationErrors">
+                </app-datepicker>
+                <app-datepicker id="DenNgayBH{{i}}" fxFlex="23%" fxFlex.sm="25%" label="Đến Ngày"
+                    *ngIf="!item.DenNgayRequired" [(model)]="item.DenNgay">
+                </app-datepicker>
+
+                <div fxFlex="4%" fxFlex.sm="20%">
+                    <button mat-icon-button class="mt-3" (click)="XoaBaoHiem(i)">
+                        <mat-icon [icIcon]="icRemove" color="warn"></mat-icon>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div fxFlex="100%" fxFlex.sm="100%">
+            <button mat-mini-fab color="primary" (click)="ThemBaoHiem()">
+                <mat-icon [icIcon]="icAdd"></mat-icon>
+            </button>
+        </div>
+    </ng-container>
+
+    <h4 class="sub-title" fxFlex="100%">Giá bệnh viện</h4>
+    <div fxFlex="100%" fxFlex.sm="100%"
+        *ngFor="let item of dichVuKhamBenhBenhVien.DichVuKhamBenhBenhVienGiaBenhViens;let i = index">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-dropdownlist label="Loại Giá" fxFlex="25%" fxFlex.sm="25%" id="LoaiGiaBV{{i}}" required="true"
+                [(model)]="item.NhomGiaDichVuKhamBenhBenhVienId" [modelText]="item.NhomGiaDichVuKhamBenhBenhVienText"
+                url="DichVuKhamBenhBenhVien/GetNhomDichVu"
+                (modelChange)="ChangeLoaiGia(item)"
+                [validationerror]="'DichVuKhamBenhBenhVienGiaBenhViens['+i+'].NhomGiaDichVuKhamBenhBenhVienId' | validationerror:validationErrors">
+            </app-dropdownlist>
+
+            <app-textboxnumeric
+                [disabled]="item.NhomGiaDichVuKhamBenhBenhVienId==null ||item.NhomGiaDichVuKhamBenhBenhVienId<=0"
+                id="GiaBV{{i}}" fxFlex="25%" fxFlex.sm="25%" [required]="true" max="999999999" [(model)]="item.Gia"
+                label="Giá" min="0"
+                [validationerror]="'DichVuKhamBenhBenhVienGiaBenhViens['+i+'].Gia' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+
+            <app-datepicker
+                [disabled]="item.NhomGiaDichVuKhamBenhBenhVienId==null ||item.NhomGiaDichVuKhamBenhBenhVienId<=0"
+                id="TuNgayBV{{i}}" fxFlex="23%" fxFlex.sm="25%" label="Từ ngày" *ngIf="item.DenNgayRequired == true"
+                [required]="true" [(model)]="item.TuNgay" [required]="true" (modelChange)="ChangeTuNgay(item)"
+                [validationerror]="'DichVuKhamBenhBenhVienGiaBenhViens['+i+'].TuNgay' | validationerror:validationErrors">
+            </app-datepicker>
+            <app-datepicker
+                [disabled]="item.NhomGiaDichVuKhamBenhBenhVienId==null ||item.NhomGiaDichVuKhamBenhBenhVienId<=0"
+                id="TuNgayBV{{i}}" fxFlex="23%" fxFlex.sm="25%" label="Từ ngày" *ngIf="!item.DenNgayRequired"
+                [required]="true" [(model)]="item.TuNgay" [required]="true" (modelChange)="ChangeTuNgay(item)"
+                [validationerror]="'DichVuKhamBenhBenhVienGiaBenhViens['+i+'].TuNgay' | validationerror:validationErrors">
+            </app-datepicker>
+            <app-datepicker
+                [disabled]="item.NhomGiaDichVuKhamBenhBenhVienId==null ||item.NhomGiaDichVuKhamBenhBenhVienId<=0"
+                id="DenNgayBV{{i}}" fxFlex="23%" fxFlex.sm="25%" label="Đến Ngày" *ngIf="item.DenNgayRequired == true"
+                [(model)]="item.DenNgay"
+                [validationerror]="'DichVuKhamBenhBenhVienGiaBenhViens['+i+'].DenNgay' | validationerror:validationErrors"
+                [required]="true">
+            </app-datepicker>
+            <app-datepicker
+                [disabled]="item.NhomGiaDichVuKhamBenhBenhVienId==null ||item.NhomGiaDichVuKhamBenhBenhVienId<=0"
+                id="DenNgayBV{{i}}" fxFlex="23%" fxFlex.sm="25%" label="Đến Ngày" *ngIf="!item.DenNgayRequired"
+                [(model)]="item.DenNgay">
+            </app-datepicker>
+
+
+            <div fxFlex="4%" fxFlex.sm="20%">
+                <button mat-icon-button class="mt-3" (click)="XoaBenhVien(i)">
+                    <mat-icon [icIcon]="icRemove" color="warn"></mat-icon>
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <button mat-mini-fab color="primary" (click)="ThemBenhVien()">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+</div>

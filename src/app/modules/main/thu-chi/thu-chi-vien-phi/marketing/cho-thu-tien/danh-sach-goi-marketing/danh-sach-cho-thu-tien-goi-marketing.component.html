@@ -1,0 +1,34 @@
+<vex-page-layout>
+	<vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+		<div [class.px-gutter]="true" class="w-full flex justify-between">
+			<vex-breadcrumbs [crumbs]="[
+			{Title:'Thu Ngân',Path:''},
+			{Title:'Viện phí gói marketing',Path:'',Active:true}]"> </vex-breadcrumbs>
+			<app-hot-key [keys]="[{Key:'Esc',Description:'Hủy', End:true}]"></app-hot-key>
+		</div>
+	</vex-page-layout-header>
+
+	<vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+		<div @fadeInUp class="-mt-16">
+			<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+				<div class="card" fxFlex="100%">
+					<div class="px-6 py-4" fxLayout="column" style="position: relative" *ngIf="choThuTien!=null">
+						<kendo-tabstrip #tabStrip (tabSelect)="onTabSelect($event)" fxFlex="100%"
+							class="content-has-border">
+							<kendo-tabstrip-tab [selected]="choThuTien.TabActive === 1" [title]="'Chưa quyết toán'">
+								<ng-template kendoTabContent>
+									<danh-sach-cho-quyet-toan-goi-marketing [tabActive]="1"></danh-sach-cho-quyet-toan-goi-marketing>
+								</ng-template>
+							</kendo-tabstrip-tab>
+							<kendo-tabstrip-tab [selected]="choThuTien.TabActive === 2" [title]="'Đã quyết toán'">
+								<ng-template kendoTabContent>
+									<app-danh-sach-da-quyet-toan-goi-marketing [tabActive]="2"></app-danh-sach-da-quyet-toan-goi-marketing>
+								</ng-template>
+							</kendo-tabstrip-tab>
+						</kendo-tabstrip>
+					</div>
+				</div>
+			</div>	
+		</div>
+	</vex-page-layout-content>
+</vex-page-layout>

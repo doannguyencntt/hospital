@@ -1,0 +1,17 @@
+.container-iframe{
+    position: relative;
+    width: 100%;
+    height: 607px;
+    background: #ebeced;
+    iframe{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        .pagebreak{            
+            border-bottom: 2px dashed #000;
+            margin-bottom: 15px;
+        }
+    }
+}

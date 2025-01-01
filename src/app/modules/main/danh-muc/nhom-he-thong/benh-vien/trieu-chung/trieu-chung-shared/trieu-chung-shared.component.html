@@ -1,0 +1,41 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between">
+    <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="mb-1">
+            <!-- show== false => ADD -->
+            <app-combobox id="TrieuChungCha" fxFlex="30%" fxFlex.sm="30%" [(model)]="trieuChung.TrieuChungChaId"
+                [modelText]="trieuChung.TenCha" label="Triệu Chứng Cha" url="TrieuChung/GetListTrieuChungCha"
+                [queryInfo]="queryInfo" [template]="lyDoTemplate"
+                [validationerror]="'TrieuChungChaId' | validationerror:validationErrors" *ngIf="show == false">
+                <ng-template #lyDoTemplate let-dataItem>
+                    <label [ngStyle]="{
+                    'font-weight':dataItem.CapNhom == 1 ? 'bold' : 'normal',
+                    'padding-left' :((dataItem.CapNhom-1)*20) + 'px'
+                 }">{{dataItem.DisplayName}}
+                    </label>
+                </ng-template>
+            </app-combobox>
+            <!-- show== true => edit -->
+            <app-combobox id="TrieuChungCha" fxFlex="30%" fxFlex.sm="30%" [(model)]="trieuChung.TrieuChungChaId"
+                [modelText]="trieuChung.TenCha" label="Triệu Chứng Cha" url="TrieuChung/GetListTrieuChungCha1"
+                [queryInfo]="queryInfo" [template]="lyDoTemplate"
+                [validationerror]="'TrieuChungChaId' | validationerror:validationErrors" *ngIf="show == true">
+                <ng-template #lyDoTemplate let-dataItem>
+                    <label [ngStyle]="{
+               'font-weight':dataItem.CapNhom == 1 ? 'bold' : 'normal',
+               'padding-left' :((dataItem.CapNhom-1)*20) + 'px'
+            }">{{dataItem.DisplayName}}
+                    </label>
+                </ng-template>
+            </app-combobox>
+            <app-textbox id="Ten" fxFlex="70%" fxFlex.sm="70%" [required]="true" [(model)]="trieuChung.Ten" label="Tên"
+                maxlength="200" [validationerror]="'Ten' | validationerror:validationErrors">
+            </app-textbox>
+            <app-multiselect id="DanhMucChuan" fxFlex="100%" fxFlex.sm="100%" [required]="true"
+                [(model)]="trieuChung.DanhMucChuanIds" label="Nhóm Chẩn Đoán" url="TrieuChung/GetListDanhMucChuanDoan"
+                [validationerror]="'DanhMucChuanIds' | validationerror:validationErrors">
+            </app-multiselect>
+        </div>
+    </div>
+</div>

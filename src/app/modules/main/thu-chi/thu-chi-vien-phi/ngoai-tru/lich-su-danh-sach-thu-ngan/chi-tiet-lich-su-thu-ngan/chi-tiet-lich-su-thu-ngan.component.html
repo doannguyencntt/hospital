@@ -1,0 +1,327 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Thu Ngân',Path:'/lich-su-thu-ngan', queryParams: {holdQuery : true}},
+            {Title:'Chi Tiết Lịch Sử Thu Ngân',Path:'',Active:true}          
+            ]">
+            </vex-breadcrumbs>
+            <app-hot-key [keys]="[       
+              {Key:'Ctrl + P',Description:'In Phiếu'},
+              {Key:'Esc',Description:'Hủy', End:true}
+            ]"></app-hot-key>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0">
+                            <!-- Thông tin hành chính -->
+                            <!-- class="content-has-border" -->
+                            <fieldset fxFlex="100%" class="mb-3">
+                                <legend>Thông tin hành chính</legend>
+                                <div class=" mt-1">
+                                    <ul class="inline">
+                                        <li>Mã TN:
+                                            <strong>
+                                                {{thongTinBenhNhan.MaYeuCauTiepNhan}}
+                                            </strong>
+                                        </li>
+                                        <li>Mã NB:
+                                            <strong>
+                                                {{thongTinBenhNhan.MaBN}}
+                                            </strong>
+                                        </li>
+                                        <li>Họ Tên:
+                                            <strong>
+                                                {{thongTinBenhNhan.HoTen}}
+                                            </strong>
+                                        </li>
+                                        <li>Năm Sinh:
+                                            <strong>
+                                                {{thongTinBenhNhan.NamSinh}}
+                                            </strong>
+                                        </li>
+                                        <li>Địa chỉ:
+                                            <strong>
+                                                {{thongTinBenhNhan.DiaChi}}
+                                            </strong>
+                                            <strong *ngIf="thongTinBenhNhan.DiaChi === ''">
+                                                Không có
+                                            </strong>
+                                        </li>
+                                        <li>Số điện thoại:
+                                            <strong>
+                                                {{thongTinBenhNhan.SoDienThoai}}
+                                            </strong>
+                                            <strong *ngIf="thongTinBenhNhan.SoDienThoai === null">
+                                                Không có
+                                            </strong>
+                                        </li>
+                                        <li>Email:
+                                            <strong>
+                                                {{thongTinBenhNhan.Email}}
+                                            </strong>
+                                            <strong *ngIf="thongTinBenhNhan.Email === null">
+                                                Không có
+                                            </strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </fieldset>
+                            <!-- Thông tin bảo hiểm y tế -->
+                            <!-- class="content-has-border" -->
+                            <fieldset fxFlex="100%" class="mb-3" *ngIf="thongTinBenhNhan.CoBHYT ===  true">
+                                <legend>Thông tin BHYT</legend>
+                                <div class=" mt-1">
+                                    <ul class="inline">
+                                        <li>Số thẻ:
+                                            <strong>
+                                                {{thongTinBenhNhan.BHYTMaSoThe}}
+                                            </strong>
+                                        </li>
+                                        <li>Ngày hiệu lực:
+                                            <strong>
+                                                {{thongTinBenhNhan.NgayHieuLucStr}}
+                                            </strong>
+                                        </li>
+                                        <li>Ngày hết hạn:
+                                            <strong>
+                                                {{thongTinBenhNhan.NgayHetHanStr}}
+                                            </strong>
+                                        </li>
+                                        <li>Nơi đăng ký khám BH:
+                                            <strong>
+                                                {{thongTinBenhNhan.BHYTDiaChi}}
+                                            </strong>
+                                        </li>
+                                        <li>Mức hưởng:
+                                            <strong>
+                                                {{thongTinBenhNhan.BHYTMucHuong}}%
+                                            </strong>
+                                        </li>
+                                        <li>Tuyến khám:
+                                            <strong class="color-green">
+                                                {{thongTinBenhNhan.TuyenKham}}
+                                            </strong>
+                                        </li>
+                                        <li>
+                                            Giấy chuyển viện:
+                                            <strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien !== null">
+                                                <a class="color-green"
+                                                    (click)="xemTaiLieu(thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien)">{{thongTinBenhNhan.TenGiayChuyenVien}}</a>
+                                            </strong>
+                                            <strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayChuyenVien === null">
+                                                Không có
+                                            </strong>
+                                        </li>
+                                        <li>
+                                            Giấy miễn cùng chi trả:
+                                            <strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra !== null">
+                                                <a (click)="xemTaiLieu(thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra)"
+                                                    class="color-green">{{thongTinBenhNhan.TenBHYTgiayMienCungChiTra}}</a>
+                                            </strong>
+                                            <strong *ngIf="thongTinBenhNhan.TaiLieuDinhKemGiayMiemCungChiTra === null">
+                                                Không có
+                                            </strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </fieldset>
+                            <!-- Thông tin bảo hiểm tư nhân -->
+                            <!-- class="content-has-border" -->
+                            <fieldset fxFlex="100%" class="mb-3" *ngIf="kiemTraThongTinBaoHiemTN === true">
+                                <legend>Thông tin bảo hiểm tư nhân</legend>
+                                <div class=" mt-1">
+                                    <app-grid [gridColumns]="gridBaoHiemTNs" [useAddDeault]="false"
+                                        class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+                                        [checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true"
+                                        [gridDataSource]="dataSourceDanhSachBHTN" style="width: 1px;"
+                                        [pageable]="false">
+                                    </app-grid>
+                                </div>
+                            </fieldset>
+                            <fieldset fxFlex="100%" class="mb-3" *ngIf="coMiemGiam===true">
+                                <legend>Thông tin miễn giảm</legend>
+                                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                    fxLayoutGap.lt-sm="0">
+                                    <!-- start thông tim miễm giảm ưu đãi -->
+                                    <div class=" mt-1" fxFlex="20%"
+                                        *ngIf="thongTinMienGiamVos.ThongTinMienGiamTheoDoiTuongUuDaiVo != null || thongTinMienGiamVos.ThongTinMienGiamTheoDoiTuongUuDaiVo != undefined">
+                                        <ul>
+                                            <li>Đối tượng ưu đãi:
+                                                <strong>
+                                                    {{thongTinMienGiamVos.ThongTinMienGiamTheoDoiTuongUuDaiVo.DoiTuongUuDai}}
+                                                </strong>
+                                            </li>
+                                            <li>
+                                                Công ty ưu đãi:
+                                                <strong>
+                                                    {{thongTinMienGiamVos.ThongTinMienGiamTheoDoiTuongUuDaiVo.CongTyUudai}}
+                                                </strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- end thông tim miễm giảm ưu đãi -->
+
+                                    <!-- start thông tim voucher -->
+                                    <div fxFlex="15%" *ngIf="thongTinMienGiamVos.ThongTinMienGiamVoucherVo !== null">
+                                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap.lt-sm="0">
+                                            <span>Thông tin voucher</span>
+                                            <app-multiselect fxFlex="100%" fxFlex.sm="100%" label="Mã Voucher"
+                                                [(model)]="listVouchers" [disabled]="true"
+                                                url="ThuNgan/GetMaVoucher?loaiVoucher={{loaiVoucher}}&yeucauTiepNhanId={{idYeuCauTiepNhan}}">
+                                            </app-multiselect>
+                                        </div>
+                                    </div>
+                                    <!-- end thông tim voucher -->
+
+                                    <!-- thông tin miễm giảm thêm -->
+                                    <div fxFlex="{{flagEnableMGThem?'85%':'10%'}}"
+                                        *ngIf="thongTinMienGiamVos.ThongTinMienGiamThemVo != null || thongTinMienGiamVos.ThongTinMienGiamThemVo != undefined">
+                                        <span>Thông tin MG Thêm</span>
+                                        <div *ngIf="flagEnableMGThem" fxLayout="row wrap" fxLayout.lt-sm="column"
+                                            fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0">
+                                            <div fxFlex="11%">
+                                                <mat-radio-button name="loaiMG" style="position: absolute;z-index: 1;"
+                                                    [disabled]="true" [checked]="checkedMGTGiaTri"
+                                                    value="chon-miem-giam">
+                                                    Số tiền MG
+                                                </mat-radio-button>
+                                                <app-textboxnumeric
+                                                    [(model)]="thongTinMienGiamVos.ThongTinMienGiamThemVo.SoTienMG"
+                                                    class="mb-0 pb-0" [isFormatCurrenly]="true" [disabled]="true">
+                                                </app-textboxnumeric>
+                                            </div>
+                                            <div fxFlex="11%" fxLayout.lt-sm="column" fxLayoutGap.lt-sm="0"
+                                                *ngIf="!checkHiddenSoTienConLai">
+                                                <app-textboxnumeric fxFlex="100%" [disabled]="true"
+                                                    label="Số tiền còn lại" class="green" [isFormatCurrenly]="true"
+                                                    [spinners]="false"
+                                                    [(model)]="thongTinMienGiamVos.ThongTinMienGiamThemVo.SoTienMGConLai">
+                                                </app-textboxnumeric>
+                                            </div>
+                                            <div fxFlex="11%">
+                                                <mat-radio-button name="loaiMG" [checked]="checkedMGTTiLe"
+                                                    [disabled]="true" style="position: absolute;z-index: 1;"
+                                                    value="chon-miem-giam">
+                                                    % MG
+                                                </mat-radio-button>
+                                                <app-textboxnumeric fxFlex="100%" max="100"
+                                                    [(model)]="thongTinMienGiamVos.ThongTinMienGiamThemVo.TiLeMienGiam"
+                                                    class="mb-0 pb-0" [disabled]="true"
+                                                    style="margin-top: 1px !important;">
+                                                </app-textboxnumeric>
+                                            </div>
+                                            <div fxFlex="13%" fxFlex.sm="17%">
+                                                <app-textarea id="MienGiamConLai" [required]="true" label="Lý do MG"
+                                                    [disabled]="true"
+                                                    [(model)]="thongTinMienGiamVos.ThongTinMienGiamThemVo.LyDoMiemGiam"
+                                                    minHeight="20">
+                                                </app-textarea>
+                                            </div>
+                                            <div fxFlex="29%">
+                                                <app-upload id="Upload" label="Tài liệu đính kèm" [required]="true"
+                                                    [model]="thongTinMienGiamVos.ThongTinMienGiamThemVo.TaiLieuDinhKemGiayMiemGiam">
+                                                </app-upload>
+                                            </div>
+                                            <app-combobox id="NguoiDuyet" fxFlex="21%" fxFlex.sm="21%"
+                                                [(model)]="thongTinMienGiamVos.ThongTinMienGiamThemVo.NhanVienDuyetMienGiamThemId"
+                                                [modelText]="thongTinMienGiamVos.ThongTinMienGiamThemVo.TenNhanVienDuyet"
+                                                label="Người duyệt" class="item-no-padding" [readonly]="true"
+                                                url="NhanVien/GetListLookupNhanVien">
+                                            </app-combobox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset fxFlex="100%" class="mb-3">
+                                <legend>Thông tin thanh toán</legend>
+                                <div class=" mt-1" *ngIf="loaiPhieu !== '0'">
+                                    <ul class="inline">
+                                        <li>Hình thức thu:
+                                            <strong>
+                                                {{thongTinThanhToan.ThuChiTienBenhNhanStr}}
+                                            </strong>
+                                        </li>
+                                        <li>Ngày thu:
+                                            <strong>
+                                                {{thongTinThanhToan.NgayThuStr}}
+                                            </strong>
+                                        </li>
+                                        <li>Tiền mặt:
+                                            <strong>
+                                                {{thongTinThanhToan.TienMat | number:'0.2-2':'vi-VN'}}
+                                            </strong>
+                                        </li>
+                                        <li>Chuyển khoản:
+                                            <strong>
+                                                {{thongTinThanhToan.ChuyenKhoan | number:'0.2-2':'vi-VN'}}
+                                            </strong>
+                                        </li>
+                                        <li>Pos:
+                                            <strong>
+                                                {{thongTinThanhToan.POS | number:'0.2-2':'vi-VN'}}
+                                            </strong>
+                                        </li>
+                                        <li>Số tiền miễm giảm:
+                                            <strong>
+                                                {{thongTinThanhToan.SoTienGiam | number:'0.2-2':'vi-VN'}}
+                                            </strong>
+                                        </li>
+                                        <li>Số tiền công nợ:
+                                            <strong>
+                                                {{thongTinThanhToan.SoTienCongNo | number:'0.2-2':'vi-VN'}}
+                                            </strong>
+                                        </li>
+                                        <li>
+                                            Nội dung thu:
+                                            <strong>
+                                                {{thongTinThanhToan.NoiDungThu}}
+                                            </strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class=" mt-1" *ngIf="loaiPhieu === '0'">
+                                    <ul class="inline">
+                                        <li>Ngày hủy:
+                                            <strong>
+                                                {{thongTinThanhToan.NgayThuStr}}
+                                            </strong>
+                                        </li>
+                                        <li>
+                                            Nội dung hủy:
+                                            <strong>
+                                                {{thongTinThanhToan.NoiDungThu}}
+                                            </strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </fieldset>
+
+                            <fieldset fxFlex="100%" class="mb-3"
+                                *ngIf="thongTinThanhToan.ThuChiTienBenhNhanStr !== 'Thu tạm ứng'">
+                                <legend>Thông tin đã thu</legend>
+                                <div class="mt-1">
+                                    <app-danh-sach-lich-su-da-thu (loadingThanhCong)="loadingThanhCong($event)">
+                                    </app-danh-sach-lich-su-da-thu>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2 mr-9" kendoTooltip>
+                            <button type="button" mat-raised-button (click)="BackToList()" title="Phím tắt: ESC">
+                                Quay lại
+                            </button>
+                            <button color="primary" *ngIf="kiemTraPhieuHuy===true" mat-raised-button type="button"
+                                (click)="InPhieu()" title="Phím tắt: Ctrl + P">
+                                Phiếu in
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

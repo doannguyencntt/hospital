@@ -1,0 +1,67 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Hình Ảnh / PDF Kết Quả Cận Lâm Sàng</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1" (click)="close('No answer')">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <!-- <div class="mb-3" *ngIf="ListImage != null">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="20%" *ngFor="let thongTinAnh of ListImage">
+                <div class="card overflow-hidden" style="border: 1px solid #ccc;position: relative;">
+                    <div class="mat-ripple p-4 text-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                        <img (click)="ViewImagePDF(thongTinAnh,1)" src="{{thongTinAnh}}"
+                            style="width: 150px;height: 150px;" />
+                    </div>
+                    <div class="bg-app-bar p-2" (click)="ViewImagePDF(thongTinAnh,1)">
+                        <p>{{data.Model.NoiDung}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3" *ngIf="listPdf != null" >
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="20%" *ngFor="let thongTinAnh of listPdf">
+                <div class="card overflow-hidden" style="border: 1px solid #ccc;position: relative;" >
+                    <div class="mat-ripple p-4 text-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                        <button type="button" mat-icon-button tabindex="-1"  class="button" (click)="ViewImagePDF(thongTinAnh,2)">
+                            <mat-icon [icIcon]="IcPDF" class ="zoom" style="color: red;width: 150px;"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="bg-app-bar p-2" (click)="ViewImagePDF(thongTinAnh,2)">
+                        <p>{{data.Model.NoiDung}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="mb-3">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-grid fxFlex="100%" fxFlex.sm="100%" [gridDataSource]="gridDataSource" [useHeaderDefault]="false"
+                [gridColumns]="gridColumns" [useActionDefault]="false"
+                [useAddDeault]="false" [checkboxAble]="false" [lazyLoadPage]="true" [autoHeight]="true"
+                style="width: 1px;" [pageable]="false" >
+            </app-grid>
+        </div>
+    </div>
+    <ng-template #headerTemplate let-dataItem>
+        <div class="text-center">
+            <button type="button"  mat-raised-button mat-button (click)="downloadFileAll(data.Model.TenGuidList)">
+                Tải tất cả
+            </button>
+        </div>
+    </ng-template>
+    <ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+        <div fxFlex="100%" >
+            <button type="button" fxFlex="50%"  style="float: right;padding-right: 5px;"color="primary" mat-raised-button mat-button (click)="ViewImagePDF(dataItem)" *ngIf="dataItem.LoaiTapTin !== 10">
+                Xem
+            </button>
+            <span fxFlex="5px" ></span>
+            <span fxFlex="50%" *ngIf="dataItem.LoaiTapTin === 10"></span>
+            <button type="button" fxFlex="50%"  style="float: right;" color="primary" mat-raised-button mat-button (click)="downloadFile(dataItem)">
+                Tải
+            </button>
+        </div>
+    </ng-template>
+</mat-dialog-content>

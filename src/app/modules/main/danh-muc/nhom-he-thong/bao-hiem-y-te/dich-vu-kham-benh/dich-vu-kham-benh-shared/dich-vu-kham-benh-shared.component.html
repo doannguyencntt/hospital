@@ -1,0 +1,84 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="MaChung" fxFlex="25%" fxFlex.sm="40%" maxlength="50" [required]="true"
+        [(model)]="dichvukhambenh.MaChung" label="Mã" [validationerror]="'MaChung' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="MaTT37" fxFlex="25%" fxFlex.sm="40%" maxlength="50" [required]="true"
+        [(model)]="dichvukhambenh.MaTT37" label="Mã TT37"
+        [validationerror]="'MaTT37' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="TenChung" fxFlex="25%" fxFlex.sm="40%" maxlength="250" [required]="true"
+        [(model)]="dichvukhambenh.TenChung" label="Tên"
+        [validationerror]="'TenChung' | validationerror:validationErrors"></app-textbox>
+
+    <app-combobox id="KhoaId" fxFlex="25%" fxFlex.sm="25%" label="Khoa" url="DichVuKhamBenh/GetKhoas"
+        [(model)]="dichvukhambenh.KhoaId" [modelText]="dichvukhambenh.TenKhoa">
+    </app-combobox>
+
+    <app-combobox fxFlex="25%" [(model)]="dichvukhambenh.HangBenhVien" [required]="true"
+        [modelText]="dichvukhambenh.TenHangBenhVien" id="HangBenhVien" label="Hạng bệnh viện"
+        url="BenhVien/GetHangBenhVien" [validationerror]="'HangBenhVien' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-textarea fxFlex="50%" [(model)]="dichvukhambenh.MoTa" maxlength="2000" label="Mô Tả"></app-textarea>
+
+    <div fxFlex="25%" fxFlex.sm="25%">
+        <div class="container-custom no-label">
+            <label>&nbsp;</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <app-checkbox fxFlex="100%" id="NgoaiQuyDinhBHYT" [(model)]="dichvukhambenh.NgoaiQuyDinhBHYT"
+                    label="Ngoài quy định BHYT" value="true">
+                </app-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="sub-title" fxFlex="100%">Thông Tin Giá Chi Tiết</h4>
+
+    <div fxFlex="100%" fxFlex.sm="100%" *ngFor="let item of dichvukhambenh.DichVuKhamBenhThongTinGias;let i = index">
+        <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+            <app-textboxnumeric id="Gia{{i}}" fxFlex="25%" fxFlex.sm="10%" [required]="true" [max]="9999999999"
+                [(model)]="item.Gia" label="Giá" [decimals]="0"
+                [validationerror]="'DichVuKhamBenhThongTinGias['+i+'].Gia' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-datepicker id="TuNgay{{i}}" fxFlex="12%" fxFlex.sm="10%" label="Từ ngày" [required]="true"
+                [(model)]="item.TuNgay"
+                [validationerror]="'DichVuKhamBenhThongTinGias['+i+'].TuNgay' | validationerror:validationErrors">
+            </app-datepicker>
+
+            <app-datepicker id="DenNgay{{i}}" fxFlex="13%" fxFlex.sm="10%" label="Đến ngày" [(model)]="item.DenNgay"
+                [validationerror]="'DichVuKhamBenhThongTinGias['+i+'].DenNgay' | validationerror:validationErrors">
+            </app-datepicker>
+
+            <app-textarea id="MoTa{{i}}" fxFlex="40%" [(model)]="item.MoTa" height="auto" minHeight="20"
+                maxlength="4000" label="Mô tả">
+            </app-textarea>
+
+            <div fxFlex="10%" fxFlex.sm="25%">
+                <div class="container-custom no-label">
+                    <label>&nbsp;</label>
+                    <div fxLayout="row" fxLayoutGap="16px">
+                        <app-checkbox fxFlex="100%" id="HieuLuc{{i}}" [(model)]="item.HieuLuc" label="Hiệu lực"
+                            value="true">
+                        </app-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div fxFlex="1  %" fxFlex.sm="20%">
+            <button mat-icon-button kendoTooltip title="Xóa" class="mt-3" (click)="xoaThongTinGia(i)">
+                <mat-icon [icIcon]="icDelete" color="warn"></mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <button mat-mini-fab color="primary" (click)="themThongTinGia()">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+</div>

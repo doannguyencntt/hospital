@@ -1,0 +1,20 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>XEM TRƯỚC KHI IN</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="overflow:hidden">
+    <div class="container-iframe">
+        <iframe width="100%" style="height: 500px;" [src]="src| safe" allowTransparency="true"
+            background="transparent"></iframe>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="mt-3">
+    <app-print-form textPrint="In Bảng Kê Thu Tiền Thuốc" style="text-align: right;"  type="PDF" [event]="data" typeSize="A5" [bodyComponent]="this" *ngIf="kiemtraPhieuInManhinh != true && InBangKe == true"
+        (click)="InPhieu(1)" copies="2">
+    </app-print-form>
+    <app-print-form textPrint="In Phiếu Thu" type="PDF"  style="text-align: right;" typeLayout="landscape" [event]="data" typeSize="A5"
+        [bodyComponent]="this" (click)="InPhieu(2)" *ngIf="kiemtraPhieuInManhinh != true && InPhieuThu == true">
+    </app-print-form>
+</mat-dialog-actions>

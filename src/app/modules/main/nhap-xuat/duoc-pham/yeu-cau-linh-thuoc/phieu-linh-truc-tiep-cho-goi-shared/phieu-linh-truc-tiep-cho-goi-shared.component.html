@@ -1,0 +1,72 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-combobox id="linhTuKho" fxFlex="25%" fxFlex.sm="25%" [required]="true"  [disabled]="true"
+        [(model)]="phieuLinhTrucTiep.KeyId" [modelText]="phieuLinhTrucTiep.DisplayName" bind="true"
+        url="YeuCauLinhDuocPham/GetTatCakhoLinhTuCuaNhanVienLoginLinhTrucTiep" label="Lĩnh từ kho"
+        >
+    </app-combobox>
+    <app-textbox id="LinhVePhong" maxlength="250" label="Lĩnh về Khoa" disabled={{true}} [(model)]="LinhVeKhoa"
+        bind="true" [required]="true" >
+    </app-textbox>
+
+    <app-textbox id="nguoiYeuCau" fxFlex="25%" fxFlex.sm="25%"
+        maxlength="250" label="Người yêu cầu" disabled={{true}} [(model)]="nguoiYeuCau" [required]="true">
+    </app-textbox>
+    <app-datepicker id="ngayYeuCau" fxFlex="25%" fxFlex.sm="25%"
+        [required]="true" label="Ngày yêu cầu" disabled={{true}} [(model)]="ngayYeuCau"
+        >
+    </app-datepicker>
+ 
+    <app-textarea id="ghiChu" fxFlex="100%" fxFlex.sm="100%" maxlength="1000"  [(model)]="ghiChu"
+         label="Ghi chú" minHeight="20"
+        >
+    </app-textarea>
+    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin dược phẩm</h3>
+    <div fxFlex="100%" fxFlex.sm="100%" fxLayoutAlign="start center" >
+        <app-datetimepicker id="TuNgay" fxFlex="18%" fxFlex.sm="100%" [(model)]="searchDanhSachThongDuocPham.TuNgay"
+            label="Từ :ngày điều trị" (modelChange)="changeTuNgay($event)" class="mt-1 on-header">
+        </app-datetimepicker>
+        <span fxFlex="2%" fxFlex.sm="100%"></span>
+        <app-datetimepicker id="DenNgay" fxFlex="18%" fxFlex.sm="100%" [(model)]="searchDanhSachThongDuocPham.DenNgay"
+            label="đến :ngày điều trị" (modelChange)="changeDenNgay($event)" class="mt-1 on-header">
+        </app-datetimepicker>
+    </div>
+    <div fxFlex="100%" fxLayoutAlign="end center">
+        <app-grid #gridCha  fxFlex="100%" fxFlex.sm="100%" style="width: 1px;"
+            [gridColumns]="gridChildColumns" [autoRefreshDataSource]="true" [allowSortDefault]="false"
+            [gridDataSource]="gridDataSource" [documentType]="documentType" [useAddDeault]="false" #gridCreate
+            [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true" maxHeight="500"
+            [pageable]="false" (extCheckboxSelection)="extCheckboxSelections($event)" [detailTemplate]="detailTemplate"
+            [masterName]='linhTrucTiepMasterName'>
+        </app-grid>
+    </div>
+    <ng-template #detailTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-grid  baseRoute="" [gridColumns]="gridColumns" [allowSortDefault]="false"
+            [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [lazyLoadPage]="true"
+            [gridDataSource]="getDataSourceChild(dataItem.ListYeuCauDuocPhamBenhViens)" 
+            [showStt]="true" [autoHeight]="true" [pageable]="false">
+        </app-grid>
+    </ng-template>
+    <ng-template #slYeuCauTemplate let-dataItem>
+        <app-textboxnumeric  [decimals]="1" class="no-label" [max]="9999">
+        </app-textboxnumeric>
+    </ng-template>
+    <ng-template #tenNhomGroupHeaderTemplate let-value="value" let-dataItem>
+        <strong>{{value}}</strong>
+    </ng-template>
+    <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+    <div class="gripViewGoiDichViKhacTemplate">
+        <ng-template #checkBoxChildTemplate let-dataItem>
+            <span *ngIf="dataItem.SoLuongTon >= dataItem.SLYeuCau">
+                <input type="checkbox" id="vehicle1" [(ngModel)]="dataItem.IsCheckRowItem" name="vehicle1" 
+                    (ngModelChange)="checkboxGridChild($event,dataItem)">
+            </span>
+            <span *ngIf="dataItem.SLYeuCau  > dataItem.SoLuongTon">
+                <input type="checkbox" id="vehicle1" [(ngModel)]="dataItem.IsCheckRowItem" name="vehicle1" disabled
+                    (ngModelChange)="checkboxGridChild($event,dataItem)">
+            </span>
+        </ng-template>
+    </div>
+</div>

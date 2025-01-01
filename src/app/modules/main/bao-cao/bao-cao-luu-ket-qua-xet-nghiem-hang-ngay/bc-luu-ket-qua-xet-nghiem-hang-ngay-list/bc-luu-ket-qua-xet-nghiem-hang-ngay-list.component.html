@@ -1,0 +1,92 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                {Title:'Thống Kê', Path:''},
+                {Title:'Báo Cáo', Path:''},
+                {Title:'Xét Nghiệm', Path:''},
+                {Title:'Lưu Kết Quả Xét Nghiệm Hằng Ngày', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6 pb-0">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+
+                <!-- <app-combobox id="NoiChiDinh" fxFlex="20%" fxFlex.sm="20%" [(model)]="noiChiDinh.KeyId"
+                    [modelText]="noiChiDinh.DisplayName" label="Nơi chỉ định" (modelChange)="chonNoiChiDinhChange($event)"
+                    [autoSelectFirstItem]="true" url="KhamBenh/GetListPhongBenhVien" class="mt-1 on-header">
+                </app-combobox> -->
+                <app-combobox id="NoiChiDinh" fxFlex="15%" fxFlex.sm="15%" url="BaoCao/GetListPhongBenhVien"
+                    [(model)]="noiChiDinh.KeyId"  popupSettings="null" [modelText]="noiChiDinh.DisplayName" (modelChange)="chonNoiChiDinhChange($event)"
+                    [templateHeader]="khoaPhongTemplateHeader" [template]="khoaPhongTemplate" label="Nơi chỉ định" class="mt-1 on-header"
+                    >
+                    <ng-template #khoaPhongTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="20%">Mã</th>
+                                <th>Tên</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #khoaPhongTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="20%">{{dataItem.Ma}}</td>
+                                <td>{{dataItem.Ten}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+
+                <app-dropdownlist id="BHYT" fxFlex="10%" fxFlex.sm="10%" [(model)]="bHYT.KeyId" class="mt-1 on-header" [autoSelectFirstItem]="true"
+                    [modelText]="bHYT.DisplayName" label="BHYT" url="BaoCao/GetListBHYT" (modelChange)="changeTrangThaiBHYT($event)">
+                </app-dropdownlist>
+                <app-dropdownlist id="KSK" fxFlex="10%" fxFlex.sm="10%" [(model)]="kSK.KeyId" class="mt-1 on-header"
+                    [modelText]="kSK.DisplayName" label="KSK" url="BaoCao/GetListKSK" (modelChange)="changeTrangThaiKhamSucKhoe($event)">
+                </app-dropdownlist>
+               
+                <!-- <app-checkbox id="BHYT" fxFlex="5%" fxFlex.sm="5%" (modelChange)="changeTrangThaiBHYT(event)" [(model)]="search.KhongBHYT"
+                    label="Không BHYT">
+                </app-checkbox> -->
+                <!-- <app-checkbox id="KhamSucKhoe" fxFlex="8%" fxFlex.sm="8%" (modelChange)="changeTrangThaiKhamSucKhoe(event)" 
+                    [(model)]="search.KhamSucKhoe" label="Khám sức khỏe">
+                </app-checkbox> -->
+                <!-- <app-checkbox id="KhamSucKhoe" fxFlex="8%" fxFlex.sm="8%" (modelChange)="changeTrangThaiKhamSucKhoe(event)" 
+                    [(model)]="search.KhongKhamSucKhoe" label=" Không Khám sức khỏe">
+                </app-checkbox> -->
+
+                <app-datetimepicker id="TuNgay" fxFlex="15%" fxFlex.sm="15%"
+                    [(model)]="search.TuNgay" [maxDate]="search.DenNgay"
+                    label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker id="DenNgay" fxFlex="15%" fxFlex.sm="15%" (modelChange)="changeValueEnd($event)"
+                    [(model)]="search.DenNgay" label="Đến ngày" class="mt-1 on-header" [minDate]="search.TuNgay">
+                </app-datetimepicker>
+
+                <div fxFlex="35%" fxFlex.sm="35%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2" (click)="XemBaoCao()">Xem Báo
+                        Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2" (click)="XuatPDF()"
+                        style="float: right;" *ngIf="ishowView == true">Xuất PDF</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2" (click)="XuatBaoCao()"
+                        style="float: right;" *ngIf="ishowView == true">Xuất Excel</button>
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" class="pb-0" [style.display]="showGrid==true ? 'block':'none'">
+                    <app-grid #gridl fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns" [allowSortDefault]="true"
+                        [urlGetData]="urlGetDataGridChild" 
+                        [urlGetTotalPage]="urlGetPageDataGridChild" [documentType]="doucument" [useAddDeault]="false"
+                        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" 
+                        [pageable]="true" masterName="gridl" [additionalSearchString]="returnDetail()" [showStt]="true" (extOnDataBound)="extOnDataBound($event)">
+                    </app-grid>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

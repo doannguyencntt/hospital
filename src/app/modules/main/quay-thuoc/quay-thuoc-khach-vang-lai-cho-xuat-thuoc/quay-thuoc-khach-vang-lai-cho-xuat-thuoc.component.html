@@ -1,0 +1,12 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-grid [gridColumns]="gridColumns" [gridDataSource]="dataSourcedanhsachThuoc" [autoHeight]="true"
+        [lazyLoadPage]="false" [useActionDefault]="false" [useAddDeault]="false" [useHeaderDefault]="false"
+        [allowSortDefault]="false" [pageable]="false" useActionDefault="false" [checkboxAble]="false"
+        [lazyLoadPage]="true">
+    </app-grid>
+</div>
+<br>
+<div *ngIf="dataSourcedanhsachThuoc.data.length>0">
+    <button type="button" color="primary" (click)="GuiData()" class="mr-1 float-right" mat-raised-button>
+        Xuất thuốc</button>
+</div>

@@ -1,0 +1,56 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Chỉnh Sửa Vật Tư Chi Tiết</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 200px;">
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3">
+            <legend>
+                Thông tin vật tư
+            </legend>
+
+            <div fxLayout="column">
+                <ul class="inline">
+                    <li>Vật tư: &nbsp;<strong>{{vatTuEdit.Ten}}</strong></li>
+                    <li>Mã: &nbsp;<strong>{{vatTuEdit.Ma}}</strong></li>
+                    <li>Đơn vị tính: &nbsp;<strong>{{vatTuEdit.DonViTinh}}</strong></li>
+                    <li>Nhà SX: &nbsp;<strong>{{vatTuEdit.NhaSX}}</strong></li>
+                    <li>Nước SX: &nbsp;<strong>{{vatTuEdit.NuocSX}}</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3 mt-3">
+            <legend>
+                Thông tin chỉnh sửa
+            </legend>
+
+            <div fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                    style="padding-top: 16px;">
+                    <app-textboxnumeric id="SoLuongAdd" fxFlex="20%" fxFlex.sm="20%" [(model)]="vatTuEdit.SoLuong"
+                        min="1" max="999999999" label="Số lượng"
+                        [validationerror]="'SoLuong' | validationerror:validationErrorsUpdate" required="true">
+                    </app-textboxnumeric>
+
+                    <app-autocomplete fxFlex="80%" fxFlex.sm="100%" [(model)]="vatTuEdit.GhiChu" (keyup)="onKey($event)"
+                        (openCombobox)="openCombobox($event)" [popupSettings]="null"
+                        [queryInfo]="{ParameterDependencies:'{LoaiDuocPhamHoacVatTu:' + loaiDuocPhamHoacVatTu +'}', Take: 50}"
+                        url="KhamBenh/GetGhiChuDonThuocChiTietString" label="Cách dùng">
+                    </app-autocomplete>
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" (click)="close()" mat-stroked-button color="primary"
+        mat-dialog-close>Hủy</button>
+    <button tabindex="-1" type="button" (click)="luuVatTu()" mat-stroked-button color="primary" class="md-primary">Cập
+        nhật</button>
+</mat-dialog-actions>

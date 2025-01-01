@@ -1,0 +1,188 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="khoa_phong" fxFlex="100%" label="Khoa phòng" [(model)]="khoaPhong" [disabled]="true">
+    </app-textbox>
+
+    <app-textbox id="chan_doan_vao_khoa" fxFlex="30%" label="Chẩn đoán vào khoa" [(model)]="chanDoanICD"
+        [disabled]="true">
+    </app-textbox>
+
+    <app-textbox id="mo_ta_chan_doan_vao_khoa" [(model)]="moTaICD" fxFlex="70%" label="Mô tả" [disabled]="true">
+    </app-textbox>
+
+    <div class="" fxFlex="100%">
+        <kendo-panelbar [keepItemContent]="true">
+            <kendo-panelbar-item
+                *ngFor="let item of thongTinBenhNhan.YeuCauKhamBenh.YeuCauDichVuKyThuatPhauThuat; let i = index"
+                [title]="item.Ten" expanded="true" class="panelbar-item panelbar-item-padr">
+                <ng-template kendoPanelBarContent>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                        style="padding-top: 16px;">
+                        <app-combobox id="cd_truoc_phau_thuat" fxFlex="30%" fxFlex.sm="30%" label="CĐ trước phẫu thuật"
+                            class="item-no-padding" [template]="truocPhauThuatTemplate" url="KhamBenh/GetListICD"
+                            [templateHeader]="truocPhauThuatTemplateHeader" [(model)]="item.ICDTruocPhauThuatId"
+                            [modelText]="item.ICDTruocPhauThuatDisplay"
+                            (selectionChange)="OnChangeCdTruocPhauThuat($event, item)" #cdTruocPhauThuat>
+                            <ng-template #truocPhauThuatTemplateHeader let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <th width="20%">Mã</th>
+                                        <th>Tên</th>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                            <ng-template #truocPhauThuatTemplate let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <td width="20%">{{dataItem.Ma}}</td>
+                                        <td>{{dataItem.TenBenh}}</td>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                        </app-combobox>
+
+                        <app-textbox id="mo_ta_cd_truoc_phau_thuat" fxFlex="70%" label="Mô tả" maxlength="4000"
+                            [(model)]="item.GhiChuICDTruocPhauThuat" (modelChange)="onChangeData()" #moTaTruocPhauThuat
+                            [validationerror]="'ListPttt['+i+'].GhiChuICDTruocPhauThuat' | validationerror:validationErrors">
+                        </app-textbox>
+
+                        <app-combobox id="cd_sau_phau_thuat" fxFlex="30%" fxFlex.sm="30%" label="CĐ sau phẫu thuật"
+                            class="item-no-padding" [template]="sauPhauThuatTemplate" url="KhamBenh/GetListICD"
+                            [templateHeader]="sauPhauThuatTemplateHeader" [(model)]="item.ICDSauPhauThuatId"
+                            [modelText]="item.ICDSauPhauThuatDisplay"
+                            (selectionChange)="OnChangeCdSauPhauThuat($event, item)" #cdSauPhauThuat>
+                            <ng-template #sauPhauThuatTemplateHeader let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <th width="20%">Mã</th>
+                                        <th>Tên</th>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                            <ng-template #sauPhauThuatTemplate let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <td width="20%">{{dataItem.Ma}}</td>
+                                        <td>{{dataItem.TenBenh}}</td>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                        </app-combobox>
+
+                        <app-textbox id="mo_ta_cd_sau_phau_thuat" fxFlex="70%" label="Mô tả" maxlength="4000"
+                            [(model)]="item.GhiChuICDSauPhauThuat" (modelChange)="onChangeData()"
+                            #moTaChanDoanSauPhauThuat
+                            [validationerror]="'ListPttt['+i+'].GhiChuICDSauPhauThuat' | validationerror:validationErrors">
+                        </app-textbox>
+
+                        <app-combobox id="phuong_phap_pttt" fxFlex="100%" fxFlex.sm="100%" label="Phương Pháp PTTT"
+                            class="item-no-padding" [template]="phuongPhapTemplate" url="KhamBenh/GetListPhuongPhapPTTT"
+                            [templateHeader]="phuongPhapTemplateHeader" [(model)]="item.PhuongPhapPhauThuatThuThuatKey"
+                            [modelText]="item.PhuongPhapPhauThuatThuThuatDisplay"
+                            (selectionChange)="onChangePhauThuatThuThuat($event, item)" #phuongPhapPttt>
+                            <ng-template #phuongPhapTemplateHeader let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <th width="20%">Mã</th>
+                                        <th>Tên PTTT</th>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                            <ng-template #phuongPhapTemplate let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <td width="20%">{{dataItem.Ma}}</td>
+                                        <td>{{dataItem.Ten}}</td>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                        </app-combobox>
+
+                        <app-textbox id="loai_pttt" fxFlex="30%" label="Loại PTTT" [(model)]="item.LoaiPTTTDisplay"
+                            [disabled]="true">
+                        </app-textbox>
+
+                        <app-combobox id="pp_vo_cam" fxFlex="70%" fxFlex.sm="70%" label="PP Vô Cảm"
+                            class="item-no-padding" [template]="phuongPhapVoCamTemplate"
+                            (selectionChange)="OnChangePhuongPhapVoCam($event, item)"
+                            url="KhamBenh/GetListPhuongPhapVoCam" [templateHeader]="phuongPhapVoCamTemplateHeader"
+                            [(model)]="item.PhuongPhapVoCamId" [modelText]="item.PhuongPhapVoCamDisplay"
+                            #phuongPhapVoCam>
+                            <ng-template #phuongPhapVoCamTemplateHeader let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <th width="20%">Mã</th>
+                                        <th>Tên</th>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                            <ng-template #phuongPhapVoCamTemplate let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <td width="20%">{{dataItem.Ma}}</td>
+                                        <td>{{dataItem.Ten}}</td>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                        </app-combobox>
+
+                        <app-textbox id="pttt_vien" fxFlex="30%" label="PTTT Viên"
+                            [(model)]="item.NhanVienThucHienDisplay" [disabled]="true">
+                        </app-textbox>
+
+                        <app-combobox id="tinh_hinh_pttt" fxFlex="70%" fxFlex.sm="70%" [(model)]="item.TinhHinhPttt"
+                            [modelText]="item.TinhHinhPtttDisplay" label="Tình Hình PTTT"
+                            (selectionChange)="OnChangeTinhHinhPttt($event, item)" url="KhamBenh/GetTinhHinhPttt"
+                            #tinhHinhPttt>
+                        </app-combobox>
+
+                        <app-combobox id="tai_bien_pttt" fxFlex="30%" fxFlex.sm="30%" [(model)]="item.TaiBienPttt"
+                            (selectionChange)="OnChangeTaiBien($event, item)" [modelText]="item.TaiBienPtttDisplay"
+                            label="Tai Biến PTTT" url="KhamBenh/GetTaiBienPttt" #taiBienPttt>
+                        </app-combobox>
+
+                        <app-combobox id="tu_vong_pttt" fxFlex="70%" fxFlex.sm="70%" [(model)]="item.TuVongPttt"
+                            [modelText]="item.TuVongPtttDisplay" label="Tử Vong Trong PTTT"
+                            (selectionChange)="OnChangeTuVong($event, item)" url="KhamBenh/GetTuVongPttt" #tuVongPttt>
+                        </app-combobox>
+
+                        <app-textarea id="trinh_tu_pttt" fxFlex="100%" fxFlex.sm="100%" maxlength="4000"
+                            (modelChange)="onChangeData()" label="Trình tự phẫu thuật" [(model)]="item.TrinhTuPttt"
+                            minHeight="20" #trinhTuPttt
+                            [validationerror]="'ListPttt['+i+'].TrinhTuPttt' | validationerror:validationErrors">
+                        </app-textarea>
+
+                        <h3 fxFlex="100%" class="sub-title">LƯỢC ĐỒ PTTT
+                            <button class="po-h" color="primary" (click)="UpLoadFile(item)">
+                                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+                            </button>
+                        </h3>
+
+                        <div fxFlex="100%" class="mb-3">
+                            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0">
+                                <div fxFlex="25%" *ngFor="let thongTinAnh of item.LuocDoPttts">
+                                    <div class="card overflow-hidden"
+                                        style="border: 1px solid #ccc;position: relative;">
+                                        <mat-icon [icIcon]="icClose" class="icon-close"
+                                            (click)="DeleteAnh(thongTinAnh, item)"></mat-icon>
+                                        <div
+                                            class="mat-ripple p-4 text-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                                            <img (click)="ViewImage(thongTinAnh)" src="{{thongTinAnh.LuocDoPhauThuat}}"
+                                                class="mx-auto" />
+                                        </div>
+                                        <div class="bg-app-bar p-2">
+                                            <p>{{thongTinAnh.MoTa}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <label *ngIf="showValidationMoTa" class="red"
+                            [innerHTML]="'ListPttt['+i+'].MoTa' | validationerror:validationErrors"></label>
+
+                    </div>
+                </ng-template>
+            </kendo-panelbar-item>
+        </kendo-panelbar>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+<app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useHeaderDefault]="false" [useAddDeault]="false" [useAddDeault]="false" [useActionDefault]="false" [checkboxAble]="false" [detailTemplate]="detailTemplate" [heightToolbar]="425" additionalSearchString={{id}}
+    [urlGetData]="urlGetDataGridParentAsync" [sort]="sort" (extDetailCollapse)="removeLog($event)" (extDetailExpand)="setMasterName($event)" #gridChiTietCha></app-grid>
+<ng-template #detailTemplate let-dataItem>
+    <app-grid [gridColumns]="gridChildColumns" [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [groups]="groups" masterName={{currentMasterName}} [removeGroupFooterIfIsOnlyOne]="true"
+        [urlGetData]="urlGetDataGridChildAsync" additionalSearchString={{dataItem.Id}} [autoHeight]="true" [pageable]="false" (extOnDataBound)="onDataBoundForChildren($event)" #gridChiTietCon>
+    </app-grid>
+</ng-template>
+<ng-template #orderTemplate let-i="rowIndex"><span>{{i+1}}</span></ng-template>
+
+<ng-template #nhomGroupHeaderTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+
+<ng-template #donGiaBenhVienTemplate let-dataItem>
+    {{dataItem.DonGiaBenhVien | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #donGiaGroupFooterTemplate let-dataItem>
+    <span style="float: right;">Cộng:</span>
+</ng-template>
+
+<ng-template #donGiaFooterTemplate let-dataItem>
+    <span style="float: right;">Tổng:</span>
+</ng-template>
+
+<ng-template #thanhTienTemplate let-dataItem>
+    {{dataItem.ThanhTienBenhVien | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #thanhTienFooterTemplate let-aggregates>
+    <span style="color:blue">{{totalThanhTien('ThanhTienBenhVien', aggregates) | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<ng-template #thanhTienGroupFooterTemplate let-aggregates>
+    {{aggregates.ThanhTienBenhVien.sum | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #dgbhytThamKhaoTemplate let-dataItem>
+    {{dataItem.DgbhytThamKhao | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #thanhTienBHYTThamKhaoTemplate let-dataItem>
+    {{dataItem.ThanhTienBhytThamKhao | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #templateDGBHYTCT let-dataItem>
+    {{dataItem.DgbhytChiTra | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #ttBHYTChiTraTemplate let-dataItem>
+    {{dataItem.TtbhytChiTra | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #ttBHYTChiTraGroupFooterTemplate let-aggregates>
+    {{aggregates.TtbhytChiTra.sum | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #ttBHYTChiTraFooterTemplate let-aggregates>
+    <span>{{totalThanhTien('TtbhytChiTra', aggregates) | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+<ng-template #tiLeTheoDvTemplate let-dataItem>
+    <span>{{dataItem.TiLeDv}}%</span>
+</ng-template>
+<ng-template #mucHuongTemplate let-dataItem>
+    <span>{{dataItem.MucHuong}}%</span>
+</ng-template>

@@ -1,0 +1,51 @@
+<app-header-form [crumbs]="[ {Title:'Khám Đoàn',Path:''}
+        ,{Title:'DS Công Ty', Path: '/kham-doan/cong-ty', queryParams: {holdQuery : true}}
+        ,{Title: header,Path:'',Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">{{title}}</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <div class="border-b" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <app-textbox id="maCongTY" fxFlex="20%" fxFlex.sm="20%" label="Mã công ty" [required]="true" [(model)]="khamDoanCongTy.Ma" [maxlength]="50" [validationerror]="'Ma' | validationerror:validationErrors">
+                    </app-textbox>
+                    <app-textbox id="tenCongTY" fxFlex="20%" fxFlex.sm="20%" label="Tên công ty" [required]="true" [(model)]="khamDoanCongTy.Ten" [maxlength]="250" [validationerror]="'Ten' | validationerror:validationErrors">
+                    </app-textbox>
+                    <app-textboxmask id="SoDienThoai" fxFlex="20%" fxFlex.sm="20%" mask="000 000-0000" label="Số Điện Thoại" [(model)]="khamDoanCongTy.SoDienThoai" [required]="true" [validationerror]="'SoDienThoai' | validationerror:validationErrors">
+                    </app-textboxmask>
+                    <app-textbox id="diaChiCongTY" fxFlex="40%" fxFlex.sm="40%" label="Địa chỉ" [required]="true" [(model)]="khamDoanCongTy.DiaChi" [maxlength]="250" [validationerror]="'DiaChi' | validationerror:validationErrors">
+                    </app-textbox>
+
+                    <app-textbox id="daiDienCongTY" fxFlex="20%" fxFlex.sm="20%" label="Đại diện"  [(model)]="khamDoanCongTy.NguoiDaiDien" [maxlength]="100" [validationerror]="'NguoiDaiDien' | validationerror:validationErrors">
+                    </app-textbox>
+                    <app-textbox id="nguoiLienHeCongTY" fxFlex="20%" fxFlex.sm="20%" label="Người liên hệ" [(model)]="khamDoanCongTy.NguoiLienHe"  [maxlength]="100" [validationerror]="'NguoiLienHe' | validationerror:validationErrors">
+                    </app-textbox>
+                    <app-textbox id="maSoThueCongTY" fxFlex="20%" fxFlex.sm="20%" label="Mã số thuế" [maxlength]="20" [(model)]="khamDoanCongTy.MaSoThue">
+                    </app-textbox>
+                    <app-textbox id="taiKhoanNganHangCongTY" fxFlex="20%" fxFlex.sm="20%" label="TK NH" [(model)]="khamDoanCongTy.SoTaiKhoanNganHang" [maxlength]="1000">
+                    </app-textbox>
+                    <app-radio fxFlex="20%" fxFlex.sm="20%" id="loaiCongTy" name="loaiCongTy" [(model)]="khamDoanCongTy.LoaiCongTy" [items]="[{Value:1,Text:'Tư Nhân'},{Value:2,Text:'Nhà Nước'}]" label="Công ty">
+                    </app-radio>
+
+                    <app-radio fxFlex="20%" fxFlex.sm="20%" id="trangThai" name="trangThai" [required]="true" [(model)]="khamDoanCongTy.CoHoatDong" [items]="[{Value:true,Text:'Hoạt động'},{Value:false,Text:'Tạm ngưng'}]" label="Trạng thái" [validationerror]="'CoHoatDong' | validationerror:validationErrors">
+                    </app-radio>
+
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="form-footer mt-6">
+                    <button *ngIf="!loading" style="margin-left: auto;" type="button" mat-stroked-button color="primary" (click)="quayLai()">Hủy</button>
+                    <button *ngIf="!loading" mat-raised-button mat-button color="primary" (click)="xuLyLuu()">Lưu</button>
+                    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                      alt="Loading" /></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

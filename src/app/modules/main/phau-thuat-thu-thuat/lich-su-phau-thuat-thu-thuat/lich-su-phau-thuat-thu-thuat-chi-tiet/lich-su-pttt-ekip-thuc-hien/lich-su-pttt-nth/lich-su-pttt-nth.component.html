@@ -1,0 +1,8 @@
+<h3 class="sub-title">Người thực hiện</h3>
+<app-grid *ngIf="yeuCauDichVuKyThuatId != undefined && yeuCauDichVuKyThuatId != null" #gridPttt masterName="gridPttt"
+    [gridColumns]="gridNguoiThucHienColumns" [documentType]="documentType" [useAddDeault]="false"
+    urlGetData="PhauThuatThuThuat/GetDataForGridAsyncLichSuEkipBacSi"
+    urlGetTotalPage="PhauThuatThuThuat/GetTotalPageForGridAsyncLichSuEkipBacSi" class="k-grid-border"
+    [additionalSearchString]="yeuCauDichVuKyThuatId" [useHeaderDefault]="false" [useActionDefault]="false"
+    [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true" [pageable]="false">
+</app-grid>

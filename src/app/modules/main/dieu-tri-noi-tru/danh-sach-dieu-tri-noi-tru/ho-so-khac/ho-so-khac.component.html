@@ -1,0 +1,71 @@
+<div class="m-1 mb-4" fxLayout="row wrap" fxLayout.lt-sm="column">
+    <div fxFlex="50%" fxFlex.sm="70%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" *ngIf="!dieuTriNoiTruModel.KetThucBenhAn">
+
+        <app-combobox id="ho-so" class="item-no-padding" fxFlex="65%" label="Chọn hồ sơ" bind="true" url="DieuTriNoiTru/GetListLoaiHoSoDieuTriNoiTru" [popupSettings]="null" [(model)]="hoSoKhacModel" (openCombobox)="openCombobox($event)" (keyup)="onKeyMaDichVu($event)"
+            (dataForLookupChange)="dataHoSoKhacChange($event)">
+        </app-combobox>
+
+        <div fxFlex="20%">
+            <button class="mt-2" (click)="themHoSo()" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm" type="button">
+                <mat-icon [icIcon]="icAdd"></mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div fxFlex="{{!dieuTriNoiTruModel.KetThucBenhAn?'50%':'100%'}}" fxFlex.sm="100%" kendoTooltip class="sticky-button-action text-right">
+        <button class="mt-2" type="button" mat-raised-button color="primary" (click)="inTatCa()">In tất cả</button>
+    </div>
+</div>
+<div *ngIf="hoSoKhacDaChonViewModel!=null && hoSoKhacDaChonViewModel.length>0">
+    <kendo-panelbar class="m-1">
+        <kendo-panelbar-item *ngFor="let item of hoSoKhacDaChonViewModel" title="" class="panelbar-item">
+            <ng-template kendoPanelBarItemTitle>
+                {{item.DisplayName|uppercase}} <a *ngIf="item.KeyId!=loaiHoSoDieuTriNoiTru.PhieuChamSoc" (click)="remove(item)" style="margin-left: 20px;color: blue;text-decoration: underline;font-weight: normal;font-style: italic;">Hủy phiếu</a>
+            </ng-template>
+            <ng-template kendoPanelBarContent>
+                <app-phieu-sang-loc-dinh-duong [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuSangLocDinhDuong"></app-phieu-sang-loc-dinh-duong>
+                <app-phieu-khai-thac-tien-su-di-ung [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuKhaiThacTienSuDiUng"></app-phieu-khai-thac-tien-su-di-ung>
+                <app-trich-bien-ban-hoi-chan [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.TrichBienBanHoiChan"></app-trich-bien-ban-hoi-chan>
+                <app-phieu-theo-doi-chuc-nang-song [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuTheoDoiChucNangSong"></app-phieu-theo-doi-chuc-nang-song>
+                <app-phieu-tom-tat-cure-info-va-services [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuTomTatThongTinDieuTri"></app-phieu-tom-tat-cure-info-va-services>
+                <app-bien-ban-hoi-chan-phau-thuat [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BienBanHoiChanPhauThuat"></app-bien-ban-hoi-chan-phau-thuat>
+                <app-bien-ban-hoi-chan-gay-me [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" [IsKetThucBenhAn]="dieuTriNoiTruModel.KetThucBenhAn" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BienBanCamKetGayMeGayTe"></app-bien-ban-hoi-chan-gay-me>
+                <app-bien-ban-cam-ket-phau-thuat [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BienBanCamKetPhauThuat"></app-bien-ban-cam-ket-phau-thuat>
+                <app-bien-ban-cam-ket-gay-te [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BienBanCamKetGayTeGiamDauTrongDeSauMo"></app-bien-ban-cam-ket-gay-te>
+                <app-bang-kiem-an-toan-phau-thuat [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BangKiemAnToanPhauThuat"></app-bang-kiem-an-toan-phau-thuat>
+                <app-phieu-kham-gay-me-truoc-mo [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuKhamGayMeTruocMo"></app-phieu-kham-gay-me-truoc-mo>
+                <app-giay-kham-chua-benh-theo-yc [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayKhamChuaBenhTheoYc"></app-giay-kham-chua-benh-theo-yc>
+                <app-giay-tu-nguyen-triet-san [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayTuNguyenTrietSan"></app-giay-tu-nguyen-triet-san>
+                <app-giay-chuyen-tuyen [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayChuyenTuyen"></app-giay-chuyen-tuyen>
+                <app-bang-theo-doi-hoi-tinh [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BangTheoDoiHoiTinh"></app-bang-theo-doi-hoi-tinh>
+                <app-ban-kiem-truoc-tiem-chung-tre-em [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" [IsKetThucBenhAn]="dieuTriNoiTruModel.KetThucBenhAn" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BanKiemTruocTiemChungTreEm"></app-ban-kiem-truoc-tiem-chung-tre-em>
+                <app-tong-hop-y-lenh-detail [dieuTriNoiTruModel]="dieuTriNoiTruModel" [IsDieuTriNoiTru]="true" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuChamSoc"></app-tong-hop-y-lenh-detail>
+                <app-phieu-so-ket-muoi-lam-ngay-dieu-tri [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuSoKet15NgayDieuTri"></app-phieu-so-ket-muoi-lam-ngay-dieu-tri>
+                <app-bang-kiem-at-nguoi-benh-pt [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BangKiemAnToanNguoiBenhPhauThuat"></app-bang-kiem-at-nguoi-benh-pt>
+                <app-bang-kiem-nhan-bn-tpm-ve-khoa-dt [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BangKiemAnToanNguoiBenhTuPhongMoVePhongDieuTri"></app-bang-kiem-nhan-bn-tpm-ve-khoa-dt>
+                <app-ban-theo-doi-gay-me-hoi-suc [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BangTheoDoiGayMeHoiSuc"></app-ban-theo-doi-gay-me-hoi-suc>
+                <app-phieu-cong-khai-thuoc [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuCongKhaiThuoc"></app-phieu-cong-khai-thuoc>
+                <app-phieu-cong-khai-vat-tu [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuCongKhaiVatTu"></app-phieu-cong-khai-vat-tu>
+                <app-phieu-cong-khai-dich-thuoc-vat-tu [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuCongKhaiThuocVatTu"></app-phieu-cong-khai-dich-thuoc-vat-tu>
+                <app-phieu-cong-khai-dich-vu-ky-thuat [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuCongKhaiDichVuKyThuat"></app-phieu-cong-khai-dich-vu-ky-thuat>
+                <app-phieu-de-nghi-test-truoc-khi-dung [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuDeNghiTestTruocKhiDungThuoc"></app-phieu-de-nghi-test-truoc-khi-dung>
+                <app-phieu-theo-doi-truyen-dich [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuTheoDoiTruyenDich"></app-phieu-theo-doi-truyen-dich>
+                <app-phieu-theo-doi-truyen-mau [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.PhieuTheoDoiTruyenMau"></app-phieu-theo-doi-truyen-mau>
+                <app-giay-ra-vien [dieuTriNoiTruModel]="dieuTriNoiTruModel" [IsKetThucBenhAn]="dieuTriNoiTruModel.KetThucBenhAn" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayRaVien"></app-giay-ra-vien>
+                <app-tom-tat-ho-so-ba [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.TomTatHoSoBenhAn"></app-tom-tat-ho-so-ba>
+                <app-giay-chung-sinh [IsKetThucBenhAn]="dieuTriNoiTruModel.KetThucBenhAn" (returnId)="returnId($event,item)" [dieuTriNoiTruModel]="dieuTriNoiTruModel" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayChungSinh"></app-giay-chung-sinh>
+                <app-giay-ck-tu-nguyen-sd-thuoc [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayCamKetTuNguyenSuDungThuoc"></app-giay-ck-tu-nguyen-sd-thuoc>
+                <app-chung-nhan-nghi-viec-huong-bhxh [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayChungNhanNghiViecHuongBHXH"></app-chung-nhan-nghi-viec-huong-bhxh>
+                <app-chung-sinh-mang-thai-ho [dieuTriNoiTruModel]="dieuTriNoiTruModel" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayChungSinhMangThaiHo" (returnId)="returnId($event,item)"></app-chung-sinh-mang-thai-ho>
+                <app-bieu-do-chuyen-da [dieuTriNoiTruModel]="dieuTriNoiTruModel" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BieuDoChuyenDa" (returnId)="returnId($event,item)"></app-bieu-do-chuyen-da>
+                <app-giay-cam-ket-ky-thuat-moi [dieuTriNoiTruModel]="dieuTriNoiTruModel" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayCamKetKyThuatMoi" (returnId)="returnId($event,item)" ></app-giay-cam-ket-ky-thuat-moi>
+                <app-ho-so-cham-soc-dieu-duong-hs [dieuTriNoiTruModel]="dieuTriNoiTruModel" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.HoSoChamSocDieuDuongHoSinh" (returnId)="returnId($event,item)" ></app-ho-so-cham-soc-dieu-duong-hs>
+                <app-bien-ban-hoi-chan-sd-thuoc-co-dau [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.BienBanHoiChanPhauThuatSuDungThuocCoDau"></app-bien-ban-hoi-chan-sd-thuoc-co-dau>
+                <app-giay-nghi-duong-thai-noi-tru [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayNghiDuongThai"></app-giay-nghi-duong-thai-noi-tru>
+                <app-giay-chung-nhan-phau-thuat [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayChungNhanPhauThuat"></app-giay-chung-nhan-phau-thuat>
+                <app-giay-cam-ket-kt-moi-gay-me-hs [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayCamKetKyThuatMoiHS"></app-giay-cam-ket-kt-moi-gay-me-hs>
+                <app-giay-thoa-thuan-lua-chon-dv-kham-theo-yc [dieuTriNoiTruModel]="dieuTriNoiTruModel" (returnId)="returnId($event,item)" *ngIf="item.KeyId==loaiHoSoDieuTriNoiTru.GiayThoaThuanLuaChonDichVuKhamChuabenhTheoYeuCau"></app-giay-thoa-thuan-lua-chon-dv-kham-theo-yc>
+            </ng-template>
+        </kendo-panelbar-item>
+    </kendo-panelbar>
+</div>

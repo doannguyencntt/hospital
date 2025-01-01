@@ -1,0 +1,84 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between" >
+    <div fxFlex="100%" *ngIf="thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.TrangThai == '5'">
+        <h4 style="color: red;">Lý do: {{thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.LyDoTuChoi}}</h4>
+    </div>
+    <app-combobox id="KyDuTru" fxFlex="20%" fxFlex.sm="20%" [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.KyDuTruId"
+        [modelText]="thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.KyDuTru" label="Kỳ dự trù" [autoSelectFirstItem]="true"
+        [disabled]="isDisableTrangThai" url="">
+    </app-combobox>
+    <app-textbox id="nguoiYeuCau" fxFlex="20%" [required]="true"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.TenNguoiYeuCau" bind="true" label="Người yêu cầu" class="item-no-padding"
+         [disabled]="isDisableTrangThai">
+    </app-textbox>
+
+    <app-datepicker id="NgayYeuCau" fxFlex="20%" [required]="true" label="Ngày yêu cầu"
+        [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.NgayYeuCau"
+         [disabled]="isDisableTrangThai">
+    </app-datepicker>
+    <app-textbox id="GhiChu" fxFlex="40%"  [(model)]="thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.GhiChu"
+        bind="true" label="Ghi chú" class="item-no-padding"  [disabled]="thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.TrangThai == '5' || thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.TrangThai == '4' || thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.TrangThai == '3'"
+        [validationerror]="'GhiChu' | validationerror:validationErrors" >
+    </app-textbox>
+     <span fxFlex="100%"><b>THÔNG TIN CHI TIẾT</b></span>
+    <div class="px-6 py-4" fxLayout="column">
+        <app-grid baseRoute="" #grid [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            [gridDataSource]="gridDataSource"  [detailTemplate]="detailChildTemplate"
+            [autoHeight]="true" [pageable]="false" [groups]="groups">
+        </app-grid>
+    </div>
+    <ng-template #detailChildTemplate let-dataItem>
+        <app-grid baseRoute="" *ngIf="thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.TrangThai == '0'" [gridColumns]="gridChildChildColumns" [documentType]="documentType" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            [gridDataSource]="getDataSourceChild(dataItem)"  [pageable]="false"
+            additionalSearchString=""  [autoHeight]="true" [groups]="groupNhoms" [removeGroupFooterIfIsOnlyOne]="true">
+        </app-grid>
+        <app-grid baseRoute=""  *ngIf="thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.TrangThai == '5'" [gridColumns]="gridChildChildColumns" [documentType]="documentType" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            urlGetData="YeuCauMuaDuocPham/GetDuTruMuaDuocPhamChiTietGoiViewChild" [removeGroupFooterIfIsOnlyOne]="true"
+            additionalSearchString="{{dataItem.Id}}"  [autoHeight]="true" [groups]="groupNhoms" [pageable]="false">
+        </app-grid>
+        <app-grid baseRoute=""  *ngIf="thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.TrangThai == '3'" [gridColumns]="gridChildChildColumns" [documentType]="documentType" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+        urlGetData="YeuCauMuaDuocPham/GetDuTruMuaDuocPhamChiTietGoiViewChild" [removeGroupFooterIfIsOnlyOne]="true"
+        additionalSearchString="{{dataItem.Id}}"  [autoHeight]="true" [groups]="groupNhoms" [pageable]="false">
+    </app-grid>
+        <app-grid baseRoute=""  *ngIf="thongTinDuTruMuaDuocPhamTaiKhoaDuocGoi.TrangThai == '4'" [gridColumns]="gridChildChildColumns" [documentType]="documentType" [useAddDeault]="false"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+        urlGetData="YeuCauMuaDuocPham/GetDuTruMuaDuocPhamChiTietGoiViewChild" [removeGroupFooterIfIsOnlyOne]="true"
+        additionalSearchString="{{dataItem.Id}}"  [autoHeight]="true" [groups]="groupNhoms" [pageable]="false">
+    </app-grid>
+    </ng-template>
+    <ng-template #tenNhomGroupHeaderTemplate let-value="value" let-dataItem>
+        <div fxFlex="100%">
+            <strong fxFlex="15%" >
+                <span>{{value}}</span> 
+            </strong>
+        </div>
+    </ng-template>
+    <ng-template #loaiNhomGroupHeaderTemplate let-value="value" let-dataItem>
+        <div fxFlex="100%">
+            <strong fxFlex="15%">
+                <span *ngIf="value == true"><b>BHYT</b></span>
+                <span *ngIf="value == false"><b>KhôngBHYT</b></span>
+            </strong>
+        </div>
+    </ng-template>
+    <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+    <ng-template #loaiTemplate let-dataItem >
+        <span *ngIf="dataItem.Loai == true"><b>BHYT</b></span>
+        <span *ngIf="dataItem.Loai == false"><b>KhôngBHYT</b></span>
+    </ng-template>
+    <ng-template #khoaTemplate let-dataItem let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+    <ng-template #soLuongDuTruHeaderTemplate let-aggregates="aggregates">
+        <strong>{{aggregates.SLDuTru.sum | number:'1.0':'vi-VN' }}</strong>
+    </ng-template>
+    <ng-template #soLuongDuKienHeaderTemplate let-aggregates="aggregates">
+        <strong>{{aggregates.SLDuKienTrongKy.sum | number:'1.0':'vi-VN' }}</strong>
+    </ng-template>
+</div>

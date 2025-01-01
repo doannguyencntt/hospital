@@ -1,0 +1,72 @@
+fieldset {
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em !important;
+    padding-bottom: 0.625em !important;
+    padding-left: 0.75em !important;
+    padding-right: 0.75em !important;
+    border: 1px #e0e0e0;
+    border-style: inherit;
+    //border-radius: 4%;
+    legend {
+        margin-left: 15px;
+        display: flex;
+        align-items: flex-end;
+        text-transform: uppercase;
+    }
+    .item_right {
+        text-align: right !important;
+        float: right;
+    }
+    ul>li {
+        padding-right: 15px !important;
+    }
+    ul.inline>li {
+        display: inline-block !important;
+    }
+    .render-header {
+        justify-content: space-between !important;
+    }
+}
+
+.hide {
+    display: none;
+}
+
+.check-box-tao-tai-khoan {
+    margin-right: 10px;
+}
+
+.avt {
+    display: table;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 16px 16px 44px 16px;
+    width: 100%;
+    border-bottom: 1px solid rgba(82, 63, 105, 0.42);
+    border-radius: 4px 4px 0 0;
+    &:hover {
+        border-bottom: 2px solid #005dab;
+    }
+    .content {
+        text-align: center;
+        height: 198px;
+        max-width: 168px;
+        margin: 0 auto;
+        .avatar-hsct {
+            border: 1px solid #ccc;
+            border-radius: 9999px;
+            width: 100%;
+            height: 168px;
+            cursor: pointer;
+            &:hover {
+                border: 1px solid #005dab;
+            }
+            img {
+                width: 100%;
+                height: 168px;
+                border-radius: 9999px;
+            }
+        }
+    }
+}

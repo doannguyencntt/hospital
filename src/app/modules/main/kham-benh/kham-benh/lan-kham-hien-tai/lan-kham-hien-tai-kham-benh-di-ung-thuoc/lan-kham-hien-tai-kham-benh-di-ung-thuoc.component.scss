@@ -1,0 +1,26 @@
+ul.inline > li{
+    padding-right: 10px !important;
+    padding-bottom: 0.625em;
+    display: inline-block !important;
+}
+
+.po-h{
+    color: #005dab;
+    position: relative;
+    top: 5px;
+    left: 5px;
+    mat-icon{
+        display: contents;
+    }
+}
+
+table#tbl-di-ung{
+    border:1px solid #ccc;
+    th, td{
+        border:1px solid #ccc;
+    }
+} 
+
+.btn-blue{
+    color: #005dab;
+}

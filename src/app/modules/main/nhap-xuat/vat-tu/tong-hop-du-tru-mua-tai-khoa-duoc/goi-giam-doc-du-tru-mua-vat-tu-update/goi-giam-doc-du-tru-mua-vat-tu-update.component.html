@@ -1,0 +1,32 @@
+<app-header-form [crumbs]="[
+{Title:'Nhập xuất',Path:''}
+,{Title:'Vật Tư',Path:''}
+,{Title:'Dự trù mua',Path:''}
+,{Title:'THDT Mua Tại K.Dược​​',Path:'/nhap-xuat/vat-tu/tong-hop-mua-vat-tu-tai-khoa-duoc',queryParams: {holdQuery : true},Active:true}
+]" [isicMoreVert]="false">
+</app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0" *ngIf="thongTinDuTruMuaVatTuTaiKhoaDuocGoi.TrangThai != '0'">Gửi Tổng Hợp Dự Trù Mua Vật Tư</h2>
+                <h2 class="title m-0" *ngIf="thongTinDuTruMuaVatTuTaiKhoaDuocGoi.TrangThai == '0'">Gửi Tổng Hợp Dự Trù Mua Vật Tư</h2>
+                <b
+                    class="status-yeu-cau-linh trang-thai t{{thongTinDuTruMuaVatTuTaiKhoaDuocGoi.TrangThai}}">{{thongTinDuTruMuaVatTuTaiKhoaDuocGoi.TrangThaiHienThi}}</b>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-goi-giam-doc-du-tru-mua-vat-tu-shared (dataItem)="getDataItem($event)">
+                </app-goi-giam-doc-du-tru-mua-vat-tu-shared>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" (click)="huy()" mat-button class="mr-1 align-right-fx"*ngIf="thongTinDuTruMuaVatTuTaiKhoaDuocGoi.TrangThai != '2'"><i class="ft-arrow-left"></i> Quay lại
+                    </button>
+                    <button type="button" (click)="huy()" mat-button class="mr-1 align-right-fx" *ngIf="thongTinDuTruMuaVatTuTaiKhoaDuocGoi.TrangThai == '2'"><i class="ft-arrow-left"></i> Hủy
+                    </button>
+                    <button type="button" (click)="goi()"  *ngIf="thongTinDuTruMuaVatTuTaiKhoaDuocGoi.TrangThai == '2'" color="primary" mat-raised-button><i class="ft-save"></i> Gửi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

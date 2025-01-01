@@ -1,0 +1,74 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="
+                    [
+                    {Title:'Nhà Thuốc',Path:''},
+                    {Title:'Khách vãng lai',Path:'/nha-thuoc', Active:true}
+                    ]">
+            </vex-breadcrumbs>
+            <app-hot-key [keys]="[
+            {Key:'Ctrl + F1',Description:'Di chuyển tới và mở tab Mua thuốc'},
+            {Key:'Ctrl + F2',Description:'Di chuyển tới và mở tab Chờ xuất thuốc'},
+            {Key:'Ctrl + S',Description:'Thu tiền'},
+            {Key:'Esc',Description:'Quay lại', End:true}
+            ]"></app-hot-key>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column">
+                        <app-quay-thuoc-khach-vang-lai-thong-tin-hanh-chinh (valueChange)="switchValueChanges($event)"
+                            [validationErrors]="validationErrorForThongTin" [donThuocId]="donThuocIds" [MaBN]="MaBN"
+                            [TenBenhNhan]="TenBenhNhan" [SDT]="SDT"
+                            [ThongTinBenhNhanDaThuTienData]="ThongTinBenhNhanDaThuTien">
+                        </app-quay-thuoc-khach-vang-lai-thong-tin-hanh-chinh>
+                        <kendo-tabstrip fxFlex="100%" class="content-has-border has-padding mt-3"
+                            [keepTabContent]="true" (tabSelect)="onTabSelect($event)" #tabVangLai>
+                            <kendo-tabstrip-tab [selected]="kendoTabSelected===1">
+                                <ng-template kendoTabContent>
+                                    <app-quay-thuoc-khach-vang-lai-cho-thanh-toan
+                                        [thongTinKhachVangLai]="thongTinBenhNhan"
+                                        (valueChangeThuTien)="switchValueChangesChoThanhToan($event)"
+                                        [donThuocId]="donThuocIds" [ttCheck]="ttCheck" (changeTab)="changeTab($event)"
+                                        (MaTiepNhanBenhNhanDaThuTien)="MaTiepNhanBenhNhanDaThuTien($event)"
+                                        (danhSachChuaThanhToan)="danhSachChuaThanhToan($event)">
+                                    </app-quay-thuoc-khach-vang-lai-cho-thanh-toan>
+                                </ng-template>
+                                <ng-template kendoTabTitle>
+                                    <div kendoTooltip title="Phím tắt: Ctrl + F1">
+                                        Mua thuốc
+                                    </div>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+                            <kendo-tabstrip-tab [selected]="kendoTabSelected===2">
+                                <ng-template kendoTabContent>
+                                    <app-quay-thuoc-khach-vang-lai-cho-xuat-thuoc
+                                        [ThongTinBenhNhanDaThuTienData]="ThongTinBenhNhanDaThuTien" [ttCheck]="ttCheck">
+                                    </app-quay-thuoc-khach-vang-lai-cho-xuat-thuoc>
+                                </ng-template>
+                                <ng-template kendoTabTitle>
+                                    <div kendoTooltip title="Phím tắt: Ctrl + F2">
+                                        Chờ xuất thuốc
+                                    </div>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+                        </kendo-tabstrip>
+                        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+                            <!-- <button type="button" (click)="inXemTruocBangKeThuoc()" mat-raised-button
+                                title="In Bảng Kê">
+                                In Bảng Kê
+                            </button> -->
+                            <button type="button" (click)="Huy()" mat-raised-button title="Phím tắt: ESC">
+                                Quay lại
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

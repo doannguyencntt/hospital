@@ -1,0 +1,267 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                {Title:'Thống Kê', Path:''},
+                {Title:'Báo Cáo', Path:''},
+                {Title:'Phẫu Thuật', Path:''},
+                {Title:'Sổ Phúc Trình Phẫu Thuật Thủ Thuật', Path:'', Active:true}]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6 pb-0">
+        <div class="card -mt-15">
+
+            <kendo-grid #baoCaoGrid id="baoCaoGrid" [pageable]="true" [height]="height" [resizable]="true"
+                [pageSize]="pageSize" [skip]="skip" (pageChange)="pageChange($event)" [data]="gridDataSource"
+                class="grid-bao-cao grid-custom-toolbar">
+
+                <ng-template kendoGridToolbarTemplate>
+                    <div class="bg-app-bar px-3  border-b sticky left-0" fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                        <!-- <app-combobox id="KhoaId" fxFlex="15%" fxFlex.sm="15%" hierarchyKeyToSend="khoa" class="mt-1 on-header"
+                            popupSettings="null" [templateHeader]="khoaTemplateHeader" [template]="khoaTemplate" label="Khoa"
+                            url="GiuongBenh/GetListKhoaPhong" bind="true" [(model)]="baoCaoSearch.KhoaId">
+                        </app-combobox>
+                        <ng-template #khoaTemplateHeader let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <th width="30%">Mã</th>
+                                    <th>Tên</th>
+                                </tr>
+                            </table>
+                        </ng-template>
+                        <ng-template #khoaTemplate let-dataItem>
+                            <table width="100%" class="table-combobox">
+                                <tr>
+                                    <td width="30%">{{dataItem.Ma}}</td>
+                                    <td>{{dataItem.Ten}}</td>
+                                </tr>
+                            </table>
+                        </ng-template> -->
+                    
+                        <app-multiselect fxFlex="20%" [(model)]="baoCaoSearch.KhoaPhongIds"
+                            (modelChange)="changeKhoa($event)" [modelText]="" label="Khoa" class="on-header item-no-padding"
+                            [template]="khoaPhongTemplate" [templateHeader]="khoaPhongTemplateHeader" [popupSettings]="null"
+                            [autoClose]="false" url="DichVuKyThuatBenhVien/GetKhoaKham">
+                            <ng-template #khoaPhongTemplateHeader let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <th width="20%">Mã</th>
+                                        <th>Tên</th>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                            <ng-template #khoaPhongTemplate let-dataItem>
+                                <table width="100%" class="table-combobox">
+                                    <tr>
+                                        <td width="20%">{{dataItem.Ma}}</td>
+                                        <td>{{dataItem.Ten}}</td>
+                                    </tr>
+                                </table>
+                            </ng-template>
+                        </app-multiselect>
+                        
+                        <app-multiselect #noiThucHien fxFlex="20%" [(model)]="baoCaoSearch.NoiThucHienIds"
+                            [modelText]="" label="Nơi thực hiện" class="on-header item-no-padding" [template]="phongBenhVienTemplate"
+                            [queryInfo]="queryNoiThucHien" url="DichVuKyThuatBenhVien/GetPhongKhamTheoDichVuKyThuatBenhVien"
+                            [autoClose]="false" [hierarchyKeyToSend]="'NoiThucHienIds'" [popupSettings]="null">
+                            <ng-template #phongBenhVienTemplate let-dataItem>
+                                <div>
+                                    <input type="checkbox" class="k-checkbox" [checked]="isItemSelected(dataItem)">
+                                    <label [ngClass]="dataItem.KhoaId !== null ? 'item-multi-child' : 'item-multi-parent'"
+                                        class="k-checkbox-label">{{dataItem.DisplayName}}</label>
+                                </div>
+                            </ng-template>
+                        </app-multiselect>
+
+                        <app-checkbox [(model)]="baoCaoSearch.LaPhauThuat" 
+                            id="laPhauThuat" label="Phẫu thuật" class="ml-2"> 
+                        </app-checkbox>
+                        <app-checkbox [(model)]="baoCaoSearch.LaThuThuat" 
+                            id="laThuThuat" label="Thủ thuật" class="ml-2"> 
+                        </app-checkbox>
+
+                        <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                            [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                        </app-datetimepicker>
+                    
+                        <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                            [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                        </app-datetimepicker>
+                    
+                        <div fxFlex="20%" fxFlex.sm="20%" class="pb-0">
+                            <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2" (click)="XemBaoCao()">Xem
+                                Báo Cáo
+                            </button>
+                            <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                                (click)="exportExcel()">Xuất Excel</button>
+                        </div>
+
+                        <!-- <span fxFlex></span> -->
+
+                        <button [matMenuTriggerFor]="columnFilterMenu" fxFlex="none" class="mr-4" mat-icon-button
+                            kendoTooltip title="Lọc cột" type="button">
+                            <mat-icon [icIcon]="icFilterList"></mat-icon>
+                        </button>
+
+                        <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                            <div *ngFor="let column of gridColumns">
+                                <button *ngIf="column.Title != ''"
+                                    class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                                    <mat-checkbox [disabled]="true" color="primary">
+                                        {{ column.Title }}
+                                    </mat-checkbox>
+                                </button>
+                            </div>
+                        </mat-menu>
+                    </div>
+                </ng-template>
+
+                <ng-container *ngFor="let column of gridColumns, index as i">
+                    <ng-container 
+                    *ngIf="column.Field != 'ChuanDoanTruocPt' 
+                        && column.Field != 'ChuanDoanSauPt' 
+                        && column.Field != 'ThoiGianPhauThuatStart' 
+                        && column.Field != 'ThoiGianPhauThuatEnd'">
+                        <kendo-grid-column field="{{column.Field}}" title="{{column.Title}}" width="{{getWidthColumn(i)}}"
+                            [headerStyle]="{'text-align': 'center','vertical-align': 'top'}" [style]="{'text-align': 'left'}">
+                            <ng-container [ngSwitch]="column.Field">
+                                <ng-template *ngSwitchCase="'STT'" kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    {{rowIndex + 1}}
+                                </ng-template>
+                                <ng-template *ngSwitchCase="'SoLuong'" kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="reverse-ellipsis r" style="text-align: left;">{{ getValueByName(column.Field, dataItem) | number}}</div>
+                                </ng-template>
+                                <ng-template *ngSwitchCase="'DonGia'" kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="reverse-ellipsis r" style="text-align: left;">{{ getValueByName(column.Field, dataItem) | number}}</div>
+                                </ng-template>
+
+                                <ng-template *ngSwitchDefault kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="reverse-ellipsis r" style="text-align: left;">{{ getValueByName(column.Field, dataItem)}}</div>
+                                </ng-template>
+                            </ng-container>
+                        </kendo-grid-column>
+                    </ng-container>
+                    <ng-container 
+                    *ngIf="column.Field == 'ChuanDoanTruocPt'">
+                        <kendo-grid-column-group title="Chẩn đoán">
+                            <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                <div class="text-center">
+                                    {{'Chẩn đoán'}}
+                                </div>
+                            </ng-template>
+
+                            <kendo-grid-column kendoTooltip field="{{getFieldColumn(i)}}" title="{{getTitleColumn(i)}}" width="{{getWidthColumn(i)}}"
+                                [headerStyle]="{'text-align': 'center','vertical-align': 'top'}" [style]="{'text-align': 'left'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="reverse-ellipsis r" style="text-align: left;">{{ getValueByName(getFieldColumn(i), dataItem)}}</div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column kendoTooltip field="{{getFieldColumn(i+1)}}" title="{{getTitleColumn(i+1)}}" width="{{getWidthColumn(i+1)}}"
+                                [headerStyle]="{'text-align': 'center','vertical-align': 'top'}" [style]="{'text-align': 'left'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="reverse-ellipsis r" style="text-align: left;">{{ getValueByName(getFieldColumn(i+1), dataItem)}}</div>
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid-column-group>
+                    </ng-container>
+
+                    <ng-container 
+                    *ngIf="column.Field == 'ThoiGianPhauThuatStart'">
+                        <kendo-grid-column-group title="Thời gian phẫu thuật">
+                            <ng-template kendoGridHeaderTemplate let-columnIndex="columnIndex" let-column="column">
+                                <div class="text-center">
+                                    {{'Thời gian phẫu thuật'}}
+                                </div>
+                            </ng-template>
+
+                            <kendo-grid-column kendoTooltip field="{{getFieldColumn(i)}}" title="{{getTitleColumn(i)}}" width="{{getWidthColumn(i)}}"
+                                [headerStyle]="{'text-align': 'center','vertical-align': 'top'}" [style]="{'text-align': 'left'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="reverse-ellipsis r" style="text-align: left;">{{ getValueByName(getFieldColumn(i), dataItem)}}</div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column kendoTooltip field="{{getFieldColumn(i+1)}}" title="{{getTitleColumn(i+1)}}" width="{{getWidthColumn(i+1)}}"
+                                [headerStyle]="{'text-align': 'center','vertical-align': 'top'}" [style]="{'text-align': 'left'}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <div class="reverse-ellipsis r" style="text-align: left;">{{ getValueByName(getFieldColumn(i+1), dataItem)}}</div>
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid-column-group>
+                    </ng-container>
+                </ng-container>
+
+                <kendo-grid-messages noRecords="Không có dữ liệu." pagerOf="trong số" pagerItems="dòng" detailExpand="Mở rộng chi tiết"
+                    detailCollapse="Thu gọn chi tiết">
+                </kendo-grid-messages>
+                
+                <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+                    <div style="justify-content: center;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-between"
+                        fxFlex="100%" *ngIf="_showDefaultPagerTemplate">
+                        <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                        <kendo-pager-numeric-buttons [buttonCount]="5" class="d-none d-sm-none d-md-block">
+                        </kendo-pager-numeric-buttons>
+                        <button *ngIf="_isLoadingTotalPage" kendoButton class="btn btn-raised btn-default btn-min-width mb-0">
+                            <img src="/assets/img/loader_circle.gif" alt="Đang tính..." style="height: 20px;" />
+                        </button>
+                        <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                        <kendo-pager-info></kendo-pager-info>
+                        <div kendoTooltip class="k-icon k-i-refresh" style="order: 10;cursor: pointer; align-self: center;"
+                            title="Làm mới" (click)="XemBaoCao()"></div>
+                        <div *ngIf="_isLoading" class="grid-loading k-i-loading"></div>
+                    </div>
+                </ng-template>
+            </kendo-grid>
+
+            <!-- <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-combobox id="KhoaId" fxFlex="15%" fxFlex.sm="15%" hierarchyKeyToSend="khoa" class="mt-1 on-header"
+                    popupSettings="null" [templateHeader]="khoaTemplateHeader" [template]="khoaTemplate" label="Khoa"
+                    url="GiuongBenh/GetListKhoaPhong" bind="true" [(model)]="baoCaoSearch.KhoaId">
+                </app-combobox>
+
+                <ng-template #khoaTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="30%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #khoaTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="30%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="35%" fxFlex.sm="35%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo
+                    </button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+                    <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+                        [lazyLoadPage]="true" [useHeaderDefault]="false" [autoHeight]="true" [checkboxAble]="false"
+                        [showStt]="true" [pageable]="true" urlGetData="BaoCao/GetDataBaoCaoSoPhucTrinhPhauThuatThuThuatForGridAsync" urlGetTotalPage="BaoCao/GetTotalPageBaoCaoSoPhucTrinhPhauThuatThuThuatForGridAsync">
+                    </app-grid>
+                </div>
+            </div> -->
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,258 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox fxFlex="25%" fxFlex.sm="25%" id="MaDuocPhamBenhVien" label="Mã dược phẩm bệnh viện" maxlength="50"
+        [(model)]="duocPhamBenhVien.MaDuocPhamBenhVien" [required]="true"
+        [validationerror]="'MaDuocPhamBenhVien' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Ten" fxFlex="25" fxFlex.sm="25" [required]="true" maxlength="250" [(model)]="duocPhamBenhVien.Ten"
+        label="Tên dược phẩm" [validationerror]="'Ten' | validationerror:validationErrors"
+        (modelChange)="changeTenDuocPham($event)">
+    </app-textbox>
+
+    <app-textbox fxFlex="25" id="HamLuong" label="Hàm lượng" maxlength="500" [(model)]="duocPhamBenhVien.HamLuong">
+    </app-textbox>
+
+    <app-combobox id="DonViTinhId" fxFlex="25%" fxFlex.sm="25%" [(model)]="duocPhamBenhVien.DonViTinhId" maxlength="500"
+        [required]="true" [modelText]="duocPhamBenhVien.TenDonViTinh" label="Đơn vị tính (Đơn vị sơ cấp)"
+        class="item-no-padding" [template]="donViTinhTemplate" [templateHeader]="donViTinhTemplateHeader"
+        url="DonViTinh/GetDanhSachDonViTinh" [validationerror]="'DonViTinhId' | validationerror:validationErrors">
+        <ng-template #donViTinhTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #donViTinhTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textbox id="QuyCach" fxFlex="25" fxFlex.sm="25" maxlength="250" [(model)]="duocPhamBenhVien.QuyCach"
+        label="Quy cách đóng gói(Đơn vị thứ cấp)">
+    </app-textbox>
+
+    <app-textboxnumeric fxFlex="25" id="HeSoDinhMucDonViTinh" label="Hệ số định mức"
+        [(model)]="duocPhamBenhVien.HeSoDinhMucDonViTinh">
+    </app-textboxnumeric>
+
+    <app-autocomplete #hoatChatAutoComplete fxFlex="25" id="HoatChat" label="Hoạt chất" fxFlex.sm="25" maxlength="550"
+        class="item-no-padding" [(model)]="duocPhamBenhVien.HoatChat" valueField="HoatChat"
+        (onValueChange)="valueChangeHoatChat($event)" url="ThuocHoacHoatChat/LookupThuocHoacHoatChat"
+        [validationerror]="'HoatChat' | validationerror:validationErrors" [templateHeader]="headerHoatChatTemplate"
+        [template]="HoatChatTemplate">
+        <ng-template #headerHoatChatTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Hoạt Chất</th>
+                    <th width="20%">ĐD</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #HoatChatTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.MaHoatChat}}</td>
+                    <td>{{dataItem.HoatChat}}</td>
+                    <td width="20%">{{dataItem.DuongDung}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-autocomplete>
+
+
+    <app-combobox id="DuocPhamBenhVienPhanNhomChaId" fxFlex="25" fxFlex.sm="25"
+        [(model)]="duocPhamBenhVien.DuocPhamBenhVienPhanNhomChaId" url="DuocPhamBenhVien/DuocPhamBenhVienChaPhanNhoms"
+        [modelText]="duocPhamBenhVien.TenDuocPhamBenhVienPhanNhomCha" label="Loại thuốc hoặc hoạt chất" required="true"
+        [autoSelectFirstItem]="true" bind="true" (modelChange)="nhomChaChange($event)"
+        [validationerror]="'DuocPhamBenhVienPhanNhomChaId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-combobox-tree fxFlex="25%" fxFlex.sm="25%" label="Phân loại theo tác dụng Dược lý"
+        [(model)]="duocPhamBenhVien.DuocPhamBenhVienPhanNhomConId" id="DuocPhamBenhVienPhanNhomConId"
+        [disabled]="duocPhamBenhVien.DuocPhamBenhVienPhanNhomChaId == undefined ||  duocPhamBenhVien.DuocPhamBenhVienPhanNhomChaId == null"
+        [popupSettings]="{width: 1000,popupClass:'item-no-padding'}"
+        [queryInfo]="{ParameterDependencies:'{DuocPhamBenhVienPhanNhomChaId:' + duocPhamBenhVien.DuocPhamBenhVienPhanNhomChaId + '}', Take: 50}"
+        [modelText]="duocPhamBenhVien.TenDuocPhamBenhVienPhanNhomCon"
+        url="DuocPhamBenhVien/DichVuBenhVienPhanNhomsLv2VaLv3" (modelChange)="nhomConChange($event)">
+    </app-combobox-tree>
+
+    <app-combobox id="DuongDungId" fxFlex="25%" fxFlex.sm="25%" [(model)]="duocPhamBenhVien.DuongDungId"
+        [required]="true" [modelText]="duocPhamBenhVien.TenDuongDung" label="Đường dùng" class="item-no-padding"
+        [template]="duongDungTemplate" [templateHeader]="duongDungTemplateHeader" url="DuocPham/GetDanhSachDuongDung"
+        [validationerror]="'DuongDungId' | validationerror:validationErrors">
+        <ng-template #duongDungTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #duongDungTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox id="LoaiThuocTheoQuanLy" fxFlex="25" fxFlex.sm="25" [(model)]="duocPhamBenhVien.LoaiThuocTheoQuanLy"
+        url="DuocPhamBenhVien/PhanLoaiThuocTheoQuanLys" [modelText]="duocPhamBenhVien.TenPhanLoaiThuocTheoQuanLy"
+        label="Phân loại theo Quản lý">
+    </app-combobox>
+
+    <app-textboxnumeric fxFlex="25" id="STTHoaChat" label="STT hoạt chất" [(model)]="duocPhamBenhVien.STTHoatChat"
+        [validationerror]="'STTHoatChat' | validationerror:validationErrors">
+    </app-textboxnumeric>
+
+    <app-autocomplete #maHoatChatAutoComplete id="MaHoaChat" label="Mã hoạt chất" fxFlex="25" fxFlex.sm="25"
+        maxlength="100" class="item-no-padding" [(model)]="duocPhamBenhVien.MaHoatChat" valueField="MaHoatChat"
+        (onValueChange)="valueChangeMaHoatChat($event)" url="ThuocHoacHoatChat/LookupThuocHoacHoatChat"
+        [validationerror]="'MaHoatChat' | validationerror:validationErrors" [templateHeader]="headerMaHoatChatTemplate"
+        [template]="MaHoatChatTemplate">
+        <ng-template #headerMaHoatChatTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Hoạt Chất</th>
+                    <th width="20%">ĐD</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #MaHoatChatTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.MaHoatChat}}</td>
+                    <td>{{dataItem.HoatChat}}</td>
+                    <td width="20%">{{dataItem.DuongDung}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-autocomplete>
+
+    <app-textbox id="MaATC" fxFlex="25" fxFlex.sm="25" maxlength="100" [(model)]="duocPhamBenhVien.MaATC"
+        label="Mã ATC">
+    </app-textbox>
+
+    <app-textbox id="SoDangKy" fxFlex="25" fxFlex.sm="25" maxlength="100" [(model)]="duocPhamBenhVien.SoDangKy"
+        label="Số đăng ký" [validationerror]="'SoDangKy' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-autocomplete id="NhaSanXuat" fxFlex="25" fxFlex.sm="25" maxlength="250" [(model)]="duocPhamBenhVien.NhaSanXuat"
+        [dataList]="nhaSanXuatDataSource" label="Nhà sản xuất">
+    </app-autocomplete>
+
+    <app-autocomplete id="NuocSanXuat" fxFlex="25" fxFlex.sm="25" maxlength="250"
+        [(model)]="duocPhamBenhVien.NuocSanXuat" [dataList]="nuocSanXuatDataSource" label="Nước sản xuất">
+    </app-autocomplete>
+    <app-textbox id="DangBaoChe" fxFlex="25" fxFlex.sm="25" maxlength="250" [(model)]="duocPhamBenhVien.DangBaoChe"
+        label="Bào chế" [validationerror]="'DangBaoChe' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textboxnumeric id="the-tich" [(model)]="duocPhamBenhVien.TheTich" fxFlex="25" fxFlex.sm="100" label="Thể tích"
+        type="number" format="#.###">
+    </app-textboxnumeric>
+
+    <app-radio id="HieuLuc" fxFlex="25" fxFlex.sm="25" [(model)]="duocPhamBenhVien.HieuLuc"
+        [items]="[{Value:true,Text:'Có'},{Value:false,Text:'Không'}]" label="Hiệu lực">
+    </app-radio>
+
+    <app-textarea id="HuongDan" fxFlex="25" fxFlex.sm="25" maxlength="4000" [(model)]="duocPhamBenhVien.HuongDan"
+        label="Hướng dẫn" minHeight="20" [validationerror]="'HuongDan' | validationerror:validationErrors">
+    </app-textarea>
+    <app-textarea fxFlex="25" id="MoTa" label="Mô tả" maxlength="4000" [(model)]="duocPhamBenhVien.MoTa" minHeight="20"
+        [validationerror]="'MoTa' | validationerror:validationErrors">
+    </app-textarea>
+
+    <app-textarea id="ChiDinh" fxFlex="25" fxFlex.sm="25" maxlength="4000" [(model)]="duocPhamBenhVien.ChiDinh"
+        label="Chỉ định" minHeight="20" [validationerror]="'ChiDinh' | validationerror:validationErrors">
+    </app-textarea>
+
+    <app-textarea id="ChongChiDinh" fxFlex="25" fxFlex.sm="25" maxlength="1000"
+        [(model)]="duocPhamBenhVien.ChongChiDinh" label="Chống chỉ định" minHeight="20"
+        [validationerror]="'ChongChiDinh' | validationerror:validationErrors">
+    </app-textarea>
+
+    <app-textarea id="LieuLuongCachDung" fxFlex="25" fxFlex.sm="25" maxlength="4000"
+        [(model)]="duocPhamBenhVien.LieuLuongCachDung" label="Liều lượng và cách dùng" minHeight="20"
+        [validationerror]="'LieuLuongCachDung' | validationerror:validationErrors">
+    </app-textarea>
+
+    <app-textarea fxFlex="25" fxFlex.sm="25" id="TacDungPhu" label="Tác dụng phụ" maxlength="4000" minHeight="20"
+        [(model)]="duocPhamBenhVien.TacDungPhu">
+    </app-textarea>
+
+    <app-textarea id="ChuYDePhong" fxFlex="25" fxFlex.sm="100" maxlength="4000" [(model)]="duocPhamBenhVien.ChuYDePhong"
+        minHeight="20" label="Chú ý đề phòng">
+    </app-textarea>
+
+    <app-textarea id="DieuKienBaoHiemThanhToan" fxFlex="25" fxFlex.sm="100" maxlength="4000"
+        [(model)]="duocPhamBenhVien.DieuKienBaoHiemThanhToan" minHeight="20" label="Điều kiện bảo hiểm thanh toán">
+    </app-textarea>
+
+    <div fxFlex="25%" fxFlex.sm="25%">
+        <div class="container-custom no-label">
+            <label>&nbsp;</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <app-checkbox fxFlex="100%" id="LaThucPhamChucNang" [(model)]="duocPhamBenhVien.LaThucPhamChucNang"
+                    label="Là thực phẩm chức năng" value="true"></app-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <div fxFlex="25%" fxFlex.sm="25%">
+        <div class="container-custom no-label">
+            <label>&nbsp;</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <app-checkbox fxFlex="100%" id="LaThuocHuongThanGayNghien"
+                    [(model)]="duocPhamBenhVien.LaThuocHuongThanGayNghien" label="Là thuốc hướng thần, gây nghiện"
+                    value="true">
+                </app-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <app-textbox fxFlex="25" id="TenTiengAnh" label="Tên tiếng anh" maxlength="250"
+        [(model)]="duocPhamBenhVien.TenTiengAnh" [validationerror]="'TenTiengAnh' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="TieuChuan" fxFlex="25" fxFlex.sm="25" maxlength="50" [(model)]="duocPhamBenhVien.TieuChuan"
+        label="Tiêu chuẩn" [validationerror]="'TieuChuan' | validationerror:validationErrors">
+    </app-textbox>
+    <div fxFlex="25%" fxFlex.sm="25%">
+        <div class="container-custom no-label">
+            <label>&nbsp;</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <app-checkbox fxFlex="100%" id="DuocPhamCoDau" [(model)]="duocPhamBenhVien.DuocPhamCoDau"
+                    label="Dược phẩm có dấu *" value="true">
+                </app-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <app-multiselect fxFlex="25%" [(model)]="duocPhamBenhVien.MayXetNghiemIds" [modelText]="" label="Sử dụng cho máy XN"
+        [popupSettings]="null" [autoClose]="false" url="DuocPhamBenhVien/GetAllMayXetNghiem">
+    </app-multiselect>
+
+    <app-combobox id="LoaiDieuKienBaoQuanDuocPhamId" fxFlex="25%" fxFlex.sm="25%"
+        [(model)]="duocPhamBenhVien.LoaiDieuKienBaoQuanDuocPham"
+        url="DuocPhamBenhVien/GetAllLoaiDieuKienBaoQuanDuocPham" [reloadForGrid]="true"
+        (modelChange)="modelChangeLoaiDieuKienBaoQuanDuocPham($event)"
+        [modelText]="duocPhamBenhVien.TenPhanLoaiThuocTheoQuanLy" label="Điều kiện bảo quản">
+    </app-combobox>
+
+    <app-textbox *ngIf="isAllowInputInfor" fxFlex="25%" id="ThongTinDieuKienBaoQuanDuocPham"
+        label="Thông tin điều kiện bảo quản" maxlength="250"
+        [(model)]="duocPhamBenhVien.ThongTinDieuKienBaoQuanDuocPham">
+    </app-textbox>
+</div>

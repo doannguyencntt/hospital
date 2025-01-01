@@ -1,0 +1,132 @@
+fieldset {
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    border: 1px #e0e0e0;
+    border-style: inherit;
+    //border-radius: 4%;
+    .item_right {
+        text-align: right !important;
+        float: right;
+    }
+    ul>li {
+        padding-right: 15px !important;
+    }
+    ul.inline>li {
+        display: inline !important;
+    }
+}
+
+// expand row table
+table {
+    width: 100%;
+    background-color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    th {
+        font-weight: bold;
+        text-transform: uppercase;
+        &.w-250 {
+            width: 250px;
+        }
+    }
+    tr {
+        &.bg-light-red {
+            background-color: #eaa3a3;
+        }
+    }
+}
+
+.order-btn {
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+.order-for-in-xuat {
+    display: flex;
+}
+
+.set-col {
+    flex-direction: column;
+}
+
+.order-color {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: flex-end;
+    align-items: center;
+    .set-color {
+        padding: 10px 40px;
+        &.black {
+            background-color: black;
+        }
+        &.red {
+            background-color: red;
+        }
+        &.blue {
+            background-color: blue;
+        }
+        &.gray {
+            background-color: lightgray;
+        }
+        &.palegoldenrod {
+            background-color: palegoldenrod;
+        }
+        &.deepskyblue {
+            background-color: deepskyblue;
+        }
+        &.bluelight {
+            background-color: #b3e5fc;
+        }
+    }
+}
+
+.order-search {
+    align-items: center;
+}
+
+.order-maneuver {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    .first-row {
+        display: flex;
+        gap: 16px;
+    }
+}
+
+.form-footer{
+    margin-top: 1.34375em;
+}
+
+.align-right-fx{
+    margin-left: auto;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+  
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }

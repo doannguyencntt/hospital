@@ -1,0 +1,97 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxFlex="100%">
+        <h3 class="sub-title" style="text-transform: none;">THÊM DƯỢC PHẨM</h3>
+    </div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="overflow: hidden;">
+    <div class="px-2 py-2" fxLayout="column">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            fxLayoutAlign="space-between">
+
+            <app-textbox id="Ten" fxFlex="50" fxFlex.sm="25" [required]="true" maxlength="250" [(model)]="duocPham.Ten"
+                (keyup)="onKey($event)" label="Tên dược phẩm"
+                [validationerror]="'Ten' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-combobox id="DuongDungId" fxFlex="30%" fxFlex.sm="30%" [(model)]="duocPham.DuongDungId"
+                [required]="true" label="Đường dùng" class="item-no-padding" (openCombobox)="openCombobox($event)"
+                (selectionChange)="chonDuongDung($event)" (keyup)="onKey($event)" [template]="duongDungTemplate"
+                [templateHeader]="duongDungTemplateHeader" url="DuocPham/GetDanhSachDuongDung" popupSettings="null"
+                [validationerror]="'DuongDungId' | validationerror:validationErrors">
+                <ng-template #duongDungTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="30%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #duongDungTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="30%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+
+
+            <app-combobox id="DonViTinhId" fxFlex="20%" fxFlex.sm="20%" [(model)]="duocPham.DonViTinhId" maxlength="500"
+                [required]="true" label="Đơn vị tính" (keyup)="onKey($event)" class="item-no-padding"
+                [template]="donViTinhTemplate" (openCombobox)="openCombobox($event)" (selectionChange)="chonDVT($event)"
+                [templateHeader]="donViTinhTemplateHeader" url="DonViTinh/GetDanhSachDonViTinh" popupSettings="null"
+                [validationerror]="'DonViTinhId' | validationerror:validationErrors">
+                <ng-template #donViTinhTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="20%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #donViTinhTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="20%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+
+            <!-- <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0"
+                fxFlex="100%"> -->
+            <app-textboxnumeric fxFlex="25" id="slDuTru" label="SL dự trù" [(model)]="duocPham.SoLuongDuTru"
+                [required]="true" max="999999999" min="1"
+                [validationerror]="'SoLuongDuTru' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+
+            <app-textboxnumeric fxFlex="25%" id="slDuKienTrongKy" label="D.kiến s.dụng trong kỳ" [required]="true"
+                max="999999999" min="1" (keyup)="onKey($event)" [(model)]="duocPham.SoLuongDuKienSuDung"
+                [validationerror]="'SoLuongDuKienSuDung' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-combobox
+                [disabled]="duocPham.NhomDuocPhamDuTru == 2"
+                id="nhomDuPhong" fxFlex="auto" fxFlex.sm="25%" [(model)]="duocPham.NhomDieuTriDuPhong"
+                popupSettings="null" url="YeuCauMuaDuocPham/GetNhomDuocPhamDieuTriDuPhong" label="Nhóm đ.trị/dự phòng">
+            </app-combobox>
+            <!-- </div> -->
+
+
+
+        </div>
+    </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" style="margin-top:10px">
+    <button mat-stroked-button color="primary" (click)="huy()" mat-dialog-close>Hủy</button>
+    <button type="button" (click)="themDuocPham()" cdkFocusInitial mat-raised-button mat-button
+        color="primary">Thêm</button>
+</mat-dialog-actions>

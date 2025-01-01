@@ -1,0 +1,47 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>{{Title}}</div>
+    <button type="button" mat-icon-button (click)="close('No answer',1)" tabindex="-1" >
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <app-grid
+    [gridColumns]="gridChildColumns2" [documentType]="documentType" [useAddDeault]="false" [gridDataSource]="data"
+    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+     [autoHeight]="true" [pageable]="false" [detailTemplate]="detailTemplate">
+    </app-grid>
+    <ng-template #actionTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button type="button"  color="primary" mat-raised-button (click)="close(dataItem,2)" tabindex="-1">
+                Chọn
+            </button>
+        </div>
+    </ng-template>
+    <ng-template #detailTemplate let-dataItem>
+        <app-grid baseRoute=""
+                        [gridColumns]="gridChild" [documentType]="documentType" [useAddDeault]="false"
+                        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                        [urlGetData]="urlGetDataChild" [additionalSearchString]="dataItem.Id + '-' +dataItem.DateStart + '-' + dataItem.DateEnd"
+                        [autoHeight]="true" [pageable]="false"  >
+                    </app-grid>
+    </ng-template>
+    <ng-template #nhomGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+    <ng-template #templatePrint let-dataItem >
+        <span *ngIf="dataItem.DonThuocBacSiKeToa == false">
+            <button  kendoTooltip title="In phiếu"
+            (click)="PrinAllDonThuocBenhNhan(dataItem.DonThuocThanhToanId)" mat-icon-button type="button">
+            <mat-icon [icIcon]="icPrint"></mat-icon>
+        </button>
+        </span>
+    </ng-template>
+    <ng-template #SoTienThuoctemplate let-dataItem>
+        <span style="color:red"> {{dataItem.SoTienDisPlay}}</span>
+    </ng-template>
+    <ng-template #TinhTrangThuoctemplate let-dataItem>
+        <span style="color:red" *ngIf="dataItem.TinhTrang =='Chưa xuất thuốc' || dataItem.TinhTrang =='Chưa thanh toán'"> {{dataItem.TinhTrang}}</span>
+        <span style="color:blue" *ngIf="dataItem.TinhTrang =='Đã thanh toán'"> {{dataItem.TinhTrang}}</span>
+    </ng-template>
+</mat-dialog-content>

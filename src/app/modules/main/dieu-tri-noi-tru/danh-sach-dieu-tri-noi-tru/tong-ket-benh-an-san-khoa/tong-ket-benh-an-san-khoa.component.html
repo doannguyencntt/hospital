@@ -1,0 +1,262 @@
+<div [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}" fxFlex="100%" fxLayout="row wrap"
+    fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+        <h3 class="blue-text" style="display: inline; float: left;">IV. THEO DÕI TẠI BUỒNG ĐẺ</h3>
+    </div>
+    <div fxFlex="100%">
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <!-- <span fxFlex="100%" class="item-no">Vào buồng đẻ lúc</span> -->
+                <app-datetimepicker id="vao-buong-de" [(model)]="thongTinBenhAnSanKhoa.VaoBuongDeLuc" fxFlex="30%"
+                    fxFlex.sm="100%" label="Vào buồng đẻ lúc"
+                    [validationerror]="'VaoBuongDeLuc' | validationerror:validationErrors">
+                </app-datetimepicker>
+                <app-combobox id="nguoi-theo-doi" class="item-no-padding"
+                    (selectionChange)="selectionNhanVienTheoDoi($event)"
+                    [(model)]="thongTinBenhAnSanKhoa.NhanVienTheoDoiId" url="NhanVien/GetListLookupNhanVien"
+                    [modelText]="thongTinBenhAnSanKhoa.TenNhanVienTheoDoi" fxFlex="30%" fxFlex.sm="100%"
+                    label="Người theo dõi">
+                </app-combobox>
+                <app-combobox id="chuc-danh" [(model)]="thongTinBenhAnSanKhoa.ChucDanhId"
+                    (selectionChange)="selectionChucVu($event)" url="NhanVien/GetListLookupChucDanhNhanVien"
+                    [modelText]="thongTinBenhAnSanKhoa.TenChucDanh" class="item-no-padding" fxFlex="40%"
+                    fxFlex.sm="100%" label="Chức danh">
+                </app-combobox>
+            </div>
+        </div>
+    </div>
+    <div fxFlex="100%">
+        <app-thong-tin-tre-so-sinh [dataSourceTreSoSinhs]="dataSourceTreSoSinhs"></app-thong-tin-tre-so-sinh>
+    </div>
+    
+    <!-- <div fxFlex="100%" class="mt-3">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-textbox id="nguoi-theo-doi" [(model)]="thongTinBenhAnSanKhoa.TinhTrangSauKhiDe" class="item-no-padding"
+                fxFlex="50%" fxFlex.sm="100%" label="Tinh trạng trẻ sơ sinh sau khi đẻ" maxlength="1000">
+            </app-textbox>
+            <app-textbox [(model)]="thongTinBenhAnSanKhoa.XuLyKetQua" id="chuc-danh" class="item-no-padding"
+                fxFlex="50%" fxFlex.sm="100%" label="Xử lý và kết quả" maxlength="1000">
+            </app-textbox>
+        </div>
+    </div> -->
+
+    <h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%"><strong>2. Đặc điểm sổ rau</strong></h5>
+    <div fxFlex="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-checkbox class="mt-10" [(model)]="thongTinBenhAnSanKhoa.Boc" fxFlex="10%" fxFlex.sm="100%" label="Bóc">
+            </app-checkbox>
+            <app-checkbox class="mt-10" [(model)]="thongTinBenhAnSanKhoa.So" fxFlex="10%" fxFlex.sm="100%" label="Sổ">
+            </app-checkbox>
+            <app-datetimepicker id="rau-so-luc" [(model)]="thongTinBenhAnSanKhoa.RauSoLuc" class="item-no-padding"
+                fxFlex="20%" fxFlex.sm="100%" label="Rau sổ lúc">
+            </app-datetimepicker>
+            <app-textbox id="cach-so-rau" [(model)]="thongTinBenhAnSanKhoa.CachSoRau" class="item-no-padding"
+                fxFlex="20%" fxFlex.sm="100%" label="Cách sổ rau" maxlength="1000">
+            </app-textbox>
+            <app-textbox id="mat-mang" [(model)]="thongTinBenhAnSanKhoa.MatMang" class="item-no-padding" fxFlex="20%"
+                fxFlex.sm="100%" label="Mặt màng" maxlength="1000">
+            </app-textbox>
+            <app-textbox id="mat-mui" [(model)]="thongTinBenhAnSanKhoa.MatMui" class="item-no-padding" fxFlex="20%"
+                fxFlex.sm="100%" label="Mặt múi" maxlength="1000">
+            </app-textbox>
+            <app-textbox id="banh-rau" [(model)]="thongTinBenhAnSanKhoa.BanhRau" class="item-no-padding" fxFlex="20%"
+                fxFlex.sm="100%" label="Bánh rau" maxlength="1000">
+            </app-textbox>
+            <app-textboxnumeric id="can-nang" [(model)]="thongTinBenhAnSanKhoa.CanNang" class="item-no-padding"
+              min="1" max="999999" format="n2" decimals="2"   fxFlex="20%" fxFlex.sm="100%" label="Cân nặng (gram)">
+            </app-textboxnumeric>
+            <app-checkbox class="mt-10" [(model)]="thongTinBenhAnSanKhoa.RauCuonCo" fxFlex="20%" fxFlex.sm="100%"
+                label="Rau cuốn cổ"></app-checkbox>
+            <app-textboxnumeric id="cuon-rau-dai" [(model)]="thongTinBenhAnSanKhoa.CuonRauDai" class="item-no-padding"
+                min="1" max="999" format="n2" decimals="2" fxFlex="20%" fxFlex.sm="100%" label="Cuốn rau dài (cm)">
+            </app-textboxnumeric>
+            <app-checkbox class="mt-10" [(model)]="thongTinBenhAnSanKhoa.CoChayMauSauSo" fxFlex="20%" fxFlex.sm="100%"
+                label="Có chảy máu sau sổ"></app-checkbox>
+            <app-textboxnumeric id="luong-mau" [(model)]="thongTinBenhAnSanKhoa.LuongMauMat" min="1" max="999999"
+                format="n2" decimals="2" class="item-no-padding " fxFlex="20%" fxFlex.sm="100%"
+                label="Lượng máu mất (ml)">
+            </app-textboxnumeric>
+            <app-checkbox class="mt-10" fxFlex="20%" [(model)]="thongTinBenhAnSanKhoa.KiemSoatTuCung" fxFlex.sm="100%"
+                label="Kiểm soát tử cung"></app-checkbox>
+            <app-textbox id="cuon-rau-dai" [(model)]="thongTinBenhAnSanKhoa.XuLyKetQuaSoRau" class="item-no-padding"
+                fxFlex="60%" fxFlex.sm="100%" label="Xử lý và kết quả" maxlength="1000">
+            </app-textbox>
+        </div>
+    </div>
+
+    <h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%"><strong>3. Tình trạng sản phụ sau đẻ</strong></h5>
+    <div fxFlex="100%">
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textbox id="da-niem-mac" [(model)]="thongTinBenhAnSanKhoa.DaMienMac" class="item-no-padding"
+                    fxFlex="25%" fxFlex.sm="100%" label="Da, niêm mạc" maxlength="1000">
+                </app-textbox>
+                <app-combobox id="phuong-phap-de" [(model)]="thongTinBenhAnSanKhoa.PhuongPhapDeId"
+                    (selectionChange)="selectionPhuongPhapDe($event)" url="DieuTriNoiTru/GetPhuongPhapDe"
+                    [modelText]="thongTinBenhAnSanKhoa.TenPhuongPhapDe" class="item-no-padding" fxFlex="25%"
+                    fxFlex.sm="100%" label="Phương pháp đẻ">
+                </app-combobox>
+                <app-textbox id="ly-do-can-thiep" [(model)]="thongTinBenhAnSanKhoa.LyDoCanThiep" class="item-no-padding"
+                    fxFlex="25%" fxFlex.sm="100%" label="Lý do can thiệp" maxlength="1000">
+                </app-textbox>
+                <app-combobox id="tang-sinh-mon" [(model)]="thongTinBenhAnSanKhoa.TangSinhMonId"
+                    (selectionChange)="selectionTangSinhMon($event)" url="DieuTriNoiTru/GetTangSinhMon"
+                    [modelText]="thongTinBenhAnSanKhoa.TenTangSinhMon" class="item-no-padding" fxFlex="25%"
+                    fxFlex.sm="100%" label="Tầng sinh môn">
+                </app-combobox>
+            </div>
+        </div>
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textbox [(model)]="thongTinBenhAnSanKhoa.PhuongPhapKhauVaLoaiChi" id="phuong-phap-khau"
+                    class="item-no-padding" fxFlex="25%" fxFlex.sm="100%" label="Phương pháp khâu và loại chỉ"
+                    maxlength="1000">
+                </app-textbox>
+                <app-textboxnumeric id="so-mui-khau" [(model)]="thongTinBenhAnSanKhoa.SoMuiKhau" class="item-no-padding"
+                    max="999" min="1" fxFlex="25%" fxFlex.sm="100%" label="Số mũi khâu">
+                </app-textboxnumeric>
+                <app-combobox id="tang-sinh-mon" [(model)]="thongTinBenhAnSanKhoa.CoTuCungId"
+                    (selectionChange)="selectionGetCoTuCung($event)" url="DieuTriNoiTru/GetCoTuCung"
+                    [modelText]="thongTinBenhAnSanKhoa.TenCoTuCung" class="item-no-padding" fxFlex="25%"
+                    fxFlex.sm="100%" label="Cổ tử cung">
+                </app-combobox>
+            </div>
+        </div>
+    </div>
+    <div class="mt-1" fxFlex="100%" fxFlex.sm="100%">
+        <!-- <app-thong-tin-chi-so-sinh-ton [dataSourceChiSoSinhTons]="dataSourceChiSoSinhTons">
+        </app-thong-tin-chi-so-sinh-ton> -->
+    </div>
+
+    <h5 class="mt-2 mb-2" fxFlex="100%" fxFlex.sm="100%"><strong>4. Tình hình phẫu thuật (nếu có)</strong></h5>
+    <div fxFlex="100%">
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textbox id="da-niem-mac" [(model)]="thongTinBenhAnSanKhoa.ChanDoanTruocPhauThuat"
+                    class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Chẩn đoán trước phẫu thuật"
+                    maxlength="1000">
+                </app-textbox>
+                <app-textbox id="phuong-phap-de" [(model)]="thongTinBenhAnSanKhoa.ChanDoanSauPhauThuat"
+                    class="item-no-padding" fxFlex="50%" fxFlex.sm="100%" label="Chẩn đoán sau phẫu thuật"
+                    maxlength="1000">
+                </app-textbox>
+            </div>
+        </div>
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0px grid" fxLayoutGap.lt-sm="0">
+                <span class="item-no mt-2 mb-1">1. Lần phẫu thuật</span>
+                <button class="po-h item-no-padding" color="primary" (click)="them()">
+                    <mat-icon [icIcon]="icAddCircle"></mat-icon>
+                </button>
+            </div>
+            
+            <div class="mt-3" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-grid fxFlex="100%" fxFlex.sm="100%" HideCheckAll="true" [gridColumns]="gridPhauThuatColumns"
+                    [documentType]="documentType" [useHeaderDefault]="false" [useActionDefault]="false"
+                    [lazyLoadPage]="true" [checkboxAble]="false" [pageable]="false" height="auto"
+                    [gridDataSource]="dataSourceLanPhauThuats">
+                </app-grid>
+            </div>
+
+            <ng-template #ngayGioTemplate let-dataItem>
+                <app-datetimepicker id="ngay" [(model)]="dataItem.PTTTNgayGio" class="item-no-padding" label="">
+                </app-datetimepicker>
+            </ng-template>
+            <ng-template #phuongPhapPPVoCamTemplate let-dataItem>
+                <app-textbox [(model)]="dataItem.PhuongPhapPhauThuat" class="item-no-padding">
+                </app-textbox>
+            </ng-template>
+            <ng-template #phauThuatVienTemplate let-value="value" let-dataItem>
+                <app-combobox id="PTTTPhauThuatVien{{dataItem.IdView}}" popupSettings="" class="no-label"
+                    url="NhanVien/GetListLookupNhanVienIsBacSiClone" [(model)]="dataItem.PTTTPhauThuatVien" bind="true">
+                </app-combobox>
+            </ng-template>
+
+            <ng-template #bacSyTemplate let-value="value" let-dataItem>
+                <app-combobox id="PTTTBacSyGayMe{{dataItem.IdView}}" popupSettings="" class="no-label"
+                    url="NhanVien/GetListLookupNhanVienIsBacSiClone" [(model)]="dataItem.PTTTBacSyGayMe" bind="true">
+                </app-combobox>
+            </ng-template>
+
+            <ng-template #actionTemplate let-dataItem>
+                <div class="text-center" kendoTooltip>
+                    <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button"
+                        (click)="xoa(dataItem)">
+                        <mat-icon [icIcon]="icDelete"></mat-icon>
+                    </button>
+                </div>
+            </ng-template>
+
+            <ng-template #phuongPhapTemplate let-value="value" let-dataItem>
+                <app-textbox id="PTTTPhuongPhap{{dataItem.IdView}}" [(model)]="dataItem.PTTT" class="no-label"
+                    maxlength="500">
+                </app-textbox>
+            </ng-template>
+
+            <ng-template #voCamTemplate let-value="value" let-dataItem>
+                <app-textbox id="VoCam{{dataItem.IdView}}" [(model)]="dataItem.VoCam" class="no-label" maxlength="500">
+                </app-textbox>
+            </ng-template>
+
+
+        </div>
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                fxFlex="100%">
+                <app-radio fxFlex="20%" fxFlex.sm="20%" id="HieuLuc" name="IsOfficial"
+                    [(model)]="thongTinBenhAnSanKhoa.TrieuChung"
+                    [items]="[{Value:true,Text:'Tai biến'},{Value:false,Text:'Biến chứng'}]">
+                </app-radio>
+            </div>
+        </div>
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                fxFlex="100%">
+                <app-checkbox class="mt-10" [(model)]="thongTinBenhAnSanKhoa.DoPhauThuat" fxFlex="20%" fxFlex.sm="20%"
+                    label="1.Do phẫu thuật"></app-checkbox>
+                <app-checkbox class="mt-10" [(model)]="thongTinBenhAnSanKhoa.DoGayMe" fxFlex="20%" fxFlex.sm="20%"
+                    label="2.Do gây mê"></app-checkbox>
+                <app-checkbox class="mt-10" [(model)]="thongTinBenhAnSanKhoa.DoViKhuan" fxFlex="20%" fxFlex.sm="20%"
+                    label="3.Do nhiễm khuẩn"></app-checkbox>
+                <app-checkbox class="mt-10" [(model)]="thongTinBenhAnSanKhoa.Khac" fxFlex="20%" fxFlex.sm="20%"
+                    label="4.Khác"></app-checkbox>
+            </div>
+        </div>
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <span fxFlex="100%" class="item-no mt-2"><b>5. Hướng điều trị và các chế độ tiếp theo</b></span>
+                <app-textbox id="da-niem-mac" class="item-no-padding" fxFlex="100%" fxFlex.sm="100%"
+                    [(model)]="thongTinBenhAnSanKhoa.HuongDieuTriCacCheDoTiepTheo"
+                    label="Hướng điều trị và các chế độ tiếp theo" maxlength="1000">
+                </app-textbox>
+            </div>
+        </div>
+    </div>
+
+    <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-md="column">
+        <div style="margin-bottom: 15px;" fxFlex="100%">
+            <h4>
+                Hồ sơ, phim ảnh
+            </h4>
+        </div>
+        
+        <app-grid fxFlex="100%" HideCheckAll="true" [gridColumns]="gridColumns" [documentType]="documentType"
+        [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false"
+        [pageable]="false" height="auto" #grid
+        [gridDataSource]="gridDataTongKetBenhAn"></app-grid>
+
+        <ng-template #soToTemplate  let-dataItem>
+            <app-textboxnumeric class="no-label" id="SoTo{{dataItem.Id}}" [(model)]="dataItem.SoTo"
+            (modelChange)="soToChange($event, dataItem)"
+                min="0" max="99999">
+            </app-textboxnumeric>
+        </ng-template>
+    </div>
+</div>
+<ng-template #loaiFooterTemplate let-dataItem>
+    <span style="float:right">Tổng cộng:</span>
+</ng-template>
+
+<ng-template #soToFooterTemplate let-dataItem>
+    <div style="text-align: center;">{{tongCong}}</div>
+</ng-template>

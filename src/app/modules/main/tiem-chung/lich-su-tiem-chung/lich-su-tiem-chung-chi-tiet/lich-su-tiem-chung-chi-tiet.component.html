@@ -1,0 +1,15 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                    { Title: 'Tiêm chủng', Path: '' },
+                    { Title: 'Lịch Sử Tiêm Chủng', Path: '/tiem-chung/lich-su-tiem' , queryParams: {holdQuery : true} },
+                    { Title: 'Chi Tiết Lịch Sử Tiêm Chủng', Path: '', Active: true }]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <app-lich-su-tiem-chung-chi-tiet-shared *ngIf="yeuCauKhamTiemChungId" [yeuCauKhamTiemChungId]="yeuCauKhamTiemChungId"></app-lich-su-tiem-chung-chi-tiet-shared>
+    </vex-page-layout-content>
+</vex-page-layout>

@@ -1,0 +1,47 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>IN KẾT QUẢ XÉT NGHIỆM</div>
+    <button type="button" mat-icon-button (click)="close('No')" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content
+[ngStyle]="{'height':luaChon == 1 || luaChon == 2? '150px': '500px'}"
+ >
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-radio id="chon-loai-dv" name="select" class="no-format-css pl-4 temp" [(model)]="luaChon" (modelChange)="changeLuaChon($event)"
+            [items]="[{Value:1,Text:'Tất cả'},{Value:2,Text:'Theo nhóm'},{Value:3,Text:'Theo dịch vụ'}]">
+        </app-radio>
+        <span fxFlex="100%" fxFlex.sm="100%" [style.display]="luaChon== 2 ? 'block':'none'">
+            <app-grid #gridTheoNhom [gridColumns]="gridColumnsNhom" [gridDataSource]="gridDataSource"
+                 [useAddDeault]="false" [useHeaderDefault]="false"  (extCheckboxSelection)="extCheckboxSelection($event)" [triggerSelectAll]="true"
+                [useActionDefault]="false" [checkboxAble]="true" [autoHeight]="true" [pageable]="false"  
+                >
+            </app-grid>
+        </span>
+        <span fxFlex="100%" fxFlex.sm="100%" [style.display]="luaChon == 3 ? 'block':'none'">
+            <app-grid #gridTheoDichVu [gridColumns]="gridColumnsDichVu" [gridDataSource]="gridDataSource" [autoRefreshDataSource]="true"
+                 [useAddDeault]="false" [useHeaderDefault]="false" (extCheckboxSelection)="extCheckboxSelection($event)" [triggerSelectAll]="true"
+                [useActionDefault]="false" [checkboxAble]="true" [autoHeight]="true" [pageable]="true" [groups]="groups" [headerTemplate]="headerTemplate">
+            </app-grid>
+        </span>
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px"
+                    fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)"
+                        (ngModelChange)="searchChanges()"
+                        placeholder="Nhập từ khóa..." />
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right" style="padding-bottom: 15px;">
+    <button tabindex="-1" type="button" (click)="close('Yes')" mat-raised-button mat-button color="primary"
+        class="md-primary">In</button>
+</mat-dialog-actions>
+<ng-template #nhomTemplate let-value="value" let-dataItem>
+    {{value}}
+</ng-template>

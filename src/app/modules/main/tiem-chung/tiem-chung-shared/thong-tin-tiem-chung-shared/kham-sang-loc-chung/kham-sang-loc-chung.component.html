@@ -1,0 +1,51 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" class="p-2">
+        <div>
+            <app-tien-su-benh [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan" [isTienSuBenhReadOnly]="isTabKhamLocChungReadOnly">
+            </app-tien-su-benh>
+        </div>
+        <div>
+            <app-di-ung [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan" [isDiUngThuocReadOnly]="isTabKhamLocChungReadOnly">
+            </app-di-ung>
+        </div>
+        <div>
+            <app-chi-so-sinh-ton [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan" [isChiSoSinhTonReadOnly]="isTabKhamLocChungReadOnly"
+                (canNangThanNhietChanged)="evtCanNangThanNhietChanged($event)">
+            </app-chi-so-sinh-ton>
+        </div>
+        <div>
+            <app-mau-sang-loc 
+                [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan" [isMauSangLocReadOnly]="isTabKhamLocChungReadOnly" [validationErrors]="validationErrors"
+                (outputLuaChonBenhVien)="evtLuaChonBenhVienChange($event)">
+            </app-mau-sang-loc>
+        </div>
+
+        <br>
+        
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-radio fxFlex="25%" fxFlex.sm="25%" id="de-nghi-kham-sang-loc" label="Đề nghị khám sàng lọc tại bệnh viện" [disabled]="isTabKhamLocChungReadOnly" [items]="[{ Value: true, Text: 'Có' }, { Value: false, Text: 'Không' }]" [(model)]="thongTinBenhNhan.KhamSangLocTiemChung.BenhNhanDeNghi"
+                (modelChange)="evtDeNghiKhamSangLocChange($event)">
+            </app-radio>
+
+            <app-textarea *ngIf="thongTinBenhNhan.KhamSangLocTiemChung.BenhNhanDeNghi" id="ly-do-de-nghi" fxFlex="100%" fxFlex.sm="100%" maxlength="1000" label="Lý do" [disabled]="!thongTinBenhNhan.KhamSangLocTiemChung.BenhNhanDeNghi || isTabKhamLocChungReadOnly" [(model)]="thongTinBenhNhan.KhamSangLocTiemChung.LyDoDeNghi"
+                (modelChange)="evtModelOnChange()">
+            </app-textarea>
+
+            <div *ngIf="!thongTinBenhNhan.KhamSangLocTiemChung.BenhNhanDeNghi" fxFlex="75%" fxFlex.sm="75%"></div>
+
+            <app-dropdownlist popupSettings="null" id="ket-luan" class="item-no-padding" label="Kết luận" fxFlex="30%" fxFlex.sm="30%" 
+                [popupSettings]="null" [disabled]="isTabKhamLocChungReadOnly" [url]="'TiemChung/GetKetLuans'" [required]="true"
+                [(model)]="thongTinBenhNhan.KhamSangLocTiemChung.KetLuan" [modelText]="thongTinBenhNhan.KhamSangLocTiemChung.KetLuanDisplay" 
+                (modelChange)="evtModelOnChange()"
+                [validationerror]="'KhamSangLocTiemChung.KetLuan' | validationerror: thongTinBenhNhan.validationErrors">
+            </app-dropdownlist>
+
+            <app-textarea id="ghi-chu" fxFlex="70%" fxFlex.sm="70%" maxlength="1000" label="Ghi chú" [disabled]="isTabKhamLocChungReadOnly" [(model)]="thongTinBenhNhan.KhamSangLocTiemChung.GhiChuKetLuan" (modelChange)="evtModelOnChange()">
+            </app-textarea>
+
+            <div *ngIf="thongTinBenhNhan.KhamSangLocTiemChung.KetLuan == loaiKetLuanKhamSangLocTiemChung.DuDieuKienTiem" fxFlex="100%">
+                <app-chi-dinh [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan" [isTabKhamLocChungReadOnly]="isTabKhamLocChungReadOnly"></app-chi-dinh>
+            </div>
+        </div>
+    </div>
+</div>

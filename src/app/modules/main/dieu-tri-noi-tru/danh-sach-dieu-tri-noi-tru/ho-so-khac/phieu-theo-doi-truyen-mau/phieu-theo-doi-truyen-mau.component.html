@@ -1,0 +1,150 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <!-- [modelText]="phieuTheoDoiTruyenMau.DisplayName" -->
+        <app-combobox id="MaDonViMauTruyen" fxFlex="20%" fxFlex.sm="20%" style="margin-top: 8px;" (modelChange)="changeMaDonVimau($event)"
+            [(model)]="phieuTheoDoiTruyenMau.MaDonViMauTruyenId"   [(modelText)]="phieuTheoDoiTruyenMau.DisplayName"
+            label="Mã đơn vị máu truyền"    [validationerror]="'MaDonViMauTruyenId' | validationerror:validationErrors"
+            url="DieuTriNoiTru/GetDanhSachMaDonViMau?MaDVMID={{phieuTheoDoiTruyenMau.MaDonViMauTruyenId}}" required="true"  [queryInfo]="{ParameterDependencies:'{YeuCauTiepNhanId:' + yeuCauTiepNhanId +'}', Take: 50}">
+        </app-combobox>
+        <label fxFlex="80%" fxFlex.sm="80%"></label>
+        <app-textboxnumeric id="LanTruyenMauThu" (modelChange)="onChangeLanTruyenMauThu($event)" min="1" max="9999"
+            [(model)]="phieuTheoDoiTruyenMau.LanTruyenMauThu" fxFlex="15%" fxFlex.sm="15%" label="Lần truyền máu thứ">
+        </app-textboxnumeric>
+        <app-textbox id="DinhNhomDonViMauChePhamMau" label="Định nhóm đơn vị máu, chế phẩm máu" 
+            fxFlex="28%" fxFlex.sm="28%" [(model)]="phieuTheoDoiTruyenMau.DinhNhomDonViMauChePhamMau">
+        </app-textbox>
+        <app-textbox id="DinhNhomMauNguoiNhan" label="Định nhóm máu người nhận"  fxFlex="28%"
+            fxFlex.sm="28%" [(model)]="phieuTheoDoiTruyenMau.DinhNhomMauNguoiNhan">
+        </app-textbox>
+        <app-textarea id="ChanDoan" fxFlex="28%" fxFlex.sm="28%" minHeight="20"
+            [(model)]="phieuTheoDoiTruyenMau.PhanUngHoaHopTaiGiuong" label="Phản ứng hòa hợp tại giường">
+        </app-textarea>
+        <app-datetimepicker fxFlex="25%" [(model)]="phieuTheoDoiTruyenMau.BatDauTruyenHoi" #batDauTruyenHoi required="true" (modelChange)="ChangebatDauTruyen($event)"
+            id="BatDauTruyenHoi"  label="Bắt đầu truyền hồi" [validationerror]="'BatDauTruyenHoi' | validationerror:validationErrors"> 
+        </app-datetimepicker>
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" >
+            <app-grid  masterName="Grid" #grid [gridColumns]="gridColumns" [documentType]="documentType"
+                [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+                [checkboxAble]="false" [maxHeight]="100" [lazyLoadPage]="true" [gridDataSource]="dataSourceDanhSach"
+                [pageable]="false">
+            </app-grid>
+        </div>
+        <ng-template #thoiGianTemplate let-dataItem>
+            <app-timepicker id="ThoiGian" [(model)]="dataItem.ThoiGian" moreClass="pl-0" placeHolder="Giờ" min="1" max="9999" 
+                [modelIsNumber]="true">
+            </app-timepicker>
+        </ng-template>
+        <ng-template #tocDoTruyenTemplate let-dataItem>
+            <app-textboxnumeric id="TocDoTruyen"  min="1" max="9999" [spinners]="false"
+                [(model)]="dataItem.TocDoTruyen">
+            </app-textboxnumeric>
+        </ng-template>
+        <ng-template #mauSacDaNiemMacTemplate let-dataItem>
+            <app-textarea id="MauSacDaNiemMac" [(model)]="dataItem.MauSacDaNiemMac"> 
+            </app-textarea>
+        </ng-template>
+        <ng-template #nhipThoTemplate let-dataItem>
+            <app-textboxnumeric id="NhipTho"  [spinners]="false" min="1" max="9999"
+                [(model)]="dataItem.NhipTho">
+            </app-textboxnumeric>
+        </ng-template>
+        <ng-template #thanNhietTemplate let-dataItem>
+            <app-textboxnumeric id="ThanNhiet"  min="1" max="9999" [format]="format" [decimals]="2" [spinners]="false"
+                [(model)]="dataItem.ThanNhiet">
+            </app-textboxnumeric>
+        </ng-template>
+        <ng-template #huyetApTemplate let-dataItem let-rowIndex="rowIndex">
+            <app-textboxnumeric id="HuyetAp1" fxFlex="45%"  min="1" max="9999" [format]="format" [decimals]="2"  [spinners]="false" style="margin-top: 16px;"
+                [(model)]="dataItem.HuyetAp1" [validationerror]="'ChiSoSinhTons['+ rowIndex + '].HuyetAp1' | validationerror:validationErrors">
+            </app-textboxnumeric>
+           <label fxFlex="10%"  style="margin-top: 16px;font-weight: bold;font-size: 25px;">/</label>
+            <app-textboxnumeric id="HuyetAp2"  fxFlex="45%" min="1" max="9999"  [format]="format" [decimals]="2"  [spinners]="false" style="margin-top: 16px;"
+                [(model)]="dataItem.HuyetAp2" [validationerror]="'ChiSoSinhTons['+ rowIndex + '].HuyetAp2' | validationerror:validationErrors">
+            </app-textboxnumeric>
+        </ng-template>
+        <ng-template #machTemplate let-dataItem>
+            <app-textboxnumeric id="Mach"  [(model)]="dataItem.Mach" min="1" max="9999" [spinners]="false"> 
+            </app-textboxnumeric>
+        </ng-template>
+        <ng-template #dienBienKhacTemplate let-dataItem>
+            <app-textarea id="DienBienKhac" [(model)]="dataItem.DienBienKhac">
+            </app-textarea>
+        </ng-template>
+        <ng-template #actionTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                    *ngIf="dataItem.Id == 0" (click)="xoa(dataItem)">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #footerTemplate>
+            <div class="text-center" kendoTooltip>
+                <button (click)="themDanhSachTruyenMau()" color="primary" mat-mini-fab kendoTooltip title="Thêm"
+                    type="button">
+                    <mat-icon [icIcon]="icAdd"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <app-datetimepicker fxFlex="25%" [(model)]="phieuTheoDoiTruyenMau.NgungTruyenHoi" id="NgungTruyenHoi" (modelChange)="ChangeNgungTruyenHoi($event)"
+             label="Ngừng truyền hồi">
+        </app-datetimepicker>
+        <app-textboxnumeric id="SLMauTruyenThucTe" (modelChange)="onChangeSLMauTruyenThucTe($event)" min="1" max="9999"
+            [(model)]="phieuTheoDoiTruyenMau.SLMauTruyenThucTe" fxFlex="20%" fxFlex.sm="20%"
+            label="SL máu truyền thực tế (ml)">
+        </app-textboxnumeric>
+        <app-autocomplete  id="BSDieuTri" popupSettings="null" fxFlex="20%" fxFlex.sm="20%" [(model)]="phieuTheoDoiTruyenMau.BSDieuTri"
+            [dataList]="dataNhanVien" label="BS điều trị">
+        </app-autocomplete>
+        <!-- <app-combobox id="DDTruyenMau" popupSettings="null"  fxFlex="20%" fxFlex.sm="20%" [(model)]="phieuTheoDoiTruyenMau.DDTruyenMau" required="true" (modelChange)="onChangeDDTruyenMau($event)"
+            [validationerror]="'DDTruyenMau' | validationerror:validationErrors"
+            [dataList]="dataNhanVien" label="ĐD truyền máu">
+        </app-combobox> -->
+        <app-combobox id="DDTruyenMau" fxFlex="20%" [required]="true"  [reloadForGrid]="true"
+                                url="Marketing/GetNhanVienTaiBenhVien" 
+                                [(model)]="phieuTheoDoiTruyenMau.DDTruyenMauId"
+                                bind=true label="ĐD truyền máu"
+                                [validationerror]="'DDTruyenMauId' | validationerror:validationErrors">
+        </app-combobox>
+        <app-upload id="Upload" #upload15NgayDieuTri [allowedExtensions]="allowedExtensions" fxFlex="100%"
+            [(model)]="phieuTheoDoiTruyenMau.FileChuKy" [multiple]="true"
+            label="File chữ ký phiếu xét nghiệm hòa hợp miễn dịch truyền máu và theo dõi truyền máu"
+            [template]="templateFileChuanDoanHAInfo">
+        </app-upload>
+        <ng-template #templateFileChuanDoanHAInfo let-files>
+            <table width="100%" >
+                <tr>
+                    <td>
+                        <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                            (click)="upload15NgayDieuTri.viewFile(files[0])"
+                            class="custom-name red">{{files[0].name}}</a>
+                        <a *ngIf="!files[0].error" title="{{files[0].name}}"
+                            (click)="upload15NgayDieuTri.viewFile(files[0])" class="green"
+                            class="custom-name green">{{files[0].name}}</a>
+                    </td>
+                    <td style="width:25px">
+                        <a type="button" (click)="upload15NgayDieuTri.remove(files[0].uid)" mat-icon-button>
+                            <mat-icon [icIcon]="icClear"></mat-icon>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </ng-template>
+        <div fxFlex="100%" style="padding-bottom: 50px;">
+            <label fxFlex="25%" style="padding-top: 30px;">Người thực hiện :
+                <b>{{phieuTheoDoiTruyenMau.TaiKhoanDangNhap}}</b></label>
+            <label fxFlex="25%" style="padding-top: 30px;">Ngày thực hiện :
+                <b>{{phieuTheoDoiTruyenMau.NgayThucHien}}</b></label>
+            <span fxFlex="50%" style="text-align: right;">
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" style="pointer-events: all;"
+                    (click)="In()" >In</button>
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                    (click)="Huy()">Hủy</button>
+                <button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+                    Lưu
+                </button>
+            </span>
+        </div>
+    </div>
+</div>

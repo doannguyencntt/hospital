@@ -1,0 +1,171 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%">
+        <a *ngIf="coGoiDichVu && !isVacxinReadonly" (click)="xemGoiDichVu()"
+            style="color:green; text-decoration: underline; font-weight: bold; bottom: 20px;" class="mr-2">
+            Sử dụng gói dịch vụ
+        </a>
+
+        <!-- cacDichVuKM -->
+        <a *ngIf="coDichVuKhuyenMai && !isVacxinReadonly" (click)="xemGoiDichVuKhuyenMai()" style="color:blue; text-decoration: underline; font-weight: bold; bottom: 20px;"> Dịch vụ khuyến mại</a>
+    </div>
+
+    <app-combobox *ngIf="!isVacxinReadonly" fxFlex="30%" label="Chọn vắcxin" id="DichVuKyThuatBenhVienId" url="TiemChung/GetVaccines" required="true" class="item-no-padding" [(model)]="chiDinhVacxinTiemChung.DichVuKyThuatBenhVienId" [modelText]="chiDinhVacxinTiemChung.DichVuKyThuatBenhVienDisplay"
+        [validationerror]="'DichVuKyThuatBenhVienId' | validationerror: validationErrors" [templateHeader]="dichVuVacxinTemplateHeader" [template]="dichVuVacxinTemplate" (selectionChange)="evtVacxinChange($event)" (keyup)="onKeyEnterAddItem($event)" (openCombobox)="openCombobox($event)"
+            [disabled]="chiDinhVacxinTiemChung.YeuCauGoiDichVuId || chiDinhVacxinTiemChung.YeuCauGoiDichVuKhuyenMaiId">
+        <ng-template #dichVuVacxinTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="40%">Tên vắcxin</th>
+                    <th width="20%">ĐVT</th>
+                    <th width="20%">Nước SX</th>
+                    <th width="10%">Số tồn</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #dichVuVacxinTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="40%">{{dataItem.DisplayName}}</td>
+                    <td width="20%">{{dataItem.DonViTinh}}</td>
+                    <td width="20%">{{dataItem.NuocSanXuat}}</td>
+                    <td width="10%">{{dataItem.SoLuongTonDisplay}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-dropdownlist *ngIf="!isVacxinReadonly" fxFlex="10%" label="Vị trí tiêm" id="ViTriTiem" class="item-no-padding" url="TiemChung/GetViTriTiems" required="true" [(model)]="chiDinhVacxinTiemChung.TiemChung.ViTriTiem" [modelText]="chiDinhVacxinTiemChung.TiemChung.ViTriTiemDisplay"
+        (keyup)="onKeyEnterAddItem($event)" (openDropDownList)="openCombobox($event)"
+        [validationerror]="'TiemChung.ViTriTiem' | validationerror:validationErrors" (selectionChange)="evtViTriTiemChange($event)">
+    </app-dropdownlist>
+
+    <app-textboxnumeric *ngIf="!isVacxinReadonly" fxFlex="10%" label="Mũi số" [min]="1" [required]="true" [(model)]="chiDinhVacxinTiemChung.TiemChung.MuiSo" (keyup)="onKeyEnterAddItem($event)" [validationerror]="'TiemChung.MuiSo' | validationerror:validationErrors">
+    </app-textboxnumeric>
+
+    <app-combobox *ngIf="!isVacxinReadonly" fxFlex="20%" id="NoiDangKyId" label="Nơi thực hiện" url="KhamBenh/GetPhongThucHienChiDinhKhamOrDichVuKyThuat" class="item-no-padding" [disabled]="!chiDinhVacxinTiemChung.DichVuKyThuatBenhVienId" required="true"
+        [(model)]="chiDinhVacxinTiemChung.NoiThucHienId" [modelText]="chiDinhVacxinTiemChung.NoiThucHienDisplay" (selectionChange)="evtNoiThucHienChange($event)" [validationerror]="'NoiThucHienId' | validationerror:validationErrors" [templateHeader]="noiThucHienTiemChungTemplateHeader"
+        [template]="noiThucHienTiemChungTemplate" [queryInfo]="{ParameterDependencies:'{DichVuId:' + chiDinhVacxinTiemChung.DichVuKyThuatBenhVienId +'}', Take: 50}"
+        (keyup)="onKeyEnterAddItem($event)" (openCombobox)="openCombobox($event)">
+        <ng-template #noiThucHienTiemChungTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th width="80%">Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #noiThucHienTiemChungTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td width="80%">{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textbox *ngIf="!isVacxinReadonly" id="lieu-luong" fxFlex="15%" fxFlex.sm="15%" maxlength="500" label="Liều lượng" 
+        [(model)]="chiDinhVacxinTiemChung.TiemChung.LieuLuong">
+    </app-textbox>
+
+    <div fxFlex="15%" fxLayoutAlign="center center" kendoTooltip>
+        <button *ngIf="!isVacxinReadonly" type="button" class="mr-2" mat-button color="primary" (click)="huy()">Huỷ</button>
+        <button *ngIf="!isEditing && !isVacxinReadonly" type="button" color="primary" mat-raised-button mat-button class="mr-1" title="Phím tắt: Chưa có" (click)="themVacxin()">Thêm</button>
+        <button *ngIf="isEditing && !isVacxinReadonly" type="button" color="primary" mat-raised-button mat-button class="mr-1" title="Phím tắt: Chưa có" (click)="luuVacxin()">Lưu</button>
+    </div>
+
+    <app-grid #gridVacxin fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" maxHeight="500" 
+        [gridColumns]="vacxinColumns" [gridDataSource]="dataSourceVacxin" [documentType]="documentType"
+        [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" 
+        [allowSortDefault]="true" [checkboxAble]="false" [lazyLoadPage]="true" [pageable]="false"
+        [removeGroupFooterIfIsOnlyOne]="true" reorderRowsMoveItemData="true">
+    </app-grid>
+
+    <ng-template #actionVacxinTemplate let-dataItem let-rowIndex="rowIndex">
+        <ng-container *ngIf="dataItem.TiemChung.TrangThaiTiemChung != trangThaiTiemChung.DaTiemChung">
+        <button *ngIf="!isVacxinReadonly" color="primary" mat-icon-button kendoTooltip title="Sửa" type="button" (click)="suaVacxin(dataItem)">
+            <mat-icon [icIcon]="icEdit"></mat-icon>
+        </button>
+
+        <button *ngIf="!isVacxinReadonly && !dataItem.IsDichVuHuyThanhToan" color="primary" mat-icon-button kendoTooltip title="Xóa" type="button" (click)="xoaVacxin(dataItem)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+
+        <button *ngIf="!isVacxinReadonly && dataItem.IsDichVuHuyThanhToan" style="color: red" mat-icon-button kendoTooltip title="Hủy" type="button" (click)="huyVacxin(dataItem)">
+            <mat-icon [icIcon]="icCancel"></mat-icon>
+        </button>
+        </ng-container>
+    </ng-template>
+
+    <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+
+    <ng-template #tenVacxinTemplate let-dataItem let-rowIndex="rowIndex">
+        <div>
+            <mat-icon fxFlex="30px" *ngIf="dataItem.YeuCauGoiDichVuId !== null || dataItem.YeuCauGoiDichVuKhuyenMaiId" [icIcon]="icInfo" kendoTooltip title="{{dataItem.TenGoiDichVu}}">
+            </mat-icon>
+            <span fxFlex="auto" class="reverse-ellipsis r" kendoTooltip title="{{dataItem.DichVuKyThuatBenhVienDisplay}}">{{dataItem.DichVuKyThuatBenhVienDisplay}} </span>
+        </div>
+    </ng-template>
+
+    <ng-template #muiSoTemplate let-dataItem let-rowIndex="rowIndex">
+        {{dataItem.TiemChung.MuiSo}}
+    </ng-template>
+
+    <ng-template #viTriTiemTemplate let-dataItem let-rowIndex="rowIndex">
+        {{dataItem.TiemChung.ViTriTiemDisplay}}
+    </ng-template>
+
+    <ng-template #soLuongTemplate let-dataItem let-rowIndex="rowIndex">
+        {{dataItem.TiemChung.SoLuong | number}}
+    </ng-template>
+
+    <ng-template #lieuLuongTemplate let-dataItem let-rowIndex="rowIndex">
+        {{dataItem.TiemChung.LieuLuong}}
+    </ng-template>
+
+    <ng-template #donGiaTemplate let-dataItem let-rowIndex="rowIndex">
+        {{dataItem.Gia | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #thanhTienTemplate let-dataItem let-rowIndex="rowIndex">
+        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #trangThaiTemplate let-dataItem let-rowIndex="rowIndex">
+        <span [style.white-space]="dataItem.KhongThucHien ? 'normal' : 'none'" 
+            [ngClass]="{'blackText': dataItem.TiemChung.TrangThaiTiemChung == trangThaiTiemChung.ChuaTiemChung, 
+                        'greenText': dataItem.TiemChung.TrangThaiTiemChung == trangThaiTiemChung.DaTiemChung }">
+            {{dataItem.TiemChung.TrangThaiTiemChungDisplay}}
+            <!-- {{dataItem.TrangThaiDisplay}} -->
+        </span>
+    </ng-template>
+
+    <ng-template #noiThucHienTemplate let-dataItem let-rowIndex="rowIndex">
+        {{dataItem.NoiThucHienDisplay}}
+    </ng-template>
+
+    <ng-template #nguoiChiDinhTemplate let-dataItem let-rowIndex="rowIndex">
+        {{dataItem.NhanVienChiDinhDisplay}}
+    </ng-template>
+
+    <ng-template #NguoiThucHienTemplate let-dataItem let-rowIndex="rowIndex">
+        {{dataItem.NhanVienTiemDisplay}}
+    </ng-template>
+
+    <ng-template #tongTienFooterTemplate let-dataItem>
+        <span>Tổng cộng:</span>
+    </ng-template>
+
+    <ng-template #tongGiaFooterTemplate let-dataItem>
+        <span style="color:blue">{{getTongGia() | number:'0.2-2':'vi-VN'}}</span>
+    </ng-template>
+
+    <ng-template #dichVuKhuyenMaiTemplate let-dataItem>
+        <app-checkbox *ngIf="dataItem.YeuCauGoiDichVuKhuyenMaiId" 
+            id="dvKhuyenMaiGoiMarketing{{dataItem.Id}}" label="" [(model)]="dataItem.YeuCauGoiDichVuKhuyenMaiId"
+            [disabled]="true">
+        </app-checkbox>
+    </ng-template>
+</div>

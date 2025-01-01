@@ -1,0 +1,56 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Chỉnh Sửa {{tenLoai}} Chi Tiết</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="height: 220px;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3">
+            <legend>
+                Thông tin {{tenLoai | lowercase}}
+            </legend>
+
+            <div fxLayout="column">
+                <ul class="inline">
+                    <li>{{tenLoai}}: &nbsp;<strong>{{thongTinVatTuThuoc.Ten}}</strong></li>
+                    <li>Mã: &nbsp;<strong>{{thongTinVatTuThuoc.Ma}}</strong></li>
+                    <li>Đơn vị tính: &nbsp;<strong>{{thongTinVatTuThuoc.DVT}}</strong></li>
+                    <li>Nhà SX: &nbsp;<strong>{{thongTinVatTuThuoc.NhaSX}}</strong></li>
+                    <li>Nước SX: &nbsp;<strong>{{thongTinVatTuThuoc.NuocSX}}</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+        <fieldset fxFlex="100%" class="mb-3 mt-3">
+            <legend>
+                Thông tin chỉnh sửa
+            </legend>
+
+            <div fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                    style="padding-top: 16px;">
+                    <app-textboxnumeric id="SoLuongAdd" fxFlex="70%" fxFlex.sm="70%"
+                        [(model)]="thongTinVatTuThuoc.SoLuong" [min]="thongTinVatTuThuoc.LoaiKho == 5 ? 0.01 : 1" max="999999" label="Số lượng"
+                        (keyup)="onKey($event)" [format]="thongTinVatTuThuoc.LoaiKho == 5 ? format : ''" [decimals]="thongTinVatTuThuoc.LoaiKho == 5 ? 2 : 0"
+                        [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+                    </app-textboxnumeric>
+                    <div fxFlex="30%" fxFlex.sm="30%">
+                        <div class="container-custom no-label">
+                            <label>&nbsp;</label>
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <app-checkbox fxFlex="100%" id="vehicle1KhuVucVT1" [(model)]="thongTinVatTuThuoc.TinhPhi"
+                                    label="Tính phí" value="true"></app-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" mat-stroked-button color="primary" mat-dialog-close>Hủy</button>
+    <button tabindex="-1" type="button" (click)="luuVatTu()" mat-stroked-button color="primary" class="md-primary">Cập nhật</button>
+</mat-dialog-actions>

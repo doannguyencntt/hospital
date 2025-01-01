@@ -1,0 +1,13 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>TẠO NHÓM DỊCH VỤ</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose" (click)="closed()" ></mat-icon>
+    </button>
+</div>
+<app-nhom-dich-vu-thuong-dung-shared [disableBoPhan]="true" [boPhan]="boPhan" [isCreate]="true"></app-nhom-dich-vu-thuong-dung-shared>
+<div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+    <app-formfooter [bodyComponent]="shared" #footer type="create" (created)="onCreated()" 
+        (closePageLocationBack)="true"
+        (validateClient)="onValidateClient($event)">
+    </app-formfooter>
+</div>

@@ -1,0 +1,120 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap.lt-sm="0">
+
+    <!-- <div fxFlex="100%" class="sub-title mt-0">Dịch vụ:
+        <ng-container *ngIf="dataThongTinLichSuEkipPTTT != undefined && dataThongTinLichSuEkipPTTT != null">
+            <label><b>{{dataThongTinLichSuEkipPTTT.TenDichVu}}</b></label>
+        </ng-container>
+    </div> -->
+
+    <app-combobox fxFlex="50%" id="dichVuPTTT" label="Dịch Vụ PTTT" url="PhauThuatThuThuat/GetDichVuPTTTs"
+        [(model)]="dichVu.YeuCauDichVuKyThuatId" bind="true" [autoSelectFirstItem]="true"
+        [queryInfo]="{ParameterDependencies:'{YeuCauTiepNhanId:' + yeuCauTiepNhanId +', LanThucHien: '+lanThucHien+'}', Take: 50}"
+        [template]="DichVuPTTTTemplate" [templateHeader]="DichVuPTTTTemplateHeader" (modelChange)="chonDichVu($event)"
+        class="item-no-padding">
+        <ng-template #DichVuPTTTTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="10%">Loại</th>
+                    <th width="15%">Mã DV</th>
+                    <th width="40%">Tên DV</th>
+                    <th width="20%">Bác sĩ chính</th>
+                    <th width="15%">Trạng thái</th>
+
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #DichVuPTTTTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="10%">{{dataItem.LoaiPTTT}}</td>
+                    <td width="15%">{{dataItem.MaDichVu}}</td>
+                    <td width="40%">{{dataItem.TenDichVu}}</td>
+                    <td width="20%">{{dataItem.BacSiChinh}}</td>
+                    <td *ngIf="dataItem.TrangThai" width="15%"><span
+                            style="color:green;">{{dataItem.TrangThaiDisplay}}</span>
+                    </td>
+                    <td *ngIf="!dataItem.TrangThai" width="15%">{{dataItem.TrangThaiDisplay}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <a *ngIf="coDichVuHuy == true" (click)="hienThiDichVuKhongThucHien()" id="show-khong-thuc-hien">
+        <span style="color:#005dab; text-decoration: underline; font-weight: bold; margin: 15px">
+            Dv không thực hiện
+        </span>
+    </a>
+
+    <div fxFlex="100%" *ngIf="dichVu.YeuCauDichVuKyThuatId != null && dataThongTinLichSuEkipPTTT != null">
+        <kendo-tabstrip fxFlex="100%" [tabPosition]="'left'" class="tab-strip-lich-su" [keepTabContent]="true"
+            (tabSelect)="onTabSelect($event)">
+            <kendo-tabstrip-tab [selected]="true">
+                <ng-template kendoTabTitle>
+                    <div kendoTooltip>
+                        EKIP <br />THỰC HIỆN
+                    </div>
+                </ng-template>
+                <ng-template kendoTabContent>
+                    <div class="p-2">
+                        <app-lich-su-pttt-ekip-thuc-hien [dataThongTinLichSuEkipPTTT]="dataThongTinLichSuEkipPTTT"
+                            [yeuCauDichVuKyThuatId]="dataThongTinLichSuEkipPTTT.Id">
+                        </app-lich-su-pttt-ekip-thuc-hien>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+
+            <kendo-tabstrip-tab
+                *ngIf="dataThongTinLichSuEkipPTTT != null && dataThongTinLichSuEkipPTTT.PTTTVienChinh != null">
+                <ng-template kendoTabTitle>
+                    <div kendoTooltip>
+                        TƯỜNG TRÌNH<br /> PT/TT
+                    </div>
+                </ng-template>
+                <ng-template kendoTabContent>
+                    <div class="p-2">
+                        <app-lich-su-pttt-tuong-trinh [dataThongTinLichSuEkipPTTT]="dataThongTinLichSuEkipPTTT"
+                            [yeuCauDichVuKyThuatId]="dichVu.YeuCauDichVuKyThuatId">
+                        </app-lich-su-pttt-tuong-trinh>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+
+            <kendo-tabstrip-tab
+                *ngIf="dataThongTinLichSuEkipPTTT != null &&dataThongTinLichSuEkipPTTT.PTTTVienChinh != null">
+                <ng-template kendoTabTitle>
+                    <div kendoTooltip>
+                        GHI NHẬN<br /> VT/THUỐC
+                    </div>
+                </ng-template>
+                <ng-template kendoTabContent>
+                    <div class="p-2">
+                        <app-lich-su-pttt-ghi-nhan-vt-thuoc [yeuCauDichVuKyThuatId]="dichVu.YeuCauDichVuKyThuatId">
+                        </app-lich-su-pttt-ghi-nhan-vt-thuoc>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+
+            <kendo-tabstrip-tab
+                *ngIf="dataThongTinLichSuEkipPTTT != null && dataThongTinLichSuEkipPTTT.PTTTVienChinh != null">
+                <ng-template kendoTabTitle>
+                    <div kendoTooltip>
+                        CHỈ SỐ <br />SINH TỒN
+                    </div>
+                </ng-template>
+                <ng-template kendoTabContent>
+                    <div class="p-2" *ngIf="yeuCauTiepNhanId != undefined">
+                        <app-ls-ptt-cs-sinh-ton [yeuCauTiepNhanId]="yeuCauTiepNhanId">
+                        </app-ls-ptt-cs-sinh-ton>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+        </kendo-tabstrip>
+    </div>
+    <div fxFlex="100%"
+        *ngIf="dichVu.YeuCauDichVuKyThuatId == undefined && dichVu.YeuCauDichVuKyThuatId == null && dataThongTinLichSuEkipPTTT != null">
+
+    </div>
+</div>
+
+<!-- <app-lich-su-pttt-ghi-nhan-vt-thuoc>
+                    </app-lich-su-pttt-ghi-nhan-vt-thuoc> -->

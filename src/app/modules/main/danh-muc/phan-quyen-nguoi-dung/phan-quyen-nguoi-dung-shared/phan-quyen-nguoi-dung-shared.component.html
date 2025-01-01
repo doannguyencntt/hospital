@@ -1,0 +1,117 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="name" class="item-no-padding" fxFlex="70%" fxFlex.sm="70%" label="Tên quyền" [maxlength]="100"
+        [(model)]="phanQuyenNguoiDung.Name" [required]="true" [disabled]="phanQuyenNguoiDung.IsDefault"
+        [validationerror]="'Name' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-dropdownlist id="user_type" fxFlex="30%" fxFlex.sm="30%" label="Loại người dùng" class="item-no-padding"
+        url="PhanQuyenNguoiDung/GetListUserType" [(model)]="phanQuyenNguoiDung.UserType" [required]="true"
+        [modelText]="phanQuyenNguoiDung.UserTypeDisplay" [disabled]="phanQuyenNguoiDung.IsDefault"
+        [validationerror]="'UserType' | validationerror:validationErrors">
+    </app-dropdownlist>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">CHỨC NĂNG
+    </h3>
+
+    <app-grid fxFlex="100%" fxFlex.sm="100%" [gridDataSource]="gridDataSource" [useHeaderDefault]="false"
+        [documentType]="documentType" [gridColumns]="gridColumns" [useActionDefault]="false" [useAddDeault]="false"
+        [checkboxAble]="false" [headerTemplate]="permissionHeaderTemplate" [pageable]="false" [heightToolbar]="425"
+        #gridPermission>
+    </app-grid>
+
+    <ng-template #permissionHeaderTemplate>
+        <div class="bg-app-bar px-6 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+            <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                fxLayoutAlign="start center" style="margin-top: 2px;">
+                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                    type="search" name="searchString" [(ngModel)]="searchString" (ngModelChange)="searchChanges($event)"
+                    (keyup)="onKeySearchChanges($event)" placeholder="Nhập từ khóa tìm kiếm" />
+            </div>
+            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+                <mat-icon [icIcon]="icSearch"></mat-icon>
+            </button>
+            <div fxFlex="70%" fxFlex.sm="70%"></div>
+            <app-checkbox fxFlex="6%" fxFlex.sm="6%" id="checkAll" value="true" [model]="isCheckAll"
+                [disabled]="phanQuyenNguoiDung.IsDefault" (modelChange)="CheckAll($event)" label="Tất cả">
+            </app-checkbox>
+        </div>
+    </ng-template>
+
+    <ng-template #nameTemplate let-dataItem>
+        <span *ngIf="dataItem.DocumentType != null" [style.marginLeft.px]="dataItem.Level * 20">{{dataItem.Name}}</span>
+
+        <button mat-button (click)="expandData(dataItem)" class="pl-0" [style.marginLeft.px]="dataItem.Level * 20"
+            *ngIf="dataItem.DocumentType == null && dataItem.DocumentType == null && dataItem.IsCollapse">
+            <mat-icon [icIcon]="icArrowDown"></mat-icon>
+            {{dataItem.Name}}
+        </button>
+        <button mat-button (click)="collapseData(dataItem)" class="pl-0" color="primary"
+            [style.marginLeft.px]="dataItem.Level * 20"
+            *ngIf="dataItem.DocumentType == null && dataItem.DocumentType == null && !dataItem.IsCollapse">
+            <mat-icon [icIcon]="icArrowUp"></mat-icon>
+            {{dataItem.Name}}
+        </button>
+        <!-- <strong *ngIf="dataItem.DocumentType == null"
+            [style.marginLeft.px]="dataItem.Level * 20">{{dataItem.Name}}</strong> -->
+    </ng-template>
+
+    <ng-template #viewTemplate let-dataItem>
+        <app-checkbox *ngIf="dataItem.DocumentType != null" value="true" [model]="dataItem.IsView" label=""
+            [disabled]="phanQuyenNguoiDung.IsDefault"
+            (modelChange)="OnChangeChildrenOnView($event, dataItem.IdParent, dataItem)">
+        </app-checkbox>
+        <app-checkbox *ngIf="dataItem.DocumentType == null" value="true" [model]="dataItem.IsView" label=""
+            [disabled]="phanQuyenNguoiDung.IsDefault"
+            (modelChange)="OnChangeParentOnView($event, dataItem.Id, dataItem)">
+        </app-checkbox>
+    </ng-template>
+
+    <ng-template #insertTemplate let-dataItem>
+        <app-checkbox *ngIf="dataItem.DocumentType != null" value="true" [model]="dataItem.IsInsert" label=""
+            [disabled]="phanQuyenNguoiDung.IsDefault"
+            (modelChange)="OnChangeChildrenOnInsert($event, dataItem.IdParent, dataItem)">
+        </app-checkbox>
+        <app-checkbox *ngIf="dataItem.DocumentType == null" value="true" [model]="dataItem.IsInsert" label=""
+            [disabled]="phanQuyenNguoiDung.IsDefault"
+            (modelChange)="OnChangeParentOnInsert($event, dataItem.Id, dataItem)">
+        </app-checkbox>
+    </ng-template>
+
+    <ng-template #updateTemplate let-dataItem>
+        <app-checkbox *ngIf="dataItem.DocumentType != null" value="true" [model]="dataItem.IsUpdate" label=""
+            [disabled]="phanQuyenNguoiDung.IsDefault"
+            (modelChange)="OnChangeChildrenOnUpdate($event, dataItem.IdParent, dataItem)">
+        </app-checkbox>
+        <app-checkbox *ngIf="dataItem.DocumentType == null" value="true" [model]="dataItem.IsUpdate" label=""
+            [disabled]="phanQuyenNguoiDung.IsDefault"
+            (modelChange)="OnChangeParentOnUpdate($event, dataItem.Id, dataItem)">
+        </app-checkbox>
+    </ng-template>
+
+    <ng-template #deleteTemplate let-dataItem>
+        <app-checkbox *ngIf="dataItem.DocumentType != null" value="true" [model]="dataItem.IsDelete" label=""
+            [disabled]="phanQuyenNguoiDung.IsDefault"
+            (modelChange)="OnChangeChildrenOnDelete($event, dataItem.IdParent, dataItem)">
+        </app-checkbox>
+        <app-checkbox *ngIf="dataItem.DocumentType == null" value="true" [model]="dataItem.IsDelete" label=""
+            [disabled]="phanQuyenNguoiDung.IsDefault"
+            (modelChange)="OnChangeParentOnDelete($event, dataItem.Id, dataItem)">
+        </app-checkbox>
+    </ng-template>
+
+    <ng-template #processTemplate let-dataItem>
+        <app-checkbox *ngIf="dataItem.DocumentType != null" value="true" [model]="dataItem.IsProcess" label=""
+            [disabled]="phanQuyenNguoiDung.IsDefault"
+            (modelChange)="OnChangeChildrenOnProcess($event, dataItem.IdParent, dataItem)">
+        </app-checkbox>
+        <app-checkbox *ngIf="dataItem.DocumentType == null" value="true" [model]="dataItem.IsProcess" label=""
+            [disabled]="phanQuyenNguoiDung.IsDefault"
+            (modelChange)="OnChangeParentOnProcess($event, dataItem.Id, dataItem)">
+        </app-checkbox>
+    </ng-template>
+</div>
+<div *ngIf="!isCreate" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+    <app-formfooter [bodyComponent]="this" type="update" [read]="phanQuyenNguoiDung.IsDefault" (updated)="onUpdated()">
+    </app-formfooter>
+</div>

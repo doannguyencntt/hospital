@@ -1,0 +1,79 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Yêu Cầu Trả {{thongTinTraVT.NhomYeuCauId == nhomGoiDichVu.VatTuTieuHao ? 'Vật Tư' : 'Thuốc 1'}}</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content class="minHeight310">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+        <div fxFlex="100%">
+            <ul class="inline">
+                <li>{{thongTinTraVT.NhomYeuCauId == nhomGoiDichVu.VatTuTieuHao ? 'Vật tư' : 'Thuốc'}}: &nbsp;<strong>{{thongTinHoanTraVTVo.Ten}}</strong></li>
+                <li>Kho: &nbsp;<strong>{{thongTinHoanTraVTVo.TenKho}}</strong></li>
+            </ul>
+        </div>
+
+        <div fxFlex="100%" *ngFor="let item of thongTinHoanTraVTVo.YeuCauDuocPhamVatTuBenhViens; let i = index">
+            <ul class="inline">
+                <li>Số lượng: &nbsp;<strong>{{item.SoLuong | number:'0.2'}}</strong></li>
+                <li>Đơn giá: &nbsp;<strong>{{item.DonGia | number:'0.2-2':'vi-VN'}}</strong></li>
+                <li>Thành tiền: &nbsp;<strong>{{item.ThanhTien | number:'0.2-2':'vi-VN'}}</strong></li>
+                <li>Số lượng đã trả: &nbsp;<strong>{{item.SoLuongDaTra | number:'0.2'}}</strong></li>
+                <li>
+                    <div style="display: inline-flex;line-height: 40px;" *ngIf="thongTinTraVT.SoLuong != 0">
+                        <span>Số lượng trả lần này: &nbsp;</span>
+                        <app-textboxnumeric style="width:100px;padding: 0" id="SoLuongTra" min="0" max="999999" [required]="true" [(model)]="item.SoLuongTra" label=" " class="no-label" 
+                            [validationerror]="'YeuCauDuocPhamVatTuBenhViens[' + i + '].SoLuongTra' | validationerror:validationErrors">
+                        </app-textboxnumeric>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div fxFlex="100%">
+            <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" style="padding-top: 16px;">
+                <app-combobox *ngIf="thongTinTraVT.SoLuong != 0" id="NguoiTra" fxFlex="20%" fxFlex.sm="40%" label="Người trả" url="ToaThuocMau/BacSiKeToa" popupSettings="null" [required]="true" [(model)]="thongTinHoanTraVTVo.NhanVienYeuCauId" [modelText]="thongTinHoanTraVTVo.TenNhanVienYeuCau"
+                    [validationerror]="'NhanVienYeuCauId' | validationerror:validationErrors">
+                </app-combobox>
+
+                <app-datepicker *ngIf="thongTinTraVT.SoLuong != 0" id="NgayYeuCau" fxFlex="20%" [(model)]="thongTinHoanTraVTVo.NgayYeuCau" required="true" label="Ngày trả" [validationerror]="'NgayYeuCau' | validationerror:validationErrors">
+                </app-datepicker>
+                <div fxFlex="60%" fxLayoutAlign="end center" kendoTooltip>
+                    <button *ngIf="thongTinTraVT.SoLuong != 0" type="button" mat-button class="mr-2" (click)="huy()">Hủy</button>
+                    <button *ngIf="(thongTinTraVT.CoYeuCauTraVTTuBenhNhanChiTiet && thongTinTraVT.SoLuong != 0)" type="button" class="mr-2" color="primary" mat-raised-button (click)="luu()">Lưu</button>
+                    <button *ngIf="(!thongTinTraVT.CoYeuCauTraVTTuBenhNhanChiTiet && thongTinTraVT.SoLuong != 0 )
+                    || (thongTinTraVT.CoYeuCauTraVTTuBenhNhanChiTiet && thongTinTraVT.SoLuong != 0)" type="button" class="mr-2" color="primary" mat-raised-button (click)="luu()">Thêm</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0">
+        <h1 fxFlex="100%" class="sub-titlewithh1  mr-4 mt-0">DS CÁC LẦN TRẢ</h1>
+        <div fxFlex="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="16px grid" fxLayout.lt-md="column">
+            <app-grid fxFlex="100%" class="k-grid-border" urlGetData="PhauThuatThuThuat/GetDataForGridDanhSachVatTuThuocHoanTraPTTT" [gridColumns]="gridColumns" [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="false" [removeGroupFooterIfIsOnlyOne]="true"
+                [checkboxAble]="false" [additionalSearchString]="additionString" [pageable]="false" [autoHeight]="true">
+            </app-grid>
+
+            <ng-template #tinhTrangTemplate let-dataItem>
+                <label *ngIf="dataItem.DuocDuyet == null">
+                    <strong><span>{{dataItem.TinhTrang}}</span></strong>
+                </label>
+                <label *ngIf="dataItem.DuocDuyet == true" class="green">
+                    <strong><span>{{dataItem.TinhTrang}}</span></strong>
+                </label>
+                <label *ngIf="dataItem.DuocDuyet == false" class="red">
+                    <strong><span>{{dataItem.TinhTrang}}</span></strong>
+                </label>
+            </ng-template>
+
+            <ng-template #ngayTraTemplate let-datathongTinHoanTraVTVo>
+                {{datathongTinHoanTraVTVo.NgayTraDisplay}}
+            </ng-template>
+
+            <ng-template #ngayTaoTemplate let-datathongTinHoanTraVTVo>
+                {{datathongTinHoanTraVTVo.NgayTaoDisplay}}
+            </ng-template>
+        </div>
+    </div>
+</mat-dialog-content>

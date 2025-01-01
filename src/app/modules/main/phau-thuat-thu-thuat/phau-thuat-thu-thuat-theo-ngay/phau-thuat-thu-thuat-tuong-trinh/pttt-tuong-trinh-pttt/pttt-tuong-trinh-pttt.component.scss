@@ -1,0 +1,53 @@
+.xe-block {
+    padding: 6px 10px;
+    position: relative;
+    background: #ffffff;
+    width: 100%;
+    text-overflow: ellipsis;
+    border: 1px solid #ececec;
+    margin-bottom: 0.2rem;
+    border-left: 2px solid #6eb0ff;
+    border-radius: 3px;
+    overflow: hidden;
+    white-space: nowrap;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+    &:hover {
+        border: 1px solid #e38c8c;
+        cursor: pointer;
+    }
+    i.fa-times {
+        position: absolute;
+        top: -5px;
+        right: -4px;
+        color: #c46d6d;
+        padding: 10px;
+    }
+}
+
+.bg-primary {
+    background-color: #7ab7ff !important;
+}
+
+.card .header {
+    font-size: 11px;
+    margin: 15px 0 0;
+    margin-top: 9px;
+    padding: 4px 15px;
+    color: #fff;
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+.po-h {
+    color: #005dab;
+    position: relative;
+    top: 5px;
+    left: 5px;
+    mat-icon {
+        display: contents;
+    }
+}
+
+.full-width-row {
+    width: 100%;
+}

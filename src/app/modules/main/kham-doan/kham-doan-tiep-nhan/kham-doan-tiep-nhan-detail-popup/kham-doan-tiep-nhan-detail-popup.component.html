@@ -1,0 +1,327 @@
+<app-header-form [crumbs]="[
+        {Title:'Khám Đoàn', Path: '/kham-doan'}
+        ,{Title:'Tiếp Nhận Khám Sức Khỏe Đoàn',Path:'',Active:true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <kendo-splitter id="splitter">
+                <kendo-splitter-pane [collapsible]="true" size="30%">
+                    <div class="pane-content">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="15px grid" fxLayoutGap.lt-sm="0">
+                            <app-combobox id="congTy" fxFlex="70%" fxFlex.sm="100%" label="Tên công ty"
+                                [required]="true" url="KhamDoan/GetCongTys" [(model)]="thongTinHopDong.CongTyId"
+                                (modelChange)="changeCongTy($event)" [reloadForGrid]="true"
+                                [validationerror]="'CongTyId' | validationerror:validationErrors"
+                                [popupSettings]="{width: 500}">
+                            </app-combobox>
+                            <app-combobox id="hopDong" fxFlex="30%" fxFlex.sm="100%" label="Số HĐ"
+                                url="KhamDoan/GetHopDongKhamSucKhoes" [required]="true"
+                                [(model)]="thongTinHopDong.HopDongId" (modelChange)="changeHopDong($event)"
+                                [reloadForGrid]="true" [autoSelectFirstItem]="true" [bind]="true"
+                                (dataForLookupChange)="changeLookupHopDong($event)"
+                                [queryInfo]="{ParameterDependencies:'{CongTyId:' + thongTinHopDong.CongTyId +'}', Take: 50}"
+                                [validationerror]="'HopDongId' | validationerror:validationErrors">
+                            </app-combobox>
+                            <ng-container *ngIf="xemChiTietHopDong">
+                                <app-datepicker id="NgayHopDong" fxFlex="50%" fxFlex.sm="100%" label="Ngày hợp đồng"
+                                    [required]="true" [disabled]="true" [(model)]="thongTinHopDong.NgayHopDong"
+                                    [validationerror]="'NgayHopDong' | validationerror:validationErrors">
+                                </app-datepicker>
+                                <app-dropdownlist id="loaiHopDong" fxFlex="50%" fxFlex.sm="100%" label="Loại hợp đồng"
+                                    url="KhamDoan/GetLoaiHopDongs" [required]="true" [disabled]="true"
+                                    [(model)]="thongTinHopDong.LoaiHopDong" [bind]="true"
+                                    [validationerror]="'LoaiHopDong' | validationerror:validationErrors">
+                                </app-dropdownlist>
+                                <app-dropdownlist id="trangThai" fxFlex="50%" fxFlex.sm="100%" label="Trạng thái"
+                                    url="KhamDoan/GetTrangThaiHopDongs" [disabled]="true"
+                                    [(model)]="thongTinHopDong.TrangThai" [bind]="true" [required]="true"
+                                    [validationerror]="'TrangThai' | validationerror:validationErrors">
+                                </app-dropdownlist>
+
+                                <app-textboxnumeric id="soBenhNhan" fxFlex="50%" fxFlex.sm="100%" [max]="999999"
+                                    label="Số người bệnh" [decimals]="0" [required]="true" [disabled]="true"
+                                    [(model)]="thongTinHopDong.SoBenhNhan"
+                                    [validationerror]="'SoBenhNhan' | validationerror:validationErrors">
+                                </app-textboxnumeric>
+                                <app-datepicker id="NgayHieuLuc" fxFlex="50%" fxFlex.sm="100%" label="Ngày hiệu lực"
+                                    [required]="true" [disabled]="true" [(model)]="thongTinHopDong.NgayHieuLuc"
+                                    [validationerror]="'NgayHieuLuc' | validationerror:validationErrors">
+                                </app-datepicker>
+                                <app-datepicker id="NgayKetThuc" fxFlex="50%" fxFlex.sm="100%" label="Ngày kết thúc"
+                                    [required]="true" [disabled]="true" [(model)]="thongTinHopDong.NgayKetThuc"
+                                    [validationerror]="'NgayKetThuc' | validationerror:validationErrors">
+                                </app-datepicker>
+                            </ng-container>
+
+
+                            <p fxFlex="100%" style="overflow:hidden;"><b>DANH SÁCH NHÂN VIÊN</b>
+                                <a class="link" (click)="xemChiTietHopDong=true" *ngIf="!xemChiTietHopDong"
+                                    style="float: right;">Xem chi tiết HĐ</a>
+                                <a class="link" (click)="xemChiTietHopDong=false" *ngIf="xemChiTietHopDong"
+                                    style="float: right;">Ẩn chi tiết HĐ</a>
+                            </p>
+                            <ng-template #headerTemplate>
+                                <div class="bg-app-bar" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid"
+                                    fxLayoutGap.lt-sm="0" style="padding: 0 15px 15px 15px;">
+                                    <app-checkbox class="mr-2" [(model)]="timKiemObj.TrangThai.ChuaKham" id="chuaKham"
+                                        label="Chưa khám">
+                                    </app-checkbox>
+                                    <app-checkbox class="mr-2" [(model)]="timKiemObj.TrangThai.DangKham" id="dangKham"
+                                        label="Đang khám">
+                                    </app-checkbox>
+                                    <app-checkbox class="mr-2" [(model)]="timKiemObj.TrangThai.DaKham" id="daKham"
+                                        label="Đã khám">
+                                    </app-checkbox>
+                                    <app-checkbox [(model)]="timKiemObj.TrangThai.DichVuPhatSinh" id="dichVuPhatSinh"
+                                        label="DV phát sinh">
+                                    </app-checkbox>
+                                    <div class="bg-card rounded-full border" fxFlex="80%" fxFlex.sm="100%"
+                                        fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center"
+                                        style="padding-right: 5px;">
+                                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                        <input [formControl]="searchCtrl"
+                                            class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search"
+                                            name="searchString" [(ngModel)]="timKiemObj.SearchString"
+                                            (keyup)="onKey($event)" (ngModelChange)="searchChanges($event)"
+                                            placeholder="Nhập từ khóa..." />
+                                    </div>
+                                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button"
+                                        (click)="clearSearch()">
+                                        <mat-icon [icIcon]="icSearch"></mat-icon>
+                                    </button>
+                                    <div fxFlex="20%" fxFlex.sm="100%">
+                                        <button style="margin-left: 5px;" color="primary" type="button" mat-raised-button mat-button
+                                            (click)="timKiemNangCao()">Tìm</button>
+                                    </div>
+
+                                    <div fxFlex="100%" fxFlex.sm="100%"
+                                        *ngIf="arrNguoiBenhBatDauKhamId!=null && arrNguoiBenhBatDauKhamId.length>0">
+                                        <button type="button" color="primary" mat-raised-button mat-button class="mt-2"
+                                            (click)="xuLyBatDauKhamNhieuNhanVien()">Bắt đầu
+                                            khám</button>
+                                        
+                                        <button type="button" color="primary" mat-raised-button mat-button class="mt-2 ml-2"
+                                            (click)="xuLyQuayLaiChuaKhamNhieuNhanVien()">Quay lại chưa khám</button>
+                                    </div>
+
+                                </div>
+                            </ng-template>
+                            <app-grid #gridNhanVien fxFlex="100%" fxFlex.sm="100%"
+                                [gridColumns]="gridColumns" [allowSortDefault]="false" [documentType]="documentype"
+                                [useAddDeault]="false" [showStt]="false" [useHeaderDefault]="false"
+                                [useActionDefault]="false" [checkboxAble]="true" [lazyLoadPage]="true"
+                                heightToolbar="310" [pageable]="true"
+                                (extCheckboxSelection)="onChangeBenhNhanBatDauKham($event)"
+                                [headerTemplate]="headerTemplate" [sort]="sort" [urlGetData]="urlGetData"
+                                [urlGetTotalPage]="urlGetTotal" [widthColumnSTT]="15" titleColumnSTT="#" >
+                            </app-grid>
+
+                            <ng-template #maNhanVienTemplate let-dataItem>
+                                <a (click)="showPopupChiTietNhanVien(dataItem)">
+                                    <p kendoTooltip class="reverse-ellipsis-kham-doan l"
+                                        title="{{dataItem.TenNhanVien}}">{{dataItem.TenNhanVien}}</p>
+                                </a>
+                            </ng-template>
+                            <ng-template #tinhTrangTemplate let-dataItem>
+                                <div style="position: relative;">
+                                    <span [ngClass]="{'': dataItem.TinhTrang == chuaKham,
+                                    'orangeText': dataItem.TinhTrang == dangKham,
+                                    'blueText': dataItem.TinhTrang == daKham}">
+                                        {{dataItem.TenTinhTrang}}
+                                    </span>
+                                </div>
+                            </ng-template>
+
+                            <ng-template #thoiGianTiepNhanTemplate let-dataItem>
+                                <div class="reverse-ellipsis r">{{dataItem.ThoiDiemTiepNhanDisplay}} </div>
+                            </ng-template>
+
+                            <ng-template #actionTemplate let-dataItem>
+                                <div kendoTooltip>
+                                    <button *ngIf="dataItem.TinhTrang == chuaKham" color="primary" mat-icon-button
+                                        kendoTooltip title="In hồ sơ" type="button" (click)="inHoSo(dataItem.Id)">
+                                        <mat-icon [icIcon]="icPrint"></mat-icon>
+                                    </button>
+
+                                    <button *ngIf="dataItem.TinhTrang != chuaKham" color="primary"
+                                        (click)="$event.stopPropagation()" kendoTooltip title="In"
+                                        [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                                        <mat-icon [icIcon]="icPrint"></mat-icon>
+                                    </button>
+                                    <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                                        <ng-template let-customer="customer" matMenuContent>
+                                            <button mat-menu-item (click)="inHoSoTungPhieu(1,dataItem.Id)">
+                                                <span>Sổ KSK định kỳ</span>
+                                            </button>
+                                            <button mat-menu-item (click)="inHoSoTungPhieu(2,dataItem.Id)">
+                                                <span>Phiếu đăng ký KSK</span>
+                                            </button>
+                                            <button mat-menu-item (click)="inHoSoTungPhieu(4,dataItem.Id)">
+                                                <span>Bảng hướng dẫn KSK</span>
+                                            </button>
+                                            <button *ngIf="dataItem.TinhTrang == daKham" mat-menu-item
+                                                (click)="inHoSoTungPhieu(3,dataItem.Id)">
+                                                <span>Kết quả KSK</span>
+                                            </button>
+                                        </ng-template>
+                                    </mat-menu>
+
+                                    <button *ngIf="dataItem.TinhTrang == chuaKham" class="ml-1" color="primary"
+                                        mat-icon-button kendoTooltip title="Bắt đầu khám" type="button"
+                                        (click)="batDauKham(dataItem)">
+                                        <mat-icon [icIcon]="icCheck"></mat-icon>
+                                    </button>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </kendo-splitter-pane>
+
+                <kendo-splitter-pane>
+                    <div class="pane-content" *ngIf="idSelect!=null">
+                        <app-kham-doan-tiep-nhan-nhan-vien-detail-popup [Id]="idSelect"
+                            [IsDichVuPhatSinh]="timKiemObj.TrangThai.DichVuPhatSinh" (saveDone)="timKiemNangCao()">
+                        </app-kham-doan-tiep-nhan-nhan-vien-detail-popup>
+                    </div>
+                </kendo-splitter-pane>
+            </kendo-splitter>
+            <!-- <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Tiếp Nhận Khám Sức Khỏe Đoàn</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <div class="border-b" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <app-combobox id="congTy" fxFlex="20%" fxFlex.sm="20%" label="Tên công ty" [required]="true"
+                        url="KhamDoan/GetCongTys" [(model)]="thongTinHopDong.CongTyId" (modelChange)="changeCongTy($event)"
+                        [reloadForGrid]="true"
+                        [validationerror]="'CongTyId' | validationerror:validationErrors">
+                    </app-combobox>
+                    <app-combobox id="hopDong" fxFlex="20%" fxFlex.sm="20%" label="Số hợp đồng" url="KhamDoan/GetHopDongKhamSucKhoes"
+                        [required]="true" [(model)]="thongTinHopDong.HopDongId"  (modelChange)="changeHopDong($event)"
+                        [reloadForGrid]="true" [autoSelectFirstItem]="true" [bind]="true" (dataForLookupChange)="changeLookupHopDong($event)"
+                        [queryInfo]="{ParameterDependencies:'{CongTyId:' + thongTinHopDong.CongTyId +'}', Take: 50}"
+                        [validationerror]="'HopDongId' | validationerror:validationErrors">
+                    </app-combobox>
+                    <app-datepicker id="NgayHopDong" fxFlex="20%" fxFlex.sm="20%" label="Ngày hợp đồng" [required]="true"
+                        [disabled]="true" [(model)]="thongTinHopDong.NgayHopDong"
+                        [validationerror]="'NgayHopDong' | validationerror:validationErrors">
+                    </app-datepicker>
+                    <app-dropdownlist id="loaiHopDong" fxFlex="20%" fxFlex.sm="20%" label="Loại hợp đồng"
+                        url="KhamDoan/GetLoaiHopDongs" [required]="true" [disabled]="true" [(model)]="thongTinHopDong.LoaiHopDong"
+                        [bind]="true"
+                        [validationerror]="'LoaiHopDong' | validationerror:validationErrors">
+                    </app-dropdownlist>
+                    <app-dropdownlist id="trangThai" fxFlex="20%" fxFlex.sm="20%" label="Trạng thái" url="KhamDoan/GetTrangThaiHopDongs"
+                        [disabled]="true" [(model)]="thongTinHopDong.TrangThai" [bind]="true"
+                        [required]="true" [validationerror]="'TrangThai' | validationerror:validationErrors">
+                    </app-dropdownlist>
+
+                    <app-textboxnumeric id="soBenhNhan" fxFlex="20%" fxFlex.sm="20%" [max]="999999" label="Số người bệnh" [decimals]="0"
+                        [required]="true"  [disabled]="true" [(model)]="thongTinHopDong.SoBenhNhan"
+                        [validationerror]="'SoBenhNhan' | validationerror:validationErrors">
+                    </app-textboxnumeric>
+                    <app-datepicker id="NgayHieuLuc" fxFlex="20%" fxFlex.sm="20%" label="Ngày hiệu lực" [required]="true"
+                        [disabled]="true" [(model)]="thongTinHopDong.NgayHieuLuc"
+                        [validationerror]="'NgayHieuLuc' | validationerror:validationErrors">
+                    </app-datepicker>
+                    <app-datepicker id="NgayKetThuc" fxFlex="20%" fxFlex.sm="20%" label="Ngày kết thúc" [required]="true"
+                        [disabled]="true" [(model)]="thongTinHopDong.NgayKetThuc"
+                        [validationerror]="'NgayKetThuc' | validationerror:validationErrors">
+                    </app-datepicker>
+
+                    <h3 fxFlex="100%" class="sub-title">Danh Sách Nhân Viên</h3>
+                    <ng-template #headerTemplate>
+                        <div class="bg-app-bar px-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                            <app-checkbox [(model)]="timKiemObj.TrangThai.ChuaKham" id="chuaKham" label="Chưa khám" class="ml-2"
+                                (modelChange)="timKiemNangCao()">
+                            </app-checkbox>
+                            <app-checkbox [(model)]="timKiemObj.TrangThai.DangKham" id="dangKham" label="Đang khám" class="ml-2"
+                                (modelChange)="timKiemNangCao()">
+                            </app-checkbox>
+                            <app-checkbox [(model)]="timKiemObj.TrangThai.DaKham" id="daKham" label="Đã khám" class="ml-2"
+                                (modelChange)="timKiemNangCao()">
+                            </app-checkbox>
+                            <app-checkbox [(model)]="timKiemObj.TrangThai.DichVuPhatSinh" id="dichVuPhatSinh" label="Dịch vụ phát sinh" class="ml-2"
+                                (modelChange)="timKiemNangCao()">
+                            </app-checkbox>
+                            <div class="bg-card rounded-full border px-4 ml-2" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                                fxLayoutAlign="start center" style="margin-top: 2px;">
+                                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                                    type="search" name="searchString" [(ngModel)]="timKiemObj.SearchString" (keyup)="onKey($event)"
+                                    (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa..." />
+                            </div>
+                            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                                <mat-icon [icIcon]="icSearch"></mat-icon>
+                            </button>
+
+                            <button style="margin-left: auto;" type="button" color="primary" mat-raised-button mat-button class="mr-1" (click)="xuLyBatDauKhamNhieuNhanVien()">Bắt đầu khám</button>
+                        </div>
+                    </ng-template>
+                    <app-grid #gridNhanVien fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridColumns"
+                        [allowSortDefault]="false" [documentType]="documentype" [useAddDeault]="false" [showStt]="false"
+                        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="true" [lazyLoadPage]="true"
+                        maxHeight="500" [pageable]="true" (extCheckboxSelection)="onChangeBenhNhanBatDauKham($event)"
+                        [headerTemplate]="headerTemplate" [sort]="sort"
+                        [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotal">
+                    </app-grid>
+
+                    <ng-template #maNhanVienTemplate let-dataItem>
+                        <a (click)="showPopupChiTietNhanVien(dataItem.Id)">
+                            <p kendoTooltip class="reverse-ellipsis-kham-doan l" title="{{dataItem.TenNhanVien}}">{{dataItem.TenNhanVien}}</p>
+                        </a>
+                    </ng-template>
+                    <ng-template #tinhTrangTemplate let-dataItem>
+                        <div style="position: relative;">
+                            <span [ngClass]="{'': dataItem.TinhTrang == chuaKham,
+                                    'orangeText': dataItem.TinhTrang == dangKham,
+                                    'blueText': dataItem.TinhTrang == daKham}">
+                                {{dataItem.TenTinhTrang}}
+                            </span>
+                        </div>
+                    </ng-template>
+
+                    <ng-template #thoiGianTiepNhanTemplate let-dataItem>
+                        <div class="reverse-ellipsis r">{{dataItem.ThoiDiemTiepNhanDisplay}} </div>
+                    </ng-template>
+
+                    <ng-template #actionTemplate let-dataItem>
+                        <div class="text-center" kendoTooltip>
+                            <button *ngIf="dataItem.TinhTrang == chuaKham" color="primary" mat-icon-button kendoTooltip title="In hồ sơ" type="button" (click)="inHoSo(dataItem.Id)">
+                                <mat-icon [icIcon]="icPrint"></mat-icon>
+                            </button>
+
+                            <button *ngIf="dataItem.TinhTrang != chuaKham" color="primary" (click)="$event.stopPropagation()" kendoTooltip title="In" [matMenuTriggerFor]="actionsMenu" mat-icon-button type="button">
+                                <mat-icon [icIcon]="icPrint"></mat-icon>
+                            </button>
+                            <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                                <ng-template let-customer="customer" matMenuContent>
+                                    <button mat-menu-item (click)="inHoSoTungPhieu(1,dataItem.Id)">
+                                        <span>Sổ KSK định kỳ</span>
+                                    </button>
+                                    <button mat-menu-item (click)="inHoSoTungPhieu(2,dataItem.Id)">
+                                        <span>Phiếu đăng ký KSK</span>
+                                    </button>
+                                    <button mat-menu-item (click)="inHoSoTungPhieu(4,dataItem.Id)">
+                                        <span>Bảng hướng dẫn KSK</span>
+                                    </button>
+                                    <button *ngIf="dataItem.TinhTrang == daKham" mat-menu-item (click)="inHoSoTungPhieu(3,dataItem.Id)">
+                                        <span>Kết quả KSK</span>
+                                    </button>
+                                </ng-template>
+                            </mat-menu>
+
+                            <button *ngIf="dataItem.TinhTrang == chuaKham" class="ml-1" color="primary" mat-icon-button kendoTooltip title="Bắt đầu khám" type="button" (click)="batDauKham(dataItem)">
+                                <mat-icon [icIcon]="icCheck"></mat-icon>
+                            </button>
+                        </div>
+                    </ng-template>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>

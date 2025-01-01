@@ -1,0 +1,54 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox fxFlex="20%" maxlength="50" id="Ma" label="Mã" maxlength="50" [required]="true"
+        [(model)]="nhaSanXuat.Ma" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textbox id="Ten" fxFlex="50%" fxFlex.sm="50%" [required]="true" maxlength="250" [(model)]="nhaSanXuat.Ten"
+        label="Tên" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+    <h4 class="sub-title" fxFlex="100%">Danh Sách Địa Chỉ</h4>
+    <div fxFlex="100%" fxFlex.sm="100%" *ngFor="let item of nhaSanXuat.NhaSanXuatTheoQuocGias;let i = index">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-textbox id="DiaChi" fxFlex="50%" fxFlex.sm="50%" maxlength="250" [(model)]="item.DiaChi"
+                [required]="true" label="Địa Chỉ"
+                [validationerror]="'NhaSanXuatTheoQuocGias['+i+'].DiaChi' | validationerror:validationErrors">
+            </app-textbox>
+            <!-- <app-combobox id="QuocGiaId" fxFlex="20%" fxFlex.sm="30%" [(model)]="item.QuocGiaId" [required]="true"
+                [modelText]="item.QuocGiaId" label="Quốc Gia" url="NhaSanXuat/GetListTenQuocGia"
+                [validationerror]="'QuocGiaId' | validationerror:validationErrors"(modelChange)="QuocGiaValueChange($event, i)">
+            </app-combobox> -->
+            <app-combobox id="QuocGiaId" fxFlex="20%" fxFlex.sm="30%" label="Tên Quốc Gia"
+                hierarchyKeyToSend="QuocGiaId" url="NhaSanXuat/GetListTenQuocGia" [(model)]="item.QuocGiaId"
+                [modelText]="item.TenQuocGia" class="item-no-padding" [template]="QuocGiaTemplate"
+                [templateHeader]="QuocGiaTemplateHeader" [required]="true"
+                [validationerror]="'NhaSanXuatTheoQuocGias['+i+'].QuocGiaId' | validationerror:validationErrors">
+                <ng-template #QuocGiaTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="20%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #QuocGiaTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="20%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+            <div fxFlex="10%" fxFlex.sm="20%">
+                <button mat-icon-button class="mt-3" (click)="XoaVitri(i)">
+                    <mat-icon [icIcon]="icRemove" color="warn"></mat-icon>
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <button mat-mini-fab color="primary" (click)="Them()">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+</div>

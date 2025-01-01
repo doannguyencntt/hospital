@@ -1,0 +1,61 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>THÔNG TIN NGƯỜI BỆNH TIẾP THEO</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="max-height: 86vh;">
+    <ng-container *ngIf="thongTinBenhNhan">
+        <fieldset fxFlex="100%">
+            <legend>Thông tin hành chính</legend>
+            <div fxFlex="100%" *ngIf="thongTinBenhNhan.YeuCauTiepNhanId">
+                <ul class="inline">
+                    <li>Mã TN: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.MaYeuCauTiepNhan}}</strong></li>
+                    <li>Mã BN: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.BenhNhan.MaBN}}</strong></li>
+                    <li>Họ tên: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.HoTen}}</strong></li>
+                    <li>Giới tính: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.TenGioiTinh}}</strong></li>
+                    <li *ngIf="!thongTinBenhNhan.IsDuoi6Tuoi">Tuổi:
+                        <strong>{{thongTinBenhNhan.YeuCauTiepNhan.Tuoi}}</strong>
+                    </li>
+                    <li *ngIf="thongTinBenhNhan.IsDuoi6Tuoi">Tuổi:
+                        <strong>{{thongTinBenhNhan.Duoi6TuoiDisplay}}</strong>
+                    </li>
+                    <li>SĐT: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.SoDienThoaiDisplay}}</strong></li>
+                    <li>Dân tộc:
+                        <strong>{{thongTinBenhNhan.YeuCauTiepNhan.DanToc == null ? null : thongTinBenhNhan.YeuCauTiepNhan.DanToc.Ten}}</strong>
+                    </li>
+                    <li>Địa chỉ:<strong>{{thongTinBenhNhan.YeuCauTiepNhan.DiaChiDisplay}}</strong></li>
+                    <li>Nghề nghiệp:
+                        <strong>{{thongTinBenhNhan.YeuCauTiepNhan.NgheNghiep == null ? null : thongTinBenhNhan.YeuCauTiepNhan.NgheNghiep.Ten}}</strong>
+                    </li>
+                    <li>Tuyến khám: <strong style="color: green;">{{thongTinBenhNhan.YeuCauTiepNhan.TenLyDoVaoVien}}</strong>
+                    </li>
+                    <li>Số BHYT: <strong>{{thongTinBenhNhan.YeuCauTiepNhan.BHYTMaSoThe}}</strong>
+                    </li>
+                    <li>Mức hưởng: <strong style="color: blue;">{{thongTinBenhNhan.YeuCauTiepNhan.BHYTMucHuong}}%</strong>
+                    </li>
+                    <li>Ngày hiệu lực: <strong [style.color]="thongTinBenhNhan.YeuCauTiepNhan.IsBHYTHetHan ? 'red' : ''">{{thongTinBenhNhan.YeuCauTiepNhan.BHYTThoiGianHieuLucDisplay}}</strong>
+                    </li>
+
+                    <li>Lý do TN:
+                        <strong>{{thongTinBenhNhan.YeuCauTiepNhan.TenLyDoTiepNhan}}</strong>
+                    </li>
+                    <li>Ngày TN:
+                        <strong>{{thongTinBenhNhan.YeuCauTiepNhan.ThoiDiemTiepNhanDisplay}}</strong>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+    </ng-container>
+
+    <ng-container *ngIf="!thongTinBenhNhan">
+        Không còn người bệnh nào trong hàng đợi
+    </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" mat-dialog-close="tuChon">Tự chọn NB </button>
+    <button type="button" mat-stroked-button color="primary" mat-dialog-close="boQua">Bỏ qua</button>
+    <button *ngIf="thongTinBenhNhan" mat-raised-button mat-button color="primary" [mat-dialog-close]="thongTinBenhNhan.Id" cdkFocusInitial>Xác nhận</button>
+</mat-dialog-actions>

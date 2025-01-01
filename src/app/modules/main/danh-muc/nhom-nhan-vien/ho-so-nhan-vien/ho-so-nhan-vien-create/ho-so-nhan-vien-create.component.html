@@ -1,0 +1,24 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Danh Mục',Path:''}
+                ,{Title:'Nhóm Nhân Viên',Path:''}
+                ,{Title:'Hồ Sơ Nhân Viên',Path:'/danh-muc/nhom-nhan-vien/ho-so-nhan-vien',Active:true}
+                ]">
+</app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Thêm Hồ Sơ Nhân Viên</h2>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <app-ho-so-nhan-vien-share></app-ho-so-nhan-vien-share>
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                    <app-formfooter #createNhanVien [bodyComponent]="shared" type="create" (created)="onCreated()">
+                    </app-formfooter>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,88 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Tìm kiếm người bệnh</div>
+    <button type="button" mat-icon-button (click)="closes()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="overflow-y: hidden;">
+    <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+        <!-- <app-textbox fxFlex="30%" id="MaTNMaBN" [(model)]="searchString" label="Mã TN/ Mã NB" (keyup)="keyUp($event)">
+        </app-textbox> -->
+        <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" style="margin-top: 2px;">
+            <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+            <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)"
+                (ngModelChange)="searchChanges()" placeholder="Nhập từ khóa..." />
+        </div>
+        <!-- <button type="button" color="primary" mat-raised-button mat-button class="ml-2" (click)="timKemBenhNhan()"> Tìm
+            kiếm</button> -->
+
+    </div>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-grid fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumns" [useAddDeault]="false"
+            [documentType]="documentType" [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotalPage"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            [additionalSearchString]="phongKhamId" [detailTemplate]="detailTemplate" height="500"
+            style="width: 1px;">
+        </app-grid>
+        <ng-template #detailTemplate let-dataItem>
+            <div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+                <fieldset class="row ml-1" fxFlex="100%">
+                    <legend>Thông tin hành chính</legend>
+                    <div fxFlex="100%">
+                        <ul class="inline">
+                            <li>Mã TN: <strong>{{dataItem.MaTN}}</strong></li>
+                            <li>Mã NB: <strong>{{dataItem.MaBN}}</strong></li>
+                            <li>Họ tên: <strong>{{dataItem.HoTen}}</strong></li>
+                            <li>Giới tính: <strong>{{dataItem.GioiTinhDisplay}}</strong></li>
+                            <li>Tuổi: <strong>{{dataItem.Tuoi}}</strong></li>
+
+                            <li>SĐT: <strong>{{dataItem.SoDienThoai}}</strong></li>
+                            <li>Dân tộc:
+                                <strong>{{dataItem.DanToc}}</strong>
+                            </li>
+                            <li>Địa chỉ: <strong>{{dataItem.DiaChiDisplay}}</strong></li>
+                            <li>Nghề nghiệp:
+                                <strong>{{dataItem.NgheNghiep}}</strong>
+                            </li>
+                            <li>Tuyến khám: <strong
+                                    style="color: green;">{{dataItem.TuyenKham}}</strong>
+                            </li>
+                            <li>Mức hưởng: <strong
+                                    style="color: blue;">{{dataItem.MucHuongDisplay}}</strong></li>
+                        </ul>
+                    </div>
+                </fieldset>
+            </div>
+            <div *ngIf="dataItem.YeuCauDichVuKyThuats.length > 0" fxLayoutAlign="start center"
+                fxLayout="row" class="py-1">
+                <fieldset class="row ml-1" fxFlex="100%">
+                    <legend>Thông tin xét nghiệm, cận lâm sàn</legend>
+                    <div fxFlex="100%">
+                        <div class="inline">
+                            <app-checkbox *ngFor="let item of dataItem.YeuCauDichVuKyThuats"
+                                value="true" id="ycdvkt{{item.Id}}" [(model)]="item.IsDone" [disabled]="true"
+                                class="inline_b py-1" label="{{item.TenDichVu}}">
+                            </app-checkbox>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </ng-template>
+    </div>
+    <!-- action chuẩn bị khám -->
+    <ng-template #chuanBiKhamActionTemplate let-dataItem let-rowIndex="rowIndex">
+        <div class="text-center" kendoTooltip>
+            <button *ngIf="dataItem.LoaiHangDoi == 1" type="button" title="Vào đợi khám" class="icon-color-button"
+                (click)="batDauKham(dataItem)">
+                <mat-icon [icIcon]="icPlay"></mat-icon>
+            </button>
+            <button *ngIf="dataItem.LoaiHangDoi ==  2" type="button" title="Vào đợi kết luận" class="icon-color-button"
+                (click)="duaVaoHangDoi(dataItem)">
+                <mat-icon [icIcon]="icAssignment"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+</mat-dialog-content>

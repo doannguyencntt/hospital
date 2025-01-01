@@ -1,0 +1,269 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <!-- <h3 fxFlex="100%" class="sub-title title-blue-text">I. Khám lâm sàn</h3>
+    <ng-container *ngFor="let items of arrDichVuKham, let i = index">
+        <div fxFlex="100%" class="sub-title title-red-text" style="font-size: 15px;">{{i+1}}. {{items.Title}}</div>
+        <ng-container *ngFor="let item of items.TemplateObj">
+            <div fxFlex="{{item.fxFlex}}">
+                <label class="ml-4">{{item.Title}}: </label>
+                <strong class="ml-2">{{item.Value}}</strong>
+            </div>
+        </ng-container>
+    </ng-container>
+
+
+    <h3 fxFlex="100%" class="sub-title title-blue-text">II. Khám cận lâm sàn</h3>
+    <div fxFlex="100%" class="sub-title title-red-text" style="font-size: 15px;">1. Xét nghiệm máu</div>
+    <strong fxFlex="100%">a) Công thức máu</strong>
+    <app-textarea fxFlex="33%" id="soLuongHongCau" label="Số lượng hồng cầu" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <app-textarea fxFlex="33%" id="soLuongBachCau" label="Số lượng bạch cầu" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <app-textarea fxFlex="34%" id="soLuongTieuCau" label="Số lượng tiểu cầu" maxlength="4000" minHeight="20">
+    </app-textarea>
+
+    <strong fxFlex="100%">b) Sinh hóa máu</strong>
+    <app-textarea fxFlex="33%" id="duongMau" label="Đường máu" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <app-textarea fxFlex="33%" id="ure" label="Urê" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <app-textarea fxFlex="34%" id="creatinin" label="Creatinin" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <app-textarea fxFlex="33%" id="asatGot" label="ASAT (GOT)" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <app-textarea fxFlex="33%" id="asatGpt" label="ASAT (GPT)" maxlength="4000" minHeight="20">
+    </app-textarea>
+
+    <strong fxFlex="100%">c) Khác (nếu có)</strong>
+    <app-textarea fxFlex="100%" id="khac" label="Nội dung" maxlength="4000" minHeight="20">
+    </app-textarea>
+
+    <div fxFlex="100%" class="sub-title title-red-text" style="font-size: 15px;">2. Xét nghiệm nước tiểu</div>
+    <app-textarea fxFlex="50%" id="xnNuocTieuPhanLoaiSucKhoe" label="a) Đường" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <app-textarea fxFlex="50%" id="xnNuocTieuProtein" label="b) Prôtêin" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <app-textarea fxFlex="100%" id="xnNuocTieukhac" label="c) Khác (nếu có)" maxlength="4000" minHeight="20">
+    </app-textarea>
+
+    <div fxFlex="100%" class="sub-title title-red-text" style="font-size: 15px;">3. Chẩn đoán hình ảnh</div>
+    <app-textarea fxFlex="100%" id="chanDoanHinhAnh" label="Nội dung" maxlength="4000" minHeight="20">
+    </app-textarea>
+
+    <h3 fxFlex="100%" class="sub-title title-blue-text">III. Kết luận</h3>
+    <app-textarea fxFlex="50%" id="phanLoaiSucKhoe" label="Phân loại sức khỏe" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <app-textarea fxFlex="50%" id="cacBenhTat" label="Các bệnh tật (nếu có)" maxlength="4000" minHeight="20">
+    </app-textarea>
+
+    <div fxFlex="100%" style="border-bottom: 1px solid var(--foreground-divider)">
+        <app-checkbox fxFlex="20%" id="keToa" label="KÊ TOA"></app-checkbox>
+    </div> -->
+
+    <!-- <app-radio fxFlex="25%" id="ThuocBV" name="ThuocBV" fxFlex="25%" label="Khu vực"
+        [items]="[{Value:3,Text:'Trong BV'},{Value:4,Text:'Ngoài BV'}]">
+    </app-radio> -->
+    <app-combobox fxFlex="50%" label="Dược phẩm" id="DuocPhamId" required="true" url="KhamBenh/DuocPhams"
+        [template]="DuocPhamTemplate" [templateHeader]="DuocPhamTemplateHeader"
+        [validationerror]="'DuocPhamId' | validationerror:validationErrors" class="item-no-padding"
+        [popupSettings]="{width: 600,popupClass:'item-no-padding'}">
+        <ng-template #DuocPhamTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="30%">Tên</th>
+                    <th width="30%">Hoạt Chất</th>
+                    <th style="text-align: right; right: 10px;" width="auto">SL Tồn</th>
+                    <th style="text-align: center; right: 10px;" width="auto">HSD</th>
+    
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #DuocPhamTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="30%">{{dataItem.Ten}}</td>
+                    <td width="30%">{{dataItem.HoatChat}}</td>
+                    <td style="text-align: right;" width="auto">{{dataItem.SLTonFormat}}</td>
+                    <td style="text-align: center;" width="auto">{{dataItem.HanSuDung}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+    <div fxFlex="100%">
+        <div fxFlex="100%" style="border:1px solid #ccc;border-radius: 5px;padding: 7px 15px 8px 15px;background: #e3f2fd;">
+            <ul class="inline" *ngIf="keToaNew.DuocPhamId != 0">
+                <li>Đơn vị tính: <strong>{{thongTinDuocPham.TenDonViTinh}}</strong></li>
+                <li>Đường dùng: <strong>{{thongTinDuocPham.TenDuongDung}}</strong></li>
+                <li>Tương tác thuốc:
+                    <strong *ngIf="thongTinDuocPham.FlagTuongTac == true" class="red">{{thongTinDuocPham.TuongTacThuoc}}
+                    </strong>
+                    <strong *ngIf="thongTinDuocPham.FlagTuongTac == false">
+                        {{thongTinDuocPham.TuongTacThuoc}}
+                    </strong>
+                </li>
+                <li>Dị ứng thuốc:
+                    <strong *ngIf="thongTinDuocPham.FlagDiUng == true" class="red">
+                        {{thongTinDuocPham.DiUngThuoc}}
+                    </strong>
+                    <strong *ngIf="thongTinDuocPham.FlagDiUng == false">
+                        {{thongTinDuocPham.DiUngThuoc}}
+                    </strong>
+                </li>
+                <li>Mức độ:
+                    <strong>
+                        <!-- {{benhNhanHienTai.YeuCauKhamBenh.TenMucDo}} -->
+                    </strong>
+                </li>
+                <li>Thuốc đã kê:
+                    <strong *ngIf="thongTinDuocPham.FlagThuocDaKe == true" class="red">
+                        {{thongTinDuocPham.ThuocDaKe}}
+                    </strong>
+                    <strong *ngIf="thongTinDuocPham.FlagThuocDaKe == false">
+                        {{thongTinDuocPham.ThuocDaKe}}
+                    </strong>
+                </li>
+                <!-- *ngIf="this.loaiKhoThuoc != 3" -->
+                <li>
+                    Tồn kho:
+                    <strong>
+                        <span *ngIf="thongTinDuocPham.TonKho < 10" class="red">
+                            {{thongTinDuocPham.TonKhoFormat}}
+                        </span>
+                        <span *ngIf="thongTinDuocPham.TonKho > 10">
+                            {{thongTinDuocPham.TonKhoFormat}}
+                        </span>
+                    </strong>
+                </li>
+                <li>
+                    HSD:
+                    <strong>
+                        <strong>
+                            {{thongTinDuocPham.HSD}}
+                        </strong>
+                    </strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <app-textboxnumeric id="SoLuongAdd" fxFlex="9%" min="1" max="999999999" label="SL" format="#.##" [decimals]="2"
+        [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+    </app-textboxnumeric>
+    <app-textbox fxFlex="10%" id="LieuDung" label="L.dùng/ngày">
+    </app-textbox>
+    <app-autocomplete id="Sang" fxFlex="7%" label="Sáng" placeHolder="SL"
+        [validationerror]="'SangDisplay' | validationerror:validationErrors" class="pr-0">
+    </app-autocomplete>
+    <app-timepicker id="GioSang" fxFlex="10%" label="" placeHolder="Giờ" [tabindex]="-1" [modelIsNumber]="true"
+        moreClass="pl-0">
+    </app-timepicker>
+    <app-autocomplete id="Trua" fxFlex="7%" label="Trưa" placeHolder="SL"
+        [validationerror]="'TruaDisplay' | validationerror:validationErrors" class="pr-0">
+    </app-autocomplete>
+    <app-timepicker id="GioTrua" fxFlex="10%" label="" placeHolder="Giờ" [tabindex]="-1" [modelIsNumber]="true"
+        moreClass="pl-0">
+    </app-timepicker>
+    <app-autocomplete id="Chieu" fxFlex="7%" label="Chiều" placeHolder="SL"
+        [validationerror]="'ChieuDisplay' | validationerror:validationErrors" class="pr-0">
+    </app-autocomplete>
+    <app-timepicker id="GioChieu" fxFlex="10%" label="" placeHolder="Giờ" [tabindex]="-1" [modelIsNumber]="true"
+        moreClass="pl-0">
+    </app-timepicker>
+    <app-autocomplete id="Toi" fxFlex="7%" label="Tối" placeHolder="SL"
+        [validationerror]="'ToiDisplay' | validationerror:validationErrors" class="pr-0">
+    </app-autocomplete>
+    <app-timepicker id="GioToi" fxFlex="10%" label="" placeHolder="Giờ" [tabindex]="-1" [modelIsNumber]="true"
+        moreClass="pl-0"></app-timepicker>
+    <app-textboxnumeric fxFlex="13%" min="0" max="9999" label="Số ngày">
+    </app-textboxnumeric>
+    
+    <app-autocomplete fxFlex="100%" fxFlex.sm="100%" url="KhamBenh/GetGhiChuDonThuocChiTietString" label="Cách dùng"
+        maxlength="4000">
+    </app-autocomplete>
+
+    <div fxFlex="100%" fxLayoutAlign="end center">
+        <button type="button" color="primary" mat-raised-button mat-button id="btnThemKeToa">Thêm</button>
+    </div>
+
+    <app-grid fxFlex="100%" #toaThuoc [gridColumns]="gridToaThuocColumns" [documentType]="documentType"
+        [removeGroupFooterIfIsOnlyOne]="true" masterName="ToaThuoc" [useAddDeault]="false" class="k-grid-border"
+        [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" style="width: 1px;"
+        [pageable]="false" [groups]="groupsChild" [lazyLoadPage]="true" reorderRowsMoveItemData=true
+        [autoHeight]="true" gridDataSource=" ">
+        <ng-template #sangTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.ThoiGianDungSangDisplay != null" kendoTooltip
+                    title="{{dataItem.SangDisplay + ' ' +(dataItem.ThoiGianDungSangDisplay)}}">
+                    {{dataItem.SangDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungSangDisplay}}
+                </p>
+                <p *ngIf="dataItem.ThoiGianDungSangDisplay == null" kendoTooltip title="{{dataItem.SangDisplay}}">
+                    {{dataItem.SangDisplay}}
+                </p>
+            </div>
+        </ng-template>
+        <ng-template #truaTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.ThoiGianDungTruaDisplay != null" kendoTooltip
+                    title="{{dataItem.TruaDisplay + ' ' +(dataItem.ThoiGianDungTruaDisplay)}}">
+                    {{dataItem.TruaDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungTruaDisplay}}
+                </p>
+                <p *ngIf="dataItem.ThoiGianDungTruaDisplay == null" kendoTooltip title="{{dataItem.TruaDisplay}}">
+                    {{dataItem.TruaDisplay}}
+                </p>
+            </div>
+        </ng-template>
+        <ng-template #chieuTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.ThoiGianDungChieuDisplay != null" kendoTooltip
+                    title="{{dataItem.ChieuDisplay + ' ' +(dataItem.ThoiGianDungChieuDisplay)}}">
+                    {{dataItem.ChieuDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungChieuDisplay}}
+                </p>
+                <p *ngIf="dataItem.ThoiGianDungChieuDisplay == null" kendoTooltip title="{{dataItem.ChieuDisplay}}">
+                    {{dataItem.ChieuDisplay}}
+                </p>
+            </div>
+
+
+        </ng-template>
+        <ng-template #toiTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.ThoiGianDungToiDisplay != null" kendoTooltip
+                    title="{{dataItem.ToiDisplay + ' ' +(dataItem.ThoiGianDungToiDisplay)}}">
+                    {{dataItem.ToiDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungToiDisplay}}
+                </p>
+                <p *ngIf="dataItem.ThoiGianDungToiDisplay == null" kendoTooltip title="{{dataItem.ToiDisplay}}">
+                    {{dataItem.ToiDisplay}}
+                </p>
+            </div>
+
+        </ng-template>
+        <ng-template #donGiaTemplate let-dataItem>
+            {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #thanhTienTemplate let-dataItem>
+            {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #thanhTienFooterTemplate let-dataItem>
+            <p style="color: blue; font-weight: bold;">
+                <span></span>
+        </ng-template>
+        <ng-template #donGiaFooterTemplate>
+            <span style="float:right">Tổng cộng:</span>
+        </ng-template>
+        <ng-template #thanhTienGroupFooterTemplate let-aggregates>
+            {{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}
+        </ng-template>
+        <ng-template #donGiaGroupFooterTemplate let-dataItem>
+            <span style="float:right">Cộng:</span>
+        </ng-template>
+        <ng-template #soLuongTemplate let-dataItem>
+            {{dataItem.SoLuongDisplay}}
+        </ng-template>
+    </app-grid>
+
+    <div fxFlex="100%" fxLayoutAlign="end center">
+        <button type="button" mat-button class="mr-1">In toa thuốc</button>
+    </div>
+</div>

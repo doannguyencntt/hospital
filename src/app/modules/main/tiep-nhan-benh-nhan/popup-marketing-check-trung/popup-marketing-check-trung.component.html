@@ -1,0 +1,36 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Xác Nhận</div>
+    <!-- <button (click)="close()" type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button> -->
+</div>
+
+<mat-dialog-content style="margin-bottom: 20px;">
+    <div class="div-tag-content">
+        <div style="margin-bottom: 10px;">Dịch vụ cảnh báo:</div>
+        <app-grid fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumns" [useAddDeault]="false"
+            [gridDataSource]="danhSachGoiDaChonTrongLanPopup" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [lazyLoadPage]="true" [autoHeight]="true" [pageable]="false">
+        </app-grid>
+        <div style="margin-top: 10px;">Ngoài ra tất cả các dịch vụ khác sẽ được thêm vào, bạn có chấp nhận không ?</div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" [mat-dialog-close]="null" (click)="Khong()">Không</button>
+    <button mat-raised-button mat-button color="primary" (click)="Co()">Có</button>
+</mat-dialog-actions>
+
+
+<ng-template #canhBaoTemplate let-dataItem>
+    <span>Trùng</span>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem>
+    <app-checkbox [(model)]="dataItem.KhongThem" id="khongThem-{{dataItem.Id}}"
+        label="Không thêm"></app-checkbox>
+    <!-- <app-textboxnumeric id="abc-{{dataItem.Id}}" [disabled]="!dataItem.IsActive || !dataItem.IsChecked" [(model)]="dataItem.SoLuongDungLanNay"
+        class="no-label" label=" " [min]="(!dataItem.IsActive || !dataItem.IsChecked) ? 0 : 1" [max]="dataItem.TenNhomDichVu == 'DỊCH VỤ KHÁM BỆNH' ? 1 : (dataItem.SoLuongConLai)"
+        (modelChange)="changeSoLuongDichVu($event, dataItem)"> 
+    </app-textboxnumeric> -->
+</ng-template>

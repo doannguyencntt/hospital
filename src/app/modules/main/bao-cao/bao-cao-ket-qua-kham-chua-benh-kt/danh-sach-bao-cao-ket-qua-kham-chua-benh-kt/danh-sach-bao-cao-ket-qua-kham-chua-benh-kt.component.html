@@ -1,0 +1,38 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                {Title:'Thống Kê', Path:''},
+                {Title:'Báo Cáo', Path:''},
+                {Title:'KHTH', Path:''},
+                {Title:'Báo Cáo Kết Quả Khám Chữa Bệnh', Path:'', Active:true}]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6 pb-0">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-datepicker id="TuNgay" fxFlex="18%" fxFlex.sm="18%" [(model)]="baoCaoSearch.TuNgay" label="Từ ngày"
+                    class="mt-1 on-header">
+                </app-datepicker>
+                <app-datepicker id="DenNgay" fxFlex="18%" fxFlex.sm="18%" [(model)]="baoCaoSearch.DenNgay"
+                    label="Đến ngày" class="mt-1 on-header">
+                </app-datepicker>
+                <div fxFlex="0%" fxFlex.sm="0%" class="pb-0" style="margin-left: 10px;">             
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="xemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="xuatBaoCao()">Xuất Excel</button>
+                </div>
+                <div fxFlex="100%">
+                    <div *ngFor="let item of columnsTitleTable">
+                        <div [innerHTML]="item.Html"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

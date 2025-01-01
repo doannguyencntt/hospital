@@ -1,0 +1,53 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-grid #gridChuaThu fxFlex="100%" fxFlex.sm="100%" maxHeight="500" reorderRowsMoveItemData="true"
+        [gridColumns]="gridColumns" [documentType]="documentType" [additionalSearchString]="benhNhanId"
+        [urlGetData]="urlGetDanhSachBenhNhanConNo" [urlGetTotalPage]="urlGetTotalPagesBenhNhanConNo"
+        [sort]="sortDanhSachBenhNhanConNo"
+        [allowSortDefault]="true" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+        [lazyLoadPage]="true" [pageable]="true" [checkboxAble]="false"
+        (extOnDataBound)="evtDataBoundGridBenhNhanChuaThu($event)">
+    </app-grid>
+
+    <ng-template #soPhieuNoTemplate let-dataItem>
+        <a (click)="xemSoPhieuNo(dataItem.Id)">{{dataItem.SoPhieuNo}}</a>
+    </ng-template>
+    
+    <ng-template #ngayTemplate let-dataItem>
+        {{dataItem.NgayDisplay}}
+    </ng-template>
+    
+    <ng-template #soTienCongNoTemplate let-dataItem>
+        {{dataItem.SoTienCongNo | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    
+    <ng-template #soTienDaThuTemplate let-dataItem>
+        <a *ngIf="dataItem.SoTienDaThu > 0" (click)="xemDanhSachDaThu(dataItem.Id)">{{dataItem.SoTienDaThu | number:'0.2-2':'vi-VN'}}</a>
+        <ng-container *ngIf="dataItem.SoTienDaThu === 0">{{dataItem.SoTienDaThu}}</ng-container>
+    </ng-template>
+    
+    <ng-template #soTienChuaThuTemplate let-dataItem>
+        {{dataItem.SoTienChuaThu | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    
+    <ng-template #tongTienFooterTemplate let-dataItem>
+        <span style="float: right;">Tổng: </span>
+    </ng-template>
+    
+    <ng-template #tongSoTienCongNoFooterTemplate>
+        {{getTongSoTienCongNo() | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    
+    <ng-template #tongSoTienDaThuFooterTemplate>
+        {{getTongSoTienDaThu() | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    
+    <ng-template #tongSoTienChuaThuFooterTemplate>
+        {{getTongSoTienChuaThu() | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+    
+    <ng-template #actionTemplate let-dataItem>
+        <button type="button" color="primary" mat-raised-button (click)="traNo(dataItem.Id)">
+            <i class="ft-save"></i> Trả nợ
+        </button>
+    </ng-template>
+</div>

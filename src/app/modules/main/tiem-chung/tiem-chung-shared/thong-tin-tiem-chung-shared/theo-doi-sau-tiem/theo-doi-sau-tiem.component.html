@@ -1,0 +1,161 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%">
+        <div class="p-2">
+            <app-thong-tin-mui-tiem
+                [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan"
+                [isTabThucHienTiemReadOnly]="true" [validationErrors]="validationErrors">
+            </app-thong-tin-mui-tiem>
+        </div>
+
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <h3 fxFlex="100%" class="sub-title mr-4">THEO DÕI SAU TIÊM</h3>
+
+            <app-datetimepicker id="thoi-gian-theo-doi-sau-tiem" fxFlex="50%" fxFlex.sm="100%" label="Thời gian theo dõi"
+                [(model)]="tiemChungTheoDoiSauTiem.ThoiDiemTheoDoiSauTiem"
+                [disabled]="isPopupLichSuTiemChung || isKhongTiemChung"
+                [validationerror]="'ThoiDiemTheoDoiSauTiem' | validationerror: validationErrors">
+            </app-datetimepicker>
+
+            <app-combobox id="nguoi-theo-doi" fxFlex="50%" fxFlex.sm="100%"
+                [popupSettings]="null" [label]="'Người theo dõi'"
+                [url]="'TiemChung/GetNhanViens'"
+                [(model)]="tiemChungTheoDoiSauTiem.NhanVienTheoDoiSauTiemId" [modelText]="tiemChungTheoDoiSauTiem.NhanVienTheoDoiSauTiemDisplay"
+                [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+            </app-combobox>
+
+            <app-dropdownlist popupSettings="null" id="phan-ung" class="item-no-padding" label="Phản ứng" fxFlex="50%" fxFlex.sm="100%" 
+                [popupSettings]="null" [url]="'TiemChung/GetPhanUngSauTiems'" [disabled]="isPopupLichSuTiemChung  || isKhongTiemChung"
+                [(model)]="tiemChungTheoDoiSauTiem.LoaiPhanUngSauTiem" [modelText]="tiemChungTheoDoiSauTiem.LoaiPhanUngSauTiemDisplay"
+                (modelChange)="clearThongTinTheoDoi()">
+            </app-dropdownlist>
+            
+            <app-textarea fxFlex="50%" fxFlex.sm="50%" maxlength="1000" [label]="'Ghi chú'"
+                [(model)]="tiemChungTheoDoiSauTiem.GhiChuTheoDoiSauTiem"
+                [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+            </app-textarea>
+
+            <ng-container *ngIf="tiemChungTheoDoiSauTiem.LoaiPhanUngSauTiem === loaiPhanUngSauTiem.PhanUngThongThuong">
+                <app-checkbox id="sung-dau-cho-tiem" fxFlex="100%" label="Sưng, đau tại chỗ tiêm"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.SungDauTaiChoTiem"
+                    [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+                </app-checkbox>
+
+                <app-checkbox id="sot-39-do" fxFlex="100%" label="Sốt >= 39 độ"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.SotLonHonBang39DoPUTT"
+                    [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+                </app-checkbox>
+                
+                <app-checkbox id="trieu-chung-khac" fxFlex="100%" label="Triệu chứng khác"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.TrieuChungKhacPUTT"
+                    (modelChange)="evtTrieuChungKhacChanged($event)"
+                    [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+                </app-checkbox>
+
+                <app-textarea fxFlex="100%" fxFlex.sm="100%" maxlength="1000" [label]="'Mô tả phản ứng'"
+                    [disabled]="!tiemChungThongTinPhanUngSauTiem.TrieuChungKhacPUTT || isPopupLichSuTiemChung || isKhongTiemChung"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.MoTaPhanUngPUTT">
+                </app-textarea>
+            </ng-container>
+
+            <ng-container *ngIf="tiemChungTheoDoiSauTiem.LoaiPhanUngSauTiem === loaiPhanUngSauTiem.TaiBienNang">
+                <app-checkbox id="sot-39-do" fxFlex="100%" label="Sốt >= 39 độ"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.SotLonHonBang39DoTBN"
+                    [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+                </app-checkbox>
+
+                <app-checkbox id="soc-trong-72-gio" fxFlex="100%" label="Sốc trong vòng 72 giờ"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.SocTrongVong72Gio"
+                    [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+                </app-checkbox>
+                
+                <app-checkbox id="benh-nao-trong-7-ngay" fxFlex="100%" label="Bệnh não trong vòng 7 ngày"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.BenhNaoTrongVong7Ngay"
+                    [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+                </app-checkbox>
+
+                <app-checkbox id="ap-xe-tai-cho-tiem" fxFlex="100%" label="Áp xe tại chỗ tiêm"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.ApXeTaiChoTiem"
+                    [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+                </app-checkbox>
+
+                <app-checkbox id="co-giat-trong-3-ngay" fxFlex="100%" label="Những cơn co giật trong vòng 3 ngày"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.NhungConCoGiatTrong3Ngay"
+                    [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+                </app-checkbox>
+                
+                <app-checkbox id="trieu-chung-khac" fxFlex="100%" label="Khác"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.TrieuChungKhacTBN"
+                    (modelChange)="evtTrieuChungKhacChanged($event)"
+                    [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+                </app-checkbox>
+
+                <app-textarea fxFlex="100%" fxFlex.sm="100%" maxlength="1000" [label]="'Mô tả phản ứng'"
+                    [disabled]="!tiemChungThongTinPhanUngSauTiem.TrieuChungKhacTBN || isPopupLichSuTiemChung || isKhongTiemChung"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.MoTaPhanUngTBN">
+                </app-textarea>
+
+                <app-textarea fxFlex="100%" fxFlex.sm="100%" maxlength="1000" [label]="'Tiền sử bệnh tật'"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.TienSuBenhTat"
+                    [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+                </app-textarea>
+
+                <app-radio fxFlex="50%" fxFlex.sm="100%" id="xu-ly-phan-ung-sau-tiem" label="Xử lý phản ứng sau tiêm"
+                    [items]="xuLyPhanSungSauTiemRadioItems" [disabled]="isPopupLichSuTiemChung || isKhongTiemChung"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.XuLyPhanUngSauTiem"
+                    (modelChange)="evtXuLyPhanUngSauTiem($event)">
+                </app-radio>
+
+                <app-multiselect popupSettings="null" id="noi-xu-tri" class="item-no-padding" label="Nơi xử trí" fxFlex="50%" fxFlex.sm="100%" 
+                    [popupSettings]="null" [url]="'TiemChung/GetNoiXuTris'" [disabled]="!tiemChungThongTinPhanUngSauTiem.XuLyPhanUngSauTiem || isPopupLichSuTiemChung || isKhongTiemChung"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.NoiXuTri" [modelText]="tiemChungThongTinPhanUngSauTiem.NoiXuTriDisplay"
+                    (modelChange)="evtNoiXuTriChanged($event)">
+                </app-multiselect>
+
+                <app-textarea fxFlex="100%" fxFlex.sm="100%" maxlength="1000" [label]="'Nơi xử trí khác'"
+                    [disabled]="isNoiXuTriKhacDisabled || isPopupLichSuTiemChung || isKhongTiemChung"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.NoiXuTriKhac">
+                </app-textarea>
+
+                <app-combobox id="nguoi-theo-doi" fxFlex="100%" fxFlex.sm="100%"
+                    [popupSettings]="null" [label]="'Người xử trí'" 
+                    [url]="'TiemChung/GetNhanViens'"
+                    [disabled]="!tiemChungThongTinPhanUngSauTiem.XuLyPhanUngSauTiem || isPopupLichSuTiemChung || isKhongTiemChung"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.NguoiXuTriId" [modelText]="tiemChungThongTinPhanUngSauTiem.NguoiXuTriDisplay"
+                    (selectionChange)="evtNguoiXuTriChanged($event)">
+                </app-combobox>
+
+                <app-dropdownlist popupSettings="null" id="tinh-trang-hien-tai" class="item-no-padding" label="Tình trạng hiện tại" fxFlex="100%" fxFlex.sm="100%" 
+                    [required]="true" [popupSettings]="null" [disabled]="isPopupLichSuTiemChung || isKhongTiemChung"
+                    [url]="'TiemChung/GetTinhTrangHienTais'"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.TinhTrangHienTai" [modelText]="tiemChungThongTinPhanUngSauTiem.TinhTrangHienTaiDisplay"
+                    (selectionChange)="evtTinhTrangHienTaiChanged($event)"
+                    [validationerror]="'TiemChungThongTinPhanUngSauTiem.TinhTrangHienTai' | validationerror: validationErrors">
+                </app-dropdownlist>
+
+                <app-textarea fxFlex="100%" fxFlex.sm="100%" maxlength="1000" [label]="'Mô tả tình trạng hiện tại'"
+                    [disabled]="!tiemChungThongTinPhanUngSauTiem.TinhTrangHienTai || isPopupLichSuTiemChung || isKhongTiemChung"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.MoTaTinhTrangHienTai">
+                </app-textarea>
+
+                <app-datepicker id="ngay-tu-vong" fxFlex="100%" fxFlex.sm="100%" label="Ngày tử vong"
+                    [disabled]="tiemChungThongTinPhanUngSauTiem.TinhTrangHienTai != tinhTrangHienTai.TuVong || isPopupLichSuTiemChung || isKhongTiemChung"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.NgayTuVong">
+                </app-datepicker>
+
+                <app-combobox id="nguoi-bao-cao" fxFlex="100%" fxFlex.sm="100%"
+                    [popupSettings]="null" [label]="'Người báo cáo'" [disabled]="isPopupLichSuTiemChung || isKhongTiemChung"
+                    [url]="'TiemChung/GetNhanViens'"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.NguoiBaoCaoId" [modelText]="tiemChungThongTinPhanUngSauTiem.NguoiBaoCaoDisplay"
+                    (selectionChange)="evtNguoiBaoCaoChanged($event)">
+                </app-combobox>
+            </ng-container>
+
+            <ng-container *ngIf="tiemChungTheoDoiSauTiem.LoaiPhanUngSauTiem === loaiPhanUngSauTiem.PhanUngKhac">
+                <app-textarea fxFlex="100%" fxFlex.sm="100%" maxlength="1000" [label]="'Mô tả phản ứng'"
+                    [(model)]="tiemChungThongTinPhanUngSauTiem.MoTaPhanUngPUK"
+                    [disabled]="isPopupLichSuTiemChung || isKhongTiemChung">
+                </app-textarea>
+            </ng-container>
+        </div>
+    </div>
+</div>

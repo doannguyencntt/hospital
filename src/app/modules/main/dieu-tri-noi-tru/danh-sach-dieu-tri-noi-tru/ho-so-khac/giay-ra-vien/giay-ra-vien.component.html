@@ -1,0 +1,51 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    style="padding-top: 13px;padding-bottom: 10px;" [ngClass]="{'disableDiv':IsKetThucBenhAn}">
+
+    <app-textarea fxFlex="50%" id="ChanDoan" label="Chẩn đoán" [(model)]="hoSoKhacGiayRaVien.ChanDoan"
+        (modelChange)="isDataChange(1)" maxlength="4000" minHeight="20">
+    </app-textarea>
+
+    <app-textarea fxFlex="50%" id="PhuongPhapDieuTri" label="Phương pháp điều trị"
+        [(model)]="hoSoKhacGiayRaVien.PhuongPhapDieuTri" (modelChange)="isDataChange(1)" maxlength="4000" minHeight="20">
+    </app-textarea>
+    <div fxFlex="100%" >
+        <button type="button" style="float: right;" color="primary" mat-raised-button mat-button (click)="GhiChuMau()">
+           Ghi chú mẫu
+        </button>
+    </div>
+    <app-textarea fxFlex="100%" id="GhiChu" label="Ghi chú" [(model)]="hoSoKhacGiayRaVien.GhiChu"
+        (modelChange)="isDataChange(2)" maxlength="4000" minHeight="20">
+    </app-textarea>
+
+
+    <app-combobox id="TruongKhoaId" fxFlex="33%" [(model)]="hoSoKhacGiayRaVien.TruongKhoaId" popupSettings="null"
+        [modelText]="hoSoKhacGiayRaVien.TenTruongKhoa" url="ToaThuocMau/BacSiKeToa" (modelChange)="isDataChange(1)"
+        label="Trưởng khoa">
+    </app-combobox>
+
+    <app-combobox id="NhanVienThucHienId" fxFlex="auto" [(model)]="hoSoKhacGiayRaVien.GiamDocChuyenMonId" popupSettings="null"
+        [modelText]="hoSoKhacGiayRaVien.TenGiamDocChuyenMon" url="DieuTriNoiTru/GiamDocChuyenMon" (modelChange)="isDataChange(1)"
+        label="Giám đốc chuyên môn">
+    </app-combobox>
+
+    <label fxFlex="80%">
+        Người thực hiện: <strong>{{hoSoKhacGiayRaVien.NhanVienDangNhap}}</strong> - Ngày thực hiện:
+        <strong>{{hoSoKhacGiayRaVien.ThoiDiemThucHienDisplay}}</strong>
+    </label>
+    <div fxFlex="20%">
+        <div style="padding-top: 11px !important;float: right">
+            <button type="button" style="margin-right: 10px; pointer-events: all;" mat-raised-button mat-button
+                (click)="inGiayRaVien()">
+                In
+            </button>
+            <button *ngIf="hoSoKhacGiayRaVien.IsDataChange" type="button" style="margin-right: 10px;" mat-raised-button
+                mat-button (click)="huy()">
+                Hủy
+            </button>
+            <button type="button" color="primary" mat-raised-button mat-button (click)="luuBienBan()">
+                Lưu
+            </button>
+        </div>
+    </div>
+
+</div>

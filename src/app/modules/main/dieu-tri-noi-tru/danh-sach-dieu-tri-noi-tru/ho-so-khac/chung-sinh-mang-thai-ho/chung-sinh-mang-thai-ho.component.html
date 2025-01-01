@@ -1,0 +1,124 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}" style="padding-top: 5px;">
+        <app-textbox id="So" fxFlex="20%" label="Số" [(model)]="giayChungSinhMangThaiHo.So" style="padding-top: 5px;">
+        </app-textbox>
+        <app-textbox id="QuyenSo" fxFlex="20%" label="Quyển sổ" [(model)]="giayChungSinhMangThaiHo.QuyenSo">
+        </app-textbox>
+        <label fxFlex="100%"><b>1. Thông tin của bên nhờ mang thai</b></label>
+        <app-textbox id="HoTenVo" fxFlex="25%" label="Họ tên vợ"
+            [(model)]="giayChungSinhMangThaiHo.HoTenVoNhoMangThaiHo">
+        </app-textbox>
+        <app-textboxnumeric id="NamSinh" fxFlex="10%" fxFlex.sm="10%" (modelChange)="onChangeNamSinh($event)"
+        format="0" min="1" [(model)]="giayChungSinhMangThaiHo.NamSinhVoNhoMangThaiHo" label="Năm sinh" [max]="9999">
+        </app-textboxnumeric>
+        <app-textbox id="CMNDHoChieu" fxFlex="25%" label="CMND/Hộ chiếu"
+            [(model)]="giayChungSinhMangThaiHo.CMNDHoChieuVoNhomangThaiHo">
+        </app-textbox>
+        <app-combobox bind="true" id="DanToc" fxFlex="15%" fxFlex.sm="15%" label="Dân tộc"
+            url="TiepNhanBenhNhan/GetDanToc" [(model)]="giayChungSinhMangThaiHo.DanTocVoNhoMangThaiHo">
+        </app-combobox>
+        <app-textarea id="NoiDangKyNoiTru" fxFlex="25%" fxFlex.sm="25%" minHeight="20"
+            [(model)]="giayChungSinhMangThaiHo.NoiDangKyThuongTruVoNhoMangThaiHo" label="Nơi đăng ký thường trú">
+        </app-textarea>
+        <!-- // -->
+        <app-textbox id="HoTenChong" fxFlex="25%" label="Họ tên chồng"
+            [(model)]="giayChungSinhMangThaiHo.HoTenChongNhoMangThaiHo">
+        </app-textbox>
+        <app-textboxnumeric id="NamSinhChong" fxFlex="10%" fxFlex.sm="10%" (modelChange)="onChangeNamSinh($event)"
+        format="0" min="1" [(model)]="giayChungSinhMangThaiHo.NamSinhChongNhoMangThaiHo" label="Năm sinh" [max]="9999" >
+        </app-textboxnumeric>
+        <app-textbox id="CMNDHoChieuChong" fxFlex="25%" label="CMND/Hộ chiếu"
+            [(model)]="giayChungSinhMangThaiHo.CMNDHoChieuChongNhomangThaiHo">
+        </app-textbox>
+        <app-combobox bind="true" id="DanTocChong" fxFlex="15%" fxFlex.sm="15%" label="Dân tộc"
+            url="TiepNhanBenhNhan/GetDanToc" [(model)]="giayChungSinhMangThaiHo.DanTocChongNhoMangThaiHo">
+        </app-combobox>
+        <app-textarea id="NoiDangKyNoiTruChong" fxFlex="25%" fxFlex.sm="25%" minHeight="20"
+            [(model)]="giayChungSinhMangThaiHo.NoiDangKyThuongTruChongNhoMangThaiHo"
+            label="Nơi đăng ký thường trú">
+        </app-textarea>
+
+        <label fxFlex="100%"><b>2. Thông tin của bên mang thai hộ</b></label>
+        <app-textbox id="HoTenVo" fxFlex="25%" label="Họ tên vợ" [(model)]="giayChungSinhMangThaiHo.HoTenVoMangThaiHo"
+            [disabled]="true">
+        </app-textbox>
+        <app-textboxnumeric id="NamSinh" fxFlex="10%" fxFlex.sm="10%" (modelChange)="onChangeNamSinh($event)"
+        format="0" min="1" [disabled]="true" [(model)]="giayChungSinhMangThaiHo.NamSinhVoMangThaiHo" label="Năm sinh" [max]="9999">
+        </app-textboxnumeric>
+        <app-textbox id="CMNDHoChieu" fxFlex="25%" label="CMND/Hộ chiếu" [disabled]="true"
+            [(model)]="giayChungSinhMangThaiHo.CMNDHoChieuVomangThaiHo">
+        </app-textbox>
+        <app-combobox bind="true" id="DanToc" fxFlex="15%" fxFlex.sm="15%" label="Dân tộc" [disabled]="true"
+            url="TiepNhanBenhNhan/GetDanToc" [(model)]="giayChungSinhMangThaiHo.DanTocVoMangThaiHo">
+        </app-combobox>
+        <app-textarea id="NoiDangKyNoiTru" fxFlex="25%" fxFlex.sm="25%" minHeight="20" [disabled]="true"
+            [(model)]="giayChungSinhMangThaiHo.NoiDangKyThuongTruVoMangThaiHo" label="Nơi đăng ký thường trú">
+        </app-textarea>
+        <!-- // -->
+        <app-textbox id="HoTenChong" fxFlex="25%" label="Họ tên chồng"
+            [(model)]="giayChungSinhMangThaiHo.HoTenChongMangThaiHo">
+        </app-textbox>
+        <app-textboxnumeric id="NamSinhChong" fxFlex="10%" fxFlex.sm="10%" (modelChange)="onChangeNamSinh($event)"
+        format="0" min="1" [(model)]="giayChungSinhMangThaiHo.NamSinhChongMangThaiHo" label="Năm sinh" [max]="9999" >
+        </app-textboxnumeric>
+        <app-textbox id="CMNDHoChieuChong" fxFlex="25%" label="CMND/Hộ chiếu"
+            [(model)]="giayChungSinhMangThaiHo.CMNDHoChieuChongmangThaiHo">
+        </app-textbox>
+        <app-combobox bind="true" id="DanTocChong" fxFlex="15%" fxFlex.sm="15%" label="Dân tộc"
+            url="TiepNhanBenhNhan/GetDanToc" [(model)]="giayChungSinhMangThaiHo.DanTocChongMangThaiHo">
+        </app-combobox>
+        <app-textarea id="NoiDangKyNoiTruChong" fxFlex="25%" fxFlex.sm="25%" minHeight="20"
+            [(model)]="giayChungSinhMangThaiHo.NoiDangKyThuongTruChongMangThaiHo" label="Nơi đăng ký thường trú">
+        </app-textarea>
+        <app-textboxnumeric id="NamSinh" fxFlex="10%" fxFlex.sm="10%" 
+        format="0" min="1" [(model)]="giayChungSinhMangThaiHo.SoLanSinh" label="Số lần sinh">
+        </app-textboxnumeric>
+        <app-textboxnumeric id="NamSinh" fxFlex="15%" fxFlex.sm="15%" 
+        format="0" min="1" [(model)]="giayChungSinhMangThaiHo.SoConHienSong" label="Số con hiện sống">
+        </app-textboxnumeric>
+        <table fxFlex="100%" style="font-style: normal;" *ngIf="giayChungSinhMangThaiHo.DacDiemTreSoSinhs != null">
+            <tr *ngFor="let item of giayChungSinhMangThaiHo.DacDiemTreSoSinhs">
+                <td>
+                    Giới tính <br><b>{{item.GioiTinh}}</b>
+                </td>
+                <td>
+                    Cân nặng <br><b>{{item.CanNang}}g</b>
+                </td>
+                <td>
+                    <app-textbox fxFlex="25%" label="Dự định đặt tên con" [(model)]="item.DuDinhDatTenCon" maxlength="1000">
+                    </app-textbox>
+                </td>
+            </tr>
+        </table>
+       
+        <app-datetimepicker id="NgayThucHien" fxFlex="25%" fxFlex.sm="25%"
+            [(model)]="giayChungSinhMangThaiHo.NgayThucHien" (modelChange)="changeValueNgayThucHien($event)"
+            label="Ngày thực hiện" required="true"
+            [validationerror]="'NgayThucHien' | validationerror:validationErrors">
+        </app-datetimepicker>
+        <app-autocomplete id="NguoiHanhNghe" fxFlex="25%" fxFlex.sm="25%" popupSettings="null"
+            [(model)]="giayChungSinhMangThaiHo.NguoiDoDe" [dataList]="dataNhanVien"
+            label="Người hành nghề KB,CB">
+        </app-autocomplete>
+        <app-autocomplete id="ChuToa" fxFlex="25%" fxFlex.sm="25%" popupSettings="null"
+            [(model)]="giayChungSinhMangThaiHo.ThuTruongCSYT" [dataList]="dataNhanVien"
+            label="Thủ trưởng đơn vị">
+        </app-autocomplete>
+        <div fxFlex="100%" style="padding-bottom: 50px;">
+            <label fxFlex="25%" style="padding-top: 30px;">Người thực hiện :
+                <b>{{giayChungSinhMangThaiHo.TaiKhoanDangNhap}}</b></label>
+            <label fxFlex="25%" style="padding-top: 30px;">Ngày thực hiện :
+                <b>{{giayChungSinhMangThaiHo.NgayThucHienString}}</b></label>
+            <span fxFlex="50%" style="text-align: right;">
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="InPhieu()"
+                    style="pointer-events: all;">In </button>
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                    (click)="Huy()">Hủy</button>
+                <button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+                    Lưu
+                </button>
+            </span>
+        </div>
+    </div>
+</div>

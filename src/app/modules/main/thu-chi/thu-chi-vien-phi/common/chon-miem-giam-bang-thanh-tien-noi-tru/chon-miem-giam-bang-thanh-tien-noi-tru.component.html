@@ -1,0 +1,92 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+	<div style="font: 500 18px/26px var(--font)">CHỌN DỊCH VỤ MIỄM GIẢM BẰNG THÀNH TIỀN</div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+<mat-dialog-content>
+	<div width="100%" fxLayout="row">
+		<kendo-grid [data]="gridData" [resizable]="true" [selectable]="{enabled: true, checkboxOnly: true}"
+			[kendoGridSelectBy]="keySelectBy" class="grid-custom" id="danhSachChuaThuTienGrid" height="541">
+
+			<kendo-grid-checkbox-column width="30">
+				<ng-template kendoGridHeaderTemplate>
+					<input class="k-checkbox" id="selectAllCheckboxId" kendoGridSelectAllCheckbox
+						[state]="selectAllState" (selectAllChange)="onSelectAllChange($event)" />
+					<label class="k-checkbox-label" for="selectAllCheckboxId"></label>
+				</ng-template>
+				<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+					<input class="k-checkbox" id="selectCheckboxId{{dataItem[keySelectBy]}}" [(ngModel)]="checkboxOnly"
+						[kendoGridSelectionCheckbox]="rowIndex" [checked]="dataItem.CheckedDefault"
+						(change)="onSelectChangeCheckbox($event,dataItem[keySelectBy])" />
+					<label class="k-checkbox-label" for="selectCheckboxId{{dataItem[keySelectBy]}}"></label>
+				</ng-template>
+			</kendo-grid-checkbox-column>
+
+			<kendo-grid-column field="" title="" width="41" [style]="{'text-align': 'center'}"
+				[headerStyle]="{'text-align': 'center'}"> </kendo-grid-column>
+			<kendo-grid-column field="" title="#" width="28" [style]="{'text-align': 'center'}"
+				[headerStyle]="{'text-align': 'center'}">
+				<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex"> {{rowIndex + 1}} </ng-template>
+			</kendo-grid-column>
+			<kendo-grid-column field="Ma" title="Mã" width="60" [style]="{'text-align': 'left'}"
+				[headerStyle]="{'text-align': 'left'}">
+				<ng-template kendoGridCellTemplate let-dataItem="dataItem">
+					<div fxLayout="row" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+						<span class="reverse-ellipsis r" title="{{dataItem.Ma}}"> {{dataItem.Ma}} </span>
+					</div>
+				</ng-template>
+			</kendo-grid-column>
+			<kendo-grid-column field="Khoa" title="Khoa" width="60" [hidden]="true" [style]="{'text-align': 'center'}"
+				[headerStyle]="{'text-align': 'center'}" class="k-grouping-row p">
+				<ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value"> <strong>Khoa:
+					</strong> {{value}} </ng-template>
+			</kendo-grid-column>
+			<kendo-grid-column field="NgayPhatSinhDiplay" title="NgayPhatSinhDiplay" width="120" [hidden]="true"
+				[style]="{'text-align': 'center'}" [headerStyle]="{'text-align': 'center'}" class="k-grouping-row p">
+				<ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value"> <strong>Ngày
+						phát sinh: </strong> {{value}} </ng-template>
+			</kendo-grid-column>
+			<kendo-grid-column field="TenDichVu" title="Tên Dịch Vụ" width="100" [style]="{'text-align': 'left'}"
+				[headerStyle]="{'text-align': 'left'}">
+				<ng-template kendoGridCellTemplate let-dataItem="dataItem">
+					<div fxLayout="row" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+						<p class="reverse-ellipsis r" title="{{dataItem.TenDichVu}}">{{dataItem.TenDichVu}}</p>
+					</div>
+				</ng-template>
+				<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex">
+					<div class="text-center" style="font-weight: bold; color: #000" kendoTooltip
+						title="Tổng cộng DV đang chọn">Tổng cộng:</div>
+				</ng-template>
+			</kendo-grid-column>
+			<kendo-grid-column field="LoaiGia" title="Loại Giá" width="60" [style]="{'text-align': 'left'}"
+				[headerStyle]="{'text-align': 'left'}"> </kendo-grid-column>
+			<kendo-grid-column field="Soluong" title="Số Lượng" width="60" [style]="{'text-align': 'right'}"
+				[headerStyle]="{'text-align': 'center'}"> </kendo-grid-column>
+			<kendo-grid-column field="DonGia" title="Đơn Giá" width="100" [style]="{'text-align': 'center'}"
+				[headerStyle]="{'text-align': 'center'}">
+				<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+					<div class="float_right">
+						{{ dataItem.DonGia | number:'0.2-2':'vi-VN'}}
+					</div>
+				</ng-template>
+			</kendo-grid-column>
+			<kendo-grid-column field="ThanhTien" title="Thành Tiền" width="90" [headerStyle]="{'text-align': 'center'}">
+				<ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+					<div class="float_right">{{ dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}</div>
+				</ng-template>
+				<ng-template kendoGridFooterTemplate let-column let-columnIndex="columnIndex"
+					style="text-align: center">
+					<span style="float: right">{{total('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+				</ng-template>
+			</kendo-grid-column>
+			<kendo-grid-messages noRecords="Không có dữ liệu." pagerOf="trong số" pagerItems="dòng"
+				detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết"> </kendo-grid-messages>
+		</kendo-grid>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<button mat-button mat-dialog-close (click)="HuyApDungMGT()">Hủy</button>
+	<button (click)="apDungMiemGiamBangThanhTien()" cdkFocusInitial mat-raised-button mat-button color="primary">Áp
+		dụng</button>
+</mat-dialog-actions>

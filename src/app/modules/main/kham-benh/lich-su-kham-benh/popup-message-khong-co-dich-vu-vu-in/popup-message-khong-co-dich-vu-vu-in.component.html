@@ -1,0 +1,33 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Xác Nhận</div>
+</div>
+<ng-container *ngIf="showMessage==1">
+    <h4>Dịch vụ khám này không có dịch vụ chỉ định.</h4>
+    <div style="float: right;">
+        <button type="button" mat-raised-button mat-button class="mr-1 mt-2" (click)="close()">Đóng</button>
+    </div>
+</ng-container>
+<ng-container *ngIf="showMessage==2">
+    <h4>Dịch vụ khám này không có thuốc BHYT.</h4>
+    <div style="float: right;">
+        <button type="button" mat-raised-button mat-button class="mr-1 mt-2" (click)="close()">Đóng</button>
+    </div>
+</ng-container>
+<ng-container *ngIf="showMessage==3">
+    <h4>Dịch vụ khám này không có thuốc nhà thuốc (thuốc không BHYT).</h4>
+    <div style="float: right;">
+        <button type="button" mat-raised-button mat-button class="mr-1 mt-2" (click)="close()">Đóng</button>
+    </div>
+</ng-container>
+<ng-container *ngIf="showMessage==4">
+    <h4>Dịch vụ khám này không có phiếu khám bệnh.</h4>
+    <div style="float: right;">
+        <button type="button" mat-raised-button mat-button class="mr-1 mt-2" (click)="close()">Đóng</button>
+    </div>
+</ng-container>
+<ng-container *ngIf="showMessage==5">
+    <h4>Dịch vụ khám này không có phiếu khám bệnh vào viện.</h4>
+    <div style="float: right;">
+        <button type="button" mat-raised-button mat-button class="mr-1 mt-2" (click)="close()">Đóng</button>
+    </div>
+</ng-container>

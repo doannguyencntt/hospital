@@ -1,0 +1,192 @@
+<ng-container *ngIf="getAsyncDone==true">
+    <!--BEGIN GRID DANH SÁCH ĐANG CHỜ XÁC NHẬN BHYT -->
+    <kendo-panelbar keepItemContent="true">
+        <kendo-panelbar-item [title]="'DV HƯỞNG BHYT'" expanded="true">
+            <ng-template kendoPanelBarContent>
+                <app-grid [gridColumns]="gridColumnsChoXacNhanBHYT" [useAddDeault]="false" class="k-grid-border" #gridHuongBhyt [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="true" [autoHeight]="true" style="width: 1px;" [pageable]="false" [groups]="groups"
+                    [gridDataSource]="dataHuongBh" masterName="huongBhyt" [removeGroupFooterIfIsOnlyOne]="true"
+                     [masterName]='bhytDuocHuong'
+                    (extCheckboxSelection)="extCheckboxSelectionDuocHuongBHYT($event)">
+                </app-grid>
+            </ng-template>
+        </kendo-panelbar-item>
+        <kendo-panelbar-item [title]="'DV CHƯA ĐƯỢC HƯỞNG BHYT'" expanded="true">
+            <ng-template kendoPanelBarContent>
+                <app-grid [gridColumns]="gridColumnChuaDuocHuongBHYT" [useAddDeault]="false" class="k-grid-border" #gridChuaHuongBhyt [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="true" [autoHeight]="true" style="width: 1px;" [pageable]="false"
+                    [groups]="groups" [gridDataSource]="dataChuaHuongBh" masterName="chuaHuongBhyt" [removeGroupFooterIfIsOnlyOne]="true"
+                    [masterName]='bhytChuaDuocHuong' 
+                    (extCheckboxSelection)="extCheckboxSelectionKhongHuongBHYT($event)">
+                </app-grid>
+            </ng-template>
+        </kendo-panelbar-item>
+    </kendo-panelbar>
+</ng-container>
+
+<ng-template #tiLeTheoDvTemplate let-dataItem let-i="rowIndex">
+    <span *ngIf="!dataItem.IsPttt || !dataItem.HuongBhyt">{{dataItem.TiLeTheoDichVu}}%</span>
+    <div kendoTooltip>
+        <app-dropdownlist *ngIf="dataItem.IsPttt && dataItem.HuongBhyt && dataItem.CanModify" id="tiLePtttCanModify" class="no-label" [data]="ptPttts" [(model)]="dataItem.LoaiPhanTram" [modelText]="dataItem.LoaiPhanTramText" (selectionChange)="ChangeTiLeDvPttt($event, dataItem)"
+            popupSettings="null">
+        </app-dropdownlist>
+        <app-dropdownlist *ngIf="dataItem.IsPttt && dataItem.HuongBhyt && !dataItem.CanModify" id="tiLePtttReadOnly" title={{messageWarningTrangThaiThanhToan}} class="no-label" [data]="ptPttts" [(model)]="dataItem.LoaiPhanTram" [modelText]="dataItem.LoaiPhanTramText"
+            [disabled]="true">
+        </app-dropdownlist>
+    </div>
+</ng-template>
+<ng-template #mucHuongTemplate let-dataItem let-i="rowIndex">
+    <span *ngIf="!dataItem.HuongBhyt">{{dataItem.MucHuong}}%</span>
+    <div class="xac-nhan-ng-muc-huong-da-duyet-template" kendoTooltip>
+        <span *ngIf="dataItem.showInfoChangeMucHuongDuyet" class="xac-nhan-ng-muc-huong-da-duyet-template" kendoTooltip>
+            <mat-icon (mouseover)="showMucHuongDaDuyetTooltip(dataItem)" [icIcon]="icWarning" class="warning"
+                title={{currentWarningMucHuongDaDuyetMessage}}>""</mat-icon>
+        </span>
+        <app-textboxnumeric *ngIf="dataItem.HuongBhyt && dataItem.CanModify" [(model)]="dataItem.MucHuong" class="no-label" [max]="100" (modelChange)="onChangeTiLe(dataItem, $event)" [validationerror]="'BenefitInsurance[' + i + '].MucHuong' | validationerror:validationErrors">
+        </app-textboxnumeric>
+        <app-textboxnumeric title={{messageWarningTrangThaiThanhToan}} *ngIf="dataItem.HuongBhyt && !dataItem.CanModify" [(model)]="dataItem.MucHuong" [readonly]="true" class="no-label">
+        </app-textboxnumeric>
+    </div>
+</ng-template>
+<!-- Đơn giá bệnh viện template-->
+<ng-template #donGiaBenhVienTemplate let-dataItem>
+    {{dataItem.DonGiaBenhVien | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<!-- Đơn giá bhyt chi trả template-->
+<ng-template #templateDGBHYTCT let-dataItem>
+    {{dataItem.DGBHYTChiTra | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<!-- Thành tiền custome grid -->
+<ng-template #thanhTienTemplate let-dataItem>
+    {{dataItem.ThanhTienBenhVien | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #thanhTienGroupFooterTemplate let-aggregates>
+    {{aggregates.ThanhTienBenhVien.sum | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #donGiaGroupFooterTemplate let-dataItem>
+    <span style="float: right;">Cộng:</span>
+</ng-template>
+<ng-template #donGiaFooterTemplate let-dataItem>
+    <span style="float: right;">Tổng:</span>
+</ng-template>
+
+<ng-template #thanhTienFooterTemplate let-aggregates>
+    <span style="color:blue">{{totalThanhTienDHBHYT('ThanhTienBenhVien', aggregates) | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<ng-template #thanhTienKHBHYTFooterTemplate let-aggregates>
+    <span style="color:blue">{{totalThanhTienKDHBYT('ThanhTienBenhVien', aggregates) | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<ng-template #dgbhytThamKhaoTemplate let-dataItem>
+    {{dataItem.DGBHYTThamKhao | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #thanhTienBHYTThamKhaoTemplate let-dataItem>
+    {{dataItem.ThanhTienBHYTThamKhao | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+
+<ng-template #ttBHYTChiTraTemplate let-dataItem>
+    {{dataItem.TTBHYTChiTra | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #ttBHYTChiTraGroupFooterTemplate let-aggregates>
+    {{aggregates.TTBHYTChiTra.sum | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #ttBHYTChiTraFooterTemplate let-aggregates>
+    <span>{{totalTTBHYTChiTra('TTBHYTChiTra', aggregates) | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+<ng-template #ttKBHYTChiTraFooterTemplate let-aggregates>
+    <span>{{totalKTTBHYTChiTra('TTBHYTChiTra', aggregates) | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+
+<ng-template #bnThanhToanTemplate let-dataItem>
+    {{dataItem.BNThanhToan | number:'0.2-2':'vi-VN'}}
+</ng-template>
+<ng-template #bnThanhToanGroupFooterTemplate let-aggregates>
+    {{aggregates.BNThanhToan.sum | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #bnThanhToanFooterTemplate let-aggregates>
+    <span style="color:red">{{totalBNConPhaiThanhToanDHBHYT('BNThanhToan', aggregates) | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<ng-template #bnThanhKhongDHBHYTToanGroupFooterTemplate let-aggregates>
+    <span style="color:red">{{totalBNConPhaiThanhToanKDHBYT('BNThanhToan', aggregates) | number:'0.2-2':'vi-VN'}}</span>
+</ng-template>
+
+<ng-template #nhomGroupHeaderTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>
+
+<ng-template #tenDvTemplate let-dataItem>
+    <ng-template #templateInfo let-dataItem>
+        <table class="table table-border" width="100%">
+            <tr>
+                <td colspan="2" class="red">CHẨN ĐOÁN ICD CHÍNH</td>
+            </tr>
+            <tr>
+                <th align="left">ICD</th>
+                <th align="left">CHẨN ĐOÁN</th>
+            </tr>
+            <tr>
+                <td>{{icdChinh}}</td>
+                <td>{{ghiChuIcd}}</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="red">CHẨN ĐOÁN ICD KÈM THEO</td>
+            </tr>
+            <tr>
+                <th align="left">ICD</th>
+                <th align="left">CHẨN ĐOÁN</th>
+            </tr>
+            <tr *ngFor="let icd of icdKems">
+                <td>{{icd.Icd}}</td>
+                <td>{{icd.GhiChu}}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <div class="xac-nhan-ng-template" kendoTooltip>
+        <span *ngIf="dataItem.GroupType == 1" class="xac-nhan-ng-template" kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block" position="left" [tooltipTemplate]="templateInfo" filter="*">
+            <mat-icon [icIcon]="icInfo" (mouseover)="setUpIcdTooltip(dataItem)" class="info"></mat-icon>
+        </span>
+        <!-- <span *ngIf="dataItem.IsWarning" class="xac-nhan-ng-template" kendoTooltip>
+            <mat-icon (mouseover)="showTooltip(dataItem)" [icIcon]="icWarning" class="warning"
+                title={{currentWarningMessage}}></mat-icon>
+        </span> -->
+        <span class="ten-dich-vu-label" title={{dataItem.TenDichVu}}>{{dataItem.TenDichVu}}</span>
+    </div>
+</ng-template>
+
+<ng-template #sttTemplate let-i="rowIndex">
+    {{i + 1}}
+</ng-template>
+
+<ng-template #huongBhytTemplate let-dataItem>
+    <section class="check-box-huong-bhyt">
+        <div kendoTooltip>
+            <app-checkbox *ngIf="dataItem.CanModify" value="true" id="check-{{dataItem.Id}}" [(model)]="dataItem.HuongBhyt" label="" (modelChange)="OnChangeHuongBhyt(dataItem)">
+            </app-checkbox>
+            <app-checkbox *ngIf="!dataItem.CanModify" value="true" id="check-{{dataItem.Id}}" [disabled]="true" [(model)]="dataItem.HuongBhyt" label="" title={{messageWarningTrangThaiThanhToan}}>
+            </app-checkbox>
+        </div>
+    </section>
+</ng-template>
+
+
+
+<ng-template #actionTemplate let-dataItem>
+    <div *ngIf="dataItem.ShowHistory" class="xac-nhan-ng-template" kendoTooltip>
+        <mat-icon [icIcon]="icHistory" (click)="lichSuXacNhan(dataItem)" title="Lịch sử xác nhận"></mat-icon>
+    </div>
+</ng-template>
+
+<ng-template #maSoTheTemplate let-group>
+    <span [ngStyle]="{'color': '#55693d'}" [innerHTML]="renderMaSoTheGroup(group)"></span>
+</ng-template>
+
+<ng-template #khoaTemplate let-group>
+    <span [ngStyle]="{'color': '#312db8'}" [innerHTML]="renderKhoa(group)"></span>
+</ng-template>

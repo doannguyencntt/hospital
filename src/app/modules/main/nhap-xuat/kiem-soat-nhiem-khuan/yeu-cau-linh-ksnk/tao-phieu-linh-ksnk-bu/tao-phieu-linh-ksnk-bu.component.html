@@ -1,0 +1,38 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'KSNK',Path:''}
+                ,{Title:'Dự trù lĩnh',Path:''}
+                ,{Title:'Yêu cầu lĩnh KSNK',Path:'/nhap-xuat/kiem-soat-nhiem-khuan/yeu-cau-linh-ksnk'}
+                ,{Title:'KSNK cần bù',Path:'/nhap-xuat/kiem-soat-nhiem-khuan/ksnk-can-bu',Active:true}
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Tạo phiếu lĩnh bù KSNK</h2>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+
+                <app-phieu-linh-ksnk-bu-gui-lai-shared [isCreate]="!isCreate"
+                    [validationErrorsLinhBu]="validationErrors">
+                </app-phieu-linh-ksnk-bu-gui-lai-shared>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" *ngIf="!loading" (click)="XemPhieuLinh()" color="primary"
+                        class="mr-1 align-right-fx" mat-raised-button><i class="ft-save"></i> Xem phiếu lĩnh</button>
+                    <button type="button" (click)="cancel()" title="Phím tắt: Esc" mat-button><i
+                            class="ft-arrow-left"></i> Hủy</button>
+                    <button type="button" *ngIf="!loading" (click)="luuPhieuLinhKSNK(false)" color="primary"
+                        mat-raised-button><i class="ft-save"></i> Lưu tạm</button>
+                    <button type="button" *ngIf="!loading" (click)="luuPhieuLinhKSNK(true)" color="primary"
+                        mat-raised-button><i class="ft-save"></i> Gửi</button>
+                    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img
+                            src="/assets/img/loader.gif" alt="Loading" /></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

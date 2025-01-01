@@ -1,0 +1,28 @@
+<div (mouseenter)="onMouseEnter()"
+     (mouseleave)="onMouseLeave()"
+     [class.collapsed]="collapsed"
+     [class.open]="collapsed && collapsedOpen$ | async"
+     class="sidenav flex flex-col">
+  <div class="sidenav-toolbar flex-none flex items-center">
+    <img class="w-6 select-none flex-none" src="assets/img/logo.png">
+    <h2 class="title ltr:pl-4 rtl:pr-4 select-none flex-auto">B.VIỆN ĐKQT BẮC HÀ</h2>
+    <button (click)="toggleCollapse()" class="w-8 h-8 -mr-2 leading-none flex-none" mat-icon-button type="button">
+      <mat-icon *ngIf="!collapsed" [icIcon]="icRadioButtonChecked" size="14px"></mat-icon>
+      <mat-icon *ngIf="collapsed" [icIcon]="icRadioButtonUnchecked" size="14px"></mat-icon>
+    </button>
+  </div>
+
+  <div class="sidenav-items flex-auto" vexScrollbar>
+    <vex-sidenav-item *ngFor="let item of itemSearchs; trackBy: trackByRoute"
+                      [item]="item"
+                      [level]="0"></vex-sidenav-item>
+  </div>
+  <div class="sidenav-toolbar flex-none flex search">
+    <div class="bg-card rounded-full border px-4" fxFlex="20px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+          fxLayoutAlign="start start">
+          <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+          <input class="px-4 py-2 border-0 outline-none bg-transparent" [(ngModel)]="searchString" (ngModelChange)="searchChange()"
+              placeholder="Tìm kiếm chức năng" type="search" name="searchString"  #searchElement/>
+      </div>
+  </div>
+</div>

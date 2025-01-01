@@ -1,0 +1,178 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" style="margin-left: 5px;" fxLayoutGap.lt-sm="0">
+    <app-textbox id="TenCha" fxFlex="100%" fxFlex.sm="40%" maxlength="250" disabled={{true}}
+        [(model)]="chiSoXNChiTiet.TenCha" label="Nhóm"></app-textbox>
+
+    <app-textbox id="TenDichVuKyThuat" fxFlex="100%" fxFlex.sm="40%" maxlength="250" disabled={{true}}
+        [(model)]="chiSoXNChiTiet.TenDichVuKyThuat" label="Dịch vụ kỹ thuật">
+    </app-textbox>
+
+    <app-textbox *ngIf="capDichVu == 2 || capDichVu == 3 || (isCreateChild && capDichVu == 1)" id="ChiSoCha"
+        fxFlex="100%" fxFlex.sm="40%" maxlength="250" disabled={{true}} [(model)]="chiSoXNChiTiet.ChiSoCha"
+        label="Chỉ số cha"></app-textbox>
+
+    <app-textbox *ngIf="capDichVu == 2 || capDichVu == 3 || (isCreateChild && capDichVu == 1)" id="TenChiSo"
+        fxFlex="100%" fxFlex.sm="40%" maxlength="250" [required]="true" [(model)]="chiSoXNChiTiet.TenChiSo"
+        label="Tên chỉ số" [validationerror]="'TenChiSo' | validationerror:validationErrors">
+    </app-textbox>
+
+
+    <app-textboxnumeric fxFlex="30%" id="SoThuTu" label="STT" min="1" max="99999" [(model)]="chiSoXNChiTiet.SoThuTu">
+    </app-textboxnumeric>
+
+    <app-textbox id="DonVi" fxFlex="35%" fxFlex.sm="35%" maxlength="30" [(model)]="chiSoXNChiTiet.DonVi"
+        label="Đơn vị tính"></app-textbox>
+    <app-combobox id="LoaiMauXetNghiem" fxFlex="35%" fxFlex.sm="20" url="DichVuXetNghiem/GetLoaiMau" [required]="true"
+        [(model)]="chiSoXNChiTiet.LoaiMauXetNghiem" [modelText]="chiSoXNChiTiet.TenLoaiMauXetNghiem" label="Loại mẫu"
+        [validationerror]="'LoaiMauXetNghiem' | validationerror:validationErrors">
+    </app-combobox>
+
+    <ng-container *ngFor="let item of chiSoXNChiTiet.KetNoiChiSoXetNghiems;let i = index">
+
+        <app-textbox
+            [required]="((item.TenKetNoi != null && item.TenKetNoi != '') ||(item.MaChiSo != null && item.MaChiSo != '') || (item.MauMayXetNghiemId != undefined && item.MauMayXetNghiemId != null))"
+            fxFlex="15%" id="MaLIS" maxlength="20" [(model)]="item.MaChiSo" label="Mã LIS"
+            (modelChange)="clearValidators()"
+            [validationerror]="'KetNoiChiSoXetNghiems['+i+'].MaChiSo' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-textbox fxFlex="15%" id="TenLIS" maxlength="20" [(model)]="item.TenKetNoi" label="Tên LIS"
+            (modelChange)="clearValidators()"
+            [required]="((item.TenKetNoi != null && item.TenKetNoi != '') ||(item.MaChiSo != null && item.MaChiSo != '') || (item.MauMayXetNghiemId != undefined && item.MauMayXetNghiemId != null))"
+            [validationerror]="'KetNoiChiSoXetNghiems['+i+'].TenKetNoi' | validationerror:validationErrors">
+        </app-textbox>
+
+        <app-combobox fxFlex="35%" label="Tên mẫu máy XN" url="DichVuXetNghiem/MauMayXetNghiems"
+            [required]="((item.TenKetNoi != null && item.TenKetNoi != '') ||(item.MaChiSo != null && item.MaChiSo != '') || (item.MauMayXetNghiemId != undefined && item.MauMayXetNghiemId != null))"
+            [(model)]="item.MauMayXetNghiemId" [(modelText)]="item.TenMauMayXetNghiem" [template]="mauMayTemplate"
+            [templateHeader]="mauMayTemplateHeader" class="item-no-padding" (modelChange)="clearValidators()"
+            [queryInfo]="{ParameterDependencies:'{MauMayXetNghiemId:' + item.MauMayXetNghiemId +'}', Take: 50}"
+            [validationerror]="'KetNoiChiSoXetNghiems['+i+'].MauMayXetNghiemId' | validationerror:validationErrors">
+
+            <ng-template #mauMayTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="25%">Mã</th>
+                        <th>Tên Tiếng Việt</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #mauMayTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="25%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+
+        </app-combobox>
+
+        <div fxFlex="35%">
+            <div fxFlex="80%" class="container-custom no-label">
+                <div fxLayout="row">
+                    <app-checkbox id="NotSendOrder{{i}}" label="Không gửi yêu cầu" [(model)]="item.NotSendOrder"
+                        style="margin-top: 7px;">
+                    </app-checkbox>
+                    <!-- (modelChange)="checkBoxChange($event, i)" -->
+
+                </div>
+            </div>
+            <button color="warn" mat-icon-button kendoTooltip title="Xóa chỉ số" (click)="xoaChiSo(item)" class="mt-2"
+                type="button">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+
+
+
+        <div fxFlex="100%" fxFlex.sm="100%">
+            <button *ngIf="i==chiSoXNChiTiet.KetNoiChiSoXetNghiems.length-1" mat-mini-fab color="primary" kendoTooltip
+                title="Thêm chỉ số" (click)="themChiSo()">
+                <mat-icon [icIcon]="icAdd"></mat-icon>
+            </button>
+        </div>
+    </ng-container>
+    <!-- required="true" -->
+
+    <!-- required="true" -->
+    <label fxFlex="30%">
+
+    </label>
+    <label fxFlex="35%">
+        <div style="text-align:center">Cao</div>
+    </label>
+    <label fxFlex="35%">
+        <div style="text-align:center">Thấp</div>
+    </label>
+    <label fxFlex="30%">
+        <div id="nam" style="margin-top: 15px;">Nam</div>
+    </label>
+    <app-textbox id="NamMax" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.NamMax" label=" ">
+    </app-textbox>
+
+    <app-textbox id="NamMin" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.NamMin" label=" ">
+    </app-textbox>
+    <label fxFlex="30%">
+        <div style="margin-top: 15px;">Nữ</div>
+    </label>
+    <app-textbox id="NuMax" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.NuMax" label=" ">
+    </app-textbox>
+
+    <app-textbox id="NuMin" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.NuMin" label=" ">
+    </app-textbox>
+
+    <label fxFlex="30%">
+        <div style="margin-top: 15px;">Trẻ em</div>
+    </label>
+    <app-textbox id="TreEmMax" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.TreEmMax"
+        label=" ">
+    </app-textbox>
+
+    <app-textbox id="TreEmMin" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.TreEmMin"
+        label=" ">
+    </app-textbox>
+
+    <label fxFlex="30%">
+        <div style="margin-top: 15px;">Trẻ em (12 - 18)</div>
+    </label>
+    <app-textbox id="TreEm1218Max" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.TreEm1218Max"
+        label=" ">
+    </app-textbox>
+
+    <app-textbox id="TreEm1218Min" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.TreEm1218Min"
+        label=" ">
+    </app-textbox>
+
+    <label fxFlex="30%">
+        <div style="margin-top: 15px;">Trẻ em (6 - 12)</div>
+    </label>
+    <app-textbox id="TreEm612Max" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.TreEm612Max"
+        label=" ">
+    </app-textbox>
+
+    <app-textbox id="TreEm612Min" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.TreEm612Min"
+        label=" ">
+    </app-textbox>
+
+    <label fxFlex="30%">
+        <div style="margin-top: 15px;">Trẻ em (&lt; 6)</div>
+    </label>
+    <app-textbox id="TreEm6Max" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.TreEm6Max"
+        label=" ">
+    </app-textbox>
+
+    <app-textbox id="TreEm6Min" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.TreEm6Min"
+        label=" ">
+    </app-textbox>
+
+    <label fxFlex="30%">
+        <div style="margin-top: 15px;">Giá trị nguy hiểm</div>
+    </label>
+    <app-textbox id="NguyHiemMax" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.NguyHiemMax"
+        label=" ">
+    </app-textbox>
+
+    <app-textbox id="NguyHiemMin" fxFlex="35%" fxFlex.sm="40%" maxlength="20" [(model)]="chiSoXNChiTiet.NguyHiemMin"
+        label=" ">
+    </app-textbox>
+</div>

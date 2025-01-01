@@ -1,0 +1,40 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase">Xác nhận</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="min-height: 150px;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div fxFlex="100" fxFlex.sm="100">Bạn có chắc chắn muốn chuyển bệnh nhân đang chọn qua phòng khác không?</div>
+        <div fxFlex="100" fxFlex.sm="100">Nếu có hãy chọn phòng chuyển đến: </div>
+        <app-combobox id="phongThucHien" fxFlex="100%" fxFlex.sm="100%" label="Phòng chuyển đến" bind="true"
+            [(model)]="phongThucHienId" [required]="true" [reloadForGrid]="true" url="KhamBenh/GetListPhongThucHienDichVuTrongKhoaHienTai"
+            [queryInfo]="{ParameterDependencies: hangDoiIdStr, Take: 50}" [templateHeader]="phongTemplateHeader" [template]="phongTemplate"
+            [autoSelectFirstItem]="true"
+            popupSettings="null" [validationerror]="'PhongThucHienId' | validationerror:validationErrors">
+            <ng-template #phongTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th>Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #phongTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" [mat-dialog-close]="null">Hủy</button>
+    <button mat-raised-button mat-button color="primary" (click)="xuLyChuyenPhongThucHienDichVuKham()">Chuyển phòng</button>
+</mat-dialog-actions>

@@ -1,0 +1,75 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>PHIẾU KẾT QUẢ</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <fieldset fxFlex="100%" style="background: #e1f5fe;margin-right: 16px;margin-bottom: 16px;">
+        <legend>
+            <app-checkbox class="mr-2 ml-3" id="chon-cau-hinh-in" fxFlex="100%"
+                fxFlex.sm="100%" label="Cấu hình in" [(model)]="chonCauHinhIn"></app-checkbox>
+        </legend>
+         <ng-container *ngIf="chonCauHinhIn">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-checkbox (modelChange)="modelChangeInPhieuLoGo($event)" class="mr-2 ml-3" id="in-logo" fxFlex="15%"
+                    fxFlex.sm="100%" label="In logo" [(model)]="cauHinhIn.InLogo"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuBarCode($event)" class="mr-2" id="in-barcode" fxFlex="15%"
+                    fxFlex.sm="100%" label="In barcode" [(model)]="cauHinhIn.InBarcode"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuTieuDe($event)" class="mr-2" id="in-tieu-de" fxFlex="15%"
+                    fxFlex.sm="100%" label="In tiêu đề" [(model)]="cauHinhIn.InTieuDe"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuHoVaTen($event)" class="mr-2" id="in-ho-va-ten" fxFlex="15%"
+                    fxFlex.sm="100%" label="In họ và tên" [(model)]="cauHinhIn.InHoVaTen"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuNamSinh($event)" class="mr-2" id="in-nam-sinh" fxFlex="15%"
+                    fxFlex.sm="100%" label="In năm sinh" [(model)]="cauHinhIn.InNamSinh"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuGioiTinh($event)" class="mr-2" id="in-gioi-tinh" fxFlex="15%"
+                    fxFlex.sm="100%" label="In giới tính" [(model)]="cauHinhIn.InGioiTinh"></app-checkbox>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-checkbox (modelChange)="modelChangeInPhieuDiaChi($event)" class="mr-2 ml-3" id="in-dia-chi"
+                    fxFlex="15%" fxFlex.sm="100%" label="In Địa chỉ" [(model)]="cauHinhIn.InDiaChi"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuBSChiDinh($event)" class="mr-2" id="in-bac-si-chi-dinh"
+                    fxFlex="15%" fxFlex.sm="100%" label="In BS chỉ định" [(model)]="cauHinhIn.InBSChiDinh"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuNgayChiDinh($event)" class="mr-2" id="in-ngay-chi-dinh"
+                    fxFlex="15%" fxFlex.sm="100%" label="In ngày chỉ định" [(model)]="cauHinhIn.InNgayChiDinh">
+                </app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuNoiChiDinh($event)" class="mr-2" id="in-noi-chi-dinh"
+                    fxFlex="15%" fxFlex.sm="100%" label="In nơi chỉ định" [(model)]="cauHinhIn.InNoiChiDinh"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuBA($event)" class="mr-2" id="in-benh-an" fxFlex="15%"
+                    fxFlex.sm="100%" label="In BA" [(model)]="cauHinhIn.InSoBenhAn"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuChuanDoan($event)" class="mr-2" id="in-chuan-doan"
+                    fxFlex="15%" fxFlex.sm="100%" label="In chuẩn đoán" [(model)]="cauHinhIn.InChuanDoan"></app-checkbox>
+            </div>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-checkbox class="mr-2 ml-3" id="in-dien-giai" fxFlex="15%" fxFlex.sm="100%" label="In diễn giải"
+                    (modelChange)="modelDienGiai($event)" [(model)]="cauHinhIn.InDienGiai"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuInChiDinh($event)" class="mr-2" id="in-chi-dinh" fxFlex="15%"
+                    fxFlex.sm="100%" label="In chỉ định" [(model)]="cauHinhIn.InChiDinh"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuInThanhNgang($event)" class="mr-2" id="in-thanh-ngang"
+                    fxFlex="15%" fxFlex.sm="100%" label="In thanh ngang" [(model)]="cauHinhIn.InThanhNgang"></app-checkbox>
+                <app-checkbox (modelChange)="modelChangeInPhieuInKyThuat($event)" class="mr-2" id="in-ky-thuat" fxFlex="15%"
+                    fxFlex.sm="100%" label="In kỹ thuật" [(model)]="cauHinhIn.InKyThuat"></app-checkbox>
+            <app-checkbox (modelChange)="modelChangeInPhieuNoiThucHien($event)" class="mr-2" id="in-noi-thuc-hien"
+                fxFlex="15%" fxFlex.sm="100%" label="In nơi thực hiện" [(model)]="cauHinhIn.InNoiThucHien">
+            </app-checkbox>
+            </div>
+         </ng-container>
+        <!-- <a class="ml-3" (click)="inSieuAmTim()"><strong style="color: blue;text-decoration: underline">Chọn cấu hình in
+                siêu âm tim</strong></a> -->
+    </fieldset>
+</div>
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <fieldset fxFlex="100%" style="margin-right: 16px;margin-bottom: 16px;">
+        <legend>Xem phiếu in</legend>
+        <mat-dialog-content style="overflow:hidden">
+            <div class="container-iframe">
+                <iframe width="100%" style="height: 500px;" [src]="src| safe" allowTransparency="true"
+                    background="transparent"></iframe>
+            </div>
+        </mat-dialog-content>
+    </fieldset>
+</div>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <app-print-form textPrint="In" type="PDF" [bodyComponent]="this" typeSize="A4">
+    </app-print-form>
+</mat-dialog-actions>

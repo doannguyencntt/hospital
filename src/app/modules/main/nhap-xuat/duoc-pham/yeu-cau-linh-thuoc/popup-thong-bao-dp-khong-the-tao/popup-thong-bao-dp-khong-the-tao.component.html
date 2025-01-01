@@ -1,0 +1,27 @@
+<!-- <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div style="text-align: center;">Xác Nhận</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div> -->
+
+<mat-dialog-content style="overflow: hidden">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <div fxFlex="100%" fxFlex.sm="100%"style="text-align: center;font-size: 20px"><b>Xác Nhận</b></div>
+        <div fxFlex="100%" fxFlex.sm="100%" style="text-align: center;font-size: 15px;padding-bottom: 10px;">Có các dược phẩm không đủ tồn</div>
+        <app-grid fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns" [checkboxAble]="false"
+            [gridDataSource]="gridDataSource"  [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true" maxHeight="500"
+            [pageable]="false">
+        </app-grid>
+        <div fxFlex="100%" fxFlex.sm="100%" style="font-size: 15px;padding-top: 10px;">Nếu đồng ý gửi thì sẻ không tạo được những dược
+            phẩm này<br>
+            Bạn có muốn tiếp tục gửi không?</div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-button mat-dialog-close (click)="Khong('No')">Không</button>
+    <button mat-raised-button mat-button color="primary" (click)="Co('Yes')" [mat-dialog-close]="true"
+        cdkFocusInitial>Có</button>
+</mat-dialog-actions>

@@ -1,0 +1,35 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-combobox id="KhoaPhong" fxFlex="50%" fxFlex.sm="50%" [(model)]="khoaPhongNhanVien.KhoaPhongId"
+        [required]="true" [modelText]="khoaPhongNhanVien.TenKhoaPhong" label="Khoa Phòng" class="item-no-padding"
+        [template]="khoaPhongTemplate" [templateHeader]="khoaPhongTemplateHeader"
+        url="KhoaPhongNhanVien/GetListKhoaPhong" [validationerror]="'KhoaPhongId' | validationerror:validationErrors">
+        <ng-template #khoaPhongTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #khoaPhongTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-combobox *ngIf="!isCreate" id="TenNhanVien" fxFlex="50%" fxFlex.sm="50%"
+        [(model)]="khoaPhongNhanVien.NhanVienId" [required]="true" [modelText]="khoaPhongNhanVien.TenNhanVien"
+        label="Tên Nhân Viên" url="KhoaPhongNhanVien/GetListNhanVien"
+        [validationerror]="'NhanVienId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-multiselect id="NhanVienMultiple" *ngIf="isCreate" fxFlex="50%" [(model)]="khoaPhongNhanVien.NhanVienIds"
+        fxFlex.sm="100%" label="Tên nhân viên" url="KhoaPhongNhanVien/GetListNhanVien" [required]="true"
+        [validationerror]="'NhanVienIds' | validationerror:validationErrors">
+    </app-multiselect>
+</div>

@@ -1,0 +1,100 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+              {Title:'Báo Cáo',Path:''}
+              , {Title:'Hoạt Động Khoa Khám Bệnh',Path:'/bao-cao/hoat-dong-khoa-kham-benh',Active:true}
+              ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [ngStyle]="{'flex-direction': 'column', 'margin-top': '-72px'}">
+        <div class="bg-app-bar px-0 h-15 border-b sticky left-0">
+            <div fxFlex="80%" fxFlex.sm="100%">
+                <app-daterangepicker id="tuNgayDenNgay" fxFlex="300px" fxFlex.sm="auto" class="mt-1 ml-2 on-header" [(model)]="searchQuery.FromToDate" label="Từ ngày - đến ngày" (modelChange)="onAdvanceSearch()">
+                </app-daterangepicker>
+
+                <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;margin-left: 5px;">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-3 py-2 border-0 outline-none w-full bg-transparent" type="search" name="searchString" [(ngModel)]="searchQuery.Searchterm" (keyup)="onKey($event)" placeholder="Tìm kiếm..." (ngModelChange)="searchChange()" />
+                </div>
+            </div>
+            <div fxFlex="20%" fxFlex.sm="100%" class="text-right" style="margin: 5px;">
+                <button (click)="exportExcel()" type="button" color="primary" mat-raised-button mat-button>Xuất
+                    Excel</button>
+                <app-print-form textPrint="In Báo Cáo" type="PDF" [bodyComponent]="this" [showInMenuItem]="false" [showIconPrint]="false">
+                </app-print-form>
+            </div>
+        </div>
+        <div fxFlex="100%" fxFlex.sm="100%" [ngStyle]="{'min-height': height+'px'}" class="pb-0">
+            <kendo-grid [data]="gridDataSource" class="k-grid1 shared-header grid-bao-cao" [pageable]="true" [resizable]="true" [height]="height" [pageSize]="pageSize" [skip]="skip" (pageChange)="pageChange($event)" #hoatDongKhoaKhamBenhGrid id={{masterName}} (columnResize)="columnResize($event)">
+                <kendo-grid-column title="STT" [width]="50" sortable="false">
+                    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        {{rowIndex+1}}
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [style]="{'text-align': 'center'}" [field]="col.Field" [title]="col.Title" [width]="CellWidthAuto(col.Width,col.MinWidth)" [sortable]="col.Sortable" *ngFor="let col of gridDisplayColumns">
+                    <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex" *ngIf="col.Template!=null">
+                        <ng-container *ngTemplateOutlet="col.Template; context:{$implicit: dataItem, rowIndex: rowIndex}">
+                        </ng-container>
+                    </ng-template>
+                    <ng-template *ngIf="col.Colspan" kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                        <table style="width:100%;" class="tableingroup" [innerHTML]="renderDescendantHeader(col.ParentTitle)">
+                        </table>
+                    </ng-template>
+                    <ng-template *ngIf="col.Colspan" kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                        <table style="width:100%;" class="tableingroup" [innerHTML]="renderDescendantBody(col.ParentTitle, dataItem)">
+                            <tr>
+                                <td style="text-align: right;">
+                                    {{ dataItem.Bhyt | number:'1.0':'vi-VN'}}
+                                </td>
+                                <td style="text-align: right;">
+                                    {{ dataItem.VienPhi | number:'1.0':'vi-VN'}}
+                                </td>
+                                <td style="text-align: right;">
+                                    {{ dataItem.KskDoan | number:'1.0':'vi-VN'}}
+                                </td>
+                                <td style="text-align: right;">
+                                    {{ dataItem.Ksk | number:'1.0':'vi-VN'}}
+                                </td>
+                                <td style="text-align: right;">
+                                    {{ dataItem.Goi | number:'1.0':'vi-VN'}}
+                                </td>
+                                <td style="text-align: right;">
+                                    {{ dataItem.TreEm | number:'1.0':'vi-VN'}}
+                                </td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </kendo-grid-column>
+                <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="currentPage">
+                    <div style="justify-content: center;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-between" fxFlex="100%">
+                        <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+                        <kendo-pager-numeric-buttons [buttonCount]="5" class="d-none d-sm-none d-md-block">
+                        </kendo-pager-numeric-buttons>
+                        <button *ngIf="isLoadingTotalPage" kendoButton class="btn btn-raised btn-default btn-min-width mb-0">
+                            <img src="/assets/img/loader_circle.gif" alt="Đang tính..." style="height: 20px;" />
+                        </button>
+                        <kendo-pager-next-buttons></kendo-pager-next-buttons>
+                        <kendo-pager-info></kendo-pager-info>
+                        <div kendoTooltip class="k-icon k-i-refresh" style="order: 10;cursor: pointer; align-self: center;" title="Làm mới" (click)="onAdvanceSearch()"></div>
+                        <div *ngIf="isLoading" class="grid-loading k-i-loading"></div>
+                    </div>
+                </ng-template>
+                <kendo-grid-messages noRecords="Không có dữ liệu." pagerOf="trong số" pagerItems="dòng" detailExpand="Mở rộng chi tiết" detailCollapse="Thu gọn chi tiết">
+                </kendo-grid-messages>
+            </kendo-grid>
+        </div>
+        <ng-template #ngayHetHanTemplate let-dataItem>
+            <span style="color: orange;" class="badge badge-pill">{{dataItem.NgayHetHanDisplay}}
+            </span>
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>
+<ng-template #gioiTinhTemplate let-dataItem>
+    <span>
+      {{dataItem.GioiTinh == null ? "" : (dataItem.GioiTinh == 1 ? "Nam" : "Nữ")}}
+  </span>
+</ng-template>

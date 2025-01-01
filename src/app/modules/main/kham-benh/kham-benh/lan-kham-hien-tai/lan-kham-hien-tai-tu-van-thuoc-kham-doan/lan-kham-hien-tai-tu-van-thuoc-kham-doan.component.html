@@ -1,0 +1,251 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+        [ngClass]="{'disableDiv':isReadOnly}">
+    <ng-container *ngIf="!isReadOnly">
+    <app-combobox #isFocus fxFlex="53%" label="Dược phẩm" id="DuocPhamId" required="true" url="KhamBenh/DuocPhamTuVans"
+        [template]="DuocPhamTemplate" [templateHeader]="DuocPhamTemplateHeader" [(model)]="keToaNew.DuocPhamId"
+        (selectionChange)="chonDuoc($event)" (keyup)="onKey($event)" (openCombobox)="openCombobox($event)"
+        [isAutoFocus]="true" [validationerror]="'DuocPhamId' | validationerror:validationErrors" class="item-no-padding"
+        [popupSettings]="{width: 600,popupClass:'item-no-padding'}">
+        <ng-template #DuocPhamTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="60%">Tên</th>
+                    <th style="text-align: right; right: 10px;" width="auto">SL Tồn</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #DuocPhamTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="60%">{{dataItem.Ten}}</td>
+                    <td *ngIf="dataItem.SLTon > 0" style="text-align: right;" width="auto">{{dataItem.SLTonFormat}}</td>
+                    <td *ngIf="dataItem.SLTon == 0" style="text-align: right;" width="auto">0</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+    <div fxFlex="40%" fxHide.sm></div>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0" fxFlex="100%"
+        style="padding-top: 10px;" *ngIf="keToaNew.DuocPhamId != undefined && keToaNew.DuocPhamId != null">
+        <div fxFlex="100%" kendoTooltip>
+            <fieldset style="border:1px solid #ccc;border-radius: 5px;padding: 7px 15px 8px 15px;background: #e3f2fd;">
+                <div fxFlex="100%">
+                    <ul class="inline">
+                        <li>Đơn vị tính: <strong>{{thongTinDuocPham.TenDonViTinh}}</strong></li>
+                        <li>Đường dùng: <strong>{{thongTinDuocPham.TenDuongDung}}</strong></li>
+                        <li>Tương tác thuốc:
+                            <strong *ngIf="thongTinDuocPham.FlagTuongTac == true"
+                                class="red">{{thongTinDuocPham.TuongTacThuoc}}
+                            </strong>
+                            <strong *ngIf="thongTinDuocPham.FlagTuongTac == false">
+                                {{thongTinDuocPham.TuongTacThuoc}}
+                            </strong>
+                        </li>
+                        <li>Dị ứng thuốc:
+                            <strong *ngIf="thongTinDuocPham.FlagDiUng == true" class="red">
+                                {{thongTinDuocPham.DiUngThuoc}}
+                            </strong>
+                            <strong *ngIf="thongTinDuocPham.FlagDiUng == false">
+                                {{thongTinDuocPham.DiUngThuoc}}
+                            </strong>
+                        </li>
+                        <li>Mức độ:
+                            <strong>
+                                {{thongTinDuocPham.MucDoDisplay}}
+                            </strong>
+                        </li>
+                        <li>Thuốc đã kê:
+                            <strong *ngIf="thongTinDuocPham.FlagThuocDaKe == true" class="red">
+                                {{thongTinDuocPham.ThuocDaKe}}
+                            </strong>
+                            <strong *ngIf="thongTinDuocPham.FlagThuocDaKe == false">
+                                {{thongTinDuocPham.ThuocDaKe}}
+                            </strong>
+                        </li>
+                        <li>
+                            Tồn kho:
+                            <strong>
+                                <span *ngIf="thongTinDuocPham.TonKho < 10" class="red">
+                                    {{thongTinDuocPham.TonKhoFormat}}
+                                </span>
+                                <span *ngIf="thongTinDuocPham.TonKho > 10">
+                                    {{thongTinDuocPham.TonKhoFormat}}
+                                </span>
+                            </strong>
+                        </li>
+                        <li *ngIf="keToaNew.LaDuocPhamBenhVien && thongTinDuocPham.CoNhapKhoDuocPhamChiTiet">
+                            HSD:
+                            <strong>
+                                <strong>
+                                    {{thongTinDuocPham.HSD}}
+                                </strong>
+                            </strong>
+                        </li>
+                    </ul>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <app-textboxnumeric id="SoLuongAdd" fxFlex="9%" [(model)]="keToaNew.SoLuong" min="1" max="999999999"
+        (modelChange)="SoLuongChange()" label="SL" format="#.##" [decimals]="2" (keyup)="onKey($event)"
+        [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+    </app-textboxnumeric>
+
+    <app-textbox fxFlex="10%" id="LieuDung" label="L.dùng/ngày" [(model)]="keToaNew.LieuDung" (keyup)="onKey($event)"
+        (modelChange)="LieuDungChange()">
+    </app-textbox>
+
+    <app-autocomplete id="Sang" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+        [(model)]="keToaNew.SangDisplay" label="Sáng" placeHolder="SL" (openCombobox)="openCombobox($event)"
+        [validationerror]="'SangDisplay' | validationerror:validationErrors" class="pr-0">
+    </app-autocomplete>
+    <app-timepicker id="GioSang" fxFlex="10%" label="" placeHolder="Giờ" (keyup)="onKey($event)" [tabindex]="-1"
+        [(model)]="keToaNew.ThoiGianDungSang" [modelIsNumber]="true" moreClass="pl-0">
+    </app-timepicker>
+
+    <app-autocomplete id="Trua" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+        [(model)]="keToaNew.TruaDisplay" label="Trưa" placeHolder="SL" (openCombobox)="openCombobox($event)"
+        [validationerror]="'TruaDisplay' | validationerror:validationErrors" class="pr-0">
+    </app-autocomplete>
+    <app-timepicker id="GioTrua" fxFlex="10%" label="" placeHolder="Giờ" (keyup)="onKey($event)" [tabindex]="-1"
+        [(model)]="keToaNew.ThoiGianDungTrua" [modelIsNumber]="true" moreClass="pl-0">
+    </app-timepicker>
+
+    <app-autocomplete id="Chieu" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+        [(model)]="keToaNew.ChieuDisplay" label="Chiều" placeHolder="SL" (openCombobox)="openCombobox($event)"
+        [validationerror]="'ChieuDisplay' | validationerror:validationErrors" class="pr-0">
+    </app-autocomplete>
+    <app-timepicker id="GioChieu" fxFlex="10%" label="" placeHolder="Giờ" (keyup)="onKey($event)" [tabindex]="-1"
+        [(model)]="keToaNew.ThoiGianDungChieu" [modelIsNumber]="true" moreClass="pl-0">
+    </app-timepicker>
+
+    <app-autocomplete id="Toi" fxFlex="7%" [dataList]="thoiGianDonThuocDataSource" (keyup)="onKey($event)"
+        [(model)]="keToaNew.ToiDisplay" label="Tối" placeHolder="SL" (openCombobox)="openCombobox($event)"
+        [validationerror]="'ToiDisplay' | validationerror:validationErrors" class="pr-0">
+    </app-autocomplete>
+    <app-timepicker id="GioToi" fxFlex="10%" label="" placeHolder="Giờ" [(model)]="keToaNew.ThoiGianDungToi"
+        [tabindex]="-1" (keyup)="onKey($event)" [modelIsNumber]="true" moreClass="pl-0">
+    </app-timepicker>
+
+    <app-textboxnumeric fxFlex="13%" [(model)]="keToaNew.SoNgayDung" min="0" (modelChange)="SoNgayDungChange()"
+        (change)="convertInt()" (keyup)="onKey($event)" max="9999" label="Số ngày">
+    </app-textboxnumeric>
+
+    <app-autocomplete fxFlex="100%" fxFlex.sm="100%" [(model)]="keToaNew.GhiChu" (keyup)="onKey($event)"
+        [queryInfo]="{ParameterDependencies:'{LoaiDuocPhamHoacVatTu:' + 1 +'}', Take: 50}"
+        url="KhamBenh/GetGhiChuDonThuocChiTietString" label="Cách dùng" maxlength="4000"
+        (openCombobox)="openCombobox($event)">
+    </app-autocomplete>
+
+    <div fxFlex="100%" fxLayoutAlign="end center">
+        <button type="button" mat-button class="mr-2" (click)="clearDuocPham()">Hủy</button>
+        <button type="button" color="primary" mat-raised-button mat-button (click)="themKeToa()"
+            id="btnThemKeToa">Thêm</button>
+    </div>
+    </ng-container>
+
+    <app-grid fxFlex="100%" #gridThuoc [gridColumns]="gridToaThuocColumns" [documentType]="documentType"
+        [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+        (extOnDataBound)="onDataBound($event)" urlGetData="KhamBenh/GetDataForGridTuVanThuoc"
+        urlGetTotalPage="KhamBenh/GetTotalPageForGridTuVanThuoc" [additionalSearchString]="YeuCauTiepNhanId"
+        [checkboxAble]="false" style="width: 1px;" [pageable]="false" [lazyLoadPage]="true" [autoHeight]="true">
+        <ng-template #sangTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.SangDisplay != null && dataItem.ThoiGianDungSangDisplay != null" kendoTooltip
+                    title="{{dataItem.SangDisplay + ' ' +(dataItem.ThoiGianDungSangDisplay)}}">
+                    {{dataItem.SangDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungSangDisplay}}
+                </p>
+                <p *ngIf="dataItem.SangDisplay != null && dataItem.ThoiGianDungSangDisplay == null" kendoTooltip
+                    title="{{dataItem.SangDisplay}}">
+                    {{dataItem.SangDisplay}}
+                </p>
+                <p *ngIf="dataItem.SangDisplay == null && dataItem.ThoiGianDungSangDisplay != null" kendoTooltip
+                    title="{{dataItem.ThoiGianDungSangDisplay}}">
+                    {{dataItem.ThoiGianDungSangDisplay}}
+                </p>
+            </div>
+        </ng-template>
+
+        <ng-template #truaTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.TruaDisplay != null && dataItem.ThoiGianDungTruaDisplay != null" kendoTooltip
+                    title="{{dataItem.TruaDisplay + ' ' +(dataItem.ThoiGianDungTruaDisplay)}}">
+                    {{dataItem.TruaDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungTruaDisplay}}
+                </p>
+                <p *ngIf="dataItem.TruaDisplay != null && dataItem.ThoiGianDungTruaDisplay == null" kendoTooltip
+                    title="{{dataItem.TruaDisplay}}">
+                    {{dataItem.TruaDisplay}}
+                </p>
+                <p *ngIf="dataItem.TruaDisplay == null && dataItem.ThoiGianDungTruaDisplay != null" kendoTooltip
+                    title="{{dataItem.ThoiGianDungTruaDisplay}}">
+                    {{dataItem.ThoiGianDungTruaDisplay}}
+                </p>
+            </div>
+        </ng-template>
+
+        <ng-template #chieuTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.ChieuDisplay != null && dataItem.ThoiGianDungChieuDisplay != null" kendoTooltip
+                    title="{{dataItem.ChieuDisplay + ' ' +(dataItem.ThoiGianDungChieuDisplay)}}">
+                    {{dataItem.ChieuDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungChieuDisplay}}
+                </p>
+                <p *ngIf="dataItem.ChieuDisplay != null && dataItem.ThoiGianDungChieuDisplay == null" kendoTooltip
+                    title="{{dataItem.ChieuDisplay}}">
+                    {{dataItem.ChieuDisplay}}
+                </p>
+                <p *ngIf="dataItem.ChieuDisplay == null && dataItem.ThoiGianDungChieuDisplay != null" kendoTooltip
+                    title="{{dataItem.ThoiGianDungChieuDisplay}}">
+                    {{dataItem.ThoiGianDungChieuDisplay}}
+                </p>
+            </div>
+        </ng-template>
+
+        <ng-template #toiTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <p *ngIf="dataItem.ToiDisplay != null && dataItem.ThoiGianDungToiDisplay != null" kendoTooltip
+                    title="{{dataItem.ToiDisplay + ' ' +(dataItem.ThoiGianDungToiDisplay)}}">
+                    {{dataItem.ToiDisplay}}&nbsp;
+                    {{dataItem.ThoiGianDungToiDisplay}}
+                </p>
+                <p *ngIf="dataItem.ToiDisplay != null && dataItem.ThoiGianDungToiDisplay == null" kendoTooltip
+                    title="{{dataItem.ToiDisplay}}">
+                    {{dataItem.ToiDisplay}}
+                </p>
+                <p *ngIf="dataItem.ToiDisplay == null && dataItem.ThoiGianDungToiDisplay != null" kendoTooltip
+                    title="{{dataItem.ThoiGianDungToiDisplay}}">
+                    {{dataItem.ThoiGianDungToiDisplay}}
+                </p>
+            </div>
+        </ng-template>
+
+        <ng-template #soLuongTemplate let-dataItem>
+            {{dataItem.SoLuongDisplay}}
+        </ng-template>
+    </app-grid>
+
+    <ng-template #actionToaThuocTemplate let-dataItem let-rowIndex="rowIndex">
+        <div class="text-right" kendoTooltip>
+            <ng-container>
+                <button color="primary" mat-icon-button kendoTooltip title="Sửa" (click)="suaKeToa(dataItem)"
+                    type="button">
+                    <mat-icon [icIcon]="icEdit"></mat-icon>
+                </button>
+                <button color="primary" mat-icon-button kendoTooltip title="Xóa" (click)="xoaKeToa(dataItem)"
+                    type="button">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </ng-container>
+        </div>
+    </ng-template>
+    <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+    <div *ngIf="!isReadOnly" fxFlex="100%" fxLayoutAlign="end center">
+        <button [disabled]="!isDisabled" type="button" class="mr-2" color="primary" mat-raised-button
+            (click)="inPhieuTuVanThuoc()">In toa thuốc</button>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Lịch sử chi tiết khám bệnh</div>
+    <button type="button" mat-icon-button (click)="close('No answer',1)" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+    <div class="card overflow-auto -mt-15" style="overflow: hidden;">
+        <kendo-tabstrip fxFlex="100%" class="content-has-border tabstrip-pad sticky-kendotab-item tabstrip-on-popup"
+           >
+            <kendo-tabstrip-tab [title]="'KHÁM BỆNH'" [selected]="true" > 
+                <ng-template kendoTabContent>
+                    <div class="content-tab-popup">
+                        <app-lich-su-kham-benh [BenhNhan]="benhNhan" [yeuCauKhamBenhId]="yeuCauKhamBenhId"
+                            [YeuCauTiepNhanId]="data.YeuCauTiepNhanId" (outputIsKhamDoan)="getIsKhamDoan($event)">
+                        </app-lich-su-kham-benh>
+                        <!-- [tenKP]="tenKhoaPhong" -->
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+
+            <!-- tab chỉ định -->
+            <kendo-tabstrip-tab [title]="'CHỈ ĐỊNH'">
+                <ng-template kendoTabContent>
+                    <div class="content-tab-popup">
+                        <app-lich-su-kham-benh-chi-dinh yeuCauKhamBenhId="{{yeuCauKhamBenhId}}" [isKhamDoan]="isKhamDoan"
+                            yeuCauTiepNhanId="{{yeuCauTiepNhanId}}">
+                        </app-lich-su-kham-benh-chi-dinh>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+
+            <!-- tab kết quả cls -->
+            <kendo-tabstrip-tab [title]="'KQ CLS'">
+                <ng-template kendoTabContent>
+                    <div class="content-tab-popup">
+                        <app-lich-su-kham-benh-ket-qua-cls [YeuCauTiepNhanId]="yeuCauTiepNhanId"> 
+                             <!-- to do  -->
+                        </app-lich-su-kham-benh-ket-qua-cls>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+
+            <!-- tab chẩn đoán //to do can update -->
+            <kendo-tabstrip-tab [title]="'CHẨN ĐOÁN'" *ngIf="!isKhamDoan">
+                <ng-template kendoTabContent>
+                    <div class="content-tab-popup">
+                        <app-lich-su-kham-benh-ket-luan [BenhNhan]="benhNhan" [yeuCauKhamBenhId]="yeuCauKhamBenhId" [yeuCauTiepNhanId]="yeuCauTiepNhanId">
+                        </app-lich-su-kham-benh-ket-luan>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+            <kendo-tabstrip-tab [title]="'TƯ VẤN THUỐC'" *ngIf="isKhamDoan">>
+                <ng-template kendoTabContent>
+                    <div class="content-tab-popup">
+                        <!-- Tư vấ thuoc -->
+                        <app-lich-su-kham-doan-tu-van-thuoc [YeuCauTiepNhanId]="yeuCauTiepNhanId"
+                            [YeuCauKhamBenhId]="yeuCauKhamBenhId" >
+                        </app-lich-su-kham-doan-tu-van-thuoc>
+                    </div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+        </kendo-tabstrip>
+    </div>
+</mat-dialog-content>

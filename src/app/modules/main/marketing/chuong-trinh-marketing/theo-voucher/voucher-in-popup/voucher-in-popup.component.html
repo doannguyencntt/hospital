@@ -1,0 +1,44 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>VOUCHER</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="flex-direction: column;display: flex;">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="p-2 mb-6 clear-margin-bottom">
+        
+        <app-textboxnumeric fxFlex="50%" [required]="true" id="so-luong" label="Số lượng"
+            [min]="1" [max]="soLuongPhatHanh"
+            [(model)]="soLuongIn" (modelChange)="soLuongChange($event)"
+            [validationerror]="'SoLuong' | validationerror:validationErrors">
+        </app-textboxnumeric>
+        <app-textboxnumeric fxFlex="50%" [required]="true" id="ma-so" label="Mã số từ: {{maVoucher}}-"
+            [min]="1" [max]="soLuongPhatHanh" [format]="format"
+            [(model)]="maSoIn" (modelChange)="maSoChange($event)"
+            [validationerror]="'MaSo' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <div class="container-iframe" fxFlex="100%">
+            <iframe width="100%" [src]="iframeSrc| safe" allowTransparency="true" background="transparent"></iframe>
+        </div>
+        <!-- <div fxFlex="100%">
+            <div fxLayout="row wrap">
+                <div fxFlex="20%" fxFlex.sm="100%" style="text-align: center;">
+                    <img style="display:block; margin: 0 auto;" class="select-none flex-none" src="assets/img/logo.png">
+                </div>
+
+                <div fxFlex="80%" fxFlex.sm="100%" style="text-align: center;">
+                    <h2>{{tenVoucher}}</h2>
+                    <img *ngIf="urlBarcode" style="display:block; margin: 0 auto; height: 70%;" class="select-none flex-none" src="data:image/png;base64,{{urlBarcode}}" alt="barcode">
+                </div>
+            </div>
+        </div> -->
+
+        <div style="flex-direction: row;justify-content: flex-end;align-items: flex-end;display: flex;margin: 0;" fxFlex="100%" class="mt-2">
+            <!-- <button type="button" style="background: #005dab; color: white;" mat-raised-button mat-button class="mr-1 mt-2" (click)="in()">In</button> -->
+            <app-print-form textPrint="In" type="PDF" typeSize="{{printSize}}"
+                [bodyComponent]="this" [showInMenuItem]="false" [showIconPrint]="false" [typeLayout]="printLayout">
+            </app-print-form>
+        </div>
+    </div>
+</mat-dialog-content>

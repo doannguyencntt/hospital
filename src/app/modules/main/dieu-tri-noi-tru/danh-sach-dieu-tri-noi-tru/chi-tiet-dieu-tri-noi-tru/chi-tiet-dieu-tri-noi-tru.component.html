@@ -1,0 +1,521 @@
+<app-header-form [crumbs]="[
+            {Title:'Danh Sách Điều Trị Nội Trú',Path:'/dieu-tri-noi-tru', queryParams: {holdQuery : true}},
+            {Title:'Chi Tiết Điều Trị Nội Trú',Path:'',Active:true}
+        ]" [isicMoreVert]="false">
+</app-header-form>
+
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-2 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <span fxLayout="row" fxFlex="50%" *ngIf="chuyenKhoa !== undefined">                
+                    <p class="green">
+                        <b>Đã chuyển khoa</b>
+                    </p>
+                </span>
+                <span fxLayout="row" fxFlex="50%" *ngIf="chuyenKhoa === undefined">
+                    <!-- <h2 class="title m-0">Chi Tiết Điều Trị Nội Trú</h2> -->
+                    <p class="{{dieuTriNoiTru.TrangThaiId==1?'orange':(dieuTriNoiTru.TrangThaiId==2?'green':'blue')}}">
+                        <b>{{dieuTriNoiTru.TrangThai}} <i
+                                *ngIf="dieuTriNoiTru.TrangThaiId==1 && dieuTriNoiTru.KetThucBenhAn==true && dieuTriNoiTru.DaQuyetToan!=true"
+                                class="red">(Chờ quyết toán)</i></b>
+                    </p>
+                </span>
+
+                <span fxFlex="50%">
+                    <div style="text-align-last: end;">
+                        <button *ngIf="laBASanKhoa && !dieuTriNoiTru.KetThucBenhAn" type="button" class="mr-2"
+                            color="primary" mat-raised-button (click)="kiemTraTaoBenhAnSoSinh()">Tạo BA sơ sinh</button>
+
+                        Tài khoản: <strong style="color: green;">{{dieuTriNoiTru.SoDuTaiKhoan |
+                            number:'0.2-2':'vi-VN'}}</strong> - Còn lại: <strong
+                            style="color: rgb(255, 86, 48);">{{dieuTriNoiTru.SoTienConLai |
+                            number:'0.2-2':'vi-VN'}}</strong>
+                    </div>
+                </span>
+            </div>
+
+            <div class="px-3 py-2" fxLayout="column">
+
+                <!-- <app-nhap-kho-share [isUpdate]="false"></app-nhap-kho-share> -->
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+                    <div fxFlex="100%">
+                        <!-- style="background: #e1f5fe;" -->
+                        <fieldset fxFlex="auto" class="{{(dieuTriNoiTru != null && dieuTriNoiTru.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+                            <legend>Thông tin bệnh án</legend>
+                            <div fxFlex="100%">
+                                <ul class="inline">
+                                    <li>Mã TN:
+                                        <strong>{{dieuTriNoiTru.MaYeuCauTiepNhan}}</strong>
+                                    </li>
+                                    <li>Mã NB:
+                                        <strong>{{dieuTriNoiTru.MaBenhNhan}}</strong>
+                                    </li>
+                                    <li>Họ tên:
+                                        <strong>{{dieuTriNoiTru.HoTen}}
+                                            <ng-container
+                                                *ngIf="dieuTriNoiTru.BenhAnCons!=null &&dieuTriNoiTru.BenhAnCons.length>0">
+                                                <a *ngFor="let benhAnCon of dieuTriNoiTru.BenhAnCons"
+                                                    (click)="navigate('/dieu-tri-noi-tru/chi-tiet-dieu-tri/'+benhAnCon.BenhAnId)"
+                                                    kendoTooltip title="Xem BA Con: {{benhAnCon.SoBenhAn}}"><img
+                                                        src="assets/img/baby.png" alt="Con" width="21"
+                                                        style="display:inline;margin-right:5px;" /></a>
+                                            </ng-container>
+                                            <a *ngIf="dieuTriNoiTru.BenhAnMe!=null"
+                                                (click)="navigate('/dieu-tri-noi-tru/chi-tiet-dieu-tri/'+dieuTriNoiTru.BenhAnMe.BenhAnId)"
+                                                kendoTooltip title="Xem BA Mẹ: {{dieuTriNoiTru.BenhAnMe.SoBenhAn}}"><img
+                                                    src="assets/img/mom.png" alt="Mẹ" width="20"
+                                                    style="display:inline;margin-right:5px;" /></a>
+                                            <a *ngIf="dieuTriNoiTru.CoBHYT==true" kendoTooltip title="Có BHYT"><img
+                                                    src="assets/img/logoBHXH.png" alt="BHYT" width="20"
+                                                    style="display:inline;" /></a>
+                                        </strong>
+                                    </li>
+                                    <li>Tuổi:
+                                        <strong>{{dieuTriNoiTru.Tuoi}}</strong>
+                                        <!-- <strong *ngIf="!isDuoi6Tuoi">{{benhNhanHienTai.YeuCauTiepNhan.Tuoi}}</strong>
+                                        <strong *ngIf="isDuoi6Tuoi">{{Duoi6TuoiDisplay}}</strong> -->
+                                    </li>
+                                    <li>
+                                        Giới tính:
+                                        <strong>{{dieuTriNoiTru.GioiTinh}}</strong>
+                                    </li>
+                                    <!-- <li>
+                                        Tuyến: <strong style="color: green;">abc</strong>
+                                    </li> -->
+                                    <li>
+                                        Địa chỉ: <strong>{{dieuTriNoiTru.DiaChi}}</strong>
+                                    </li>
+                                    <li>
+                                        Nghề nghiệp: <strong>{{dieuTriNoiTru.NgheNghiep}}</strong>
+                                    </li>
+                                    <li>Số BA:
+                                        <strong class="color-blue">{{dieuTriNoiTru.SoBenhAn}}</strong>
+                                    </li>
+                                    <li>
+                                        Loại BA:
+                                        <strong>{{dieuTriNoiTru.LoaiBenhAn}}</strong>
+                                    </li>
+                                    <li>
+                                        Khoa: <strong>{{dieuTriNoiTru.Khoa}}</strong>
+                                    </li>
+                                    <li>
+                                        BS điều trị: <strong>{{dieuTriNoiTru.BacSiDieuTri}}</strong>
+                                    </li>
+                                    <li>
+                                        Phòng: <strong>{{dieuTriNoiTru.Phong}}</strong>
+                                    </li>
+                                    <li>
+                                        Giường: <strong>{{dieuTriNoiTru.Giuong}}</strong>
+                                    </li>
+                                    <li>
+                                        Đối tượng: <strong class="color-blue">{{dieuTriNoiTru.DoiTuong}}</strong>
+                                    </li>
+                                </ul>
+                            </div>
+                        </fieldset>
+                        <fieldset *ngIf="dieuTriNoiTru.GoiDichVus != null && dieuTriNoiTru.GoiDichVus.length > 0"
+                            fxFlex="30%" style="background: #e1f5fe;">
+                            <legend>Thông tin tạm ứng gói</legend>
+                            <div fxFlex="100%">
+                                <ng-container *ngFor="let goiDichVu of dieuTriNoiTru.GoiDichVus">
+                                    <p class="mb-3"><strong>{{goiDichVu.TenGoiDichVu}}:
+                                        </strong> TẠM ỨNG: <strong
+                                            class="green">{{goiDichVu.BenhNhanDaThanhToanDisplay}}</strong>
+                                        - CÒN LẠI: <strong class="red">{{goiDichVu.ConLaiDisplay}}</strong></p>
+                                </ng-container>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="div-parent-content" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column"
+                        fxLayoutGap="0px grid" fxLayoutGap.lt-sm="0">
+                        <p fxFlex="100%" class="red mb-3"
+                            *ngIf="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi && dieuTriNoiTru.KhoaId != dieuTriNoiTru.KhoaPhuSanId">
+                            <strong>Phải chỉ định Phòng giường và BS điều trị trước khi thực hiện điều trị</strong>
+                        </p>
+
+                        <p fxFlex="100%" class="red mb-3"
+                            *ngIf="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi && dieuTriNoiTru.KhoaId == dieuTriNoiTru.KhoaPhuSanId">
+                            <strong>Phải chỉ định BS điều trị trước khi thực hiện điều trị</strong>
+                        </p>
+                        <kendo-tabstrip #tabStrip tabPosition="left" (tabSelect)="onTabSelect($event)" fxFlex="100%"
+                            class="content-has-border menu-left">
+                            <kendo-tabstrip-tab name="0" [selected]="true">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Lịch sử vào viện
+                                    </div>
+                                </ng-template>
+
+                                <ng-template kendoTabContent>
+                                    <!-- Lịch sử vào viện - Content -->
+                                    <app-lich-su-vao-vien [dieuTriNoiTruModel]="dieuTriNoiTru"></app-lich-su-vao-vien>
+                                </ng-template>
+
+                            </kendo-tabstrip-tab>
+
+                            <kendo-tabstrip-tab name="1">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Thông tin hành chính
+                                    </div>
+                                </ng-template>
+                                <ng-template kendoTabContent>
+                                    <app-thong-tin-hanh-chinh [dieuTriNoiTruModel]="dieuTriNoiTru"
+                                        (outputThongTinBenhNhanChanged)="thongTinBenhNhanChanged($event)">
+                                    </app-thong-tin-hanh-chinh>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <kendo-tabstrip-tab name="2">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Phòng giường, BS điều trị
+                                    </div>
+                                </ng-template>
+
+                                <ng-template kendoTabContent>
+                                    <div fxFlex="100%">
+                                        <app-phong-giuong-bs-dieu-tri [dieuTriNoiTruModel]="dieuTriNoiTru"
+                                            [IsBenhAnSoSinh]="dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnTreSoSinh"
+                                            (outputIsDaChiDinhBacSiChanged)="isDaChiDinhBacSiChanged($event)"
+                                            (outputIsDaChiDinhGiuongChanged)="isDaChiDinhGiuongChanged($event)"
+                                            (outputKhoaDieuTriChanged)="khoaDieuTriChanged($event)">
+                                        </app-phong-giuong-bs-dieu-tri>
+                                    </div>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <kendo-tabstrip-tab fxFlex="100%" name="3">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Dịch vụ chỉ định ngoại trú
+                                    </div>
+                                </ng-template>
+
+                                <ng-template kendoTabContent>
+                                    <div fxFlex="100%">
+                                        <!-- <app-phieu-dieu-tri [id]="id" [dieuTriNoiTruModel]="dieuTriNoiTru"
+                                            (phieuDieuTriId)="getPhieuDieuTriId($event)"
+                                            [validationErrors]="validationErrors"
+                                            (disabledInPhieuThuocVT)="disabledInPhieuThuocVT($event)"
+                                            [dataBenhNhan]="dieuTriNoiTru"
+                                            (ngayDieuTriHienTaiChange)="ngayDieuTriHienTaiChange($event)"
+                                            (tabSelectChange)="phieuDieuTriTabChange($event)" (checkKhacKhoaDieuTri)="checkKhacKhoaDieuTri($event)">
+                                        </app-phieu-dieu-tri> -->
+                                        <app-dich-vu-chi-dinh-ngoai-tru [dieuTriNoiTruModel]="dieuTriNoiTru">
+                                        </app-dich-vu-chi-dinh-ngoai-tru>
+                                    </div>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <kendo-tabstrip-tab fxFlex="100%" name="4"
+                                [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Phiếu điều trị
+                                    </div>
+                                </ng-template>
+
+                                <ng-template kendoTabContent>
+                                    <div fxFlex="100%">
+                                        <app-phieu-dieu-tri [id]="id" [dieuTriNoiTruModel]="dieuTriNoiTru"
+                                            (phieuDieuTriId)="getPhieuDieuTriId($event)"
+                                            [validationErrors]="validationErrors"
+                                            (disabledInPhieuThuocVT)="disabledInPhieuThuocVT($event)"
+                                            [dataBenhNhan]="dieuTriNoiTru"
+                                            (ngayDieuTriHienTaiChange)="ngayDieuTriHienTaiChange($event)"
+                                            (laNgayDieuTriDauTienChange)="laNgayDieuTriDauTienChange($event)"
+                                            (tabSelectChange)="phieuDieuTriTabChange($event)"
+                                            (checkKhacKhoaDieuTri)="checkKhacKhoaDieuTri($event)">
+                                        </app-phieu-dieu-tri>
+                                    </div>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <kendo-tabstrip-tab name="5" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Tai nạn thương tích
+                                    </div>
+                                </ng-template>
+
+                                <ng-template kendoTabContent>
+                                    <app-tai-nan-thuong-tich [dieuTriNoiTruModel]="dieuTriNoiTru">
+                                    </app-tai-nan-thuong-tich>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <kendo-tabstrip-tab name="6" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Thông tin bệnh án
+                                    </div>
+                                </ng-template>
+                                <ng-template kendoTabContent>
+                                    <app-thong-tin-benh-an [dieuTriNoiTruModel]="dieuTriNoiTru"></app-thong-tin-benh-an>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <kendo-tabstrip-tab name="7" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Tổng kết bệnh án
+                                    </div>
+                                </ng-template>
+
+                                <ng-template kendoTabContent>
+                                    <div fxFlex="100%">
+                                        <app-tong-ket-benh-an-noi-khoa [dieuTriNoiTruModel]="dieuTriNoiTru"
+                                            *ngIf="dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnNoiKhoa || dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnNhiKhoa || dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnTreSoSinh">
+                                        </app-tong-ket-benh-an-noi-khoa>
+                                        <app-tong-ket-benh-an-ngoai-khoa [dieuTriNoiTruModel]="dieuTriNoiTru" *ngIf="dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnPhuKhoa || dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnNgoaiKhoa 
+                                            || dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnThamMy">
+                                        </app-tong-ket-benh-an-ngoai-khoa>
+                                        <!-- <app-tong-ket-benh-an-san-khoa *ngIf="!(dieuTriNoiTru.LoaiBenhAnEnum == 1 || dieuTriNoiTru.LoaiBenhAnEnum == 2 
+                                                                                    || dieuTriNoiTru.LoaiBenhAnEnum == 3 || dieuTriNoiTru.LoaiBenhAnEnum == 6)"></app-tong-ket-benh-an-san-khoa> -->
+                                        <app-tong-ket-benh-an-san-khoa [dieuTriNoiTruModel]="dieuTriNoiTru"
+                                            *ngIf="dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnSanKhoaMo || dieuTriNoiTru.LoaiBenhAnEnum == loaiBenhAnSanKhoaThuong"
+                                            [dieuTriNoiTruModel]="dieuTriNoiTru"></app-tong-ket-benh-an-san-khoa>
+                                    </div>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <kendo-tabstrip-tab name="8" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Ra viện
+                                    </div>
+                                </ng-template>
+
+                                <ng-template kendoTabContent>
+                                    <app-ra-vien-noi-tru [dieuTriNoiTruModel]="dieuTriNoiTru"></app-ra-vien-noi-tru>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <kendo-tabstrip-tab name="9" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Hồ sơ khác
+                                    </div>
+                                </ng-template>
+
+                                <ng-template kendoTabContent>
+                                    <app-ho-so-khac (yeuCauTiepNhanId)="id" [dieuTriNoiTruModel]="dieuTriNoiTru">
+                                    </app-ho-so-khac>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <kendo-tabstrip-tab name="10" [disabled]="!dieuTriNoiTru.DaChiDinhGiuongVaBacSi">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Thuốc ra viện
+                                    </div>
+                                </ng-template>
+                                <ng-template kendoTabContent>
+                                    <app-thuoc-ra-vien-list [dieuTriNoiTruModel]="dieuTriNoiTru">
+                                    </app-thuoc-ra-vien-list>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+
+                            <!-- <kendo-tabstrip-tab name="9">
+                                <ng-template kendoTabTitle>
+                                    <div>
+                                        Lưu trữ bệnh án
+                                    </div>
+                                </ng-template>
+
+                                <ng-template kendoTabContent>
+                                    Lưu trữ bệnh án - Content
+                                </ng-template>
+                            </kendo-tabstrip-tab> -->
+
+
+                        </kendo-tabstrip>
+
+                    </div>
+
+                </div>
+
+                <div class="sticky-button-action py-3 text-right" kendoTooltip>
+                    <div style="float: left;">
+                        <button (click)="back()" type="button" mat-button class="mr-2">Quay lại</button>
+                    </div>
+
+                    <div [hidden]="CheckHiddenBottom(1, null, null)">
+                        <button *ngIf="!kiemTraKetThucBenhAn" (click)="huyThongTinHanhChinh()" type="button" mat-button
+                            class="mr-2">Hủy</button>
+                        <button *ngIf="!kiemTraKetThucBenhAn" (click)="luuThongTinHanhChinh()" type="button"
+                            class="mr-2" color="primary" mat-raised-button>Lưu</button>
+                    </div>
+
+                    <div
+                        [hidden]="CheckHiddenBottom(4, 0, tabChildPhieuDieutriId) || ngayDieuTriHienTai == null || ngayDieuTriHienTai == undefined">
+
+                        <div class="link-dv-chua-thuc-hien"
+                            *ngIf="!(ngayDieuTriHienTai == undefined && ngayDieuTriHienTai == null)">
+                            <a (click)="dichVuThuocVatTuChuaThucHien()"><b>Dịch vụ , thuốc , vật tư chưa thực
+                                    hiện</b></a>
+                        </div>
+
+
+                        <button [hidden]="ngayDieuTriHienTai == null || ngayDieuTriHienTai == undefined"
+                            (click)="InToDieuTriTheoNgay()" type="button" class="mr-2" color="primary"
+                            mat-raised-button>In tờ điều trị theo ngày</button>
+
+                        <button [hidden]="ngayDieuTriHienTai == null || ngayDieuTriHienTai == undefined"
+                            (click)="InTatCaToDieuTri()" type="button" class="mr-2" color="primary" mat-raised-button>In
+                            tất cả tờ điều trị</button>
+                        <button *ngIf="!kiemTraKetThucBenhAn &&khacKhoaDieuTri==false" (click)="HuyPhieuKham()"
+                            type="button" mat-button class="mr-2">Hủy</button>
+                        <button *ngIf="!kiemTraKetThucBenhAn &&khacKhoaDieuTri==false" (click)="LuuPhieuKham()"
+                            type="button" class="mr-2" color="primary" mat-raised-button>Lưu</button>
+
+                    </div>
+
+                    <div [hidden]="CheckHiddenBottom(4, 1, tabChildPhieuDieutriId)">
+                        <div class="link-dv-chua-thuc-hien"
+                            *ngIf="!(ngayDieuTriHienTai == undefined && ngayDieuTriHienTai == null)">
+                            <a (click)="dichVuThuocVatTuChuaThucHien()"><b>Dịch vụ , thuốc , vật tư chưa thực
+                                    hiện</b></a>
+                        </div>
+                        
+                        <button type="button" color="primary" mat-raised-button (click)="InPhieuXN()"  style="margin-right: 5px;">
+                            In phiếu chỉ định xét nghiệm test nhanh Sars-Cov 2
+                        </button>
+                        <button (click)="InChiDinh()" type="button" class="mr-2" color="primary" mat-raised-button>In
+                            chỉ định</button>
+                    </div>
+
+                    <div [hidden]="CheckHiddenBottom(4, 2, tabChildPhieuDieutriId)"
+                        class="sticky-button-action py-3 text-right">
+                        <div class="link-dv-chua-thuc-hien"
+                            *ngIf="!(ngayDieuTriHienTai == undefined && ngayDieuTriHienTai == null)">
+                            <a (click)="dichVuThuocVatTuChuaThucHien()"><b>Dịch vụ , thuốc , vật tư chưa thực
+                                    hiện</b></a>
+                        </div>
+                        <!-- <button type="button" color="primary" class="float-left" style="left:17%"
+                            mat-raised-button>Xuất</button> -->
+                        <!-- <button [disabled]="!isDisabledIn" type="button" class="mr-2" color="primary"
+                            (click)="inPhieuCongKhaiThuoc()" mat-raised-button>In phiếu công khai thuốc</button> -->
+                    </div>
+
+                    <div [hidden]="CheckHiddenBottom(4, 3, tabChildPhieuDieutriId)"
+                        class="sticky-button-action py-3 text-right">
+                        <div class="link-dv-chua-thuc-hien"
+                            *ngIf="!(ngayDieuTriHienTai == undefined && ngayDieuTriHienTai == null)">
+                            <a (click)="dichVuThuocVatTuChuaThucHien()"><b>Dịch vụ , thuốc , vật tư chưa thực
+                                    hiện</b></a>
+                        </div>
+                        <ng-container *ngIf="!dieuTriNoiTru.KetThucBenhAn">
+                            <button *ngIf="ngayDieuTriDauTienVo.LaNgayDieuTriDauTien 
+                            && ngayDieuTriDauTienVo.LaKhoaChiDinh" (click)="apDungDonThuocChoCacNgaySau()"
+                                type="button" class="mr-2" color="primary" mat-raised-button>Chọn các ngày áp dụng đơn
+                                thuốc</button>
+                            <button *ngIf="!ngayDieuTriDauTienVo.LaNgayDieuTriDauTien 
+                        && ngayDieuTriDauTienVo.LaKhoaChiDinh" (click)="saoChepDonThuocNgayKhacApDungNgayHienTai()"
+                                type="button" class="mr-2" color="primary" mat-raised-button>Sao chép đơn thuốc</button>
+                        </ng-container>
+
+                    </div>
+
+                    <div [hidden]="CheckHiddenBottom(4, 4, tabChildPhieuDieutriId)">
+                        <div class="link-dv-chua-thuc-hien"
+                            *ngIf="!(ngayDieuTriHienTai == undefined && ngayDieuTriHienTai == null)">
+                            <a (click)="dichVuThuocVatTuChuaThucHien()"><b>Dịch vụ , thuốc , vật tư chưa thực
+                                    hiện</b></a>
+                        </div>
+                        <ng-container *ngIf="!dieuTriNoiTru.KetThucBenhAn">
+                            <button *ngIf="ngayDieuTriDauTienVo.LaNgayDieuTriDauTien 
+                        && ngayDieuTriDauTienVo.LaKhoaChiDinh" (click)="apDungDonVTYTChoCacNgaySau()" type="button"
+                                class="mr-2" color="primary" mat-raised-button>Chọn các ngày áp dụng
+                                VTYT</button>
+                            <button *ngIf="!ngayDieuTriDauTienVo.LaNgayDieuTriDauTien 
+                        && ngayDieuTriDauTienVo.LaKhoaChiDinh" (click)="saoChepDonVTYTNgayKhacApDungNgayHienTai()"
+                                type="button" class="mr-2" color="primary" mat-raised-button>Sao chép VTYT</button>
+                        </ng-container>
+
+                    </div>
+
+                    <div [hidden]="CheckHiddenBottom(4, 5, tabChildPhieuDieutriId)">
+                        <div class="link-dv-chua-thuc-hien"
+                            *ngIf="!(ngayDieuTriHienTai == undefined && ngayDieuTriHienTai == null)">
+                            <a (click)="dichVuThuocVatTuChuaThucHien()"><b>Dịch vụ , thuốc , vật tư chưa thực
+                                    hiện</b></a>
+                        </div>
+                        <button type="button" class="mr-2" color="primary" mat-raised-button
+                            (click)="inPhieuTruyenMau()">In phiếu chỉ đinh truyền máu</button>
+                    </div>
+
+                    <div [hidden]="CheckHiddenBottom(4, 6, tabChildPhieuDieutriId)">
+                        <div class="link-dv-chua-thuc-hien"
+                            *ngIf="!(ngayDieuTriHienTai == undefined && ngayDieuTriHienTai == null)">
+                            <a (click)="dichVuThuocVatTuChuaThucHien()"><b>Dịch vụ , thuốc , vật tư chưa thực
+                                    hiện</b></a>
+                        </div>
+                        <button type="button" class="mr-2" color="primary" mat-raised-button (click)="inPhieuAn()">In
+                            phiếu ăn</button>
+                        <!-- <button [disabled]="!isDisabledIn" type="button" class="mr-2" color="primary"
+                            mat-raised-button>In phiếu truyền
+                            máu</button> -->
+                    </div>
+
+                    <div [hidden]="CheckHiddenBottom(0)">
+                    </div>
+
+                    <div [hidden]="CheckHiddenBottom(5, null, null)">
+                        <button *ngIf="!kiemTraKetThucBenhAn" (click)="huyTaiNanThuongTich()" type="button" mat-button
+                            class="mr-2">Hủy</button>
+                        <button *ngIf="!kiemTraKetThucBenhAn" (click)="luuTaiNanThuongTich()" type="button" class="mr-2"
+                            color="primary" mat-raised-button>Lưu</button>
+                    </div>
+
+                    <div [hidden]="CheckHiddenBottom(6, null, null)">
+                        <button *ngIf="!kiemTraKetThucBenhAn" (click)="InPhieuKhamBenh()" type="button" class="mr-2"
+                            color="primary" mat-raised-button>In phiếu khám bệnh</button>
+                        <button *ngIf="!kiemTraKetThucBenhAn" (click)="HuyThongTinBenhAn()" type="button" mat-button
+                            class="mr-2">Hủy</button>
+                        <button *ngIf="!kiemTraKetThucBenhAn" (click)="LuuThongTinBenhAn()" type="button" class="mr-2"
+                            color="primary" mat-raised-button>Lưu</button>
+                    </div>
+                    <div [hidden]="CheckHiddenBottom(7, null, null)">
+                        <button *ngIf="!kiemTraKetThucBenhAn" (click)="HuyTongKetBenhAn()" type="button" mat-button
+                            class="mr-2">Hủy</button>
+                        <button *ngIf="!kiemTraKetThucBenhAn" (click)="LuuTongKetBenhAn()" type="button" class="mr-2"
+                            color="primary" mat-raised-button>Lưu</button>
+                    </div>
+
+                    <div [hidden]="CheckHiddenBottom(8, null, null)">
+                        <div>
+                            <div fxFlex="100%" style="text-align: right; width: 100%;">
+                                <button (click)="inBangkeChiPhi()" color="primary" mat-raised-button class="mr-2"> Xem
+                                    bảng kê chi phí</button>
+
+                                <button (click)="inThongTinBenhAn()" color="primary" class="mr-2" mat-raised-button> In
+                                    bệnh
+                                    án</button>
+                                <button *ngIf="!ketThucBenhAnKhiThanhToan && !kiemTraKetThucBenhAn"
+                                    (click)="ketThucThongTinBenhAn()" type="button" mat-button class="mr-2">
+                                    Kết thúc bệnh án
+                                </button>
+                                <button
+                                    *ngIf="chuyenKhoa === undefined && !ketThucBenhAnKhiThanhToan && kiemTraKetThucBenhAn"
+                                    (click)="moThongTinBenhAn()" type="button" mat-button class="mr-2">
+                                    Mở lại bệnh án
+                                </button>
+                                <button *ngIf="!kiemTraKetThucBenhAn" (click)="HuyThongTinRaVien()" type="button"
+                                    mat-button class="mr-2">Hủy</button>
+                                <button *ngIf="!kiemTraKetThucBenhAn" (click)="LuuThongTinRaVien()" type="button"
+                                    class="mr-2" color="primary" mat-raised-button>Lưu</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

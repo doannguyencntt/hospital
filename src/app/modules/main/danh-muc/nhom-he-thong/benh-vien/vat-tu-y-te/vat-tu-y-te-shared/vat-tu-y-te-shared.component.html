@@ -1,0 +1,55 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between">
+    <app-textbox id="Ma" fxFlex="25" fxFlex.sm="25" [required]="true" maxlength="50" [(model)]="vatTuYTe.Ma" label="Mã"
+        [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textbox fxFlex="25" id="Ten" label="Tên" maxlength="250" [(model)]="vatTuYTe.Ten"
+        [validationerror]="'Ten' | validationerror:validationErrors" [required]="true"
+        (modelChange)="changeTenVatTu($event)">
+    </app-textbox>
+    <app-combobox-tree fxFlex="25%" fxFlex.sm="25%" label="Nhóm vật tư" [(model)]="vatTuYTe.NhomVatTuId"
+        [modelText]="vatTuYTe.NhomVatTuModelText" [validationerror]="'NhomVatTuId' | validationerror:validationErrors"
+        [required]="true" url="VatTu/GetListNhomVatTuAsync">
+    </app-combobox-tree>
+    <app-textboxnumeric fxFlex="25" id="TyLeBaoHiemThanhToan" label="Tỷ lệ bảo hiểm thanh toán"
+        [(model)]="vatTuYTe.TyLeBaoHiemThanhToan" [required]="true"
+        [validationerror]="'TyLeBaoHiemThanhToan' | validationerror:validationErrors">
+    </app-textboxnumeric>
+    <app-textbox fxFlex="25" id="QuyCach" label="Đơn vị sơ cấp" maxlength="250" [(model)]="vatTuYTe.QuyCach">
+    </app-textbox>
+    <app-textbox id="DonViTinh" fxFlex="25" fxFlex.sm="25" maxlength="50" [(model)]="vatTuYTe.DonViTinh"
+        label="Đơn vị thứ cấp">
+    </app-textbox>
+    <app-textboxnumeric fxFlex="25" id="HeSoDinhMucDonViTinh" label="Hệ số định mức"
+        [(model)]="vatTuYTe.HeSoDinhMucDonViTinh">
+    </app-textboxnumeric>
+    <app-autocomplete id="NhaSanXuat" fxFlex="25" fxFlex.sm="25" maxlength="500" [(model)]="vatTuYTe.NhaSanXuat"
+        [dataList]="nhaSanXuatDataSource" label="Nhà sản xuất"
+        [validationerror]="'NhaSanXuat' | validationerror:validationErrors">
+    </app-autocomplete>
+    <app-autocomplete id="NuocSanXuat" fxFlex="25" fxFlex.sm="25" maxlength="500" [(model)]="vatTuYTe.NuocSanXuat"
+        [dataList]="nuocSanXuatDataSource" label="Nước sản xuất"
+        [validationerror]="'NuocSanXuat' | validationerror:validationErrors">
+    </app-autocomplete>
+    <app-radio id="IsDisabled" fxFlex="25" fxFlex.sm="25" maxlength="50" [(model)]="vatTuYTe.IsDisabled"
+        [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" label="Hiệu lực">
+    </app-radio>
+    <app-textarea id="MoTa" fxFlex="50" fxFlex.sm="50" maxlength="4000" [(model)]="vatTuYTe.MoTa" label="Mô tả"
+        minHeight="20">
+    </app-textarea>
+    <app-checkbox id="SuDungVatTuBenhVien" fxFlex="100%" fxFlex.sm="100%" [(model)]="vatTuYTe.SuDungVatTuBenhVien"
+        label="Sử dụng vật tư bệnh viện"
+        (modelChange)="changeSuDungTaiBenhVien($event)">
+    </app-checkbox>
+    <app-textbox fxFlex="25" id="MaVatTuBenhVien" label="Mã vật tư bệnh viện" maxlength="250" [(model)]="vatTuYTe.MaVatTuBenhVien"  [required]="true" 
+    [validationerror]="'VatTuBenhViewModel.MaVatTuBenhVien' | validationerror:validationErrors" *ngIf="vatTuYTe.SuDungVatTuBenhVien == true">
+    </app-textbox>
+    <app-dropdownlist id="loai-su-dung" fxFlex="25%" fxFlex.sm="25%" [(model)]="vatTuYTe.LoaiSuDung"
+        [modelText]="vatTuYTe.LoaiSuDungText" label="Loại sử dụng" url="VatTuBenhVien/GetLoaiSuDung"  [required]="true" 
+        [validationerror]="'VatTuBenhViewModel.LoaiSuDung' | validationerror:validationErrors" *ngIf="vatTuYTe.SuDungVatTuBenhVien == true">
+    </app-dropdownlist>
+    <app-textarea id="dk-bao-hiem-thanh-toan" fxFlex="50%" fxFlex.sm="50%" maxlength="4000" minHeight="20"
+        [(model)]="vatTuYTe.DieuKienBaoHiemThanhToan" label="Điều Kiện Bảo Hiểm Thanh Toán" *ngIf="vatTuYTe.SuDungVatTuBenhVien == true">
+    </app-textarea>
+
+</div>

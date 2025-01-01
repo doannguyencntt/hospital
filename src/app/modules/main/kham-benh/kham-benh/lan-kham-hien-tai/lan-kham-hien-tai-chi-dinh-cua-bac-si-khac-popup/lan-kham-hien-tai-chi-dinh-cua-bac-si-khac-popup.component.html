@@ -1,0 +1,44 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Chỉ Định Của Bác Sĩ Khác</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content>
+        <app-grid #GridChiDinhBSKhac fxFlex="100%" class="k-grid-border" [gridColumns]="gridColumns" [useAddDeault]="false"
+            [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotalPage" [useHeaderDefault]="false"
+            [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" [autoHeight]="true"
+            [additionalSearchString]="yeuCauTiepNhanId + ';' + yeuCauKhamBenhId" [useHeaderDefault]="false"
+            [pageable]="true" [groups]="groups" (extOnDataBound)="extOnDataBound($event)" >
+        </app-grid>
+        <!-- <ng-template #detailTemplate let-dataItem>
+
+        </ng-template> -->
+        <ng-template #nhomGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+
+        <ng-template #sttTemplate let-rowIndex="rowIndex">
+            <strong>{{rowIndex + 1}}</strong>
+        </ng-template>
+        <div class="gripViewGoiDichViKhacTemplate">
+            <ng-template #checkBoxHeaderTemplate let-dataItem>
+                <input type="checkbox" id="vehicle1" name="vehicle1" [(ngModel)]="checkAll"
+                    (ngModelChange)="SelectcheckAllboxIn($event)">
+            </ng-template>
+            <ng-template #checkBoxTemplate let-dataItem>
+                <input type="checkbox" id="vehicle1" [(ngModel)]="dataItem.isCheckRowItem" name="vehicle1"
+                    (ngModelChange)="checkboxIn($event,dataItem)">
+            </ng-template>
+        </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right" style="padding-bottom: 15px;">
+    <ng-container>
+        <button type="button" color="primary" mat-raised-button (click)="InPhieuXN()"  style="margin-right: 5px;">
+            In phiếu chỉ định xét nghiệm test nhanh Sars-Cov 2
+        </button>
+        <button (click)="InChiDinhNoiTru(0)" type="button" class="mr-2" color="primary" mat-raised-button>In
+            chỉ định</button>
+    </ng-container>
+</mat-dialog-actions>

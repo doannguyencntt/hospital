@@ -1,0 +1,246 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <!-- background: #e1f5fe; -->
+    <fieldset fxFlex="100%" style="margin-right: 16px;margin-bottom: 16px;" class="{{(thongTinHanhChinh != null && thongTinHanhChinh.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+        <legend>Thông tin hành chính</legend>
+        <div fxFlex="100%" class="ml-2">
+            <ul class="inline">
+                <li>Mã TN:
+                    <strong>{{thongTinHanhChinh.ThongTinHanhChinhMaTiepNhan}}</strong>
+                </li>
+                <li>Mã NB:
+                    <strong>{{thongTinHanhChinh.ThongTinHanhChinhMaBenhNhan}}</strong>
+                </li>
+                <li>Họ tên:
+                    <strong>{{thongTinHanhChinh.ThongTinHanhChinhHoTen}}</strong>
+                </li>
+                <li>Tuổi:
+                    <strong *ngIf="!isDuoi6Tuoi">{{thongTinHanhChinh.ThongTinHanhChinhTuoi}}</strong>
+                    <strong *ngIf="isDuoi6Tuoi">{{Duoi6TuoiDisplay}}</strong>
+                </li>
+                <li>
+                    Giới tính:
+                    <strong>{{thongTinHanhChinh.ThongTinHanhChinhTenGioiTinh}}</strong>
+                </li>
+                <li>
+                    Địa chỉ:
+                    <strong>{{thongTinHanhChinh.ThongTinHanhChinhDiaChi}}</strong>
+                </li>
+                <li>
+                    Đối tượng: <strong style="color: blue;">{{thongTinHanhChinh.ThongTinHanhChinhDoiTuong}}</strong>
+                </li>
+                <li>
+                    BS chỉ định: <strong>{{thongTinHanhChinh.ThongTinHanhChinhBacSiChiDinh}}</strong>
+                </li>
+                <li>
+                    Ngày chỉ định: <strong>{{thongTinHanhChinh.ThongTinHanhChinhNgayChiDinh}}</strong>
+                </li>
+                <li>
+                    Nơi chỉ định: <strong>{{thongTinHanhChinh.ThongTinHanhChinhNoiChiDinh}}</strong>
+                </li>
+                <li>
+                    Số BA: <strong style="color: blue;">{{thongTinHanhChinh.ThongTinHanhChinhSoBenhAn}}</strong>
+                </li>
+                <li>
+                    Chẩn đoán: <strong>{{thongTinHanhChinh.ThongTinHanhChinhChanDoan}}</strong>
+                </li>
+                <!-- <li>
+                    Chỉ định: <strong>{{thongTinHanhChinh.ThongTinHanhChinhChiDinh}}</strong>
+                </li> -->
+            </ul>
+        </div>
+    </fieldset>
+
+    <!-- Trang trí theo cầu khách hàng  -->
+    <div fxFlex="30%" fxFlex.sm="100%">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            style="width: 100%">
+            <app-combobox id="yeucaudvkt" fxFlex="100%" fxFlex.sm="100%" #chonDichVuKyThuat
+                url="CanLamSang/GetListKyThuatDichVuKyThuatTheoTiepNhan"
+                label="DS dịch vụ của NB ({{totalDVKTComplete}}/{{totalDVKT}})"
+                [queryInfo]="{ParameterDependencies:'{YeuCauTiepNhanId:' + noiDungKetQua.YeuCauTiepNhanId +' , ChoKetQua:' + timKiemObj.TrangThai.ChoKetQua +'}', Take: 50}"
+                [(model)]="lookupItemChonDichVuKyThuat.KeyId" (modelChange)="modelChangeVuKyThuat($event)" [bind]="true"
+                [modelText]="lookupItemChonDichVuKyThuat.DisplayName" [template]="chonDVTemplate"
+                [templateHeader]="chonDVTemplateHeader" [autoSelectFirstItem]="true"
+                [validationerror]="'YeuCauDichVuKyThuatId' | validationerror:validationErrors"
+                (dataBound)="dataBoundYeuCauDichVuKyThuat($event)">
+                <ng-template #chonDVTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="60%">Tên</th>
+                            <th width="40%">Trạng Thái</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #chonDVTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="60%">{{dataItem.DisplayName}}</td>
+                            <td width="40%">
+                                <span style="color:red;" *ngIf="dataItem.TrangThaiDangThucHien === true">Chưa thực
+                                    hiện</span>
+                                <span style="color:green;" *ngIf="dataItem.TrangThaiDangThucHien !== true">Đã thực
+                                    hiện</span>
+                            </td>
+                        </tr>
+                    </table>
+                </ng-template>
+            </app-combobox>
+            <div [ngClass]="{'disableDiv': (dichVuDaThucHien == true && nhanVienThucHienLai == true )}">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0"
+                    style="width: 100%">
+                    <app-textbox id="tenKetQua" fxFlex="auto" fxFlex.sm="auto" label="Tên kết quả" [required]="true"
+                        fxFlex="50%" fxFlex.sm="100%" [(model)]="noiDungKetQua.ChiTietKetQuaObj.TenKetQua"
+                        [maxlength]="2000"
+                        [validationerror]="'ChiTietKetQuaObj.TenKetQua' | validationerror:validationErrors">
+                    </app-textbox>
+                    <app-textbox id="kyThuat" fxFlex="50%" fxFlex.sm="100%" label="Kỹ thuật"
+                        [(model)]="noiDungKetQua.ChiTietKetQuaObj.KyThuat" [maxlength]="2000">
+                    </app-textbox>
+                    <app-datetimepicker id="ngayThucHien" fxFlex="50%" fxFlex.sm="100%" [required]="true"
+                        label="Ngày thực hiện" [(model)]="noiDungKetQua.ThoiDiemThucHien"
+                        [validationerror]="'ThoiDiemThucHien' | validationerror:validationErrors">
+                    </app-datetimepicker>
+                    <app-combobox id="bacSiKetLuan" fxFlex="50%" fxFlex.sm="100%" [required]="true" [bind]="true"
+                        url="YeuCauLinhDuocPham/GetListNhanVien" label="Bác sĩ kết luận 1"
+                        [(model)]="noiDungKetQua.NhanVienKetLuanId"  [reloadForGrid]="true"
+                        [validationerror]="'NhanVienKetLuanId' | validationerror:validationErrors">
+                    </app-combobox>
+                    <app-combobox id="nguoiThucHien" fxFlex="50%" fxFlex.sm="100%" [bind]="true"
+                        url="YeuCauLinhDuocPham/GetListNhanVien" label="Điều dưỡng/ Kỹ thuật viên 1"
+                        [(model)]="noiDungKetQua.NhanVienThucHienId"   [reloadForGrid]="true"
+                        [validationerror]="'NhanVienThucHienId' | validationerror:validationErrors">
+                    </app-combobox>
+                    <app-combobox id="bacSiKetLuan" fxFlex="50%" fxFlex.sm="100%" [bind]="true"
+                        url="YeuCauLinhDuocPham/GetListNhanVien" label="Bác sĩ kết luận 2"  [reloadForGrid]="true"
+                        [(model)]="noiDungKetQua.NhanVienKetLuan2Id">
+                    </app-combobox>
+                    <app-combobox id="nguoiThucHien" fxFlex="50%" fxFlex.sm="100%" [bind]="true"  [reloadForGrid]="true"
+                        url="YeuCauLinhDuocPham/GetListNhanVien" label="Điều dưỡng/ Kỹ thuật viên 2"
+                        [(model)]="noiDungKetQua.NhanVienThucHien2Id">
+                    </app-combobox>
+                    <app-upload fxFlex="50%" fxFlex.sm="100%" #fileChuKy [allowedExtensions]="allowedExtensions"
+                        id="chu-ky" label="Tài liệu" [model]="file" (uploadFileDone)="uploadFileDone($event)">
+                    </app-upload>
+                    <app-textarea id="ghichu" fxFlex="100%" fxFlex.sm="100%" label="Ghi chú" maxlength="1000"
+                        minHeight="20" [(model)]="noiDungKetQua.GhiChuKetQuaCLS">
+                    </app-textarea>
+
+                    <!-- Begin Cập nhật vật tư và thuốc cho chuẩn đoán hình ảnh -->
+                    <h3 fxFlex="100%" class="sub-title mt-0">
+                        THUỐC/VẬT TƯ
+                        <a *ngIf="!kiemTraThuocVatTuDaCo && isThemThuocVatTu!==true"
+                            class="size-icon-open k-icon ng-star-inserted k-plus"
+                            (click)="themGhiNhanVTThuoc(true , yeuCauKyThuatId)">
+                            <!-- <mat-icon [icIcon]="icAddCircle"></mat-icon> -->
+                        </a>
+                        <a *ngIf="!kiemTraThuocVatTuDaCo && isThemThuocVatTu===true"
+                            class="size-icon-close k-icon ng-star-inserted k-minus"
+                            (click)="themGhiNhanVTThuoc(false, yeuCauKyThuatId)">
+                            <!-- <mat-icon [icIcon]="icCancel"></mat-icon> -->
+                        </a>
+                    </h3>
+                    <ng-container>
+                        <app-ghi-nhan-vat-tu-thuoc
+                            [benhNhanHienTaiCoBHYT]="thongTinHanhChinh.ThongTinHanhChinhDoiTuong=='BHYT'"
+                            [isThemThuocVatTu]="isThemThuocVatTu" [YeuCauTiepNhanId]="noiDungKetQua.YeuCauTiepNhanId"
+                            (dataChange)="dataChange($event)" (dataChangeXoa)="dataChangeXoa($event)" fxFlex="100%"
+                            [yeuCauDichVuKyThuatId]="yeuCauKyThuatId">
+                        </app-ghi-nhan-vat-tu-thuoc>
+                    </ng-container>
+                    <!--End Cập nhật vật tư và thuốc cho chuẩn đoán hình ảnh -->
+                    <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                        fxLayoutGap.lt-sm="0">
+                        <h3 fxFlex="100%" class="sub-title">HÌNH ẢNH ĐÍNH KÈM
+                            <button class="po-h" color="primary" (click)="themHinhAnh()">
+                                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+                            </button>
+
+                            <app-checkbox
+                                *ngIf="noiDungKetQua.ChiTietKetQuaObj.HinhAnhDinhKems != undefined && noiDungKetQua.ChiTietKetQuaObj.HinhAnhDinhKems != null && noiDungKetQua.ChiTietKetQuaObj.HinhAnhDinhKems.length > 0"
+                                class="ml-4" label="In ảnh lên KQ" [(model)]="noiDungKetQua.ChiTietKetQuaObj.InKemAnh">
+                            </app-checkbox>
+                        </h3>
+                        <ng-container
+                            *ngIf="noiDungKetQua.ChiTietKetQuaObj.HinhAnhDinhKems == undefined || noiDungKetQua.ChiTietKetQuaObj.HinhAnhDinhKems == null || noiDungKetQua.ChiTietKetQuaObj.HinhAnhDinhKems.length == 0">
+                            <p>Không có hình ảnh đính kèm</p>
+                        </ng-container>
+
+                        <div fxFlex="100%"
+                            *ngIf="noiDungKetQua.ChiTietKetQuaObj.HinhAnhDinhKems != undefined && noiDungKetQua.ChiTietKetQuaObj.HinhAnhDinhKems != null && noiDungKetQua.ChiTietKetQuaObj.HinhAnhDinhKems.length > 0"
+                            class="mb-3">
+                            <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                fxLayoutGap.lt-sm="0">
+                                <div fxFlex="25%"
+                                    *ngFor="let hinhAnh of noiDungKetQua.ChiTietKetQuaObj.HinhAnhDinhKems">
+                                    <div class="card overflow-hidden"
+                                        style="border: 1px solid #ccc;position: relative;">
+                                        <div>
+                                            <!-- <app-checkbox class="ml-1" label="In ảnh lên KQ" [(model)]="hinhAnh.InKemKetQua">
+                                    </app-checkbox> -->
+                                            <mat-icon style="float: right;" [icIcon]="icClose" class="icon-close"
+                                                (click)="xoaHinhAnh(hinhAnh)">
+                                            </mat-icon>
+                                        </div>
+
+                                        <div
+                                            class="mat-ripple p-4 text-center hover:bg-hover trans-ease-out cursor-pointer relative">
+                                            <img (click)="xemHinhAnh(hinhAnh.HinhAnh)" src="{{hinhAnh.HinhAnh}}"
+                                                class="mx-auto" />
+                                            <p class="text-center mt-2"><strong>{{hinhAnh.MoTa}}</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div fxFlex="70%" fxFlex.sm="100%"
+        [ngClass]="{'disableDiv': (dichVuDaThucHien == true && nhanVienThucHienLai == true)}">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            style="width: 100%">
+            <div fxFlex="100%" class="d-flex flex-row-reverse">
+                <button class="ml-1 mt-2" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm"
+                    type="button" (click)="showPopupDuLieuMacDinh()">
+                    <mat-icon style="color: white;" [icIcon]="icAdd"></mat-icon>
+                </button>
+                <app-combobox id="ketQuaMau" fxFlex="50%" fxFlex.sm="50%" url="CanLamSang/GetListNoiDungMau"
+                    #comboboxLayMau [(model)]="layMauId" popupSettings="null" label="Nội dung mẫu"
+                    class="item-no-padding mr-2" style="padding-bottom: 0px;" (selectionChange)="chonKetQua($event)"
+                    [template]="ketQuaTemplate" [templateHeader]="ketQuaTemplateHeader">
+                    <ng-template #ketQuaTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="20%">Mã</th>
+                                <th>Tên</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #ketQuaTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="20%">{{dataItem.Ma}}</td>
+                                <td>{{dataItem.Ten}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+            </div>
+            <app-editor id="ketQua" fxFlex="100%" label="Kết quả" [required]="true"
+                [(model)]="noiDungKetQua.ChiTietKetQuaObj.KetQua" [hideLinkButton]="true" [hideFileButton]="true"
+                [hideImageButton]="true" [showToolbar]="false"
+                [validationerror]="'ChiTietKetQuaObj.KetQua' | validationerror:validationErrors">
+            </app-editor>
+            <app-editor id="ketLuan" fxFlex="100%" label="Kết luận" [required]="true"
+                [(model)]="noiDungKetQua.ChiTietKetQuaObj.KetLuan" [hideLinkButton]="true" [hideFileButton]="true"
+                [hideImageButton]="true" [showToolbar]="false"
+                [validationerror]="'ChiTietKetQuaObj.KetLuan' | validationerror:validationErrors">
+            </app-editor>
+        </div>
+    </div>
+
+    <!-- Trang trí theo cầu khách hàng  -->
+</div>

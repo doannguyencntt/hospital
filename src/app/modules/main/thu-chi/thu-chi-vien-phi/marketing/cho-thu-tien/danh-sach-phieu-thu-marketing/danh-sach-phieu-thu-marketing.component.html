@@ -1,0 +1,103 @@
+<app-grid [gridColumns]="gridColumns" [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false"
+    [useActionDefault]="false" [autoHeight]="true" [lazyLoadPage]="true" [checkboxAble]="false"
+    [headerTemplate]="headerTemplate" urlGetData="ThuNganMarketing/GetDataThongTinPhieuThuForGridAsync" #gridList
+    (extOnDataBound)="onDataBound($event)" [additionalSearchString]="queryString" style="width: 1px;"
+    [pageable]="false">
+</app-grid>
+
+<ng-template #headerTemplate>
+    <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+        <app-combobox id="goi-dv" label="Gói dịch vụ" class="ml-2 on-header" [popupSettings]="null"
+            style="margin-top: 19px;" url="ThuNganMarketing/GetGoiDichVuTheoBenhNhan?benhNhanId={{benhNhanId}}"
+            [(model)]="timKiemThongTinPhieuThu.GoiDichDichVuId" fxFlex="210px"
+            (selectionChange)="chonGoiDichDichVuChange($event)">
+        </app-combobox>
+        <app-datetimepicker fxFlex="210px" [(model)]="timKiemThongTinPhieuThu.ThoiDiemTuFormat" #tiepnhantu
+            id="ThoiDiemTiepNhanTuFormat" (modelChange)="thoiDiemTNChange()" label="Ngày thu từ" class="ml-2 on-header"
+            (keyup)="onKey($event)"> </app-datetimepicker>
+        <app-datetimepicker fxFlex="210px" [(model)]="timKiemThongTinPhieuThu.ThoiDiemDenFormat" #tiepnhanden
+            id="ThoiDiemTiepNhanDenFormat" (modelChange)="thoiDiemTNChange()" label="Ngày thu đến"
+            class="ml-2 on-header" (keyup)="onKey($event)"> </app-datetimepicker>
+        <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+            fxLayoutAlign="start center" style="margin-top: 2px;" kendoTooltip>
+            <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+            <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                type="search" name="searchString" [(ngModel)]="timKiemThongTinPhieuThu.SearchString"
+                (keyup)="onKey($event)" (ngModelChange)="TimkiemNangCao()" placeholder="Nhập từ khóa" />
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+    <div kendoTooltip>
+        <button
+            *ngIf="dataItem.LoaiPhieuThuChiThuNgan !== 1 && dataItem.LoaiPhieuThuChiThuNgan !== 3 && dataItem.HuyPhieuThu && (dataItem.ThoiGianThuHoi === undefined || dataItem.ThoiGianThuHoi === null) "
+            type="button" (click)="HuyThu(dataItem , 'HuyThu')" title="Hủy thu" color="warn" mat-raised-button
+            class="mr-3">
+            <span>Hủy thu</span>
+        </button>
+
+        <button *ngIf="dataItem.ThuHoiPhieu === false" type="button" (click)="HuyThu(dataItem,'ThuHoi')"
+            title="Thu hồi phiếu" color="warn" mat-raised-button class="mr-3">
+            <span>Thu hồi phiếu</span>
+        </button>
+
+        <button *ngIf="dataItem.ThuHoiPhieu === true" type="button" (click)="xemThongTinPhieuThu(dataItem)"
+            title="Xem thông tin" color="primary" mat-raised-button class="mr-3">
+            <span>Xem</span>
+        </button>
+
+        <button *ngIf="dataItem.LoaiPhieuThuChiThuNgan === 3" type="button" (click)="InPhieuHoanUng(dataItem)"
+            title="Phiếu in" mat-button style="background: #3333;">
+            <span>In</span>
+        </button>
+
+        <button *ngIf="dataItem.LoaiPhieuThuChiThuNgan === 2" type="button" (click)="InPhieu(dataItem)"
+            title="Phiếu in" mat-button style="background: #3333;">
+            <span>In</span>
+        </button>
+
+        <button *ngIf="dataItem.LoaiPhieuThuChiThuNgan === 1" type="button" (click)="InPhieuThuMarketing(dataItem)"
+            title="Phiếu in" mat-button style="background: #3333;">
+            <span>In</span>
+        </button>
+
+    </div>
+</ng-template>
+
+<ng-template #thuCuaGoiTemplate let-dataItem>
+    <ng-container *ngFor="let item of dataItem.ThuCuaGoi, let i = index">
+        <strong>{{item}}</strong><br />
+    </ng-container>
+</ng-template>
+
+<ng-template #soTienThuTemplate let-dataItem>
+    {{dataItem.SoTienThu | number:'0.2-2':'vi-VN'}}
+</ng-template>
+
+<ng-template #loaiPhieuTemplate let-dataItem>
+    <ng-container *ngIf="dataItem.LoaiPhieuThuChiThuNgan === 1">
+        <strong>Phiếu thu </strong><br />
+    </ng-container>
+    <ng-container *ngIf="dataItem.LoaiPhieuThuChiThuNgan === 2">
+        <strong>Tạm ứng </strong><br />
+    </ng-container>
+    <ng-container *ngIf="dataItem.LoaiPhieuThuChiThuNgan === 3">
+        <strong>Hoàn ứng </strong><br />
+    </ng-container>
+</ng-template>
+
+<ng-template #tinhTrangTemplate let-dataItem>
+    <ng-container *ngIf="dataItem.DaHuy === true">
+        <strong style="color:red">Đã hủy</strong><br />
+    </ng-container>
+    <ng-container *ngIf="dataItem.DaHuy === false">
+        <strong style="color:green">Còn hiệu lực </strong><br />
+    </ng-container>
+</ng-template>
+
+<div class="sticky-button-action py-3 text-right mt-5" kendoTooltip>
+    <div style="float: left">
+        <button (click)="BackToList()" type="button" mat-button class="mr-2" mat-raised-button>Quay lại</button>
+    </div>
+</div>

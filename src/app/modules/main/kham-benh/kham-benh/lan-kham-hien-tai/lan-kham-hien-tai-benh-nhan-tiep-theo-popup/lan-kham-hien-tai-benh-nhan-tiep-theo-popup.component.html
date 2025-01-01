@@ -1,0 +1,61 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Thông Tin Người Bệnh Tiếp Theo</div>
+    <!-- <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button> -->
+</div>
+
+<mat-dialog-content>
+    <ng-container *ngIf="conBenhNhanTrongHangDoi">
+        <div fxLayoutAlign="start center" fxLayout="row" class="py-1">
+            <fieldset class="row ml-1" fxFlex="100%">
+                <legend>Thông tin hành chính</legend>
+                <div fxFlex="100%">
+                    <ul class="inline">
+                        <li>Mã TN: <strong>{{benhNhanTiepTheo.YeuCauTiepNhan.MaYeuCauTiepNhan}}</strong></li>
+                        <li>Mã NB: <strong>{{benhNhanTiepTheo.YeuCauTiepNhan.BenhNhanId}}</strong></li>
+                        <li>Họ tên: <strong>{{benhNhanTiepTheo.YeuCauTiepNhan.HoTen}}</strong></li>
+                        <li>Giới tính: <strong>{{benhNhanTiepTheo.YeuCauTiepNhan.TenGioiTinh}}</strong></li>
+                        <li *ngIf="!IsKhamDoanTatCa">Tuổi: <strong>{{benhNhanTiepTheo.YeuCauTiepNhan.Tuoi}}</strong></li>
+                        <li *ngIf="IsKhamDoanTatCa">Năm sinh: <strong>{{benhNhanTiepTheo.YeuCauTiepNhan.NamSinh}}</strong></li>
+    
+                        <li>SĐT: <strong>{{benhNhanTiepTheo.YeuCauTiepNhan.SoDienThoai}}</strong></li>
+                        <li>Dân tộc: <strong>{{benhNhanTiepTheo.YeuCauTiepNhan.DanToc == null ? null :benhNhanTiepTheo.YeuCauTiepNhan.DanToc.Ten}}</strong></li>
+                        <li>Địa chỉ: <strong>{{benhNhanTiepTheo.YeuCauTiepNhan.DiaChiDisplay}}</strong></li>
+                        <li>Nghề nghiệp: <strong>{{benhNhanTiepTheo.YeuCauTiepNhan.NgheNghiep == null ? null : benhNhanTiepTheo.YeuCauTiepNhan.NgheNghiep.Ten}}</strong></li>
+                        <ng-container *ngIf="!IsKhamDoanTatCa">
+                            <li>Tuyến khám: <strong style="color: green;">{{benhNhanTiepTheo.YeuCauTiepNhan.TenLyDoVaoVien}}</strong></li>
+                            <li>Mức hưởng: <strong style="color: blue;">{{benhNhanTiepTheo.YeuCauTiepNhan.BHYTMucHuong}}%</strong></li>
+                        </ng-container>
+                        
+                        <li *ngIf="IsKhamDoanTatCa">Công ty: <strong style="color: red;">{{benhNhanTiepTheo.YeuCauTiepNhan.TenCongTy}}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </fieldset>
+        </div>
+        <div *ngIf="benhNhanTiepTheo.YeuCauKhamBenh.YeuCauDichVuKyThuats != undefined && benhNhanTiepTheo.YeuCauKhamBenh.YeuCauDichVuKyThuats.length > 0"
+            fxLayoutAlign="start center" fxLayout="row" class="py-1">
+            <fieldset class="row ml-1" fxFlex="100%">
+                <legend>Thông tin xét nghiệm, cận lâm sàn</legend>
+                <div fxFlex="100%">
+                    <div class="inline">
+                        <app-checkbox *ngFor="let item of benhNhanTiepTheo.YeuCauKhamBenh.YeuCauDichVuKyThuats" value="true"
+                            id="ycdvkt{{item.Id}}" [(model)]="item.IsDone" [disabled]="true" class="inline_b py-1" label="{{item.TenDichVu}}">
+                        </app-checkbox>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="conBenhNhanTrongHangDoi == false">
+        Không còn người bệnh nào trong hàng đợi
+    </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button type="button" mat-stroked-button color="primary" mat-dialog-close="tuChon">Tự chọn NB </button>
+    <button *ngIf="benhNhanTiepTheo != null && !chuyenKham" type="button" mat-stroked-button color="primary" mat-dialog-close="boQua">Bỏ qua</button>
+    <button *ngIf="benhNhanTiepTheo != null" mat-raised-button mat-button color="primary" 
+        [mat-dialog-close]="benhNhanTiepTheoId" cdkFocusInitial>Xác nhận</button>
+  </mat-dialog-actions>

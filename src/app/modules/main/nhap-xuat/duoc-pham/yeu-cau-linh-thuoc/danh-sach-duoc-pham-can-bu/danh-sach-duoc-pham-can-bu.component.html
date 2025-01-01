@@ -1,0 +1,88 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs  [crumbs]="[
+            {Title:'Nhập xuất',Path:''}
+            ,{Title:'Dược phẩm',Path:''}
+            ,{Title:'Dự trù lĩnh',Path:''}
+            ,{Title:'Yêu cầu lĩnh dược phẩm',Path:'/nhap-xuat/duoc-pham/yeu-cau-linh-thuoc'}
+            ,{Title:'Dược phẩm cần lĩnh bù',Path:'',Active:true}
+            ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="" #grid [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+                [lazyLoadPage]="false" [useHeaderDefault]="false" [headerTemplate]="headerTemplate" heightToolbar="150"
+                [checkboxAble]="false" [pageable]="false"  [detailTemplate]="detailTemplate" [groups]="groups"
+                [urlGetData]="urlGetDataGrid" [additionalSearchString]="additionalSearchString" (extOnDataBound)="extOnDataBound($event)">
+            </app-grid>
+      
+            <ng-template #detailTemplate let-dataItem>                
+                <app-grid #gridChildLevel1 [gridColumns]="gridChildLevel1Columns" [documentType]="documentType" [useAddDeault]="false" 
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" pageSize="5" [groups]="groupChilds"
+                    [urlGetData]="urlGetDataGridChildLevel1" [urlGetTotalPage]="urlGetTotalPageGridChildLevel1"
+                    additionalSearchString="{'KhoLinhId':{{dataItem.KhoLinhId}},'KhoBuId':{{dataItem.KhoBuId}}}" 
+                    [lazyLoadPage]="true" [autoHeight]="true" [detailTemplate]="detailChildTemplate">
+                </app-grid>
+            </ng-template>
+            <ng-template #detailChildTemplate let-dataItem1>
+                <app-grid [gridColumns]="gridChildLevel2Columns" [documentType]="documentType" [useAddDeault]="false"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" pageSize="5"
+                    [urlGetData]="urlGetDataGridChildLevel2" [urlGetTotalPage]="urlGetTotalPageGridChildLevel2"
+                    additionalSearchString="{'KhoLinhId':{{dataItem1.KhoLinhId}},'KhoBuId':{{dataItem1.KhoBuId}},'DuocPhamBenhVienId':{{dataItem1.DuocPhamBenhVienId}},'LaBHYT':{{dataItem1.LaBHYT}}}" 
+                    [lazyLoadPage]="true" [autoHeight]="true">
+                </app-grid>
+            </ng-template>
+        <ng-template #headerTemplate>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">            
+                <app-combobox id="linhTuKho" fxFlex="25%" fxFlex.sm="25%" 
+                [data]="danhSachLinhTuKho"
+                    [(model)]="duocPhamCanBuSearch.KhoLinhId" label="Lĩnh từ kho" class="mt-1 on-header"
+                    (modelChange)="search($event,1)">
+                </app-combobox>
+                <app-combobox id="linhVeKho" fxFlex="25%" fxFlex.sm="25%" class="mt-1 on-header"                
+                [data]="danhSachLinhVekho" label="Lĩnh về kho"
+                    (modelChange)="search($event,2)">
+                </app-combobox>
+                
+                <!-- <app-combobox id="linhTuKho" fxFlex="15%" fxFlex.sm="25%" url="YeuCauLinhDuocPham/GetTatCakhoLinhTuCuaNhanVienLoginLinhBu"
+                    [(model)]="duocPhamCanBuSearch.KhoLinhId" label="Lĩnh từ kho" class="mt-1 on-header"
+                    (modelChange)="search($event)">
+                </app-combobox>
+                <app-combobox id="linhVeKho" fxFlex="15%" fxFlex.sm="25%" class="mt-1 on-header"
+                    [(model)]="duocPhamCanBuSearch.KhoBuId" url="YeuCauLinhDuocPham/GetTatCaKhoLinhVeCuaNhanVienLoginLinhBu" label="Lĩnh về kho"
+                    (modelChange)="search($event)">
+                </app-combobox> -->
+                
+                <!-- <button (click)="exportExcel()" style="margin-left: auto;" mat-icon-button
+                    kendoTooltip title="Xuất Excel" type="button">
+                    <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                </button>       -->
+            </div>
+        </ng-template>   
+        
+        <ng-template #actionTemplate  let-dataItem>
+            <button *ngIf="dataItem.KhoLinhId>0" (click)="taoPhieuLinh(dataItem)" color="primary"  mat-raised-button  type="button">
+                    Tạo phiếu lĩnh
+                </button> 
+        </ng-template> 
+
+        <ng-template #actionChildTemplate  let-dataItem>
+            <button *ngIf="dataItem.KhongLinhBu!=true" (click)="khongBu(dataItem)" color="primary"  mat-raised-button  type="button">
+                    Không bù
+                </button> 
+        </ng-template> 
+        
+        <ng-template #STTTemplate let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+        
+    <ng-template #nhomGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+    
+    </div>
+    </vex-page-layout-content>
+</vex-page-layout>

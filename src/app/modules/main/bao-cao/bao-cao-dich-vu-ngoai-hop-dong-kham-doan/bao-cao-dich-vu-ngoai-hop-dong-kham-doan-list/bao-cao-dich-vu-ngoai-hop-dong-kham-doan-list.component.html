@@ -1,0 +1,93 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Báo cáo',Path:''}
+            ,{Title:'Khám đoàn',Path:''}
+            ,{Title:'Dịch Vụ ngoài hợp đồng KSK',Path:'',Active:true}
+            ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+
+            <app-grid #gridChild [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+                [lazyLoadPage]="true" [useHeaderDefault]="false" [checkboxAble]="false" pageSize="50" [showStt]="true"
+                urlGetData="BaoCaoKhamDoanHopDong/GetDataForGridAsyncDichVuNgoai" [sort]="sort"
+                urlGetTotalPage="BaoCaoKhamDoanHopDong/GetTotalPageForGridAsyncDichVuNgoai"
+                [headerTemplate]="headerTemplate"  (extOnDataBound)="onDataBound($event)">
+            </app-grid>
+
+            <ng-template #donGiaTemplate let-dataItem>
+                <p> {{dataItem.DonGiaBV | number:'0.2-2':'vi-VN'}}</p>
+            </ng-template>
+
+            <ng-template #donGiaMoiTemplate let-dataItem>
+                <p> {{dataItem.DonGiaMoi | number:'0.2-2':'vi-VN'}}</p>
+            </ng-template>
+
+            <ng-template #tienMienGiamTemplate let-dataItem>
+                <p> {{dataItem.SoTienMienGiam | number:'0.2-2':'vi-VN'}}</p>
+            </ng-template>
+
+            <ng-template #congNoTemplate let-dataItem>
+                <p class="{{dataItem.MaTN}} {{dataItem.Id}}"> {{dataItem.TongSoTienCongNo | number:'0.2-2':'vi-VN'}}</p>
+            </ng-template>
+
+            <ng-template #thanhTienTemplate let-dataItem>
+                {{dataItem.ThanhTienThucThu | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <app-combobox id="CongTyKhamSucKhoeId" fxFlex="250px" fxFlex.sm="auto" label="Tên công ty"
+                        [required]="true" class="mt-1 on-header" url="KhamDoan/GetCongTys" style="padding-top: 20px;"
+                        popupSettings="null" (modelChange)="congTyKhamSucKhoeChange($event)"
+                        [(model)]="baoCaoDichVuHopDongKhamDoanNgoaiHopDong.CongTyKhamSucKhoeId">
+                    </app-combobox>
+
+                    <app-combobox id="HopDongKhamSucKhoeId" fxFlex="10%" fxFlex.sm="20%" label="Số hợp đồng"
+                        [required]="true" url="KhamDoan/GetHopDongKhamSucKhoes" class="mt-1 on-header"
+                        style="padding-top: 20px;margin-left: 5px;" popupSettings="null"
+                        [(model)]="baoCaoDichVuHopDongKhamDoanNgoaiHopDong.HopDongKhamSucKhoeId"
+                        [autoSelectFirstItem]="true" [bind]="true" [reloadForGrid]="true"
+                        (dataForLookupChange)="changeLookupHopDong($event)"
+                        [queryInfo]="{ParameterDependencies:'{CongTyKhamSucKhoeId:' + baoCaoDichVuHopDongKhamDoanNgoaiHopDong.CongTyKhamSucKhoeId + '}', Take: 50}">
+                    </app-combobox>
+
+                    <!-- <app-daterangepicker style="margin-left: 5px;" id="range-ngay-yeu-cau" fxFlex="250px"
+                        fxFlex.sm="auto" [(model)]="baoCaoDichVuHopDongKhamDoanNgoaiHopDong.RangeFromDate"
+                        label="Từ ngày - đến ngày" class="mt-1 on-header">
+                    </app-daterangepicker> -->
+                    <app-datetimepicker fxFlex="245px"
+                        [(model)]="baoCaoDichVuHopDongKhamDoanNgoaiHopDong.ThoiDiemTiepNhanTuFormat" #tiepnhantu1
+                        id="ThoiDiemTiepNhanTuFormat" label="Từ ngày" class="ml-2 on-header">
+                    </app-datetimepicker>
+                    <app-datetimepicker fxFlex="245px"
+                        [(model)]="baoCaoDichVuHopDongKhamDoanNgoaiHopDong.ThoiDiemTiepNhanDenFormat" #tiepnhanden1
+                        id="ThoiDiemTiepNhanDenFormat" label="Đến ngày" class="ml-2 on-header">
+                    </app-datetimepicker>
+
+                    <div fxFlex="20%" fxFlex.sm="32%" class="pb-0">
+                        <button type="button" color="primary" mat-raised-button mat-button class="mr-1"
+                            style="margin-left: 5px;" (click)="timKiem()">Tìm kiếm</button>
+                    </div>
+                    <span fxFlex></span>
+
+                    <button (click)="xuatExcel()" class="mr-1" fxFlex="none" color="primary" mat-raised-button
+                        mat-button kendoTooltip title="Xuất Excel" type="button">
+                        Xuất Excel
+                    </button>
+
+                    <!-- <button class="ml-4 right" style="right: 20px; float: right;" type="button" mat-icon-button
+                    (click)="xuatExcel()" kendoTooltip title="Xuất Excel" fxFlex="none">
+                    <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                </button> -->
+                </div>
+
+
+            </ng-template>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

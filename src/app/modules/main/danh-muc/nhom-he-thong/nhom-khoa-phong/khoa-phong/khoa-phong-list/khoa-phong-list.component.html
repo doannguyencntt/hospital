@@ -1,0 +1,48 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục',Path:''}
+                    ,{Title:'Nhóm Khoa Phòng',Path:''}
+                    ,{Title:'Khoa Phòng',Path:'/danh-muc/nhom-khoa-phong/khoa-phong', Active: true}
+                        ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/nhom-khoa-phong/khoa-phong" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useActionDefault]="true" [lazyLoadPage]="true" [groups]="groups"
+                [showExportExcel]="true" (extExportExcel)="exportExcel()">
+            </app-grid>
+        </div>
+    </vex-page-layout-content>
+
+    <ng-template #kieuKhamTemplate let-dataItem>
+        <!-- <span *ngIf="dataItem.CoKhamNgoaiTru == 1">Ngoại Trú</span>
+        <span *ngIf="dataItem.CoKhamNgoaiTru == 0">Nội Trú</span>
+        <span *ngIf="!dataItem.CoKhamNgoaiTru"></span> -->
+        <span>{{dataItem.KieuKhamDisplay}}</span>
+    </ng-template>
+
+    <ng-template #soTienThuTamUngTemplate let-dataItem>
+        {{dataItem.SoTienThuTamUng | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #tenLoaiKhoaPhongTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-template #trangThaiTemplate let-dataItem>
+        <button *ngIf="dataItem.IsDisabled == 1" (click)="updateTinhTrang(dataItem.Id,dataItem.IsDisabled)"
+            mat-menu-item>
+            <mat-icon [icIcon]="icClose" color="warn"></mat-icon><span>Ngừng sử dụng</span>
+        </button>
+        <button *ngIf="dataItem.IsDisabled != 1" (click)="updateTinhTrang(dataItem.Id,dataItem.IsDisabled)"
+            mat-menu-item>
+            <mat-icon [icIcon]="icicdone" color="primary"></mat-icon><span>Đang sử dụng</span>
+        </button>
+    </ng-template>
+</vex-page-layout>

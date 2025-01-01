@@ -1,0 +1,36 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Xác Nhận</div>
+</div>
+<ng-container *ngIf="dataItem.CoDonThuocBHYT || dataItem.CoDonThuocKhongBHYT || dataItem.CoDonVatTu">
+    <p class="mb-3"> Thực hiện in toa thuốc/vật tư cho NB : </p>
+
+    <div *ngIf="dataItem.CoDonThuocBHYT == true">
+        <app-checkbox id="BHYT" [(model)]="thongTin.ThuocBHYT" label="In toa thuốc BHYT" class="pb-0"></app-checkbox>
+    </div>
+
+    <div *ngIf="dataItem.CoDonThuocKhongBHYT">
+        <app-checkbox id="KhongBHYT" [(model)]="thongTin.ThuocKhongBHYT" label="In toa thuốc không BHYT" class="pb-0">
+        </app-checkbox>
+    </div>
+
+    <div *ngIf="dataItem.CoDonVatTu">
+        <app-checkbox id="VatTu" [(model)]="thongTin.VatTu" label="In vật tư" class="pb-0">
+        </app-checkbox>
+    </div>
+
+    <div style="float: right;">
+        <button type="button" style="margin-right: 10px" mat-raised-button mat-button class="mr-1 mt-2"
+            (click)="close()">Không</button>
+        <button [disabled]="!thongTin.ThuocBHYT && !thongTin.ThuocKhongBHYT && !thongTin.VatTu" type="button"
+            color="primary" mat-raised-button mat-button class="mr-1 mt-2" (click)="InToaThuoc()">In toa
+            thuốc/vật tư</button>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="!dataItem.CoDonThuocBHYT && !dataItem.CoDonThuocKhongBHYT && !dataItem.CoDonVatTu">
+
+    <h4>Dịch vụ khám này không có toa thuốc/vật tư.</h4>
+    <div style="float: right;">
+        <button type="button" mat-raised-button mat-button class="mr-1 mt-2" (click)="close()">Đóng</button>
+    </div>
+</ng-container>

@@ -1,0 +1,13 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>{{Title}}</div>
+    <button type="button" mat-icon-button (click)="close('No answer')" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<p> Bạn chắc chắn muốn thu của người bệnh <b>{{tenBenhNhan}}</b> với số tiền <b>{{soTien| number:'0.2-2':'vi-VN'}}</b> hay không?
+</p>
+<div style="float: right;">
+    <button type="button" mat-raised-button mat-button class="mr-1 mt-2" (click)="close('No answer')">Không</button>
+    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+        (click)="close('Yes')">Có</button>
+</div>

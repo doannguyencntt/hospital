@@ -1,0 +1,102 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0" style="position: relative;">
+    <kendo-tabstrip #tabChildStrip fxFlex="100%" class="content-has-border sticky-kendotab-item-2"
+        (tabSelect)="onTabSelect($event)">
+        <kendo-tabstrip-tab [selected]="true">
+            <ng-template kendoTabTitle>
+                <div>
+                    DV Khám
+                </div>
+            </ng-template>
+
+            <ng-template kendoTabContent>
+                <app-chi-dinh-ngoai-tru-dich-vu-kham-benh 
+                    [dieuTriNoiTruModel]="dieuTriNoiTruModel" 
+                    [yeuCauTiepNhanNgoaiTruid]="dieuTriNoiTruModel.YeuCauTiepNhanNgoaiTruId">
+                </app-chi-dinh-ngoai-tru-dich-vu-kham-benh>
+            </ng-template>
+
+        </kendo-tabstrip-tab>
+
+        <kendo-tabstrip-tab>
+            <ng-template kendoTabTitle>
+                <div>
+                    DVKT
+                </div>
+            </ng-template>
+            <ng-template kendoTabContent>
+                <!-- <app-chi-dinh-ngoai-tru-dich-vu-ky-thuat 
+                    [dieuTriNoiTruModel]="dieuTriNoiTruModel" 
+                    [yeuCauTiepNhanNgoaiTruid]="dieuTriNoiTruModel.YeuCauTiepNhanNgoaiTruId">
+                </app-chi-dinh-ngoai-tru-dich-vu-ky-thuat> -->
+
+                <!-- Lúc đầu định tạo riêng component
+                     Nhưng sau nghĩ lại dùng chung cho dễ bảo trì vì xử lý tương tự nhau có thể dùng chung code
+                    Ký tên: AnhNgoc -->
+                <app-chi-dinh-ngoai-tru-dich-vu-kham-benh 
+                    [dieuTriNoiTruModel]="dieuTriNoiTruModel" 
+                    [yeuCauTiepNhanNgoaiTruid]="dieuTriNoiTruModel.YeuCauTiepNhanNgoaiTruId"
+                    [nhomDichVu]="nhomDichVuKyThuat">
+                </app-chi-dinh-ngoai-tru-dich-vu-kham-benh>
+            </ng-template>
+
+        </kendo-tabstrip-tab>
+
+        <kendo-tabstrip-tab>
+            <ng-template kendoTabTitle>
+                <div>
+                    KQ CLS
+                </div>
+            </ng-template>
+            <ng-template kendoTabContent>
+                <app-lan-kham-hien-tai-ket-qua-cls 
+                    *ngIf="dieuTriNoiTruModel.YeuCauTiepNhanNgoaiTruId != undefined && dieuTriNoiTruModel.YeuCauTiepNhanNgoaiTruId != null"
+                    [YeuCauTiepNhanId]="dieuTriNoiTruModel.YeuCauTiepNhanNgoaiTruId"
+                    [documentType]="documentType">
+                </app-lan-kham-hien-tai-ket-qua-cls>
+                <!-- <app-chi-dinh-ngoai-tru-ket-qua-cls></app-chi-dinh-ngoai-tru-ket-qua-cls> -->
+                <!-- <app-ket-qua-can-lam-sang [phieuDieuTriHienTaiId]="phieuDieuTriHienTaiId" [YeuCauTiepNhanId]="id">
+                </app-ket-qua-can-lam-sang> -->
+            </ng-template>
+
+        </kendo-tabstrip-tab>
+
+
+        <kendo-tabstrip-tab>
+            <ng-template kendoTabTitle>
+                <div>
+                    Thuốc
+                </div>
+            </ng-template>
+
+            <ng-template kendoTabContent>
+                <app-chi-dinh-ngoai-tru-thuoc 
+                    [dieuTriNoiTruModel]="dieuTriNoiTruModel" 
+                    [yeuCauTiepNhanNgoaiTruid]="dieuTriNoiTruModel.YeuCauTiepNhanNgoaiTruId">
+                </app-chi-dinh-ngoai-tru-thuoc>
+                <!-- <app-phieu-dieu-tri-thuoc [dieuTriNoiTruModel]="dieuTriNoiTruModel"
+                    [phieuDieuTriHienTaiId]="phieuDieuTriHienTaiId" (disabledInPhieu)="disabledInPhieu($event)"
+                    [khoaChiDinh]="thongTinPhieuKham.KhoaChiDinh" [dataBenhNhan]="dataBenhNhan">
+                </app-phieu-dieu-tri-thuoc> -->
+            </ng-template>
+
+        </kendo-tabstrip-tab>
+        <kendo-tabstrip-tab>
+            <ng-template kendoTabTitle>
+                <div>
+                    VTYT
+                </div>
+            </ng-template>
+            <ng-template kendoTabContent>
+                <app-chi-dinh-ngoai-tru-thuoc 
+                    [dieuTriNoiTruModel]="dieuTriNoiTruModel" 
+                    [yeuCauTiepNhanNgoaiTruid]="dieuTriNoiTruModel.YeuCauTiepNhanNgoaiTruId"
+                    [nhomDichVu]="nhomVatTu">
+                </app-chi-dinh-ngoai-tru-thuoc>
+                <!-- <app-phieu-dieu-tri-vat-tu [dieuTriNoiTruModel]="dieuTriNoiTruModel"
+                    [phieuDieuTriHienTaiId]="phieuDieuTriHienTaiId" (disabledInPhieu)="disabledInPhieu($event)"
+                    [khoaChiDinh]="thongTinPhieuKham.KhoaChiDinh" [dataBenhNhan]="dataBenhNhan">
+                </app-phieu-dieu-tri-vat-tu> -->
+            </ng-template>
+        </kendo-tabstrip-tab>
+    </kendo-tabstrip>
+</div>

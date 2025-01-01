@@ -1,0 +1,15 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="KyHieu" fxFlex="25%" fxFlex.sm="25%" maxlength="50" [required]="true" [(model)]="cheDoAn.KyHieu"
+        label="Ký Hiệu" [validationerror]="'KyHieu' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textbox id="Ten" fxFlex="25%" fxFlex.sm="25%" maxlength="500" [required]="true" [(model)]="cheDoAn.Ten"
+        label="Tên" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textarea id="MoTa" fxFlex="50%" fxFlex.sm="50%" maxlength="2000" [(model)]="cheDoAn.MoTa"
+        label="Mô tả">
+    </app-textarea>
+    <app-radio fxFlex="25%" fxFlex.sm="25%" id="IsDisabled" name="IsOfficial"
+        [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" [(model)]="cheDoAn.IsDisabled" label="Sử Dụng"
+        [validationerror]="'IsDisabled' | validationerror:validationErrors">
+    </app-radio>
+</div>

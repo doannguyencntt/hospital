@@ -1,0 +1,33 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+    <div>Chọn Ghi Chú</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="overflow:hidden">
+    <div class="container-iframe">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <app-grid fxFlex="100%" fxFlex.sm="100%"  [gridColumns]="gridColumns" 
+            [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false"
+             [checkboxAble]="false"   [autoHeight]="true" [pageable]="false"
+            [gridDataSource]="gridDataSource">
+            </app-grid>
+            <ng-template #comBoBoxTemplate let-dataItem let-rowIndex="rowIndex">
+                <app-combobox [(model)]="dataItem.KeyId" [modelText]="dataItem.DisplayName" id="GiayRaVienId"
+                    url="DieuTriNoiTru/GetListGhiChuGiayRaVien" (selectionChange)="changeGhiChu($event)"
+                    class="mt-1 on-header pb-0 mr-1" popupSettings="null"  class="no-label">
+                </app-combobox>
+            </ng-template>
+            <ng-template #textAreaTemplate let-dataItem let-rowIndex="rowIndex">
+                <app-textarea class="no-label"popupSettings="null"
+                    [(model)]="dataItem.DisplayName"  maxlength="4000" minHeight="20">
+                </app-textarea>
+            </ng-template>
+            <ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+                <button type="button" color="primary" mat-raised-button mat-button (click)="Ok()">Chọn</button>
+            </ng-template>
+           
+        </div>
+    </div>
+ 
+</mat-dialog-content>

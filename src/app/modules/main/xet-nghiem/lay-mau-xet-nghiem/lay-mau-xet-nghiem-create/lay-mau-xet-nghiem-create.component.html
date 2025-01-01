@@ -1,0 +1,118 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">Tạo phiếu gửi mẫu</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose" (click)="quayLai()"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-combobox id="nguoiGuiMau" fxFlex="25%" fxFlex.sm="25%" [required]="true" disabled={{true}}
+            url="YeuCauLinhDuocPham/GetListNhanVien" label="Người gửi mẫu" [(model)]="phieuGuiMau.NhanVienGuiMauId" [modelText]="phieuGuiMau.TenNhanVienGuiMau"
+            [bind]="true" [reloadForGrid]="true" popupSettings="null"
+            [validationerror]="'NhanVienGuiMauId' | validationerror:validationErrors">
+        </app-combobox>
+        <app-datepicker id="ngayGuiMau" fxFlex="25%" fxFlex.sm="25%" [required]="true" label="Ngày gửi mẫu"
+            [(model)]="phieuGuiMau.ThoiDiemGuiMau"
+            disabled={{true}} [validationerror]="'ThoiDiemGuiMau' | validationerror:validationErrors">
+        </app-datepicker>
+        <app-combobox id="noiTiepNhan" fxFlex="25%" fxFlex.sm="25%" url="XetNghiem/GetListPhongBenhVien"
+            [(model)]="phieuGuiMau.PhongNhanMauId" [required]="true"  popupSettings="null"
+            [templateHeader]="khoaPhongTemplateHeader" [template]="khoaPhongTemplate" label="Nơi tiếp nhận"
+            [validationerror]="'PhongNhanMauId' | validationerror:validationErrors">
+            <ng-template #khoaPhongTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="20%">Mã</th>
+                        <th>Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #khoaPhongTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="20%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+
+        <app-textarea id="ghiChu" fxFlex="100" fxFlex.sm="100" maxlength="1000" label="Ghi chú" minHeight="40"
+            [(model)]="phieuGuiMau.GhiChu"
+            [validationerror]="'GhiChu' | validationerror:validationErrors">
+        </app-textarea>
+        <h3 fxFlex="100%" class="sub-title mt-0">Thông tin mẫu gửi <span
+                style="float: right; text-transform: initial;">SL mẫu để gửi: {{soLuongMauDeGui}}</span></h3>
+        <app-grid #gridNhom [gridColumns]="gridNhomXetNghiemColumns" [documentType]="documentType" [useAddDeault]="false"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+            [allowSortDefault]="false" [autoHeight]="true" [pageable]="false" [detailTemplate]="dichVuTemplate"
+            (extOnDataBound)="onDataBoundGridNhom($event)" [showStt]="true" [autoRefreshDataSource]="true"
+            [additionalSearchString]="strAdditionalSearchString"
+            urlGetData="XetNghiem/GetDataForGridNhomCanLayMauXetNghiem" urlGetTotalPage="XetNghiem/GetTotalPageForGridNhomCanLayMauXetNghiem">
+        </app-grid>
+
+        <ng-template #dichVuTemplate let-dataItem>
+            <app-grid [gridColumns]="gridDichVuColumns" [documentType]="documentType" [useAddDeault]="false"
+                [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                [allowSortDefault]="false" [autoHeight]="true" [pageable]="true" [showStt]="true"
+                [additionalSearchString]="dataItem.YeuCauTiepNhanId + ';' + dataItem.PhienXetNghiemId + ';' + dataItem.NhomDichVuBenhVienId + ';' + dataItem.TrangThai"
+                urlGetData="XetNghiem/GetDataForGridDichVuCanLayMauXetNghiem" urlGetTotalPage="XetNghiem/GetTotalPageForGridDichVuCanLayMauXetNghiem">
+            </app-grid>
+        </ng-template>
+
+        <ng-template #actionNhomXetNghiemTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                    (click)="xuLyKhongGuiNhomMauXetNghiem(dataItem)">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+
+        <ng-template #tenNhomTemplate let-dataItem>
+            <div>
+                <span fxFlex="auto" class="reverse-ellipsis r" kendoTooltip
+                    title="{{dataItem.TenNhom}}">{{dataItem.TenNhom}}</span>
+            </div>
+        </ng-template>
+        <ng-template #loaiMauTemplate let-dataItem>
+            <ng-template #tuChoiInfoTemplate let-dataItem>
+                <table class="table table-border" width="100%">
+                    <tr>
+                        <td>Mẫu bị huỷ bởi: <b>{{thongTinTuChoi.TenNhanVienXetKhongDat}}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Vào ngày: {{thongTinTuChoi.ThoiDiemXetKhongDatDisplay}}</td>
+                    </tr>
+                    <tr>
+                        <td>Lý do: {{thongTinTuChoi.LyDoKhongDat}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+            <ul class="reverse-ellipsis r" style="display: inline-flex;">
+                <li class="mr-2 loai-mau" *ngFor="let item of dataItem.LoaiMaus">
+                    <mat-icon *ngIf="item.DatChatLuong == true" style="color: green;"  [icIcon]="icDone"></mat-icon>
+                    <mat-icon *ngIf="item.DatChatLuong == false" style="color: red;"  [icIcon]="icClear"
+                        kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block" [tooltipTemplate]="tuChoiInfoTemplate" 
+                        filter="*" (mouseover)="tooltipCustom(item)"></mat-icon>
+                    {{item.TenLoaiMau}}
+                </li>
+            </ul>
+        </ng-template>
+        <ng-template #tenLoaiMauTemplate let-dataItem>
+            <div class="reverse-ellipsis r">{{dataItem.TenLoaiMau}}</div>
+        </ng-template>
+        <ng-template #thoiGianChiDinhTemplate let-dataItem>
+            <div class="reverse-ellipsis r">{{dataItem.ThoiGianChiDinhDisplay}}</div>
+        </ng-template>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="mt-4 pb-5">
+    <button type="button" style="margin-left: auto;" (click)="quayLai()" mat-button class="mr-1 mt-4"><i
+            class="ft-arrow-left"></i> Hủy</button>
+    <button type="button" [disabled]="soLuongMauDeGui == null || soLuongMauDeGui == 0" *ngIf="!loading" (click)="guiVaInPhieu()" color="primary" mat-raised-button><i
+            class="ft-edit"></i> Gửi và In phiếu gửi mẫu</button>
+    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+            alt="Loading" /></button>
+</mat-dialog-actions>

@@ -1,0 +1,103 @@
+<app-header-form [crumbs]="[
+        {Title:'Kế toán',Path:''},
+        {Title:'Duyệt kho vật tư',Path:'/ke-toan/duyet-nhap-kho-vat-tu',queryParams: {holdQuery : true}, Active: true}
+        ]" [isicMoreVert]="false">
+</app-header-form>
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 fxFlex="90%" fxFlex.sm="90%" class="title m-0">Duyệt Nhập Kho Vật Tư</h2>
+                <span style="right: 38px;width: auto;position: absolute;" fxFlex="10%" fxFlex.sm="10%"
+                    *ngIf="thongTinDuyetKhoVatTu.ClassTrangThai === 'dang_cho_duyet'"
+                    class="{{thongTinDuyetKhoVatTu.ClassTrangThai}}">{{thongTinDuyetKhoVatTu.TinhTrangDuyet}}</span>
+                <span style="right: 38px;width: auto;position: absolute;" fxFlex="10%" fxFlex.sm="10%"
+                    *ngIf="thongTinDuyetKhoVatTu.ClassTrangThai === 'da_duyet'"
+                    class="{{thongTinDuyetKhoVatTu.ClassTrangThai}}">{{thongTinDuyetKhoVatTu.TinhTrangDuyet}}</span>
+                <span style="right: 38px;width: auto;position: absolute;" fxFlex="10%" fxFlex.sm="10%"
+                    *ngIf="thongTinDuyetKhoVatTu.ClassTrangThai === 'tu_choi_duyet'"
+                    class="{{thongTinDuyetKhoVatTu.ClassTrangThai}}">{{thongTinDuyetKhoVatTu.TinhTrangDuyet}}</span>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <app-textbox id="SoChungTuId" fxFlex="20%" fxFlex.sm="20%" label="Số hóa đơn"
+                        [(model)]="thongTinDuyetKhoVatTu.SoChungTu" [disabled]='true' maxlength="100">
+                    </app-textbox>
+                    <app-combobox fxFlex="20%" fxFlex.sm="20%" id="NguoiNhapId" label="Người nhập"
+                        [modelText]="thongTinDuyetKhoVatTu.TenNguoiNhap" [disabled]='true'
+                        [(model)]="thongTinDuyetKhoVatTu.NguoiNhapId" url="NhanVien/GetListLookupNhanVien">
+                    </app-combobox>
+                    <app-datepicker id="NgayNhapId" fxFlex="20%" fxFlex.sm="20%" label="Ngày nhập"
+                        [(model)]="thongTinDuyetKhoVatTu.NgayNhap" [disabled]='true'>
+                    </app-datepicker>
+                    <app-combobox fxFlex="20%" fxFlex.sm="20%" id="NguoiNhapId" label="Người duyệt"
+                        *ngIf="thongTinDuyetKhoVatTu.ClassTrangThai === 'da_duyet'"
+                        [modelText]="thongTinDuyetKhoVatTu.NguoiDuyet" [disabled]='true'
+                        [(model)]="thongTinDuyetKhoVatTu.NguoiDuyetId" url="NhanVien/GetListLookupNhanVien">
+                    </app-combobox>
+                    <app-datepicker id="NgayNhapId" fxFlex="20%" fxFlex.sm="20%" label="Ngày duyệt"
+                        *ngIf="thongTinDuyetKhoVatTu.ClassTrangThai === 'da_duyet'"
+                        [(model)]="thongTinDuyetKhoVatTu.NgayDuyet" [disabled]='true'>
+                    </app-datepicker>
+
+                    <app-combobox fxFlex="20%" fxFlex.sm="20%" id="NguoiNhapId" label="Người từ chối duyệt"
+                        *ngIf="thongTinDuyetKhoVatTu.ClassTrangThai === 'tu_choi_duyet'"
+                        [modelText]="thongTinDuyetKhoVatTu.NguoiDuyet" [disabled]='true'
+                        [(model)]="thongTinDuyetKhoVatTu.NguoiDuyetId" url="NhanVien/GetListLookupNhanVien">
+                    </app-combobox>
+                    <app-datepicker id="NgayNhapId" fxFlex="20%" fxFlex.sm="20%" label="Ngày từ chối duyệt"
+                        *ngIf="thongTinDuyetKhoVatTu.ClassTrangThai === 'tu_choi_duyet'"
+                        [(model)]="thongTinDuyetKhoVatTu.NgayDuyet" [disabled]='true'>
+                    </app-datepicker>
+
+                </div>
+                <h3 fxFlex="100%" class="sub-title mt-3">THÔNG TIN VẬT TƯ</h3>
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault]="false"
+                        [groups]="groups" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                        pageSize="5" [urlGetData]="urlGetDataAsync" [sort]="sortDuyetKhoChild" pageSize="5"
+                        (extOnDataBound)="extOnDataBound($event)"
+                        additionalSearchString={{yeuCauNhapKhoVatTuId}} [autoHeight]="true">
+                    </app-grid>
+                    <ng-template #TinhTrangBHYTTemplate let-dataItem>
+                        <span *ngIf="dataItem.LoaiBHYT">BHYT</span>
+                        <span *ngIf="!dataItem.LoaiBHYT">Không BHYT</span>
+                    </ng-template>
+                    <ng-template #nhomGroupHeaderTemplate let-value="value">
+                        <strong>{{value}}</strong>
+                    </ng-template>
+                    <ng-template #giaNhapTemplate let-dataItem>
+                        {{dataItem.DonGiaNhap | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+                    <ng-template #giaBanTemplate let-dataItem>
+                        {{dataItem.GiaBan | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #headerTongCongGroupFooter let-dataItem>
+                        Tổng cộng:
+                    </ng-template>
+                    <ng-template #tongSoTienDonGiaNhapGroupFooter let-dataItem>
+                        <span style="color: red;"> {{tongCongGia('DonGiaNhap') |
+                            number:'0.2-2':'vi-VN'}}</span>
+                    </ng-template>
+                    <ng-template #tongSoTienGiaBanGroupFooter let-dataItem>
+                        <span style="color: red;"> {{tongCongGia('GiaBan') |
+                            number:'0.2-2':'vi-VN'}}</span>
+                    </ng-template>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-3">
+                    <div class="form-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                        <button type="button" (click)="BackToList()" mat-button class="mr-1"><i
+                                class="ft-arrow-left"></i>
+                            Hủy</button>
+                        <button *ngIf="thongTinDuyetKhoVatTu.ClassTrangThai === 'dang_cho_duyet'" type="button"
+                            (click)="duyet()" color="primary" mat-raised-button><i class="ft-save"></i> Duyệt và In</button>
+                        <button *ngIf="thongTinDuyetKhoVatTu.ClassTrangThai === 'dang_cho_duyet'" type="button"
+                            (click)="khongPheDuyet()" color="primary" mat-raised-button><i class="ft-save"></i> Không
+                            phê duyệt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

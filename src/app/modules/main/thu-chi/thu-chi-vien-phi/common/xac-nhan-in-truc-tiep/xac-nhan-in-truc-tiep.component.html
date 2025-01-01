@@ -1,0 +1,14 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" class="mb-1">
+	<div>Xác Nhận</div>
+	<button type="button" mat-icon-button (click)="close()" tabindex="-1">
+		<mat-icon [icIcon]="icClose"></mat-icon>
+	</button>
+</div>
+
+<legend *ngIf="data=='ThuTamUng'">Bạn có muốn in phiếu thu cho NB hay không?</legend>
+<legend *ngIf="data=='PhieuChi'">Bạn có đồng ý với phiếu chi này cho NB hay không?</legend>
+<legend *ngIf="data=='PhieuThuTraTienBenhNhan'">Bạn có đồng ý với phiếu thu tiền này hay không?</legend>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px">
+	<button mat-button mat-dialog-close>Không</button>
+	<button mat-raised-button mat-button color="primary" (click)="InPhieu()" [mat-dialog-close]="true" cdkFocusInitial>Có</button>
+</mat-dialog-actions>

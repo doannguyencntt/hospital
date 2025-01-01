@@ -1,0 +1,48 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="
+                    [
+                    {Title:'Nhà Thuốc',Path:''},
+                    {Title:'DS Đơn Thuốc',Path:'/nha-thuoc', Active:true}
+                    ]">
+            </vex-breadcrumbs>
+            <app-hot-key  style="position: absolute;right: 180px;top: 7px;" [keys]="[
+            {Key:'Ctrl + Q',Description:'Quét mã vạch',End:true}
+            ]"></app-hot-key>
+            <button type="button" (click)="ToKhachVangLai(typeDanhSachThanhToan)"
+                style="position: absolute;right: 21px;top: 7px;" mat-raised-button mat-button>Khách Vãng Lai</button>
+               
+        </div>
+       
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <!-- (onHaddlekiemTraDonThuocThanhToan)="getkiemTraDonThuocThanhToan($event)"  -->
+                        <app-quay-thuoc-tim-benh-nhan (dataSearch)="getData($event)" class="mb-2"
+                             
+                            (onHaddleeXportExel)="KiemTraeXportExel($event)"
+                            (onHaddleUuTienSearch)="getonHaddleUuTienSearch($event)"
+                            [typeDanhSachThanhToan]="typeDanhSachThanhToan"
+                            [dataQuayThuocSearch]="dataQuayThuocSearch" 
+                            [hoquerySearch]="hoquerySearch"
+                            >
+                        </app-quay-thuoc-tim-benh-nhan>
+                        <!-- [typeDanhSachThanhToan]="typeDanhSachThanhToan"  -->
+                        <app-quay-thuoc-list 
+                        [(id)]=id 
+                        [xacNhanIn]="xacNhanIn" 
+                        [queryStringSearchUuTien]="queryStringSearchUuTien"
+                        (OnHandleDataQuayThuocSearchList)="getonHaddleDataSearch($event)"
+                        >
+                        </app-quay-thuoc-list>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

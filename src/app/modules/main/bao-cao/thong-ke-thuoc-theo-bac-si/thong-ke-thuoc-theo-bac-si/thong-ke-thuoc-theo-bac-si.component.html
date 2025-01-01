@@ -1,0 +1,91 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống kê', Path:''},
+                    {Title:'Báo cáo', Path:''},
+                    {Title:'Dược', Path:''},
+                    {Title:'Thống Kê Thuốc Theo Bác Sĩ', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid [gridColumns]="gridColumns" [gridDataSource]="gridDataSource" [documentType]="documentType"
+                [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                [headerTemplate]="headerTemplate" [checkboxAble]="false" [showStt]="true" [groups]="groups">
+            </app-grid>
+
+        </div>
+
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar p-0 h-15 border-b sticky left-0">
+                <app-combobox id="KhoaId" fxFlex="15%" fxFlex.sm="15%" style="margin-left: 5px;"
+                    class="mt-1 on-header pb-0 mr-1" label="Bác sĩ" popupSettings="" bind="true"
+                    [autoSelectFirstItem]="true" url="BaoCao/GetTatCaBacSi"
+                    [(model)]="baoCaoThongKeThuocTheoBacSiSearch.BacSiId">
+                </app-combobox>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoThongKeThuocTheoBacSiSearch.TuNgay" #tiepnhantu
+                    id="TuNgay" [maxDate]="baoCaoThongKeThuocTheoBacSiSearch.DenNgay" label="Từ ngày"
+                    class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoThongKeThuocTheoBacSiSearch.DenNgay" #tiepnhanden
+                    id="DenNgay" [minDate]="baoCaoThongKeThuocTheoBacSiSearch.TuNgay" class="mt-1 on-header"
+                    label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="55%" fxFlex.sm="55%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                        (click)="xemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-1"
+                        (click)="xuatBaoCao()">Xuất Excel</button>
+                </div>
+
+            </div>
+        </ng-template>
+
+        <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem>
+            <strong>{{value}}</strong>
+        </ng-template>
+
+        <ng-template #tongCongGroupFooterTemplate let-aggregates>
+            <span style="float: right;">Cộng: {{aggregates.DonViTinh.count}} khoản</span>
+        </ng-template>
+
+        <ng-template #tongCongFooterTemplate let-dataItem>
+            <span style="float: right;">Tổng cộng: {{ total('TongCong')}} khoản</span>
+        </ng-template>
+
+        <ng-template #soLuongTemplate let-dataItem>
+            {{dataItem.SoLuong | number:'0.2-2':'vi-VN' }}
+        </ng-template>
+
+        <ng-template #soLuongGroupFooterTemplate let-aggregates>
+            <strong>{{aggregates.SoLuong.sum | number:'0.2-2':'vi-VN'}}</strong>
+        </ng-template>
+
+        <ng-template #soLuongFooterTemplate let-dataItem>
+            <span>{{total('SoLuong') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+
+        <ng-template #thanhTienTemplate let-dataItem>
+            {{dataItem.ThanhTien | number:'0.2-2':'vi-VN' }}
+        </ng-template>
+
+        <ng-template #thanhTienGroupFooterTemplate let-aggregates>
+            <strong>{{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}</strong>
+        </ng-template>
+
+        <ng-template #thanhTienFooterTemplate let-dataItem>
+            <span>{{total('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+        </ng-template>
+
+    </vex-page-layout-content>
+
+</vex-page-layout>

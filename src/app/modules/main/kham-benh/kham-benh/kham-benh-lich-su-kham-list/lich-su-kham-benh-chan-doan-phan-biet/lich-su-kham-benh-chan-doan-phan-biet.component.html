@@ -1,0 +1,25 @@
+<h3 class="sub-title">Chẩn đoán phân biệt
+</h3>
+<ng-container *ngIf="dataSourceChanDoanPhamBiet.data.length == 0">
+    <p>Không có chẩn đoán phân biệt</p>
+</ng-container>
+<app-grid *ngIf="dataSourceChanDoanPhamBiet.data.length > 0" masterName="TienSuBenh"
+    [gridColumns]="gridChanDoanPhanBietColumns" [documentType]="documentType" [useAddDeault]="false"
+    class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [maxHeight]="200"
+    [lazyLoadPage]="true" [gridDataSource]="dataSourceChanDoanPhamBiet" style="width: 1px;" [pageable]="false">
+</app-grid>
+
+<ng-template #icdTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-combobox *ngIf="dataItem.Id == 0" [(model)]="dataItem.ICDId" class="no-label"
+    [modelText]="dataItem.TenICD" [popupSettings]="null" url="ChuanDoan/GetChuanDoanLienKetICD" [required]="true"
+    label=" ">
+
+</app-combobox>
+    <p class="ml-1" *ngIf="dataItem.Id != 0" >{{dataItem.MaICd}}</p>
+</ng-template>
+<ng-template #ghiChuTemplate let-dataItem>
+    <app-textbox *ngIf="dataItem.Id == 0" maxlength="4000" [(model)]="dataItem.GhiChu" class="no-label"
+        label="" [required]="true">
+    </app-textbox>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.GhiChu}}</p>
+</ng-template>

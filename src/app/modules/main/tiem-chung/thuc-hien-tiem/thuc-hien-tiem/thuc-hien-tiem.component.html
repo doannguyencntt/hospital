@@ -1,0 +1,27 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                { Title: 'Tiêm Chủng', Path: '' },
+                { Title: 'Thực Hiện Tiêm Chủng', Path: '', Active: true }
+            ]"></vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div @fadeInUp class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column" style="position: relative;">
+                        <app-hang-doi-shared 
+                            [documentType]="documentType" 
+                            [loaiHangDoi]="loaiHangDoi"
+                            [isTabKhamLocChungReadOnly]="true"
+                            [isTabThucHienTiemDisplayed]="true"
+                            [isTabThucHienTiemDefault]="true"
+                        ></app-hang-doi-shared>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

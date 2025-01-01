@@ -1,0 +1,301 @@
+<!-- THÔNG TIN CHUNG -->
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+        <h3 class="blue-text" style="display: inline; float: left;">THÔNG TIN CHUNG</h3>
+    </div>
+</div>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <!-- Row 1 -->
+    <app-textbox id="dia-diem-xay-ra-tai-nan" fxFlex="50%" fxFlex.md="100%" fxFlex.sm="100%" maxlength="4000" label="Địa điểm xảy ra tai nạn"
+        [(model)]="thongTinTaiNanThuongTich.DiaDiemXayRaTaiNan"
+        [validationerror]="'DiaDiemXayRaTaiNan' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-datetimepicker id="thoi-gian-tai-nan" class="item-no-padding" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Thời gian xảy ra tai nạn"
+        [formatDate]="'dd/MM/yyyy HH:mm'"
+        [(model)]="thongTinTaiNanThuongTich.ThoiGianXayRaTaiNan"
+        [validationerror]="'ThoiGianXayRaTaiNan' | validationerror: validationErrors">
+    </app-datetimepicker>
+
+    <app-datetimepicker id="thoi-gian-cap-cuu" class="item-no-padding" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Thời gian đến cấp cứu"
+        [formatDate]="'dd/MM/yyyy HH:mm'"
+        [(model)]="thongTinTaiNanThuongTich.ThoiGianDenCapCuu"
+        [validationerror]="'ThoiGianDenCapCuu' | validationerror: validationErrors">
+    </app-datetimepicker>
+
+    <!-- Row 2 -->
+    <app-radio id="so-cuu-ban-dau" name="so-cuu" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Sơ cứu ban đầu"
+        [items]="radioTwoSelectItems"
+        [(model)]="thongTinTaiNanThuongTich.SoCuuBanDau"
+        [validationerror]="'SoCuuBanDau' | validationerror:validationErrors">
+    </app-radio>
+
+    <app-textbox id="phuong-tien-dua-nan-nhan-den-vien" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" maxlength="200" label="Phương tiện đưa nạn nhân đến viện"
+        [(model)]="thongTinTaiNanThuongTich.PhuongTienDuaNanNhanDenVien"
+        [validationerror]="'PhuongTienDuaNanNhanDenVien' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="phuong-tien-su-dung-khi-bi-tai-nan" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" maxlength="200" label="Phương tiện sử dụng khi bị tai nạn"
+        [(model)]="thongTinTaiNanThuongTich.PhuongTienSuDungKhiBiTaiNan"
+        [validationerror]="'PhuongTienSuDungKhiBiTaiNan' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="loai-tai-nan" class="item-no-padding" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Loại tai nạn" maxlength="200"
+        [(model)]="thongTinTaiNanThuongTich.LoaiTaiNan"
+        [validationerror]="'LoaiTaiNan' | validationerror: validationErrors">
+    </app-textbox>
+
+    <!-- Row 3 -->
+    <!-- <div fxFlex="75%" fxFlex.md="100%" fxFlex.sm="100%">
+        <div class="container-custom pt-checkbox-container">
+            <label style="display: flex;">Phương tiện gây tai nạn
+            </label>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-checkbox id="phuong-tien-gay-tai-nan-o-to" name="phuong-tien-gay-tai-nan" fxFlex="20%" fxFlex.sm="100%" label="Ô tô"
+                    [(model)]="thongTinTaiNanThuongTich.PhuongTienGayTaiNan.OTo"
+                    [validationerror]="'OTo' | validationerror: validationErrors">
+                </app-checkbox>
+
+                <app-checkbox id="phuong-tien-gay-tai-nan-tau-hoa" name="phuong-tien-gay-tai-nan" fxFlex="20%" fxFlex.sm="100%" label="Tàu hoả"
+                    [(model)]="thongTinTaiNanThuongTich.PhuongTienGayTaiNan.TauHoa"
+                    [validationerror]="'TauHoa' | validationerror: validationErrors">
+                </app-checkbox>
+
+                <app-checkbox id="phuong-tien-gay-tai-nan-mo-to" name="phuong-tien-gay-tai-nan" fxFlex="20%" fxFlex.sm="100%" label="Mô tô, xe gắn máy"
+                    [(model)]="thongTinTaiNanThuongTich.PhuongTienGayTaiNan.MoToXeGanMay"
+                    [validationerror]="'MoToXeGanMay' | validationerror: validationErrors">
+                </app-checkbox>
+
+                <app-checkbox id="phuong-tien-gay-tai-nan-xe-tu-che" name="phuong-tien-gay-tai-nan" fxFlex="20%" fxFlex.sm="100%" label="Xe tự chế"
+                    [(model)]="thongTinTaiNanThuongTich.PhuongTienGayTaiNan.XeTuChe"
+                    [validationerror]="'XeTuChe' | validationerror: validationErrors">
+                </app-checkbox>
+
+                <app-checkbox id="phuong-tien-gay-tai-nan-tu-gay-tai-nan" name="phuong-tien-gay-tai-nan" fxFlex="20%" fxFlex.sm="100%" label="Tự gây tai nạn"
+                    [(model)]="thongTinTaiNanThuongTich.PhuongTienGayTaiNan.TuGayTaiNan"
+                    [validationerror]="'TuGayTaiNan' | validationerror: validationErrors">
+                </app-checkbox>
+            </div>
+        </div>
+    </div> -->
+
+    <app-radio id="phuong-tien-gay-tai-nan" fxFlex="75%" fxFlex.md="100%" fxFlex.sm="100%" label="Phương tiện gây tai nạn"
+        [items]="radioPhuongTienGayTaiNan"
+        [(model)]="thongTinTaiNanThuongTich.PhuongTienGayTaiNan"
+        [validationerror]="'PhuongTienGayTaiNan' | validationerror:validationErrors">
+    </app-radio>
+
+    <app-textbox id="phuong-tien-gay-tai-nan-khac" fxFlex="25%" fxFlex.md="100%" fxFlex.sm="100%" maxlength="200" label="Khác"
+        [(model)]="thongTinTaiNanThuongTich.ThongTinKhac"
+        [validationerror]="'ThongTinKhac' | validationerror:validationErrors">
+    </app-textbox>
+</div>
+
+<!-- THÔNG TIN SỬ DỤNG MŨ BẢO HIỂM -->
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+        <h3 class="blue-text" style="display: inline; float: left;">THÔNG TIN SỬ DỤNG MŨ BẢO HIỂM</h3>
+    </div>
+</div>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <app-radio id="doi-mu-bao-hiem" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Đội mũ bảo hiểm"
+        [items]="radioThreeSelectItems"
+        [(model)]="thongTinTaiNanThuongTich.DoiMuBaoHiem"
+        [validationerror]="'DoiMuBaoHiem' | validationerror:validationErrors">
+    </app-radio>
+
+    <app-radio id="doi-mu-co-quai" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Đội mũ có cài quai"
+        [items]="radioThreeSelectItems"
+        [(model)]="thongTinTaiNanThuongTich.DoiMuCoCaiQuai"
+        [validationerror]="'DoiMuCoCaiQuai' | validationerror:validationErrors">
+    </app-radio>
+
+    <app-radio id="mu-bao-hiem-bi-vo" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Mũ bảo hiểm bị vỡ"
+        [items]="radioThreeSelectItems"
+        [(model)]="thongTinTaiNanThuongTich.MuBaoHiemBiVo"
+        [validationerror]="'MuBaoHiemBiVo' | validationerror:validationErrors">
+    </app-radio>
+
+    <app-textbox id="ten-loai-mu-bao-hiem" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" maxlength="200" label="Loại mũ bảo hiểm (tên)"
+        [(model)]="thongTinTaiNanThuongTich.LoaiMuBaoHiem"
+        [validationerror]="'LoaiMuBaoHiem' | validationerror:validationErrors">
+    </app-textbox>
+</div>
+
+<!-- THÔNG TIN SỬ DỤNG RƯỢU BIA -->
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+        <h3 class="blue-text" style="display: inline; float: left;">THÔNG TIN SỬ DỤNG RƯỢU BIA</h3>
+    </div>
+</div>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <app-radio id="su-dung-ruou-bia" class="mt-6 mt-md-0 mt-sm-0" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Sử dụng rượu bia"
+        [items]="radioThreeSelectItems"
+        [(model)]="thongTinTaiNanThuongTich.SuDungRuouBia"
+        [validationerror]="'SuDungRuouBia' | validationerror:validationErrors">
+    </app-radio>
+
+    <app-radio id="theo-cam-quan" class="mt-6 mt-md-0 mt-sm-0" fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%" label="Theo cảm quan"
+        [items]="radioTwoSelectItems"
+        [(model)]="thongTinTaiNanThuongTich.TheoCamQuan"
+        [validationerror]="'TheoCamQuan' | validationerror:validationErrors">
+    </app-radio>
+
+    <div fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%">
+        <div class="container-custom">
+            <label style="display: flex;">Nồng độ cồn trong máu
+            </label>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textboxnumeric id="nong-do-con-trong-mau" fxFlex="70%" fxFlex.sm="100%" label="mg/ml máu"
+                    [(model)]="thongTinTaiNanThuongTich.NongDoConTrongMau"
+                    [disabled]="thongTinTaiNanThuongTich.KhongDoNongDoConTrongMau" [min]="0" [max]="50" [decimals]="1" [format]="format"
+                    [validationerror]="'NongDoConTrongMau' | validationerror:validationErrors">
+                </app-textboxnumeric>
+                <app-checkbox id="khong-do-nong-do-con-trong-mau" class="mt-4 mt-md-4 mt-sm-0" fxFlex="30%" fxFlex.sm="100%" label="Không đo"
+                    [(model)]="thongTinTaiNanThuongTich.KhongDoNongDoConTrongMau"
+                    (modelChange)="khongDoNongDoConTrongMauChanged($event)"
+                    [validationerror]="'KhongDoNongDoConTrongMau' | validationerror: validationErrors">
+                </app-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <div fxFlex="25%" fxFlex.md="50%" fxFlex.sm="100%">
+        <div class="container-custom">
+            <label style="display: flex;">Nồng độ cồn trong hơi thở
+            </label>
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-textboxnumeric id="nong-do-con-trong-hoi-tho" fxFlex="70%" fxFlex.sm="100%" label="mg/ml khí thở"
+                    [(model)]="thongTinTaiNanThuongTich.NongDoConTrongHoiTho"
+                    [disabled]="thongTinTaiNanThuongTich.KhongDoNongDoConTrongHoiTho" [min]="0" [max]="50" [decimals]="1" [format]="format"
+                    [validationerror]="'NongDoConTrongHoiTho' | validationerror:validationErrors">
+                </app-textboxnumeric>
+                <app-checkbox id="khong-do-nong-do-con-trong-hoi-tho" class="mt-4 mt-md-4 mt-sm-0" fxFlex="30%" fxFlex.sm="100%" label="Không đo"
+                    [(model)]="thongTinTaiNanThuongTich.KhongDoNongDoConTrongHoiTho"
+                    (modelChange)="khongDoNongDoConTrongHoiThoChanged($event)"
+                    [validationerror]="'KhongDoNongDoConTrongHoiTho' | validationerror: validationErrors">
+                </app-checkbox>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TÌNH TRẠNG THƯƠNG TÍCH -->
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+        <h3 class="blue-text" style="display: inline; float: left;">TÌNH TRẠNG THƯƠNG TÍCH</h3>
+    </div>
+</div>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <app-radio id="chan-thuong-so-nao" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" label="Chấn thương sọ não"
+        [items]="radioTwoSelectItems"
+        [(model)]="thongTinTaiNanThuongTich.ChanThuongSoNao"
+        [validationerror]="'ChanThuongSoNao' | validationerror:validationErrors">
+    </app-radio>
+
+    <app-textboxnumeric id="glassgow" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" maxlength="1000" label="Glassgow" aria-placeholder="điểm"
+        [decimals]="1" [format]="format"
+        [(model)]="thongTinTaiNanThuongTich.Glassgow"
+        [validationerror]="'Glassgow' | validationerror:validationErrors">
+    </app-textboxnumeric>
+
+    <app-radio id="chan-thuong-cot-song-co" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" label="Chấn thương cột sống cổ"
+        [items]="radioTwoSelectItems"
+        [(model)]="thongTinTaiNanThuongTich.ChanThuongCotSongCo"
+        [validationerror]="'ChanThuongCotSongCo' | validationerror:validationErrors">
+    </app-radio>
+
+    <div fxFlex="40%" fxFlex.md="50%" fxFlex.sm="100%">
+        <div class="container-custom pt-checkbox-container">
+            <label style="display: flex;">Tổn thương khác
+            </label>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-checkbox id="ton-thuong-khac-ham-mat" name="ton-thuong-khac" fxFlex="25%" fxFlex.sm="100%" label="Hàm, mặt"
+                    [(model)]="thongTinTaiNanThuongTich.TonThuongKhac.HamMat"
+                    [validationerror]="'HamMat' | validationerror: validationErrors">
+                </app-checkbox>
+
+                <app-checkbox id="ton-thuong-khac-chi" name="ton-thuong-khac" fxFlex="25%" fxFlex.sm="100%" label="Chi"
+                    [(model)]="thongTinTaiNanThuongTich.TonThuongKhac.Chi"
+                    [validationerror]="'Chi' | validationerror: validationErrors">
+                </app-checkbox>
+
+                <app-checkbox id="ton-thuong-khac-nguc-bung" name="ton-thuong-khac" fxFlex="25%" fxFlex.sm="100%" label="Ngực, bụng"
+                    [(model)]="thongTinTaiNanThuongTich.TonThuongKhac.NgucBung"
+                    [validationerror]="'NgucBung' | validationerror: validationErrors">
+                </app-checkbox>
+
+                <app-checkbox id="ton-thuong-khac-da-cha-thuong" name="ton-thuong-khac" fxFlex="25%" fxFlex.sm="100%" label="Đa chấn thương"
+                    [(model)]="thongTinTaiNanThuongTich.TonThuongKhac.DaChanThuong"
+                    [validationerror]="'DaChanThuong' | validationerror: validationErrors">
+                </app-checkbox>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- XỬ TRÍ -->
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-3">
+        <h3 class="blue-text" style="display: inline; float: left;">XỬ TRÍ</h3>
+    </div>
+</div>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+    <app-radio id="nhap-vien" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" label="Nhập viện"
+        [items]="radioTwoSelectItems"
+        [(model)]="thongTinTaiNanThuongTich.NhapVien"
+        [validationerror]="'NhapVien' | validationerror:validationErrors">
+    </app-radio>
+
+    <app-radio id="mo-cap-cuu" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" label="Mổ cấp cứu"
+        [items]="radioTwoSelectItems"
+        [(model)]="thongTinTaiNanThuongTich.MoCapCuu"
+        [validationerror]="'MoCapCuu' | validationerror:validationErrors">
+    </app-radio>
+
+    <app-radio id="tu-vong" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" label="Tử vong"
+        [items]="radioTuVong"
+        [(model)]="thongTinTaiNanThuongTich.TuVong"
+        [validationerror]="'TuVong' | validationerror:validationErrors">
+    </app-radio>
+
+    <!-- <div fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%">
+        <div class="container-custom pt-checkbox-container">
+            <label style="display: flex;">Tử vong
+            </label>
+            <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <app-checkbox id="tu-vong-truoc-bv" name="tu-vong" fxFlex="50%" fxFlex.sm="100%" label="Trước BV"
+                    [(model)]="thongTinTaiNanThuongTich.TuVong.TruocBV"
+                    [validationerror]="'TruocBV' | validationerror: validationErrors">
+                </app-checkbox>
+
+                <app-checkbox id="tu-vong-trong-bv" name="tu-vong" fxFlex="50%" fxFlex.sm="100%" label="Trong BV"
+                    [(model)]="thongTinTaiNanThuongTich.TuVong.TrongBV"
+                    [validationerror]="'TrongBV' | validationerror: validationErrors">
+                </app-checkbox>
+            </div>
+        </div>
+    </div> -->
+
+    <app-checkbox id="nang-xin-ve" class="mt-4 mt-md-4 mt-sm-0" fxFlex="10%" fxFlex.md="50%" fxFlex.sm="100%" label="Nặng, xin về"
+        [(model)]="thongTinTaiNanThuongTich.NangXinVe"
+        [validationerror]="'NangXinVe' | validationerror: validationErrors">
+    </app-checkbox>
+
+    <app-textbox id="noi-chuyen-tuyen" fxFlex="20%" fxFlex.md="50%" fxFlex.sm="100%" maxlength="250" label="Nơi chuyển tuyến"
+        [(model)]="thongTinTaiNanThuongTich.NoiChuyenTuyen"
+        [disabled]="thongTinTaiNanThuongTich.KhongChuyenTuyen"
+        [validationerror]="'NoiChuyenTuyen' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-checkbox id="khong-chuyen" class="mt-4 mt-md-4 mt-sm-0" fxFlex="10%" fxFlex.md="50%" fxFlex.sm="100%" label="Không chuyển"
+        [(model)]="thongTinTaiNanThuongTich.KhongChuyenTuyen"
+        (modelChange)="khongChuyenTuyenChanged($event)"
+        [validationerror]="'KhongChuyenTuyen' | validationerror: validationErrors">
+    </app-checkbox>
+</div>

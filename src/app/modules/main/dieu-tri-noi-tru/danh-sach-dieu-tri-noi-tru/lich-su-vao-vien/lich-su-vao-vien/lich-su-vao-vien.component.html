@@ -1,0 +1,9 @@
+<app-grid [gridColumns]="gridColumns" [useAddDeault]="false" [useHeaderDefault]="false"
+    [additionalSearchString]="yeuCauTiepNhanId" [documentType]="documentType" [urlGetData]="urlGetDataGridAsync"
+    [urlGetTotalPage]="urlGetTotalPageGridAsync" [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true"
+    searchString="" [showStt]="true">
+</app-grid>
+<ng-template #maTNTemplate let-dataItem>
+    <a (click)="xemChiTiet(dataItem.Id , dataItem.MaTiepNhan, dataItem.KiemTraNoiTru , dataItem.BenhNhanId)">
+        {{dataItem.MaTiepNhan}}</a>
+</ng-template>

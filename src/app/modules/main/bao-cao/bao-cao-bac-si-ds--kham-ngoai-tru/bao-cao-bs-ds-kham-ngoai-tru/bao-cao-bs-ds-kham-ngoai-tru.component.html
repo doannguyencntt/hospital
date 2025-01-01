@@ -1,0 +1,102 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Báo Cáo', Path:''}
+                    ,{Title:'Báo Cáo Người Bệnh Khám Ngoại Trú', Path:''}
+                    ,{Title:'Bác Sĩ Khám DS Khám Ngoại Trú', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-combobox id="KhoaId" fxFlex="15%" fxFlex.sm="15%" hierarchyKeyToSend="khoa"
+                class="mt-1 on-header" popupSettings="null" [templateHeader]="khoaTemplateHeader"
+                    [template]="khoaTemplate" label="Khoa" url="GiuongBenh/GetListKhoaPhong" bind="true"
+                    [(model)]="search.KhoaId" >
+                </app-combobox>
+                <ng-template #khoaTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="30%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #khoaTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="30%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+                <app-combobox id="PhongId" fxFlex="15%" fxFlex.sm="15%" hierarchyKeyToListen="khoa"  [disabled]="search.KhoaId == 0 || search.KhoaId == null"
+                class="mt-1 on-header" label="Phòng" [templateHeader]="phongTemplateHeader"
+                    [template]="phongTemplate" url="BaoCao/GetTaCaPhongTheoKhoa" bind="true" [(model)]="search.PhongId"
+                    popupSettings="null" >
+                </app-combobox>
+                <ng-template #phongTemplateHeader let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <th width="20%">Mã</th>
+                            <th>Tên</th>
+                        </tr>
+                    </table>
+                </ng-template>
+                <ng-template #phongTemplate let-dataItem>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td width="20%">{{dataItem.Ma}}</td>
+                            <td>{{dataItem.Ten}}</td>
+                        </tr>
+                    </table>
+                </ng-template>
+                <app-datetimepicker id="NgayVaoVien" fxFlex="15%" fxFlex.sm="15%" [(model)]="search.DateStart"
+                    label="Tháng:Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+                <app-datetimepicker id="NgayRaVien" fxFlex="15%" fxFlex.sm="15%" label="Đến ngày" class="mt-1 on-header"
+                    [(model)]="search.DateEnd">
+                </app-datetimepicker>
+                <div fxFlex="40%" fxFlex.sm="40%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="InbaoCao()" style="float: right;" *ngIf="showPrintExport">In Báo cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XuatBaoCao()" style="float: right;" *ngIf="showPrintExport">Xuất Excel</button>
+                </div>
+                <app-grid fxFlex="100%" fxFlex.sm="100%" *ngIf="showGrid" [gridColumns]="gridColumns" [documentType]="documentType"
+                    [useActionDefault]="false" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                     [checkboxAble]="false" pageSize="50"  [autoHeight]="true"
+                    [gridDataSource]="gridDataSource">
+                </app-grid>
+               
+                <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+                    {{rowIndex + 1}}
+                </ng-template>
+                <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem let-aggregates="aggregates">
+                    <p fxFlex="100%" kendoTooltip>
+                        <strong fxFlex="100%">
+                            <span fxFlex="45%">{{theFirstValueFormat(value)}}</span>
+                            <ul class='inline small ml-20' fxFlex="55%">
+                                <li>
+                                    <span>
+                                        {{theFirstValueFormatTotalGroup(value)}}
+                                    </span>
+                                </li>
+                            </ul>
+                        </strong>
+                    </p>
+                </ng-template>
+                <!-- <ng-template #phongKhamGroupFooterTemplate let-aggregates >
+                    {{aggregates.PhongKham.count}} 
+                </ng-template> -->
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

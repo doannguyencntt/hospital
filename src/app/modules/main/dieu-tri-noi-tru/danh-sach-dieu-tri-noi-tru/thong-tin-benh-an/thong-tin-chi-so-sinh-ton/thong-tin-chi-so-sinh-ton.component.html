@@ -1,0 +1,77 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mr-4">CHỈ SỐ SINH TỒN
+        <button class="po-h" color="primary" (click)="themChiSoSinhTon()">
+            <mat-icon [icIcon]="icAddCircle"></mat-icon>
+        </button>
+    </h3>
+    <ng-container *ngIf="dataSourceChiSoSinhTons.data.length == 0">
+        <p>Không có chỉ số sinh tồn</p>
+    </ng-container>
+    <app-grid fxFlex="100%" HideCheckAll="true" [gridColumns]="gridColumnChiSoSinhTons"
+        *ngIf="dataSourceChiSoSinhTons != null && dataSourceChiSoSinhTons.data != null&& dataSourceChiSoSinhTons.data.length > 0"
+        [documentType]="documentType" [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true"
+        [checkboxAble]="false" [gridDataSource]="dataSourceChiSoSinhTons" [pageable]="false" height="auto"></app-grid>
+</div>
+<ng-template #nhipTimTemplate let-dataItem>
+    <app-textboxnumeric [max]="9999" [spinners]="false" [(model)]="dataItem.NhipTim" class="no-label"
+        (modelChange)="onChangeNhipTim(dataItem, $event)">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #huyetApTemplate let-dataItem>
+    <table width="100%">
+        <tr>
+            <td style="width:calc(50% - 3px);padding:0">
+                <app-textboxnumeric [spinners]="false" [(model)]="dataItem.HuyetApTamThu" class="no-label" [max]="9999"
+                    (modelChange)="onChangeHuyetApTamThu($event, dataItem)">
+                </app-textboxnumeric>
+            </td>
+            <td style="width:6px;padding:0">/</td>
+            <td style="width:calc(50% - 3px);padding:0">
+                <app-textboxnumeric [spinners]="false" [(model)]="dataItem.HuyetApTamTruong" class="no-label"
+                    [max]="9999" (modelChange)="onChangeHuyetApTamTruong($event, dataItem)">
+                </app-textboxnumeric>
+            </td>
+        </tr>
+    </table>
+</ng-template>
+<ng-template #thanNhietTemplate let-dataItem>
+    <app-textboxnumeric [format]="format" [max]="9999" [spinners]="false" [decimals]="1" [(model)]="dataItem.ThanNhiet"
+        class="no-label">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #nhipThoTemplate let-dataItem>
+    <app-textboxnumeric [max]="9999" [spinners]="false" [(model)]="dataItem.NhipTho" class="no-label"
+        (modelChange)="onChangeNhipTho($event, dataItem)">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #canNangTemplate let-dataItem>
+    <app-textboxnumeric [format]="format" [spinners]="false" [(model)]="dataItem.CanNang" class="no-label" [max]="999999"
+    min="1" max="999999" format="n2" decimals="2" (modelChange)="onChangeCanNang(dataItem)">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #chieuCaoTemplate let-dataItem>
+    <app-textboxnumeric [format]="format" [spinners]="false" [(model)]="dataItem.ChieuCao" [decimals]="1"
+        class="no-label" [max]="999999" (modelChange)="onChangeChieuCao(dataItem)">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #BMITemplate let-dataItem>
+    <p class="ml-1">{{dataItem.BMI | number: '1.2-2'}}</p>
+</ng-template>
+<ng-template #glassgowTemplate let-dataItem>
+    <app-textboxnumeric [max]="9999" [format]="format" [spinners]="false" [(model)]="dataItem.Glassgow" [decimals]="1"
+        class="no-label">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #spO2Template let-dataItem>
+    <app-textboxnumeric [max]="9999" [format]="format" [spinners]="false" [(model)]="dataItem.SpO2" [decimals]="1"
+        class="no-label">
+    </app-textboxnumeric>
+</ng-template>
+<ng-template #actionSinhHieuTemplate let-dataItem>
+    <div class="text-center" kendoTooltip>
+        <button color="primary" mat-icon-button kendoTooltip title="Xóa" type="button"
+            (click)="xoaChiSoSinhHieu(dataItem)">
+            <mat-icon [icIcon]="icDelete"></mat-icon>
+        </button>
+    </div>
+</ng-template>

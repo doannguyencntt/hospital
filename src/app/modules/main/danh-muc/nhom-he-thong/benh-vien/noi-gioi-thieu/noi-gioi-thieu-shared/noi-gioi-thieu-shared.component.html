@@ -1,0 +1,51 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="Ten" fxFlex="20%" fxFlex.sm="40%" maxlength="100" [required]="true" [(model)]="noiGioiThieu.Ten"
+        label="Tên" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+    <!-- <app-textbox id="DonVi" fxFlex="15%" fxFlex.sm="20%" maxlength="250" [(model)]="noiGioiThieu.DonVi" label="Đơn Vị">
+    </app-textbox> -->
+
+    <app-combobox fxFlex="15%" [(model)]="noiGioiThieu.DonViMauId" [modelText]="noiGioiThieu.TenDonViMau"
+        (selectionChange)="chonDonVi($event)" id="DonViMauId" label="Đơn Vị" url="NoiGioiThieu/DonViMaus">
+    </app-combobox>
+
+    <div fxFlex="5%" class="mt-2" fxLayoutAlign="start center">
+        <button (click)="themDonVi()" class="right" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm"
+            type="button">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+    <!-- <app-textbox id="SoDienThoai" fxFlex="20%" fxFlex.sm="40%" maxlength="12" [(model)]="noiGioiThieu.SoDienThoai"
+        onlynumber="true" label="Số Điện Thoại" [validationerror]="'SoDienThoai' | validationerror:validationErrors">
+    </app-textbox> -->
+    <app-textboxmask id="SoDienThoai" fxFlex="20%" fxFlex.sm="40%" [(model)]="noiGioiThieu.SoDienThoai"
+        label="Số Điện Thoại" [validationerror]="'SoDienThoai' | validationerror:validationErrors" mask="000 000-0000">
+    </app-textboxmask>
+    <app-radio fxFlex="20%" fxFlex.sm="20%" id="IsDisabled" name="IsDisabled"
+        [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" [(model)]="noiGioiThieu.IsDisabled"
+        label="Sử Dụng" [validationerror]="'IsDisabled' | validationerror:validationErrors">
+    </app-radio>
+    <app-combobox fxFlex="20%" [(model)]="noiGioiThieu.NhanVienQuanLyId"
+        [validationerror]="'NhanVienQuanLyId' | validationerror:validationErrors" id="NhanVienQuanLyId"
+        [modelText]="noiGioiThieu.HoTenNguoiQuanLy" label="Người Quản Lý" url="NoiGioiThieu/GetNguoiQuanLy"
+        [templateHeader]="nguoiQuanLyTemplateHeader" [template]="nguoiQuanLyTemplate" class="item-no-padding">
+        <ng-template #nguoiQuanLyTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="60%">Họ Tên</th>
+                    <th>Số Điện Thoại</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #nguoiQuanLyTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="60%">{{dataItem.HoTen}}</td>
+                    <td>{{dataItem.SoDienThoai}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+    <app-textarea id="MoTa" fxFlex="100%" [(model)]="noiGioiThieu.MoTa" maxlength="2000" label="Mô Tả"
+        [validationerror]="'MoTa' | validationerror:validationErrors"></app-textarea>
+</div>

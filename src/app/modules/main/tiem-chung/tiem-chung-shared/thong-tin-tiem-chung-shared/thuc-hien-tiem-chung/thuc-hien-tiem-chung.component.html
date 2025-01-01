@@ -1,0 +1,24 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <div fxFlex="100%">
+        <app-thong-tin-mui-tiem 
+            [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan"
+            [isTabThucHienTiemReadOnly]="isTabThucHienTiemReadOnly" [validationErrors]="validationErrors"
+            [isLichSuTiemChung]="isLichSuTiemChung">
+        </app-thong-tin-mui-tiem>
+    </div>
+
+    <div fxFlex="100%">
+        <app-thuoc-vat-tu 
+            [documentType]="documentType" [thongTinBenhNhan]="thongTinBenhNhan"
+            [isThuocVatTuReadonly]="isTabThucHienTiemReadOnly"
+            [isShowHeaderAddItem]="true"
+        ></app-thuoc-vat-tu>
+    </div>
+
+    <app-combobox fxFlex="30%" label="Nơi theo dõi sau tiêm" id="NoiTheoDoiSauTiem" url="TiemChung/GetListNoiTheoDoiSauTiem" 
+        [disabled]="isTabThucHienTiemReadOnly"
+        required="true" class="item-no-padding" [(model)]="thongTinBenhNhan.KhamSangLocTiemChung.NoiTheoDoiSauTiemId"
+        class="item-no-padding mt-2"  [reloadForGrid]="true"
+        [validationerror]="'NoiTheoDoiSauTiemId' | validationerror: validationErrors">
+    </app-combobox>
+</div>

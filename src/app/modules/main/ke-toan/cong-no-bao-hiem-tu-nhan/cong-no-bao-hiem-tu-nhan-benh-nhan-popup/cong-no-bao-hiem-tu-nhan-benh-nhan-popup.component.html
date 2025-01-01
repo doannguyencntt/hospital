@@ -1,0 +1,54 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">Người bệnh</div>
+    <button type="button" mat-icon-button mat-dialog-close (click)="chonBenhNhan(null)" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false" [lazyLoadPage]="true"
+        [useHeaderDefault]="false" [checkboxAble]="false" [pageable]="true" [height]="550"
+        [headerTemplate]="headerTemplate"
+        urlGetData="GachNo/GetDataBenhNhanForGrid" urlGetTotalPage="GachNo/GetTotalPageBenhNhanForGrid">
+    </app-grid>
+    <ng-template #headerTemplate>
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0" class="m-0">
+            <app-textbox #ma id="Ma" fxFlex="15%" fxFlex.sm="15%" label="Mã" [maxlength]="50"
+                [(model)]="benhNhanTimKiemObj.MaBN"
+                (keyup)="onKey($event)" (modelChange)="searchChanges($event, ma)">
+            </app-textbox>
+            <app-textbox #ten id="Ten" fxFlex="25%" fxFlex.sm="25%" label="Họ tên" [maxlength]="250"
+                [(model)]="benhNhanTimKiemObj.HoTen"
+                (keyup)="onKey($event)" (modelChange)="searchChanges($event, ten)">
+            </app-textbox>
+            <app-textbox #diaChi id="DiaChi" fxFlex="20%" fxFlex.sm="20%" label="Địa chỉ" [maxlength]="500"
+                [(model)]="benhNhanTimKiemObj.DiaChiDayDu"
+                (keyup)="onKey($event)" (modelChange)="searchChanges($event, diaChi)">
+            </app-textbox>
+            <app-textboxmask #dienThoai id="DienThoai" fxFlex="15%" fxFlex.sm="15%" [(model)]="benhNhanTimKiemObj.SoDienThoai" label="Điện thoại"
+                mask="000 000 0000" maxlength="12"
+                (keyup)="onKey($event)" (modelChange)="searchChanges($event, dienThoai)">
+            </app-textboxmask>
+            <app-textbox #cmt id="CMT" fxFlex="15%" fxFlex.sm="15%" label="CMND" [maxlength]="50"
+                [(model)]="benhNhanTimKiemObj.SoChungMinhThu"
+                (keyup)="onKey($event)" (modelChange)="searchChanges($event, cmt)">
+            </app-textbox>
+
+            <div fxFlex="10%" fxFlex.sm="10%">
+                <button mat-flat-button color="primary" style="margin-top: 13px;" (click)="timKiem()">Tìm kiếm</button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #sttTemplate let-rowIndex="rowIndex">
+        {{rowIndex + 1}}
+    </ng-template>
+    <ng-template #soDienThoaiTemplate let-dataItem>
+        {{dataItem.SoDienThoaiDisplay}}
+    </ng-template>
+    <ng-template #actionTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button color="primary" mat-flat-button type="button" (click)="chonBenhNhan(dataItem)">
+                Chọn
+            </button>
+        </div>
+    </ng-template>
+</mat-dialog-content>

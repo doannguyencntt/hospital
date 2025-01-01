@@ -1,0 +1,128 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    *ngFor="let yeuCauKhamBenh of yeuCauKhamBenhs">
+    <div fxFlex="100%">
+        <span>Lý do vào viện: <strong>{{trieuChungBenh}}</strong></span>
+    </div>
+    <div fxFlex="100%">
+        <span>Bệnh sử: <strong>{{yeuCauKhamBenh.BenhSu}}</strong></span>
+    </div>   
+    <!--Begin Thông tin Tiền sử bệnh và dị ứng và chỉ số sinh tồn -->
+    <div fxFlex="100%">
+        <fieldset fxFlex="49.5%" class="mb-3">
+            <span>Tiền sử bệnh:</span>
+            <div class=" mt-1">
+                <app-grid fxFlex="100%" [gridColumns]="gridColumnTienSuBenhs" [useAddDeault]="false"
+                    urlGetData="KhamBenh/GetDataForGridAsyncTienSuBenh" [additionalSearchString]="BenhNhanId"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true"
+                    searchString="">
+                </app-grid>
+            </div>
+        </fieldset>
+        <fieldset fxFlex="49.5%" class="ml-3">
+            <span>Dị ứng:</span>
+            <div class="mt-1">
+                <app-grid fxFlex="100%" [gridColumns]="gridColumnDiUngs" [useAddDeault]="false"
+                    urlGetData="KhamBenh/GetDataForGridAsyncDiUngThuoc" [additionalSearchString]="BenhNhanId"
+                    [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true"
+                    searchString="">
+                </app-grid>
+            </div>
+        </fieldset>
+    </div>
+    <div fxFlex="100%">
+        <legend>Chỉ số sinh tồn:</legend>
+        <div class="mt-1">
+            <app-lich-su-kham-benh-chi-so-sinh-ton-noi-tru [maTiepNhanBNId]="YeuCauTiepNhanId">
+            </app-lich-su-kham-benh-chi-so-sinh-ton-noi-tru>
+        </div>
+    </div>
+
+    <!--End Thông tin Tiền sử bệnh và dị ứng và chỉ số sinh tồn -->
+    <div fxFlex="100%">
+        <span>Khám toàn thân: <strong>{{yeuCauKhamBenh.KhamToanThan}}</strong></span>
+    </div>
+    <div fxFlex="100%">
+        <!-- thông tin Khám các cơ quan -->
+        <legend>Khám các cơ quan:</legend>
+        <ng-container *ngIf="yeuCauKhamBenhTemplate.ThongTinKhamTheoDichVuTemplateObj==null">
+            <label fxFlex="100%" class="font-weight-bold">Không có khám cơ quan khác</label>
+        </ng-container>
+        <ng-container *ngIf="yeuCauKhamBenhTemplate.ThongTinKhamTheoDichVuTemplateObj!=null 
+            && yeuCauKhamBenhTemplate.ThongTinKhamTheoDichVuTemplateObj.ComponentDynamics!=null
+             && yeuCauKhamBenhTemplate.ThongTinKhamTheoDichVuTemplateObj.ComponentDynamics.length>0">
+            <ng-container
+                *ngFor="let item of yeuCauKhamBenhTemplate.ThongTinKhamTheoDichVuTemplateObj.ComponentDynamics">
+                <ng-container
+                    *ngIf="item.groupItems == undefined || item.groupItems == null || item.groupItems.length == 0">
+                    <div class="mt-1">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                            fxFlex="100%">
+                            <span fxFlex="50%" *ngIf="item.Type==2">{{item.Label}}:
+                                <strong>{{item.Value}}</strong></span>
+                            <span fxFlex="50%" *ngIf="item.Type==3">{{item.Label}}:
+                                <strong>{{item.Value}}</strong></span>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+
+        <!-- thông tin Khám khác -->
+        <legend>Khám khác:</legend>
+        <ng-container *ngIf="dataSourceKhamKhac.data.length == 0">
+            <p>Không có khám khác</p>
+        </ng-container>
+        <app-grid *ngIf="dataSourceKhamKhac.data.length > 0" masterName="TienSuBenh" [gridColumns]="gridKhamKhacColumns"
+            [useAddDeault]="false" class="k-grid-border" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [maxHeight]="200" [lazyLoadPage]="true" [gridDataSource]="dataSourceKhamKhac"
+            style="width: 1px;" [pageable]="false">
+        </app-grid>
+    </div>
+    <div fxFlex="100%">
+        <legend>Chẩn đoán tổn thương:</legend>
+        <div class="mt-1">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                fxFlex="100%">               
+                <app-lich-su-kham-benh-bo-phan-ton-thuong-noi-tru [yeuCauKhamBenhId]="KhamBenhId">
+                </app-lich-su-kham-benh-bo-phan-ton-thuong-noi-tru>
+            </div>
+        </div>
+    </div>
+    <div fxFlex="100%">
+        <fieldset fxFlex="49.5%" class="mb-3">
+            <span>Chẩn đoán sơ bộ:</span>
+            <div class="mt-1">
+                <ul>
+                    <li *ngIf="yeuCauKhamBenh.ChanDoanSoBoICDId != null">ICD:
+                        <strong>{{yeuCauKhamBenh.ChanDoanSoBoICDId}}</strong>
+                    </li>
+                    <li *ngIf="yeuCauKhamBenh.ChanDoanSoBoGhiChu != null">Chẩn đoán:
+                        <strong>{{yeuCauKhamBenh.ChanDoanSoBoGhiChu}}</strong>
+                    </li>
+                </ul>
+            </div>
+        </fieldset>
+        <fieldset fxFlex="49.5%" class="ml-3">
+            <span>Chẩn đoán phân biệt:</span>
+            <div class="mt-1">
+                <app-grid fxFlex="100%" [gridColumns]="gridColumnChuanDoanPhanBiets" [useAddDeault]="false"
+                    [gridDataSource]="dataSourceChanDoanPhanBiet" [useHeaderDefault]="false" [useActionDefault]="false"
+                    [checkboxAble]="false" [autoHeight]="true" searchString="">
+                </app-grid>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<ng-template #boPhanTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox *ngIf="dataItem.Id == 0" maxlength="250" [(model)]="dataItem.Ten" class="no-label" label=" "
+        required="true">
+    </app-textbox>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.Ten}}</p>
+</ng-template>
+<ng-template #moTaTemplate let-dataItem let-rowIndex="rowIndex">
+    <app-textbox *ngIf="dataItem.Id == 0" maxlength="4000" [(model)]="dataItem.NoiDung" class="no-label" label=" "
+        required="true">
+    </app-textbox>
+    <p class="ml-1" *ngIf="dataItem.Id != 0">{{dataItem.NoiDUng}}</p>
+</ng-template>

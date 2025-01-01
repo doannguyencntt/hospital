@@ -1,0 +1,170 @@
+<vex-page-layout>
+    <!-- class="pb-16" -->
+	<vex-page-layout-header  fxLayout="column" fxLayoutAlign="center start">
+		<!-- <div [class.px-gutter]="true" class="w-full flex justify-between">
+			<vex-breadcrumbs [crumbs]="[
+			    {Title:'Bệnh Án Điện Tử',Path:''}]">
+            </vex-breadcrumbs>
+		</div> -->
+	</vex-page-layout-header>
+
+	<vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+		<div @fadeInUp class="-mt-16">
+			<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+				<div class="card" fxFlex="100%">
+					<div fxLayout="column" style="position: relative;">
+                        <!-- <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                            <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                                fxLayoutAlign="start center" style="margin-top: 2px;" kendoTooltip>
+                                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                                    type="search" name="searchString" [(ngModel)]="timKiemNangCaoObj.SearchString" (keyup)="onKey($event)"
+                                    (ngModelChange)="searchChanges($event)" placeholder="Họ tên, Mã NB, Mã TN" />
+                                <button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button"
+                                    class="button-barcoe-in-search" kendoTooltip title="Quét mã vạch thẻ" title="Phím tắt: Ctrl + Q">
+                                    <img src="assets/img/barcode.png" alt="Scan barcode" />
+                                </button>
+                            </div>
+                            
+                            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                                <mat-icon [icIcon]="icSearch"></mat-icon>
+                            </button>
+                            
+                            <app-daterangepicker id="tuNgayDenNgay" fxFlex="20%" fxFlex.sm="20%" class="on-header ml-2"
+                                [(model)]="timKiemNangCaoObj.TuNgayDenNgayNhapVien" label="Nhập viện" (keyup)="onKey($event)">
+                            </app-daterangepicker>
+
+                            <app-daterangepicker id="tuNgayDenNgay" fxFlex="20%" fxFlex.sm="20%" class="on-header ml-2"
+                                [(model)]="timKiemNangCaoObj.TuNgayDenNgayXuatVien" label="Xuất viện" (keyup)="onKey($event)">
+                            </app-daterangepicker>
+                            <button type="button" color="primary" (click)="timKiemNangCao()" class="ml-2" mat-raised-button>Tìm</button>
+
+                            <ng-container *ngIf="benhAnDienTu != undefined && benhAnDienTu.GayBenhAns.length > 0">
+                            <button *ngIf="benhAnDienTu != undefined && benhAnDienTu.GayBenhAns.length > 0" type="button" color="primary"
+                                (click)="getThongTinTheoGayBenhAn(null, -1, false, false, true)" class="ml-2" mat-raised-button>In</button>
+                            
+                            <button (click)="inBangkeChiPhi()" color="primary" mat-raised-button style="margin-left: auto;"> Xem
+                                bảng kê chi phí</button>
+                            </ng-container>
+                        </div> -->
+
+                        <kendo-splitter class="mt-2">
+                            <kendo-splitter-pane [collapsible]="true" size="25%" class="format-height" style="overflow-y: auto; min-height: 850px;">
+                                <div class="pane-content">
+                                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="5px grid" fxLayoutGap.lt-sm="0">
+                                    <div  fxFlex="100%" fxFlex.sm="100%">
+                                        <div class="rounded-full border" fxLayout="row"
+                                            fxLayoutAlign="start center" style="margin-top: 2px;background: #ebeced;width:100%;" kendoTooltip>
+                                            <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                                            <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search"
+                                                name="searchString" [(ngModel)]="timKiemNangCaoObj.SearchString" (keyup)="onKey($event)"
+                                                (ngModelChange)="searchChanges($event)" placeholder="Họ tên, Mã NB, Mã TN" />
+                                            <button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button" style="right:0" class="button-barcoe-in-search"
+                                                kendoTooltip title="Quét mã vạch thẻ" title="Phím tắt: Ctrl + Q">
+                                                <img src="assets/img/barcode.png" alt="Scan barcode" />
+                                            </button>
+                                        </div>
+                                    
+                                        <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                                            <mat-icon [icIcon]="icSearch"></mat-icon>
+                                        </button>
+                                    </div>
+                                       
+                                    
+                                        <app-daterangepicker id="tuNgayDenNgay" fxFlex="50%" fxFlex.sm="100%" 
+                                            [(model)]="timKiemNangCaoObj.TuNgayDenNgayNhapVien" label="Nhập viện" (keyup)="onKey($event)">
+                                        </app-daterangepicker>
+                                    
+                                        <app-daterangepicker id="tuNgayDenNgay" fxFlex="50%" fxFlex.sm="100%" 
+                                            [(model)]="timKiemNangCaoObj.TuNgayDenNgayXuatVien" label="Xuất viện" (keyup)="onKey($event)">
+                                        </app-daterangepicker>
+                                        <div  fxFlex="80%" fxFlex.sm="100%">
+                                            <ng-container *ngIf="benhAnDienTu != undefined && benhAnDienTu.GayBenhAns.length > 0">
+                                                <button *ngIf="benhAnDienTu != undefined && benhAnDienTu.GayBenhAns.length > 0" type="button" color="primary"
+                                                    (click)="getThongTinTheoGayBenhAn(null, -1, false, false, true)" class="mt-2" mat-raised-button>In</button>
+                                        
+                                                <button (click)="inBangkeChiPhi()" color="primary" mat-raised-button class="mt-2 ml-2"> Xem bảng kê chi
+                                                    phí</button>
+                                            </ng-container>
+                                        </div>
+                                        <div  fxFlex="20%" fxFlex.sm="100%">
+                                            <button type="button" color="primary" (click)="timKiemNangCao()" class="mt-2" style="float: right;" mat-raised-button>Tìm</button>
+                                        </div>
+                                    
+                                        
+                                </div>
+                            </div>
+
+                                <ng-container *ngIf="benhAnDienTu != undefined">
+                                    <p *ngIf="benhAnDienTu.GayBenhAns.length == 0">
+                                        Không có lịch sử khám chữa bệnh
+                                    </p>
+                                    <div *ngIf="benhAnDienTu.GayBenhAns.length > 0">
+                                        <table fxFlex="100%" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>DS GÁY BỆNH ÁN</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <ng-container *ngFor="let gayBenhAn of benhAnDienTu.GayBenhAns, let i = index">
+                                                    <tr class="gay-label {{indexGayBenhAnHienTai == i ? 'selected': ''}}">
+                                                        <td>
+                                                            <a (click)="chonGayBenhAn(gayBenhAn, i)">{{gayBenhAn.TenGayHoSo}}</a>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </ng-container>
+                            
+                            </kendo-splitter-pane>
+                            <kendo-splitter-pane style="overflow:initial;">
+                                <!-- <div class="container-iframe" *ngIf="fileUrl != null">
+                                    <iframe id="fileLichSuKham" frameborder="0" [src]="fileUrl | safe"
+                                        type="application/pdf" allowTransparency="true" background="transparent" style="display:none"
+                                        onload="this.style.display = 'block';">
+                                    </iframe>
+                                </div> -->
+                                <div *ngIf="benhAnDienTu != undefined" fxLayout="row" fxLayout.lt-md="column" id="test" class="format-height" style="max-height: 860px;">
+                                    <div fxFlex="10%" class="btn-arrow">
+                                        <a *ngIf="(showBtnPrevHtml || indexHtmlGayBenhAnHienTai > 0) && !isLoadingDataNext && !isLoadingDataPrev" class="ic-arrow" (click)="chuyenPhieu(false)">
+                                            <ic-icon [icon]="icArrowBack" inline="true" size="40px"></ic-icon>
+                                        </a>
+                                    </div>
+                                    <div fxFlex="80%" style="background: #ebebee;overflow: hidden;">
+                                        <div style="width: 100%;display: block;text-align: center;padding: 5px 0;">
+                                            <iframe id="myiframe" class="target" width="100%" style="min-height: 850px;" [src]="src| safe" allowTransparency="true"
+                                                background="transparent"></iframe>
+                                        </div>
+                                    </div>
+                                    <div fxFlex="10%" class="btn-arrow">
+                                        <div>
+                                            <button *ngIf="src != undefined && src != null && src != ''" (click)="zoomOut()" [disabled]="zoom <= 0.1" mat-menu-item>
+                                                <ic-icon [icon]="icZoomOut" inline="true" size="40px"></ic-icon>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button *ngIf="src != undefined && src != null && src != ''" (click)="zoomIn()" [disabled]="zoom >= 1" mat-menu-item>
+                                                <ic-icon [icon]="icZoomIn" inline="true" size="40px"></ic-icon>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button *ngIf="src != undefined && src != null && src != ''" (click)="InGayBenhAn()" mat-menu-item>
+                                                <ic-icon [icon]="icPrint" inline="true" size="40px"></ic-icon>
+                                            </button>
+                                        </div>
+                                        <a *ngIf="(showBtnNextHtml || (indexHtmlGayBenhAnHienTai < htmlGayBenhAnHienTai.length - 1)) && !isLoadingDataNext && !isLoadingDataPrev" class="ic-arrow" (click)="chuyenPhieu()">
+                                            <ic-icon [icon]="icArrowForward" inline="true" size="40px"></ic-icon>
+                                        </a>
+                                    </div>
+                                </div>
+                            </kendo-splitter-pane>
+                        </kendo-splitter>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

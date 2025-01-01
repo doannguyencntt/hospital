@@ -1,0 +1,247 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-combobox *ngIf="trangThaiVo != undefined && trangThaiVo!= null && trangThaiVo.TrangThai == null" id="KhoXuatId"
+        fxFlex="25%" fxFlex.sm="25%" [(model)]="yeuCauXuatKhoKhac.KhoXuatId" [required]="true"
+        autoSelectFirstItem="true" bind="true" [disabled]="disabled" [modelText]="yeuCauXuatKhoKhac.TenKhoXuat"
+        label="Kho xuất" (modelChange)="khoXuatModelChange($event)" url="XuatKhoDuocPhamKhac/GetKhoTheoLoaiDuocPham"
+        [queryInfo]="{ParameterDependencies:'{KhoId:' + yeuCauXuatKhoKhac.KhoXuatId +'}', Take: 50}"
+        [validationerror]="'KhoXuatId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-combobox *ngIf="trangThaiVo != undefined && trangThaiVo!= null && trangThaiVo.TrangThai == true" id="KhoXuatId"
+        fxFlex="25%" fxFlex.sm="25%" [(model)]="yeuCauXuatKhoKhac.KhoXuatId" [required]="true" [disabled]="true"
+        [modelText]="yeuCauXuatKhoKhac.TenKhoXuat" label="Kho xuất" url="XuatKhoDuocPhamKhac/GetKhoTheoLoaiDuocPham">
+    </app-combobox>
+
+    <app-combobox id="NguoiXuatId" fxFlex="25%" fxFlex.sm="25%" [(model)]="yeuCauXuatKhoKhac.NguoiXuatId"
+        [required]="true" [modelText]="yeuCauXuatKhoKhac.TenNguoiXuat" bind="true" label="Người xuất"
+        url="XuatKhoDuocPham/GetNguoiXuat" [disabled]="true"
+        [validationerror]="'NguoiXuatId' | validationerror:validationErrors">
+    </app-combobox>
+
+    <app-combobox id="NguoiNhanId" fxFlex="25%" fxFlex.sm="25%" [(model)]="yeuCauXuatKhoKhac.NguoiNhanId"
+        [disabled]="trangThaiVo != undefined && trangThaiVo != null  && trangThaiVo.TrangThai != null"
+        [queryInfo]="{ParameterDependencies:'{NguoiNhanId:' + yeuCauXuatKhoKhac.NguoiNhanId +'}', Take: 50}"
+        [modelText]="yeuCauXuatKhoKhac.TenNguoiNhan" label="Người nhận" url="XuatKhoDuocPhamKhac/GetNguoiNhanXuatKhac">
+    </app-combobox>
+
+    <app-datetimepicker id="NgayXuat" fxFlex="25%"
+        [fxFlex]="yeuCauXuatKhoKhac.TraNCC === true ||
+        (yeuCauXuatKhoKhac.LoaiKho === 1 || yeuCauXuatKhoKhac.LoaiKho === 2 || yeuCauXuatKhoKhac.LoaiKho === 6 || yeuCauXuatKhoKhac.LoaiKho === 4) ? '15%' : '25%'"
+        label="Ngày xuất" [(model)]="yeuCauXuatKhoKhac.NgayXuat" [required]="true"
+        [disabled]="trangThaiVo != undefined && trangThaiVo != null  && trangThaiVo.TrangThai != null"
+        [validationerror]="'NgayXuat' | validationerror:validationErrors">
+    </app-datetimepicker>
+
+    <div *ngIf="
+    (yeuCauXuatKhoKhac.LoaiKho === 1 || yeuCauXuatKhoKhac.LoaiKho === 2 || yeuCauXuatKhoKhac.LoaiKho === 6 || yeuCauXuatKhoKhac.LoaiKho === 4)"
+        fxFlex="10%" fxFlex.sm="20%">
+        <div class="container-custom no-label">
+            <label>&nbsp;</label>
+            <div fxLayout="row">
+                <app-checkbox
+                    [disabled]="trangThaiVo != undefined && trangThaiVo != null  && trangThaiVo.TrangThai != null || disabled"
+                    (modelChange)="traNCCChange($event)" id="traNCC" [(model)]="yeuCauXuatKhoKhac.TraNCC"
+                    label="Trả NCC">
+                </app-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <ng-container *ngIf="yeuCauXuatKhoKhac.TraNCC == true">
+        <app-combobox id="NhaThauId" fxFlex="50%" fxFlex.sm="50%" [(model)]="yeuCauXuatKhoKhac.NhaThauId"
+            [required]="true" [modelText]="yeuCauXuatKhoKhac.TenNhaThau" label="Nhà cung cấp" [disabled]="disabled"
+            (modelChange)="nhaThauChange()" url="XuatKhoDuocPhamKhac/GetNhaCungCapTheoKhoDuocPhams"
+            [queryInfo]="{ParameterDependencies:'{KhoId:' +yeuCauXuatKhoKhac.KhoXuatId +', Id: '+yeuCauXuatKhoKhac.NhaThauId+'}', Take: 50}"
+            [validationerror]="'NhaThauId' | validationerror:validationErrors">
+        </app-combobox>
+
+        <app-combobox id="SoChungTu" fxFlex="50%" fxFlex.sm="50%" [(model)]="yeuCauXuatKhoKhac.NhapKhoDuocPhamId"
+            [required]="true" [modelText]="yeuCauXuatKhoKhac.SoChungTu" label="Số hóa đơn" [disabled]="disabled"
+            url="XuatKhoDuocPhamKhac/GetSoHoaDonTheoKhoDuocPhams" (selectionChange)="soHoaDonChange($event)"
+            [queryInfo]="{ParameterDependencies:'{Id:' +yeuCauXuatKhoKhac.NhaThauId +', NhaThauId: '+yeuCauXuatKhoKhac.NhaThauId +' , KhoId: '+yeuCauXuatKhoKhac.KhoXuatId  +'}', Take: 50}"
+            [validationerror]="'NhapKhoDuocPhamId' | validationerror:validationErrors">
+        </app-combobox>
+    </ng-container>
+
+    <app-textbox id="LyDoXuatKho" fxFlex="100%" fxFlex.sm="100%" [(model)]="yeuCauXuatKhoKhac.LyDoXuatKho"
+        label="Ghi chú" maxlength="1000" [required]="true"
+        [disabled]="trangThaiVo != undefined && trangThaiVo != null  && trangThaiVo.TrangThai != null"
+        [validationerror]="'LyDoXuatKho' | validationerror:validationErrors">
+    </app-textbox>
+
+</div>
+
+<div style="height: 20px;">
+
+</div>
+
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <h3 fxFlex="100%" class="sub-title mt-0">THÔNG TIN DƯỢC PHẨM
+    </h3>
+    <ng-container *ngIf="trangThaiVo != undefined && trangThaiVo!= null && trangThaiVo.TrangThai == null">
+
+        <app-grid fxFlex="50%" HideCheckAll="true" [gridColumns]="gridColumns" [documentType]="documentType"
+            [urlGetData]="urlGetData" [urlGetTotalPage]="urlGetTotal" [useHeaderDefault]="false"
+            [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false" pageSize="50" height="500"
+            [headerTemplate]="headerTemplate" #gridDuocPhamXuat [groups]="groups"></app-grid>
+
+        <app-grid fxFlex="50%" HideCheckAll="true" [gridColumns]="gridResultColumns" [documentType]="documentType"
+            [useHeaderDefault]="false" [useActionDefault]="false" [lazyLoadPage]="true" [checkboxAble]="false"
+            [pageable]="false" height="500" [headerTemplate]="headerTemplate2" #gridResult [groups]="groups"
+            [gridDataSource]="gridDataSourceThuocKhac"></app-grid>
+    </ng-container>
+
+    <ng-container *ngIf="trangThaiVo != undefined && trangThaiVo!= null && trangThaiVo.TrangThai != null">
+        <app-grid fxFlex="100%" HideCheckAll="true" [gridColumns]="gridResultDaDuyetColumns"
+            [documentType]="documentType" [sort]="sort" [urlGetData]="urlGetDataDaDuyet"
+            [urlGetTotalPage]="urlGetTotalDaDuyet" [useHeaderDefault]="false" [useActionDefault]="false"
+            [lazyLoadPage]="true" [checkboxAble]="false" pageSize="50" height="500"
+            [additionalSearchString]="addtionStringDefault" [headerTemplate]="headerTemplateDaDuyet"
+            #gridDuocPhamXuatDaDuyet [groups]="groups"></app-grid>
+    </ng-container>
+
+    <ng-template #headerTemplateDaDuyet>
+        <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+            <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px"
+                fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                    type="search" name="searchString" [(ngModel)]="xuatKhoKhacGridDaDuyet.SearchString"
+                    (keyup)="onKeyGrid3($event)" (ngModelChange)="searchChanges3($event)"
+                    placeholder="Nhập từ khóa..." />
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #nhomGroupHeaderTemplate let-value="value" let-dataItem>
+        <strong>{{value}}</strong>
+    </ng-template>
+
+    <ng-template #headerTemplate>
+        <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+            <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px"
+                fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                    type="search" name="searchString" [(ngModel)]="yeuCauXuatKhoDuocPhamChiTietVoSearch.SearchString"
+                    (keyup)="onKeyGrid1($event)" (ngModelChange)="searchChanges($event)"
+                    placeholder="Nhập từ khóa..." />
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #headerTemplate2>
+        <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+            <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px"
+                fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                    type="search" name="searchString2" [(ngModel)]="searchString2" (keyup)="onKeyGrid2($event)"
+                    (ngModelChange)="clearSearchGrid2($event)" placeholder="Nhập từ khóa..." />
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- GRID DATA 1  CONTENT-->
+
+    <ng-template #soLuongXuatGrid1Template let-dataItem>
+        <app-textboxnumeric class="no-label" id="SoLuongXuat{{dataItem.Id}}" [(model)]="dataItem.SoLuongXuat"
+            [format]="format" [decimals]="2" [max]="dataItem.SoLuongTon">
+        </app-textboxnumeric>
+    </ng-template>
+
+    <ng-template #transferTemplate let-dataItem>
+        <div style="text-align: right;">
+            <button (click)="dieuChuyenTungDuocPhamGrid1(dataItem)" [ngClass]="['bg-gray-500', 'text-contrast-white']"
+                kendoTooltip title="Chọn: {{dataItem.Ten}}" class="p-0" style="min-width: 0;line-height: 26px;"
+                mat-raised-button type="button">
+                <mat-icon [icIcon]="icRight"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+    <ng-template #tenNhomGroupHeaderTemplate let-value="value" let-dataItem>
+        <div style="width: 50%;">
+            <strong>{{value}}</strong>
+        </div>
+        <div style="width: 50%; text-align: right;">
+            <button (click)="dieuChuyenDuocPhamTheoNhomGrid(dataItem,1)" color="primary" kendoTooltip
+                title="Chọn chóm: {{value}}" class="p-0" style="min-width: 0;line-height: 26px;" mat-raised-button
+                type="button">
+                <mat-icon [icIcon]="icRightLast"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+
+
+    <!-- GRID DATA 2  CONTENT-->
+
+    <ng-template #soLuongXuatGrid2Template let-dataItem let-rowIndex="rowIndex">
+        <app-textboxnumeric *ngIf="trangThaiVo != undefined && trangThaiVo != null  && trangThaiVo.TrangThai == null"
+            class="no-label" id="SoLuongXuat{{dataItem.Id}}" [(model)]="dataItem.SoLuongXuat"
+            [max]="dataItem.SoLuongTon" maxlength="99999999" [format]="format" [decimals]="2"
+            [validationerror]="'YeuCauXuatKhoDuocPhamChiTiets['+rowIndex+'].SoLuongXuat' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <div *ngIf="trangThaiVo != undefined && trangThaiVo != null  && trangThaiVo.TrangThai != null">
+            {{dataItem.SoLuongXuat | number:'1.0':'vi-VN' }}
+        </div>
+
+    </ng-template>
+
+    <ng-template #templateInfo let-dataItem>
+        <table class="table table-border" width="100%">
+            <tr>
+                <td>Số lượng tồn thực tế: {{sLTonThucTe | number:'1.0':'vi-VN'}}</td>
+            </tr>
+        </table>
+    </ng-template>
+
+    <ng-template #sLTonTemplate let-dataItem let-rowIndex="rowIndex">
+        {{dataItem.SoLuongTon | number:'1.2-2':'vi-VN' }}
+    </ng-template>
+
+    <ng-template #slTonThucTeTemplate let-dataItem let-rowIndex="rowIndex">
+        <span> {{dataItem.SoLuongTon | number:'1.2-2':'vi-VN' }}</span>
+        <span
+            *ngIf="validationErrors != []&& validationErrors!=undefined && validationErrors!=null &&  validationErrors.length > 0"
+            class="kho-tong-ton-ng-template" kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block"
+            position="left" [tooltipTemplate]="templateInfo" filter="*">
+            <mat-icon [icIcon]="icInfo" (mouseover)="TooltipCustom(dataItem)" class="info"></mat-icon>
+        </span>
+    </ng-template>
+
+    <ng-template #tenNhom2GroupHeaderTemplate let-value="value" let-dataItem>
+        <button (click)="dieuChuyenDuocPhamTheoNhomGrid(dataItem,2)" color="primary" kendoTooltip
+            title="Bỏ chọn nhóm: {{value}}" class="p-0 mr-2" style="min-width: 0;line-height: 26px;" mat-raised-button
+            type="button">
+            <mat-icon [icIcon]="icLeftLast"></mat-icon>
+        </button>
+        <strong>{{value}}</strong>
+    </ng-template>
+
+
+    <ng-template #transferTemplate2 let-dataItem>
+        <button (click)="dieuChuyenTungDuocPhamGrid2(dataItem)" [ngClass]="['bg-gray-500', 'text-contrast-white']"
+            kendoTooltip title="Bỏ chọn: {{dataItem.Ten}}" class="p-0" style="min-width: 0;line-height: 26px;"
+            mat-raised-button type="button">
+            <mat-icon [icIcon]="icLeft"></mat-icon>
+        </button>
+    </ng-template>
+
+    <ng-template #hsdTemplate let-dataItem>
+        {{dataItem.HanSuDungDisplay}}
+    </ng-template>
+
+    <ng-template #mayXetNghiemTemplate let-dataItem>
+        <app-combobox fxFlex="100%" class="no-label p-0" [popupSettings]="null"
+            [(model)]="dataItem.XetNghiemIdDauTienMayXetNghiem" [bind]="true" [reloadForGrid]="true"
+            [modelText]="dataItem.TenXetNghiemDauTienMayXetNghiem"
+            [queryInfo]="{ParameterDependencies:'{DuocPhamBenhVienId:' + dataItem.DuocPhamBenhVienId + '}', Take: 50}"
+            url="XuatKhoDuocPhamKhac/GetAllMayXetNghiemKhoKhac">
+        </app-combobox>
+    </ng-template>
+
+</div>

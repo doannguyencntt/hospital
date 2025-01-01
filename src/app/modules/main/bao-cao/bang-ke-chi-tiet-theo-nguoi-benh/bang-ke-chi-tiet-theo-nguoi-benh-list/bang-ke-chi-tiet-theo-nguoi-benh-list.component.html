@@ -1,0 +1,196 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'Kinh Doanh', Path:''},
+                    {Title:'Bảng Kê Chi Tiết Theo Người Bệnh', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <!-- <app-combobox id="NguoiGioiThieuId" fxFlex="15%" fxFlex.sm="15%" class="mt-1 on-header" label="Người giới thiệu" [reloadForGrid]="true"
+                    url="BaoCao/GetNoiGioiThieuDaCoNguoiBenhCoTatCa" [(model)]="baoCaoSearch.NoiGioiThieuId"  [autoSelectFirstItem]="true"
+                    [templateHeader]="noiGioiThieuTemplateHeader" [template]="noiGioiThieuTemplate" popupSettings="null"
+                    hierarchyKeyToSend="NoiGioiThieuId">
+                    <ng-template #noiGioiThieuTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="60%">Tên</th>
+                                <th>Đơn vị</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #noiGioiThieuTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="60%">{{dataItem.Ten}}</td>
+                                <td>{{dataItem.Ma}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+
+                <app-combobox id="nguoiBenhId" fxFlex="15%" fxFlex.sm="15%" class="mt-1 on-header" label="Người bệnh" [reloadForGrid]="true"
+                    url="BaoCao/GetNguoiBenhTheoNoiGioiThieu" [(model)]="baoCaoSearch.NguoiBenhId" 
+                    [templateHeader]="noiGioiThieuTemplateHeader" [template]="noiGioiThieuTemplate" popupSettings="null"
+                    hierarchyKeyToListen="NoiGioiThieuId">
+                    <ng-template #noiGioiThieuTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="40%">Mã</th>
+                                <th>Họ tên</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #noiGioiThieuTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="40%">{{dataItem.Ma}}</td>
+                                <td>{{dataItem.Ten}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox> -->
+
+                <!-- <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker> -->
+
+                <app-combobox id="hinhThucDen" fxFlex="15%" fxFlex.sm="15%" class="mt-1 on-header" label="Hình thức đến" [reloadForGrid]="true"
+                    url="BaoCao/GetHinhThucDenCoTatCa" [(model)]="baoCaoSearch.HinhThucDenId"  [autoSelectFirstItem]="true"
+                    popupSettings="null" hierarchyKeyToSend="HinhThucDenId" (modelChange)="changeHinhThucDen($event)">
+                </app-combobox>
+
+                <app-combobox id="KhoId" fxFlex="15%" fxFlex.sm="15%" class="mt-1 on-header" label="Người giới thiệu" [reloadForGrid]="true"
+                    url="BaoCao/GetNoiGioiThieuDaCoNguoiBenhCoTatCa" [(model)]="baoCaoSearch.NoiGioiThieuId" [autoSelectFirstItem]="true" 
+                    [disabled]="baoCaoSearch.HinhThucDenId == undefined || baoCaoSearch.HinhThucDenId == 0"
+                    [templateHeader]="noiGioiThieuTemplateHeader" [template]="noiGioiThieuTemplate" popupSettings="null" hierarchyKeyToListen="HinhThucDenId"
+                    (modelChange)="changeNguoiGioiThieu($event)">
+                    <ng-template #noiGioiThieuTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="60%">Tên</th>
+                                <th>Đơn vị</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #noiGioiThieuTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="60%">{{dataItem.Ten}}</td>
+                                <td>{{dataItem.Ma}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+
+                <app-combobox #cboTiepNhan id="yeuCauTiepNhan" fxFlex="15%" fxFlex.sm="15%" class="mt-1 on-header" label="Người bệnh"
+                    url="BaoCao/GetMaYeuCauTiepNhanTheoHinhThucDen" [(model)]="baoCaoSearch.MaYeuCauTiepNhan"
+                    [queryInfo]="{ParameterDependencies:'{HinhThucDenId:' + (baoCaoSearch.HinhThucDenId == undefined ? null : baoCaoSearch.HinhThucDenId) +', NoiGioiThieuId:' + (baoCaoSearch.NoiGioiThieuId == undefined ? null : baoCaoSearch.NoiGioiThieuId) +' }', Take: 50}"
+                    popupSettings="null" [templateHeader]="tiepNhanTemplateHeader" [template]="tiepNhanemplate"
+                    (modelChange)="changeMaTiepNhan($event)" [bind]="true">
+                    <ng-template #tiepNhanTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="40%">Mã TN</th>
+                                <th>Họ tên</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #tiepNhanemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="40%">{{dataItem.MaYeuCauTiepNhan}}</td>
+                                <td>{{dataItem.TenNguoiBenh}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+                </app-combobox>
+
+                <div fxFlex="30%" fxFlex.sm="60%" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button
+                        class="mr-1 mt-2" (click)="exportExcel()">Xuất Excel</button>
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+                    <app-grid [gridColumns]="gridColumns" [useAddDeault]="false" [groups]="groups"
+                        [checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [documentType]="documentType" [pageable]="true"
+                        urlGetData="BaoCao/GetDataBaoCaoBangKeChiTietTheoNguoiBenhForGrid" urlGetTotalPage="BaoCao/GetTotalPageBaoCaoBangKeChiTietTheoNguoiBenhForGrid">
+                    </app-grid>
+                    <ng-template #tongTienTitleTemplate kendoGridGroupFooterTemplate>
+                        <strong>
+                            Tổng Cộng:
+                        </strong>
+                    </ng-template>
+
+                    <ng-template #thanhTienTitleGroupFooterTemplate kendoGridGroupFooterTemplate>
+                        <strong>
+                            Tổng Cộng:
+                        </strong>
+                    </ng-template>
+                    <ng-template #thanhTienGroupFooterTemplate kendoGridGroupFooterTemplate let-aggregates>
+                        <strong>{{aggregates.ThanhTien.sum | number:'0.2-2':'vi-VN'}}</strong>
+                    </ng-template>
+
+                    <ng-template #tenNhomGroupTemplate let-value="value">
+                        <strong>{{value}}</strong>
+                    </ng-template>
+
+                    <ng-template #soLuongTemplate let-dataItem>
+                        {{dataItem.SoLuong | number}}
+                    </ng-template>
+
+                    <ng-template #giaNiemYetTemplate let-dataItem>
+                        {{dataItem.GiaNiemYet | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #giaUuDaiTemplate let-dataItem>
+                        {{dataItem.GiaUuDai | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #thanhTienTemplate let-dataItem>
+                        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #nguoiBenhDaThanhToanTemplate let-dataItem>
+                        {{dataItem.NguoiBenhDaThanhToan | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #congNoConPhaiThanhToanTemplate let-dataItem>
+                        {{dataItem.CongNoConPhaiThanhToan | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #tongChiPhiTemplate>
+                        {{tongThanhTien | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #tongCongGiaTonKhoTemplate let-dataItem>
+                        {{dataItem.TongCongGiaTonKho | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+                    <ng-template #tongCongGiaTonKhoGroupFooterTemplate kendoGridGroupFooterTemplate let-aggregates>
+                        <strong>{{aggregates.TongCongGiaTonKho.sum | number:'0.2-2':'vi-VN'}}</strong>
+                    </ng-template>
+                    <ng-template #tongCongGiaTonKhoFooterTemplate>
+                        {{tongCongGiaTonKho | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+                </div>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

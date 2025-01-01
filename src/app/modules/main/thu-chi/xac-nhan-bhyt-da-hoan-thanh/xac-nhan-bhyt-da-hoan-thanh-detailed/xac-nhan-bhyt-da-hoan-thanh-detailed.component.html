@@ -1,0 +1,177 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+                      {Title:'Ngoại Trú',Path:''},
+                      {Title:'Xác Nhận BHYT',Path:''},
+                      {Title:'Chi Tiết Xác Nhận BHYT Đã Hoàn Thành',Path:'/xac-nhan-bhyt-da-hoan-thanh/ngoai-tru', queryParams: {holdQuery : true}, Active:true}
+                  ]">
+            </vex-breadcrumbs>
+            <app-hot-key [keys]="[
+          {Key:'Ctrl + F1',Description:'Di chuyển tới và mở tab DV Đã xác nhận'},
+          {Key:'Ctrl + F2',Description:'Di chuyển tới và mở tab Chi tiết lần xác nhận'},
+          {Key:'Esc',Description:'Hủy', End:true}
+          ]"></app-hot-key>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="auto">
+                    <div class="px-6 py-4" fxLayout="column">
+                        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+                            <!-- Thông tin hành chính -->
+                            <div fxFlex="100%">
+                                <fieldset>
+                                    <legend>Thông tin hành chính</legend>
+                                    <div fxFlex="100%">
+                                        <ul class="inline">
+                                            <li>Mã TN:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.MaYeuCauTiepNhan}}
+                                                </strong>
+                                            </li>
+                                            <li>Mã NB:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.MaBN}}
+                                                </strong>
+                                            </li>
+                                            <li>Họ Tên:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.HoTen}}
+                                                </strong>
+                                            </li>
+                                            <li>Năm Sinh:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.NamSinh}}
+                                                </strong>
+                                            </li>
+                                            <li>Địa chỉ:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.DiaChi}}
+                                                </strong>
+                                            </li>
+                                            <li>Số điện thoại:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.SoDienThoai}}
+                                                </strong>
+                                            </li>
+                                            <li>Email:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.Email}}
+                                                </strong>
+                                            </li>
+                                            <li>Đối tượng ưu đãi:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.DoiTuongUuDai}}
+                                                </strong>
+                                            </li>
+                                            <li>Công ty ưu đãi:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.CongTyUuDai}}
+                                                </strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <!-- Thông tin bảo hiểm y tế -->
+                            <div fxFlex="100%">
+                                <fieldset>
+                                    <legend>Thông tin BHYT</legend>
+                                    <div fxFlex="100%">
+                                        <ul class="inline">
+                                            <li>Số thẻ:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.BHYTMaSoThe}}
+                                                </strong>
+                                            </li>
+                                            <li>Ngày hiệu lực:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.BHYTngayHieuLucStr}}
+                                                </strong>
+                                            </li>
+                                            <li>Ngày hết hạn:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.BHYTngayHetHanStr}}
+                                                </strong>
+                                            </li>
+                                            <li>Nơi đăng ký khám BH:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.DKBD}}
+                                                </strong>
+                                            </li>
+                                            <li>Mức hưởng:
+                                                <strong>
+                                                    {{thongTinXacNhanBhyt.BHYTMucHuong}} %
+                                                </strong>
+                                            </li>
+                                            <li>Tuyến khám:
+                                                <strong class="color-green">
+                                                    {{thongTinXacNhanBhyt.LyDoVaoVienDisplay}}
+                                                </strong>
+                                            </li>
+                                            <li>Giấy chuyển viện:
+                                                <strong *ngIf="thongTinXacNhanBhyt.GiayChuyenVienDisplay !== null">
+                                                    <a class="color-blue"
+                                                        (click)="viewDocument(thongTinXacNhanBhyt.GiayChuyenVienId, 1)">{{thongTinXacNhanBhyt.GiayChuyenVienDisplay}}
+                                                    </a>
+                                                </strong>
+                                            </li>
+                                            <li>Giấy miễn cùng chi trả:
+                                                <strong *ngIf="thongTinXacNhanBhyt.GiayMienCungChiTraDisplay !== null">
+                                                    <a class="color-blue"
+                                                        (click)="viewDocument(thongTinXacNhanBhyt.BHYTGiayMienCungChiTraId, 2)">{{thongTinXacNhanBhyt.GiayMienCungChiTraDisplay}}
+                                                    </a>
+                                                </strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div fxFlex="100%">
+                                <kendo-tabstrip (tabSelect)="onTabSelect($event)" #tabBhyt class="content-has-border">
+                                    <kendo-tabstrip-tab [selected]="tab == 1">
+                                        <ng-template kendoTabContent>
+                                            <app-da-xac-nhan-bhyt-list (valueChange)="switchDaXacNhan()">
+                                            </app-da-xac-nhan-bhyt-list>
+                                        </ng-template>
+                                        <ng-template kendoTabTitle>
+                                            <div kendoTooltip title="Phím tắt: Ctrl + F1">
+                                                DV Đã xác nhận
+                                            </div>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+                                    <kendo-tabstrip-tab [selected]="tab == 2">
+                                        <ng-template kendoTabContent>
+                                            <app-chi-tiet-lan-xac-nhan-list>
+                                            </app-chi-tiet-lan-xac-nhan-list>
+                                        </ng-template>
+                                        <ng-template kendoTabTitle>
+                                            <div kendoTooltip title="Phím tắt: Ctrl + F2">
+                                                Chi Tiết Lần Xác Nhận
+                                            </div>
+                                        </ng-template>
+                                    </kendo-tabstrip-tab>
+                                </kendo-tabstrip>
+                            </div>
+                            <div fxFlex="100%" class="sticky-button-action py-3 text-right">
+                                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" kendoTooltip>
+                                    <button (click)="phieuLinhThuocBenhNhanBHYT()" color="primary" mat-raised-button
+                                        class="mr-2"> Phiếu lĩnh thuốc
+                                    </button>
+                                    <button (click)="onHuy()" type="button" color="" mat-raised-button
+                                        title="Phím tắt: ESC">Hủy</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

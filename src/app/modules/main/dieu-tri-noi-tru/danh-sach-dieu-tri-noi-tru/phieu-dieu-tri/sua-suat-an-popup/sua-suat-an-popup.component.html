@@ -1,0 +1,59 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Chỉnh Sửa Suất Ăn Chi Tiết</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="min-height: 200px;">
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3">
+            <legend>
+                Thông tin suất ăn
+            </legend>
+
+            <div fxLayout="column">
+                <ul class="inline">
+                    <li>Mã: &nbsp;<strong>{{suatAnEdit.Ma}}</strong></li>
+                    <li>Tên: &nbsp;<strong>{{suatAnEdit.Ten}}</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3 mt-3">
+            <legend>
+                Thông tin chỉnh sửa
+            </legend>
+
+            <div fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                    style="padding-top: 16px;">
+
+                    <app-combobox id="BuaAn" fxFlex="30%" fxFlex.sm="30%" label="Bữa ăn" url="DieuTriNoiTru/GetBuaAn"
+                        popupSettings="" [(model)]="suatAnEdit.BuaAn" [(modelText)]="suatAnEdit.BuaAnDisplay">
+                    </app-combobox>
+
+                    <app-textboxnumeric fxFlex="30%" fxFlex.sm="30%" min=1 max=99999 id="SL" label="SL"
+                        [format]="format" [(model)]="suatAnEdit.SoLan" [required]="true" (keyup)="onKey($event)"
+                        [validationerror]="'SoLan' | validationerror:validationErrors">
+                    </app-textboxnumeric>
+
+                    <app-dropdownlist id="DoiTuong" fxFlex="40%" fxFlex.sm="40%" label="Đối tượng"
+                        url="DieuTriNoiTru/GetDoiTuongSuatAn" [required]="true" popupSettings=" "
+                        [(model)]="suatAnEdit.DoiTuongSuDung" [modelText]="suatAnEdit.DoiTuong"
+                        (openDropDownList)="openDropDownList($event)" (keyup)="onKey($event)"
+                        [validationerror]="'DoiTuongSuDung' | validationerror:validationErrors">
+                    </app-dropdownlist>
+
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" mat-stroked-button color="primary" mat-dialog-close>Hủy</button>
+    <button tabindex="-1" type="button" (click)="luuSuatAn()" mat-stroked-button color="primary" class="md-primary">Cập
+        nhật</button>
+</mat-dialog-actions>

@@ -1,0 +1,35 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Danh Mục', Path:''}
+                    ,{Title:'Hợp Đồng Thầu', Path:''}
+                    ,{Title:'Dược Phẩm', Path:''}
+                    ,{Title:'Hợp Đồng Thầu Dược Phẩm', Path:'/danh-muc/hop-dong-thau/duoc-pham', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/danh-muc/hop-dong-thau/duoc-pham" [gridColumns]="gridColumns"
+                [documentType]="documentType" [useActionDefault]="true" [lazyLoadPage]="true"
+                [detailTemplate]="detailTemplate" [showExportExcel]="true" (extExportExcel)="exportExcel()" #gridHdtCha>
+            </app-grid>
+
+            <ng-template #detailTemplate let-dataItem>
+                <app-grid baseRoute="/danh-muc/hop-dong-thau/duoc-pham" [gridColumns]="gridChildColumns"
+                    [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+                    [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                    [urlGetData]="urlGetDataGridChild" [urlGetTotalPage]="urlGetTotalPageGridChild"
+                    additionalSearchString="{{dataItem.Id}}" [autoHeight]="true">
+                </app-grid>
+            </ng-template>
+            <ng-template #giaTemplate let-dataItem>
+                {{dataItem.Gia | number:'0.2-2':'vi-VN'}}
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

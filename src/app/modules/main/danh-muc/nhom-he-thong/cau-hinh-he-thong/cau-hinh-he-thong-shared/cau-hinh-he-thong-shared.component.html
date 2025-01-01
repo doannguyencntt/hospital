@@ -1,0 +1,184 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between" *ngIf="loaiCauHinh == 1">
+    <app-textbox fxFlex="50%" fxFlex.sm="50%" class="col-sm-8" [maxlength]="255" id="Description" label="Mô tả"
+        [(model)]="cauhinh.Description" [required]="true"
+        [validationerror]="'Description' | validationerror:validationErrors">
+    </app-textbox>
+    <div fxFlex="50%" fxFlex.sm="50%" *ngIf="type==1">
+        <div class="container-custom">
+            <label>Chọn</label>
+            <div fxLayout="row" fxLayoutGap="16px">
+                <app-checkbox id="CheckboxA" [(model)]="cauhinh.Value" label="True" [required]="true"></app-checkbox>
+            </div>
+            <app-validationerrorother [validationerror]="'Value' | validationerror:validationErrors">
+            </app-validationerrorother>
+        </div>
+    </div>
+    <app-textboxnumeric *ngIf="type==2" class="col-sm-4" id="Value" fxFlex="50%" fxFlex.sm="50%" [required]="true"
+        min="1" [(model)]="cauhinh.Value" label="Giá trị"
+        [validationerror]="'Value' | validationerror:validationErrors">
+    </app-textboxnumeric>
+    <app-textbox *ngIf="type==3" id="Value" label="Giá trị" fxFlex="50%" fxFlex.sm="50%" [required]="true"
+        [(model)]="cauhinh.Value" [validationerror]="'Value' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textboxnumeric *ngIf="type==4" class="col-sm-4" id="Value" [format]="" fxFlex="50%" fxFlex.sm="50%"
+        [required]="true" min="1" [(model)]="cauhinh.Value" label="Giá trị"
+        [validationerror]="'Value' | validationerror:validationErrors">
+    </app-textboxnumeric>
+
+    <app-datepicker id="Datepicker" fxFlex="50%" fxFlex.sm="50%" *ngIf="type==5" [(model)]="cauhinh.Value"
+        label="Giá trị" [required]="true" [validationerror]="'Value' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-timepicker id="Timepicker" [modelIsNumber]="true" format="HH:mm" fxFlex="50%" fxFlex.sm="50%" *ngIf="type==6"
+        [(model)]="cauhinh.Value" label="Giá trị" [validationerror]="'Value' | validationerror:validationErrors"
+        format="HH:mm" [required]="true">
+    </app-timepicker>
+
+    <app-datetimepicker id="datetimepicker" fxFlex="50%" fxFlex.sm="50%" *ngIf="type==7" label="Giá trị"
+        [(model)]="cauhinh.Value" [required]="true" [validationerror]="'Value' | validationerror:validationErrors">
+    </app-datetimepicker>
+
+    <app-textboxmask id="texboxmask" fxFlex="50%" fxFlex.sm="50%" *ngIf="type==8" [(model)]="cauhinh.Value"
+        label="Giá trị" label="Giá trị" mask="000 000 0000" [required]="true">
+    </app-textboxmask>
+
+    <app-textbox *ngIf="type==9" id="Value" label="Giá trị" fxFlex="50%" fxFlex.sm="50%" [required]="false"
+        [(model)]="cauhinh.Value" [validationerror]="'Value' | validationerror:validationErrors" label="Giá trị">
+    </app-textbox>
+
+    <ng-container *ngIf="type==10 && cauhinh.CauHinhDanhSachChiTiets != undefined && cauhinh.CauHinhDanhSachChiTiets != null">
+        <div fxFlex="grow"></div>
+        <ng-container [ngSwitch]="cauhinh.DataTypeLoaiCauHinh">
+            <ng-container *ngSwitchCase="loaiCauHinhGachNo">
+                <ng-container *ngFor="let item of cauhinh.CauHinhDanhSachChiTiets;let i = index">
+                    <app-textbox id="displayName" label="Tên hiển thị" fxFlex="50%" fxFlex.sm="50%" [required]="true"
+                        [(model)]="item.DisplayName" [maxlength]="50"
+                        [validationerror]="'CauHinhDanhSachChiTiets['+i+'].DisplayName' | validationerror:validationErrors">
+                    </app-textbox>
+                    <app-textbox id="ghiChu" label="Ghi chú" fxFlex="46%" fxFlex.sm="46%" [(model)]="item.GhiChu"
+                        [maxlength]="250"
+                        [validationerror]="'CauHinhDanhSachChiTiets['+i+'].GhiChu' | validationerror:validationErrors">
+                    </app-textbox>
+                    <div fxFlex="auto">
+                        <button (click)="deleteItems(i)" style="color: red" mat-icon-button kendoTooltip title="Xóa"
+                            type="button">
+                            <mat-icon [icIcon]="icDelete"></mat-icon>
+                        </button>
+                    </div>
+                </ng-container>
+                <div>
+                    <button (click)="addNewItems()" color="primary" fxFlex="none" mat-mini-fab kendoTooltip title="Thêm"
+                        type="button">
+                        <mat-icon [icIcon]="icAdd"></mat-icon>
+                    </button>
+                </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="loaiCauHinhNoiTru">
+                <ng-container *ngFor="let item of cauhinh.CauHinhDanhSachChiTiets;let i = index">
+                    <app-timepicker *ngIf="item.DataType==6" id="Timepicker" [modelIsNumber]="true" format="HH:mm" fxFlex="50%" fxFlex.sm="50%"
+                        [(model)]="item.Value" label="{{item.DisplayName}}" [required]="true"
+                        [validationerror]="'CauHinhDanhSachChiTiets['+i+'].Value' | validationerror:validationErrors">
+                    </app-timepicker>
+                    <app-textbox id="ghiChu" label="Ghi chú" fxFlex="50%" fxFlex.sm="50%" [(model)]="item.GhiChu"
+                        [maxlength]="250"
+                        [validationerror]="'CauHinhDanhSachChiTiets['+i+'].GhiChu' | validationerror:validationErrors">
+                    </app-textbox>
+                </ng-container>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+                
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</div>
+
+<!-- loại cấu hình theo thời gian -->
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between" *ngIf="loaiCauHinh == 2">
+    <app-textbox fxFlex="100%" fxFlex.sm="100%" class="col-sm-8" maxlength="255" id="Description" label="Mô tả"
+        [(model)]="cauhinh.Description" [required]="true"
+        [validationerror]="'Description' | validationerror:validationErrors"></app-textbox>
+
+    <h4 class="sub-title" fxFlex="100%">Cấu hình theo thời gian</h4>
+    <div fxFlex="100%" fxFlex.sm="100%" *ngFor="let item of cauhinh.CauHinhTheoThoiGianChiTiets;let i = index">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="50%" fxFlex.sm="50%" *ngIf="type==1">
+                <div class="container-custom">
+                    <label>Chọn</label>
+                    <div fxLayout="row" fxLayoutGap="16px">
+                        <app-checkbox id="CheckboxA" [(model)]="item.Value" label="True" [required]="true">
+                        </app-checkbox>
+                    </div>
+                    <app-validationerrorother
+                        [validationerror]="'CauHinhTheoThoiGianChiTiets['+i+'].Value' | validationerror:validationErrors">
+                    </app-validationerrorother>
+                </div>
+            </div>
+
+            <app-textboxnumeric *ngIf="type==2" class="col-sm-4" id="Value" fxFlex="50%" fxFlex.sm="50%"
+                [required]="true" min="1" [(model)]="item.Value" label="Giá trị"
+                [validationerror]="'CauHinhTheoThoiGianChiTiets['+i+'].Value' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-textbox *ngIf="type==3" id="Value" label="Giá trị" fxFlex="50%" fxFlex.sm="50%" [required]="true"
+                [(model)]="item.Value"
+                [validationerror]="'CauHinhTheoThoiGianChiTiets['+i+'].Value' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textboxnumeric *ngIf="type==4" class="col-sm-4" id="Value" [format]="" fxFlex="50%" fxFlex.sm="50%"
+                [required]="true" min="1" [(model)]="item.Value" label="Giá trị"
+                [validationerror]="'CauHinhTheoThoiGianChiTiets['+i+'].Value' | validationerror:validationErrors">
+            </app-textboxnumeric>
+
+            <app-datepicker id="Datepicker" fxFlex="50%" fxFlex.sm="50%" *ngIf="type==5" [(model)]="item.Value"
+                label="Giá trị" [required]="true"
+                [validationerror]="'CauHinhTheoThoiGianChiTiets['+i+'].Value' | validationerror:validationErrors">
+            </app-datepicker>
+
+            <app-timepicker id="Timepicker" [modelIsNumber]="true" format="HH:mm" fxFlex="50%" fxFlex.sm="50%"
+                *ngIf="type==6" [(model)]="item.Value" label="Giá trị"
+                [validationerror]="'CauHinhTheoThoiGianChiTiets['+i+'].Value' | validationerror:validationErrors"
+                format="HH:mm" [required]="true">
+            </app-timepicker>
+
+            <app-datetimepicker id="datetimepicker" fxFlex="50%" fxFlex.sm="50%" *ngIf="type==7" label="Giá trị"
+                [(model)]="item.Value" [required]="true"
+                [validationerror]="'CauHinhTheoThoiGianChiTiets['+i+'].Value' | validationerror:validationErrors">
+            </app-datetimepicker>
+
+            <app-textboxmask id="texboxmask" fxFlex="50%" fxFlex.sm="50%" *ngIf="type==8" [(model)]="item.Value"
+                label="Giá trị" label="Giá trị" mask="000 000 0000" [required]="true"
+                [validationerror]="'CauHinhTheoThoiGianChiTiets['+i+'].Value' | validationerror:validationErrors">
+            </app-textboxmask>
+
+            <app-textbox *ngIf="type==9" id="Value" label="Giá trị" fxFlex="50%" fxFlex.sm="50%" [required]="true"
+                [(model)]="item.Value"
+                [validationerror]="'CauHinhTheoThoiGianChiTiets['+i+'].Value' | validationerror:validationErrors"
+                label="Giá trị">
+            </app-textbox>
+
+            <app-datepicker id="FromDate" fxFlex="23%" fxFlex.sm="23%" label="Từ ngày" [required]="true"
+                [(model)]="item.FromDate" [required]="true"
+                [validationerror]="'CauHinhTheoThoiGianChiTiets['+i+'].FromDate' | validationerror:validationErrors">
+            </app-datepicker>
+
+            <app-datepicker *ngIf="item.ToDate!=null" [disabled]="true" id="ToDate" fxFlex="23%" fxFlex.sm="23%"
+                label="Đến Ngày" [(model)]="item.ToDate">
+            </app-datepicker>
+
+            <div fxFlex="4%" fxFlex.sm="20%">
+                <button mat-icon-button class="mt-3" (click)="XoaCauHinh(i)">
+                    <mat-icon [icIcon]="icRemove" color="warn"></mat-icon>
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <button mat-mini-fab color="primary" (click)="ThemCauHinh()">
+            <mat-icon [icIcon]="icAdd"></mat-icon>
+        </button>
+    </div>
+</div>

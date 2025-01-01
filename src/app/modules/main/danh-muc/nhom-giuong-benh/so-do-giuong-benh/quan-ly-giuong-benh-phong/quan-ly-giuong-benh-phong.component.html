@@ -1,0 +1,86 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+            {Title:'Danh Mục',Path:''}
+            ,{Title:'Nhóm Giường Bệnh',Path:''}
+            ,{Title:'Tình Trạng Giường Bệnh',Path:'/danh-muc/nhom-giuong-benh/so-do-giuong-benh/'}
+            ,{Title:'Quản Lý Giường Bệnh Tại Khoa: '+tenKhoa,Path:'', Active: true}
+            ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+
+            <app-grid baseRoute="danh-muc/nhom-giuong-benh/so-do-giuong-benh" [headerTemplate]="headerTemplate"
+                [urlGetData]="urlData" [urlGetTotalPage]="urlTotal"
+                [useHeaderDefault]="false" [lazyLoadPage]="true" [gridColumns]="gridColumns" (getDataSource)="getDataSource($event)"
+                [documentType]="documentType" [checkboxAble]="false" [useActionDefault]="false" [lazyLoadPage]="true">
+            </app-grid>
+
+
+            <ng-template #headerTemplate>
+                <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <app-combobox id="KhoaId" fxFlex="300px" class="on-header item-no-padding"
+                        popupSettings="null" [templateHeader]="khoaTemplateHeader" [template]="khoaTemplate" label="Phòng"
+                        url="SoDoGiuongBenh/GetListPhong/?khoaId={{id}}" bind="true" [(model)]="soDoGiuongBenhSearch.PhongId"
+                        (modelChange)="khoaChange($event)"
+                        style="margin-left: 5px;margin-top: 20px;">
+                    </app-combobox>
+                    <ng-template #khoaTemplateHeader let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <th width="20%">Mã</th>
+                                <th>Tên</th>
+                            </tr>
+                        </table>
+                    </ng-template>
+                    <ng-template #khoaTemplate let-dataItem>
+                        <table width="100%" class="table-combobox">
+                            <tr>
+                                <td width="20%">{{dataItem.Ma}}</td>
+                                <td>{{dataItem.Ten}}</td>
+                            </tr>
+                        </table>
+                    </ng-template>
+
+                    <div style="width: 100%; text-align: right;">
+                        <button type="button" color="primary" (click)="quayLai()" class="ml-2"
+                        mat-raised-button>
+                            Quay lại
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template #phongTemplate let-dataItem>
+                <a (click)="Xem(dataItem)" style="width: 100; text-align: center;">
+                    {{dataItem.Ten}}
+                </a>
+            </ng-template>
+
+
+            <ng-template #khoaFooterTemplate let-dataItem>
+                <span style="float:right">Tổng:</span>
+            </ng-template>
+
+            <ng-template #giuongTrongFooteremplate let-aggregates>
+                {{totalGiuongTrong}}
+            </ng-template>
+
+            <ng-template #giuongCoBenhNhanFooteremplate let-aggregates>
+                {{totalGiuongCoBenhNhan}}
+            </ng-template>
+
+            <ng-template #giuongBenhCuaKhoaFooteremplate let-aggregates>
+                {{totalTongGiuongBenhCuaKhoa}}
+            </ng-template>
+
+        </div>
+
+
+    </vex-page-layout-content>
+</vex-page-layout>

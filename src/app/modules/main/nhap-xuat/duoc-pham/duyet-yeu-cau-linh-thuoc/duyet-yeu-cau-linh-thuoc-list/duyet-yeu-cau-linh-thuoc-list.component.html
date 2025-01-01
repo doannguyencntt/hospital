@@ -1,0 +1,217 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="[
+            {Title:'Nhập Xuất',Path:''}
+            ,{Title:'Dược Phẩm',Path:''}
+            ,{Title:'Dự Trù Lĩnh',Path:''}
+            ,{Title:'Duyệt Yêu Cầu Lĩnh',Path:'/nhap-xuat/duoc-pham/duyet-yeu-cau-linh-thuoc',Active:true}
+            ]">
+            </vex-breadcrumbs>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="" [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="false"
+                [lazyLoadPage]="true" [useHeaderDefault]="false" [headerTemplate]="headerTemplate"
+                [checkboxAble]="false" pageSize="50"
+                urlGetData="YeuCauLinhDuocPham/GetDataDSDuyetLinhDuocPhamForGridAsync"
+                urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageDSLinhDuocPhamForGridAsync"
+                [detailTemplate]="detailTemplate" [allowSortDefault]="true">
+                <!-- [detailTemplate]="detailTemplate"> -->
+            </app-grid>
+        </div>
+        <span fxFlex="20px"></span>
+        <ng-template #headerTemplate>
+            <div class="bg-app-bar p-0 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                <!-- <app-checkbox name="dang-thanh-toan" (modelChange)="checkTrangThaiDCT($event,1)" class="ml-2"
+                    [(model)]="kiemTraDanhSachDaChoGoi" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center"
+                    value="dangthanhtoan" label="Đang chờ gởi">
+                </app-checkbox> -->
+                <app-checkbox name="dang-thanh-toan" (modelChange)="checkTrangThaiDCT($event,2)" class="ml-2"
+                    [(model)]="kiemTraDanhSachDangChoDuyet" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center"
+                    value="dangthanhtoan" label="Đang chờ duyệt">
+                </app-checkbox>
+                <app-checkbox name="dang-thanh-toan" (modelChange)="checkTrangThaiDCT($event,3)" class="ml-2"
+                    [(model)]="kiemTraDanhSachTuChoiDuyet" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center"
+                    value="dangthanhtoan" label="Từ chối duyệt">
+                </app-checkbox>
+                <app-checkbox name="dang-thanh-toan" (modelChange)="checkTrangThaiDCT($event,4)" class="ml-2"
+                    [(model)]="kiemTraDanhSachDaDuyet" fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center"
+                    value="dangthanhtoan" label="Đã duyệt">
+                </app-checkbox>
+                <div style="margin-top: 5px;" class="bg-card rounded-full border mb-1 ml-2" fxFlex="400px"
+                    fxFlex.lt-md="auto" fxHide.xs fxLayout="row" fxLayoutAlign="start center">
+                    <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                    <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                        type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)"
+                        (ngModelChange)="searchChanges()"
+                        placeholder="Nhập từ khóa(Người yêu cầu,Lĩnh từ kho,Lĩnh về kho,Người duyệt)" />
+                </div>
+                <span fxFlex="5px"></span>
+                <app-daterangepicker id="Daterange" fxFlex="250px" class="mt-1 on-header" (blur)="blur($event)"
+                    [(model)]="timKiemTuNgay.NgayYeuCauRangDate" label="Yêu cầu từ ngày - đến ngày"
+                    (keyup)="onKeyDateRange($event)" (modelChange)="changRange($event)">
+                </app-daterangepicker>
+                <span fxFlex="5px"></span>
+                <app-daterangepicker id="Daterange" fxFlex="250px" label="Duyệt từ ngày - đến ngày"
+                    class="mt-1 on-header" (blur)="blur($event)" (keyup)="onKeyDateRange($event)"
+                    [(model)]="timKiemTuNgay.NgayDuyetRangDate" (modelChange)="changRange($event)">
+                </app-daterangepicker>
+                <!-- <button type="button" color="primary" (click)="TimkiemNangCao()" class="ml-2"
+                    mat-raised-button>Tìm</button> -->
+                <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                    <mat-icon [icIcon]="icSearch"></mat-icon>
+                </button>
+
+                <button [matMenuTriggerFor]="columnFilterMenu" style="margin-left: auto;" fxFlex="none" class="mr-2"
+                    mat-icon-button kendoTooltip title="Lọc cột" type="button">
+                    <mat-icon [icIcon]="icFilterList"></mat-icon>
+                </button>
+
+                <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                    <div *ngFor="let column of gridColumns">
+                        <button *ngIf="column.Title != ''"
+                            class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                            <mat-checkbox [disabled]="true" color="primary">
+                                {{ column.Title }}
+                            </mat-checkbox>
+                        </button>
+                    </div>
+                </mat-menu>
+                <button (click)="exportExcel()" fxFlex="2%" fxFlex.sm="2%" mat-icon-button kendoTooltip
+                    title="Xuất Excel" type="button">
+                    <mat-icon [icIcon]="icFileExcel"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <ng-template #TinhTrangTemplate let-dataItem>
+            <span *ngIf="dataItem.DuocDuyet == null" style="color: orange;">{{dataItem.TinhTrang}}</span>
+            <span *ngIf="dataItem.DuocDuyet == false" style="color: red;">{{dataItem.TinhTrang}}</span>
+            <span *ngIf="dataItem.DuocDuyet == true" style="color: green;">{{dataItem.TinhTrang}}</span>
+        </ng-template>
+
+        <ng-template #ngayYeuCauTemplate let-dataItem>
+            {{dataItem.NgayYeuCauHienThi}}
+        </ng-template>
+        <ng-template #ngayDuyetTemplate let-dataItem>
+            {{dataItem.NgayDuyetHienThi}}
+        </ng-template>
+        <ng-template #maTNTemplate let-dataItem>
+            <a (click)="xemChiTietYeuCauLinh(dataItem.Id, dataItem.LoaiPhieuLinh)">{{dataItem.MaPL}}</a>
+        </ng-template>
+        <ng-template #groupTemplate let-dataItem>
+            <button (click)="$event.stopPropagation()" kendoTooltip title="Hành động" [matMenuTriggerFor]="actionsMenu"
+                *ngIf="dataItem.DuocDuyet == true" mat-icon-button type="button">
+                <mat-icon [icIcon]="icMoreHoriz"></mat-icon>
+            </button>
+            <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
+                <ng-template let-customer="customer" matMenuContent>
+                    <button (click)="InDuocPham(dataItem.Id,dataItem.LoaiPhieuLinh)" mat-menu-item
+                        *ngIf="dataItem.DuocDuyet == true">
+                        <mat-icon [icIcon]="icPrint"></mat-icon>
+                        <span>In</span>
+                    </button>
+                </ng-template>
+            </mat-menu>
+        </ng-template>
+        <ng-template #detailTemplate let-dataItem>
+            <!-- 1 linh du tru null , (true , false) -> # null-->
+            <app-grid baseRoute="" [gridColumns]="gridChildLinhDuTruChuaDuyetColumns" *ngIf="dataItem.LoaiPhieuLinh == 1 && dataItem.DuocDuyet == null"
+                [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+                [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                urlGetData="YeuCauLinhDuocPham/GetDataDSDuyetLinhDuocPhamChildForGridAsync"
+                urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageFDSLinhDuocPhamChildForGridAsync"
+                additionalSearchString="{{dataItem.Id}}-{{dataItem.LoaiPhieuLinh}}-{{dataItem.LinhVeKhoId}}-{{dataItem.DuocDuyet}}"
+                [autoHeight]="true" [groups]="groups">
+            </app-grid>
+            <app-grid baseRoute="" [gridColumns]="gridChildLinhDuTruDaDuyetColumns" *ngIf="dataItem.LoaiPhieuLinh == 1 && dataItem.DuocDuyet != null"
+                [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false"
+                [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                urlGetData="YeuCauLinhDuocPham/GetDataDSDuyetLinhDuocPhamChildForGridAsync"
+                urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageFDSLinhDuocPhamChildForGridAsync"
+                additionalSearchString="{{dataItem.Id}}-{{dataItem.LoaiPhieuLinh}}-{{dataItem.LinhVeKhoId}}-{{dataItem.DuocDuyet}}"
+                [autoHeight]="true" [groups]="groups">
+            </app-grid>
+            <!-- 2 linh bu -->
+            <!-- null, true, false -->
+            <app-grid baseRoute="" [gridColumns]="gridChildLinhBuChuaDuyetColumns"
+                *ngIf="dataItem.LoaiPhieuLinh == 2 && dataItem.DuocDuyet == null" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" urlGetData="YeuCauLinhDuocPham/GetDataDSDuyetLinhDuocPhamChildForGridAsync"
+                urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageFDSLinhDuocPhamChildForGridAsync"
+                additionalSearchString="{{dataItem.Id}}-{{dataItem.LoaiPhieuLinh}}-{{dataItem.LinhVeKhoId}}" [autoHeight]="true"
+                [detailTemplate]="detailTemplateDuocPhamLinhBu">
+            </app-grid>
+            <app-grid baseRoute="" [gridColumns]="gridChildLinhBuDaDuyetColumns"
+                *ngIf="dataItem.LoaiPhieuLinh == 2 && dataItem.DuocDuyet == true" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" urlGetData="YeuCauLinhDuocPham/GetDataDSDuyetLinhDuocPhamChildForGridAsync"
+                urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageFDSLinhDuocPhamChildForGridAsync"
+                additionalSearchString="{{dataItem.Id}}-{{dataItem.LoaiPhieuLinh}}-{{dataItem.LinhVeKhoId}}"
+                [autoHeight]="true"  [detailTemplate]="detailTemplateDuocPhamLinhBu">
+            </app-grid>
+            <!-- 2 linh bu -->
+            <!-- Từ chối duyệt -->
+            <app-grid baseRoute="" [gridColumns]="gridChildLinhBuDaDuyetColumns"
+                *ngIf="dataItem.LoaiPhieuLinh == 2 && dataItem.DuocDuyet ==false" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" urlGetData="YeuCauLinhDuocPham/GetDataDSDuyetLinhDuocPhamChildForGridAsync"
+                urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageFDSLinhDuocPhamChildForGridAsync"
+                additionalSearchString="{{dataItem.Id}}-{{dataItem.LoaiPhieuLinh}}-{{dataItem.LinhVeKhoId}}"
+                [autoHeight]="true" >
+            </app-grid>
+            <!-- 3 linh người bệnh -->
+            <app-grid #gridA baseRoute="" [gridColumns]="gridChildLinhBenhNhanColumns"
+                *ngIf="dataItem.LoaiPhieuLinh == 3 && dataItem.DuocDuyet != false" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" urlGetData="YeuCauLinhDuocPham/GetDataDSDuyetLinhDuocPhamChildForGridAsync" 
+                urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageFDSLinhDuocPhamChildForGridAsync"
+                additionalSearchString="{{dataItem.Id}}-{{dataItem.LoaiPhieuLinh}}-{{dataItem.LinhVeKhoId}}-{{dataItem.DuocDuyet}}-{{dataItem.DaGui}}"
+                [autoHeight]="true" [detailTemplate]="detailTemplateDuocPhamLinhBenhNhan">
+            </app-grid>
+
+            <app-grid #gridB baseRoute="" [gridColumns]="gridChildChildLinhBenhNhanTuChoiColumns"
+                *ngIf="dataItem.LoaiPhieuLinh == 3 && dataItem.DuocDuyet == false" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" urlGetData="YeuCauLinhDuocPham/GetDataDSDuyetLinhDuocPhamChildForGridAsync"
+                urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageFDSLinhDuocPhamChildForGridAsync"
+                additionalSearchString="{{dataItem.Id}}-{{dataItem.LoaiPhieuLinh}}-{{dataItem.LinhVeKhoId}}-{{dataItem.DuocDuyet}}"
+                [autoHeight]="true" >
+            </app-grid>
+        </ng-template>
+        <!-- child linh người bệnh -->
+        <ng-template #detailTemplateDuocPhamLinhBenhNhan let-dataItem>
+            <app-grid baseRoute="" [gridColumns]="gridChildChildLinhBenhNhanColumns" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" urlGetData="YeuCauLinhDuocPham/GetDataDSDuyetLinhDuocPhamChildChildForGridAsync"
+                urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageFDSLinhDuocPhamChildChildForGridAsync" 
+                additionalSearchString="{{dataItem.Id}}-{{dataItem.LoaiPhieuLinh}}-{{dataItem.DuocPhamBenhVienId}}-{{dataItem.LaBHYT}}-{{dataItem.LinhVeKhoId}}-{{dataItem.YeuCauTiepNhanId}}-{{dataItem.DuocDuyet}}-{{dataItem.KhoLinhId}}"
+                [autoHeight]="true">
+            </app-grid>
+        </ng-template>
+        <!-- child linh bu -->
+        <ng-template #detailTemplateDuocPhamLinhBu let-dataItem>
+            <app-grid baseRoute=""   [gridColumns]="gridChildChildLinhBuDaDuyetColumns" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" urlGetData="YeuCauLinhDuocPham/GetDataDSDuyetLinhDuocPhamChildChildForGridAsync"
+                urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageFDSLinhDuocPhamChildChildForGridAsync"
+                additionalSearchString="{{dataItem.Id}}-{{dataItem.LoaiPhieuLinh}}-{{dataItem.DuocPhamBenhVienId}}-{{dataItem.LaBHYT}}-{{dataItem.LinhVeKhoId}}"
+                [autoHeight]="true">
+            </app-grid>
+            <!-- <app-grid baseRoute="" *ngIf="dataItem.DaDuyet == true" [gridColumns]="gridChildChildLinhBuDaDuyetColumns" [documentType]="documentType"
+                [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                [lazyLoadPage]="true" urlGetData="YeuCauLinhDuocPham/GetDataDSDuyetLinhDuocPhamChildChildForGridAsync"
+                urlGetTotalPage="YeuCauLinhDuocPham/GetTotalPageFDSLinhDuocPhamChildChildForGridAsync"
+                additionalSearchString="{{dataItem.Id}}-{{dataItem.LoaiPhieuLinh}}-{{dataItem.DuocPhamBenhVienId}}-{{dataItem.LaBHYT}}-{{dataItem.LinhVeKhoId}}"
+                [autoHeight]="true">
+            </app-grid> -->
+        </ng-template>
+        <ng-template #nhomGroupHeaderTemplate let-value="value">
+            <strong>{{value}}</strong>
+        </ng-template>
+        <ng-template #sttTemplate let-dataItem let-rowIndex="rowIndex">
+            {{rowIndex + 1}}
+        </ng-template>
+    </vex-page-layout-content>
+</vex-page-layout>

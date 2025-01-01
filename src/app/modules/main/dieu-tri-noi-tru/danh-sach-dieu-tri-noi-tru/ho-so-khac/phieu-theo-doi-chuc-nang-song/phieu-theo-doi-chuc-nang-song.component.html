@@ -1,0 +1,126 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <div fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+            <div fxFlex="100%" fxFlex.sm="100%"></div>
+
+            <app-textbox id="chan-doan" fxFlex="50%" fxFlex.sm="100%" maxlength="1000" label="Chẩn đoán"
+                [(model)]="thongTinHoSoPhieuTheoDoiChucNangSong.ChanDoan"
+                [validationerror]="'ChanDoan' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-upload id="upload" #chuKyPhieuSangLocDinhDuong [allowedExtensions]="allowedExtensions" fxFlex="50%" fxFlex.sm="100%"
+                    [(model)]="noiTruHoSoKhac.FilesChuKy" [multiple]="true" label="File chữ ký"
+                    [template]="templateFileChuanDoanHAInfo">
+                </app-upload>
+                <ng-template #templateFileChuanDoanHAInfo let-files>
+                    <table width="100%" class="table-combobox">
+                        <tr>
+                            <td>
+                                <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                                    (click)="chuKyPhieuSangLocDinhDuong.viewFile(files[0])" class="custom-name red">{{files[0].name}}</a>
+                                <a *ngIf="!files[0].error" title="{{files[0].name}}" (click)="chuKyPhieuSangLocDinhDuong.viewFile(files[0])"
+                                    class="green" class="custom-name green">{{files[0].name}}</a>
+                            </td>
+                            <td style="width:25px">
+                                <a type="button" (click)="chuKyPhieuSangLocDinhDuong.remove(files[0].uid)" mat-icon-button>
+                                    <mat-icon [icIcon]="icClear"></mat-icon>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </ng-template>
+        </div>
+
+        <p fxFlex="70%" fxFlex.md="70%" fxFlex.sm="100%">
+            Người thực hiện: <b>{{noiTruHoSoKhac.NhanVienThucHienDisplay}}</b> 
+            Ngày thực hiện: <b>{{noiTruHoSoKhac.ThoiDiemThucHienDisplay}}</b>
+        </p>
+
+        <div fxFlex="30%" fxFlex.md="30%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+            <button type="button" class="mr-2" mat-button color="primary" style="pointer-events: all;" (click)="in()">In</button>
+            <button type="button" class="mr-2" mat-button color="primary" (click)="huy()">Huỷ</button>
+            <button type="button" class="mr-2" color="primary" mat-raised-button (click)="luuPhieuTheoDoiChucNangSong()">Lưu</button>
+        </div>
+    </div>
+</div>
+<!--#region Chart -->
+<!-- <div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0" fxLayoutGap.lt-sm="0">
+        <table id="table-chuc-nang-song" fxFlex="100%">
+            <thead>
+                <tr>
+                    <th colspan="2">Ngày, tháng</th>
+                    <th colspan="2">1/1/2020</th>
+                    <th colspan="2">2/1/2020</th>
+                    <th colspan="2">3/1/2020</th>
+                </tr>
+                <tr>
+                    <th style="width: 62.5px;">Mạch L/ph</th>
+                    <th style="width: 62.5px;">Nhiệt độ C</th>
+                    <th style="width: calc((100% - 125px)/6);">9h</th>
+                    <th style="width: calc((100% - 125px)/6);">16h</th>
+                    <th style="width: calc((100% - 125px)/6);">9h</th>
+                    <th style="width: calc((100% - 125px)/6);">16h</th>
+                    <th style="width: calc((100% - 125px)/6);">9h</th>
+                    <th style="width: calc((100% - 125px)/6);">16h</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="8" style="padding: 0;">
+                        <kendo-chart style="width: 100%;">
+                            <kendo-chart-legend [visible]="false">
+                            </kendo-chart-legend>
+                
+                            <kendo-chart-value-axis>
+                                <kendo-chart-value-axis-item *ngFor="let item of valueAxes" [name]="item.name" [title]="{ text: item.title }"
+                                    [min]="item.min" [max]="item.max" [majorUnit]="item.majorUnit" [color]="item.color" [labels]="valueAxisLabel">
+                                </kendo-chart-value-axis-item>
+                            </kendo-chart-value-axis>
+        
+                            <kendo-chart-series>
+                                <kendo-chart-series-item *ngFor="let item of series" [name]="item.name" [data]="item.data" [type]="item.type"
+                                    [stack]="item.stack" [color]="item.color" [axis]="item.axis" [xField]="item.xField" [yField]="item.yField">
+        
+                                    <kendo-chart-series-item-tooltip *ngIf="item.category == 'catemach'" format="{0} L/ph">
+                                    </kendo-chart-series-item-tooltip>
+        
+                                    <kendo-chart-series-item-tooltip *ngIf="item.category == 'catenhietdo'" format="{0}&deg;C">
+                                    </kendo-chart-series-item-tooltip>
+                                </kendo-chart-series-item>
+                            </kendo-chart-series>
+                        </kendo-chart>
+                    </td>
+                </tr>
+                <tr *ngFor="let item of dataSource">
+                    <td colspan="2">
+                        {{item.NhomDoLuong}}
+                    </td>
+                    <td>
+                        {{item.MorningFirstDay}}
+                    </td>
+                    <td>
+                        {{item.EveningFirstDay}}
+                    </td>
+                    <td>
+                        {{item.MorningSecondDay}}
+                    </td>
+                    <td>
+                        {{item.EveningSecondDay}}
+                    </td>
+                    <td>
+                        {{item.MorningThirdDay}}
+                    </td>
+                    <td>
+                        {{item.EveningThirdDay}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div fxFlex="100%" fxFlex.md="100%" fxFlex.sm="100%" kendoTooltip class="sticky-button-action py-3 text-right">
+            <button type="button" class="mr-2" mat-button color="primary" (click)="in()">In</button>
+        </div>
+    </div>
+</div> -->
+<!--#endregion -->

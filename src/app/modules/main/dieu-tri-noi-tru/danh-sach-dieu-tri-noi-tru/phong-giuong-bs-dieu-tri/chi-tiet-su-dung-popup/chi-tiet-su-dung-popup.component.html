@@ -1,0 +1,215 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>CHI TIẾT SỬ DỤNG GIƯỜNG THEO NGÀY</div>
+    <button type="button" mat-icon-button (click)="close()" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content class="content-min-height content-min-height-md content-min-height-sm"
+    style="flex-direction: column;display: flex;">
+    <table *ngIf="dataChiTietSuDung.IsReadOnly" class="table" cellpadding="0" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th style="width: 150px;">KHOA CHỈ ĐỊNH</th>
+                <th style="width: 170px;">GIƯỜNG CHUYỂN ĐẾN</th>
+                <th style="width: 100px;">DV TRONG GÓI</th>
+                <!-- <th style="width: 100px;">DV KHUYẾN MÃI</th> -->
+                <th style="width: 100px;">LOẠI GIƯỜNG</th>
+                <th style="width: 100px;">BAO PHÒNG</th>
+                <th style="width: 200px;">DV GIƯỜNG </th>
+                <th style="width: 100px;">ĐỐI TƯỢNG</th>
+                <th style="width: 80px;">SL</th>
+                <th style="width: 80px;">SL GHÉP</th>
+                <th style="width: 100px;">ĐƠN GIÁ</th>
+                <th style="width: 100px;">THÀNH TIỀN</th>
+                <th style="width: 100px;">ĐƠN GIÁ BH</th>
+                <th style="width: 100px;">THÀNH TIỀN BH</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let item of dataChiTietSuDung.SuDungGiuongTheoNgays; index as i">
+                <tr>
+                    <td colspan="14" class="head-ngay-phat-sinh">Ngày phát sinh: {{item.NgayPhatSinhDisplay}}</td>
+                </tr>
+
+                <ng-container *ngFor="let item1 of item.ChiTietGiuongBenhVienChiPhis; index as i1">
+                    <tr>
+                        <td class="pl-30">{{item1.KhoaChiDinhDisplay}}</td>
+                        <td>{{item1.GiuongChuyenDenDisplay}}</td>
+                        <td>
+                            <input *ngIf="item1.CoDichVuNayTrongGoi" type="checkbox" [checked]="item1.LaDichVuTrongGoi"
+                                disabled="{{true}}" />
+                            <!-- <app-checkbox *ngIf="item1.CoDichVuNayTrongGoi" id="LaDichVuTrongGoi{{i1}}"
+                                label="" [(model)]="item1.LaDichVuTrongGoi"
+                                disabled="{{true}}">
+                            </app-checkbox> -->
+                        </td>
+                        <!-- <td>
+                            <app-checkbox *ngIf="item1.CoDichVuNayTrongGoiKhuyenMai"
+                                id="dvKhuyenMaiGoiMarketing{{item1.Id}}" label=""
+                                [(model)]="item1.LaDichVuKhuyenMai" disabled="{{true}}">
+                            </app-checkbox>
+                        </td> -->
+                        <td>{{item1.LoaiGiuongDisplay}}</td>
+                        <td align="center">
+                            <app-checkbox label=" " class="no-label" disabled="disabled" id="BaoPhong{{i1}}"
+                                [(model)]="item1.BaoPhong">
+                            </app-checkbox>
+                        </td>
+                        <td>{{item1.DichVuGiuongDisplay}}</td>
+                        <td>{{item1.DoiTuongDisplay}}</td>
+                        <td align="center">{{item1.SoLuong}}</td>
+                        <td align="center">{{item1.SoLuongGhep}}</td>
+                        <td>{{item1.DonGia | number:'0.2-2':'vi-VN'}}</td>
+                        <td>{{item1.ThanhTien | number:'0.2-2':'vi-VN'}}</td>
+                        <td>{{getDonGiaBHYT(item1) | number:'0.2-2':'vi-VN'}}</td>
+                        <td>{{getThanhTienBHYT(item1) | number:'0.2-2':'vi-VN'}}</td>
+                    </tr>
+                </ng-container>
+            </ng-container>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="14">
+                    <div style="margin-left: auto !important; text-align: end;">
+                        <span>
+                            <strong>Tổng: </strong>
+                            Tiền DV: <strong>{{tongTienDichVu | number:'0.2-2':'vi-VN'}}</strong> -
+                            Tiền BH: <strong>{{tongTienBaoHiem | number:'0.2-2':'vi-VN'}}</strong> =
+                            NB chi trả: <strong style="color: green;">{{(tongTienDichVu - tongTienBaoHiem) |
+                                number:'0.2-2':'vi-VN'}}</strong>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <table *ngIf="!dataChiTietSuDung.IsReadOnly" class="table" cellpadding="0" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th style="width: 150px;">KHOA CHỈ ĐỊNH</th>
+                <th style="width: 170px;">GIƯỜNG CHUYỂN ĐẾN</th>
+                <th style="width: 100px;">DV TRONG GÓI</th>
+                <!-- <th style="width: 100px;">DV KHUYẾN MÃI</th> -->
+                <th style="width: 100px;">LOẠI GIƯỜNG</th>
+                <th style="width: 100px;">BAO PHÒNG</th>
+                <th style="width: 200px;">DV GIƯỜNG </th>
+                <th style="width: 100px;">ĐỐI TƯỢNG</th>
+                <th style="width: 80px;">SL</th>
+                <th style="width: 80px;">SL GHÉP</th>
+                <th style="width: 100px;">ĐƠN GIÁ</th>
+                <th style="width: 100px;">THÀNH TIỀN</th>
+                <th style="width: 100px;">ĐƠN GIÁ BH</th>
+                <th style="width: 100px;">THÀNH TIỀN BH</th>
+                <th style="width: fit-content;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let item of dataChiTietSuDung.SuDungGiuongTheoNgays; index as i">
+                <tr>
+                    <td colspan="15" class="head-ngay-phat-sinh">
+                        Ngày phát sinh: {{item.NgayPhatSinhDisplay}}
+                        <button (click)="addDichVu(item)" class="ml-3" color="primary" mat-mini-fab kendoTooltip
+                            title="Thêm dịch vụ giường" type="button">
+                            <mat-icon [icIcon]="icAdd"></mat-icon>
+                        </button>
+                    </td>
+                </tr>
+
+                <ng-container *ngFor="let item1 of item.ChiTietGiuongBenhVienChiPhis; index as i1">
+                    <tr>
+                        <td class="pl-30">{{item1.KhoaChiDinhDisplay}}</td>
+                        <td *ngIf="item1.isCreated">
+                            <app-combobox label=" " class="no-label" [popupSettings]="{width: 300}"
+                                [required]="item1.DoiTuong != enumDoiTuongSuDung.NguoiNha"
+                                [disabled]="item1.DoiTuong == enumDoiTuongSuDung.NguoiNha"
+                                [url]="'DieuTriNoiTru/GetListGiuongChoChiTietSuDungTheoNgay'"
+                                [queryInfo]="getQueryInfo(item)" [(model)]="item1.GiuongChuyenDenId"
+                                [modelText]="item1.GiuongChuyenDenDisplay"
+                                [validationerror]="'SuDungGiuongTheoNgays[' + i + '].ChiTietGiuongBenhVienChiPhis[' + i1 + '].GiuongChuyenDenId' | validationerror:validationErrors">
+                            </app-combobox>
+                        </td>
+                        <td *ngIf="!item1.isCreated">
+                            {{item1.GiuongChuyenDenDisplay}}
+                        </td>
+                        <td>
+                            <app-checkbox *ngIf="item1.CoDichVuNayTrongGoi" id="LaDichVuTrongGoi{{item1.Id}}" label=""
+                                [(model)]="item1.LaDichVuTrongGoi">
+                            </app-checkbox>
+                        </td>
+                        <!-- <td>
+                            <app-checkbox *ngIf="item1.CoDichVuNayTrongGoiKhuyenMai"
+                                id="dvKhuyenMaiGoiMarketing{{item1.Id}}" label=""
+                                [(model)]="item1.LaDichVuKhuyenMai" disabled="{{true}}">
+                            </app-checkbox>
+                        </td> -->
+                        <td>{{item1.LoaiGiuongDisplay}}</td>
+                        <td align="center">
+                            <app-checkbox label=" " class="no-label" disabled="disabled" [(model)]="item1.BaoPhong">
+                            </app-checkbox>
+                        </td>
+                        <td>
+                            <app-combobox label=" " class="no-label" [required]="true"
+                                [url]="'KhamBenh/GetDichVuGiuongBenhVien'" [popupSettings]="{width: 400}"
+                                [(model)]="item1.DichVuGiuongId" [modelText]="item1.DichVuGiuongDisplay"
+                                [queryInfo]="getDichVuGiuongQueryInfo(item.NgayPhatSinh)"
+                                (modelChange)="giuongChange($event, item1)"
+                                (selectionChange)="evtDichVuGiuongChanged($event,item,item1)"
+                                [validationerror]="'SuDungGiuongTheoNgays[' + i + '].ChiTietGiuongBenhVienChiPhis[' + i1 + '].DichVuGiuongId' | validationerror:validationErrors">
+                            </app-combobox>
+                        </td>
+                        <td>
+                            <app-combobox label=" " class="no-label" [popupSettings]="{width: 200}" [required]="true"
+                                [url]="'DieuTriNoiTru/GetListDoiTuongSuDung'" [(model)]="item1.DoiTuong"
+                                [modelText]="item1.DoiTuongDisplay"
+                                [validationerror]="'SuDungGiuongTheoNgays[' + i + '].ChiTietGiuongBenhVienChiPhis[' + i1 + '].DoiTuong' | validationerror:validationErrors">
+                            </app-combobox>
+                        </td>
+                        <td align="center">
+                            <app-textboxnumeric label=" " class="no-label" [(model)]="item1.SoLuong" style="width:100px"
+                                [required]="true" [step]="step" [format]="format" decimals="1"
+                                (modelChange)="evtSoLuongChanged($event, item1)"
+                                [validationerror]="'SuDungGiuongTheoNgays[' + i + '].ChiTietGiuongBenhVienChiPhis[' + i1 + '].SoLuong' | validationerror:validationErrors">
+                            </app-textboxnumeric>
+                        </td>
+                        <td align="center">
+                            <app-textboxnumeric label=" " class="no-label" [(model)]="item1.SoLuongGhep"
+                                style="width:100px" [required]="true"
+                                [validationerror]="'SuDungGiuongTheoNgays[' + i + '].ChiTietGiuongBenhVienChiPhis[' + i1 + '].SoLuongGhep' | validationerror:validationErrors">
+                            </app-textboxnumeric>
+                        </td>
+                        <td>{{item1.DonGia | number:'0.2-2':'vi-VN'}}</td>
+                        <td>{{item1.ThanhTien | number:'0.2-2':'vi-VN'}}</td>
+                        <td>{{getDonGiaBHYT(item1) | number:'0.2-2':'vi-VN'}}</td>
+                        <td>{{getThanhTienBHYT(item1) | number:'0.2-2':'vi-VN'}}</td>
+                        <td>
+                            <a (click)="removeDichVu(item,item1)">
+                                <mat-icon [icIcon]="icDelete"></mat-icon>
+                            </a>
+                        </td>
+                    </tr>
+                </ng-container>
+            </ng-container>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="15">
+                    <div style="margin-left: auto !important; text-align: end;">
+                        <span>
+                            <strong>Tổng: </strong>
+                            Tiền DV: <strong>{{tongTienDichVu | number:'0.2-2':'vi-VN'}}</strong> -
+                            Tiền BH: <strong>{{tongTienBaoHiem | number:'0.2-2':'vi-VN'}}</strong> =
+                            NB chi trả: <strong style="color: green;">{{tongTienDichVu - tongTienBaoHiem |
+                                number:'0.2-2':'vi-VN'}}</strong>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="!dataChiTietSuDung.IsReadOnly" fxLayoutAlign="end center" fxLayoutGap="8px">
+    <button mat-stroked-button mat-button color="primary" (click)="close()">Hủy</button>
+    <button type="button" color="primary" mat-raised-button mat-button
+        (click)="luuChiTietSuDungGiuongTheoNgay()">Lưu</button>
+</mat-dialog-actions>

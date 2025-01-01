@@ -1,0 +1,37 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox id="Ma" fxFlex="30%" fxFlex.sm="30%" maxlength="50" [required]="true" [(model)]="nhomDichVuBenhVien.Ma"
+        label="Mã" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Ten" fxFlex="30%" fxFlex.sm="30%" maxlength="250" [required]="true"
+        [(model)]="nhomDichVuBenhVien.Ten" label="Tên" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-combobox id="NhomDichVuBenhVienCha" fxFlex="40%" fxFlex.sm="40%" label="Nhóm Dịch Vụ Bệnh Viện Cha"
+        url="NhomDichVuBenhVien/GetNhomDichVuBenhVien" [queryInfo]="queryInfo" [disabled]="isDisabled"
+        [(model)]="nhomDichVuBenhVien.NhomDichVuBenhVienChaId" [modelText]="nhomDichVuBenhVien.NhomDichVuBenhVienCha"
+        class="item-no-padding" [template]="nhomDichVuBenhVienTemplate"
+        [templateHeader]="nhomDichVuBenhVienTemplateHeader"
+        [validationerror]="'NhomDichVuBenhVienChaId' | validationerror:validationErrors">
+        <ng-template #nhomDichVuBenhVienTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="30%">Mã</th>
+                    <th width="70%">Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #nhomDichVuBenhVienTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="30%">{{dataItem.Ma}}</td>
+                    <td width="70%">{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-textarea id="MoTa" fxFlex="100%" maxlength="2000" [(model)]="nhomDichVuBenhVien.MoTa" label="Mô Tả"
+        [validationerror]="'MoTa' | validationerror:validationErrors">
+    </app-textarea>
+</div>

@@ -1,0 +1,43 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+
+    <app-textbox id="Ma" fxFlex="50%" fxFlex.sm="50%" [required]="true" [(model)]="phongBenhVien.Ma"
+        label="Mã Phòng Khám" maxlength="50" [validationerror]="'Ma' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textbox id="Ten" fxFlex="50%" fxFlex.sm="50%" [required]="true" [(model)]="phongBenhVien.Ten"
+        label="Tên Phòng Khám" maxlength="250" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+
+
+    <app-combobox id="KhoaPhong" fxFlex="50%" fxFlex.sm="50%" [(model)]="phongBenhVien.KhoaPhongId" [required]="true"
+        [modelText]="phongBenhVien.TenKhoaPhong" label="Khoa Phòng" class="item-no-padding"
+        [template]="khoaPhongTemplate" [templateHeader]="khoaPhongTemplateHeader"
+        url="KhoaPhongNhanVien/GetListKhoaPhong" [validationerror]="'KhoaPhongId' | validationerror:validationErrors">
+        <ng-template #khoaPhongTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="20%">Mã</th>
+                    <th>Tên</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #khoaPhongTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="20%">{{dataItem.Ma}}</td>
+                    <td>{{dataItem.Ten}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+
+    <app-radio fxFlex="25%" fxFlex.sm="25%" id="IsDisabled" name="IsDisabled"
+        [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" [(model)]="phongBenhVien.IsDisabled"
+        label="Sử Dụng">
+    </app-radio>
+
+    <app-textbox id="Tang" fxFlex="25%" fxFlex.sm="25%" [(model)]="phongBenhVien.Tang"
+        label="Tầng" maxlength="20">
+    </app-textbox>
+</div>

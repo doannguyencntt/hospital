@@ -1,0 +1,143 @@
+<div class="mb-4">
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+        [ngClass]="{'disableDiv':dieuTriNoiTruModel.KetThucBenhAn}">
+        <app-radio class="no-label" id="SelectBenhNhanHoacNguoiNha" fxFlex="25%"
+            style="margin-top: 5px;background-color:white;"
+            [items]="[{Value:true,Text:'Người bệnh'},{Value:false,Text:'Người nhà'}]"
+            [(model)]="phieuDeNghiTestTruocKhiDungThuoc.SelectBenhNhanHoacNguoiNha">
+        </app-radio>
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+            *ngIf="phieuDeNghiTestTruocKhiDungThuoc.SelectBenhNhanHoacNguoiNha == false">
+            <app-textbox id="HoTen" fxFlex="20%" label="Họ tên" [required]="true"
+                [(model)]="phieuDeNghiTestTruocKhiDungThuoc.HoTen"
+                [validationerror]="'HoTen' | validationerror:validationErrors">
+            </app-textbox>
+            <app-textboxnumeric id="NamSinh" fxFlex="8%" fxFlex.sm="8%" (modelChange)="onChangeNamSinh($event)"
+                [(model)]="phieuDeNghiTestTruocKhiDungThuoc.NamSinh" label="Năm sinh" [min]="1900" [max]="9999"
+                format="0" [validationerror]="'NamSinh' | validationerror:validationErrors" [required]="true">
+            </app-textboxnumeric>
+            <app-radio id="GioiTinh" fxFlex="12%" fxFlex.sm="12%" label="Giới tính"
+                [items]="[{Value:true,Text:'Nam'},{Value:false,Text:'Nữ'}]"
+                [(model)]="phieuDeNghiTestTruocKhiDungThuoc.GioiTinh" [required]="true">
+            </app-radio>
+
+            <app-combobox bind="true" id="DanToc" fxFlex="20%" fxFlex.sm="20%" label="Dân tộc"
+                [(model)]="phieuDeNghiTestTruocKhiDungThuoc.DanToc" url="TiepNhanBenhNhan/GetDanToc">
+            </app-combobox>
+            <app-combobox id="NgoaiKieu" fxFlex="20%" fxFlex.sm="20%" label="Ngoại kiều" bind="true"
+                [(model)]="phieuDeNghiTestTruocKhiDungThuoc.NgoaiKieu" url="TiepNhanBenhNhan/GetQuocTich">
+            </app-combobox>
+            <app-combobox id="NgheNghiep" fxFlex="20%" fxFlex.sm="20%" label="Nghề nghiệp" bind="true"
+                [(model)]="phieuDeNghiTestTruocKhiDungThuoc.NgheNghiep" url="TiepNhanBenhNhan/GetNgheNghiep">
+            </app-combobox>
+            <app-textbox id="NoiLamViec" fxFlex="20%" label="Nơi làm việc"
+                [(model)]="phieuDeNghiTestTruocKhiDungThuoc.NoiLamViec">
+            </app-textbox>
+            <app-textbox id="DiaChi" fxFlex="80%" label="Địa chỉ" [required]="true"
+                [(model)]="phieuDeNghiTestTruocKhiDungThuoc.DiaChi"
+                [validationerror]="'DiaChi' | validationerror:validationErrors">
+            </app-textbox>
+        </div>
+        <app-checkbox name="dong-y-test" fxFlex.lt-md="auto" label="Đồng ý đề nghị test" fxFlex="100%" fxFlex.sm="100%"
+            [(model)]="phieuDeNghiTestTruocKhiDungThuoc.DongYDeNghiTest">
+        </app-checkbox>
+        <app-textarea id="ChanDoan" fxFlex="35%" fxFlex.sm="35%" minHeight="20"
+            [(model)]="phieuDeNghiTestTruocKhiDungThuoc.ChanDoan" label="Chẩn đoán">
+        </app-textarea>
+        <h3 fxFlex="100%" class="sub-title mr-4">Danh sách thuốc cần test
+            <button class="po-h" color="primary" (click)="themDanhSachCanTest()">
+                <mat-icon [icIcon]="icAddCircle"></mat-icon>
+            </button>
+        </h3>
+        <!-- <app-grid *ngIf="dataSourceDanhSachCanTest.length != 0" #Grid fxFlex="100%" fxFlex.sm="100%"
+            [gridColumns]="gridColumns" [allowSortDefault]="true" [gridDataSource]="dataSourceDanhSachCanTest"
+            [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false"
+            [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500" [pageable]="false" masterName="Grid">
+        </app-grid> -->
+        <app-grid fxFlex="100%" *ngIf="dataSourceDanhSachCanTest.data.length > 0" masterName="Grid"
+            [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault]="false" class="k-grid-border"
+            [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [maxHeight]="200"
+            [lazyLoadPage]="true" [gridDataSource]="dataSourceDanhSachCanTest" [pageable]="false">
+        </app-grid>
+        <ng-template #ngayThuTemplate let-dataItem>
+            <app-datetimepicker id="NgayThu" [(model)]="dataItem.NgayThu">
+            </app-datetimepicker>
+        </ng-template>
+        <ng-template #thuocTemplate let-dataItem>
+            <app-autocomplete id="Thuoc" [(model)]="dataItem.Thuoc" [dataList]="dataDuocPham" popupSettings="null">
+            </app-autocomplete>
+        </ng-template>
+        <ng-template #phuongPhapThuTemplate let-dataItem>
+            <app-textarea id="PhuongPhapThu" minHeight="20" class="no-lable" [(model)]="dataItem.PhuongPhapThu">
+            </app-textarea>
+        </ng-template>
+        <ng-template #bacSiChiDinhTemplate let-dataItem>
+            <app-autocomplete id="BacSiChiDinh" [(model)]="dataItem.BacSiChiDinh" class="no-lable"
+                [dataList]="dataNhanVien" popupSettings="null">
+            </app-autocomplete>
+        </ng-template>
+        <ng-template #nguoiThuTemplate let-dataItem>
+            <app-autocomplete id="NguoiThu" [(model)]="dataItem.NguoiThu" [dataList]="dataNhanVien" class="no-lable"
+                popupSettings="null">
+            </app-autocomplete>
+        </ng-template>
+        <ng-template #bSDocVaKiemTraTemplate let-dataItem>
+            <app-autocomplete id="BSDocVaKiemTra" [(model)]="dataItem.BSDocVaKiemTra" [dataList]="dataNhanVien"
+                class="no-lable" popupSettings="null">
+            </app-autocomplete>
+        </ng-template>
+        <ng-template #ngayDocKQTemplate let-dataItem>
+            <app-datetimepicker id="NgayDocKQ" class="no-lable" [(model)]="dataItem.NgayDocKQ"
+                (modelChange)="changeNgay($event,dataItem)">
+            </app-datetimepicker>
+        </ng-template>
+        <ng-template #actionTemplate let-dataItem>
+            <div class="text-center" kendoTooltip>
+                <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                    (click)="xoa(dataItem)">
+                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                </button>
+            </div>
+        </ng-template>
+        <app-upload id="Upload" #uploadDeNghiThuTruocKhiDung [allowedExtensions]="allowedExtensions" fxFlex="100%"
+            [(model)]="phieuDeNghiTestTruocKhiDungThuoc.FileChuKy" [multiple]="true" label="File chữ ký"
+            [template]="templateFileChuanDoanHAInfo">
+        </app-upload>
+        <ng-template #templateFileChuanDoanHAInfo let-files>
+            <table width="100%">
+                <tr>
+                    <td>
+                        <a *ngIf="files[0].error" title="{{'Tải file bị lỗi: '+files[0].error}}"
+                            (click)="uploadDeNghiThuTruocKhiDung.viewFile(files[0])"
+                            class="custom-name red">{{files[0].name}}</a>
+                        <a *ngIf="!files[0].error" title="{{files[0].name}}"
+                            (click)="uploadDeNghiThuTruocKhiDung.viewFile(files[0])" class="green"
+                            class="custom-name green">{{files[0].name}}</a>
+                    </td>
+                    <td style="width:25px">
+                        <a type="button" (click)="uploadDeNghiThuTruocKhiDung.remove(files[0].uid)" mat-icon-button>
+                            <mat-icon [icIcon]="icClear"></mat-icon>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </ng-template>
+        <div fxFlex="100%" style="padding-bottom: 50px;">
+            <label fxFlex="25%" style="padding-top: 30px;">Người thực hiện :
+                <b>{{phieuDeNghiTestTruocKhiDungThuoc.TaiKhoanDangNhap}}</b></label>
+            <label fxFlex="25%" style="padding-top: 30px;">Ngày thực hiện :
+                <b>{{phieuDeNghiTestTruocKhiDungThuoc.NgayThucHien}}</b></label>
+            <span fxFlex="50%" style="text-align: right;">
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="InPhieu(2)"
+                    style="pointer-events: all;">In giấy phản ứng thuốc</button>
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="InPhieu(1)"
+                    style="pointer-events: all;">In phiếu đề nghị</button>
+                <button type="button" color="primary" mat-stroked-button mat-button class="mr-1"
+                    (click)="Huy()">Hủy</button>
+                <button type="button" color="primary" mat-raised-button mat-button (click)="Luu()">
+                    Lưu
+                </button>
+            </span>
+        </div>
+    </div>
+</div>

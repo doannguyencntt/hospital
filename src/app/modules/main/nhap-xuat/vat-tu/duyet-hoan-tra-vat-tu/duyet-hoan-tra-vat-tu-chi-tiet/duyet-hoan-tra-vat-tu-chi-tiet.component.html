@@ -1,0 +1,165 @@
+<app-header-form [crumbs]="[
+        {Title:'Nhập xuất',Path:''},
+        {Title:'Vật tư',Path:''},
+        {Title:'Hoàn trả',Path:''},
+        {Title:'Duyệt hoàn trả',Path:'/nhap-xuat/vat-tu/duyet-hoan-tra-vat-tu', queryParams: {holdQuery : true}, Active: true}
+        ]" [isicMoreVert]="false">
+</app-header-form>
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 fxFlex="90%" fxFlex.sm="90%" class="title m-0">Duyệt hoàn trả vật tư</h2>
+                <span style="right: 38px;width: auto;position: absolute;" fxFlex="10%" fxFlex.sm="10%"
+                    *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'dang_cho_duyet'"
+                    class="{{thongTinHoanTraVatTu.ClassTrangThai}}">{{thongTinHoanTraVatTu.TinhTrangDuyet}}</span>
+                <span style="right: 38px;width: auto;position: absolute;" fxFlex="10%" fxFlex.sm="10%"
+                    *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'da_duyet'"
+                    class="{{thongTinHoanTraVatTu.ClassTrangThai}}">{{thongTinHoanTraVatTu.TinhTrangDuyet}}</span>
+                <span style="right: 38px;width: auto;position: absolute;" fxFlex="10%" fxFlex.sm="10%"
+                    *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'tu_choi_duyet'"
+                    class="{{thongTinHoanTraVatTu.ClassTrangThai}}">{{thongTinHoanTraVatTu.TinhTrangDuyet}}</span>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <app-combobox fxFlex="15%" fxFlex.sm="15%" id="NguoiNhapId" label="Hoàn trả từ kho"
+                        [modelText]="thongTinHoanTraVatTu.HoanTraTuKho" [disabled]='true'
+                        [(model)]="thongTinHoanTraVatTu.HoanTraTuKhoId" url="DinhMucVatTuTonKho/GetListKhoAsync">
+                    </app-combobox>
+                    <app-combobox fxFlex="15%" fxFlex.sm="15%" id="NguoiNhapId" label="Hoàn trả về kho"
+                        [modelText]="thongTinHoanTraVatTu.HoanTraVeKho" [disabled]='true'
+                        [(model)]="thongTinHoanTraVatTu.HoanTraVeKhoId" url="DinhMucVatTuTonKho/GetListKhoAsync">
+                    </app-combobox>
+
+                    <app-combobox fxFlex="15%" fxFlex.sm="15%" id="NguoiNhapId" label="Người nhập"
+                        [modelText]="thongTinHoanTraVatTu.TenNguoiYeuCau" [disabled]='true'
+                        [(model)]="thongTinHoanTraVatTu.NguoiYeuCauId" url="NhanVien/GetListLookupNhanVien">
+                    </app-combobox>
+
+                    <app-datepicker id="NgayNhapId" fxFlex="15%" fxFlex.sm="15%" label="Ngày yêu cầu"
+                        [(model)]="thongTinHoanTraVatTu.NgayYeuCau" [disabled]='true'>
+                    </app-datepicker>
+
+                    <app-combobox fxFlex="15%" fxFlex.sm="15%" id="NguoiNhapId" label="Người duyệt"
+                        *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'da_duyet' || thongTinHoanTraVatTu.ClassTrangThai === 'da_tu_choi'"
+                        [modelText]="thongTinHoanTraVatTu.NguoiDuyet" [disabled]='true'
+                        [(model)]="thongTinHoanTraVatTu.NguoiDuyetId" url="NhanVien/GetListLookupNhanVien">
+                    </app-combobox>
+                    <app-datepicker id="NgayNhapId" fxFlex="15%" fxFlex.sm="15%" label="Ngày duyệt"
+                        *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'da_duyet' || thongTinHoanTraVatTu.ClassTrangThai === 'da_tu_choi'"
+                        [(model)]="thongTinHoanTraVatTu.NgayDuyet" [disabled]='true'>
+                    </app-datepicker>
+
+                    <!-- Từ chối duyệt -->
+                    <app-combobox fxFlex="15%" fxFlex.sm="15%" id="NhanVienYeuCauId" label="Người từ chối duyệt" required="true"
+                        *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'tu_choi_duyet'"
+                        [modelText]="thongTinHoanTraVatTu.NguoiDuyet" [disabled]='true'
+                        [(model)]="thongTinHoanTraVatTu.NguoiDuyetId" url="">
+                    </app-combobox>
+                    <app-datepicker id="NgayNhapId" fxFlex="15%" fxFlex.sm="15%" label="Ngày từ chối duyệt"
+                        *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'tu_choi_duyet'"
+                        [(model)]="thongTinHoanTraVatTu.NgayDuyet" [disabled]='true'>
+                    </app-datepicker>
+
+                    <app-textarea id="GhiChu" fxFlex="100%" fxFlex.sm="100%" label="Ghi chú"
+                        [disabled]="true"
+                        [(model)]="thongTinHoanTraVatTu.GhiChu" maxlength="4000">
+                    </app-textarea>
+                </div>
+                <h3 fxFlex="100%" class="sub-title mt-3">THÔNG TIN VẬT TƯ</h3>
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <app-grid [gridColumns]="gridColumns" [documentType]="documentType" [useAddDeault]="false"
+                        [groups]="groups" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false"
+                        pageSize="5" [urlGetData]="urlGetDataAsync" [sort]="sortDuyetKhoChild" pageSize="5"
+                        additionalSearchString={{yeuCauNhapKhoVatTuId}} [autoHeight]="true" [showStt]="true">
+                    </app-grid>
+                    <ng-template #TinhTrangBHYTTemplate let-dataItem>
+                        <!-- <app-checkbox value="true" label="" [(model)]="dataItem.LoaiBHYT" [disabled]="true">
+                        </app-checkbox> -->
+                        {{dataItem.LoaiBHYTDisplay}}
+                    </ng-template>
+                    <ng-template #nhomGroupHeaderTemplate let-value="value">
+                        <strong>{{value}}</strong>
+                    </ng-template>
+                    <ng-template #giaNhapTemplate let-dataItem>
+                        {{dataItem.DonGiaNhap | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+                    <ng-template #giaBanTemplate let-dataItem>
+                        {{dataItem.GiaBan | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+                    <ng-template #hsdTemplate let-dataItem>
+                        {{dataItem.HanSuDungStr}}
+                    </ng-template>
+                    
+                    <ng-template #soLuongHoanTraTemplate let-dataItem>
+                        {{dataItem.SoLuongHoanTraDisplay}}
+                    </ng-template>
+                </div>
+                <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px" class="mt-3">
+                    <!-- Chưa duyệt -->
+                    <app-combobox fxFlex="25%" fxFlex.sm="25%" id="NhanVienTraId" label="Người trả" required="true"
+                        *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'dang_cho_duyet'"
+                        [modelText]="thongTinHoanTraVatTu.TenNguoiTra"
+                        [(model)]="thongTinHoanTraVatTu.NguoiTraId" url="NhanVien/GetListLookupNhanVien"
+                        [validationerror]="'NguoiTraId' | validationerror: validationErrors">
+                    </app-combobox>
+                    <app-combobox fxFlex="25%" fxFlex.sm="25%" id="NhanVienNhanId" label="Người nhận" required="true"
+                        *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'dang_cho_duyet'"
+                        [modelText]="thongTinHoanTraVatTu.TenNguoiNhan"
+                        [(model)]="thongTinHoanTraVatTu.NguoiNhanId" url="NhanVien/GetListLookupNhanVien"
+                        [validationerror]="'NguoiNhanId' | validationerror: validationErrors">
+                    </app-combobox>
+
+                    <!-- Đã duyệt -->
+                    <app-combobox fxFlex="25%" fxFlex.sm="25%" id="NhanVienTraId" label="Người trả" required="true"
+                        *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'da_duyet'"
+                        [disabled]="true"
+                        [modelText]="thongTinHoanTraVatTu.TenNguoiTra"
+                        [(model)]="thongTinHoanTraVatTu.NguoiTraId" url="NhanVien/GetListLookupNhanVien">
+                    </app-combobox>
+                    <app-combobox fxFlex="25%" fxFlex.sm="25%" id="NhanVienNhanId" label="Người nhận" required="true"
+                        *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'da_duyet'"
+                        [disabled]="true"
+                        [modelText]="thongTinHoanTraVatTu.TenNguoiNhan"
+                        [(model)]="thongTinHoanTraVatTu.NguoiNhanId" url="NhanVien/GetListLookupNhanVien">
+                    </app-combobox>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-3">
+                    <div class="form-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                        <button *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'da_duyet'" class="float-left" type="button" color="primary" mat-raised-button (click)="InPhieuHoanTra()">
+                            <i class="ft-save"></i> In Phiếu Hoàn Trả
+                        </button>
+
+                        <!-- <button type="button" (click)="BackToList()" mat-button class="mr-1"><i
+                                class="ft-arrow-left"></i>
+                            Hủy</button> -->
+                        <button *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'dang_cho_duyet'" type="button" (click)="BackToList()" mat-button class="mr-1">
+                            <i class="ft-arrow-left"></i> Hủy
+                        </button>
+                        <button *ngIf="thongTinHoanTraVatTu.ClassTrangThai !== 'dang_cho_duyet'" type="button" (click)="BackToList()" mat-button class="mr-1">
+                            <i class="ft-arrow-left"></i> Quay lại
+                        </button>
+
+                        <button *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'dang_cho_duyet'" type="button"
+                            (click)="duyet()" color="primary" mat-raised-button><i class="ft-save"></i> Duyệt</button>
+                        <button *ngIf="thongTinHoanTraVatTu.ClassTrangThai === 'dang_cho_duyet'" type="button"
+                            (click)="khongPheDuyet()" color="primary" mat-raised-button><i class="ft-save"></i> Không
+                            phê duyệt</button>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="px-6 py-4" fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <app-combobox fxFlex="20%" fxFlex.sm="20%" id="NguoiNhapId" label="Người trả"
+                        [modelText]="thongTinHoanTraVatTu.TenNguoiTra" [required]="true"
+                        [(model)]="thongTinHoanTraVatTu.NguoiTraId" url="NhanVien/GetListLookupNhanVien">
+                    </app-combobox>
+                    <app-combobox fxFlex="20%" fxFlex.sm="20%" id="NguoiNhapId" label="Người nhận"
+                        [modelText]="thongTinHoanTraVatTu.TenNguoiNhan" [required]="true"
+                        [(model)]="thongTinHoanTraVatTu.NguoiNhanId" url="NhanVien/GetListLookupNhanVien">
+                    </app-combobox>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>

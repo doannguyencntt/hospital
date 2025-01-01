@@ -1,0 +1,127 @@
+fieldset {
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    border: 1px #e0e0e0;
+    border-style: inherit;
+    //border-radius: 4%;
+
+    .item_right{
+        text-align: right !important;
+        float:right;
+    }
+
+    ul>li{
+        padding-right: 15px !important;
+        padding-bottom: 10px;
+    }
+
+    ul.inline > li{
+        display: inline-block !important;
+    }
+}
+.selectAddViTri {
+    border: 0px solid #ccc;
+    width: 120px;
+    border-radius: 0px;
+    overflow: hidden;
+    background: #fafafa;
+
+}
+.selectAddViTri:before { 
+	// content:"\f107"; 
+	font-family:'FontAwesome';
+	position: absolute; 
+	top:3px; 
+	right: 12px; 
+	font-size: 18px; 
+}
+.selectAddViTri select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+}
+.selectAddViTri select:focus {
+    outline: none;
+}
+select option{ 
+    color: black;
+}
+.yellowText{
+    color: yellowgreen;
+}
+.redText{ 
+    color:red; 
+}
+.greenText{
+     color:green;
+}
+.orangeText{
+    color: orange;
+}
+.blueText{
+    color:blue;
+}
+.blackText{
+    color: black;
+}
+
+.styleInChiDinh{
+    text-align: right;
+    float: right;
+    margin-left: 10px;
+}
+.styleTinhTong{
+    border:1px solid #ccc;border-radius: 5px;padding: 15px;background: #e3f2fd;text-align: right;margin: 10px -17px -17px -17px;
+}
+
+.size-icon{   
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background-color:green;    
+    color: #FFF;
+    text-align: center;  
+}
+
+.container-so-do-giuong{
+    position: relative;
+    margin-bottom: 16px;
+    .so-do-giuong{
+        text-decoration: underline; 
+        color: blue; 
+        font-style: italic; 
+        position: absolute; 
+        bottom: 0px;
+    }
+}
+
+.icon-war-status-grid
+{
+    position: absolute;
+    color: red; 
+    right: 0; 
+    background-color: white; 
+    height: 15px; 
+    top: 2px;
+}
+
+.icon-info-status-grid
+{
+    position: absolute;
+    right: 0; 
+    background-color: white; 
+    height: 15px; 
+    top: 2px;
+}

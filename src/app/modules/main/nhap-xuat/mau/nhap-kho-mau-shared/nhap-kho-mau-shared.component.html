@@ -1,0 +1,388 @@
+<div class="border-b" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <app-textbox [disabled]="phieuNhapKhoMau.DuocKeToanDuyet" id="soHoaDon" fxFlex="15%" fxFlex.sm="15%" label="Số HĐ"
+        [(model)]="phieuNhapKhoMau.SoHoaDon" [maxlength]="50"
+        [validationerror]="'SoHoaDon' | validationerror:validationErrors">
+    </app-textbox>
+    <app-datepicker id="NgayHoaDon" fxFlex="15%" fxFlex.sm="15%" label="Ngày HĐ" [(model)]="phieuNhapKhoMau.NgayHoaDon"
+        [disabled]="phieuNhapKhoMau.DuocKeToanDuyet"
+        [validationerror]="'NgayHoaDon' | validationerror:validationErrors">
+    </app-datepicker>
+    <app-combobox id="nhaCungCap" fxFlex="40%" fxFlex.sm="40%" label="Nhà cung cấp"
+        url="HopDongThauDuocPham/GetListNhaThau" [disabled]="phieuNhapKhoMau.DuocKeToanDuyet"
+        [(model)]="phieuNhapKhoMau.NhaThauId" [modelText]="phieuNhapKhoMau.TenNhaThau" class="item-no-padding"
+        [required]="true" [template]="nhaCungCapTemplate" [templateHeader]="nhaCungCapTemplateHeader"
+        [validationerror]="'NhaThauId' | validationerror:validationErrors">
+        <ng-template #nhaCungCapTemplateHeader let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <th width="30%">Tên</th>
+                    <th>Địa Chỉ</th>
+                </tr>
+            </table>
+        </ng-template>
+        <ng-template #nhaCungCapTemplate let-dataItem>
+            <table width="100%" class="table-combobox">
+                <tr>
+                    <td width="30%">{{dataItem.Ten}}</td>
+                    <td>{{dataItem.DiaChi}}</td>
+                </tr>
+            </table>
+        </ng-template>
+    </app-combobox>
+    <app-combobox id="nguoiNhap" fxFlex="15%" fxFlex.sm="15%" [required]="true" [disabled]="true"
+        [(model)]="phieuNhapKhoMau.NguoiNhapId" [bind]="true" [reloadForGrid]="true"
+        [modelText]="phieuNhapKhoMau.TenNguoiNhap" url="YeuCauLinhDuocPham/GetListNhanVien" label="Người nhập"
+        [validationerror]="'NguoiNhapId' | validationerror:validationErrors">
+    </app-combobox>
+    <app-datepicker id="NgayNhap" fxFlex="15%" fxFlex.sm="15%" label="Ngày Nhập" [required]="true"
+        [(model)]="phieuNhapKhoMau.NgayNhap" [required]="true" [disabled]="true"
+        [validationerror]="'NgayNhap' | validationerror:validationErrors">
+    </app-datepicker>
+
+    <app-radio fxFlex="25%" fxFlex.sm="25%" id="LoaiNguoiGiao" name="LoaiNguoiGiao"
+        [items]="[{Value:1,Text:'Trong hệ thống'},{Value:2,Text:'Ngoài hệ thống'}]"
+        (modelChange)="changeLoaiNguoiGiao()" [(model)]="phieuNhapKhoMau.LoaiNguoiGiao" label="Loại người giao"
+        [disabled]="phieuNhapKhoMau.DuocKeToanDuyet"
+        [validationerror]="'LoaiNguoiGiao' | validationerror:validationErrors">
+    </app-radio>
+    <app-combobox *ngIf="phieuNhapKhoMau.LoaiNguoiGiao == 1" id="nguoiGiao" fxFlex="25%" fxFlex.sm="25%"
+        [(model)]="phieuNhapKhoMau.NguoiGiaoId" [bind]="true" [reloadForGrid]="true"
+        [disabled]="phieuNhapKhoMau.DuocKeToanDuyet" [modelText]="phieuNhapKhoMau.TenNguoiGiao"
+        url="YeuCauLinhDuocPham/GetListNhanVien" label="Người giao">
+    </app-combobox>
+    <app-textbox *ngIf="phieuNhapKhoMau.LoaiNguoiGiao == 2" id="TenLoaiNguoiGiao" fxFlex="25%" fxFlex.sm="25%"
+        label="Người giao" [(model)]="phieuNhapKhoMau.TenNguoiGiao" [maxlength]="100"
+        [disabled]="phieuNhapKhoMau.DuocKeToanDuyet">
+    </app-textbox>
+    <app-textarea fxFlex="50%" fxFlex.sm="50%" id="ghiChu" label="Ghi Chú" maxlength="1000"
+        [(model)]="phieuNhapKhoMau.GhiChu" minHeight="20" [disabled]="phieuNhapKhoMau.DuocKeToanDuyet">
+    </app-textarea>
+
+    <h3 fxFlex="100%" class="sub-title">Thông Tin Máu</h3>
+    <ng-container *ngIf="!phieuNhapKhoMau.DuocKeToanDuyet">
+        <app-combobox id="XuatChoBenhNhan" fxFlex="35%" fxFlex.sm="35%" [required]="true" class="item-no-padding"
+            [broadcastAfterLoaded]="true" [reloadForGrid]="true" [bind]="true"
+            [(model)]="phieuNhapKhoMauChiTiet.YeuCauTruyenMauId"
+            [modelText]="phieuNhapKhoMauChiTiet.TenBenhNhanTruyenMau" [disabled]="phieuNhapKhoMauChiTiet.Index != null"
+            url="NhapKhoMau/GetListYeuCauTruyenMau" (selectionChange)="chonYeuCauTruyenMau($event)"
+            hierarchyKeyToListen="MauVaChePhamId" label="Xuất cho người bệnh" [template]="yeuCauTruyenMauTemplate"
+            [templateHeader]="yeuCauTruyenMauTemplateHeader"
+            [validationerror]="'YeuCauTruyenMauId' | validationerror:validationErrorsChiTiet">
+            <ng-template #yeuCauTruyenMauTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="15%">Mã TN</th>
+                        <th width="15%">Mã NB</th>
+                        <th width="15%">Họ Tên</th>
+                        <th width="25%">Tên Chế Phẩm Máu</th>
+                        <th width="15%">Nhóm Máu</th>
+                        <th width="15%">Thể Tích</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #yeuCauTruyenMauTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr style="font-weight: lighter !important;">
+                        <th width="15%">{{dataItem.MaYeuCauTiepNhan}}</th>
+                        <th width="15%">{{dataItem.MaBenhNhan}}</th>
+                        <th width="15%">{{dataItem.HoTen}}</th>
+                        <th width="25%">{{dataItem.TenChePhamMau}}</th>
+                        <th width="15%">{{dataItem.NhomMau}}</th>
+                        <th width="15%">{{dataItem.TheTichDisplay}}</th>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        <app-combobox id="chePhamMau" fxFlex="40%" fxFlex.sm="40%" [required]="true" class="item-no-padding"
+            [disabled]="phieuNhapKhoMauChiTiet.Index != null" [(model)]="phieuNhapKhoMauChiTiet.MauVaChePhamId"
+            [modelText]="phieuNhapKhoMauChiTiet.TenDichVu" [broadcastAfterLoaded]="true" [bind]="true"
+            [readonly]="true"
+            url="DieuTriNoiTru/GetMauVaChePham" label="Chế phẩm máu" popupSettings="null"
+            (selectionChange)="chonChePhamMau($event)" [template]="mauChePhamTemplate"
+            [templateHeader]="mauChePhamTemplateHeader" hierarchyKeyToSend="MauVaChePhamId"
+            [validationerror]="'MauVaChePhamId' | validationerror:validationErrorsChiTiet">
+            <ng-template #mauChePhamTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="30%">Mã</th>
+                        <th width="70%">Tên</th>
+                        <!-- <th style="text-align: center;" width="20%">Thể tích</th> -->
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #mauChePhamTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="30%">{{dataItem.Ma}}</td>
+                        <td width="70%">{{dataItem.Ten}}</td>
+                        <!-- <td style="text-align: right; right: 10px;" width="20%">{{dataItem.TheTich}}</td> -->
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        <app-textbox id="MaTuiMau" fxFlex="25%" fxFlex.sm="25%" label="Mã túi máu"
+            [(model)]="phieuNhapKhoMauChiTiet.MaTuiMau" [maxlength]="50" [required]="true"
+            [validationerror]="'MaTuiMau' | validationerror:validationErrorsChiTiet">
+        </app-textbox>
+        <app-combobox id="nhomMau" fxFlex="15%" fxFlex.sm="15%" [(model)]="phieuNhapKhoMauChiTiet.NhomMau" [bind]="true"
+            url="NhapKhoMau/GetListNhomMau" label="Nhóm máu túi máu" (selectionChange)="chonNhomMau($event)">
+        </app-combobox>
+        <app-dropdownlist id="yeuToRh" fxFlex="15%" fxFlex.sm="15%" [(model)]="phieuNhapKhoMauChiTiet.YeuToRh"
+            [bind]="true" url="NhapKhoMau/GetListYeuToRh" label="Yếu tố Rh" (selectionChange)="chonYeuToRh($event)">
+        </app-dropdownlist>
+        <app-datepicker id="NgaySanXuat" fxFlex="15%" fxFlex.sm="15%" label="Ngày Sản xuất" [required]="true"
+            [(model)]="phieuNhapKhoMauChiTiet.NgaySanXuat" [required]="true"
+            [validationerror]="'NgaySanXuat' | validationerror:validationErrorsChiTiet">
+        </app-datepicker>
+        <app-datepicker id="HanSuDung" fxFlex="15%" fxFlex.sm="15%" label="HSD" [required]="true"
+            [(model)]="phieuNhapKhoMauChiTiet.HanSuDung" [required]="true"
+            [validationerror]="'HanSuDung' | validationerror:validationErrorsChiTiet">
+        </app-datepicker>
+        <app-datepicker id="NgayLamXNHoaHop" fxFlex="15%" fxFlex.sm="15%" label="Ngày làm XN hòa hợp"
+            [(model)]="phieuNhapKhoMauChiTiet.NgayLamXetNghiemHoaHop">
+        </app-datepicker>
+        <app-combobox id="NguoiLamXetNghiemHoaHop" fxFlex="25%" url="Marketing/GetNhanVienTaiBenhVien"
+            [(model)]="phieuNhapKhoMauChiTiet.NguoiLamXetNghiemHoaHopId" label="Người làm XN hòa hợp"
+            (selectionChange)="chonNguoiLamXNHP($event)"  [modelText]="phieuNhapKhoMauChiTiet.NguoiLamXetNghiemHoaHop"
+            class="item-no-padding" [validationerror]="'NguoiLamXetNghiemHoaHopId' | validationerror:validationErrors">
+        </app-combobox>
+        <div fxFlex="100%">
+            <fieldset>
+                <legend style="display: flex;">
+                    KQ xét nghiệm máu từ NCC
+                    <button class="po-h" color="primary" (click)="themKetQuaXetNghiemKhac()">
+                        <mat-icon [icIcon]="icAddCircle"></mat-icon>
+                    </button>
+                </legend>
+                <div fxFlex="100%" class="ml-2">
+                    <!-- <ul class="five-col"> -->
+                    <ul class="five-col">
+                        <li>
+                            <app-radio id="sotRet" name="sotRet"
+                                [items]="[{Value:1,Text:'Âm tính'},{Value:2,Text:'Dương tính'}]"
+                                [(model)]="phieuNhapKhoMauChiTiet.KetQuaXetNghiemSotRet" label="Sốt rét">
+                            </app-radio>
+                        </li>
+                        <!-- <li>
+                            <app-radio id="phanUngCheoOng1" name="phanUngCheoOng1"
+                                [items]="[{Value:1,Text:'Âm tính'},{Value:2,Text:'Dương tính'}]"
+                                [(model)]="phieuNhapKhoMauChiTiet.KetQuaPhanUngCheoOngI" label="KQ phản ứng chéo ống I">
+                            </app-radio>
+                        </li> -->
+
+                        <li>
+                            <app-radio id="giangMai" name="giangMai"
+                                [items]="[{Value:1,Text:'Âm tính'},{Value:2,Text:'Dương tính'}]"
+                                [(model)]="phieuNhapKhoMauChiTiet.KetQuaXetNghiemGiangMai" label="Giang mai">
+                            </app-radio>
+                        </li>
+                        <!-- <li>
+                            <app-radio id="phanUngCheoOng2" name="phanUngCheoOng2"
+                                [items]="[{Value:1,Text:'Âm tính'},{Value:2,Text:'Dương tính'}]"
+                                [(model)]="phieuNhapKhoMauChiTiet.KetQuaPhanUngCheoOngII" label="KQ phản ứng chéo ống II">
+                            </app-radio>
+                        </li> -->
+
+                        <li>
+                            <app-radio id="hcv" name="hcv"
+                                [items]="[{Value:1,Text:'Âm tính'},{Value:2,Text:'Dương tính'}]"
+                                [(model)]="phieuNhapKhoMauChiTiet.KetQuaXetNghiemHCV" label="HCV">
+                            </app-radio>
+                        </li>
+                        <!-- <li>
+                            <app-radio id="moiTruongMuoi" name="moiTruongMuoi"
+                                [items]="[{Value:1,Text:'Âm tính'},{Value:2,Text:'Dương tính'}]"
+                                [(model)]="phieuNhapKhoMauChiTiet.KetQuaXetNghiemMoiTruongMuoi" label="Môi trường muối">
+                            </app-radio>
+                        </li> -->
+
+                        <li>
+                            <app-radio id="hbv" name="hbv"
+                                [items]="[{Value:1,Text:'Âm tính'},{Value:2,Text:'Dương tính'}]"
+                                [(model)]="phieuNhapKhoMauChiTiet.KetQuaXetNghiemHBV" label="HBV">
+                            </app-radio>
+                        </li>
+                        <!-- <li>
+                            <app-radio id="37oCKhamGlubulin" name="37oCKhamGlubulin"
+                                [items]="[{Value:1,Text:'Âm tính'},{Value:2,Text:'Dương tính'}]"
+                                [(model)]="phieuNhapKhoMauChiTiet.KetQuaXetNghiem37oCKhangGlubulin"
+                                label="37oC/Kháng glubulin">
+                            </app-radio>
+                        </li> -->
+
+                        <li>
+                            <app-radio id="hiv" name="hiv"
+                                [items]="[{Value:1,Text:'Âm tính'},{Value:2,Text:'Dương tính'}]"
+                                [(model)]="phieuNhapKhoMauChiTiet.KetQuaXetNghiemHIV" label="HIV">
+                            </app-radio>
+                        </li>
+                        <!-- <li>
+                            <app-radio id="nat" name="nat" [items]="[{Value:1,Text:'Âm tính'},{Value:2,Text:'Dương tính'}]"
+                                [(model)]="phieuNhapKhoMauChiTiet.KetQuaXetNghiemNAT" label="NAT">
+                            </app-radio>
+                        </li> -->
+                    </ul>
+
+                    <ng-container
+                        *ngFor="let ketQuaXetNghiemKhac of phieuNhapKhoMauChiTiet.KetQuaXetNghiemKhacs, let i = index">
+                        <ul class="five-col">
+                            <li>
+                                <app-combobox id="loaiXetNgiemKhac{{i}}" [required]="true" class="item-no-padding mr-2"
+                                    [broadcastAfterLoaded]="true" [reloadForGrid]="true" [bind]="true"
+                                    popupSettings="null" [(model)]="ketQuaXetNghiemKhac.LoaiXetNghiem"
+                                    [modelText]="ketQuaXetNghiemKhac.TenLoaiXetNghiem"
+                                    url="NhapKhoMau/GetListLoaiXetNghiemMauNhapThem" label="Xét nghiệm"
+                                    [validationerror]="'KetQuaXetNghiemKhacs['+i+'].LoaiXetNghiem' | validationerror:validationErrorsChiTiet">
+                                </app-combobox>
+                            </li>
+                            <li>
+                                <app-radio id="ketQuaXetNghiemKhac{{i}}" name="ketQuaXetNghiemKhacName{{i}}"
+                                    [items]="[{Value:1,Text:'Âm tính'},{Value:2,Text:'Dương tính'}]"
+                                    [(model)]="ketQuaXetNghiemKhac.KetQua" label="Kết quả">
+                                </app-radio>
+                            </li>
+                            <li>
+                                <button style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                                    (click)="xoaKetQuaXetNghiemKhac(phieuNhapKhoMauChiTiet, i)">
+                                    <mat-icon [icIcon]="icDelete"></mat-icon>
+                                </button>
+                            </li>
+
+                            <!-- //tạm thời -->
+                            <!-- <li class="d-empty"></li> -->
+                            <li class="d-empty"></li>
+                            <li class="d-empty"></li>
+                        </ul>
+                    </ng-container>
+                    <!-- <ng-container *ngIf="phieuNhapKhoMauChiTiet.KetQuaXetNghiemKhacs != undefined 
+                                                && phieuNhapKhoMauChiTiet.KetQuaXetNghiemKhacs != null 
+                                                && phieuNhapKhoMauChiTiet.KetQuaXetNghiemKhacs.length % 5 != 0">
+                                <li *ngFor="let number of getLength()" class="d-empty"></li>
+                            </ng-container> -->
+
+                    <!-- <ul class="five-col">
+                        <li>
+                            <div style="display: inline-block;width: 100%;">
+                                <app-textbox id="NguoiThucHien1" label="Người thực hiện 1"
+                                    [(model)]="phieuNhapKhoMauChiTiet.NguoiThucHien1" [maxlength]="100">
+                                </app-textbox>
+                            </div>
+                        </li>
+    
+                        <li>
+                            <div style="display: inline-block;width: 100%;">
+                                <app-textbox id="NguoiThucHien2" label="Người thực hiện 2"
+                                    [(model)]="phieuNhapKhoMauChiTiet.NguoiThucHien2" [maxlength]="100">
+                                </app-textbox>
+                            </div>
+                        </li>
+                        <li class="d-empty"></li>
+                        <li class="d-empty"></li>
+                        <li class="d-empty"></li>
+                    </ul> -->
+                </div>
+            </fieldset>
+        </div>
+        <div fxFlex="100%" fxLayoutAlign="end center" kendoTooltip>
+            <button type="button" color="primary" mat-stroked-button mat-button class="mr-1" (click)="huyThongTinMau()"
+                title="Phím tắt: Esc">Hủy</button>
+            <button *ngIf="phieuNhapKhoMauChiTiet.Index == null" type="button" color="primary" mat-raised-button
+                mat-button class="mr-1" (click)="themThongTinMau()" title="Phím tắt: Ctrl + S">Thêm</button>
+            <button *ngIf="phieuNhapKhoMauChiTiet.Index != null" type="button" color="primary" mat-raised-button
+                mat-button class="mr-1" (click)="capNhatThongTinMau()" title="Phím tắt: Ctrl + S">Lưu</button>
+        </div>
+    </ng-container>
+
+    <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridColumns" [allowSortDefault]="true"
+        [documentType]="documentype" [useAddDeault]="false" [showStt]="true" [useHeaderDefault]="false"
+        [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true" maxHeight="500" [pageable]="false"
+        [gridDataSource]="gridDataSource">
+    </app-grid>
+
+    <ng-template #maTuiMauTemplate let-dataItem let-rowIndex="rowIndex">
+        <span class="reverse-ellipsis r" kendoTooltip title="{{dataItem.MaTuiMau}}">
+            <p>{{dataItem.MaTuiMau}}</p>
+            <app-validationerrorother
+                [validationerror]="'NhapKhoMauChiTiets['+rowIndex+'].MaTuiMau' | validationerror:validationErrors"
+                (clearValidateErrorOtherCallback)="clearValidateErrorOtherCallback($event)">
+            </app-validationerrorother>
+        </span>
+    </ng-template>
+    <ng-template #ngaySanXuatTemplate let-dataItem let-rowIndex="rowIndex">
+        <span class="reverse-ellipsis r" kendoTooltip title="{{dataItem.NgaySanXuat | date:'dd/MM/yyyy'}}">
+            <p>{{dataItem.NgaySanXuat | date:'dd/MM/yyyy'}}</p>
+            <app-validationerrorother
+                [validationerror]="'NhapKhoMauChiTiets['+rowIndex+'].NgaySanXuat' | validationerror:validationErrors"
+                (clearValidateErrorOtherCallback)="clearValidateErrorOtherCallback($event)">
+            </app-validationerrorother>
+        </span>
+    </ng-template>
+    <ng-template #ngayLamXNHoaHopTemplate let-dataItem>
+        {{dataItem.NgayLamXetNghiemHoaHop | date:'dd/MM/yyyy'}}
+    </ng-template>
+    <ng-template #hanSuDungTemplate let-dataItem let-rowIndex="rowIndex">
+        <span class="reverse-ellipsis r" kendoTooltip title="{{dataItem.HanSuDung | date:'dd/MM/yyyy'}}">
+            <p>{{dataItem.HanSuDung | date:'dd/MM/yyyy'}}</p>
+            <app-validationerrorother
+                [validationerror]="'NhapKhoMauChiTiets['+rowIndex+'].HanSuDung' | validationerror:validationErrors"
+                (clearValidateErrorOtherCallback)="clearValidateErrorOtherCallback($event)">
+            </app-validationerrorother>
+        </span>
+    </ng-template>
+
+    <ng-template #benhNhanTuyenMauTemplate let-dataItem let-rowIndex="rowIndex">
+        <span class="reverse-ellipsis r">
+            <p><a kendoTooltip #tooltip="kendoTooltip" tooltipClass="tooltip-block"
+                    [tooltipTemplate]="thongTinYeuCauTruyenMauTemplate" filter="*">{{dataItem.TenBenhNhanTruyenMau}}</a>
+            </p>
+            <app-validationerrorother
+                [validationerror]="'NhapKhoMauChiTiets['+rowIndex+'].YeuCauTruyenMauId' | validationerror:validationErrors"
+                (clearValidateErrorOtherCallback)="clearValidateErrorOtherCallback($event)">
+            </app-validationerrorother>
+        </span>
+        <ng-template #thongTinYeuCauTruyenMauTemplate>
+            <table class="table table-border" width="100%">
+                <tr>
+                    <td>Mã TN: <b>{{dataItem.ThongTinYeuCauTruyenMau.MaYeuCauTiepNhan}}</b></td>
+                </tr>
+                <tr>
+                    <td>Mã BA: <b>{{dataItem.ThongTinYeuCauTruyenMau.MaBenhAn}}</b></td>
+                </tr>
+                <tr>
+                    <td>Mã NB: <b>{{dataItem.ThongTinYeuCauTruyenMau.MaBenhNhan}}</b></td>
+                </tr>
+                <tr>
+                    <td>Họ Tên: <b>{{dataItem.ThongTinYeuCauTruyenMau.HoTen}}</b></td>
+                </tr>
+                <tr>
+                    <td>Tên chế phẩm máu: <b>{{dataItem.ThongTinYeuCauTruyenMau.TenChePhamMau}}</b></td>
+                </tr>
+                <tr>
+                    <td>Nhóm máu: <b>{{dataItem.ThongTinYeuCauTruyenMau.NhomMau}}</b></td>
+                </tr>
+                <tr>
+                    <td>Thể tích: <b>{{dataItem.ThongTinYeuCauTruyenMau.TheTich}}</b></td>
+                </tr>
+            </table>
+        </ng-template>
+    </ng-template>
+
+    <ng-template #ketQuaKhacTemplate let-dataItem let-rowIndex="rowIndex">
+        <ng-container *ngFor="let item of dataItem.KetQuaXetNghiemKhacs">
+            {{item.HienThiKetQuaKhac + "; "}}
+        </ng-container>
+    </ng-template>
+
+    <ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+        <div class="text-center" *ngIf="!phieuNhapKhoMau.DuocKeToanDuyet" kendoTooltip>
+            <button color="primary" mat-icon-button kendoTooltip title="Sửa" type="button"
+                (click)="suaNhapMauChiTiet(dataItem, rowIndex)">
+                <mat-icon [icIcon]="icEdit"></mat-icon>
+            </button>
+            <button class="ml-2" style="color: red" mat-icon-button kendoTooltip title="Xóa" type="button"
+                (click)="xoaNhapMauChiTiet(rowIndex)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+</div>

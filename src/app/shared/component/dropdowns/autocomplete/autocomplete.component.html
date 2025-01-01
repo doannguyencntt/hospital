@@ -1,0 +1,28 @@
+<kendo-textbox-container floatingLabel="{{label}}" [ngClass]="{'required':required}">
+    <!-- <kendo-autocomplete class="form-control" [data]="dataList" [(ngModel)]="model" [filterable]="filterable"
+        (ngModelChange)="emit($event)" ngControl="model" style="background-color:#dae2e7;" *ngIf="disabled==true"
+        [placeholder]="placeHolder"  id="{{id}}" [readonly]="readonly"
+        [disabled]="disabled" name="{{id}}" (valueChange)="valueChange($event)" (selectionChange)="onSelectionChange($event)"
+        (filterChange)="filterChange($event)" (open)="open()" (close)="close()" (focus)="focus()" (blur)="blur()"
+        title="{{title}}" [itemDisabled]="itemDisabled">
+        <kendo-autocomplete-messages
+            clearTitle="Xóa"
+            noDataText="Không có dữ liệu">
+        </kendo-autocomplete-messages>
+    </kendo-autocomplete> -->
+    <kendo-autocomplete #autocomplete class="form-control" [data]="_data" [(ngModel)]="model" [filterable]="filterable" [valueField]="valueField"
+        (ngModelChange)="emit($event)" ngControl="model" [placeholder]="placeHolder" id="{{id}}" [readonly]="readonly"
+        [disabled]="disabled" name="{{id}}" (valueChange)="valueChange($event)" maxlength="{{maxlength}}"
+        (filterChange)="filterChange($event)" (open)="open()"
+        (close)="close()" (focus)="focus()" (blur)="blur()" title="{{title}}" [itemDisabled]="itemDisabled" [popupSettings]="popupSettings">
+        <kendo-autocomplete-messages clearTitle="Xóa" noDataText="Không có dữ liệu">
+        </kendo-autocomplete-messages>
+    <ng-template kendoAutoCompleteHeaderTemplate let-dataItem *ngIf="templateHeader!=null">
+        <ng-container *ngTemplateOutlet="templateHeader; context:{$implicit: dataItem}"></ng-container>
+    </ng-template>
+    <ng-template kendoAutoCompleteItemTemplate  let-dataItem *ngIf="template!=null">
+        <ng-container *ngTemplateOutlet="template; context:{$implicit: dataItem}"></ng-container>
+    </ng-template>
+    </kendo-autocomplete>
+    <label class="red" [innerHTML]="validationerror"></label>
+</kendo-textbox-container>

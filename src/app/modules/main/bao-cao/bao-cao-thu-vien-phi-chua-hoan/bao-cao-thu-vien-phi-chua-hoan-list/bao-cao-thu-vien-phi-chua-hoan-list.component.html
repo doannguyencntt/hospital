@@ -1,0 +1,93 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+                    {Title:'Thống Kê', Path:''},
+                    {Title:'Báo Cáo', Path:''},
+                    {Title:'Kế Toán', Path:''},
+                    {Title:'Thu Viện Phí Chưa Hoàn', Path:'', Active:true}
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card -mt-15">
+            <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="3px grid" fxLayoutGap.lt-sm="0">
+                <app-combobox id="Khoa" fxFlex="15%" fxFlex.sm="15%" popupSettings=""  style="margin-left: 5px;"  class="mt-1 on-header pb-0 mr-1" label="Nhóm thu viện phí" bind="true" 
+                    url="BaoCao/GetNhomThuVienPhiChuaHoan" [(model)]="baoCaoSearch.NhomThuVienPhi" [autoSelectFirstItem]="true">
+                </app-combobox>
+
+                <div class="h-15 mt-0" fxFlex="20%" style="padding: 3px !important" >
+                    <div class="bg-card rounded-full border" fxFlex="100%" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                        fxLayoutAlign="start center" style="margin-top: 0px">
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                            type="search" name="searchString" [(ngModel)]="baoCaoSearch.SearchString"
+                            placeholder="Tìm kiếm Mã TN, Họ tên, Mã NB" />
+                    </div>
+                    <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button">
+                        <mat-icon [icIcon]="icSearch"></mat-icon>
+                    </button>
+                </div>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.TuNgayFormat" #tiepnhantu id="TuNgayFormat"
+                    [maxDate]="baoCaoSearch.DenNgayFormat" label="Từ ngày" class="mt-1 on-header">
+                </app-datetimepicker>
+
+                <app-datetimepicker fxFlex="15%" [(model)]="baoCaoSearch.DenNgayFormat" #tiepnhanden id="DenNgayFormat"
+                    [minDate]="baoCaoSearch.TuNgayFormat" class="mt-1 on-header" label="Đến ngày">
+                </app-datetimepicker>
+
+                <div fxFlex="auto" fxFlex.sm="auto" class="pb-0">
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="XemBaoCao()">Xem Báo Cáo</button>
+                    <button type="button" color="primary" mat-raised-button mat-button class="mr-1 mt-2"
+                        (click)="exportExcel()">Xuất Excel</button>
+                </div>
+
+                <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+                    <app-grid [gridColumns]="gridColumns" [useAddDeault]="false"
+                        [checkboxAble]="false" [autoHeight]="true" [lazyLoadPage]="true" [useHeaderDefault]="false"
+                        [useActionDefault]="false" [documentType]="documentType" [pageable]="true" [showStt]="true" [groups]="groups"
+                        urlGetData="BaoCao/GetDataBaoCaoThuVienPhiChuaHoanForGrid" urlGetTotalPage="BaoCao/GetTotalPageBaoCaoThuVienPhiChuaHoanForGrid">
+                    </app-grid>
+
+                    <ng-template #tenGroupTemplate let-value="value">
+                        <strong>{{value}}</strong>
+                    </ng-template>
+
+                    <ng-template #tongCongTitleFooterTemplate let-dataItem>
+                        Tổng cộng
+                    </ng-template>
+                    <ng-template #ngayThuTemplate let-dataItem>
+                        {{dataItem.NgayThuDisplay}}
+                    </ng-template>
+                    <ng-template #soTienTamUngTemplate let-dataItem>
+                        {{dataItem.SoTienTamUng | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+                    <ng-template #soTienDaHoanTemplate let-dataItem>
+                        {{dataItem.SoTienDaHoan | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #soTienTamUngGroupFooterTemplate let-aggregates>
+                        {{aggregates.SoTienTamUng.sum | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+                    <ng-template #soTienDaHoanGroupFooterTemplate let-aggregates>
+                        {{aggregates.SoTienDaHoan.sum | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+
+                    <ng-template #soTienTamUngFooterTemplate>
+                        {{tongTienTamUng | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+                    <ng-template #soTienDaHoanFooterTemplate>
+                        {{tongTienDaHoan | number:'0.2-2':'vi-VN'}}
+                    </ng-template>
+                </div>
+            </div>
+
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

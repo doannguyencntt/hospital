@@ -1,0 +1,72 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="
+                    [
+                        {Title:'Gửi H.Sơ Giám Định BHYT',Path:''},
+                        {Title:'Lịch Sử H.Sơ Giám Định BHYT', Active:true}           
+                    ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="/lich-su-bao-hiem-y-te" urlGetData="BHYT/GetDanhSachLichSuBHYTForGridAsync"
+                urlGetTotalPage="BHYT/GetDanhSachLichSuBHYTTotalPageForGridAsync"
+                [gridColumns]="gridDanhSachBHYTColumns" [useActionDefault]="false" [lazyLoadPage]="true"
+                [useHeaderDefault]="false" [headerTemplate]="headerTemplate" [documentType]="documentType"
+                [searchString]="timKiemDSBaoHiemYTe.SearchString" [checkboxAble]="false" [sort]="sort">
+            </app-grid>
+            <ng-template #actionTemplate let-dataItem let-rowIndex="rowIndex">
+                <div class="text-center">
+                    <a (click)="view(dataItem.Id)">
+                        <p class="reverse-ellipsis l" title="{{dataItem.MaTN}}">{{dataItem.MaTN}}</p>
+                    </a>
+                </div>
+            </ng-template>
+        </div>
+    </vex-page-layout-content>
+    <ng-template #headerTemplate>
+        <div class="bg-app-bar px-3 h-15 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+            <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs fxLayout="row"
+                fxLayoutAlign="start center" style="margin-top: 2px;">
+                <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                    type="search" name="searchString" [(ngModel)]="searchString" (keyup)="onKey($event)"
+                    (ngModelChange)="searchChanges($event)" placeholder="Nhập từ khóa..." />
+            </div>
+            <app-datetimepicker fxFlex="225px" [(model)]="timKiemDSBaoHiemYTe.TuNgay" #tiepnhantu
+                id="ThoiDiemTiepNhanTuFormat" label="Từ ngày" class="ml-2 on-header" (keyup)="onKey($event)">
+            </app-datetimepicker>
+            <app-datetimepicker fxFlex="225px" [(model)]="timKiemDSBaoHiemYTe.DenNgay" #tiepnhanden
+                id="ThoiDiemTiepNhanDenFormat" label="Đến ngày" class="ml-2 on-header" (keyup)="onKey($event)">
+            </app-datetimepicker>
+            <button type="button" color="primary" (click)="timKiemNangCao()" class="ml-2" mat-raised-button>Tìm</button>
+            <button class="ml-4" fxFlex="none" fxHide.gt-xs mat-icon-button type="button" (click)="clearSearch()">
+                <mat-icon [icIcon]="icSearch"></mat-icon>
+            </button>
+
+            <div fxFlex="61%" fxFlex.sm="40%"></div>
+            <button [matMenuTriggerFor]="columnFilterMenu" class="mr-4" fxFlex="0%" fxFlex.sm="0%" mat-icon-button
+                kendoTooltip title="Lọc cột" type="button">
+                <mat-icon [icIcon]="icFilterList"></mat-icon>
+            </button>
+            <mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+                <div *ngFor="let column of gridDanhSachBHYTColumns">
+                    <button
+                        class="checkbox-item mat-menu-item mat-checkbox mat-primary mat-checkbox-disabled _mat-animation-noopable ng-untouched ng-pristine mat-checkbox-checked">
+                        <mat-checkbox [disabled]="true" color="primary">
+                            {{ column.Title }}
+                        </mat-checkbox>
+                    </button>
+                </div>
+            </mat-menu>
+            <button (click)="DownloadFileExcels()" class="ml-8" fxFlex="none" mat-icon-button kendoTooltip
+                title="Xuất excel" type="button">
+                <mat-icon [icIcon]="icFileExcel"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+</vex-page-layout>

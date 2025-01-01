@@ -1,0 +1,56 @@
+<kendo-textbox-container floatingLabel="{{label}}" [ngClass]="{'required':required}">
+    <kendo-daterange class="form-control" [ngClass]="validationerror!=''?'has-error':''" style="position: relative !important">
+            <span class="k-select" role="button">
+                <kendo-dateinput  kendoDateRangeStartInput #startDateModel="ngModel"
+                    [(value)]="model.startDate" [max]="model.endDate" id="{{id}}Start" (blur)="onStartDateBlur()" (keyup.enter)="onStartDateEnter()"
+                    [(ngModel)]="model.startDate" placeholder="{{placeHolder}}" class="startDateInput"  (paste)="onStartPaste($event)"
+                    (focus)="onStartDateFocus()" (mouseleave)="onStartDateMouseLeave()"
+                   >
+                </kendo-dateinput>
+            </span>
+            <span class="k-select" role="button">
+                <kendo-dateinput kendoDateRangeEndInput #endDateModel="ngModel"
+                    [(value)]="model.endDate" [min]="model.startDate" id="{{id}}End" (blur)="onEndDateBlur()" (keyup.enter)="onEndDateEnter()" 
+                    [(ngModel)]="model.endDate"  placeholder="{{placeHolder}}" class="endDateInput" (paste)="onEndPaste($event)"
+                    (focus)="onEndDateFocus()" (mouseleave)="onEndDateMouseLeave()"
+                   >
+                </kendo-dateinput> 
+            
+            </span>
+            <span class="k-icon k-i-close" *ngIf="model.startDate!=null || model.endDate!=null" (click)="clear()" style="opacity: 0.54;  position: absolute !important; right: 20px;top: 15px;cursor: pointer;z-index: 9; "></span>
+            <span class="k-icon k-i-calendar" (click)="popup.toggle()" style="opacity: 0.54;  position: absolute !important; right: 0px;top: 15px;cursor: pointer; "></span>
+            <kendo-daterange-popup #popup>
+                    <ng-template kendoDateRangePopupTemplate>
+                        <div id="{{id}}-daterange-popup">
+                            <div fxLayout="column wrap" fxFlex="250%" fxLayout.lt-sm="column" 
+                            [style.display]="!isHiden ? 'none' : 'block'" style="width: 250px;">
+                                <div fxLayout="column" fxLayout.lt-sm="column" fxLayoutGap.lt-sm="0">
+                                    <button type="button" mat-raised-button class="float-right backgroupndButton" (click)="popup.toggle()" (click)="selectDateFor(7)" >7 ngày gần đây</button>
+                                    <button type="button" mat-raised-button class="float-right backgroupndButton" (click)="popup.toggle()" (click)="selectDateFor(30)">30 ngày gần đây</button>
+                                    <button type="button" mat-raised-button class="float-right backgroupndButton" (click)="popup.toggle()" (click)="selectWeekFor(true)">Tuần này</button>
+                                    <button type="button" mat-raised-button class="float-right backgroupndButton" (click)="popup.toggle()" (click)="selectWeekFor(false)">Tuần trước</button>
+                                    <button type="button" mat-raised-button class="float-right backgroupndButton" (click)="popup.toggle()" (click)="selectMonthFor(true)">Tháng này</button>
+                                    <button type="button" mat-raised-button class="float-right backgroupndButton" (click)="popup.toggle()" (click)="selectMonthFor(false)">Tháng trước</button>
+                                </div>
+                                <div fxFlex="250%" style="border-top: 1px solid #a99f9f">
+                                        <button type="button" mat-raised-button class="ml-12" (click)="onView()">Từ ngày - đến ngày</button>
+                                </div>
+                            </div>
+                            <kendo-multiviewcalendar kendoDateRangeSelection [style.display]="!isHidenCalendat ? 'none' : 'block'" 
+                                style="overflow: hidden !important ;"
+                                [min]="minDate" [max]="maxDate"  (ngModelChange)="emit($event)" 
+                                (blur)="onBlur()" (keyup.enter)="onEnter()" (focus)="onFocus()" (open)="onOpen()" 
+                                (close)="onClose()" (cellEnter)="onCellEnter($event)" (cellLeave)="onCellLeave($event)">
+                            </kendo-multiviewcalendar>
+                        </div>
+                    </ng-template>
+            </kendo-daterange-popup>
+    </kendo-daterange>
+
+
+
+<label class="red" [innerHTML]="validationerror"></label> 
+</kendo-textbox-container>
+
+
+

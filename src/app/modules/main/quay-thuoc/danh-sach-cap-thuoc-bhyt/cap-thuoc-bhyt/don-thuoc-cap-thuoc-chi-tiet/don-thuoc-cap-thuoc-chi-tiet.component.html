@@ -1,0 +1,164 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-16" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <vex-breadcrumbs [crumbs]="
+                    [
+                    {Title:'Cấp phát thuốc bhyt',Path:''},
+                    {Title:'Chờ cấp thuốc chi tiết bhyt',Path:'/nha-thuoc', queryParams: { holdQuery:true},Active:true}
+                    ]">
+            </vex-breadcrumbs>
+            <app-hot-key [keys]="[{Key:'Esc',Description:'Quay lại', End:true}]">
+            </app-hot-key>
+        </div>
+    </vex-page-layout-header>
+
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="-mt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+                <div class="card" fxFlex="100%">
+                    <div class="px-6 py-4" fxLayout="column">
+                        <div class="row">
+                            <fieldset fxFlex="100%" *ngIf="benhNhanId == null">
+                                <legend>THÔNG TIN HÀNH CHÍNH</legend>
+                                <div fxFlex="100%">
+                                    <ul class="inline">
+                                        <li>Mã TN:
+                                            <strong>{{benhnhanThongTin.MaYeuCauTiepNhan}}</strong>
+                                        </li>
+                                        <li>Mã NB:
+
+                                            <strong>{{benhnhanThongTin.MaBN}}</strong>
+                                        </li>
+                                        <li>Họ tên:
+                                            <strong>{{benhnhanThongTin.HoTen}}</strong>
+                                        </li>
+                                        <li>Giới tính:
+                                            <strong>{{benhnhanThongTin.GioiTinhHienThi}}</strong>
+                                        </li>
+                                        <li>Năm sinh:
+                                            <strong>{{benhnhanThongTin.NamSinh}}</strong>
+                                        </li>
+                                        <li>Địa chỉ:
+                                            <strong>{{benhnhanThongTin.DiaChiDayDu}}</strong>
+                                        </li>
+
+                                        <li>SĐT:
+                                            <strong>{{benhnhanThongTin.SoDienThoai}}</strong>
+                                        </li>
+                                        <li>Email:
+                                            <strong>{{benhnhanThongTin.Email}}</strong>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </fieldset>
+                            <fieldset fxFlex="100%" *ngIf="benhNhanId != null">
+                                <legend>THÔNG TIN HÀNH CHÍNH</legend>
+                                <div fxFlex="100%">
+                                    <ul class="inline">
+                                        <li>Mã NB:
+                                            <strong>{{benhnhanThongTin.MaBN}}</strong>
+                                        </li>
+                                        <li>Họ tên:
+                                            <strong>{{benhnhanThongTin.HoTen}}</strong>
+                                        </li>
+                                        <li>Giới tính:
+                                            <strong>{{benhnhanThongTin.GioiTinhHienThi}}</strong>
+                                        </li>
+                                        <li>Năm sinh:
+                                            <strong>{{benhnhanThongTin.NamSinh}}</strong>
+                                        </li>
+                                        <li>Địa chỉ:
+                                            <strong>{{benhnhanThongTin.DiaChiDayDu}}</strong>
+                                        </li>
+
+                                        <li>SĐT:
+                                            <strong>{{benhnhanThongTin.SoDienThoai}}</strong>
+                                        </li>
+                                        <li>Email:
+                                            <strong>{{benhnhanThongTin.Email}}</strong>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <kendo-tabstrip fxFlex="100%" class="content-has-border has-padding mt-3"
+                             [keepTabContent]="true" #tabQuayThuoc>
+                            <kendo-tabstrip-tab [selected]="true">
+                                <ng-template kendoTabContent>
+
+                                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                                        fxLayoutGap.lt-sm="0">
+                                        <app-grid *ngIf="dataSourcedanhsachThuocBHYT.data.length>0" fxFlex="100%"
+                                            [gridColumns]="gridColumns" [gridDataSource]="dataSourcedanhsachThuocBHYT"
+                                            [autoHeight]="true" [lazyLoadPage]="false" [useActionDefault]="false"
+                                            [useAddDeault]="false" [useHeaderDefault]="false" [allowSortDefault]="false"
+                                            [pageable]="false" [headerTemplate]="headerTemplate"
+                                            useActionDefault="false" [checkboxAble]="false" [lazyLoadPage]="true">
+                                            <ng-template #headerTemplate>
+                                                <div class="px-2 py-2" style="background: burlywood;overflow: hidden;">
+                                                    <h4 style="font-weight: bold;float: left;line-height: 36px;">THUỐC
+                                                        BHYT- VẬT TƯ</h4>
+                                                    <button type="button" (click)="KeThuoc()" style="float: right;"
+                                                        mat-raised-button>
+                                                        In kê thuốc</button>
+                                                </div>
+                                            </ng-template>
+                                        </app-grid>
+                                        <app-grid *ngIf="dataSourcedanhsachThuocKhongBHYT.data.length>0" fxFlex="100%"
+                                            [gridColumns]="gridColumns"
+                                            [gridDataSource]="dataSourcedanhsachThuocKhongBHYT" [autoHeight]="true"
+                                            [lazyLoadPage]="false" [useActionDefault]="false"
+                                            [headerTemplate]="headerTemplate1" [useAddDeault]="false"
+                                            [useHeaderDefault]="false" [allowSortDefault]="false" [pageable]="false"
+                                            useActionDefault="false" [checkboxAble]="false" [lazyLoadPage]="true">
+                                            <ng-template #headerTemplate1>
+                                                <div class="px-2 py-2" style="background: lightblue;">
+                                                    <h4 style="font-weight: bold;">THUỐC KHÔNG BHYT-VẬT TƯ</h4>
+
+                                                </div>
+                                            </ng-template>
+                                        </app-grid>
+                                        <p *ngIf="dataSourcedanhsachThuocKhongBHYT.data.length == 0 && dataSourcedanhsachThuocBHYT.data.length == 0"
+                                            class="m-0 p-0"><strong>Không có dược phẩm nào chờ xuất</strong></p>
+                                        <ng-template #donGiaTemplate let-dataItem>
+                                            <span> {{dataItem.DonGia | number:'0.2-2':'vi-VN'}}</span>
+                                        </ng-template>
+
+                                        <ng-template #thanhTienTemplate let-dataItem>
+                                            <span> {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}</span>
+                                        </ng-template>
+
+                                    </div>
+                                    <br>
+                                    <div
+                                        *ngIf="dataSourcedanhsachThuocBHYT.data.length>0 || dataSourcedanhsachThuocKhongBHYT.data.length>0">
+                                        <button type="button" color="primary" (click)="GuiData()"
+                                            class="mr-1 float-right" mat-raised-button>
+                                            Xuất thuốc</button>
+                                    </div>
+
+                                </ng-template>
+                                <ng-template kendoTabTitle>
+                                    <div kendoTooltip title="Phím tắt: Ctrl + F2">
+                                        Chờ xuất thuốc-vật tư
+                                    </div>
+                                </ng-template>
+                            </kendo-tabstrip-tab>
+                        </kendo-tabstrip>
+                        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px" class="mt-2" kendoTooltip>
+                            <button type="button" (click)="inXemTruocBangKeThuoc()" mat-raised-button
+                                title="In Bảng Kê">
+                                In Bảng Kê
+                            </button>
+                            <button type="button" (click)="Huy()" mat-raised-button title="Phím tắt: ESC">
+                                Quay lại
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>

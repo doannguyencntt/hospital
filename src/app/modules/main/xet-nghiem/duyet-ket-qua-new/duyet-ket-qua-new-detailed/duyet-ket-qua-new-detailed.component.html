@@ -1,0 +1,353 @@
+<app-header-form [crumbs]="[
+{Title:'Xét Nghiệm',Path:''},
+{Title:'DS Duyệt Kết Quả', Path:'/xet-nghiem/duyet-ket-qua-new', queryParams: {holdQuery : true}, Active: true}
+    ]" [isicMoreVert]="false">
+</app-header-form>
+
+<div class="p-gutter" vexContainer>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+        <div class="card" fxFlex="auto">
+            <div class="px-6 border-b order-btn" fxLayout="row" fxLayoutAlign="start center"
+                style="padding-top: 0.5rem;">
+                <h2 class="title m-0">Chi tiết duyệt kết quả xét nghiệm</h2>
+                <div class="bg-app-bar px-3 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+                    <div class="bg-card rounded-full border px-4" fxFlex="400px" fxFlex.lt-md="auto" fxHide.xs
+                        fxLayout="row" fxLayoutAlign="start center" style="margin-top: 2px;">
+                        <ic-icon [icIcon]="icSearch" size="20px"></ic-icon>
+                        <input [formControl]="searchCtrl" class="px-4 py-2 border-0 outline-none w-full bg-transparent"
+                            type="search" name="searchStringBarCode" [(ngModel)]="search.SearchStringBarCode"
+                            (keyup)="onKey($event)" maxlength="10" (ngModelChange)="searchChangesNangCao($event)"
+                            placeholder="Nhập barcode..." />
+                        <button (click)="QuetMaQRCodeClick()" color="primary" mat-mini-fab type="button" kendoTooltip
+                            title="Quét mã vạch thẻ" class="button-barcoe-in-search">
+                            <img src="assets/img/barcode.png" alt="Scan barcode" />
+                        </button>
+                    </div>
+
+                    <app-datetimepicker fxFlex="245px" [(model)]="search.ThoiDiemGoiDuyetTuFormat" #tiepnhantu
+                        id="ThoiDiemGoiDuyetTuFormat" label="Từ ngày" class="ml-2 on-header" (keyup)="onKey($event)">
+                    </app-datetimepicker>
+
+                    <app-datetimepicker fxFlex="245px" [(model)]="search.ThoiDiemGoiDuyetDenFormat" #tiepnhanden
+                        id="ThoiDiemGoiDuyetDenFormat" label="Đến ngày" class="ml-2 on-header" (keyup)="onKey($event)">
+                    </app-datetimepicker>
+                </div>
+                <b *ngIf="duyetKqXetNghiemDetail.TrangThai == true"
+                    style="color:orange;">{{duyetKqXetNghiemDetail.TrangThaiDisplay}}</b>
+                <b *ngIf="duyetKqXetNghiemDetail.TrangThai == false"
+                    style="color:blue;">{{duyetKqXetNghiemDetail.TrangThaiDisplay}}</b>
+                <b *ngIf="duyetKqXetNghiemDetail.TrangThai == null"
+                    style="color:green;">{{duyetKqXetNghiemDetail.TrangThaiDisplay}}</b>
+            </div>
+
+
+            <div class="px-6" fxLayout="column" style="padding-top: 0.5rem;">
+                <div class="row mb-2">
+                    <!-- style="background: #e1f5fe;"  -->
+                    <fieldset class="{{(duyetKqXetNghiemDetail != null && duyetKqXetNghiemDetail.LaCapCuu == true) ? 'bg-tthc-lightpink' : 'bg-tthc-lightblue'}}">
+                        <legend>Thông tin hành chính</legend>
+                        <div fxFlex="100%">
+                            <ul class="inline">
+                                <li>Barcode:
+                                    <strong>{{duyetKqXetNghiemDetail.BarCodeID}}</strong>
+                                </li>
+                                <li>Mã NB:
+                                    <strong>{{duyetKqXetNghiemDetail.MaBN}}</strong>
+                                </li>
+                                <li>Mã TN:
+                                    <strong>{{duyetKqXetNghiemDetail.MaYeuCauTiepNhan}}</strong>
+                                </li>
+                                <li>Họ tên:
+                                    <strong>{{duyetKqXetNghiemDetail.HoTen}}</strong>
+                                </li>
+                                <li>Năm sinh:
+                                    <strong>{{duyetKqXetNghiemDetail.NamSinhDisplay}}</strong>
+                                </li>
+                                <li>
+                                    Giới tính:
+                                    <strong>{{duyetKqXetNghiemDetail.GioiTinhDisplay}}</strong>
+                                </li>
+                                <li>Số thẻ BHYT:
+                                    <strong>{{duyetKqXetNghiemDetail.MaSoBHYT}}</strong>
+                                </li>
+                                <li>
+                                    Đối tượng: <strong style="color: blue;">{{duyetKqXetNghiemDetail.DoiTuong}}</strong>
+                                </li>
+                                <li>
+                                    Địa chỉ:
+                                    <strong>{{duyetKqXetNghiemDetail.DiaChi}}</strong>
+                                </li>
+                                <li>
+                                    Chẩn đoán: <strong>{{duyetKqXetNghiemDetail.ChanDoan}}</strong>
+                                </li>
+                                <li>
+                                    Khoa chỉ định: <strong>{{duyetKqXetNghiemDetail.KhoaChiDinh}}</strong>
+                                </li>
+                                <li>
+                                    Phòng: <strong>{{duyetKqXetNghiemDetail.Phong}}</strong>
+                                </li>
+                                <li>
+                                    SĐT: <strong>{{duyetKqXetNghiemDetail.SoDienThoai}}</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </fieldset>
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0"
+                        style="padding-top: 10px;">
+                        <div fxFlex="60%" fxLayout.lt-sm="column" fxLayoutGap="10px grid" fxLayoutGap.lt-sm="0">
+                            <app-combobox id="nguoi-thuc-hien" fxFlex="30%" fxFlex.sm="50%" label="Người Thực Hiện"
+                                [required]="true" [(model)]="duyetKqXetNghiemDetail.NguoiThucHienId"
+                                url="NhanVien/GetListLookupNhanVien" class="item-no-padding"
+                                [modelText]="duyetKqXetNghiemDetail.NguoiThucHien">
+                            </app-combobox>
+
+                            <app-textbox id="ghi-chu" [disabled]="duyetKqXetNghiemDetail.TrangThai == null" fxFlex="70%"
+                                fxFlex.sm="50%" maxlength="1000" [(model)]="duyetKqXetNghiemDetail.GhiChu"
+                                label="Ghi Chú">
+                            </app-textbox>
+                        </div>
+                        <div fxFlex="auto" fxLayoutAlign="end center">
+                            <button type="button" class="mr-1" style="float: right;" color="primary" mat-raised-button
+                                (click)="xuLyDuyet()">
+                                Duyệt</button>
+                            <button type="button" class="mr-1" style="float: right;" color="primary" mat-raised-button
+                                (click)="xuLyDuyetVaIn()">
+                                Duyệt Và In</button>
+                            <!-- <button *ngIf="coDichVuDuocDuyet" type="button" class="mr-1" color="primary"
+                                style="float: right;" mat-raised-button mat-button (click)="Print()">
+                                In Kết Quả
+                            </button> -->
+                            <button type="button" class="mr-1" style="float: right;" color="primary" mat-raised-button
+                                (click)="capNhat()">
+                                Cập nhật</button>
+                            <!-- *ngIf="duyetKqXetNghiemDetail.TrangThai != null" -->
+                        </div>
+                    </div>
+
+
+                    <fieldset class="mt-2 set-col">
+                        <legend>Chi tiết kết quả xét nghiệm</legend>
+                        <div *ngIf="gridDataSource != undefined">
+                            <app-grid masterName="ketQuaXetNghiem" [sort]="sort" [documentType]="documentType"
+                                [useHeaderDefault]="false" [useAddDeault]="false" [useAddDeault]="false"
+                                [useActionDefault]="false" #gridChiTietDuyetKetQuaXn [checkboxAble]="false"
+                                [gridColumns]="gridColumns" [gridDataSource]="gridDataSource" [groups]="groups"
+                                [pageable]="false" [headerTemplate]="headerTemplate" heightToolbar="425"
+                                (extOnKeydownGrid)="onKeydownGrid($event)">
+                            </app-grid>
+
+                            <ng-template #headerTemplate>
+                                <div style="margin-top: 5px;width: 99%; justify-content: space-between;"
+                                    class="bg-card rounded-full border mb-1 ml-2" fxFlex.lt-md="auto" fxHide.xs
+                                    fxLayout="row" fxLayoutAlign="start center">
+                                    <div fxFlex="50%" class="order-search">
+                                        <ic-icon class="ml-4" [icIcon]="icSearch" size="20px"></ic-icon>
+                                        <input fxFlex="40%" [formControl]="searchCtrl"
+                                            class="px-4 py-2 border-0 outline-none w-full bg-transparent" type="search"
+                                            name="searchString" [(ngModel)]="search.SearchString"
+                                            (ngModelChange)="searchChanges($event)" (keyup)="onKey($event)"
+                                            placeholder="Nhập từ khóa..." />
+                                    </div>
+                                    <div fxFlex="50%" class="order-color">
+                                        <div class="set-color bluelight"></div>
+                                        <p>DV chưa duyệt</p>
+                                        <div class="set-color black"></div>
+                                        <p>Bình thường</p>
+                                        <div class="set-color blue"></div>
+                                        <p>Bất thường</p>
+                                        <div class="set-color red"></div>
+                                        <p>Nguy hiểm</p>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </div>
+
+                    </fieldset>
+
+                    <!-- <div class="form-footer">
+                        <button type="button" mat-button class="mr-1" (click)="quayLai()"><i class="ft-arrow-left"></i>
+                            Quay lại</button>
+
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #nhomTemplate let-value="value" let-dataItem>
+    <div style="width: 100%;position: absolute;margin-left: 20px;" kendoTooltip>
+        <strong style="width: 100%;">
+            <app-checkbox id="check_{{dataItem.items[0].NhomDichVuBenhVienId}}" label="{{value}}" fxFlex="10%"
+                (modelChange)="checkBoxNhomChange($event,dataItem)" [(model)]="dataItem.items[0].CheckBoxParent">
+            </app-checkbox>
+            <ul class='inline small ml-20'>
+                <li *ngFor="let item of dataItem.items[0].DanhSachLoaiMau">
+                    <span *ngIf="checkHiddenIcon(item, dataItem.items[0].DanhSachLoaiMauDaCoKetQua)">
+                        <span *ngIf="!isMauKhongDat(item, dataItem.items[0].DanhSachLoaiMauKhongDat)">
+                            <span class='green'>&#10003;</span> {{item}}
+                        </span>
+                        <span *ngIf="isMauKhongDat(item, dataItem.items[0].DanhSachLoaiMauKhongDat)">
+                            <span class='red'>&times; </span> {{item}}
+                        </span>
+                    </span>
+
+                    <span *ngIf="!checkHiddenIcon(item, dataItem.items[0].DanhSachLoaiMauDaCoKetQua)">
+                        <span class='red'></span> {{item}}
+                    </span>
+                </li>
+            </ul>
+
+            <a class='float-right' *ngIf="dataItem.items[0].YeuCauChayLai == true
+            && dataItem.items[0].DaDuyet == true && duyetKqXetNghiemDetail.TrangThai != null" #tooltip="kendoTooltip"
+                tooltipClass="tooltip-block" position="top" [tooltipTemplate]="templateInfo" filter="*"
+                (mouseover)="setUpDataTooltip(dataItem)" kendoTooltip>Yêu
+                cầu chạy lại XN</a>
+
+            <ng-template #templateInfo let-dataItem>
+                <div>
+                    <span>Người yêu cầu: </span><span>{{displayToolTipGridNguoiYeuCau}}</span>
+                </div>
+                <div>
+                    <span>Ngày yêu cầu: </span><span>{{displayToolTipGridNgayYeuCau}}</span>
+                </div>
+                <div>
+                    <span>Lý do yêu cầu: </span><span>{{displayToolTipGridLyDoYeuCau}}</span>
+                </div>
+                <div>
+                    <span>Người duyệt: </span><span>{{displayToolTipGridNguoiDuyet}}</span>
+                </div>
+                <div>
+                    <span>Ngày duyệt: </span><span>{{displayToolTipGridNgayDuyet}}</span>
+                </div>
+            </ng-template>
+        </strong>
+    </div>
+</ng-template>
+
+<ng-template #tenTemplate let-dataItem>
+    <span [ngStyle]="{'padding-left':(dataItem.Level)*20+'px','font-weight':dataItem.IdChilds.length>0?'bold':'normal'}"
+        kendoTooltip title="{{dataItem.Ten}}">{{dataItem.Ten}}</span>
+    <div *ngIf="dataItem.LaDichVuSarCovid2 && dataItem.CheckBox">
+        <app-combobox id="LoaiKitThu" fxFlex="auto" fxFlex.sm="32%" label="Loại kít thử" [popupSettings]="null"
+            url="DuyetKetQuaXetNghiem/DichVuTestSarsCovids" [(model)]="dataItem.LoaiKitThuId"
+            [modelText]="dataItem.LoaiKitThu">
+        </app-combobox>
+    </div>
+</ng-template>
+
+<ng-template #kqCuTemplate let-dataItem>
+    <div *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)"
+        [ngStyle]="{'background-color':dataItem.GiaTriCu !=null && dataItem.GiaTriCu !='' ? 'deepskyblue' : ''}"
+        kendoTooltip #tooltip="kendoTooltip" position="left" filter="*"
+        [tooltipTemplate]="(dataItem.GiaTriCu != null && dataItem.GiaTriCu != '') ? templateInfoNgayDuyet : ''"
+        (mouseover)="TooltipCustomNgayDuyet(dataItem)">
+        {{dataItem.GiaTriCu}}</div>
+</ng-template>
+
+<ng-template #templateInfoNgayDuyet let-dataItem>
+    <span class="tooltiptext">
+        {{ngayDuyet}}
+    </span>
+</ng-template>
+
+<ng-template #kqTuMayTemplate let-dataItem>
+    <span *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)"
+        [ngStyle]="{'color':dataItem.LoaiKetQuaTuMay == 1 ? 'black' : (dataItem.LoaiKetQuaTuMay == 2 ? 'blue' : 'red')}">{{dataItem.GiaTriTuMay}}</span>
+</ng-template>
+
+<ng-template #kqNhapTayTemplate let-dataItem kendoTooltip>
+    <span kendoTooltip #tooltip="kendoTooltip" position="left"
+        [tooltipTemplate]="(dataItem.GiaTriNhapTay != null && dataItem.GiaTriNhapTay != '') ? templateInfo: ''"
+        filter="*" (mouseover)="TooltipCustom(dataItem.GiaTriNhapTay)"
+        *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)"
+        [ngStyle]="{'color':dataItem.LoaiKetQuaNhapTay == 1 ? 'black' : (dataItem.LoaiKetQuaNhapTay == 2 ? 'blue' : 'red')}">{{dataItem.GiaTriNhapTay}}</span>
+</ng-template>
+
+<ng-template #templateInfo let-dataItem>
+    <span class="tooltiptext">
+        {{kqNhapTay}}
+    </span>
+</ng-template>
+
+<ng-template #kqDuyetTemplate let-dataItem kendoTooltip let-rowIndex="rowIndex">
+    <app-textbox id="GiaTriDuyet-{{dataItem.Id}}"
+        *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0) || dataItem.Duyet || duyetKqXetNghiemDetail.TrangThai == null || dataItem.DaGoiDuyet != true"
+        kendoTooltip #tooltip="kendoTooltip" position="left"
+        [tooltipTemplate]="(dataItem.GiaTriDuyet != null && dataItem.GiaTriDuyet != '') ? templateInfoKQDuyet: ''"
+        filter="*" (mouseover)="TooltipCustomKQD(dataItem.GiaTriDuyet)" [disabled]="dataItem.DaDuyet" class="no-label"
+        label=" " maxlength="500" [(model)]="dataItem.GiaTriDuyet">
+    </app-textbox>
+
+
+
+
+    <!-- <p class="ml-1" *ngIf="dataItem.Duyet">{{dataItem.GiaTriDuyet}}</p> -->
+</ng-template>
+
+<ng-template #templateInfoKQDuyet let-dataItem>
+    <span class="tooltiptext">
+        {{kqDuyet}}
+    </span>
+</ng-template>
+
+<!-- (modelChange)="CheckHighlight(dataItem, $event)" -->
+<ng-template #damKQTemplate let-dataItem>
+
+    <app-checkbox *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)"
+        [disabled]="dataItem.DaDuyet" id="damKetQua-{{dataItem.Id}}" label=" " [(model)]="dataItem.ToDamGiaTri"
+        class="pl-2"></app-checkbox>
+</ng-template>
+<ng-template #chiSoBinhThuongTemplate let-dataItem>
+    <span *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)">{{dataItem.Csbt}}</span>
+</ng-template>
+<ng-template #donViTinhTemplate let-dataItem>
+    <span *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)">{{dataItem.DonVi}}</span>
+</ng-template>
+<ng-template #gioTiepNhanTemplate let-dataItem>
+    <span
+        *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)">{{dataItem.ThoiDiemGuiYeuCauDisplay}}</span>
+</ng-template>
+<ng-template #gioNhanMauTemplate let-dataItem>
+    <span
+        *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)">{{dataItem.ThoiDiemNhanKetQuaDisplay}}</span>
+</ng-template>
+<ng-template #mayXNTemplate let-dataItem>
+    <!-- <div *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)">
+        <span>
+            {{dataItem.TenMayXetNghiem}}
+        </span>
+    </div> -->
+    <span>
+        {{dataItem.TenMayXetNghiem}}
+    </span>
+</ng-template>
+<ng-template #nguoiDuyetTemplate let-dataItem>
+    <span *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)">{{dataItem.NguoiDuyet}}</span>
+</ng-template>
+<ng-template #ngayDuyetTemplate let-dataItem>
+    <span
+        *ngIf="dataItem.Level!=1 || (dataItem.Level==1 && dataItem.IdChilds.length==0)">{{dataItem.ThoiDiemDuyetKetQuaDisplay}}</span>
+</ng-template>
+
+<!-- DUYỆT -->
+
+<ng-template #duyetHeaderColumnTemplate let-value="value" let-dataItem>
+    <app-checkbox class="pl-2" label=" " [(model)]="dataItem.items[0].DuyetNhom" id="duyet{{processId(dataItem)}}">
+    </app-checkbox>
+    <!-- (modelChange)="ApproveOnGroup($event, dataItem)" -->
+</ng-template>
+
+<ng-template #duyetTemplate let-dataItem>
+    <app-checkbox value="true" [(model)]="dataItem.CheckBox" (modelChange)="checkBoxDichVu(dataItem, $event)" label=" "
+        class="pl-2">
+    </app-checkbox>
+    <!-- (modelChange)="Approve(dataItem, $event)" -->
+</ng-template>
+
+<ng-template #checkBoxHeaderTemplate let-dataItem>
+    <input type="checkbox" id="vehicle1" (ngModelChange)="checkBoxAllChange($event)" name="vehicle1"
+        [(ngModel)]="checkAll">
+</ng-template>
+
+<app-barcode [(model)]="modelQRCode" (modelChange)="changeQR($event)" style="display: none;"></app-barcode>

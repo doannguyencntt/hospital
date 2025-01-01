@@ -1,0 +1,93 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Danh Mục',Path:''}
+                ,{Title:'Nhóm Nhân Viên',Path:''}
+                ,{Title:'Tài Khoản Người Dùng',Path:'/danh-muc/nhom-nhan-vien/tai-khoan-nguoi-dung/', Active: true}
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Tạo Tài Khoản</h2>
+            </div>
+
+            <div class="px-6 py-4" fxLayout="column">
+
+                <div fxLayout="row" fxFlex="100%">
+                    <div class="left" fxFlex="20%" fxFlex.sm="20%">
+                        <button (click)="timNhanVien()" mat-raised-button color="primary" type="button" class="button-tim-kiem">
+                            <mat-icon [icIcon]="icFind"></mat-icon>
+                            <span>
+                                Tìm nhân viên
+                            </span>
+                        </button>
+                    </div>
+                    
+                </div>
+
+                <div style="height: 30px;">
+
+                </div>
+
+                <div fxLayout="row wrap" fxFlex="100%">
+                    <h3 fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-0">Thông tin hành chính: </h3>
+
+                    <div fxLayout="row" fxFlex="100%">
+                        <span fxFlex="25%" fxFlex.sm="25%">
+                            Họ tên: &nbsp;<strong>{{nhanVien.HoTen}}</strong>
+                        </span>
+
+                        <span fxFlex="75%" fxFlex.sm="75%">
+                            Địa chỉ: &nbsp;<strong>{{nhanVien.DiaChi}}</strong>
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div style="height: 30px;">
+
+                </div>
+
+                <div fxLayout="row wrap" fxFlex="100%">
+                    <h3 fxFlex="100%" fxFlex.sm="100%" class="sub-title mt-0">Thông tin tài khoản: </h3>
+
+                    <div fxLayout="row" fxFlex="100%">
+                        <app-textbox id="SoDienThoai" fxFlex="25%" fxFlex.sm="25%" label="Số điện thoại" 
+                        maxlength="12" [disabled]="true" [(model)]="nhanVien.SoDienThoai">
+                        </app-textbox>
+                        <app-textbox id="Email" fxFlex="25%" fxFlex.sm="25%" label="Email" [disabled]="true"
+                        [(model)]="nhanVien.Email">
+                        </app-textbox>
+                    
+                        <app-textbox [eyesDisplay]="true" id="MatKhauQuanLyTaiKhoan" type="password" fxFlex="25%" fxFlex.sm="25%"
+                            label="Mật khẩu" [(model)]="nhanVien.Password" required="true"
+                            [validationerror]="'Password' | validationerror:validationErrors">
+                        </app-textbox>
+                    
+                        <app-textbox [eyesDisplay]="true" id="ConfirmMatKhauQuanLyTaiKhoan" type="password" fxFlex="25%" fxFlex.sm="25%"
+                            label="Nhắc lại mật khẩu" [(model)]="nhanVien.PasswordConfirm"  
+                            [validationerror]="'PasswordConfirm' | validationerror:validationErrors">
+                        </app-textbox>
+                    </div>
+
+                </div>
+
+
+                <div class="form-footer" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="8px">
+                
+                    <button *ngIf="!loading" type="button" mat-button class="mr-1" (click)="huy()">Hủy</button>
+                    <button *ngIf="!loading" type="button" (click)="them()" color="primary" mat-raised-button>Thêm</button>
+                
+                    <button *ngIf="loading" class="btn btn-raised btn-raised btn-primary mb-0"><img src="/assets/img/loader.gif"
+                            alt="Loading" /></button>
+                
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,142 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>Chỉnh Sửa Dịch Truyền Chi Tiết</div>
+    <button type="button" mat-icon-button mat-dialog-close tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+
+<mat-dialog-content style="min-height: 270px;">
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3">
+            <legend>
+                Thông tin dịch truyền
+            </legend>
+
+            <div fxLayout="column">
+                <ul class="inline">
+                    <li>Dược phẩm: &nbsp;<strong>{{thongTinDuocPham.Ten}}</strong></li>
+                    <li>Hoạt chất: &nbsp;<strong>{{thongTinDuocPham.HoatChat}}</strong></li>
+                    <li>Đơn vị tính: &nbsp;<strong>{{thongTinDuocPham.DVT}}</strong></li>
+                    <li>Đường dùng: &nbsp;<strong>{{thongTinDuocPham.TenDuongDung}}</strong></li>
+                    <li *ngIf="thongTinDuocPham.KhuVuc == 1">Đơn giá:
+                        &nbsp;<strong>{{thongTinDuocPham.DonGia | number:'0.2-2':'vi-VN'}}</strong>
+                    </li>
+                    <li>Tương tác thuốc: &nbsp;<strong>{{thongTinDuocPham.TuongTacThuoc}}</strong></li>
+                    <li>Dị ứng: &nbsp;<strong>{{thongTinDuocPham.DiUngThuoc}}</strong></li>
+                </ul>
+            </div>
+        </fieldset>
+    </div>
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <fieldset fxFlex="100%" class="mb-3 mt-3">
+            <legend>
+                Thông tin chỉnh sửa
+            </legend>
+
+            <div fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+                    style="padding-top: 16px;">
+                    <!-- [disabled]="keToaEdit.TinhTrang" -->
+                    <!-- <app-textboxnumeric id="SoLuong" fxFlex="10%" [(model)]="keToaEdit.SoLuong" min="1" max="999999999"
+                        label="SL" (keyup)="onKey($event)" [format]="format" [decimals]="2"
+                        [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+                    </app-textboxnumeric> -->
+
+                    <app-textboxnumeric *ngIf="laTuTruc" id="SoLuong" fxFlex="10%" [(model)]="keToaEdit.SoLuong"
+                        [min]="0.01" max="999999999" label="SL" (keyup)="onKey($event)" [format]="format" [decimals]="2"
+                        [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+                    </app-textboxnumeric>
+
+                    <app-textboxnumeric *ngIf="!laTuTruc" id="SoLuong" fxFlex="10%" [(model)]="keToaEdit.SoLuong"
+                        min="1" max="999999999" label="SL" (keyup)="onKey($event)"
+                        [validationerror]="'SoLuong' | validationerror:validationErrors" required="true">
+                    </app-textboxnumeric>
+
+                    <app-textboxnumeric id="TheTich" fxFlex="10%" fxFlex.sm="10%" min=1 max=99999999
+                        label="Thể tích(ml)" [disabled]="true" [(model)]="thongTinDuocPham.TheTich">
+                    </app-textboxnumeric>
+
+                    <app-textboxnumeric id="TocDoTruyen" fxFlex="10%" fxFlex.sm="10%" min=1 max=99999999
+                        label="Tốc độ truyền" (keyup)="onKey($event)" [(model)]="keToaEdit.TocDoTruyen">
+                    </app-textboxnumeric>
+
+                    <app-combobox id="DonViTocDoTruyen" fxFlex="12%" fxFlex.sm="12%" label="Đơn vị tốc độ truyền"
+                        [(model)]="keToaEdit.DonViTocDoTruyen" [modelText]="keToaEdit.DonViTocDoTruyenDisplay"
+                        popupSettings="null" bind="true" url="DieuTriNoiTru/GetDonViTocDoTruyen">
+                    </app-combobox>
+
+                    <app-timepicker id="ThoiGianBatDauTruyen" fxFlex="15%" fxFlex.sm="15%" label="Giờ bắt đầu"
+                        (modelChange)="thoiGianBatDauTruyenChange($event)" [(model)]="keToaEdit.ThoiGianBatDauTruyen"
+                        required="true" [modelIsNumber]="true" moreClass="pl-0" (keyup)="onKey($event)"
+                        [validationerror]="'ThoiGianBatDauTruyen' | validationerror:validationErrors">
+                    </app-timepicker>
+
+                    <app-textboxnumeric id="SoLanDungTrongNgay"
+                        [disabled]="keToaEdit.ThoiGianBatDauTruyen == undefined || keToaEdit.ThoiGianBatDauTruyen == null"
+                        (modelChange)="soLanDungTrongNgayChange($event)" fxFlex="10%" fxFlex.sm="10%" [min]="1"
+                        [max]="20" (keyup)="onKey($event)" [(model)]="keToaEdit.SoLanDungTrongNgay" label="Số lần/ngày">
+                    </app-textboxnumeric>
+
+                    <ng-container
+                        *ngIf="keToaEdit.SoLanDungTrongNgay != undefined && keToaEdit.SoLanDungTrongNgay != null && keToaEdit.SoLanDungTrongNgay > 1">
+                        <app-textboxnumeric id="CachGioTruyenDich"
+                            [disabled]="keToaEdit.SoLanDungTrongNgay == undefined || keToaEdit.SoLanDungTrongNgay == null || keToaEdit.SoLanDungTrongNgay <= 1"
+                            (modelChange)="cachGioTruyenDichChange($event)" fxFlex="10%" fxFlex.sm="10%" min="0"
+                            [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                            [(model)]="keToaEdit.CachGioTruyenDich" required="true"
+                            [validationerror]="'CachGioTruyenDich' | validationerror:validationErrors" label="Cách giờ">
+                        </app-textboxnumeric>
+                    </ng-container>
+
+                    <ng-container
+                        *ngIf="keToaEdit.SoLanDungTrongNgay != undefined && keToaEdit.SoLanDungTrongNgay != null && keToaEdit.SoLanDungTrongNgay == 1">
+                        <app-textboxnumeric id="CachGioTruyenDich"
+                            [disabled]="keToaEdit.SoLanDungTrongNgay == undefined || keToaEdit.SoLanDungTrongNgay == null || keToaEdit.SoLanDungTrongNgay <= 1"
+                            (modelChange)="cachGioTruyenDichChange($event)" fxFlex="10%" fxFlex.sm="10%" min="0"
+                            [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                            [(model)]="keToaEdit.CachGioTruyenDich" label="Cách giờ">
+                        </app-textboxnumeric>
+                    </ng-container>
+
+                    <ng-container
+                        *ngIf="keToaEdit.SoLanDungTrongNgay == undefined || keToaEdit.SoLanDungTrongNgay == null">
+                        <app-textboxnumeric id="CachGioTruyenDich"
+                            [disabled]="keToaEdit.SoLanDungTrongNgay == undefined || keToaEdit.SoLanDungTrongNgay == null || keToaEdit.SoLanDungTrongNgay <= 1"
+                            (modelChange)="cachGioTruyenDichChange($event)" fxFlex="10%" fxFlex.sm="10%" min="0"
+                            [max]="cachGioMax" (keyup)="onKey($event)" format="#.#" [decimals]="1"
+                            [(model)]="keToaEdit.CachGioTruyenDich" label="Cách giờ">
+                        </app-textboxnumeric>
+                    </ng-container>
+
+
+                    <app-textbox id="GioSuDung" fxFlex="auto" fxFlex.sm="auto" [(model)]="keToaEdit.GioSuDung"
+                        label="Giờ sử dụng" [readonly]="true">
+                    </app-textbox>
+
+                    <app-autocomplete [fxFlex]="keToaEdit.KhuVuc == 1 ? '83%' : '100%'" fxFlex.sm="100%"
+                        [(model)]="keToaEdit.GhiChu" label="Cách dùng" (keyup)="onKey($event)" maxlength="1000"
+                        url="KhamBenh/GetGhiChuDonThuocChiTietString" (openCombobox)="openCombobox($event)"
+                        popupSettings="null"
+                        [queryInfo]="{ParameterDependencies:'{LoaiDuocPhamHoacVatTu:' +loaiDuocPhamHoacVatTu +'}', Take: 50}">
+                    </app-autocomplete>
+
+                    <div *ngIf="keToaEdit.KhuVuc == 1" fxFlex="17%" fxFlex.sm="20%">
+                        <div class="container-custom no-label">
+                            <label>&nbsp;</label>
+                            <div fxLayout="row" fxLayoutGap="16px">
+                                <app-checkbox fxFlex="100%" id="vehicle1KhuVucdt100" [(model)]="keToaEdit.KhongTinhPhi"
+                                    label="Tính phí" value="true"></app-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions fxLayoutAlign="end center" fxLayoutGap="8px" class="float-right">
+    <button tabindex="-1" type="button" mat-stroked-button color="primary" mat-dialog-close>Hủy</button>
+    <button tabindex="-1" type="button" (click)="luuKeToa()" mat-stroked-button color="primary" class="md-primary">Cập
+        nhật</button>
+</mat-dialog-actions>

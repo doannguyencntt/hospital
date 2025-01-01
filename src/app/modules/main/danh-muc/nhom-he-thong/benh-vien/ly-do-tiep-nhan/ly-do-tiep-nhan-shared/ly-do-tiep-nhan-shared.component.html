@@ -1,0 +1,42 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between">
+    <div fxFlex="100%" fxFlex.sm="100%" class="pb-0">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="mb-1">
+            <app-combobox id="LyDoTiepNhanCha" fxFlex="30%" fxFlex.sm="30%" [(model)]="lyDo.LyDoTiepNhanChaId"
+                [modelText]="lyDo.TenCha" label="Lý Do Tiếp Nhận Cha" url="LyDoTiepNhan/GetListLyDoTiepNhanCha"
+                [queryInfo]="queryInfo" [template]="lyDoTemplate"
+                [validationerror]="'LyDoTiepNhanChaId' | validationerror:validationErrors" *ngIf="isAdd == false">
+                <!-- [idWhere]="idCha" -->
+
+                <ng-template #lyDoTemplate let-dataItem>
+                    <label [ngStyle]="{
+                    'font-weight':dataItem.CapNhom == 1 ? 'bold' : 'normal',
+                    'padding-left' :((dataItem.CapNhom-1)*20) + 'px'
+                 }">{{dataItem.DisplayName}}
+                    </label>
+                </ng-template>
+            </app-combobox>
+
+            <app-combobox id="LyDoTiepNhanCha" fxFlex="30%" fxFlex.sm="30%" [(model)]="lyDo.LyDoTiepNhanChaId"
+                [modelText]="lyDo.TenCha" label="Lý Do Tiếp Nhận Cha" url="LyDoTiepNhan/GetListLyDoTiepNhanChaChinhSua"
+                [queryInfo]="queryInfo" [template]="lyDoTemplate"
+                [validationerror]="'LyDoTiepNhanChaId' | validationerror:validationErrors" *ngIf="isAdd == true">
+                <ng-template #lyDoTemplate let-dataItem>
+                    <label [ngStyle]="{
+                    'font-weight':dataItem.CapNhom == 1 ? 'bold' : 'normal',
+                    'padding-left' :((dataItem.CapNhom-1)*20) + 'px'
+                 }">{{dataItem.DisplayName}}
+                    </label>
+                </ng-template>
+            </app-combobox>
+
+            <app-textbox id="Ten" fxFlex="70%" fxFlex.sm="70%" [required]="true" [(model)]="lyDo.Ten" label="Tên"
+                maxlength="250" [validationerror]="'Ten' | validationerror:validationErrors">
+            </app-textbox>
+
+            <app-textarea id="MoTa" fxFlex="100%" [(model)]="lyDo.MoTa" maxlength="2000" label="Mô Tả">
+
+            </app-textarea>
+        </div>
+    </div>
+</div>

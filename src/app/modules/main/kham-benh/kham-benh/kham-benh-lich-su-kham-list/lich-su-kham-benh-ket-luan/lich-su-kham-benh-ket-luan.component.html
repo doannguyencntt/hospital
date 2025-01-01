@@ -1,0 +1,140 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" class="pt-4"
+    *ngFor="let item of gridKetLuanColumns" fxFlex="100%">
+    <div fxFlex="100%">
+        <a (click)="xemChanDoan()" style="color:green; text-decoration: underline; font-weight: bold; bottom: 20px;">Xem
+            chẩn đoán của bác sĩ khác</a>
+    </div>
+    <h3 fxFlex="100%" class="sub-title mt-0">TÓM TẮT KẾT QUẢ CLS </h3>
+
+    <label fxFlex="100%" *ngIf="item.TomTatKetQuaCLS != null">Tóm tắt kết quả :{{item.TomTatKetQuaCLS}}</label>
+    <label fxFlex="100%" *ngIf="item.TomTatKetQuaCLS == null">Không có tóm tắt kết quả cận lâm sàng.</label>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">Chẩn đoán ICD chính </h3>
+    <label fxFlex="50%" *ngIf="item.ChuanDoanICDChinh != null"><span style="font-weight: bold;">ICD</span>:{{item.ChuanDoanICDChinh}}</label>
+    <label fxFlex="50%" *ngIf="item.ChuThichChanDoanICDChinh != null"><span style="font-weight: bold;">Chẩn đoán</span>
+        :{{item.ChuThichChanDoanICDChinh}}</label>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">CHẨN ĐOÁN ICD KÈM THEO </h3>
+
+    <label *ngIf="gridKetLuanICDPhus.length == 0" fxFlex="50%">Không có chẩn đoán icd kèm theo.</label>
+    <ng-container *ngIf="gridKetLuanICDPhus.length != null">
+        <div fxFlex="100%" fxFlex.sm="100%" *ngFor="let item of gridKetLuanICDPhus">
+            <label fxFlex="50%"><span style="font-weight: bold;">ICD</span> :{{item.ICDPhu}}</label>
+            <label fxFlex="50%"><span style="font-weight: bold;">Chẩn đoán</span> :{{item.ChuThichChanDoanICDPhu}}</label>
+        </div>
+    </ng-container>
+
+    <h3 fxFlex="100%" class="sub-title mt-0">CÁCH GIẢI QUYẾT </h3>
+    <label fxFlex="100%" *ngIf="item.CachGiaiQuyet != null">Cách giải quyết :{{item.CachGiaiQuyet}}</label>
+    <label fxFlex="100%" *ngIf="item.CachGiaiQuyet == null">Không có cách giải quyết.</label>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="CoKeToa" fxFlex="35%" value="true" [(model)]="item.CoKeToa" label="Cho về, Kê đơn thuốc"
+            [disabled]="true">
+        </app-checkbox>
+        <app-checkbox id="CoKeToa" fxFlex="35%" value="false" [(model)]="item.CoKeToa" label="Cho về, không toa" *ngIf="item.CoKeToa == null"
+        [disabled]="true" >
+        </app-checkbox>
+        <app-checkbox id="CoKeToa" fxFlex="35%" value="false" [(model)]="!item.CoKeToa" label="Cho về, không toa" *ngIf="item.CoKeToa == false"
+        [disabled]="true" >
+        </app-checkbox>
+        <app-checkbox id="CoKeToa" fxFlex="35%" value="false"  label="Cho về, không toa" *ngIf="item.CoKeToa == true"
+        [disabled]="true" >
+        </app-checkbox>
+        <a (click)="xemDonThuocBacSiKhac()" *ngIf="item.CoKeToa == true"  fxFlex="45%" style="float: right;">
+            <span style="color:green; text-decoration: underline; font-weight: bold; bottom: 20px;float: right;">
+                Xem đơn thuốc bác sĩ khác đã kê
+            </span>
+        </a>
+    </div>
+    <div *ngIf="item.CoKeToa == true" fxFlex="100%">
+        <app-lich-su-kham-benh-ke-toa *ngIf="item.CoKeToa == true" [yeuCauKhamBenhId]="yeuCauKhamBenhId">
+        </app-lich-su-kham-benh-ke-toa>
+        
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="TaiKham" fxFlex="80%" fxFlex.sm="100%" value="true" [(model)]="item.TaiKham" label="Tái khám"
+            [disabled]="true">
+        </app-checkbox>
+    </div>
+    <div *ngIf="item.TaiKham == true" fxFlex="100%">
+        <div class="row ml-1">
+            <fieldset fxFlex="100%">
+                <div fxFlex="100%">
+                    <ul class="inline">
+                        <li>Ngày hẹn tái khám:
+                            <strong>{{item.NgayHenKhamDisplay}}</strong>
+                        </li>
+                        <li>Ghi chú:
+                            <strong>{{item.GhiChu}}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="TaiKham" fxFlex="80%" fxFlex.sm="100%" value="true" [(model)]="item.DieuTriNgoaiTru"
+            label="Điều trị ngoại trú" [disabled]="true">
+        </app-checkbox>
+    </div>
+    <div *ngIf="item.DieuTriNgoaiTru == true" fxFlex="100%">
+        <div class="row ml-1">
+            <fieldset fxFlex="100%">
+                <div fxFlex="100%">
+                    <ul class="inline">
+                        <li>Dịch vụ kỹ thuật:
+                            <strong>{{item.TenDichVuKyThuat}}</strong>
+                        </li>
+                        <li>Số lần điều trị:
+                            <strong>{{item.SoLanDieuTri}}</strong>
+                        </li>
+                        <li>Thời gian bắt đầu điều trị:
+                            <strong>{{item.ThoiGianBatDauDieuTri}}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="NhapVien" fxFlex="70%" value="true" [(model)]="item.NhapVien" label="Nhập viện"
+            [disabled]="true">
+        </app-checkbox>
+    </div>
+    <div *ngIf="item.NhapVien == true" fxFlex="100%">
+
+        <label fxFlex="50%">Khoa :{{item.Khoa}}</label>
+        <label fxFlex="50%">Lý do :{{item.LyDoNhapVien}}</label>
+    </div>
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="ChuyenVien" fxFlex="70%" value="true" [(model)]="item.ChuyenVien" label="Chuyển viện"
+            [disabled]="true">
+        </app-checkbox>
+    </div>
+    <div *ngIf="item.ChuyenVien == true" fxFlex="100%">
+        <label fxFlex="50%">Bệnh viện chuyển đến :{{item.BenhVienChuyenDen}}</label>
+        <label fxFlex="50%">Tình trạng người bệnh lúc chuyển viện :{{item.TinhTrangChuyenVien}}</label>
+    </div>
+    <div *ngIf="item.ChuyenVien == true" fxFlex="100%">
+        <label fxFlex="100%">Lý do :{{item.LyDoChuyenVien}}</label>
+    </div>
+    <!-- <div *ngIf="item.ChuyenVien == true" fxFlex="100%">
+        <label fxFlex="100%">Hướng điều trị :{{item.HuongDieuTri}}</label>
+    </div> -->
+    <div *ngIf="item.ChuyenVien == true" fxFlex="100%">
+        <label fxFlex="25%">Thời điểm chuyển viện :{{item.ThoiDiemChuyenVien}}</label>
+        <label fxFlex="25%">Nhân viên hộ tống :{{item.NhanVienHoTong}}</label>
+        <label fxFlex="25%">Phương tiện vẫn chuyển :{{item.PhuongTienDiChuyen}}</label>
+    </div>
+
+    <div fxFlex="100%" fxFlex.sm="100%">
+        <app-checkbox id="CoTuVong" fxFlex="70%" value="true" [(model)]="item.CoTuVong" label="Tử vong"
+            [disabled]="true">
+        </app-checkbox>
+    </div>
+    <div *ngIf="item.CoTuVong == true" fxFlex="100%">
+        <label fxFlex="100%">Cách giải quyết :{{item.CachGiaiQuyet}}</label>
+    </div>
+
+
+</div>

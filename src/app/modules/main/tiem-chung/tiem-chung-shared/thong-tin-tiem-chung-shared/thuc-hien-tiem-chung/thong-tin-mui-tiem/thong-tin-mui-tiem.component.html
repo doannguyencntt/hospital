@@ -1,0 +1,77 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+    <h3 fxFlex="100%" class="sub-title mr-4">THÔNG TIN MŨI TIÊM</h3>
+    
+    <app-grid #gridThongTinMuiTiem fxFlex="100%" class="k-grid-border"
+        [allowSortDefault]="false" [autoRefreshDataSource]="true" [documentType]="documentType" [lazyLoadPage]="true"
+        [gridColumns]="gridThongTinMuiTiemColumns" [gridDataSource]="dataSourceThongTinMuiTiem"
+        [useAddDeault]="false" [useActionDefault]="false" [useHeaderDefault]="false" [checkboxAble]="false" [autoHeight]="true"
+        [pageable]="false" [showStt]="true">
+    </app-grid>
+
+
+    <ng-template #tenVacxinTemplate let-dataItem let-rowIndex="rowIndex">
+        <div>
+            <mat-icon fxFlex="30px" *ngIf="dataItem.YeuCauGoiDichVuId !== null || dataItem.YeuCauGoiDichVuKhuyenMaiId" [icIcon]="icInfo" kendoTooltip
+                title="{{dataItem.TenGoiDichVu}}">
+            </mat-icon>
+            <p kendoTooltip class="reverse-ellipsis r" title="{{dataItem.TenDichVu}}">{{dataItem.TenDichVu}}
+            </p>
+        </div>
+    </ng-template>
+
+    <ng-template #muiSoTemplate let-dataItem let-rowIndex="rowIndex">
+        {{dataItem.TiemChung.MuiSo}}
+    </ng-template>
+
+    <ng-template #viTriTiemTemplate let-dataItem let-rowIndex="rowIndex">
+        <p kendoTooltip class="reverse-ellipsis r" title="{{dataItem.TiemChung.ViTriTiemDisplay}}">{{dataItem.TiemChung.ViTriTiemDisplay}}
+        </p>
+    </ng-template>
+
+    <ng-template #lieuLuongTemplate let-dataItem let-rowIndex="rowIndex">
+        <p kendoTooltip class="reverse-ellipsis r" title="{{dataItem.TiemChung.LieuLuong}}">{{dataItem.TiemChung.LieuLuong}}
+        </p>
+    </ng-template>
+
+    <ng-template #loVacxinTemplate let-dataItem let-rowIndex="rowIndex">
+        <p kendoTooltip class="reverse-ellipsis r" title="{{dataItem.TiemChung.SoLoVacXinDisplay}}">{{dataItem.TiemChung.SoLoVacXinDisplay}}
+        </p>
+    </ng-template>
+
+    <ng-template #trangThaiTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-dropdownlist id="trang-thai-tiem{{rowIndex}}" class="no-label item-no-padding" [required]="true"
+            [popupSettings]="null" url="TiemChung/GetListTrangThaiTiemVacxin" [(model)]="dataItem.TiemChung.TrangThaiTiemChung" 
+            (modelChange)="xuLyChuyenTrangThaiTiem($event, dataItem)" [bind]="true" [disabled]="isTabThucHienTiemReadOnly || dataItem.TiemChung.IsDaTiem"
+            [validationerror]="'YeuCauDichVuKyThuats['+rowIndex+'].TiemChung.TrangThaiTiemChung' | validationerror:validationErrors">
+        </app-dropdownlist>
+    </ng-template>
+
+    <ng-template #nguoiThucHienTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-combobox id="nguoi-thuc-hien-tiem{{rowIndex}}" class="item-no-padding no-label" [required]="true" 
+            [disabled]="isTabThucHienTiemReadOnly"
+            [popupSettings]="null" url="TiemChung/GetListNhanVien" [(model)]="dataItem.TiemChung.NhanVienTiemId" [reloadForGrid]="true"
+            [validationerror]="'YeuCauDichVuKyThuats['+rowIndex+'].TiemChung.NhanVienTiemId' | validationerror:validationErrors">
+        </app-combobox>
+    </ng-template>
+
+    <ng-template #thoiGianTiemTemplate let-dataItem let-rowIndex="rowIndex">
+        <app-datetimepicker id="thoi-gian-tiem{{rowIndex}}" class="item-no-padding no-label" [required]="true"
+            [formatDate]="'dd/MM/yyyy HH:mm'" [(model)]="dataItem.TiemChung.ThoiDiemTiem" [disabled]="isTabThucHienTiemReadOnly"
+            [validationerror]="'YeuCauDichVuKyThuats['+rowIndex+'].TiemChung.ThoiDiemTiem' | validationerror:validationErrors">
+        </app-datetimepicker>
+    </ng-template>
+
+    <ng-template #nguoiChiDinhTemplate let-dataItem let-rowIndex="rowIndex">
+        <p kendoTooltip class="reverse-ellipsis r" title="{{dataItem.NhanVienChiDinhDisplay}}">{{dataItem.NhanVienChiDinhDisplay}}
+        </p>
+    </ng-template>
+
+    <ng-template #actionTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button *ngIf="dataItem.IsDaTiem" style="color: red" mat-icon-button kendoTooltip
+                title="Hủy tiêm vacxin" type="button" (click)="xuLyHuyTiemVacxin(dataItem)">
+                <mat-icon [icIcon]="icHistory"></mat-icon>
+            </button>
+        </div>
+    </ng-template>
+</div>

@@ -1,0 +1,65 @@
+<app-header-form [isicMoreVert]="false" [crumbs]="[
+                {Title:'Nhập xuất',Path:''}
+                ,{Title:'Dược phẩm',Path:''},
+                {Title:'Dự trù mua',Path:''},         
+                {Title:'THDT Mua Tại Khoa',Path:'/nhap-xuat/duoc-pham/tong-hop-mua-duoc-pham-tai-khoa',Active:true}               
+                ]">
+    ></app-header-form>
+<div [@stagger]="true" class="p-gutter" vexContainer>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div @fadeInUp class="card" fxFlex="auto">
+            <div class="px-6 py-4 border-b" fxLayout="row" fxLayoutAlign="start center">
+                <h2 class="title m-0">Gửi duyệt dự trù mua dược phẩm</h2>
+            </div>
+            <div class="px-6 py-4" fxLayout="column">
+                <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                    <app-textbox id="khoa" fxFlex="25" fxFlex.sm="25" [(model)]="thongTinGoiTaiKhoa.TenKhoaPhong"
+                        [required]="true" maxlength="250" label="Khoa" [disabled]="true">
+                    </app-textbox>
+                    <app-textbox id="KyDuTru" fxFlex="25" fxFlex.sm="25" [(model)]="thongTinGoiTaiKhoa.KyDuTru"
+                        [required]="true" maxlength="250" label="Kỳ dự trù" [disabled]="true">
+                    </app-textbox>
+                    <app-textbox id="nguoiYeuCau" fxFlex="25" fxFlex.sm="25"
+                        [(model)]="thongTinGoiTaiKhoa.TenNhanVienYeuCau" [required]="true" maxlength="250"
+                        label="Người yêu cầu" [disabled]="true">
+                    </app-textbox>
+                    <app-datepicker id="ngayYeuCau" fxFlex="25" fxFlex.sm="25" [required]="true" label="Ngày yêu cầu"
+                        [(model)]="thongTinGoiTaiKhoa.NgayYeuCau" [disabled]="true"
+                        [validationerror]="'TuNgay' | validationerror:validationErrors">
+                    </app-datepicker>
+                    <app-textarea id="ghiChu" fxFlex="100" fxFlex.sm="100" maxlength="4000" label="Ghi chú"
+                        minHeight="20" [(model)]="thongTinGoiTaiKhoa.GhiChu">
+                    </app-textarea>
+                    <h3 fxFlex="100%" class="sub-title mt-0">Thông tin chi tiết</h3>
+                    <app-grid fxFlex="100%" fxFlex.sm="100%" style="width: 1px;" [gridColumns]="gridColumns"
+                        [allowSortDefault]="true" [documentType]="documentType" [sort]="sortDuTruTaiKhoa"
+                        urlGetData="YeuCauMuaDuocPham/GetDuTruMuaDPTaiKhoaForGridAsync"
+                        urlGetTotalPage="YeuCauMuaDuocPham/GetTotalDuTruMuaDPTaiKhoaForGridAsync" [useAddDeault]="false"
+                        [useHeaderDefault]="false" [useActionDefault]="false" (extOnDataBound)="onDataBound($event)"
+                        [groups]="groups" [additionalSearchString]="kyDuTruMuaDuocPhamVatTuId" [checkboxAble]="false"
+                        [lazyLoadPage]="true" maxHeight="500" [pageable]="false" [detailTemplate]="detailTemplate">
+                        <ng-template #detailTemplate let-dataItem>
+                            <app-grid [gridColumns]="gridChildColumns" [documentType]="documentType"
+                                [useAddDeault]="false" [sort]="sortDuTruChild" [urlGetData]="urlGetDataGridChildAsync"
+                                additionalSearchString="{{kyDuTruMuaDuocPhamVatTuId}}-{{dataItem.LaBHYT}}-{{dataItem.DuocPhamId}}"
+                                [urlGetTotalPage]="urlGetTotalPageGridChild" [showStt]="true" [useHeaderDefault]="false"
+                                [useActionDefault]="false" [checkboxAble]="false" [lazyLoadPage]="true"
+                                [autoHeight]="true">
+                            </app-grid>
+                        </ng-template>
+                    </app-grid>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px" class="form-footer">
+                    <button type="button" title="Phím tắt: Esc" (click)="cancel()" mat-button
+                        class="mr-1 align-right-fx"><i class="ft-arrow-left"></i> Hủy</button>
+                    <button type="button" (click)="guiTatCa()" color="primary" mat-raised-button><i class="ft-save"></i>
+                        Gửi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #nhomGroupHeaderTemplate let-value="value">
+    <strong>{{value}}</strong>
+</ng-template>

@@ -1,0 +1,25 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div style="text-transform: uppercase;">Thông tin gói khám</div>
+    <button type="button" mat-icon-button mat-dialog-close [mat-dialog-close]="null" tabindex="-1">
+        <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+</div>
+<mat-dialog-content style="padding: 0;">  
+    <!-- Radiobuton sử dụng gói khám chung và riêng(luồng củ) -->
+    <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <app-radio fxFlex="100%" fxFlex.sm="100%" id="goikham" *ngIf="isCreatedHopDongKhamSucKhoe===true"
+            [items]="[{Value:true,Text:'Gói khám chung'},{Value:false,Text:'Tạo gói khám'}]" label="Thông tin gói khám"
+            [(model)]="chonGoiKham">
+        </app-radio>
+
+        <app-kham-doan-goi-kham-suc-chung *ngIf="isCreatedHopDongKhamSucKhoe===true && chonGoiKham===true" fxFlex="100%"
+            fxFlex.sm="100%" [dataKhamDoan]="dataKhamDoan">
+        </app-kham-doan-goi-kham-suc-chung>
+
+        <app-kham-doan-goi-kham-suc-khoe-detail-popup *ngIf="chonGoiKham===false"
+            [dataKhamDoan]="dataKhamDoan" fxFlex="100%" fxFlex.sm="100%"
+            (afterChangedFromHopDongKham)="afterChangedFromHopDongKham($event)">
+        </app-kham-doan-goi-kham-suc-khoe-detail-popup>
+    </div>
+
+</mat-dialog-content>

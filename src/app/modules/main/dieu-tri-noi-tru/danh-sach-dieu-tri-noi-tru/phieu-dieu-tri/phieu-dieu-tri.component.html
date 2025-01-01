@@ -1,0 +1,131 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="0 grid" fxLayoutGap.lt-sm="0" style="position: relative;">
+    <kendo-tabstrip #tabChildStrip fxFlex="100%" class="content-has-border sticky-kendotab-item-2"
+        (tabSelect)="onTabSelect($event)" [hidden]="!(ngayDieuTriHienTai != undefined && ngayDieuTriHienTai != null)">
+        <kendo-tabstrip-tab>
+            <ng-template kendoTabTitle>
+                <div>
+                    Thăm khám
+                </div>
+            </ng-template>
+
+            <ng-template kendoTabContent>
+                <app-phieu-dieu-tri-tham-kham
+                    [ngClass]="{'disableDiv':dieuTriNoiTruModel.Khoa != thongTinPhieuKham.KhoaChiDinh}"
+                    [dieuTriNoiTruModel]="dieuTriNoiTruModel" (thongTinPhieuKham)="getThongTinPhieuKham($event)"
+                    [validationErrors]="validationErrors" [phieuDieuTriId]="phieuDieuTriHienTaiId" [id]="id">
+                </app-phieu-dieu-tri-tham-kham>
+            </ng-template>
+
+        </kendo-tabstrip-tab>
+
+        <kendo-tabstrip-tab>
+            <ng-template kendoTabTitle>
+                <div>
+                    DVKT
+                </div>
+            </ng-template>
+            <!-- [ngClass]="{'disableDiv':dieuTriNoiTruModel.Khoa != thongTinPhieuKham.KhoaChiDinh}" -->
+            <ng-template kendoTabContent>
+                <app-phieu-dieu-tri-dvkt [khoaChiDinh]="thongTinPhieuKham.KhoaChiDinh"
+                    [dieuTriNoiTruModel]="dieuTriNoiTruModel" [phieuDieuTriId]="phieuDieuTriHienTaiId" [id]="id">
+                </app-phieu-dieu-tri-dvkt>
+            </ng-template>
+
+        </kendo-tabstrip-tab>
+
+        <kendo-tabstrip-tab>
+            <ng-template kendoTabTitle>
+                <div>
+                    KQ CLS/KHÁM
+                </div>
+            </ng-template>
+            <!-- [ngClass]="{'disableDiv':dieuTriNoiTruModel.Khoa != thongTinPhieuKham.KhoaChiDinh}" -->
+            <ng-template kendoTabContent>
+                <app-ket-qua-can-lam-sang [phieuDieuTriHienTaiId]="phieuDieuTriHienTaiId" [YeuCauTiepNhanId]="id">
+                </app-ket-qua-can-lam-sang>
+            </ng-template>
+
+        </kendo-tabstrip-tab>
+
+
+        <kendo-tabstrip-tab>
+            <ng-template kendoTabTitle>
+                <div>
+                    Thuốc
+                </div>
+            </ng-template>
+
+            <ng-template kendoTabContent>
+                <app-phieu-dieu-tri-thuoc [dieuTriNoiTruModel]="dieuTriNoiTruModel"
+                    [phieuDieuTriHienTaiId]="phieuDieuTriHienTaiId" (disabledInPhieu)="disabledInPhieu($event)"
+                    [lstYear]="lstYear" [lstYearOrderBy]="lstYearOrderBy" [khoaChiDinh]="thongTinPhieuKham.KhoaChiDinh"
+                    [dataBenhNhan]="dataBenhNhan">
+                </app-phieu-dieu-tri-thuoc>
+            </ng-template>
+
+        </kendo-tabstrip-tab>
+        <kendo-tabstrip-tab>
+            <ng-template kendoTabTitle>
+                <div>
+                    Vật tư
+                </div>
+            </ng-template>
+            <!-- [ngClass]="{'disableDiv':dieuTriNoiTruModel.Khoa != thongTinPhieuKham.KhoaChiDinh}" -->
+            <ng-template kendoTabContent>
+                <app-phieu-dieu-tri-vat-tu [dieuTriNoiTruModel]="dieuTriNoiTruModel"
+                    [phieuDieuTriHienTaiId]="phieuDieuTriHienTaiId" (disabledInPhieu)="disabledInPhieu($event)"
+                    [lstYear]="lstYear" [lstYearOrderBy]="lstYearOrderBy" [khoaChiDinh]="thongTinPhieuKham.KhoaChiDinh"
+                    [dataBenhNhan]="dataBenhNhan">
+                </app-phieu-dieu-tri-vat-tu>
+            </ng-template>
+
+        </kendo-tabstrip-tab>
+
+        <kendo-tabstrip-tab>
+            <ng-template kendoTabTitle>
+                <div>
+                    Truyền máu
+                </div>
+            </ng-template>
+            <!-- [ngClass]="{'disableDiv':dieuTriNoiTruModel.Khoa != thongTinPhieuKham.KhoaChiDinh}"  -->
+            <ng-template kendoTabContent>
+                <app-phieu-dieu-tri-truyen-mau [dieuTriNoiTruModel]="dieuTriNoiTruModel"
+                    (disabledInPhieu)="disabledInPhieu($event)" [phieuDieuTriHienTaiId]="phieuDieuTriHienTaiId"
+                    [khoaChiDinh]="thongTinPhieuKham.KhoaChiDinh" [dataBenhNhan]="dataBenhNhan">
+                </app-phieu-dieu-tri-truyen-mau>
+            </ng-template>
+
+        </kendo-tabstrip-tab>
+        <kendo-tabstrip-tab>
+            <ng-template kendoTabTitle>
+                <div>
+                    Suất ăn
+                </div>
+            </ng-template>
+            <!-- [ngClass]="{'disableDiv':dieuTriNoiTruModel.Khoa != thongTinPhieuKham.KhoaChiDinh}" -->
+            <ng-template kendoTabContent>
+                <app-phieu-dieu-tri-suat-an [dieuTriNoiTruModel]="dieuTriNoiTruModel"
+                    [khoaChiDinh]="thongTinPhieuKham.KhoaChiDinh" [phieuDieuTriHienTaiId]="phieuDieuTriHienTaiId">
+                </app-phieu-dieu-tri-suat-an>
+            </ng-template>
+
+        </kendo-tabstrip-tab>
+    </kendo-tabstrip>
+    <div fxFlex="auto" style="text-align: center;margin-top:100px;"
+        *ngIf="!(ngayDieuTriHienTai != undefined && ngayDieuTriHienTai != null)">
+        <h3>HÔM NAY CHƯA TẠO NGÀY ĐIỀU TRỊ</h3>
+    </div>
+    <div style="position: absolute;top: -7px;right:0;">
+        <mat-button-toggle-group>
+            <mat-button-toggle (click)="decreaseDate()">
+                <mat-icon [icIcon]="icChevronLeft"></mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle (click)="contentDate()">
+                Ngày điều trị: {{ngayDieuTriHienTaiHienThi}}
+            </mat-button-toggle>
+            <mat-button-toggle (click)="increaseDate()">
+                <mat-icon [icIcon]="icChevronRight"></mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+</div>

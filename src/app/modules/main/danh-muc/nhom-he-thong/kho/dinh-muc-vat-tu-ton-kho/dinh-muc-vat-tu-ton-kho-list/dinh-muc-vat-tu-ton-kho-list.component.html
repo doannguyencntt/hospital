@@ -1,0 +1,27 @@
+<vex-page-layout>
+    <vex-page-layout-header class="pb-15" fxLayout="column" fxLayoutAlign="center start">
+        <div [class.px-gutter]="true" class="w-full flex justify-between">
+            <div>
+                <vex-breadcrumbs [crumbs]="[
+          {Title:'Danh Mục', Path:''}
+          ,{Title:'Nhóm Hệ Thống', Path:''}
+          ,{Title:'Kho', Path:''}
+          ,{Title:'Định Mức Vật Tư Tồn Kho', Path:'/danh-muc/nhom-he-thong/kho/dinh-muc-vat-tu-ton-kho', Active:true}
+          ]">
+                </vex-breadcrumbs>
+            </div>
+        </div>
+    </vex-page-layout-header>
+    <vex-page-layout-content [class.px-gutter]="true" class="-mt-6">
+        <div class="card overflow-auto -mt-15">
+            <app-grid baseRoute="danh-muc/nhom-he-thong/kho/dinh-muc-vat-tu-ton-kho" [gridColumns]="gridColumns" [documentType]="documentType" [useActionDefault]="true" [showExportExcel]="true" (extExportExcel)="exportExcel()" [lazyLoadPage]="true">
+            </app-grid>
+        </div>
+    </vex-page-layout-content>
+</vex-page-layout>
+<ng-template #tonToiThieuTemplate let-dataItem>
+    {{dataItem.TonToiThieu | number:'1.0':'vi-VN' }}
+</ng-template>
+<ng-template #tonToiDaTemplate let-dataItem>
+    {{dataItem.TonToiDa | number:'1.0':'vi-VN' }}
+</ng-template>

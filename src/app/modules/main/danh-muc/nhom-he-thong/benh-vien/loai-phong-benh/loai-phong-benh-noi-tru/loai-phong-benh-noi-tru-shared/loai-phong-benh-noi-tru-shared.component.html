@@ -1,0 +1,10 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0"
+    fxLayoutAlign="space-between">
+    <app-textbox id="Ten" fxFlex="100%" fxFlex.sm="100%" maxlength="250" [required]="true"
+        [(model)]="loaiPhongBenhNoiTru.Ten" label="Tên" [validationerror]="'Ten' | validationerror:validationErrors">
+    </app-textbox>
+
+    <app-textarea id="Textarea" fxFlex="100%" maxlength="2000" [(model)]="loaiPhongBenhNoiTru.MoTa" label="Mô Tả"
+        [validationerror]="'MoTa' | validationerror:validationErrors">
+    </app-textarea>
+</div>

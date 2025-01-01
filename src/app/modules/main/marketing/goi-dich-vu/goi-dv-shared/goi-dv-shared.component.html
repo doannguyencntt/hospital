@@ -1,0 +1,194 @@
+<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0" >
+    <app-textbox id="ten-goi" fxFlex="30%" fxFlex.sm="100%" maxlength="200" [required]="true" [(model)]="goiDichVu.TenGoiDv" label="Tên nhóm" [validationerror]="'TenGoiDv' | validationerror:validationErrors">
+    </app-textbox>
+    <app-textarea id="mo-ta" fxFlex="50%" fxFlex.sm="100%" maxlength="2000" minHeight="20"  [(model)]="goiDichVu.MoTa" label="Mô Tả" [validationerror]="'MoTa' | validationerror:validationErrors">
+    </app-textarea>
+
+    <app-radio id="su-dung" fxFlex="20%" fxFlex.sm="50%" id="IsDisabled" name="IsDisabled" [required]="true" [items]="[{Value:false,Text:'Có'},{Value:true,Text:'Không'}]" [(model)]="goiDichVu.IsDisabled" label="Sử dụng" [validationerror]="'IsDisabled' | validationerror:validationErrors">
+    </app-radio>
+
+
+    <h3 fxFlex="100%" class="sub-title mt-0">THÊM DỊCH VỤ
+    </h3>
+
+    <div fxFlex="100%" class="po-h-radio">
+        <!-- ,{Value:3,Text:'Dịch vụ giường'} -->
+        <app-radio id="chon-loai-dv" name="select" class="no-format-css pl-4 temp" (modelChange)="onChangeGoiDvLuaChon($event)" [(model)]="luaChonGoiDichVu" [items]="[{Value:1,Text:'Dịch vụ khám'},{Value:2,Text:'Dịch vụ kỹ thuật'},{Value:3,Text:'Dịch vụ giường'}]">
+        </app-radio>
+    </div>
+
+    <ng-container>
+        <app-combobox *ngIf="luaChonGoiDichVu===1" id="ten-dv" fxFlex="30%" fxFlex.sm="100%" label="Tên Dịch Vụ"
+            url="KhamBenh/GetDichVuKhamBenh" [(model)]="dvTrongGois.DvId" class="item-no-padding" bind="true"
+            [template]="dichVuKhamBenhTemplate" [templateHeader]="dichVuKhamBenhTemplateHeader" [required]="true"
+            [validationerror]="'DvId' | validationerror:validationErrors" (selectionChange)="onChangeDichVu($event)"
+            (openCombobox)="openComboboxKhamBenh($event)" (keyup)="onKeyAddDv($event, 1)">
+            <ng-template #dichVuKhamBenhTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="30%">Mã</th>
+                        <th>Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #dichVuKhamBenhTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="30%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        
+        <app-combobox *ngIf="luaChonGoiDichVu===2" id="dich-vu-kt-bv" fxFlex="30%" fxFlex.sm="100%" label="Tên Dịch Vụ"
+            url="GoiDichVu/GetListDichVuKyThuat" [(model)]="dvTrongGois.DvId" bind="true" class="item-no-padding"
+            [template]="dichVuKyThuatTemplate" [templateHeader]="dichVuKyThuatTemplateHeader" [required]="true"
+            [validationerror]="'DvId' | validationerror:validationErrors" (selectionChange)="onChangeDichVu($event)"
+            (openCombobox)="openComboboxKyThuat($event)" (keyup)="onKeyAddDv($event, 2)">
+            <ng-template #dichVuKyThuatTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="30%">Mã</th>
+                        <th>Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #dichVuKyThuatTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="30%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        
+        <app-combobox *ngIf="luaChonGoiDichVu===3" id="dich-vu-giuong-bv" fxFlex="30%" fxFlex.sm="100%" label="Tên Dịch Vụ"
+            url="GoiDichVu/GetListDichVuGiuong" [(model)]="dvTrongGois.DvId" bind="true" class="item-no-padding"
+            [template]="dichVuGiuongTemplate" [templateHeader]="dichVuGiuongTemplateHeader" [required]="true"
+            [validationerror]="'DvId' | validationerror:validationErrors" (selectionChange)="onChangeDichVu($event)"
+            (keyup)="onKeyAddDv($event, 5)">
+            <ng-template #dichVuGiuongTemplateHeader let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <th width="30%">Mã</th>
+                        <th>Tên</th>
+                    </tr>
+                </table>
+            </ng-template>
+            <ng-template #dichVuGiuongTemplate let-dataItem>
+                <table width="100%" class="table-combobox">
+                    <tr>
+                        <td width="30%">{{dataItem.Ma}}</td>
+                        <td>{{dataItem.Ten}}</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </app-combobox>
+        <!-- url="KhamBenh/LoaiGia" -->
+        <app-dropdownlist *ngIf="luaChonGoiDichVu===1" id="loai-gia" (openDropDownList)="openComboboxLoaiGiaKhamBenh($event)"
+            fxFlex="20%" fxFlex.sm="50%" label="Loại Giá"  [(model)]="dvTrongGois.LoaiGia" [data]="danhSachLoaiGia"
+            class="item-no-padding" (keyup)="onKeyAddDv($event, 3)" bind="true" [required]="true" [validationerror]="'LoaiGia' | validationerror:validationErrors"
+            (selectionChange)="onChangeLoaiGia($event)">
+        </app-dropdownlist>
+        <!-- url="GoiDichVu/LoaiGiaNhomGiaDichVuKyThuatBenhVien" -->
+        <app-dropdownlist *ngIf="luaChonGoiDichVu===2" id="loai-gia" (openDropDownList)="openComboboxLoaiGiaKyThuat($event)"
+            fxFlex="20%" fxFlex.sm="50%" label="Loại Giá" [data]="danhSachLoaiGia"
+            [(model)]="dvTrongGois.LoaiGia" class="item-no-padding" (keyup)="onKeyAddDv($event, 4)" bind="true" [validationerror]="'LoaiGia' | validationerror:validationErrors"
+            [required]="true" (selectionChange)="onChangeLoaiGia($event)">
+        </app-dropdownlist>
+        <!-- <app-dropdownlist [style.display]="luaChonGoiDichVu===3 && dvTrongGois.DvId == 0 ?'block': 'none'" id="loai-gia"
+            (openDropDownList)="openComboboxLoaiGiaGiuong($event)" fxFlex="20%" fxFlex.sm="50%" label="Loại Giá"  [data]="danhSachLoaiGia"
+            [(model)]="dvTrongGois.LoaiGia" class="item-no-padding" (keyup)="onKeyAddDv($event, 6)" bind="true"
+            [required]="true" (selectionChange)="onChangeLoaiGia($event)">
+        </app-dropdownlist> -->
+        
+        <app-dropdownlist *ngIf="luaChonGoiDichVu===3" id="loai-gia"
+            (openDropDownList)="openComboboxLoaiGiaGiuong($event)" fxFlex="20%" fxFlex.sm="50%" label="Loại Giá"
+            [data]="danhSachLoaiGia" [(model)]="dvTrongGois.LoaiGia" class="item-no-padding" (keyup)="onKeyAddDv($event, 6)"  [validationerror]="'LoaiGia' | validationerror:validationErrors"
+            bind="true" [required]="true" (selectionChange)="onChangeLoaiGia($event)">
+        </app-dropdownlist>
+
+        <app-textboxnumeric id="so-luong" (keyup)="onKeyAddDv($event)" fxFlex="10%" fxFlex.sm="50%" [(model)]="dvTrongGois.SoLuong" (modelChange)="ChangeSoLuong($event)" [required]="true" label="Số Lượng" [min]="1" [max]="10000" [validationerror]="'SoLuong' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-textboxnumeric id="don-gia" (keyup)="onKeyAddDv($event)" fxFlex="20%" fxFlex.sm="50%" [(model)]="dvTrongGois.DonGia" [spinners]="false" label="Đơn Giá" [disabled]="true" [validationerror]="'DonGia' | validationerror:validationErrors">
+        </app-textboxnumeric>
+
+        <app-textboxnumeric id="thanh-tien" (keyup)="onKeyAddDv($event)" fxFlex="20%" fxFlex.sm="50%" [(model)]="dvTrongGois.ThanhTien" [spinners]="false" label="Thành Tiền" [disabled]="true">
+        </app-textboxnumeric>
+
+        <app-textarea id="ghi-chu" (keyup)="onKeyAddDv($event)" fxFlex="100%" maxlength="1000" minHeight="20" [(model)]="dvTrongGois.GhiChu" label="Ghi Chú">
+        </app-textarea>
+    </ng-container>
+
+    <div fxFlex="100%">
+        <div class="form-footer" style="float: right;">
+            <button type="button" (click)="Reset()" mat-raised-button>Hủy</button>
+            <button color="primary" class="btn btn-raised btn-raised btn-primary mb-0" (click)="Add()" color="primary" mat-raised-button>Thêm</button></div>
+    </div>
+
+    <app-grid fxFlex="100%" fxFlex.sm="100%" [gridColumns]="gridColumns" [gridDataSource]="gridDataSource" [documentType]="documentType" [useAddDeault]="false" [useHeaderDefault]="false" [useActionDefault]="false" [checkboxAble]="false" [autoHeight]="true"
+        [pageable]="false" [groups]="groups" masterName="coChietKhau" #gridDvTrongGoi>
+    </app-grid>
+
+    <ng-template #trangThaiTemplate let-dataItem>
+        <div class="text-center" kendoTooltip>
+            <button style="color: red" mat-icon-button kendoTooltip title="Xóa" (click)="ConfirmDelete(dataItem)">
+                <mat-icon [icIcon]="icDelete"></mat-icon>
+            </button></div>
+    </ng-template>
+
+    <ng-template #loaiGiaTemplate let-dataItem>
+        <app-dropdownlist *ngIf="dataItem.Nhom==1" id="loai-gia-grid" popupSettings="" label=" " url="GoiDichVu/LoaiGiaDichVuKhamBenh?idDichVuKhamBenhId={{dataItem.DvId}}" [(model)]="dataItem.LoaiGia" class="no-label" bind="true" (selectionChange)="onChangeLoaiGiaTheoDataItem($event, dataItem)">
+        </app-dropdownlist>
+        <app-dropdownlist *ngIf="dataItem.Nhom==2" id="loai-gia-grid" popupSettings="" label=" " url="GoiDichVu/LoaiGiaNhomGiaDichVuKyThuatBenhVien?dichVuKyThuatId={{dataItem.DvId}}" [(model)]="dataItem.LoaiGia" class="no-label" bind="true" (selectionChange)="onChangeLoaiGiaTheoDataItem($event, dataItem)">
+        </app-dropdownlist>
+        <!-- <app-dropdownlist *ngIf="dataItem.Nhom==3" id="loai-gia-grid" popupSettings="" label=" "
+            url="GoiDichVu/LoaiGiaNhomGiaGiuongBenhVien" [(model)]="dataItem.LoaiGia" class="no-label" bind="true"
+            (selectionChange)="onChangeLoaiGiaTheoDataItem($event, dataItem)">
+        </app-dropdownlist> -->
+        <app-dropdownlist  *ngIf="dataItem.Nhom==3" id="loai-gia-grid" popupSettings="" label=" "
+        url="GoiDichVu/LoaiGiaNhomGiaGiuongBenhVien?dichVuGiuongBenhVienId={{dataItem.DvId}}"   [(model)]="dataItem.LoaiGia" class="no-label" bind="true"
+            (selectionChange)="onChangeLoaiGiaTheoDataItem($event, dataItem)">
+        </app-dropdownlist>
+    </ng-template>
+
+    <ng-template #soLuongTemplate let-dataItem>
+        <app-textboxnumeric id="so-luong-grid" [(model)]="dataItem.SoLuong" (modelChange)="ChangeSoLuongDataItem($event, dataItem)" class="no-label" label=" " [min]="1" [max]="10000" [validationerror]="'dataItem[' + goiDichVu.DvTrongGois.indexOf(dataItem) + '].SoLuong' | validationerror:validationErrors">
+        </app-textboxnumeric>
+    </ng-template>
+
+    <ng-template #ghiChuTemplate let-dataItem>
+        <app-textarea id="ghi-chu-grid" fxFlex="100%" maxlength="1000" minHeight="20" [(model)]="dataItem.GhiChu" label=" " class="no-label p-0">
+        </app-textarea>
+    </ng-template>
+
+    <ng-template #donGiaTemplate let-dataItem>
+        <span style="display: block;">{{dataItem.DonGia | number:'0.2-2':'vi-VN'}}</span>
+        <label class="red" [innerHTML]="'dataItem[' + goiDichVu.DvTrongGois.indexOf(dataItem) + '].DonGia' | validationerror:validationErrors"></label>
+    </ng-template>
+
+    <ng-template #thanhTienTemplate let-dataItem>
+        {{dataItem.ThanhTien | number:'0.2-2':'vi-VN'}}
+    </ng-template>
+
+    <ng-template #donGiaFooterTemplate let-dataItem>
+        <span style="float:right">Tổng cộng:</span>
+    </ng-template>
+
+    <ng-template #thanhTienFooterTemplate let-dataItem>
+        <div fxLayoutAlign="start center" fxLayout="row">
+            <div>
+                <span style="color:blue;">{{totalNotChietKhau('ThanhTien') | number:'0.2-2':'vi-VN'}}</span>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #sttTemplate let-i="rowIndex">
+        {{i + 1}}
+    </ng-template>
+    <ng-template #nhomGroupHeaderTemplate let-value="value">
+        <strong>{{value}}</strong>
+    </ng-template>
+</div>

@@ -1,0 +1,70 @@
+<div style="overflow: hidden;" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+    fxLayoutGap.lt-sm="0">
+
+    <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100%" class="mb-0">
+        <!-- <button fxFlex="5%" (click)="decreaseDate()" class="button-ngay-dieu-tri">
+            <</button>
+                <button fxFlex="85%" (click)="contentDate()" class="button-content">Ngày điều trị:
+                    {{ngayDieuTriHienTaiHienThi}}
+                </button>
+                <button fxFlex="5%" (click)="increaseDate()" class="button-ngay-dieu-tri">></button>
+
+                 -->
+        <h3 fxFlex="95%" style="text-align: center;">CHỌN NGÀY ĐIỀU TRỊ</h3>
+        <button fxFlex="5%" type="button" mat-icon-button (click)="close()" tabindex="-1">
+            <mat-icon [icIcon]="icClose"></mat-icon>
+        </button>
+    </div>
+
+    <!-- <mat-dialog-content> -->
+
+    <div style="height: 345px; border-bottom-width: 1px; overflow: auto;" fxFlex="100%" fxLayout="row wrap"
+        fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+        <ul style="height: 20px;" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+            fxLayoutGap.lt-sm="0">
+            <li *ngFor="let y of lstYear" fxFlex="100%" fxLayout="row wrap" fxLayout.lt-sm="column"
+                fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                <p style="width: 100%;font-weight: bold;">
+                    <span style="cursor: pointer;" *ngIf="y.Expands" ng-model="y.Expands"
+                        (click)="y.Expands=!y.Expands">- &nbsp;</span>
+                    <span style="cursor: pointer;" *ngIf="!y.Expands" ng-model="y.Expands"
+                        (click)="y.Expands=!y.Expands">+ &nbsp;</span>
+                    <span style="color:blue">Năm {{y.Year}}</span>
+                </p>
+                <div fxFlex="100%" *ngIf="y.Expands" fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="16px grid"
+                    fxLayoutGap.lt-sm="0">
+                    <ul fxFlex="100%" *ngFor="let m of y.Months" fxLayout="row wrap" fxLayout.lt-sm="column"
+                        fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                        <p fxFlex="100%">
+                            <span>&nbsp;&nbsp;&nbsp;&nbsp; Tháng {{m.Month}}</span>
+                        </p>
+                        <li class="li-tag-div" fxFlex="100%" style="margin-left: 38px;" fxLayout="row wrap"
+                            fxLayout.lt-sm="column" fxLayoutGap="16px grid" fxLayoutGap.lt-sm="0">
+                            <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+                            <div *ngFor="let d of m.Days" fxFlex="10%" fxFlex.sm="10%">
+                                <!-- class="day-tag-active" -->
+                                <div [ngClass]="checkActiveDay(d.PhieuDieuTriId, d.LaNgayDieuTriTamThoi)" kendoTooltip
+                                    title="Khoa chỉ định: {{d.TenKhoa}}"
+                                    (click)="dayAction(d.Day, d.Month, d.Year, d.PhieuDieuTriId)"
+                                    (dblclick)="dayDoubleClick(d.Day, d.Month, d.Year, d.PhieuDieuTriId, d.LaNgayDieuTriTamThoi)">
+                                    {{d.Day}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="div-bottom" fxFlex="100%" *ngIf="!dieuTriNoiTruModel.KetThucBenhAn">
+        <button *ngIf="lstYear != undefined && lstYear != null && lstYear.length != 0" (click)="removeDate()"
+            type="button" class="mr-2" color="warn" mat-raised-button>Xóa</button>
+        <button *ngIf="coHienThiNutLuu" (click)="luuNgayDieuTri()" type="button" class="mr-2 float-right"
+            color="primary" mat-raised-button>Lưu</button>
+        <button (click)="addDate()" type="button" class="mr-2 float-right" color="primary" mat-raised-button>Thêm ngày
+            điều trị</button>
+    </div>
+
+    <!-- </mat-dialog-content> -->
+</div>

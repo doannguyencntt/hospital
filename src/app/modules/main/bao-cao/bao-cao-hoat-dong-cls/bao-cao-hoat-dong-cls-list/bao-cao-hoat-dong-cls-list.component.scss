@@ -1,0 +1,236 @@
+.k-grid1{
+    // border:none;
+    position: relative;
+    .k-grid-header-wrap{
+        th{
+            text-transform: uppercase;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+    }
+    th{
+        padding: 0px !important;
+    }
+    td{
+        padding: 0px !important;
+        a{
+            color: #005dab;
+            text-decoration: underline;
+            cursor: pointer;
+            &.k-plus{
+                text-decoration: none;
+            }
+        }
+    }
+    .tableingroup{
+        tr{
+            &:hover{
+                background: none;
+            }
+            &:last-child{
+                th,td{
+                    border-bottom: none;;
+                }
+            }
+        }
+    }
+  
+  }
+  .k-i-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: 64px;
+    background-color: rgba(255,255,255,.3);
+    color: #ff6757;
+  }
+  .k-list {
+    height: 100%;
+    width: 100%;
+    padding-right: 17px;
+    overflow-y: scroll;
+    overflow: auto;
+  }
+
+.monthyear{
+    padding-bottom: 1.34375em;
+    kendo-datepicker{        
+        width: calc(100% - 20px) !important;
+        height: 32px !important;
+        display: inline-block !important;
+        border: none !important;
+        .k-picker-wrap{
+            border-radius: 0.25rem 0 0 0.25rem !important;
+            .k-select{
+                border-radius: 0 !important;
+            }
+            &.k-state-disabled{ 
+                .k-input{
+                    background: #ECEFF1;
+                }
+            }
+        }
+        height: 42px !important;
+        .k-input{
+            margin-top: 5px;
+            font-size: 14px !important;
+            padding-left: 0 !important;
+        }
+        .k-picker-wrap  {
+           border: none !important;
+        }
+    }
+    kendo-timepicker{
+        width: 31px !important;
+        margin-top: 1px;
+        position: absolute !important;
+        right: 0;
+        kendo-dateinput{
+            display: none !important;
+        }
+        .k-picker-wrap{
+            border: none !important;
+        }
+    }
+    kendo-textbox-container{   
+        position: relative !important;     
+        background-color: rgba(0, 0, 0, 0.04);
+        width: 100% !important;
+        border-radius: 4px 4px 0 0;
+        padding: .75em .75em 0 .75em;
+        border-bottom: 1px solid rgba(82, 63, 105, 0.42);
+        >.k-label{
+            margin-left: 10px;
+            background: none !important;
+            transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+        }
+        &.k-state-empty{            
+            >.k-label{
+                transform: translate(0, 0) scale(1) !important;
+            }
+        }
+        &.k-state-focused>.k-label {
+            transform: translate(0, -6px) translate(-1px, -0.53125em) translate(-12.5%, -9.375%) scale(.75) !important;
+            color:#005dab !important;
+        }
+        &:hover{ 
+          &::after {
+            opacity: 1;
+            transform: scaleX(1);
+          }
+        }
+        .clear{
+            position: absolute;
+            top: 26px;
+            right: 55px;            
+            color: #aaa;
+            cursor: pointer;
+            &:hover{
+                color: #000;
+            }
+        }
+        
+    }
+    &.on-header{
+        padding-bottom: 0;
+        kendo-textbox-container{
+            padding-top: 5px;
+            border-radius: 9999px;
+            background-color: rgba(0, 0, 0, 0.04);
+            height: 41px;
+            .k-label{
+                top:calc(1.03125em + 1px);
+            }
+        }
+        .clear{
+            top: 19px;
+        }
+    }
+    &.on-header-height{
+        padding-bottom: 0;
+        kendo-textbox-container{
+            padding-top: 5px;
+            border-radius: 9999px;
+            background: #fff;
+            height: 45px;
+            .k-label{
+                top:calc(1.03125em + 1px);
+            }
+        }
+        .clear{
+            top: 19px;
+        }
+    }
+    &.no-label{    
+        kendo-textbox-container{  
+            padding-top: 0px;
+            .k-clear-value{
+                top: 0px;
+            }
+            .clear{
+                position: absolute;
+                top: 15px;
+                right: 55px;            
+                color: #aaa;
+                cursor: pointer;
+                &:hover{
+                    color: #000;
+                }
+            }
+
+        }
+        kendo-timepicker{
+            width: 37px !important;
+            margin-top: 4px;
+            padding-top: 2px;
+            position: absolute !important;
+            right: 0;
+            kendo-dateinput{
+                display: none !important;
+            }
+            .k-picker-wrap{
+                border: none !important;
+            }
+        }
+
+        kendo-datepicker{        
+            padding-top: 3px;
+            width: calc(100% - 20px) !important;
+            height: 32px !important;
+            display: inline-block !important;
+            border: none !important;
+            .k-picker-wrap{
+                border-radius: 0.25rem 0 0 0.25rem !important;
+                .k-select{
+                    border-radius: 0 !important;
+                }
+                &.k-state-disabled{ 
+                    .k-input{
+                        background: #ECEFF1;
+                    }
+                }
+            }
+            height: 42px !important;
+            .k-input{
+                margin-top: 5px;
+                font-size: 14px !important;
+                padding-left: 0 !important;
+            }
+            .k-picker-wrap  {
+               border: none !important;
+            }
+        }
+    }
+}
+
+.bg-app-bar{
+    .monthyear{
+      &.on-header{
+        kendo-textbox-container{
+            background-color: #ffffff !important;
+        }
+      }
+    }
+}
