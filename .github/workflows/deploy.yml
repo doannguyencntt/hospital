@@ -29,7 +29,3 @@ jobs:
           nohup npm start -- --disable-host-check --host 0.0.0.0 & 
           sleep 10  # Wait for the Angular app to start
           nohup npx ngrok http 4202 &  # Run ngrok in the background
-          
-      - name: Wait for services to be fully initialized
-        run: |
-          sleep 60  # This will allow time for both the Angular app and ngrok to initialize.
