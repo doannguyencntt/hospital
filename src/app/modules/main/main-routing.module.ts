@@ -403,10 +403,10 @@ const mainChildRoutes: Routes = [
         path: 'danh-muc/nhom-he-thong/kho/kho-duoc-pham-vat-tu-y-te',
         loadChildren: () => import('./danh-muc/nhom-he-thong/kho/kho-duoc-pham/kho-duoc-pham.module').then(o => o.KhoDuocPhamModule)
     },
-    {
-        path: 'danh-muc/nhom-he-thong/Kho/vi-tri-kho-duoc-pham-vat-tu-y-te',
-        loadChildren: () => import('./danh-muc/nhom-he-thong/Kho/vi-tri-kho-duoc-pham/vi-tri-kho-duoc-pham.module').then(o => o.ViTriKhoDuocPhamModule)
-    },
+    // {
+    //     path: 'danh-muc/nhom-he-thong/Kho/vi-tri-kho-duoc-pham-vat-tu-y-te',
+    //     loadChildren: () => import('./danh-muc/nhom-he-thong/Kho/vi-tri-kho-duoc-pham/vi-tri-kho-duoc-pham.module').then(o => o.ViTriKhoDuocPhamModule)
+    // },
     {
         path: 'danh-muc/nhom-he-thong/kho/dinh-muc-duoc-pham-ton-kho',
         loadChildren: () => import('./danh-muc/nhom-he-thong/kho/dinh-muc-duoc-pham-ton-kho/dinh-muc-duoc-pham-ton-kho.module').then(o => o.DinhMucDuocPhamTonKhoModule)

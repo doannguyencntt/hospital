@@ -8,12 +8,12 @@ import { CommonService } from 'src/app/core/utilities/common.helper';
 import { ConfirmComponent } from 'src/app/shared/component/dialogs/confirm/confirm.component';
 import { SystemMessage } from 'src/app/shared/configdata/system-message';
 import { ApiError } from 'src/app/shared/models/api-error.model';
-import { PhieuCongKhaiVatTu, Table,NoiTruHoSoKhacPhieuCongKhaiVatTu } from './phieu-cong-khai-VatTu.model';
 import icDelete from '@iconify/icons-ic/delete';
 import icClear from '@iconify/icons-ic/twotone-clear';
 import { PhieuCongKhaiVatTuPopupComponent } from './phieu-cong-khai-vat-tu-popup/phieu-cong-khai-vat-tu-popup.component';
 import { ChiTietDieuTriNoiTruViewModel } from '../../../dieu-tri-noi-tru.model';
 import { PhieuCongKhaiVatTuLoaiInPopupComponent } from './phieu-cong-khai-vat-tu-loai-in-popup/phieu-cong-khai-vat-tu-loai-in-popup.component';
+import { NoiTruHoSoKhacPhieuCongKhaiVatTu, PhieuCongKhaiVatTu, Table } from './phieu-cong-khai-vattu.model';
 
 @Component({
   selector: 'app-phieu-cong-khai-vat-tu',
