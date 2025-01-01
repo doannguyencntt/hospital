@@ -1,4 +1,4 @@
-name: Run Angular App
+name: Run Angular App with Public URL
 
 on:
   push:
@@ -22,4 +22,6 @@ jobs:
         run: npm install
 
       - name: Start Angular App
-        run: npm start
+        run: |
+          npm start &
+          npx ngrok http 4200
