@@ -21,7 +21,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Start Angular App
+      - name: Add Ngrok Authtoken
+        run: npx ngrok authtoken 2r13IymzhSkH29ThtKzB4R9xMrU_4GV336h3Zr83LhDzBmgvT
+
+      - name: Start Angular App with Ngrok
         run: |
           npm start &
           npx ngrok http 4200
