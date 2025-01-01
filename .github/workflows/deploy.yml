@@ -26,5 +26,5 @@ jobs:
 
       - name: Start Angular App with Ngrok
         run: |
-          npm start &
+          HOST=0.0.0.0 npm start -- --disable-host-check &
           npx ngrok http 4202
