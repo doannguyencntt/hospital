@@ -29,5 +29,4 @@ jobs:
       - name: Start Angular App and Ngrok
         run: |
           HOST=0.0.0.0 npm start -- --disable-host-check &
-          sleep 10  # Wait for the Angular app to start
           nohup npx ngrok http --url=muskox-unified-tortoise.ngrok-free.app 4202 &  # Run ngrok in the background
