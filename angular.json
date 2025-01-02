@@ -18,9 +18,9 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "outputPath": "dist/vex",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -41,7 +41,10 @@
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "src/assets/js/voice.js"
-            ]
+            ],
+            "customWebpackConfig": {
+              "path": "./webpack.config.js"
+            }
           },
           "configurations": {
             "production": {
@@ -66,7 +69,10 @@
                   "maximumWarning": "5mb",
                   "maximumError": "10mb"
                 }
-              ]
+              ],
+              "customWebpackConfig": {
+                "path": "./webpack.prod.config.js"
+              }
             }
           }
         },
