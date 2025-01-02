@@ -1,5 +1,5 @@
 const path = require('path');
-
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 let sassImplementation;
 try {
   // tslint:disable-next-line:no-implicit-dependencies
@@ -41,5 +41,13 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  optimization: {
+    splitChunks: false
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+    }),
+  ]
 };
