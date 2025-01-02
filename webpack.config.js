@@ -1,5 +1,5 @@
 const path = require('path');
-
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 let sassImplementation;
 try {
   // tslint:disable-next-line:no-implicit-dependencies
@@ -39,42 +39,15 @@ module.exports = {
             }
           }
         ]
-      },
-      {
-        test: /@vex[\\\/]styles[\\\/]tailwind\.scss$/,
-        use: [
-          {
-            loader: '@fullhuman/purgecss-loader',
-            options: {
-              content: [
-                path.join(__dirname, 'src/**/*.html'),
-                path.join(__dirname, 'src/**/*.ts')
-              ],
-              defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
-            }
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              ident: 'postcss',
-              syntax: 'postcss-scss',
-              plugins: () => [
-                require('tailwindcss')
-              ]
-            }
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              implementation: sassImplementation,
-              sourceMap: false,
-              sassOptions: {
-                precision: 8
-              }
-            }
-          }
-        ]
       }
     ]
-  }
+  },
+  optimization: {
+    splitChunks: false
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+    }),
+  ]
 };
