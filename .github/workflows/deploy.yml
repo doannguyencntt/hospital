@@ -1,32 +1,38 @@
-name: Run Angular App with Public URL
+name: Build and Deploy Angular App
 
 on:
   push:
     branches:
       - main
-  schedule:
-    - cron: '0 */3 * * *'
 
 jobs:
-  build-and-serve:
+  build:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 10
+          node-version: '10'  # Chọn version phù hợp
 
+      # Install dependencies
       - name: Install dependencies
         run: npm install
 
-      - name: Add Ngrok Authtoken
-        run: npx ngrok authtoken 2r13IymzhSkH29ThtKzB4R9xMrU_4GV336h3Zr83LhDzBmgvT
+      # Build the Angular app
+      - name: Build Angular app
+        run: npm run build --prod
 
-      - name: Start Angular App and Ngrok
-        run: |
-          HOST=0.0.0.0 npm start -- --disable-host-check &
-          nohup npx ngrok http --url=muskox-unified-tortoise.ngrok-free.app 4202 &  # Run ngrok in the background
+      # Deploy to GitHub Pages (hoặc các dịch vụ khác)
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: main
+          folder: dist/vex  # Đường dẫn tới folder chứa file build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
