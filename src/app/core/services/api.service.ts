@@ -24,9 +24,10 @@ export class ApiService {
 
   post<T>(path: string, body: Object = {}): Observable<T> {
     var bodyCopy=Object.assign({}, body);
+    console.log(environment.api_url);
     return this.http.post<T>(
-      `${environment.api_url}/${path}`,
-      JSON.stringify(CommonService.replaceDateToStringBeforeStringify(bodyCopy))
+      `http://ec2-54-169-155-55.ap-southeast-1.compute.amazonaws.com/api/${path}`,
+      bodyCopy
     );
   }
 

@@ -36,12 +36,13 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 import { PageNotFoundComponent } from './modules/page-not-found/page-not-found.component';
 //import { AngularFireMessagingModule } from '@angular/fire/messaging';
 //import { AngularFireModule } from '@angular/fire';
+import { InjectionToken } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { MatSnackBarModule } from '@angular/material';
 import { UrlService } from 'src/@vex/services/url.service';
 import { MenuModule } from '@progress/kendo-angular-menu';
 
-
+// export const BASE_API_URL = new InjectionToken<string>('BaseApiUrl');
 
 
 @NgModule({
@@ -75,8 +76,9 @@ import { MenuModule } from '@progress/kendo-angular-menu';
         MenuModule,
     ],
     providers: [
+        // { provide: BASE_API_URL, useValue: environment.api_url },
         { provide: ErrorHandler, useClass: GlobalErrorHandler },
-        { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true },
+        // { provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true },
         { provide: LOCALE_ID, useValue: 'vi-VN' },
         AuthGuard,

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_url: 'http://localhost:5000/api',
+  api_url: 'http://ec2-54-169-155-55.ap-southeast-1.compute.amazonaws.com/api',
   firebase: {
     apiKey: 'AIzaSyAshtkI8Izqe9oYV5wvAONbFzQZhAXC_cg',
     authDomain: 'hapu-60236.firebaseapp.com',

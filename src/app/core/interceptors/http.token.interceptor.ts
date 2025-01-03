@@ -19,7 +19,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     //console.log("req.url = ", req.url.indexOf("amazonaws.com"))
     //console.log("req.url = ", req.url)
 
-    if (req.url.indexOf("amazonaws.com") > -1) {
+    if (req.url.indexOf("weqweqwe.com") > -1) {
       //   //req.url: structure JSON [{name, url}];
       let urls = JSON.parse(req.url);
       let url: string = "";

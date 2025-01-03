@@ -208,13 +208,13 @@ export class LoginComponent implements OnInit {
                 this.cdRef.markForCheck();
                 this.clearCountDown();
             },
-            (err: ApiError) => {
-                err.ValidationErrors === null || err.ValidationErrors.length == 0
-                    ? this.notificationService.showError(err.Message)
-                    : (this.validationErrors = err.ValidationErrors);
-                this.cdRef.markForCheck();
-                this.loading = false;
-            }
+            // (err: ApiError) => {
+            //     err.ValidationErrors === null || err.ValidationErrors.length == 0
+            //         ? this.notificationService.showError(err.Message)
+            //         : (this.validationErrors = err.ValidationErrors);
+            //     this.cdRef.markForCheck();
+            //     this.loading = false;
+            // }
         );
     }
 

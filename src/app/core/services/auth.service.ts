@@ -78,19 +78,20 @@ export class AuthService {
   }
 
   login(loginObj: Login) {
-    const user = {
-      AccessToken: {
-      Id: 1,
-      Token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6IlVzZXJOYW1lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
-      ExpiresIn: 3600
-      },
-      UserName: 'UserName',
-      Id: 1,
-      HinhThucKhamBenh: 1,
-      MenuInfo: {},
-      Permissions: []
-    }
-    this.setAuth(user as AccessUser);
+    // const user = {
+    //   AccessToken: {
+    //   Id: 1,
+    //   Token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6IlVzZXJOYW1lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+    //   ExpiresIn: 3600
+    //   },
+    //   UserName: 'UserName',
+    //   Id: 1,
+    //   HinhThucKhamBenh: 1,
+    //   MenuInfo: {},
+    //   Permissions: []
+    // }
+    // this.setAuth(user as AccessUser);
+    // console.log(loginObj);
     return this.apiService.post<AccessUser>('auth/Login', loginObj)
       .pipe(map(
         data => {
